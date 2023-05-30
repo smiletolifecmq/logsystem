@@ -242,7 +242,7 @@
           <el-input
             type="textarea"
             v-model="form.completeness"
-            placeholder="请输入工作内容"
+            placeholder="请输入工作基本内容"
             :rows="3"
             :maxlength="2000"
             :autosize="{ minRows: 2 }"
@@ -287,13 +287,12 @@
             <el-input
               type="textarea"
               v-model="item.completeness"
-              placeholder="请输入工作量"
+              placeholder="请输入工作基本内容"
               :rows="3"
               :maxlength="2000"
               :autosize="{ minRows: 2 }"
             />
 
-            <!-- <el-input v-model="item.completeness" placeholder="请输入工作量" /> -->
             <el-button v-if="index > 0" type="danger" @click="deleteLog(index)"
               ><i class="el-icon-close"></i
             ></el-button>
@@ -399,7 +398,7 @@ export default {
               } else {
                 for (let i = 0; i < value.length; i++) {
                   if (!value[i].content || !value[i].completeness) {
-                    callback(new Error("请填写完整的工作标题和工作量"));
+                    callback(new Error("请填写完整的工作标题和工作基本内容"));
                     return;
                   }
                 }
@@ -565,7 +564,7 @@ export default {
     },
     submitAddForm() {
       if (this.editform.logs.length === 0) {
-        this.$message.error("请添加工作标题和工作量");
+        this.$message.error("请添加工作标题和工作基本内容");
         return;
       }
       this.$refs["editform"].validate((valid) => {
