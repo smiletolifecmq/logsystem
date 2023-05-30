@@ -9,8 +9,7 @@
     <version>3.8.5</version>
 
     <name>kcylog</name>
-    <url>http://www.kcylog.vip</url>
-    <description>若依管理系统</description>
+    <description>福清分公司综合信息管理系统</description>
     
     <properties>
         <kcylog.version>3.8.5</kcylog.version>
