@@ -1,0 +1,101 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.kcylog.system.mapper.SysWebsiteMapper">
+    
+    <resultMap type="SysWebsite" id="SysWebsiteResult">
+        <result property="webId"    column="web_id"    />
+        <result property="title"    column="title"    />
+        <result property="webUrl"    column="web_url"    />
+        <result property="imgUrl"    column="img_url"    />
+        <result property="num"    column="num"    />
+        <result property="createTime"    column="create_time"    />
+        <result property="updateTime"    column="update_time"    />
+    </resultMap>
+
+    <sql id="selectSysWebsiteVo">
+        select web_id, title, web_url, img_url, num, create_time, update_time from sys_website
+    </sql>
+
+    <select id="selectSysWebsiteList" parameterType="SysWebsite" resultMap="SysWebsiteResult">
+        <include refid="selectSysWebsiteVo"/>
+        <where>  
+            <if test="title != null  and title != ''"> and title = #{title}</if>
+            <if test="webUrl != null  and webUrl != ''"> and web_url = #{webUrl}</if>
+            <if test="imgUrl != null  and imgUrl != ''"> and img_url = #{imgUrl}</if>
+            <if test="num != null  and num != ''"> and num = #{num}</if>
+        </where>
+        order by web_id desc
+    </select>
+
+
+    <select id="selectSysWebListByNum" parameterType="SysWebsite" resultMap="SysWebsiteResult">
+        <include refid="selectSysWebsiteVo"/>
+        <where>
+            <if test="title != null  and title != ''"> and title = #{title}</if>
+            <if test="webUrl != null  and webUrl != ''"> and web_url = #{webUrl}</if>
+            <if test="imgUrl != null  and imgUrl != ''"> and img_url = #{imgUrl}</if>
+            <if test="num != null  and num != ''"> and num = #{num}</if>
+        </where>
+        order by num desc
+    </select>
+    
+    <select id="selectSysWebsiteByWebId" parameterType="String" resultMap="SysWebsiteResult">
+        <include refid="selectSysWebsiteVo"/>
+        where web_id = #{webId}
+    </select>
+        
+    <insert id="insertSysWebsite" parameterType="SysWebsite" useGeneratedKeys="true" keyProperty="webId">
+        insert into sys_website
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="title != null and title != ''">title,</if>
+            <if test="webUrl != null and webUrl != ''">web_url,</if>
+            <if test="imgUrl != null and imgUrl != ''">img_url,</if>
+            <if test="num != null and num != ''">num,</if>
+            <if test="createTime != null">create_time,</if>
+            <if test="updateTime != null">update_time,</if>
+         </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test="title != null and title != ''">#{title},</if>
+            <if test="webUrl != null and webUrl != ''">#{webUrl},</if>
+            <if test="imgUrl != null and imgUrl != ''">#{imgUrl},</if>
+            <if test="num != null and num != ''">#{num},</if>
+            <if test="createTime != null">#{createTime},</if>
+            <if test="updateTime != null">#{updateTime},</if>
+         </trim>
+    </insert>
+
+    <update id="updateSysWebsite" parameterType="SysWebsite">
+        update sys_website
+        <trim prefix="SET" suffixOverrides=",">
+            <if test="title != null and title != ''">title = #{title},</if>
+            <if test="webUrl != null and webUrl != ''">web_url = #{webUrl},</if>
+            <if test="imgUrl != null and imgUrl != ''">img_url = #{imgUrl},</if>
+            <if test="num != null and num != ''">num = #{num},</if>
+            <if test="createTime != null">create_time = #{createTime},</if>
+            <if test="updateTime != null">update_time = #{updateTime},</if>
+        </trim>
+        where web_id = #{webId}
+    </update>
+
+    <delete id="deleteSysWebsiteByWebId" parameterType="String">
+        delete from sys_website where web_id = #{webId}
+    </delete>
+
+    <delete id="deleteSysWebsiteByWebIds" parameterType="String">
+        delete from sys_website where web_id in 
+        <foreach item="webId" collection="array" open="(" separator="," close=")">
+            #{webId}
+        </foreach>
+    </delete>
+
+
+    <update id="updateSysWebsiteNum" parameterType="SysWebsite">
+        update sys_website
+        <trim prefix="SET" suffixOverrides=",">
+            num = num + 1
+        </trim>
+        where web_id = #{webId}
+    </update>
+</mapper>
