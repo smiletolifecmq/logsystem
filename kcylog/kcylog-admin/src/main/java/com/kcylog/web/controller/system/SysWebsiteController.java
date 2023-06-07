@@ -120,6 +120,7 @@ public class SysWebsiteController extends BaseController
      * 查询网站整合列表,给整合网站开的接口，不需要验证
      */
     @Anonymous
+    @CrossOrigin
     @GetMapping("/web_list")
     public TableDataInfo webList(SysWebsite sysWebsite)
     {
@@ -128,6 +129,7 @@ public class SysWebsiteController extends BaseController
     }
 
     @Anonymous
+    @CrossOrigin
     @PutMapping("/web_num")
     public AjaxResult editNum(@RequestBody SysWebsite sysWebsite)
     {
