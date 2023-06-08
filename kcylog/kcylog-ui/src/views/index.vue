@@ -9,6 +9,27 @@
           </li>
           <h1>福清分公司综合信息管理系统使用说明</h1>
           <h3>模块划分</h3>
+          <div class="block">
+            <p>组件值：{{ value }}</p>
+            <el-date-picker
+              v-model="value"
+              type="daterange"
+              start-placeholder="开始日期"
+              end-placeholder="结束日期"
+              range-separator="至"
+              :default-time="['12:00:00', '12:00:00']"
+              @change="handleDateRangeChange"
+            ></el-date-picker>
+            <el-select v-model="startAmPm" placeholder="请选择">
+              开始时间<el-option label="上午" value="上午"></el-option>
+              结束时间<el-option label="下午" value="下午"></el-option>
+            </el-select>
+            <el-select v-model="endAmPm" placeholder="请选择">
+              <el-option label="上午" value="上午"></el-option>
+              <el-option label="下午" value="下午"></el-option>
+            </el-select>
+          </div>
+
           <img style="width: 95%" :src="moduleImg" class="sidebar-logo" />
           <div>从上图中可知，项目主要分为三个模块</div>
           <div>1. 个人中心模块</div>
@@ -82,11 +103,25 @@ export default {
       headImg: headImgUrl,
       userLogImg: userLogImgUrl,
       addUserLogImg: addUserLogImgUrl,
+      value: null,
+      startAmPm: "上午",
+      endAmPm: "上午",
+      value1: [new Date(2000, 10, 10, 10, 10), new Date(2000, 10, 11, 10, 10)],
     };
   },
   methods: {
     goTarget(href) {
       window.open(href, "_blank");
+    },
+    handleDateRangeChange(value) {
+      if (value) {
+        const startDate = value[0];
+        const endDate = value[1];
+        console.log("开始日期:", startDate);
+        console.log("开始时间:", this.startAmPm);
+        console.log("结束日期:", endDate);
+        console.log("结束时间:", this.endAmPm);
+      }
     },
   },
 };
