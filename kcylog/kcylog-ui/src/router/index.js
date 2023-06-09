@@ -161,7 +161,21 @@ export const dynamicRoutes = [
         meta: { title: '修改生成配置', activeMenu: '/tool/gen' }
       }
     ]
-  }
+  },
+  {
+    path: '/system/process-config',
+    component: Layout,
+    hidden: true,
+    permissions: ['system:processConfig:edit'],
+    children: [
+      {
+        path: 'info/:processConfigId(\\d+)/:deptId(\\d+)',
+        component: () => import('@/views/system/processConfig/processConfigInfo'),
+        name: 'ProcessConfigInfo',
+        meta: { title: '配置流程', activeMenu: '/system/processConfig' }
+      }
+    ]
+  },
 ]
 
 // 防止连续点击多次路由报错
