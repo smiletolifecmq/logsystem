@@ -44,20 +44,11 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
     <select id="selectSysReviewList" parameterType="SysReview" resultMap="SysReviewResult">
         <include refid="selectSysReviewVo"/>
         <where>  
-            <if test="serialNum != null  and serialNum != ''"> and serial_num = #{serialNum}</if>
-            <if test="projectName != null  and projectName != ''"> and project_name like concat('%', #{projectName}, '%')</if>
-            <if test="requester != null  and requester != ''"> and requester = #{requester}</if>
-            <if test="porjectMoney != null "> and porject_money = #{porjectMoney}</if>
-            <if test="workload != null  and workload != ''"> and workload = #{workload}</if>
-            <if test="userId != null  and userId != ''"> and user_id = #{userId}</if>
-            <if test="deptId != null  and deptId != ''"> and dept_id = #{deptId}</if>
-            <if test="status != null "> and status = #{status}</if>
-            <if test="peopleNum != null  and peopleNum != ''"> and people_num = #{peopleNum}</if>
-            <if test="startTime != null "> and start_time = #{startTime}</if>
-            <if test="endTime != null "> and end_time = #{endTime}</if>
-            <if test="budgetDay != null "> and budget_day = #{budgetDay}</if>
-            <if test="budgetMoney != null "> and budget_money = #{budgetMoney}</if>
-            <if test="finalTime != null "> and final_time = #{finalTime}</if>
+            <if test="serialNum != null  and serialNum != ''"> and r.serial_num = #{serialNum}</if>
+            <if test="projectName != null  and projectName != ''"> and r.project_name like concat('%', #{projectName}, '%')</if>
+            <if test="requester != null  and requester != ''"> and r.requester = #{requester}</if>
+            <if test="status != null "> and r.status = #{status}</if>
+            <if test="userId != null  and userId != ''"> and r.user_id = #{userId}</if>
         </where>
     </select>
     

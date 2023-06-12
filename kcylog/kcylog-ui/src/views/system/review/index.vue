@@ -77,7 +77,6 @@
           icon="el-icon-plus"
           size="mini"
           @click="handleAdd"
-          v-hasPermi="['system:review:add']"
           >新增</el-button
         >
       </el-col>
@@ -89,7 +88,6 @@
           size="mini"
           :disabled="multiple"
           @click="handleDelete"
-          v-hasPermi="['system:review:remove']"
           >删除</el-button
         >
       </el-col>
@@ -111,8 +109,16 @@
       <el-table-column label="项目金额" align="center" prop="porjectMoney" />
       <el-table-column label="工作量" align="center" prop="workload" />
       <el-table-column label="负责人" align="center" prop="user.userName" />
-      <el-table-column label="部门ID" align="center" prop="dept.deptName" />
-      <el-table-column label="审核状态" align="center" prop="status" />
+      <el-table-column label="部门" align="center" prop="dept.deptName" />
+      <el-table-column label="审核状态" align="center" prop="status">
+        <template slot-scope="scope">
+          <span v-if="scope.row.status === 0">未开始</span>
+          <span v-else-if="scope.row.status === 1">进行中</span>
+          <span v-else-if="scope.row.status === 1">通过</span>
+          <span v-else-if="scope.row.status === 1">未通过</span>
+          <span v-else>其他状态</span>
+        </template>
+      </el-table-column>
       <el-table-column label="人数" align="center" prop="peopleNum" />
       <el-table-column
         label="预估雇工工作开始时间"
@@ -137,6 +143,16 @@
       <el-table-column label="预估天数" align="center" prop="budgetDay" />
       <el-table-column label="预算金额" align="center" prop="budgetMoney" />
       <el-table-column
+        label="创建时间"
+        align="center"
+        prop="createTime"
+        width="160"
+      >
+        <template slot-scope="scope">
+          <span>{{ parseTime(scope.row.createTime) }}</span>
+        </template>
+      </el-table-column>
+      <el-table-column
         label="操作"
         align="center"
         class-name="small-padding fixed-width"
@@ -155,7 +171,6 @@
             type="text"
             icon="el-icon-edit"
             @click="handleUpdate(scope.row)"
-            v-hasPermi="['system:review:edit']"
             v-if="scope.row.status === 0"
             >修改基本信息</el-button
           >
@@ -165,7 +180,6 @@
             icon="el-icon-delete"
             @click="handleDelete(scope.row)"
             v-if="scope.row.status === 0"
-            v-hasPermi="['system:review:remove']"
             >删除</el-button
           >
         </template>

@@ -59,4 +59,13 @@ public interface SysProcessConfigInfoMapper
      * @return 结果
      */
     public int deleteSysProcessConfigInfoByInfoIds(String[] infoIds);
+
+    /**
+     * 查询流程配置过程列表
+     *
+     * @param deptId 流程配置过程
+     * @return 流程配置过程集合
+     */
+    public List<SysProcessConfigInfo> selectSysProcessConfigInfoListByDeptId(Long deptId);
+
 }

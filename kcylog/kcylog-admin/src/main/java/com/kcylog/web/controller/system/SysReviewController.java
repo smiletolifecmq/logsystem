@@ -7,7 +7,11 @@ import com.kcylog.common.core.page.TableDataInfo;
 import com.kcylog.common.enums.BusinessType;
 import com.kcylog.common.utils.SecurityUtils;
 import com.kcylog.common.utils.poi.ExcelUtil;
+import com.kcylog.system.domain.SysProcessConfigInfo;
 import com.kcylog.system.domain.SysReview;
+import com.kcylog.system.domain.SysReviewProcess;
+import com.kcylog.system.service.ISysProcessConfigInfoService;
+import com.kcylog.system.service.ISysReviewProcessService;
 import com.kcylog.system.service.ISysReviewService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.access.prepost.PreAuthorize;
@@ -15,6 +19,7 @@ import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.bind.annotation.*;
 
 import javax.servlet.http.HttpServletResponse;
+import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -29,6 +34,11 @@ public class SysReviewController extends BaseController
 {
     @Autowired
     private ISysReviewService sysReviewService;
+    @Autowired
+    private ISysProcessConfigInfoService sysProcessConfigInfoService;
+
+    @Autowired
+    private ISysReviewProcessService sysReviewProcessService;
 
     /**
      * 查询审核单列表
@@ -38,6 +48,8 @@ public class SysReviewController extends BaseController
     public TableDataInfo list(SysReview sysReview)
     {
         startPage();
+        Long userId = SecurityUtils.getUserId();
+        sysReview.setUserId(userId);
         List<SysReview> list = sysReviewService.selectSysReviewList(sysReview);
         return getDataTable(list);
     }
@@ -58,7 +70,6 @@ public class SysReviewController extends BaseController
     /**
      * 获取审核单详细信息
      */
-    @PreAuthorize("@ss.hasPermi('system:review:query')")
     @GetMapping(value = "/{reviewId}")
     public AjaxResult getInfo(@PathVariable("reviewId") String reviewId)
     {
@@ -68,7 +79,6 @@ public class SysReviewController extends BaseController
     /**
      * 新增审核单
      */
-    @PreAuthorize("@ss.hasPermi('system:review:add')")
     @Log(title = "审核单", businessType = BusinessType.INSERT)
     @Transactional
     @PostMapping
@@ -78,13 +88,25 @@ public class SysReviewController extends BaseController
         Long deptId = SecurityUtils.getDeptId();
         sysReview.setUserId(userId);
         sysReview.setDeptId(deptId);
-        return toAjax(sysReviewService.insertSysReview(sysReview));
+        sysReviewService.insertSysReview(sysReview);
+        List<SysProcessConfigInfo> list = sysProcessConfigInfoService.selectSysProcessConfigInfoListByDeptId(deptId);
+        List<SysReviewProcess> reviewProcess = new ArrayList<>();
+        for (SysProcessConfigInfo configInfo : list) {
+            SysReviewProcess review = new SysReviewProcess();
+            review.setReviewId((sysReview.getReviewId()));
+            review.setUserId(configInfo.getUserId());
+            review.setStatus((long)0);
+            review.setNode(Long.parseLong(configInfo.getNode()));
+            reviewProcess.add(review);
+        }
+        int result = sysReviewProcessService.insertSysReviewProcessBatch(reviewProcess);
+
+        return toAjax(result);
     }
 
     /**
      * 修改审核单
      */
-    @PreAuthorize("@ss.hasPermi('system:review:edit')")
     @Log(title = "审核单", businessType = BusinessType.UPDATE)
     @PutMapping
     public AjaxResult edit(@RequestBody SysReview sysReview)
@@ -95,12 +117,14 @@ public class SysReviewController extends BaseController
     /**
      * 删除审核单
      */
-    @PreAuthorize("@ss.hasPermi('system:review:remove')")
     @Log(title = "审核单", businessType = BusinessType.DELETE)
+    @Transactional
 	@DeleteMapping("/{reviewIds}")
     public AjaxResult remove(@PathVariable String[] reviewIds)
     {
-        return toAjax(sysReviewService.deleteSysReviewByReviewIds(reviewIds));
+        sysReviewService.deleteSysReviewByReviewIds(reviewIds);
+        int result = sysReviewProcessService.deleteSysReviewProcessByReviewIds(reviewIds);
+        return toAjax(result);
     }
 
 
@@ -108,9 +132,12 @@ public class SysReviewController extends BaseController
      * 发起审核单审核
      */
     @Log(title = "审核单", businessType = BusinessType.UPDATE)
+    @Transactional
     @PutMapping("/set_status")
     public AjaxResult setStatus(@RequestBody SysReview sysReview)
     {
-        return toAjax(sysReviewService.setSysReviewStatusByReviewId(sysReview));
+        sysReviewService.setSysReviewStatusByReviewId(sysReview);
+        int result = sysReviewProcessService.setStatusByReviewIdFirst(sysReview.getReviewId());
+        return toAjax(result);
     }
 }

@@ -59,4 +59,12 @@ public interface ISysProcessConfigInfoService
      * @return 结果
      */
     public int deleteSysProcessConfigInfoByInfoId(String infoId);
+
+    /**
+     * 通过部门ID配置过程信息
+     *
+     * @param deptId 流程配置过程部门ID
+     * @return 结果
+     */
+    public List<SysProcessConfigInfo> selectSysProcessConfigInfoListByDeptId(Long deptId);
 }

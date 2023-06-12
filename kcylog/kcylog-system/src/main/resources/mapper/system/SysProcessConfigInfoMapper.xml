@@ -70,4 +70,13 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
             #{infoId}
         </foreach>
     </delete>
+
+    <select id="selectSysProcessConfigInfoListByDeptId" parameterType="Long" resultMap="SysProcessConfigInfoResult">
+        select p.* from sys_process_config_info p
+        inner join sys_process_config e on p.process_config_id = e.process_config_id
+        <where>
+            e.dept_id = #{deptId}
+        </where>
+        order by p.node asc
+    </select>
 </mapper>

@@ -91,4 +91,16 @@ public class SysProcessConfigInfoServiceImpl implements ISysProcessConfigInfoSer
     {
         return sysProcessConfigInfoMapper.deleteSysProcessConfigInfoByInfoId(infoId);
     }
+
+    /**
+     * 查询流程配置过程列表
+     *
+     * @param deptId 流程配置过程
+     * @return 流程配置过程
+     */
+    @Override
+    public List<SysProcessConfigInfo> selectSysProcessConfigInfoListByDeptId(Long deptId)
+    {
+        return sysProcessConfigInfoMapper.selectSysProcessConfigInfoListByDeptId(deptId);
+    }
 }

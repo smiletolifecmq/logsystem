@@ -1,0 +1,110 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.kcylog.system.mapper.SysReviewProcessMapper">
+    
+    <resultMap type="SysReviewProcess" id="SysReviewProcessResult">
+        <result property="reviewProcessId"    column="review_process_id"    />
+        <result property="reviewId"    column="review_id"    />
+        <result property="userId"    column="user_id"    />
+        <result property="status"    column="status"    />
+        <result property="node"    column="node"    />
+        <result property="reason"    column="reason"    />
+        <result property="reviewTime"    column="review_time"    />
+    </resultMap>
+
+    <sql id="selectSysReviewProcessVo">
+        select review_process_id, review_id, user_id, status, node, reason, review_time from sys_review_process
+    </sql>
+
+    <select id="selectSysReviewProcessList" parameterType="SysReviewProcess" resultMap="SysReviewProcessResult">
+        <include refid="selectSysReviewProcessVo"/>
+        <where>  
+            <if test="reviewId != null "> and review_id = #{reviewId}</if>
+            <if test="userId != null "> and user_id = #{userId}</if>
+            <if test="status != null "> and status = #{status}</if>
+            <if test="node != null "> and node = #{node}</if>
+            <if test="reason != null  and reason != ''"> and reason = #{reason}</if>
+            <if test="reviewTime != null "> and review_time = #{reviewTime}</if>
+        </where>
+    </select>
+    
+    <select id="selectSysReviewProcessByReviewProcessId" parameterType="Long" resultMap="SysReviewProcessResult">
+        <include refid="selectSysReviewProcessVo"/>
+        where review_process_id = #{reviewProcessId}
+    </select>
+        
+    <insert id="insertSysReviewProcess" parameterType="SysReviewProcess" useGeneratedKeys="true" keyProperty="reviewProcessId">
+        insert into sys_review_process
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="reviewId != null">review_id,</if>
+            <if test="userId != null">user_id,</if>
+            <if test="status != null">status,</if>
+            <if test="node != null">node,</if>
+            <if test="reason != null">reason,</if>
+            <if test="reviewTime != null">review_time,</if>
+         </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test="reviewId != null">#{reviewId},</if>
+            <if test="userId != null">#{userId},</if>
+            <if test="status != null">#{status},</if>
+            <if test="node != null">#{node},</if>
+            <if test="reason != null">#{reason},</if>
+            <if test="reviewTime != null">#{reviewTime},</if>
+         </trim>
+    </insert>
+
+    <insert id="insertSysReviewProcessBatch" parameterType="java.util.List">
+        insert into sys_review_process (review_id, user_id, status, node, reason, review_time)
+        values
+        <foreach collection="list" item="item" separator=",">
+            (#{item.reviewId}, #{item.userId}, #{item.status}, #{item.node}, #{item.reason}, #{item.reviewTime})
+        </foreach>
+    </insert>
+
+
+    <update id="updateSysReviewProcess" parameterType="SysReviewProcess">
+        update sys_review_process
+        <trim prefix="SET" suffixOverrides=",">
+            <if test="reviewId != null">review_id = #{reviewId},</if>
+            <if test="userId != null">user_id = #{userId},</if>
+            <if test="status != null">status = #{status},</if>
+            <if test="node != null">node = #{node},</if>
+            <if test="reason != null">reason = #{reason},</if>
+            <if test="reviewTime != null">review_time = #{reviewTime},</if>
+        </trim>
+        where review_process_id = #{reviewProcessId}
+    </update>
+
+    <delete id="deleteSysReviewProcessByReviewProcessId" parameterType="Long">
+        delete from sys_review_process where review_process_id = #{reviewProcessId}
+    </delete>
+
+    <delete id="deleteSysReviewProcessByReviewProcessIds" parameterType="String">
+        delete from sys_review_process where review_process_id in 
+        <foreach item="reviewProcessId" collection="array" open="(" separator="," close=")">
+            #{reviewProcessId}
+        </foreach>
+    </delete>
+
+    <update id="setStatusByReviewIdFirst" parameterType="Long">
+        UPDATE sys_review_process AS r1
+            INNER JOIN (
+            SELECT review_process_id
+            FROM sys_review_process
+            WHERE review_id = #{reviewId}
+            ORDER BY node ASC
+            LIMIT 1
+            ) AS r2 ON r1.review_process_id = r2.review_process_id
+            SET r1.status = 1;
+    </update>
+
+
+    <delete id="deleteSysReviewProcessByReviewIds" parameterType="String">
+        delete from sys_review_process where review_id in
+        <foreach item="reviewId" collection="array" open="(" separator="," close=")">
+            #{reviewId}
+        </foreach>
+    </delete>
+</mapper>
