@@ -1,5 +1,6 @@
 package com.kcylog.system.domain;
 
+import com.kcylog.common.core.domain.entity.SysDept;
 import org.apache.commons.lang3.builder.ToStringBuilder;
 import org.apache.commons.lang3.builder.ToStringStyle;
 import com.kcylog.common.annotation.Excel;
@@ -25,6 +26,12 @@ public class SysProcessConfig extends BaseEntity
     /** 部门ID */
     @Excel(name = "部门ID")
     private Long deptId;
+
+
+    /**
+     * 部门对象
+     */
+    private SysDept dept;
 
     public void setProcessConfigId(Long processConfigId)
     {
@@ -54,6 +61,13 @@ public class SysProcessConfig extends BaseEntity
         return deptId;
     }
 
+    public SysDept getDept() {
+        return dept;
+    }
+
+    public void setDept(SysDept dept) {
+        this.dept = dept;
+    }
     @Override
     public String toString() {
         return new ToStringBuilder(this,ToStringStyle.MULTI_LINE_STYLE)

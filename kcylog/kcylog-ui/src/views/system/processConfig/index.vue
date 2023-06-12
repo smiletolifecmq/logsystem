@@ -90,7 +90,7 @@
     >
       <el-table-column type="selection" width="55" align="center" />
       <el-table-column label="配置名称" align="center" prop="title" />
-      <el-table-column label="部门ID" align="center" prop="deptId" />
+      <el-table-column label="部门ID" align="center" prop="dept.deptName" />
       <el-table-column
         label="操作"
         align="center"

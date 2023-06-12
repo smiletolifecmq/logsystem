@@ -58,17 +58,6 @@
           >删除</el-button
         >
       </el-col>
-      <el-col :span="1.5">
-        <el-button
-          type="warning"
-          plain
-          icon="el-icon-download"
-          size="mini"
-          @click="handleExport"
-          v-hasPermi="['system:info:export']"
-          >导出</el-button
-        >
-      </el-col>
       <right-toolbar
         :showSearch.sync="showSearch"
         @queryTable="getList"
@@ -81,14 +70,8 @@
       @selection-change="handleSelectionChange"
     >
       <el-table-column type="selection" width="55" align="center" />
-      <el-table-column label="流程配置过程ID" align="center" prop="infoId" />
-      <el-table-column
-        label="流程配置ID"
-        align="center"
-        prop="processConfigId"
-      />
-      <el-table-column label="审核节点" align="center" prop="node" />
-      <el-table-column label="审核人id" align="center" prop="userId" />
+      <el-table-column label="审核环节" align="center" prop="node" />
+      <el-table-column label="审核人" align="center" prop="user.userName" />
       <el-table-column
         label="操作"
         align="center"
@@ -126,6 +109,19 @@
     <!-- 添加或修改流程配置过程对话框 -->
     <el-dialog :title="title" :visible.sync="open" width="500px" append-to-body>
       <el-form ref="form" :model="form" :rules="rules" label-width="80px">
+        <el-form-item label="审核环节" prop="node">
+          <el-input-number v-model="form.node" :min="0" />
+        </el-form-item>
+        <el-form-item label="审核人" prop="userId">
+          <el-autocomplete
+            v-model="form.userName"
+            :fetch-suggestions="querySearchReviewer"
+            placeholder="请选择审核人"
+            @select="selectReviewer"
+            @clear="clearReviewer"
+            clearable
+          ></el-autocomplete>
+        </el-form-item>
       </el-form>
       <div slot="footer" class="dialog-footer">
         <el-button type="primary" @click="submitForm">确 定</el-button>
@@ -143,11 +139,21 @@ import {
   addInfo,
   updateInfo,
 } from "@/api/system/processConfigInfo";
+import { listUser } from "@/api/system/user";
 
 export default {
   name: "Info",
   data() {
     return {
+      processConfigId: 0,
+      deptId: 0,
+      dateRange: [],
+      restaurants: [],
+      queryUserParams: {
+        pageNum: 1,
+        pageSize: 9999,
+        deptId: null,
+      },
       // 遮罩层
       loading: true,
       // 选中数组
@@ -178,25 +184,61 @@ export default {
       form: {},
       // 表单校验
       rules: {
-        processConfigId: [
-          { required: true, message: "流程配置ID不能为空", trigger: "blur" },
-        ],
-        node: [
-          { required: true, message: "审核节点不能为空", trigger: "blur" },
-        ],
+        node: [{ required: true, message: "审核环节", trigger: "blur" }],
         userId: [
-          { required: true, message: "审核人id不能为空", trigger: "blur" },
+          { required: true, message: "审核人不能为空", trigger: "change" },
         ],
       },
     };
   },
   created() {
+    this.processConfigId =
+      this.$route.params && this.$route.params.processConfigId;
+    this.queryUserParams.deptId =
+      this.$route.params && this.$route.params.deptId;
     this.getList();
+    this.loadAllUsers();
   },
   methods: {
+    clearReviewer() {},
+    querySearchReviewer(queryString, cb) {
+      var restaurants = this.restaurants;
+      var results = queryString
+        ? restaurants.filter(this.createStateFilter(queryString))
+        : restaurants;
+      cb(results);
+    },
+    selectReviewer(item) {
+      this.form.userId = item.userId;
+      this.form.processConfigId = this.processConfigId;
+      console.log(this.form);
+    },
+    createStateFilter(queryString) {
+      return (state) => {
+        return (
+          state.value.toLowerCase().indexOf(queryString.toLowerCase()) === 0
+        );
+      };
+    },
+    loadAllUsers() {
+      listUser(this.addDateRange(this.queryUserParams, this.dateRange)).then(
+        (response) => {
+          for (let i = 0; i < response.rows.length; i++) {
+            let userObject = {
+              value: "",
+              userId: 0,
+            };
+            userObject.value = response.rows[i].userName;
+            userObject.userId = response.rows[i].userId;
+            this.restaurants.push(userObject);
+          }
+        }
+      );
+    },
     /** 查询流程配置过程列表 */
     getList() {
       this.loading = true;
+      this.queryParams.processConfigId = this.processConfigId;
       listInfo(this.queryParams).then((response) => {
         this.infoList = response.rows;
         this.total = response.total;

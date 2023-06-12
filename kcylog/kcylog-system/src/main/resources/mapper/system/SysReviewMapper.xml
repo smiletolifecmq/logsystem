@@ -1,0 +1,148 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.kcylog.system.mapper.SysReviewMapper">
+    
+    <resultMap type="SysReview" id="SysReviewResult">
+        <result property="reviewId"    column="review_id"    />
+        <result property="serialNum"    column="serial_num"    />
+        <result property="projectName"    column="project_name"    />
+        <result property="requester"    column="requester"    />
+        <result property="porjectMoney"    column="porject_money"    />
+        <result property="workload"    column="workload"    />
+        <result property="userId"    column="user_id"    />
+        <result property="deptId"    column="dept_id"    />
+        <result property="status"    column="status"    />
+        <result property="peopleNum"    column="people_num"    />
+        <result property="startTime"    column="start_time"    />
+        <result property="endTime"    column="end_time"    />
+        <result property="budgetDay"    column="budget_day"    />
+        <result property="budgetMoney"    column="budget_money"    />
+        <result property="createTime"    column="create_time"    />
+        <result property="updateTime"    column="update_time"    />
+        <result property="finalTime"    column="final_time"    />
+        <association property="dept" column="dept_name" javaType="SysDept" resultMap="sysReviewDeptResult"/>
+        <association property="user" column="user_name" javaType="SysUser" resultMap="sysReviewUserResult"/>
+    </resultMap>
+
+
+    <resultMap id="sysReviewDeptResult" type="SysDept">
+        <result property="deptName" column="dept_name"/>
+    </resultMap>
+
+    <resultMap id="sysReviewUserResult" type="SysUser">
+        <result property="userName" column="user_name"/>
+    </resultMap>
+
+    <sql id="selectSysReviewVo">
+        select r.*, d.dept_name, u.user_name from sys_review r
+        inner join sys_dept d on r.dept_id = d.dept_id
+        inner join sys_user u on r.user_id = u.user_id
+    </sql>
+
+    <select id="selectSysReviewList" parameterType="SysReview" resultMap="SysReviewResult">
+        <include refid="selectSysReviewVo"/>
+        <where>  
+            <if test="serialNum != null  and serialNum != ''"> and serial_num = #{serialNum}</if>
+            <if test="projectName != null  and projectName != ''"> and project_name like concat('%', #{projectName}, '%')</if>
+            <if test="requester != null  and requester != ''"> and requester = #{requester}</if>
+            <if test="porjectMoney != null "> and porject_money = #{porjectMoney}</if>
+            <if test="workload != null  and workload != ''"> and workload = #{workload}</if>
+            <if test="userId != null  and userId != ''"> and user_id = #{userId}</if>
+            <if test="deptId != null  and deptId != ''"> and dept_id = #{deptId}</if>
+            <if test="status != null "> and status = #{status}</if>
+            <if test="peopleNum != null  and peopleNum != ''"> and people_num = #{peopleNum}</if>
+            <if test="startTime != null "> and start_time = #{startTime}</if>
+            <if test="endTime != null "> and end_time = #{endTime}</if>
+            <if test="budgetDay != null "> and budget_day = #{budgetDay}</if>
+            <if test="budgetMoney != null "> and budget_money = #{budgetMoney}</if>
+            <if test="finalTime != null "> and final_time = #{finalTime}</if>
+        </where>
+    </select>
+    
+    <select id="selectSysReviewByReviewId" parameterType="String" resultMap="SysReviewResult">
+        <include refid="selectSysReviewVo"/>
+        where review_id = #{reviewId}
+    </select>
+        
+    <insert id="insertSysReview" parameterType="SysReview" useGeneratedKeys="true" keyProperty="reviewId">
+        insert into sys_review
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="serialNum != null and serialNum != ''">serial_num,</if>
+            <if test="projectName != null and projectName != ''">project_name,</if>
+            <if test="requester != null and requester != ''">requester,</if>
+            <if test="porjectMoney != null">porject_money,</if>
+            <if test="workload != null">workload,</if>
+            <if test="userId != null and userId != ''">user_id,</if>
+            <if test="deptId != null and deptId != ''">dept_id,</if>
+            <if test="status != null">status,</if>
+            <if test="peopleNum != null and peopleNum != ''">people_num,</if>
+            <if test="startTime != null">start_time,</if>
+            <if test="endTime != null">end_time,</if>
+            <if test="budgetDay != null">budget_day,</if>
+            <if test="budgetMoney != null">budget_money,</if>
+            <if test="createTime != null">create_time,</if>
+            <if test="updateTime != null">update_time,</if>
+            <if test="finalTime != null">final_time,</if>
+         </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test="serialNum != null and serialNum != ''">#{serialNum},</if>
+            <if test="projectName != null and projectName != ''">#{projectName},</if>
+            <if test="requester != null and requester != ''">#{requester},</if>
+            <if test="porjectMoney != null">#{porjectMoney},</if>
+            <if test="workload != null">#{workload},</if>
+            <if test="userId != null and userId != ''">#{userId},</if>
+            <if test="deptId != null and deptId != ''">#{deptId},</if>
+            <if test="status != null">#{status},</if>
+            <if test="peopleNum != null and peopleNum != ''">#{peopleNum},</if>
+            <if test="startTime != null">#{startTime},</if>
+            <if test="endTime != null">#{endTime},</if>
+            <if test="budgetDay != null">#{budgetDay},</if>
+            <if test="budgetMoney != null">#{budgetMoney},</if>
+            <if test="createTime != null">#{createTime},</if>
+            <if test="updateTime != null">#{updateTime},</if>
+            <if test="finalTime != null">#{finalTime},</if>
+         </trim>
+    </insert>
+
+    <update id="updateSysReview" parameterType="SysReview">
+        update sys_review
+        <trim prefix="SET" suffixOverrides=",">
+            <if test="serialNum != null and serialNum != ''">serial_num = #{serialNum},</if>
+            <if test="projectName != null and projectName != ''">project_name = #{projectName},</if>
+            <if test="requester != null and requester != ''">requester = #{requester},</if>
+            <if test="porjectMoney != null">porject_money = #{porjectMoney},</if>
+            <if test="workload != null">workload = #{workload},</if>
+            <if test="userId != null and userId != ''">user_id = #{userId},</if>
+            <if test="deptId != null and deptId != ''">dept_id = #{deptId},</if>
+            <if test="status != null">status = #{status},</if>
+            <if test="peopleNum != null and peopleNum != ''">people_num = #{peopleNum},</if>
+            <if test="startTime != null">start_time = #{startTime},</if>
+            <if test="endTime != null">end_time = #{endTime},</if>
+            <if test="budgetDay != null">budget_day = #{budgetDay},</if>
+            <if test="budgetMoney != null">budget_money = #{budgetMoney},</if>
+            <if test="createTime != null">create_time = #{createTime},</if>
+            <if test="updateTime != null">update_time = #{updateTime},</if>
+            <if test="finalTime != null">final_time = #{finalTime},</if>
+        </trim>
+        where review_id = #{reviewId}
+    </update>
+
+    <delete id="deleteSysReviewByReviewId" parameterType="String">
+        delete from sys_review where review_id = #{reviewId}
+    </delete>
+
+    <delete id="deleteSysReviewByReviewIds" parameterType="String">
+        delete from sys_review where review_id in 
+        <foreach item="reviewId" collection="array" open="(" separator="," close=")">
+            #{reviewId}
+        </foreach>
+    </delete>
+
+    <update id="setSysReviewStatusByReviewId" parameterType="SysReview">
+        update sys_review
+        set status = #{status}
+        where review_id = #{reviewId}
+    </update>
+</mapper>
