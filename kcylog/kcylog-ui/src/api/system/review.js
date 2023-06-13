@@ -70,3 +70,11 @@ export function setReviewProcessStatus(data) {
     data: data
   })
 }
+
+export function getReviewProcessList(query) {
+  return request({
+    url: '/system/process/list',
+    method: 'get',
+    params: query
+  })
+}

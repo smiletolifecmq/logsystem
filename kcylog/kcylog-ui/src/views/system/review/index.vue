@@ -186,6 +186,13 @@
             v-if="scope.row.status === 0 || scope.row.status === 3"
             >删除</el-button
           >
+          <el-button
+            size="mini"
+            type="text"
+            icon="el-icon-s-operation"
+            @click="handleReviewProcess(scope.row)"
+            >流程详情</el-button
+          >
         </template>
       </el-table-column>
     </el-table>
@@ -197,6 +204,22 @@
       :limit.sync="queryParams.pageSize"
       @pagination="getList"
     />
+
+    <!-- 具体流程 -->
+
+    <el-dialog :visible.sync="reviewProcessOpen" width="300px" append-to-body>
+      <div style="height: 300px">
+        <el-steps direction="vertical" :active="reviewProcessActive">
+          <el-step
+            v-for="reviewProcess in reviewProcessList"
+            :key="reviewProcess.id"
+            :title="reviewProcess.user.userName"
+            :status="reviewProcessStatus(reviewProcess)"
+            :description="reviewProcessDescription(reviewProcess)"
+          ></el-step>
+        </el-steps>
+      </div>
+    </el-dialog>
 
     <!-- 添加或修改审核单对话框 -->
     <el-dialog :title="title" :visible.sync="open" width="500px" append-to-body>
@@ -295,6 +318,7 @@ import {
   addReview,
   updateReview,
   setReviewStatus,
+  getReviewProcessList,
 } from "@/api/system/review";
 import { listUser } from "@/api/system/user";
 
@@ -302,6 +326,7 @@ export default {
   name: "Review",
   data() {
     return {
+      reviewProcessActive: -1,
       queryUserParams: {
         pageNum: 1,
         pageSize: 9999,
@@ -348,6 +373,8 @@ export default {
       title: "",
       // 是否显示弹出层
       open: false,
+      reviewProcessOpen: false,
+      reviewProcessList: [],
       // 查询参数
       queryParams: {
         pageNum: 1,
@@ -395,11 +422,44 @@ export default {
       },
     };
   },
+  computed: {},
   created() {
     this.getList();
     // this.loadAllUsers();
   },
   methods: {
+    reviewProcessDescription(reviewProcess) {
+      if (reviewProcess.status === 0) {
+        return "审核状态:未开始";
+      } else if (reviewProcess.status === 1) {
+        return "审核状态:进行中";
+      } else if (reviewProcess.status === 2) {
+        let description = "审核状态:通过；";
+        if (reviewProcess.reason != "") {
+          description = description + "理由:" + reviewProcess.reason + "；";
+        }
+        description = description + "审核时间:" + reviewProcess.reviewTime;
+        return description;
+      } else if (reviewProcess.status === 3) {
+        let description = "审核状态:拒绝；";
+        if (reviewProcess.reason != "") {
+          description = description + "理由:" + reviewProcess.reason + "；";
+        }
+        description = description + "审核时间:" + reviewProcess.reviewTime;
+        return description;
+      }
+    },
+    reviewProcessStatus(reviewProcess) {
+      if (reviewProcess.status === 0) {
+        return "";
+      } else if (reviewProcess.status === 1) {
+        return "finish";
+      } else if (reviewProcess.status === 2) {
+        return "success";
+      } else if (reviewProcess.status === 3) {
+        return "error";
+      }
+    },
     clearReviewer() {},
     querySearchReviewer(queryString, cb) {
       var restaurants = this.restaurants;
@@ -508,6 +568,21 @@ export default {
         this.form = response.data;
         this.open = true;
         this.title = "修改审核单";
+      });
+    },
+    /** 显示具体流程按钮操作 */
+    handleReviewProcess(row) {
+      let formObj = {};
+      formObj.reviewId = row.reviewId;
+      getReviewProcessList(formObj).then((response) => {
+        this.reviewProcessList = response.rows;
+        this.reviewProcessActive = -1;
+        for (let i = 0; i < response.rows.length; i++) {
+          if (response.rows[i].status != 0) {
+            this.reviewProcessActive = this.reviewProcessActive + 1;
+          }
+        }
+        this.reviewProcessOpen = true;
       });
     },
     /** 提交按钮 */

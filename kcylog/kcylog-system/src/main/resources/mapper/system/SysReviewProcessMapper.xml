@@ -12,10 +12,16 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
         <result property="node"    column="node"    />
         <result property="reason"    column="reason"    />
         <result property="reviewTime"    column="review_time"    />
+        <association property="user" column="user_name" javaType="SysUser" resultMap="sysReviewUserResult"/>
+    </resultMap>
+
+    <resultMap id="sysReviewUserResult" type="SysUser">
+        <result property="userName" column="user_name"/>
     </resultMap>
 
     <sql id="selectSysReviewProcessVo">
-        select review_process_id, review_id, user_id, status, node, reason, review_time from sys_review_process
+        select rp.*, u.user_name from sys_review_process rp
+        inner join sys_user u on rp.user_id = u.user_id
     </sql>
 
     <select id="selectSysReviewProcessList" parameterType="SysReviewProcess" resultMap="SysReviewProcessResult">
@@ -23,6 +29,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
         <where>  
             <if test="reviewId != null "> and review_id = #{reviewId}</if>
         </where>
+        order by node asc
     </select>
     
     <select id="selectSysReviewProcessByReviewProcessId" parameterType="Long" resultMap="SysReviewProcessResult">

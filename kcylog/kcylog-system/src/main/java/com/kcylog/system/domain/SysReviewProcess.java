@@ -3,6 +3,7 @@ package com.kcylog.system.domain;
 import com.fasterxml.jackson.annotation.JsonFormat;
 import com.kcylog.common.annotation.Excel;
 import com.kcylog.common.core.domain.BaseEntity;
+import com.kcylog.common.core.domain.entity.SysUser;
 import org.apache.commons.lang3.builder.ToStringBuilder;
 import org.apache.commons.lang3.builder.ToStringStyle;
 
@@ -42,9 +43,14 @@ public class SysReviewProcess extends BaseEntity
     private String reason;
 
     /** 审核时间 */
-    @JsonFormat(pattern = "yyyy-MM-dd")
-    @Excel(name = "审核时间", width = 30, dateFormat = "yyyy-MM-dd")
+    @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss")
+    @Excel(name = "审核时间", width = 30, dateFormat = "yyyy-MM-dd HH:mm:ss")
     private Date reviewTime;
+
+    /**
+     * 用户对象
+     */
+    private SysUser user;
 
     public void setReviewProcessId(Long reviewProcessId) 
     {
@@ -108,6 +114,14 @@ public class SysReviewProcess extends BaseEntity
     public Date getReviewTime() 
     {
         return reviewTime;
+    }
+
+    public SysUser getUser() {
+        return user;
+    }
+
+    public void setUser(SysUser user) {
+        this.user = user;
     }
 
     @Override
