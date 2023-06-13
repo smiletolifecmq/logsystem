@@ -33,7 +33,11 @@
         />
       </el-form-item>
       <el-form-item label="审核状态" prop="status">
-        <el-select v-model="statusVaule" placeholder="请选择">
+        <el-select
+          v-model="statusVaule"
+          placeholder="请选择"
+          @change="handleQuery"
+        >
           <el-option
             v-for="item in statusArr"
             :key="item.value"
@@ -114,8 +118,8 @@
         <template slot-scope="scope">
           <span v-if="scope.row.status === 0">未开始</span>
           <span v-else-if="scope.row.status === 1">进行中</span>
-          <span v-else-if="scope.row.status === 1">通过</span>
-          <span v-else-if="scope.row.status === 1">未通过</span>
+          <span v-else-if="scope.row.status === 2">通过</span>
+          <span v-else-if="scope.row.status === 3">未通过</span>
           <span v-else>其他状态</span>
         </template>
       </el-table-column>
@@ -163,7 +167,7 @@
             type="text"
             icon="el-icon-edit-outline"
             @click="handleReview(scope.row)"
-            v-if="scope.row.status === 0"
+            v-if="scope.row.status === 0 || scope.row.status === 3"
             >发起审核</el-button
           >
           <el-button
@@ -171,7 +175,7 @@
             type="text"
             icon="el-icon-edit"
             @click="handleUpdate(scope.row)"
-            v-if="scope.row.status === 0"
+            v-if="scope.row.status === 0 || scope.row.status === 3"
             >修改基本信息</el-button
           >
           <el-button
@@ -179,7 +183,7 @@
             type="text"
             icon="el-icon-delete"
             @click="handleDelete(scope.row)"
-            v-if="scope.row.status === 0"
+            v-if="scope.row.status === 0 || scope.row.status === 3"
             >删除</el-button
           >
         </template>
@@ -393,7 +397,7 @@ export default {
   },
   created() {
     this.getList();
-    this.loadAllUsers();
+    // this.loadAllUsers();
   },
   methods: {
     clearReviewer() {},
@@ -433,11 +437,13 @@ export default {
     /** 查询审核单列表 */
     getList() {
       this.loading = true;
-      listReview(this.queryParams).then((response) => {
-        this.reviewList = response.rows;
-        this.total = response.total;
-        this.loading = false;
-      });
+      listReview(this.addDateRange(this.queryParams, this.dateRange)).then(
+        (response) => {
+          this.reviewList = response.rows;
+          this.total = response.total;
+          this.loading = false;
+        }
+      );
     },
     // 取消按钮
     cancel() {
@@ -470,10 +476,15 @@ export default {
     /** 搜索按钮操作 */
     handleQuery() {
       this.queryParams.pageNum = 1;
+      if (this.statusVaule != "") {
+        this.queryParams.status = this.statusVaule;
+      }
       this.getList();
     },
     /** 重置按钮操作 */
     resetQuery() {
+      this.statusVaule = "";
+      this.dateRange = [];
       this.resetForm("queryForm");
       this.handleQuery();
     },

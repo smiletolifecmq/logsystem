@@ -51,3 +51,22 @@ export function setReviewStatus(data) {
     data: data
   })
 }
+
+// 查询待审核单列表
+export function upcomingListReview(query) {
+  return request({
+    url: '/system/review/upcomingListReview',
+    method: 'get',
+    params: query
+  })
+}
+
+
+// 修改审核是否通过
+export function setReviewProcessStatus(data) {
+  return request({
+    url: '/system/review/set_review_process',
+    method: 'put',
+    data: data
+  })
+}

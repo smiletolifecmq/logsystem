@@ -103,4 +103,10 @@ public class SysReviewServiceImpl implements ISysReviewService
     {
         return sysReviewMapper.setSysReviewStatusByReviewId(sysReview);
     }
+
+    // 获取当前用户需要审核的待审核单
+    public List<SysReview> selectSysUpcomingReviewList(SysReview sysReview)
+    {
+        return sysReviewMapper.selectSysUpcomingReviewList(sysReview);
+    }
 }

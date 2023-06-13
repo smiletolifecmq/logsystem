@@ -5,6 +5,7 @@ import com.kcylog.common.core.controller.BaseController;
 import com.kcylog.common.core.domain.AjaxResult;
 import com.kcylog.common.core.page.TableDataInfo;
 import com.kcylog.common.enums.BusinessType;
+import com.kcylog.common.utils.DateUtils;
 import com.kcylog.common.utils.SecurityUtils;
 import com.kcylog.common.utils.poi.ExcelUtil;
 import com.kcylog.system.domain.SysProcessConfigInfo;
@@ -32,6 +33,8 @@ import java.util.List;
 @RequestMapping("/system/review")
 public class SysReviewController extends BaseController
 {
+    final int PassStatus = 2;
+    final int NoPassStatus = 3;
     @Autowired
     private ISysReviewService sysReviewService;
     @Autowired
@@ -136,8 +139,70 @@ public class SysReviewController extends BaseController
     @PutMapping("/set_status")
     public AjaxResult setStatus(@RequestBody SysReview sysReview)
     {
+        //设置审核单为进行中
         sysReviewService.setSysReviewStatusByReviewId(sysReview);
+        //先将审核单流程状态全部设置成未开始
+        sysReviewProcessService.setStatusNotStartByReviewId(sysReview.getReviewId());
+        //将审核单第一个流程设置成进行中
         int result = sysReviewProcessService.setStatusByReviewIdFirst(sysReview.getReviewId());
         return toAjax(result);
+    }
+
+    /**
+     * 获取待办审核单
+     */
+    @GetMapping("/upcomingListReview")
+    public TableDataInfo upcomingListReview(SysReview sysReview)
+    {
+        startPage();
+        Long userId = SecurityUtils.getUserId();
+        sysReview.setUserId(userId);
+        List<SysReview> list = sysReviewService.selectSysUpcomingReviewList(sysReview);
+        return getDataTable(list);
+    }
+
+
+    /**
+     * 修改审核是否通过
+     */
+    @Log(title = "审核单", businessType = BusinessType.UPDATE)
+    @Transactional
+    @PutMapping("/set_review_process")
+    public AjaxResult setReviewProcessStatus(@RequestBody SysReviewProcess sysReviewProcess)
+    {
+        //修改审核流程中流程信息
+        Long userId = SecurityUtils.getUserId();
+        sysReviewProcess.setUserId(userId);
+        sysReviewProcess.setReviewTime(DateUtils.getNowDate());
+        sysReviewProcessService.setStatusByUserIdAndReviewId(sysReviewProcess);
+
+        SysReview review = new SysReview();
+        review.setReviewId(sysReviewProcess.getReviewId());
+        if (sysReviewProcess.getStatus() == (long)this.PassStatus){
+            //审核通过
+            //获取审核单审核流程
+            List<SysReviewProcess> list = sysReviewProcessService.selectSysReviewProcessList(sysReviewProcess);
+            int passNum = 0;
+            for (SysReviewProcess obj : list) {
+                if (obj.getStatus() == (long)this.PassStatus){
+                    passNum ++;
+                }
+            }
+            //判断流程是否都已经通过了
+            if (passNum == list.size()){
+                //审核单通过
+                review.setStatus((long)this.PassStatus);
+                sysReviewService.setSysReviewStatusByReviewId(review);
+            }else {
+                //审核单流程没有全部通过，进入下一个流程审核
+                sysReviewProcessService.setNextStatusByReviewId(sysReviewProcess.getReviewId());
+            }
+
+        }else {
+            //审核不通过
+            review.setStatus((long)this.NoPassStatus);
+            sysReviewService.setSysReviewStatusByReviewId(review);
+        }
+        return toAjax(1);
     }
 }

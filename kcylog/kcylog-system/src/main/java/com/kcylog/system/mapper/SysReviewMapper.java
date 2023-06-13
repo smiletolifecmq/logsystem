@@ -64,4 +64,7 @@ public interface SysReviewMapper
      * 发起审核单申请
      */
     public int setSysReviewStatusByReviewId(SysReview sysReview);
+
+    // 获取当前用户需要审核的待审核单
+    public List<SysReview> selectSysUpcomingReviewList(SysReview sysReview);
 }

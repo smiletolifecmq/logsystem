@@ -49,6 +49,14 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
             <if test="requester != null  and requester != ''"> and r.requester = #{requester}</if>
             <if test="status != null "> and r.status = #{status}</if>
             <if test="userId != null  and userId != ''"> and r.user_id = #{userId}</if>
+
+
+            <if test="params.beginTime != null and params.beginTime != ''"><!-- 开始时间检索 -->
+                AND date_format(r.create_time,'%y%m%d') &gt;= date_format(#{params.beginTime},'%y%m%d')
+            </if>
+            <if test="params.endTime != null and params.endTime != ''"><!-- 结束时间检索 -->
+                AND date_format(r.create_time,'%y%m%d') &lt;= date_format(#{params.endTime},'%y%m%d')
+            </if>
         </where>
     </select>
     
@@ -136,4 +144,22 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
         set status = #{status}
         where review_id = #{reviewId}
     </update>
+
+    <select id="selectSysUpcomingReviewList" parameterType="SysReview" resultMap="SysReviewResult">
+        <include refid="selectSysReviewVo"/>
+        inner join sys_review_process rp on r.review_id = rp.review_id
+        <where>
+            <if test="serialNum != null  and serialNum != ''"> and r.serial_num = #{serialNum}</if>
+            <if test="projectName != null  and projectName != ''"> and r.project_name like concat('%', #{projectName}, '%')</if>
+            <if test="requester != null  and requester != ''"> and r.requester = #{requester}</if>
+            <if test="params.beginTime != null and params.beginTime != ''"><!-- 开始时间检索 -->
+                AND date_format(r.create_time,'%y%m%d') &gt;= date_format(#{params.beginTime},'%y%m%d')
+            </if>
+            <if test="params.endTime != null and params.endTime != ''"><!-- 结束时间检索 -->
+                AND date_format(r.create_time,'%y%m%d') &lt;= date_format(#{params.endTime},'%y%m%d')
+            </if>
+        </where>
+        AND rp.user_id = #{userId}
+        AND rp.status = 1
+    </select>
 </mapper>

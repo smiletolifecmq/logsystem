@@ -69,9 +69,9 @@ public interface SysReviewProcessMapper
     public int insertSysReviewProcessBatch(List<SysReviewProcess> sysReviewProcess);
 
     /**
-     * 批量新增审核单流程
+     * 设置审核单状态
      *
-     * @param reviewId 审核单流程
+     * @param reviewId 审核单id
      * @return 结果
      */
     public int setStatusByReviewIdFirst(Long reviewId);
@@ -83,4 +83,16 @@ public interface SysReviewProcessMapper
      * @return 结果
      */
     public int deleteSysReviewProcessByReviewIds(String[] reviewIds);
+
+    /**
+     * 修改审核单流程状态
+     *
+     * @param sysReviewProcess 审核单参数
+     * @return 结果
+     */
+    public int setStatusByUserIdAndReviewId(SysReviewProcess sysReviewProcess);
+
+    public int setNextStatusByReviewId(Long reviewId);
+
+    public int setStatusNotStartByReviewId(Long reviewId);
 }

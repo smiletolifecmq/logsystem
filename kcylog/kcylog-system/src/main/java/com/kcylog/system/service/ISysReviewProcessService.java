@@ -83,4 +83,16 @@ public interface ISysReviewProcessService
      * @return 结果
      */
     public int deleteSysReviewProcessByReviewIds(String[] reviewIds);
+
+    /**
+     * 修改审核流程状态
+     *
+     * @param sysReviewProcess 审核参数
+     * @return 结果
+     */
+    public int setStatusByUserIdAndReviewId(SysReviewProcess sysReviewProcess);
+
+    public int setNextStatusByReviewId(Long reviewId);
+
+    public int setStatusNotStartByReviewId(Long reviewId);
 }

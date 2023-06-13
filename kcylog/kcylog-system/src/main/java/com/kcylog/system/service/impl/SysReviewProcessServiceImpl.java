@@ -127,4 +127,28 @@ public class SysReviewProcessServiceImpl implements ISysReviewProcessService
     {
         return sysReviewProcessMapper.deleteSysReviewProcessByReviewIds(reviewIds);
     }
+
+    /**
+     * 修改审核单流程状态
+     *
+     * @param sysReviewProcess 审核单参数
+     * @return 结果
+     */
+    @Override
+    public int setStatusByUserIdAndReviewId(SysReviewProcess sysReviewProcess)
+    {
+        return sysReviewProcessMapper.setStatusByUserIdAndReviewId(sysReviewProcess);
+    }
+
+    @Override
+    public int setNextStatusByReviewId(Long reviewId)
+    {
+        return sysReviewProcessMapper.setNextStatusByReviewId(reviewId);
+    }
+
+    @Override
+    public int setStatusNotStartByReviewId(Long reviewId)
+    {
+        return sysReviewProcessMapper.setStatusNotStartByReviewId(reviewId);
+    }
 }
