@@ -176,6 +176,20 @@ export const dynamicRoutes = [
       }
     ]
   },
+  {
+    path: '/system/review-employee',
+    component: Layout,
+    hidden: true,
+    permissions: ['system:review:list'],
+    children: [
+      {
+        path: 'edit/:reviewId(\\d+)',
+        component: () => import('@/views/system/review/reviewEmployee'),
+        name: 'ReviewEmployee',
+        meta: { title: '填写最终雇佣信息', activeMenu: '/system/reviewEmployee' }
+      }
+    ]
+  },
 ]
 
 // 防止连续点击多次路由报错

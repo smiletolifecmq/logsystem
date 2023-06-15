@@ -201,6 +201,15 @@
             @click="handleReviewProcess(scope.row)"
             >流程详情</el-button
           >
+
+          <el-button
+            size="mini"
+            type="text"
+            icon="el-icon-user-solid"
+            @click="finalEmploymentInfo(scope.row)"
+            v-if="scope.row.status === 2"
+            >最终雇佣信息</el-button
+          >
         </template>
       </el-table-column>
     </el-table>
@@ -465,6 +474,10 @@ export default {
     // this.loadAllUsers();
   },
   methods: {
+    finalEmploymentInfo(row) {
+      const reviewId = row.reviewId;
+      this.$router.push("/system/review-employee/edit/" + reviewId);
+    },
     filterTime(timeString) {
       if (timeString != "" && timeString != null) {
         const timeSubstring = timeString.substring(11);

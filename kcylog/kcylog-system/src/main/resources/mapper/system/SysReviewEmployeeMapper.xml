@@ -1,0 +1,81 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.kcylog.system.mapper.SysReviewEmployeeMapper">
+    
+    <resultMap type="SysReviewEmployee" id="SysReviewEmployeeResult">
+        <result property="reviewEmployeeId"    column="review_employee_id"    />
+        <result property="name"    column="name"    />
+        <result property="idCard"    column="id_card"    />
+        <result property="workTime"    column="work_time"    />
+        <result property="workDay"    column="work_day"    />
+        <result property="cost"    column="cost"    />
+        <result property="reviewId"    column="review_id"    />
+    </resultMap>
+
+    <sql id="selectSysReviewEmployeeVo">
+        select review_employee_id, name, id_card, work_time, work_day, cost, review_id from sys_review_employee
+    </sql>
+
+    <select id="selectSysReviewEmployeeList" parameterType="SysReviewEmployee" resultMap="SysReviewEmployeeResult">
+        <include refid="selectSysReviewEmployeeVo"/>
+        <where>  
+            <if test="name != null  and name != ''"> and name like concat('%', #{name}, '%')</if>
+            <if test="idCard != null  and idCard != ''"> and id_card = #{idCard}</if>
+            <if test="workTime != null  and workTime != ''"> and work_time = #{workTime}</if>
+            <if test="workDay != null "> and work_day = #{workDay}</if>
+            <if test="cost != null "> and cost = #{cost}</if>
+            <if test="reviewId != null "> and review_id = #{reviewId}</if>
+        </where>
+    </select>
+    
+    <select id="selectSysReviewEmployeeByReviewEmployeeId" parameterType="Long" resultMap="SysReviewEmployeeResult">
+        <include refid="selectSysReviewEmployeeVo"/>
+        where review_employee_id = #{reviewEmployeeId}
+    </select>
+        
+    <insert id="insertSysReviewEmployee" parameterType="SysReviewEmployee" useGeneratedKeys="true" keyProperty="reviewEmployeeId">
+        insert into sys_review_employee
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="name != null and name != ''">name,</if>
+            <if test="idCard != null and idCard != ''">id_card,</if>
+            <if test="workTime != null and workTime != ''">work_time,</if>
+            <if test="workDay != null">work_day,</if>
+            <if test="cost != null">cost,</if>
+            <if test="reviewId != null">review_id,</if>
+         </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test="name != null and name != ''">#{name},</if>
+            <if test="idCard != null and idCard != ''">#{idCard},</if>
+            <if test="workTime != null and workTime != ''">#{workTime},</if>
+            <if test="workDay != null">#{workDay},</if>
+            <if test="cost != null">#{cost},</if>
+            <if test="reviewId != null">#{reviewId},</if>
+         </trim>
+    </insert>
+
+    <update id="updateSysReviewEmployee" parameterType="SysReviewEmployee">
+        update sys_review_employee
+        <trim prefix="SET" suffixOverrides=",">
+            <if test="name != null and name != ''">name = #{name},</if>
+            <if test="idCard != null and idCard != ''">id_card = #{idCard},</if>
+            <if test="workTime != null and workTime != ''">work_time = #{workTime},</if>
+            <if test="workDay != null">work_day = #{workDay},</if>
+            <if test="cost != null">cost = #{cost},</if>
+            <if test="reviewId != null">review_id = #{reviewId},</if>
+        </trim>
+        where review_employee_id = #{reviewEmployeeId}
+    </update>
+
+    <delete id="deleteSysReviewEmployeeByReviewEmployeeId" parameterType="Long">
+        delete from sys_review_employee where review_employee_id = #{reviewEmployeeId}
+    </delete>
+
+    <delete id="deleteSysReviewEmployeeByReviewEmployeeIds" parameterType="String">
+        delete from sys_review_employee where review_employee_id in 
+        <foreach item="reviewEmployeeId" collection="array" open="(" separator="," close=")">
+            #{reviewEmployeeId}
+        </foreach>
+    </delete>
+</mapper>
