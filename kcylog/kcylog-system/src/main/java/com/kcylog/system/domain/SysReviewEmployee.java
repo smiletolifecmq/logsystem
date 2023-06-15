@@ -42,7 +42,6 @@ public class SysReviewEmployee extends BaseEntity
     private BigDecimal cost;
 
     /** 审核单ID */
-    @Excel(name = "审核单ID")
     private Long reviewId;
 
     private List<WorkTimeStamp> workTimeStamp;

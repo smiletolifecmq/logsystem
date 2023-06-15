@@ -60,7 +60,7 @@ public class SysReviewEmployeeController extends BaseController
     {
         List<SysReviewEmployee> list = sysReviewEmployeeService.selectSysReviewEmployeeList(sysReviewEmployee);
         ExcelUtil<SysReviewEmployee> util = new ExcelUtil<SysReviewEmployee>(SysReviewEmployee.class);
-        util.exportExcel(response, list, "雇工实际工作内容记录数据");
+        util.exportExcel(response, list, "雇工实际工作记录数据");
     }
 
     /**

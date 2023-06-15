@@ -2,6 +2,7 @@ package com.kcylog.system.domain;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
 import com.kcylog.common.annotation.Excel;
+import com.kcylog.common.annotation.Excels;
 import com.kcylog.common.core.domain.BaseEntity;
 import com.kcylog.common.core.domain.entity.SysDept;
 import com.kcylog.common.core.domain.entity.SysUser;
@@ -21,11 +22,19 @@ public class SysReview extends BaseEntity
 {
     private static final long serialVersionUID = 1L;
 
+    /**
+     * 部门对象
+     */
+    @Excels({
+            @Excel(name = "部门", targetAttr = "deptName", type = Excel.Type.EXPORT),
+    })
+    private SysDept dept;
+
     /** 审核单ID */
     private Long reviewId;
 
     /** 编号 */
-    @Excel(name = "编号")
+    @Excel(name = "工程编号")
     private String serialNum;
 
     /** 项目名称 */
@@ -45,53 +54,42 @@ public class SysReview extends BaseEntity
     private String workload;
 
     /** 用户ID(负责人) */
-    @Excel(name = "用户ID(负责人)")
     private Long userId;
 
     /** 部门ID */
-    @Excel(name = "部门ID")
     private Long deptId;
 
     /** 审核状态(0:未开始;1进行中;2通过;3:未通过) */
-    @Excel(name = "审核状态(0:未开始;1进行中;2通过;3:未通过)")
     private Long status;
 
     /** 人数 */
-    @Excel(name = "人数")
     private String peopleNum;
 
     /** 预估雇工工作开始时间 */
     @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss")
-    @Excel(name = "预估雇工工作开始时间", width = 30, dateFormat = "yyyy-MM-dd")
     private Date startTime;
 
     /** 预估雇工工作结束时间 */
     @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss")
-    @Excel(name = "预估雇工工作结束时间", width = 30, dateFormat = "yyyy-MM-dd")
     private Date endTime;
 
     /** 预估天数 */
-    @Excel(name = "预估天数")
     private float budgetDay;
 
     /** 预算金额 */
-    @Excel(name = "预算金额")
     private BigDecimal budgetMoney;
 
     /** 填写单子的最终时间 */
     @JsonFormat(pattern = "yyyy-MM-dd")
-    @Excel(name = "填写单子的最终时间", width = 30, dateFormat = "yyyy-MM-dd")
     private Date finalTime;
 
     /**
      * 用户对象
      */
+    @Excels({
+            @Excel(name = "负责人", targetAttr = "userName", type = Excel.Type.EXPORT),
+    })
     private SysUser user;
-
-    /**
-     * 部门对象
-     */
-    private SysDept dept;
 
     public void setReviewId(Long reviewId)
     {

@@ -61,7 +61,6 @@ public class SysReviewController extends BaseController
     /**
      * 导出审核单列表
      */
-    @PreAuthorize("@ss.hasPermi('system:review:export')")
     @Log(title = "审核单", businessType = BusinessType.EXPORT)
     @PostMapping("/export")
     public void export(HttpServletResponse response, SysReview sysReview)

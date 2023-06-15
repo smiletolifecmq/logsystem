@@ -64,6 +64,29 @@
         @queryTable="getUpcomingList"
       ></right-toolbar>
     </el-row> -->
+    <el-row :gutter="10" class="mb8">
+      <el-col :span="1.5">
+        <el-button
+          type="warning"
+          plain
+          icon="el-icon-download"
+          size="mini"
+          @click="handleEmployeeExport"
+          >按雇工导出</el-button
+        >
+      </el-col>
+
+      <el-col :span="1.5">
+        <el-button
+          type="warning"
+          plain
+          icon="el-icon-download"
+          size="mini"
+          @click="handleDeptExport"
+          >按部门导出</el-button
+        >
+      </el-col>
+    </el-row>
 
     <el-table v-loading="loading" :data="reviewList">
       <el-table-column label="编号" align="center" prop="serialNum" />
@@ -309,6 +332,23 @@ export default {
     //   this.single = selection.length !== 1;
     //   this.multiple = !selection.length;
     // },
+
+    /** 导出按钮操作 */
+    handleEmployeeExport() {
+      this.download(
+        "system/reviewEmployee/export",
+        {},
+        `雇工工作记录_雇工_${new Date().getTime()}.xlsx`
+      );
+    },
+
+    handleDeptExport() {
+      this.download(
+        "system/review/export",
+        {},
+        `雇工工作记录_部门_${new Date().getTime()}.xlsx`
+      );
+    },
   },
 };
 </script>
