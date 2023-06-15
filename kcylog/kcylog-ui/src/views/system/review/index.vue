@@ -477,7 +477,13 @@ export default {
     },
     handleTimeChange() {
       if (this.form.startTime != null && this.form.endTime != null) {
-        let startTimeTemp = this.form.startTime + " " + this.startAmPm;
+        let startTimeTemp = "";
+        if (this.startAmPm == "23:59:59") {
+          startTimeTemp = this.form.startTime + " " + "24:00:00";
+        } else {
+          startTimeTemp = this.form.startTime + " " + this.startAmPm;
+        }
+
         let endTimeTemp = "";
         if (this.endAmPm == "23:59:59") {
           endTimeTemp = this.form.endTime + " " + "24:00:00";
