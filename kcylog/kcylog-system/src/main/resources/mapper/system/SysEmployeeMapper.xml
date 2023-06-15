@@ -58,4 +58,9 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
             #{employeeId}
         </foreach>
     </delete>
+
+    <select id="selectSysEmployeeByIdCard" parameterType="String" resultMap="SysEmployeeResult">
+        <include refid="selectSysEmployeeVo"/>
+        where id_card = #{idCard}
+    </select>
 </mapper>

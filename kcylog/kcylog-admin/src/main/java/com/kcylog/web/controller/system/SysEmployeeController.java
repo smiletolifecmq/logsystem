@@ -5,6 +5,7 @@ import com.kcylog.common.core.controller.BaseController;
 import com.kcylog.common.core.domain.AjaxResult;
 import com.kcylog.common.core.page.TableDataInfo;
 import com.kcylog.common.enums.BusinessType;
+import com.kcylog.common.exception.review.EmployeeExistsException;
 import com.kcylog.common.utils.poi.ExcelUtil;
 import com.kcylog.system.domain.SysEmployee;
 import com.kcylog.system.service.ISysEmployeeService;
@@ -66,7 +67,15 @@ public class SysEmployeeController extends BaseController
     @PostMapping
     public AjaxResult add(@RequestBody SysEmployee sysEmployee)
     {
-        return toAjax(sysEmployeeService.insertSysEmployee(sysEmployee));
+        try
+        {
+            sysEmployeeService.insertSysEmployee(sysEmployee);
+            return toAjax(1);
+        }
+        catch (Exception e)
+        {
+            throw new EmployeeExistsException();
+        }
     }
 
     /**

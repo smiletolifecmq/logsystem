@@ -91,4 +91,11 @@ public class SysReviewEmployeeServiceImpl implements ISysReviewEmployeeService
     {
         return sysReviewEmployeeMapper.deleteSysReviewEmployeeByReviewEmployeeId(reviewEmployeeId);
     }
+
+    @Override
+    public List<SysReviewEmployee> selectSysReviewEmployeeListNotItself(SysReviewEmployee sysReviewEmployee)
+    {
+        return sysReviewEmployeeMapper.selectSysReviewEmployeeListNotItself(sysReviewEmployee);
+    }
+
 }

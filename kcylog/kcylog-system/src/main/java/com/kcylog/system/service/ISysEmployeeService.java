@@ -59,4 +59,7 @@ public interface ISysEmployeeService
      * @return 结果
      */
     public int deleteSysEmployeeByEmployeeId(Long employeeId);
+
+    public SysEmployee selectSysEmployeeByIdCard(String idCard);
+
 }

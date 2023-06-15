@@ -59,4 +59,7 @@ public interface SysReviewEmployeeMapper
      * @return 结果
      */
     public int deleteSysReviewEmployeeByReviewEmployeeIds(Long[] reviewEmployeeIds);
+
+    public List<SysReviewEmployee> selectSysReviewEmployeeListNotItself(SysReviewEmployee sysReviewEmployee);
+
 }

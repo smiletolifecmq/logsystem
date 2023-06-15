@@ -1,11 +1,12 @@
 package com.kcylog.system.service.impl;
 
-import java.util.List;
+import com.kcylog.system.domain.SysEmployee;
+import com.kcylog.system.mapper.SysEmployeeMapper;
+import com.kcylog.system.service.ISysEmployeeService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-import com.kcylog.system.mapper.SysEmployeeMapper;
-import com.kcylog.system.domain.SysEmployee;
-import com.kcylog.system.service.ISysEmployeeService;
+
+import java.util.List;
 
 /**
  * 雇工Service业务层处理
@@ -89,5 +90,11 @@ public class SysEmployeeServiceImpl implements ISysEmployeeService
     public int deleteSysEmployeeByEmployeeId(Long employeeId)
     {
         return sysEmployeeMapper.deleteSysEmployeeByEmployeeId(employeeId);
+    }
+
+    @Override
+    public SysEmployee selectSysEmployeeByIdCard(String idCard)
+    {
+        return sysEmployeeMapper.selectSysEmployeeByIdCard(idCard);
     }
 }

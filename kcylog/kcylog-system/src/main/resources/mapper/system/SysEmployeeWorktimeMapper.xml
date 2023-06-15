@@ -1,0 +1,91 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.kcylog.system.mapper.SysEmployeeWorktimeMapper">
+    
+    <resultMap type="SysEmployeeWorktime" id="SysEmployeeWorktimeResult">
+        <result property="worktimeId"    column="worktime_id"    />
+        <result property="employeeId"    column="employee_id"    />
+        <result property="startTime"    column="start_time"    />
+        <result property="endTime"    column="end_time"    />
+        <result property="reviewId"    column="review_id"    />
+        <result property="reviewEmployeeId"    column="review_employee_id"    />
+    </resultMap>
+
+    <sql id="selectSysEmployeeWorktimeVo">
+        select worktime_id, employee_id, start_time, end_time, review_id,review_employee_id from sys_employee_worktime
+    </sql>
+
+    <select id="selectSysEmployeeWorktimeList" parameterType="SysEmployeeWorktime" resultMap="SysEmployeeWorktimeResult">
+        <include refid="selectSysEmployeeWorktimeVo"/>
+        <where>  
+            <if test="employeeId != null "> and employee_id = #{employeeId}</if>
+            <if test="startTime != null "> and start_time = #{startTime}</if>
+            <if test="endTime != null "> and end_time = #{endTime}</if>
+            <if test="reviewId != null "> and review_id = #{reviewId}</if>
+        </where>
+    </select>
+    
+    <select id="selectSysEmployeeWorktimeByWorktimeId" parameterType="Long" resultMap="SysEmployeeWorktimeResult">
+        <include refid="selectSysEmployeeWorktimeVo"/>
+        where worktime_id = #{worktimeId}
+    </select>
+        
+    <insert id="insertSysEmployeeWorktime" parameterType="SysEmployeeWorktime" useGeneratedKeys="true" keyProperty="worktimeId">
+        insert into sys_employee_worktime
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="employeeId != null">employee_id,</if>
+            <if test="startTime != null">start_time,</if>
+            <if test="endTime != null">end_time,</if>
+            <if test="reviewId != null">review_id,</if>
+            <if test="reviewEmployeeId != null">review_employee_id,</if>
+
+        </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test="employeeId != null">#{employeeId},</if>
+            <if test="startTime != null">#{startTime},</if>
+            <if test="endTime != null">#{endTime},</if>
+            <if test="reviewId != null">#{reviewId},</if>
+            <if test="reviewEmployeeId != null">#{reviewEmployeeId},</if>
+        </trim>
+    </insert>
+
+    <update id="updateSysEmployeeWorktime" parameterType="SysEmployeeWorktime">
+        update sys_employee_worktime
+        <trim prefix="SET" suffixOverrides=",">
+            <if test="employeeId != null">employee_id = #{employeeId},</if>
+            <if test="startTime != null">start_time = #{startTime},</if>
+            <if test="endTime != null">end_time = #{endTime},</if>
+            <if test="reviewId != null">review_id = #{reviewId},</if>
+        </trim>
+        where worktime_id = #{worktimeId}
+    </update>
+
+    <delete id="deleteSysEmployeeWorktimeByWorktimeId" parameterType="Long">
+        delete from sys_employee_worktime where worktime_id = #{worktimeId}
+    </delete>
+
+    <delete id="deleteSysEmployeeWorktimeByWorktimeIds" parameterType="String">
+        delete from sys_employee_worktime where worktime_id in 
+        <foreach item="worktimeId" collection="array" open="(" separator="," close=")">
+            #{worktimeId}
+        </foreach>
+    </delete>
+
+
+    <select id="selectSysEmployeeWorktimeExists" parameterType="SysEmployeeWorktime" resultMap="SysEmployeeWorktimeResult">
+        <include refid="selectSysEmployeeWorktimeVo"/>
+        <where>
+            <if test="employeeId != null "> and employee_id = #{employeeId}</if>
+        </where>
+        AND ((#{startTime} >= start_time AND end_time >= #{startTime}) OR (#{endTime} >= start_time AND end_time >= #{endTime}))
+    </select>
+
+    <delete id="deleteSysEmployeeWorktimeByReviewEmployeeIds" parameterType="String">
+        delete from sys_employee_worktime where review_employee_id in
+        <foreach item="reviewEmployeeId" collection="array" open="(" separator="," close=")">
+            #{reviewEmployeeId}
+        </foreach>
+    </delete>
+</mapper>

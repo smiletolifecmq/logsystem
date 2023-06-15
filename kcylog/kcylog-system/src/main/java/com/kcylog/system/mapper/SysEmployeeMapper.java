@@ -59,4 +59,7 @@ public interface SysEmployeeMapper
      * @return 结果
      */
     public int deleteSysEmployeeByEmployeeIds(Long[] employeeIds);
+
+    public SysEmployee selectSysEmployeeByIdCard(String idCard);
+
 }

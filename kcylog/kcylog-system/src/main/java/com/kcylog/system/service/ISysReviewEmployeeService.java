@@ -59,4 +59,7 @@ public interface ISysReviewEmployeeService
      * @return 结果
      */
     public int deleteSysReviewEmployeeByReviewEmployeeId(Long reviewEmployeeId);
+
+    public List<SysReviewEmployee> selectSysReviewEmployeeListNotItself(SysReviewEmployee sysReviewEmployee);
+
 }

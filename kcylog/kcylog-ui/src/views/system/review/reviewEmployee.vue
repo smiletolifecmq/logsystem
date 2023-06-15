@@ -74,20 +74,81 @@
     <!-- 添加或修改雇工实际工作内容记录对话框 -->
     <el-dialog :title="title" :visible.sync="open" width="500px" append-to-body>
       <el-form ref="form" :model="form" :rules="rules" label-width="80px">
+        <el-form-item label="雇工列表">
+          <el-select
+            v-model="employeeName"
+            placeholder="请选择"
+            @change="selectEmployee"
+          >
+            <el-option
+              v-for="item in reviewEmployeeList"
+              :key="item.idCard"
+              :label="item.name"
+              :value="item"
+            >
+            </el-option>
+          </el-select>
+        </el-form-item>
         <el-form-item label="姓名" prop="name">
-          <el-input v-model="form.name" placeholder="请输入姓名" />
+          <el-input v-model="form.name" placeholder="请输入姓名" disabled />
         </el-form-item>
         <el-form-item label="身份证" prop="idCard">
-          <el-input v-model="form.idCard" placeholder="请输入身份证" />
+          <el-input v-model="form.idCard" placeholder="请输入身份证" disabled />
         </el-form-item>
         <el-form-item label="作业时间" prop="workTime">
-          <el-input v-model="form.workTime" placeholder="请输入作业时间" />
+          <el-input
+            type="textarea"
+            :autosize="{ minRows: 2, maxRows: 4 }"
+            placeholder="作业时间"
+            v-model="form.workTime"
+            disabled
+          >
+          </el-input>
+        </el-form-item>
+        <el-form-item>
+          <el-button type="danger" plain @click="clearTime">清空时间</el-button>
+        </el-form-item>
+        <el-form-item label="添加时间">
+          <el-form-item label="开始时间" prop="startTime">
+            <el-date-picker
+              clearable
+              v-model="form.startTime"
+              type="date"
+              value-format="yyyy-MM-dd"
+              placeholder="请选择工作开始时间"
+            >
+            </el-date-picker>
+
+            <el-select v-model="startAmPm" placeholder="请选择">
+              <el-option label="上午" value="12:00:00"></el-option>
+              <el-option label="下午" value="23:59:59"></el-option>
+            </el-select>
+          </el-form-item>
+          <el-form-item label="结束时间" prop="endTime">
+            <el-date-picker
+              clearable
+              v-model="form.endTime"
+              type="date"
+              value-format="yyyy-MM-dd"
+              placeholder="请选择结束时间"
+            >
+            </el-date-picker>
+            <el-select v-model="endAmPm" placeholder="请选择">
+              <el-option label="上午" value="12:00:00"></el-option>
+              <el-option label="下午" value="23:59:59"></el-option>
+            </el-select>
+          </el-form-item>
+          <el-form-item>
+            <el-button type="primary" plain @click="handleTimeChange"
+              >确认</el-button
+            >
+          </el-form-item>
         </el-form-item>
         <el-form-item label="天数" prop="workDay">
-          <el-input v-model="form.workDay" placeholder="请输入天数" />
+          <el-input v-model="form.workDay" placeholder="天数" disabled />
         </el-form-item>
         <el-form-item label="费用" prop="cost">
-          <el-input v-model="form.cost" placeholder="请输入费用" />
+          <el-input v-model="form.cost" placeholder="请输入费用" disabled />
         </el-form-item>
       </el-form>
       <div slot="footer" class="dialog-footer">
@@ -118,7 +179,7 @@
       </el-form>
       <div slot="footer" class="dialog-footer">
         <el-button type="primary" @click="submitEmployeeForm">确 定</el-button>
-        <el-button @click="cancel">取 消</el-button>
+        <el-button @click="cancelEmployee">取 消</el-button>
       </div>
     </el-dialog>
   </div>
@@ -138,6 +199,10 @@ export default {
   name: "Employee",
   data() {
     return {
+      money: 100,
+      startAmPm: "12:00:00",
+      endAmPm: "23:59:59",
+      employeeName: "",
       employeeTitle: "",
       // 雇工表格数据
       reviewEmployeeList: [],
@@ -178,6 +243,7 @@ export default {
         cost: null,
         reviewId: null,
       },
+      workTimeStamp: [],
       // 表单参数
       form: {},
       // 表单校验
@@ -190,6 +256,7 @@ export default {
           { required: true, message: "作业时间不能为空", trigger: "blur" },
         ],
         workDay: [{ required: true, message: "天数不能为空", trigger: "blur" }],
+        cost: [{ required: true, message: "费用不能为空", trigger: "blur" }],
       },
       employeeRules: {
         name: [{ required: true, message: "姓名不能为空", trigger: "blur" }],
@@ -205,12 +272,92 @@ export default {
     this.getEmployeeList();
   },
   methods: {
+    clearTime() {
+      this.form.workTime = null;
+      this.form.workDay = null;
+      this.form.cost = null;
+      this.workTimeStamp = [];
+    },
+    handleTimeChange() {
+      if (this.form.startTime != null && this.form.endTime != null) {
+        if (
+          this.form.startTime + " " + this.startAmPm >
+          this.form.endTime + " " + this.endAmPm
+        ) {
+          this.$message({
+            showClose: true,
+            message: "开始时间不能大于结束时间～",
+            type: "error",
+          });
+          return;
+        }
+
+        let startTimeTemp = "";
+        if (this.startAmPm == "23:59:59") {
+          startTimeTemp = this.form.startTime + ":下午";
+        } else {
+          startTimeTemp = this.form.startTime + ":上午";
+        }
+        let endTimeTemp = "";
+        if (this.endAmPm == "23:59:59") {
+          endTimeTemp = this.form.endTime + ":下午";
+        } else {
+          endTimeTemp = this.form.endTime + "上午";
+        }
+        if (this.form.workTime == null) {
+          this.form.workTime = "";
+        }
+        this.form.workTime =
+          this.form.workTime + startTimeTemp + "~" + endTimeTemp + ";";
+
+        let startAmPmTemp = "";
+        if (this.startAmPm == "23:59:59") {
+          startAmPmTemp = this.form.startTime + " " + "24:00:00";
+        } else {
+          startAmPmTemp = this.form.startTime + " " + this.startAmPm;
+        }
+
+        let endAmPmTemp = "";
+        if (this.endAmPm == "23:59:59") {
+          endAmPmTemp = this.form.endTime + " " + "24:00:00";
+        } else {
+          endAmPmTemp = this.form.endTime + " " + this.endAmPm;
+        }
+        const date1 = new Date(startAmPmTemp);
+        const timestamp1 = Date.parse(startAmPmTemp);
+
+        const date2 = new Date(endAmPmTemp);
+        const timestamp2 = Date.parse(endAmPmTemp);
+
+        const diffInMs = date2 - date1;
+        const diffInHours = diffInMs / (1000 * 60 * 60);
+        if (this.form.workDay == null) {
+          this.form.workDay = 0;
+        }
+        this.form.workDay = this.form.workDay + (diffInHours / 12 + 1) * 0.5;
+        if (this.form.cost == null) {
+          this.form.cost = 0;
+        }
+        this.form.cost = (this.form.workDay / 0.5) * this.money;
+        let workTime = {};
+        workTime.startTime = timestamp1 / 1000;
+        workTime.endTime = timestamp2 / 1000;
+        this.workTimeStamp.push(workTime);
+        this.form.workTimeStamp = this.workTimeStamp;
+      }
+    },
+    selectEmployee(employee) {
+      this.employeeName = employee.name;
+      this.form.name = employee.name;
+      this.form.idCard = employee.idCard;
+    },
     submitEmployeeForm() {
       this.$refs["form"].validate((valid) => {
         if (valid) {
           addReviewEmployee(this.employeeForm).then((response) => {
             this.$modal.msgSuccess("新增成功");
             this.employeeOpen = false;
+            this.getEmployeeList();
           });
         }
       });
@@ -244,8 +391,19 @@ export default {
       this.open = false;
       this.reset();
     },
+    // 取消按钮
+    cancelEmployee() {
+      this.open = false;
+      this.employeeForm = {
+        name: null,
+        idCard: null,
+      };
+      this.resetForm("employeeForm");
+      this.employeeOpen = false;
+    },
     // 表单重置
     reset() {
+      this.workTimeStamp = [];
       this.form = {
         reviewEmployeeId: null,
         name: null,
@@ -277,6 +435,7 @@ export default {
     handleAdd() {
       this.reset();
       this.open = true;
+      this.employeeName = "";
       this.title = "添加雇工实际工作内容记录";
     },
     /** 修改按钮操作 */
@@ -285,6 +444,7 @@ export default {
       const reviewEmployeeId = row.reviewEmployeeId || this.ids;
       getEmployee(reviewEmployeeId).then((response) => {
         this.form = response.data;
+        this.employeeName = "";
         this.open = true;
         this.title = "修改雇工实际工作内容记录";
       });

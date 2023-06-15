@@ -6,6 +6,7 @@ import org.apache.commons.lang3.builder.ToStringBuilder;
 import org.apache.commons.lang3.builder.ToStringStyle;
 
 import java.math.BigDecimal;
+import java.util.List;
 
 /**
  * 雇工实际工作内容记录对象 sys_review_employee
@@ -43,6 +44,18 @@ public class SysReviewEmployee extends BaseEntity
     /** 审核单ID */
     @Excel(name = "审核单ID")
     private Long reviewId;
+
+    private List<WorkTimeStamp> workTimeStamp;
+
+    public void setWorkTimeStamp(List<WorkTimeStamp> workTimeStamp)
+    {
+        this.workTimeStamp = workTimeStamp;
+    }
+
+    public List<WorkTimeStamp> getWorkTimeStamp()
+    {
+        return workTimeStamp;
+    }
 
     public void setReviewEmployeeId(Long reviewEmployeeId) 
     {

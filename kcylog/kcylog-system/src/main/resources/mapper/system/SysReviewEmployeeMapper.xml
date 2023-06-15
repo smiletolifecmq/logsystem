@@ -73,4 +73,12 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
             #{reviewEmployeeId}
         </foreach>
     </delete>
+
+    <select id="selectSysReviewEmployeeListNotItself" parameterType="SysReviewEmployee" resultMap="SysReviewEmployeeResult">
+        <include refid="selectSysReviewEmployeeVo"/>
+        <where>
+            <if test="reviewId != null "> and review_id = #{reviewId}</if>
+            <if test="reviewEmployeeId != null "> and review_employee_id != #{reviewEmployeeId}</if>
+        </where>
+    </select>
 </mapper>
