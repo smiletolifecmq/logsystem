@@ -190,6 +190,21 @@ export const dynamicRoutes = [
       }
     ]
   },
+
+  {
+    path: '/system/review-employee',
+    component: Layout,
+    hidden: true,
+    permissions: ['system:review:list'],
+    children: [
+      {
+        path: 'info/:reviewId(\\d+)',
+        component: () => import('@/views/system/review/reviewEmployeeInfo'),
+        name: 'ReviewEmployeeInfo',
+        meta: { title: '查看最终雇佣信息', activeMenu: '/system/reviewEmployeeInfo' }
+      }
+    ]
+  },
 ]
 
 // 防止连续点击多次路由报错

@@ -1,28 +1,6 @@
 <template>
   <div class="app-container">
     <el-row :gutter="10" class="mb8">
-      <el-col :span="1.5">
-        <el-button
-          type="primary"
-          plain
-          icon="el-icon-plus"
-          size="mini"
-          @click="handleAdd"
-          >新增雇佣信息</el-button
-        >
-      </el-col>
-
-      <el-col :span="1.5">
-        <el-button
-          type="primary"
-          plain
-          icon="el-icon-plus"
-          size="mini"
-          @click="addNewEmployee"
-          >新增雇工人员</el-button
-        >
-      </el-col>
-
       <right-toolbar
         :showSearch.sync="showSearch"
         @queryTable="getList"
@@ -39,28 +17,6 @@
       <el-table-column label="作业时间" align="center" prop="workTime" />
       <el-table-column label="天数" align="center" prop="workDay" />
       <el-table-column label="费用" align="center" prop="cost" />
-      <el-table-column
-        label="操作"
-        align="center"
-        class-name="small-padding fixed-width"
-      >
-        <template slot-scope="scope">
-          <el-button
-            size="mini"
-            type="text"
-            icon="el-icon-edit"
-            @click="handleUpdate(scope.row)"
-            >修改</el-button
-          >
-          <el-button
-            size="mini"
-            type="text"
-            icon="el-icon-delete"
-            @click="handleDelete(scope.row)"
-            >删除</el-button
-          >
-        </template>
-      </el-table-column>
     </el-table>
 
     <pagination
