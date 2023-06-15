@@ -119,6 +119,7 @@ public class SysReviewEmployeeController extends BaseController
      */
     @Log(title = "雇工实际工作内容记录", businessType = BusinessType.UPDATE)
     @PutMapping
+    @Transactional
     public AjaxResult edit(@RequestBody SysReviewEmployee sysReviewEmployee)
     {
         SysReview sysReview = sysReviewService.selectSysReviewByReviewId(sysReviewEmployee.getReviewId().toString());
@@ -131,6 +132,27 @@ public class SysReviewEmployeeController extends BaseController
         int result = sysReview.getBudgetMoney().compareTo(money);
         if (result < 0) {
             throw new ServiceException("审核单雇工实际总费用大于预估费用～");
+        }
+
+
+        SysEmployee sysEmployee = sysEmployeeService.selectSysEmployeeByIdCard(sysReviewEmployee.getIdCard());
+
+        if (sysReviewEmployee.getWorkTimeStamp() != null){
+            Long[] reviewRemployeeId = {sysReviewEmployee.getReviewEmployeeId()};
+            sysEmployeeWorktimeService.deleteSysEmployeeWorktimeByReviewEmployeeIds(reviewRemployeeId);
+            for (WorkTimeStamp reviewEmployee :sysReviewEmployee.getWorkTimeStamp()){
+                SysEmployeeWorktime employeeWorktime = new SysEmployeeWorktime();
+                employeeWorktime.setEmployeeId(sysEmployee.getEmployeeId());
+                employeeWorktime.setStartTime(reviewEmployee.getStartTime());
+                employeeWorktime.setEndTime(reviewEmployee.getEndTime());
+                employeeWorktime.setReviewId(sysReviewEmployee.getReviewId());
+                employeeWorktime.setReviewEmployeeId(sysReviewEmployee.getReviewEmployeeId());
+                List<SysEmployeeWorktime> listWorktime = sysEmployeeWorktimeService.selectSysEmployeeWorktimeExists(employeeWorktime);
+                if (listWorktime.size() > 0){
+                    throw new ServiceException("该雇工在这时间段已经安排了工作～");
+                }
+                sysEmployeeWorktimeService.insertSysEmployeeWorktime(employeeWorktime);
+            }
         }
 
         return toAjax(sysReviewEmployeeService.updateSysReviewEmployee(sysReviewEmployee));

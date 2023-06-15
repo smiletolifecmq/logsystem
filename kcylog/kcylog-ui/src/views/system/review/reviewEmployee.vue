@@ -444,6 +444,39 @@ export default {
       const reviewEmployeeId = row.reviewEmployeeId || this.ids;
       getEmployee(reviewEmployeeId).then((response) => {
         this.form = response.data;
+        const workTimeArr = response.data.workTime.split(";");
+
+        for (let i = 0; i < workTimeArr.length - 1; i++) {
+          const timeArr = workTimeArr[i].split("~");
+          const timeArr1 = timeArr[0].split(":");
+          const timeArr2 = timeArr[1].split(":");
+
+          let startAmPmTemp1 = "";
+          if (timeArr1[1] == "上午") {
+            startAmPmTemp1 = timeArr1[0] + " " + "12:00:00";
+          } else {
+            startAmPmTemp1 = timeArr1[0] + " " + "24:00:00";
+          }
+
+          let endAmPmTemp1 = "";
+          if (timeArr2[1] == "上午") {
+            endAmPmTemp1 = timeArr2[0] + " " + "12:00:00";
+          } else {
+            endAmPmTemp1 = timeArr2[0] + " " + "24:00:00";
+          }
+
+          console.log(startAmPmTemp1);
+          console.log(endAmPmTemp1);
+
+          const timestampSelf1 = Date.parse(startAmPmTemp1);
+
+          const timestampSelf2 = Date.parse(endAmPmTemp1);
+
+          let workTimeObj = {};
+          workTimeObj.startTime = timestampSelf1 / 1000;
+          workTimeObj.endTime = timestampSelf2 / 1000;
+          this.workTimeStamp.push(workTimeObj);
+        }
         this.employeeName = "";
         this.open = true;
         this.title = "修改雇工实际工作内容记录";
