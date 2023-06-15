@@ -20,12 +20,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 
     <select id="selectSysReviewEmployeeList" parameterType="SysReviewEmployee" resultMap="SysReviewEmployeeResult">
         <include refid="selectSysReviewEmployeeVo"/>
-        <where>  
-            <if test="name != null  and name != ''"> and name like concat('%', #{name}, '%')</if>
-            <if test="idCard != null  and idCard != ''"> and id_card = #{idCard}</if>
-            <if test="workTime != null  and workTime != ''"> and work_time = #{workTime}</if>
-            <if test="workDay != null "> and work_day = #{workDay}</if>
-            <if test="cost != null "> and cost = #{cost}</if>
+        <where>
             <if test="reviewId != null "> and review_id = #{reviewId}</if>
         </where>
     </select>

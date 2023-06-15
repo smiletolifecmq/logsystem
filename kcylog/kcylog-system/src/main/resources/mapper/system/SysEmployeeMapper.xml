@@ -1,0 +1,61 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.kcylog.system.mapper.SysEmployeeMapper">
+    
+    <resultMap type="SysEmployee" id="SysEmployeeResult">
+        <result property="employeeId"    column="employee_id"    />
+        <result property="name"    column="name"    />
+        <result property="idCard"    column="id_card"    />
+    </resultMap>
+
+    <sql id="selectSysEmployeeVo">
+        select employee_id, name, id_card from sys_employee
+    </sql>
+
+    <select id="selectSysEmployeeList" parameterType="SysEmployee" resultMap="SysEmployeeResult">
+        <include refid="selectSysEmployeeVo"/>
+        <where>  
+            <if test="name != null  and name != ''"> and name like concat('%', #{name}, '%')</if>
+            <if test="idCard != null  and idCard != ''"> and id_card = #{idCard}</if>
+        </where>
+    </select>
+    
+    <select id="selectSysEmployeeByEmployeeId" parameterType="Long" resultMap="SysEmployeeResult">
+        <include refid="selectSysEmployeeVo"/>
+        where employee_id = #{employeeId}
+    </select>
+        
+    <insert id="insertSysEmployee" parameterType="SysEmployee" useGeneratedKeys="true" keyProperty="employeeId">
+        insert into sys_employee
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="name != null and name != ''">name,</if>
+            <if test="idCard != null and idCard != ''">id_card,</if>
+         </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test="name != null and name != ''">#{name},</if>
+            <if test="idCard != null and idCard != ''">#{idCard},</if>
+         </trim>
+    </insert>
+
+    <update id="updateSysEmployee" parameterType="SysEmployee">
+        update sys_employee
+        <trim prefix="SET" suffixOverrides=",">
+            <if test="name != null and name != ''">name = #{name},</if>
+            <if test="idCard != null and idCard != ''">id_card = #{idCard},</if>
+        </trim>
+        where employee_id = #{employeeId}
+    </update>
+
+    <delete id="deleteSysEmployeeByEmployeeId" parameterType="Long">
+        delete from sys_employee where employee_id = #{employeeId}
+    </delete>
+
+    <delete id="deleteSysEmployeeByEmployeeIds" parameterType="String">
+        delete from sys_employee where employee_id in 
+        <foreach item="employeeId" collection="array" open="(" separator="," close=")">
+            #{employeeId}
+        </foreach>
+    </delete>
+</mapper>

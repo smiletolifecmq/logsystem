@@ -18,7 +18,7 @@
           plain
           icon="el-icon-plus"
           size="mini"
-          @click="addEmployee"
+          @click="addNewEmployee"
           >新增雇工人员</el-button
         >
       </el-col>
@@ -95,6 +95,32 @@
         <el-button @click="cancel">取 消</el-button>
       </div>
     </el-dialog>
+
+    <!-- 添加或修改雇工对话框 -->
+    <el-dialog
+      :title="employeeTitle"
+      :visible.sync="employeeOpen"
+      width="500px"
+      append-to-body
+    >
+      <el-form
+        ref="form"
+        :model="employeeForm"
+        :rules="employeeRules"
+        label-width="80px"
+      >
+        <el-form-item label="姓名" prop="name">
+          <el-input v-model="employeeForm.name" placeholder="请输入姓名" />
+        </el-form-item>
+        <el-form-item label="身份证" prop="idCard">
+          <el-input v-model="employeeForm.idCard" placeholder="请输入身份证" />
+        </el-form-item>
+      </el-form>
+      <div slot="footer" class="dialog-footer">
+        <el-button type="primary" @click="submitEmployeeForm">确 定</el-button>
+        <el-button @click="cancel">取 消</el-button>
+      </div>
+    </el-dialog>
   </div>
 </template>
 
@@ -106,11 +132,20 @@ import {
   addEmployee,
   updateEmployee,
 } from "@/api/system/reviewEmployee";
+import { listReviewEmployee, addReviewEmployee } from "@/api/system/employee";
 
 export default {
   name: "Employee",
   data() {
     return {
+      employeeTitle: "",
+      // 雇工表格数据
+      reviewEmployeeList: [],
+      // 查询参数
+      queryEmployeeParams: {
+        pageNum: 1,
+        pageSize: 9999,
+      },
       reviewId: 0,
       // 遮罩层
       loading: true,
@@ -124,6 +159,8 @@ export default {
       showSearch: true,
       // 总条数
       total: 0,
+      employeeOpen: false,
+      employeeForm: {},
       // 雇工实际工作内容记录表格数据
       employeeList: [],
       // 弹出层标题
@@ -154,17 +191,48 @@ export default {
         ],
         workDay: [{ required: true, message: "天数不能为空", trigger: "blur" }],
       },
+      employeeRules: {
+        name: [{ required: true, message: "姓名不能为空", trigger: "blur" }],
+        idCard: [
+          { required: true, message: "身份证不能为空", trigger: "blur" },
+        ],
+      },
     };
   },
   created() {
     this.reviewId = this.$route.params && this.$route.params.reviewId;
     this.getList();
+    this.getEmployeeList();
   },
   methods: {
-    addEmployee() {},
+    submitEmployeeForm() {
+      this.$refs["form"].validate((valid) => {
+        if (valid) {
+          addReviewEmployee(this.employeeForm).then((response) => {
+            this.$modal.msgSuccess("新增成功");
+            this.employeeOpen = false;
+          });
+        }
+      });
+    },
+    getEmployeeList() {
+      listReviewEmployee(this.queryEmployeeParams).then((response) => {
+        this.reviewEmployeeList = response.rows;
+      });
+    },
+    addNewEmployee() {
+      this.employeeTitle = "新增雇工人员";
+      this.employeeForm = {
+        name: null,
+        idCard: null,
+      };
+      this.resetForm("employeeForm");
+      this.employeeOpen = true;
+    },
     /** 查询雇工实际工作内容记录列表 */
     getList() {
       this.loading = true;
+      this.queryParams.reviewId = this.reviewId;
       listEmployee(this.queryParams).then((response) => {
         this.employeeList = response.rows;
         this.total = response.total;
@@ -232,6 +300,7 @@ export default {
               this.getList();
             });
           } else {
+            this.form.reviewId = this.reviewId;
             addEmployee(this.form).then((response) => {
               this.$modal.msgSuccess("新增成功");
               this.open = false;
