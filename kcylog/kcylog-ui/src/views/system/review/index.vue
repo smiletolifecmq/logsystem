@@ -106,7 +106,7 @@
       :data="reviewList"
       @selection-change="handleSelectionChange"
     >
-      <el-table-column type="selection" width="55" align="center" />
+      <!-- <el-table-column type="selection" width="55" align="center" /> -->
       <el-table-column label="编号" align="center" prop="serialNum" />
       <el-table-column label="项目名称" align="center" prop="projectName" />
       <el-table-column label="委托单位" align="center" prop="requester" />
@@ -131,7 +131,11 @@
         width="180"
       >
         <template slot-scope="scope">
-          <span>{{ parseTime(scope.row.startTime, "{y}-{m}-{d}") }}</span>
+          <span
+            >{{ parseTime(scope.row.startTime, "{y}-{m}-{d}") }}:{{
+              filterTime(scope.row.startTime)
+            }}</span
+          >
         </template>
       </el-table-column>
       <el-table-column
@@ -141,7 +145,11 @@
         width="180"
       >
         <template slot-scope="scope">
-          <span>{{ parseTime(scope.row.endTime, "{y}-{m}-{d}") }}</span>
+          <span
+            >{{ parseTime(scope.row.endTime, "{y}-{m}-{d}") }}:{{
+              filterTime(scope.row.endTime)
+            }}</span
+          >
         </template>
       </el-table-column>
       <el-table-column label="预估天数" align="center" prop="budgetDay" />
@@ -248,6 +256,7 @@
             v-model="form.porjectMoney"
             :precision="2"
             :step="0.1"
+            :min="0.0"
             placeholder="请输入项目金额"
           />
         </el-form-item>
@@ -258,6 +267,14 @@
             placeholder="请输入内容"
           />
         </el-form-item>
+        <el-form-item label="雇工人数" prop="peopleNum">
+          <el-input-number
+            v-model="form.peopleNum"
+            placeholder="请预估雇工人数"
+            :min="0"
+            @change="handleTimeChange"
+          />
+        </el-form-item>
         <el-form-item label="预估雇工工作开始时间" prop="startTime">
           <el-date-picker
             clearable
@@ -265,12 +282,17 @@
             type="date"
             value-format="yyyy-MM-dd"
             placeholder="请选择预估雇工工作开始时间"
+            @change="handleTimeChange"
           >
           </el-date-picker>
 
-          <el-select v-model="startAmPm" placeholder="请选择">
-            <el-option label="上午" value="上午"></el-option>
-            <el-option label="下午" value="下午"></el-option>
+          <el-select
+            v-model="startAmPm"
+            placeholder="请选择"
+            @change="handleTimeChange"
+          >
+            <el-option label="上午" value="12:00:00"></el-option>
+            <el-option label="下午" value="23:59:59"></el-option>
           </el-select>
         </el-form-item>
         <el-form-item label="预估雇工工作结束时间" prop="endTime">
@@ -280,11 +302,16 @@
             type="date"
             value-format="yyyy-MM-dd"
             placeholder="请选择预估雇工工作结束时间"
+            @change="handleTimeChange"
           >
           </el-date-picker>
-          <el-select v-model="endAmPm" placeholder="请选择">
-            <el-option label="上午" value="上午"></el-option>
-            <el-option label="下午" value="下午"></el-option>
+          <el-select
+            v-model="endAmPm"
+            placeholder="请选择"
+            @change="handleTimeChange"
+          >
+            <el-option label="上午" value="12:00:00"></el-option>
+            <el-option label="下午" value="23:59:59"></el-option>
           </el-select>
         </el-form-item>
         <el-form-item label="预估天数" prop="budgetDay">
@@ -326,14 +353,15 @@ export default {
   name: "Review",
   data() {
     return {
+      money: 100,
       reviewProcessActive: -1,
       queryUserParams: {
         pageNum: 1,
         pageSize: 9999,
       },
       restaurants: [],
-      startAmPm: "上午",
-      endAmPm: "下午",
+      startAmPm: "12:00:00",
+      endAmPm: "23:59:59",
       statusArr: [
         {
           value: 0,
@@ -416,9 +444,18 @@ export default {
         title: [
           { required: true, message: "配置标题不能为空", trigger: "blur" },
         ],
-        // userId: [
-        //   { required: true, message: "请选择关联项目", trigger: "change" },
-        // ],
+        budgetDay: [
+          { required: true, message: "请填写预估天数", trigger: "blur" },
+        ],
+        budgetMoney: [
+          { required: true, message: "请填写预估金额", trigger: "blur" },
+        ],
+        startTime: [
+          { required: true, message: "请选择开始时间", trigger: "change" },
+        ],
+        endTime: [
+          { required: true, message: "请选择结束时间", trigger: "change" },
+        ],
       },
     };
   },
@@ -428,6 +465,34 @@ export default {
     // this.loadAllUsers();
   },
   methods: {
+    filterTime(timeString) {
+      if (timeString != "" && timeString != null) {
+        const timeSubstring = timeString.substring(11);
+        if (timeSubstring == this.startAmPm) {
+          return "上午";
+        } else {
+          return "下午";
+        }
+      }
+    },
+    handleTimeChange() {
+      if (this.form.startTime != null && this.form.endTime != null) {
+        let startTimeTemp = this.form.startTime + " " + this.startAmPm;
+        let endTimeTemp = "";
+        if (this.endAmPm == "23:59:59") {
+          endTimeTemp = this.form.endTime + " " + "24:00:00";
+        } else {
+          endTimeTemp = this.form.endTime + " " + this.endAmPm;
+        }
+        const date1 = new Date(startTimeTemp);
+        const date2 = new Date(endTimeTemp);
+        const diffInMs = date2 - date1;
+        const diffInHours = diffInMs / (1000 * 60 * 60);
+        this.form.budgetDay = (diffInHours / 12 + 1) * 0.5;
+        this.form.budgetMoney =
+          (this.form.budgetDay / 0.5) * this.money * this.form.peopleNum;
+      }
+    },
     reviewProcessDescription(reviewProcess) {
       if (reviewProcess.status === 0) {
         return "审核状态:未开始";
@@ -435,14 +500,14 @@ export default {
         return "审核状态:进行中";
       } else if (reviewProcess.status === 2) {
         let description = "审核状态:通过；";
-        if (reviewProcess.reason != "") {
+        if (reviewProcess.reason != "" && reviewProcess.reason != null) {
           description = description + "理由:" + reviewProcess.reason + "；";
         }
         description = description + "审核时间:" + reviewProcess.reviewTime;
         return description;
       } else if (reviewProcess.status === 3) {
         let description = "审核状态:拒绝；";
-        if (reviewProcess.reason != "") {
+        if (reviewProcess.reason != "" && reviewProcess.reason != null) {
           description = description + "理由:" + reviewProcess.reason + "；";
         }
         description = description + "审核时间:" + reviewProcess.reviewTime;
@@ -565,6 +630,15 @@ export default {
       this.reset();
       const reviewId = row.reviewId || this.ids;
       getReview(reviewId).then((response) => {
+        if (response.data.startTime != null && response.data.startTime != "") {
+          this.startAmPm = response.data.startTime.substring(11);
+          response.data.startTime = response.data.startTime.substring(0, 10);
+        }
+        if (response.data.endTime != null && response.data.endTime != "") {
+          this.endAmPm = response.data.endTime.substring(11);
+          response.data.endTime = response.data.endTime.substring(0, 10);
+        }
+        console.log();
         this.form = response.data;
         this.open = true;
         this.title = "修改审核单";
@@ -590,17 +664,47 @@ export default {
       this.$refs["form"].validate((valid) => {
         if (valid) {
           if (this.form.reviewId != null) {
-            updateReview(this.form).then((response) => {
-              this.$modal.msgSuccess("修改成功");
-              this.open = false;
-              this.getList();
-            });
+            let oldStartTime = this.form.startTime;
+            let oldEndTime = this.form.endTime;
+            this.form.startTime = this.form.startTime + " " + this.startAmPm;
+            this.form.endTime = this.form.endTime + " " + this.endAmPm;
+
+            if (this.form.startTime > this.form.endTime) {
+              this.$message({
+                showClose: true,
+                message: "开始时间不能大于结束时间～",
+                type: "error",
+              });
+              this.form.startTime = oldStartTime;
+              this.form.endTime = oldEndTime;
+            } else {
+              updateReview(this.form).then((response) => {
+                this.$modal.msgSuccess("修改成功");
+                this.open = false;
+                this.getList();
+              });
+            }
           } else {
-            addReview(this.form).then((response) => {
-              this.$modal.msgSuccess("新增成功");
-              this.open = false;
-              this.getList();
-            });
+            let oldStartTime = this.form.startTime;
+            let oldEndTime = this.form.endTime;
+            this.form.startTime = this.form.startTime + " " + this.startAmPm;
+            this.form.endTime = this.form.endTime + " " + this.endAmPm;
+
+            if (this.form.startTime > this.form.endTime) {
+              this.$message({
+                showClose: true,
+                message: "开始时间不能大于结束时间～",
+                type: "error",
+              });
+              this.form.startTime = oldStartTime;
+              this.form.endTime = oldEndTime;
+            } else {
+              addReview(this.form).then((response) => {
+                this.$modal.msgSuccess("新增成功");
+                this.open = false;
+                this.getList();
+              });
+            }
           }
         }
       });

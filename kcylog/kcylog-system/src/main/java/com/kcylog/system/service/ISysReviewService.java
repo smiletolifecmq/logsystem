@@ -67,4 +67,8 @@ public interface ISysReviewService
 
     // 获取当前用户需要审核的待审核单
     public List<SysReview> selectSysUpcomingReviewList(SysReview sysReview);
+
+    public List<SysReview> selectCompletedReviewList(SysReview sysReview);
+
+    public List<SysReview> selectDoneReviewList(SysReview sysReview);
 }

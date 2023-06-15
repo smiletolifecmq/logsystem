@@ -205,4 +205,25 @@ public class SysReviewController extends BaseController
         }
         return toAjax(1);
     }
+
+    /**
+     * 获取全部已通过的审核单
+     */
+    @GetMapping("/completedListReview")
+    public TableDataInfo completedReview(SysReview sysReview)
+    {
+        startPage();
+        List<SysReview> list = sysReviewService.selectCompletedReviewList(sysReview);
+        return getDataTable(list);
+    }
+
+    @GetMapping("/doneListReview")
+    public TableDataInfo doneReview(SysReview sysReview)
+    {
+        startPage();
+        Long userId = SecurityUtils.getUserId();
+        sysReview.setUserId(userId);
+        List<SysReview> list = sysReviewService.selectDoneReviewList(sysReview);
+        return getDataTable(list);
+    }
 }

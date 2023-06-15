@@ -132,20 +132,6 @@
           <el-button
             size="mini"
             type="text"
-            icon="el-icon-success"
-            @click="handleReview(scope.row, 2)"
-            >通过</el-button
-          >
-          <el-button
-            size="mini"
-            type="text"
-            icon="el-icon-error"
-            @click="handleReview(scope.row, 3)"
-            >不通过</el-button
-          >
-          <el-button
-            size="mini"
-            type="text"
             icon="el-icon-s-operation"
             @click="handleReviewProcess(scope.row)"
             >流程详情</el-button
@@ -180,11 +166,7 @@
 </template>
 
 <script>
-import {
-  upcomingListReview,
-  setReviewProcessStatus,
-  getReviewProcessList,
-} from "@/api/system/review";
+import { completedListReview, getReviewProcessList } from "@/api/system/review";
 
 export default {
   name: "Review",
@@ -289,7 +271,8 @@ export default {
     /** 查询审核单列表 */
     getUpcomingList() {
       this.loading = true;
-      upcomingListReview(
+      this.queryParams.status = 2;
+      completedListReview(
         this.addDateRange(this.queryParams, this.dateRange)
       ).then((response) => {
         this.reviewList = response.rows;
@@ -315,28 +298,6 @@ export default {
     //   this.single = selection.length !== 1;
     //   this.multiple = !selection.length;
     // },
-
-    /** 操作审核状态 */
-    handleReview(row, status) {
-      this.$prompt("请输入理由(非必填)", "提示", {
-        confirmButtonText: "确定",
-        cancelButtonText: "取消",
-      })
-        .then(({ value }) => {
-          this.form.reviewId = row.reviewId;
-          this.form.status = status;
-          this.form.reason = value;
-          setReviewProcessStatus(this.form).then((response) => {
-            this.getUpcomingList();
-            if (this.form.status == 2) {
-              this.$modal.msgSuccess("已通过审核");
-            } else {
-              this.$modal.msgSuccess("已拒绝审核");
-            }
-          });
-        })
-        .catch(() => {});
-    },
   },
 };
 </script>

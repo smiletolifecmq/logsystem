@@ -109,4 +109,14 @@ public class SysReviewServiceImpl implements ISysReviewService
     {
         return sysReviewMapper.selectSysUpcomingReviewList(sysReview);
     }
+
+    public List<SysReview> selectCompletedReviewList(SysReview sysReview)
+    {
+        return sysReviewMapper.selectCompletedReviewList(sysReview);
+    }
+
+    public List<SysReview> selectDoneReviewList(SysReview sysReview)
+    {
+        return sysReviewMapper.selectDoneReviewList(sysReview);
+    }
 }

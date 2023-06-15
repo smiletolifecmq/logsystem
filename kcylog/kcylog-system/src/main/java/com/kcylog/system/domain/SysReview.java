@@ -61,18 +61,18 @@ public class SysReview extends BaseEntity
     private String peopleNum;
 
     /** 预估雇工工作开始时间 */
-    @JsonFormat(pattern = "yyyy-MM-dd")
+    @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss")
     @Excel(name = "预估雇工工作开始时间", width = 30, dateFormat = "yyyy-MM-dd")
     private Date startTime;
 
     /** 预估雇工工作结束时间 */
-    @JsonFormat(pattern = "yyyy-MM-dd")
+    @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss")
     @Excel(name = "预估雇工工作结束时间", width = 30, dateFormat = "yyyy-MM-dd")
     private Date endTime;
 
     /** 预估天数 */
     @Excel(name = "预估天数")
-    private Long budgetDay;
+    private float budgetDay;
 
     /** 预算金额 */
     @Excel(name = "预算金额")
@@ -201,12 +201,12 @@ public class SysReview extends BaseEntity
     {
         return endTime;
     }
-    public void setBudgetDay(Long budgetDay)
+    public void setBudgetDay(float budgetDay)
     {
         this.budgetDay = budgetDay;
     }
 
-    public Long getBudgetDay()
+    public float getBudgetDay()
     {
         return budgetDay;
     }

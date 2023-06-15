@@ -78,3 +78,20 @@ export function getReviewProcessList(query) {
     params: query
   })
 }
+
+// 查询已完成审核单列表
+export function completedListReview(query) {
+  return request({
+    url: '/system/review/completedListReview',
+    method: 'get',
+    params: query
+  })
+}
+
+export function doneListReview(query) {
+  return request({
+    url: '/system/review/doneListReview',
+    method: 'get',
+    params: query
+  })
+}
