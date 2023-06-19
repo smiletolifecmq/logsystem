@@ -470,6 +470,20 @@
             disabled
           />
         </el-form-item>
+        <el-form-item>
+          <el-button
+            type="primary"
+            @click="finalEmploymentInfo(formInfo)"
+            v-if="
+              showEmployeeButton(
+                formInfo.finalTime,
+                formInfo.status,
+                formInfo.finalSecondStatus
+              )
+            "
+            >最终雇工信息</el-button
+          >
+        </el-form-item>
       </el-form>
     </el-dialog>
   </div>
@@ -635,6 +649,7 @@ export default {
     },
     finalEmploymentInfo(row) {
       const reviewId = row.reviewId;
+      this.openInfo = false;
       this.$router.push("/system/review-employee/edit/" + reviewId);
     },
     filterTime(timeString) {
