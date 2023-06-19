@@ -92,7 +92,7 @@ public class SysReviewEmployee extends BaseEntity
     {
         return workTime;
     }
-    public void setWorkDay(Long workDay) 
+    public void setWorkDay(float workDay)
     {
         this.workDay = workDay;
     }

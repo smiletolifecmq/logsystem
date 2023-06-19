@@ -62,4 +62,5 @@ public interface ISysReviewEmployeeService
 
     public List<SysReviewEmployee> selectSysReviewEmployeeListNotItself(SysReviewEmployee sysReviewEmployee);
 
+    public List<SysReviewEmployee> selectSysReviewEmployeeByReviewId(Long reviewId);
 }

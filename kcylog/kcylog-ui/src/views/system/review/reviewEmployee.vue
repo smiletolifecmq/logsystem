@@ -302,7 +302,7 @@ export default {
         if (this.endAmPm == "23:59:59") {
           endTimeTemp = this.form.endTime + ":下午";
         } else {
-          endTimeTemp = this.form.endTime + "上午";
+          endTimeTemp = this.form.endTime + ":上午";
         }
         if (this.form.workTime == null) {
           this.form.workTime = "";

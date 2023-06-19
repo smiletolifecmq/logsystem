@@ -194,8 +194,8 @@ export default {
   created() {
     this.processConfigId =
       this.$route.params && this.$route.params.processConfigId;
-    this.queryUserParams.deptId =
-      this.$route.params && this.$route.params.deptId;
+    // this.queryUserParams.deptId =
+    //   this.$route.params && this.$route.params.deptId;
     this.getList();
     this.loadAllUsers();
   },

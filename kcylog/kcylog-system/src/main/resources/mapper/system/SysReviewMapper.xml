@@ -24,8 +24,18 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
         <result property="finalTime"    column="final_time"    />
         <association property="dept" column="dept_name" javaType="SysDept" resultMap="sysReviewDeptResult"/>
         <association property="user" column="user_name" javaType="SysUser" resultMap="sysReviewUserResult"/>
+        <association property="reviewEmployee" javaType="java.util.List" resultMap="sysReviewReviewEmployeeResult"/>
     </resultMap>
 
+    <resultMap type="SysReviewEmployee" id="sysReviewReviewEmployeeResult">
+        <result property="reviewEmployeeId"    column="review_employee_id"    />
+        <result property="name"    column="name"    />
+        <result property="idCard"    column="id_card"    />
+        <result property="workTime"    column="work_time"    />
+        <result property="workDay"    column="work_day"    />
+        <result property="cost"    column="cost"    />
+        <result property="reviewId"    column="review_id"    />
+    </resultMap>
 
     <resultMap id="sysReviewDeptResult" type="SysDept">
         <result property="deptName" column="dept_name"/>

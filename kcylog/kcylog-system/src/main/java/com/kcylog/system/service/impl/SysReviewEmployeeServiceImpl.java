@@ -98,4 +98,9 @@ public class SysReviewEmployeeServiceImpl implements ISysReviewEmployeeService
         return sysReviewEmployeeMapper.selectSysReviewEmployeeListNotItself(sysReviewEmployee);
     }
 
+    @Override
+    public  List<SysReviewEmployee> selectSysReviewEmployeeByReviewId(Long reviewId)
+    {
+        return sysReviewEmployeeMapper.selectSysReviewEmployeeByReviewId(reviewId);
+    }
 }

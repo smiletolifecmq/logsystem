@@ -81,4 +81,9 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
             <if test="reviewEmployeeId != null "> and review_employee_id != #{reviewEmployeeId}</if>
         </where>
     </select>
+
+    <select id="selectSysReviewEmployeeByReviewId" parameterType="Long" resultMap="SysReviewEmployeeResult">
+        <include refid="selectSysReviewEmployeeVo"/>
+        where review_id = #{reviewId}
+    </select>
 </mapper>

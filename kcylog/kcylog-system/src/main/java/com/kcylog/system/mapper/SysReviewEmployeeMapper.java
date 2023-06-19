@@ -62,4 +62,5 @@ public interface SysReviewEmployeeMapper
 
     public List<SysReviewEmployee> selectSysReviewEmployeeListNotItself(SysReviewEmployee sysReviewEmployee);
 
+    public List<SysReviewEmployee> selectSysReviewEmployeeByReviewId(Long reviewId);
 }

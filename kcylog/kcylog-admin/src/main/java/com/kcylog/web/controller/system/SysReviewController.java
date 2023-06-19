@@ -10,8 +10,10 @@ import com.kcylog.common.utils.SecurityUtils;
 import com.kcylog.common.utils.poi.ExcelUtil;
 import com.kcylog.system.domain.SysProcessConfigInfo;
 import com.kcylog.system.domain.SysReview;
+import com.kcylog.system.domain.SysReviewEmployee;
 import com.kcylog.system.domain.SysReviewProcess;
 import com.kcylog.system.service.ISysProcessConfigInfoService;
+import com.kcylog.system.service.ISysReviewEmployeeService;
 import com.kcylog.system.service.ISysReviewProcessService;
 import com.kcylog.system.service.ISysReviewService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -44,6 +46,9 @@ public class SysReviewController extends BaseController
     @Autowired
     private ISysReviewProcessService sysReviewProcessService;
 
+    @Autowired
+    private ISysReviewEmployeeService sysReviewEmployeeService;
+
     /**
      * 查询审核单列表
      */
@@ -55,6 +60,7 @@ public class SysReviewController extends BaseController
         Long userId = SecurityUtils.getUserId();
         sysReview.setUserId(userId);
         List<SysReview> list = sysReviewService.selectSysReviewList(sysReview);
+
         return getDataTable(list);
     }
 
@@ -66,8 +72,24 @@ public class SysReviewController extends BaseController
     public void export(HttpServletResponse response, SysReview sysReview)
     {
         List<SysReview> list = sysReviewService.selectSysReviewList(sysReview);
+        List<SysReview> reviewList = new ArrayList<SysReview>();
+
+        for (SysReview sysReviewTemp:list){
+            SysReview sysReviewObj = new SysReview();
+            List<SysReviewEmployee> reviewEmployee = sysReviewEmployeeService.selectSysReviewEmployeeByReviewId(sysReviewTemp.getReviewId());
+            sysReviewObj.setDept(sysReviewTemp.getDept());
+            sysReviewObj.setSerialNum(sysReviewTemp.getSerialNum());
+            sysReviewObj.setProjectName(sysReviewTemp.getProjectName());
+            sysReviewObj.setRequester(sysReviewTemp.getRequester());
+            sysReviewObj.setPorjectMoney(sysReviewTemp.getPorjectMoney());
+            sysReviewObj.setWorkload(sysReviewTemp.getWorkload());
+            sysReviewObj.setUser(sysReviewTemp.getUser());
+            sysReviewObj.setReviewEmployee(reviewEmployee);
+            reviewList.add(sysReviewObj);
+        }
+
         ExcelUtil<SysReview> util = new ExcelUtil<SysReview>(SysReview.class);
-        util.exportExcel(response, list, "审核单数据");
+        util.exportExcel(response, reviewList, "审核单数据");
     }
 
     /**

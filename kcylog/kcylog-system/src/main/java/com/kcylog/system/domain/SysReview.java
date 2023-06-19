@@ -11,6 +11,7 @@ import org.apache.commons.lang3.builder.ToStringStyle;
 
 import java.math.BigDecimal;
 import java.util.Date;
+import java.util.List;
 
 /**
  * 审核单对象 sys_review
@@ -26,7 +27,7 @@ public class SysReview extends BaseEntity
      * 部门对象
      */
     @Excels({
-            @Excel(name = "部门", targetAttr = "deptName", type = Excel.Type.EXPORT),
+            @Excel(name = "部门", targetAttr = "deptName", type = Excel.Type.EXPORT ,width = 20, needMerge = true),
     })
     private SysDept dept;
 
@@ -34,23 +35,23 @@ public class SysReview extends BaseEntity
     private Long reviewId;
 
     /** 编号 */
-    @Excel(name = "工程编号")
+    @Excel(name = "工程编号",width = 20, needMerge = true)
     private String serialNum;
 
     /** 项目名称 */
-    @Excel(name = "项目名称")
+    @Excel(name = "项目名称",width = 20, needMerge = true)
     private String projectName;
 
     /** 委托单位 */
-    @Excel(name = "委托单位")
+    @Excel(name = "委托单位",width = 20, needMerge = true)
     private String requester;
 
     /** 项目金额 */
-    @Excel(name = "项目金额")
+    @Excel(name = "项目金额",width = 20, needMerge = true)
     private BigDecimal porjectMoney;
 
     /** 工作量 */
-    @Excel(name = "工作量")
+    @Excel(name = "工作量",width = 20, needMerge = true)
     private String workload;
 
     /** 用户ID(负责人) */
@@ -87,9 +88,20 @@ public class SysReview extends BaseEntity
      * 用户对象
      */
     @Excels({
-            @Excel(name = "负责人", targetAttr = "userName", type = Excel.Type.EXPORT),
+            @Excel(name = "负责人", targetAttr = "userName", type = Excel.Type.EXPORT,width = 20, needMerge = true),
     })
     private SysUser user;
+
+    @Excel(name = "雇工")
+    private List<SysReviewEmployee> reviewEmployee;
+
+    public List<SysReviewEmployee> getReviewEmployee() {
+        return reviewEmployee;
+    }
+
+    public void setReviewEmployee(List<SysReviewEmployee> reviewEmployee) {
+        this.reviewEmployee = reviewEmployee;
+    }
 
     public void setReviewId(Long reviewId)
     {

@@ -343,9 +343,10 @@ export default {
     },
 
     handleDeptExport() {
+      this.queryParams.status = 2;
       this.download(
         "system/review/export",
-        {},
+        { ...this.queryParams },
         `雇工工作记录_部门_${new Date().getTime()}.xlsx`
       );
     },
