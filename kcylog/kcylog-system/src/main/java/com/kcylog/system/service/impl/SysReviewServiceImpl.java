@@ -105,23 +105,33 @@ public class SysReviewServiceImpl implements ISysReviewService
     }
 
     // 获取当前用户需要审核的待审核单
+    @Override
     public List<SysReview> selectSysUpcomingReviewList(SysReview sysReview)
     {
         return sysReviewMapper.selectSysUpcomingReviewList(sysReview);
     }
 
+    @Override
     public List<SysReview> selectCompletedReviewList(SysReview sysReview)
     {
         return sysReviewMapper.selectCompletedReviewList(sysReview);
     }
 
+    @Override
     public List<SysReview> selectDoneReviewList(SysReview sysReview)
     {
         return sysReviewMapper.selectDoneReviewList(sysReview);
     }
 
+    @Override
     public int updateSysReviewFinalTime(SysReview sysReview)
     {
         return sysReviewMapper.updateSysReviewFinalTime(sysReview);
+    }
+
+    @Override
+    public int setSysReviewFinalSecondStatusByReviewId(SysReview sysReview)
+    {
+        return sysReviewMapper.setSysReviewFinalSecondStatusByReviewId(sysReview);
     }
 }

@@ -73,4 +73,6 @@ public interface SysReviewMapper
     public List<SysReview> selectDoneReviewList(SysReview sysReview);
 
     public int updateSysReviewFinalTime(SysReview sysReview);
+
+    public int setSysReviewFinalSecondStatusByReviewId(SysReview sysReview);
 }

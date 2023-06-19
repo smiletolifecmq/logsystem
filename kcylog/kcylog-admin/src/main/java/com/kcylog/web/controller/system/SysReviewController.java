@@ -215,7 +215,12 @@ public class SysReviewController extends BaseController
                 //审核单通过
                 review.setStatus((long)this.PassStatus);
                 sysReviewService.setSysReviewStatusByReviewId(review);
-            }else {
+            } else if (passNum == list.size() - 1) {
+                //审核到终审的前一个
+                review.setFinalSecondStatus(1);
+                sysReviewService.setSysReviewFinalSecondStatusByReviewId(review);
+                sysReviewProcessService.setNextStatusByReviewId(sysReviewProcess.getReviewId());
+            } else {
                 //审核单流程没有全部通过，进入下一个流程审核
                 sysReviewProcessService.setNextStatusByReviewId(sysReviewProcess.getReviewId());
             }

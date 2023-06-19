@@ -174,6 +174,7 @@
         label="操作"
         align="center"
         class-name="small-padding fixed-width"
+        fixed="right"
       >
         <template slot-scope="scope">
           <el-button
@@ -213,7 +214,13 @@
             type="text"
             icon="el-icon-user-solid"
             @click="finalEmploymentInfo(scope.row)"
-            v-if="showEmployeeButton(scope.row.finalTime, scope.row.status)"
+            v-if="
+              showEmployeeButton(
+                scope.row.finalTime,
+                scope.row.status,
+                scope.row.finalSecondStatus
+              )
+            "
             >最终雇工信息</el-button
           >
         </template>
@@ -599,9 +606,23 @@ export default {
     // this.loadAllUsers();
   },
   methods: {
-    showEmployeeButton(finalTime, status) {
+    showEmployeeButton(finalTime, status, finalSecondStatus) {
       if (finalTime == null && status == 2) {
         return true;
+      }
+      if (finalSecondStatus == 1) {
+        if (finalTime == null) {
+          return true;
+        } else {
+          const now = new Date();
+          const finalTimeDate = new Date(finalTime);
+          const todayStart = new Date(
+            now.getFullYear(),
+            now.getMonth(),
+            now.getDate()
+          );
+          return finalTimeDate > todayStart;
+        }
       }
       const now = new Date();
       const finalTimeDate = new Date(finalTime);
