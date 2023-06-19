@@ -58,9 +58,9 @@ public class SysReviewEmployeeController extends BaseController
      * 导出雇工实际工作内容记录列表
      */
     @PostMapping("/export")
-    public void export(HttpServletResponse response, SysReviewEmployee sysReviewEmployee)
+    public void export(HttpServletResponse response, SysReview sysReview)
     {
-        List<SysReviewEmployee> list = sysReviewEmployeeService.selectSysReviewEmployeeList(sysReviewEmployee);
+        List<SysReviewEmployee> list = sysReviewEmployeeService.selectSysReviewEmployeeListJoinReview(sysReview);
         ExcelUtil<SysReviewEmployee> util = new ExcelUtil<SysReviewEmployee>(SysReviewEmployee.class);
         util.exportExcel(response, list, "雇工实际工作记录数据");
     }

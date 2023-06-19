@@ -12,6 +12,11 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
         <result property="workDay"    column="work_day"    />
         <result property="cost"    column="cost"    />
         <result property="reviewId"    column="review_id"    />
+        <association property="review" column="create_time" javaType="SysReview" resultMap="SysReviewEmployeeReviewResult"/>
+    </resultMap>
+
+    <resultMap id="SysReviewEmployeeReviewResult" type="SysReview">
+        <result property="createTime" column="create_time"/>
     </resultMap>
 
     <sql id="selectSysReviewEmployeeVo">
@@ -85,5 +90,21 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
     <select id="selectSysReviewEmployeeByReviewId" parameterType="Long" resultMap="SysReviewEmployeeResult">
         <include refid="selectSysReviewEmployeeVo"/>
         where review_id = #{reviewId}
+    </select>
+
+    <select id="selectSysReviewEmployeeListJoinReview" parameterType="SysReview" resultMap="SysReviewEmployeeResult">
+        select e.*, r.create_time from sys_review_employee e
+        inner join sys_review r on e.review_id = r.review_id
+        <where>
+            <if test="serialNum != null  and serialNum != ''"> and r.serial_num = #{serialNum}</if>
+            <if test="projectName != null  and projectName != ''"> and r.project_name like concat('%', #{projectName}, '%')</if>
+            <if test="requester != null  and requester != ''"> and r.requester = #{requester}</if>
+            <if test="params.beginTime != null and params.beginTime != ''"><!-- 开始时间检索 -->
+                AND date_format(r.create_time,'%y%m%d') &gt;= date_format(#{params.beginTime},'%y%m%d')
+            </if>
+            <if test="params.endTime != null and params.endTime != ''"><!-- 结束时间检索 -->
+                AND date_format(r.create_time,'%y%m%d') &lt;= date_format(#{params.endTime},'%y%m%d')
+            </if>
+        </where>
     </select>
 </mapper>

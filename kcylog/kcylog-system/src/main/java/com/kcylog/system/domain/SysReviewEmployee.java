@@ -46,6 +46,19 @@ public class SysReviewEmployee extends BaseEntity
 
     private List<WorkTimeStamp> workTimeStamp;
 
+//    @Excels({
+//            @Excel(name = "审核单创建时间", targetAttr = "createTime", dateFormat = "yyyy-MM-dd HH:mm:ss", type = Excel.Type.EXPORT),
+//    })
+    private SysReview review;
+
+    public SysReview getReview() {
+        return review;
+    }
+
+    public void setReview(SysReview review) {
+        this.review = review;
+    }
+
     public void setWorkTimeStamp(List<WorkTimeStamp> workTimeStamp)
     {
         this.workTimeStamp = workTimeStamp;

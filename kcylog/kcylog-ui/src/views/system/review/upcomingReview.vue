@@ -66,14 +66,21 @@
     </el-row> -->
 
     <el-table v-loading="loading" :data="reviewList">
-      <el-table-column label="编号" align="center" prop="serialNum" />
+      <el-table-column label="编号" align="center" prop="serialNum">
+        <template slot-scope="scope">
+          <a @click="showReviewInfo(scope.row)" style="color: blue">
+            {{ scope.row.serialNum }}
+          </a>
+        </template>
+      </el-table-column>
       <el-table-column label="项目名称" align="center" prop="projectName" />
       <el-table-column label="委托单位" align="center" prop="requester" />
       <el-table-column label="项目金额" align="center" prop="porjectMoney" />
       <el-table-column label="工作量" align="center" prop="workload" />
+      <el-table-column label="雇工金额" align="center" prop="budgetMoney" />
       <el-table-column label="负责人" align="center" prop="user.userName" />
       <el-table-column label="部门" align="center" prop="dept.deptName" />
-      <el-table-column label="审核状态" align="center" prop="status">
+      <!-- <el-table-column label="审核状态" align="center" prop="status">
         <template slot-scope="scope">
           <span v-if="scope.row.status === 0">未开始</span>
           <span v-else-if="scope.row.status === 1">进行中</span>
@@ -81,7 +88,7 @@
           <span v-else-if="scope.row.status === 3">未通过</span>
           <span v-else>其他状态</span>
         </template>
-      </el-table-column>
+      </el-table-column> -->
       <el-table-column label="人数" align="center" prop="peopleNum" />
       <el-table-column
         label="预估雇工工作开始时间"
@@ -112,7 +119,6 @@
         </template>
       </el-table-column>
       <el-table-column label="预估天数" align="center" prop="budgetDay" />
-      <el-table-column label="预算金额" align="center" prop="budgetMoney" />
       <el-table-column
         label="创建时间"
         align="center"
@@ -176,6 +182,109 @@
         </el-steps>
       </div>
     </el-dialog>
+
+    <!-- 详情对话框 -->
+    <el-dialog
+      :title="titleInfo"
+      :visible.sync="openInfo"
+      width="600px"
+      append-to-body
+    >
+      <el-form ref="formInfo" :model="formInfo" label-width="80px">
+        <el-form-item label="编号" prop="serialNum">
+          <el-input
+            v-model="formInfo.serialNum"
+            placeholder="请输入编号"
+            disabled
+          />
+        </el-form-item>
+        <el-form-item label="项目名称" prop="projectName">
+          <el-input
+            v-model="formInfo.projectName"
+            placeholder="请输入项目名称"
+            disabled
+          />
+        </el-form-item>
+        <el-form-item label="委托单位" prop="requester">
+          <el-input
+            v-model="formInfo.requester"
+            placeholder="请输入委托单位"
+            disabled
+          />
+        </el-form-item>
+        <el-form-item label="项目金额" prop="porjectMoney">
+          <el-input-number
+            v-model="formInfo.porjectMoney"
+            :precision="2"
+            :step="0.1"
+            :min="0.0"
+            placeholder="请输入项目金额"
+            disabled
+          />
+        </el-form-item>
+        <el-form-item label="工作量" prop="workload">
+          <el-input
+            v-model="formInfo.workload"
+            type="textarea"
+            placeholder="请输入内容"
+            disabled
+          />
+        </el-form-item>
+        <el-form-item label="雇工人数" prop="peopleNum">
+          <el-input-number
+            v-model="formInfo.peopleNum"
+            placeholder="请预估雇工人数"
+            :min="0"
+            disabled
+          />
+        </el-form-item>
+        <el-form-item label="开始时间" prop="startTime">
+          <el-date-picker
+            clearable
+            v-model="formInfo.startTime"
+            type="date"
+            value-format="yyyy-MM-dd"
+            placeholder="请选择预估雇工工作开始时间"
+            disabled
+          >
+          </el-date-picker>
+
+          <el-select v-model="startAmPm" placeholder="请选择" disabled>
+            <el-option label="上午" value="12:00:00"></el-option>
+            <el-option label="下午" value="23:59:59"></el-option>
+          </el-select>
+        </el-form-item>
+        <el-form-item label="结束时间" prop="endTime">
+          <el-date-picker
+            clearable
+            v-model="formInfo.endTime"
+            type="date"
+            value-format="yyyy-MM-dd"
+            placeholder="请选择预估雇工工作结束时间"
+            disabled
+          >
+          </el-date-picker>
+          <el-select v-model="endAmPm" placeholder="请选择" disabled>
+            <el-option label="上午" value="12:00:00"></el-option>
+            <el-option label="下午" value="23:59:59"></el-option>
+          </el-select>
+        </el-form-item>
+        <el-form-item label="预估天数" prop="budgetDay">
+          <el-input
+            v-model="formInfo.budgetDay"
+            placeholder="请输入预估天数"
+            disabled
+          />
+        </el-form-item>
+        <el-form-item label="预算金额" prop="budgetMoney">
+          <el-input
+            v-model="formInfo.budgetMoney"
+            placeholder="请输入预算金额"
+            disabled
+          />
+        </el-form-item>
+      </el-form>
+    </el-dialog>
   </div>
 </template>
 
@@ -184,12 +293,16 @@ import {
   upcomingListReview,
   setReviewProcessStatus,
   getReviewProcessList,
+  getReview,
 } from "@/api/system/review";
 
 export default {
   name: "Review",
   data() {
     return {
+      openInfo: false,
+      formInfo: {},
+      titleInfo: "",
       startAmPm: "12:00:00",
       endAmPm: "23:59:59",
       reviewProcessOpen: false,
@@ -336,6 +449,23 @@ export default {
           });
         })
         .catch(() => {});
+    },
+
+    showReviewInfo(row) {
+      const reviewId = row.reviewId || this.ids;
+      getReview(reviewId).then((response) => {
+        if (response.data.startTime != null && response.data.startTime != "") {
+          this.startAmPm = response.data.startTime.substring(11);
+          response.data.startTime = response.data.startTime.substring(0, 10);
+        }
+        if (response.data.endTime != null && response.data.endTime != "") {
+          this.endAmPm = response.data.endTime.substring(11);
+          response.data.endTime = response.data.endTime.substring(0, 10);
+        }
+        this.formInfo = response.data;
+        this.openInfo = true;
+        this.titleInfo = "审核单详情";
+      });
     },
   },
 };

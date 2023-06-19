@@ -1,5 +1,6 @@
 package com.kcylog.system.mapper;
 
+import com.kcylog.system.domain.SysReview;
 import com.kcylog.system.domain.SysReviewEmployee;
 
 import java.util.List;
@@ -63,4 +64,6 @@ public interface SysReviewEmployeeMapper
     public List<SysReviewEmployee> selectSysReviewEmployeeListNotItself(SysReviewEmployee sysReviewEmployee);
 
     public List<SysReviewEmployee> selectSysReviewEmployeeByReviewId(Long reviewId);
+
+    public List<SysReviewEmployee> selectSysReviewEmployeeListJoinReview(SysReview sysReview);
 }

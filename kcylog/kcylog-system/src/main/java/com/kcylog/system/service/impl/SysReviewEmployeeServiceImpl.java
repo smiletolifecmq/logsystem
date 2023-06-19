@@ -1,5 +1,6 @@
 package com.kcylog.system.service.impl;
 
+import com.kcylog.system.domain.SysReview;
 import com.kcylog.system.domain.SysReviewEmployee;
 import com.kcylog.system.mapper.SysReviewEmployeeMapper;
 import com.kcylog.system.service.ISysReviewEmployeeService;
@@ -102,5 +103,11 @@ public class SysReviewEmployeeServiceImpl implements ISysReviewEmployeeService
     public  List<SysReviewEmployee> selectSysReviewEmployeeByReviewId(Long reviewId)
     {
         return sysReviewEmployeeMapper.selectSysReviewEmployeeByReviewId(reviewId);
+    }
+
+    @Override
+    public List<SysReviewEmployee> selectSysReviewEmployeeListJoinReview(SysReview sysReview)
+    {
+        return sysReviewEmployeeMapper.selectSysReviewEmployeeListJoinReview(sysReview);
     }
 }
