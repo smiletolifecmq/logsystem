@@ -52,6 +52,14 @@
           @click="handleQuery"
           >搜索</el-button
         >
+        <el-button
+          type="success"
+          icon="el-icon-success"
+          size="mini"
+          :disabled="multiple"
+          @click="batchReviewPass"
+          >批量审核通过</el-button
+        >
         <el-button icon="el-icon-refresh" size="mini" @click="resetQuery"
           >重置</el-button
         >
@@ -65,7 +73,12 @@
       ></right-toolbar>
     </el-row> -->
 
-    <el-table v-loading="loading" :data="reviewList">
+    <el-table
+      v-loading="loading"
+      :data="reviewList"
+      @selection-change="handleSelectionChange"
+    >
+      <el-table-column type="selection" width="55" align="center" />
       <el-table-column label="编号" align="center" prop="serialNum">
         <template slot-scope="scope">
           <a @click="showReviewInfo(scope.row)" style="color: blue">
@@ -295,6 +308,7 @@ import {
   setReviewProcessStatus,
   getReviewProcessList,
   getReview,
+  setBatchReviewPass,
 } from "@/api/system/review";
 
 export default {
@@ -343,6 +357,20 @@ export default {
     this.getUpcomingList();
   },
   methods: {
+    batchReviewPass() {
+      const reviewIds = this.ids;
+
+      this.$modal
+        .confirm('是否确认对选中的审核单进行批量通过"')
+        .then(function () {
+          return setBatchReviewPass(reviewIds);
+        })
+        .then(() => {
+          this.getUpcomingList();
+          this.$modal.msgSuccess("审核成功");
+        })
+        .catch(() => {});
+    },
     filterTime(timeString) {
       if (timeString != "" && timeString != null) {
         const timeSubstring = timeString.substring(11);
@@ -423,12 +451,12 @@ export default {
       this.resetForm("queryForm");
       this.handleQuery();
     },
-    // // 多选框选中数据
-    // handleSelectionChange(selection) {
-    //   this.ids = selection.map((item) => item.reviewId);
-    //   this.single = selection.length !== 1;
-    //   this.multiple = !selection.length;
-    // },
+    // 多选框选中数据
+    handleSelectionChange(selection) {
+      this.ids = selection.map((item) => item.reviewId);
+      this.single = selection.length !== 1;
+      this.multiple = !selection.length;
+    },
 
     /** 操作审核状态 */
     handleReview(row, status) {

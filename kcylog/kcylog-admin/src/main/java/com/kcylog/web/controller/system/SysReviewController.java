@@ -253,4 +253,52 @@ public class SysReviewController extends BaseController
         List<SysReview> list = sysReviewService.selectDoneReviewList(sysReview);
         return getDataTable(list);
     }
+
+    /**
+     * 批量修改审核单
+     */
+    @Log(title = "审核单", businessType = BusinessType.UPDATE)
+    @Transactional
+    @PutMapping("/set_batch_review_pass/{reviewIds}")
+    public AjaxResult setBatchReviewPass(@PathVariable Long[] reviewIds)
+    {
+        //修改审核流程中流程信息
+        Long userId = SecurityUtils.getUserId();
+        SysReviewProcess sysReviewProcess = new SysReviewProcess();
+        sysReviewProcess.setUserId(userId);
+        sysReviewProcess.setReviewTime(DateUtils.getNowDate());
+
+        for (Long reviewId:reviewIds){
+            sysReviewProcess.setReviewId(reviewId);
+            sysReviewProcess.setStatus((long)this.PassStatus);
+            sysReviewProcessService.setStatusByUserIdAndReviewId(sysReviewProcess);
+            SysReview review = new SysReview();
+            review.setReviewId(sysReviewProcess.getReviewId());
+            //审核通过
+            //获取审核单审核流程
+            List<SysReviewProcess> list = sysReviewProcessService.selectSysReviewProcessList(sysReviewProcess);
+            int passNum = 0;
+            for (SysReviewProcess obj : list) {
+                if (obj.getStatus() == (long)this.PassStatus){
+                    passNum ++;
+                }
+            }
+            //判断流程是否都已经通过了
+            if (passNum == list.size()){
+                //审核单通过
+                review.setStatus((long)this.PassStatus);
+                sysReviewService.setSysReviewStatusByReviewId(review);
+            } else if (passNum == list.size() - 1) {
+                //审核到终审的前一个
+                review.setFinalSecondStatus(1);
+                sysReviewService.setSysReviewFinalSecondStatusByReviewId(review);
+                sysReviewProcessService.setNextStatusByReviewId(sysReviewProcess.getReviewId());
+            } else {
+                //审核单流程没有全部通过，进入下一个流程审核
+                sysReviewProcessService.setNextStatusByReviewId(sysReviewProcess.getReviewId());
+            }
+        }
+
+        return toAjax(1);
+    }
 }

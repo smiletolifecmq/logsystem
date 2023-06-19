@@ -95,3 +95,12 @@ export function doneListReview(query) {
     params: query
   })
 }
+
+
+// 批量通过
+export function setBatchReviewPass(reviewIds) {
+  return request({
+    url: '/system/review/set_batch_review_pass/' + reviewIds,
+    method: 'put'
+  })
+}
