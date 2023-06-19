@@ -206,4 +206,10 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
         AND rp.user_id = #{userId}
         AND (rp.status = 2 OR rp.status = 3)
     </select>
+
+    <update id="updateSysReviewFinalTime" parameterType="SysReview">
+        update sys_review
+        set final_time = #{finalTime}
+        where review_id = #{reviewId}
+    </update>
 </mapper>

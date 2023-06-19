@@ -207,7 +207,7 @@
             type="text"
             icon="el-icon-user-solid"
             @click="finalEmploymentInfo(scope.row)"
-            v-if="scope.row.status === 2"
+            v-if="showEmployeeButton(scope.row.finalTime, scope.row.status)"
             >最终雇佣信息</el-button
           >
         </template>
@@ -474,6 +474,16 @@ export default {
     // this.loadAllUsers();
   },
   methods: {
+    showEmployeeButton(finalTime, status) {
+      const now = new Date();
+      const finalTimeDate = new Date(finalTime);
+      const todayStart = new Date(
+        now.getFullYear(),
+        now.getMonth(),
+        now.getDate()
+      );
+      return finalTimeDate > todayStart && status == 2;
+    },
     finalEmploymentInfo(row) {
       const reviewId = row.reviewId;
       this.$router.push("/system/review-employee/edit/" + reviewId);

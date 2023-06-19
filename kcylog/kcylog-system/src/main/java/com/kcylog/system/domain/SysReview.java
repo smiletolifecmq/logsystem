@@ -81,7 +81,7 @@ public class SysReview extends BaseEntity
     private BigDecimal budgetMoney;
 
     /** 填写单子的最终时间 */
-    @JsonFormat(pattern = "yyyy-MM-dd")
+    @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss")
     private Date finalTime;
 
     /**

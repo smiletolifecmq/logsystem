@@ -71,4 +71,6 @@ public interface ISysReviewService
     public List<SysReview> selectCompletedReviewList(SysReview sysReview);
 
     public List<SysReview> selectDoneReviewList(SysReview sysReview);
+
+    public int updateSysReviewFinalTime(SysReview sysReview);
 }

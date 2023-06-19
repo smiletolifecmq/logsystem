@@ -119,4 +119,9 @@ public class SysReviewServiceImpl implements ISysReviewService
     {
         return sysReviewMapper.selectDoneReviewList(sysReview);
     }
+
+    public int updateSysReviewFinalTime(SysReview sysReview)
+    {
+        return sysReviewMapper.updateSysReviewFinalTime(sysReview);
+    }
 }

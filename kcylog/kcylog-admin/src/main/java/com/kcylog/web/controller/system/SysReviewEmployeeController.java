@@ -6,6 +6,7 @@ import com.kcylog.common.core.domain.AjaxResult;
 import com.kcylog.common.core.page.TableDataInfo;
 import com.kcylog.common.enums.BusinessType;
 import com.kcylog.common.exception.ServiceException;
+import com.kcylog.common.utils.DateUtils;
 import com.kcylog.common.utils.poi.ExcelUtil;
 import com.kcylog.system.domain.*;
 import com.kcylog.system.service.ISysEmployeeService;
@@ -111,6 +112,10 @@ public class SysReviewEmployeeController extends BaseController
             }
             sysEmployeeWorktimeService.insertSysEmployeeWorktime(employeeWorktime);
         }
+
+        //修改审核单最终填写事件
+        sysReview.setFinalTime(DateUtils.getNowDate());
+        sysReviewService.updateSysReviewFinalTime(sysReview);
 
         return toAjax(1);
     }
