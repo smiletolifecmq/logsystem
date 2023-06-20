@@ -16,6 +16,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
         <result property="status"    column="status"    />
         <result property="finalSecondStatus"    column="final_second_status"    />
         <result property="peopleNum"    column="people_num"    />
+        <result property="startEdit"    column="start_edit"    />
         <result property="startTime"    column="start_time"    />
         <result property="endTime"    column="end_time"    />
         <result property="budgetDay"    column="budget_day"    />
@@ -129,6 +130,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
             <if test="deptId != null and deptId != ''">dept_id = #{deptId},</if>
             <if test="status != null">status = #{status},</if>
             <if test="peopleNum != null and peopleNum != ''">people_num = #{peopleNum},</if>
+            <if test="startEdit != null">start_edit = #{startEdit},</if>
             <if test="startTime != null">start_time = #{startTime},</if>
             <if test="endTime != null">end_time = #{endTime},</if>
             <if test="budgetDay != null">budget_day = #{budgetDay},</if>
@@ -193,6 +195,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
                 AND date_format(r.create_time,'%y%m%d') &lt;= date_format(#{params.endTime},'%y%m%d')
             </if>
         </where>
+        order by review_id desc
     </select>
 
     <select id="selectDoneReviewList" parameterType="SysReview" resultMap="SysReviewResult">
@@ -211,6 +214,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
         </where>
         AND rp.user_id = #{userId}
         AND (rp.status = 2 OR rp.status = 3)
+        order by review_id desc
     </select>
 
     <update id="updateSysReviewFinalTime" parameterType="SysReview">
@@ -222,6 +226,14 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
     <update id="setSysReviewFinalSecondStatusByReviewId" parameterType="SysReview">
         update sys_review
         set final_second_status = #{finalSecondStatus}
+        where review_id = #{reviewId}
+    </update>
+
+    <update id="updateStartEditByReviewId" parameterType="SysReview">
+        update sys_review
+        <trim prefix="SET" suffixOverrides=",">
+            <if test="startEdit != null and startEdit != ''">start_edit = #{startEdit},</if>
+        </trim>
         where review_id = #{reviewId}
     </update>
 </mapper>

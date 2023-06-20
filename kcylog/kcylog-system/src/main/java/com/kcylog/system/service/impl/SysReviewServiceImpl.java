@@ -134,4 +134,10 @@ public class SysReviewServiceImpl implements ISysReviewService
     {
         return sysReviewMapper.setSysReviewFinalSecondStatusByReviewId(sysReview);
     }
+
+    @Override
+    public int updateStartEditByReviewId(SysReview sysReview)
+    {
+        return sysReviewMapper.updateStartEditByReviewId(sysReview);
+    }
 }

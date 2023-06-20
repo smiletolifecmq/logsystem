@@ -143,6 +143,14 @@
             @click="handleReviewProcess(scope.row)"
             >流程详情</el-button
           >
+          <el-button
+            size="mini"
+            type="text"
+            icon="el-icon-setting"
+            @click="startEdit(scope.row)"
+            v-if="showStartEdit"
+            >开启编辑</el-button
+          >
         </template>
       </el-table-column>
     </el-table>
@@ -308,12 +316,15 @@ import {
   doneListReview,
   getReviewProcessList,
   getReview,
+  setStartEdit,
 } from "@/api/system/review";
+import userInfo from "@/store/modules/user";
 
 export default {
   name: "Review",
   data() {
     return {
+      showStartEdit: false,
       openInfo: false,
       formInfo: {},
       titleInfo: "",
@@ -353,9 +364,26 @@ export default {
     };
   },
   created() {
+    if (userInfo.state.deptId == 100 || userInfo.state.deptId == 201) {
+      this.showStartEdit = true;
+    } else {
+      this.showStartEdit = false;
+    }
     this.getUpcomingList();
   },
   methods: {
+    startEdit(row) {
+      this.$modal
+        .confirm('是否开启该审核单的编辑"')
+        .then(function () {
+          return setStartEdit(row.reviewId);
+        })
+        .then(() => {
+          this.getUpcomingList();
+          this.$modal.msgSuccess("开启成功");
+        })
+        .catch(() => {});
+    },
     filterTime(timeString) {
       if (timeString != "" && timeString != null) {
         const timeSubstring = timeString.substring(11);

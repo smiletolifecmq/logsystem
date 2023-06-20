@@ -94,11 +94,22 @@ public class SysReview extends BaseEntity
 
     private int finalSecondStatus;
 
+    private int startEdit;
+
     @Excel(name = "雇工")
     private List<SysReviewEmployee> reviewEmployee;
 
     public List<SysReviewEmployee> getReviewEmployee() {
         return reviewEmployee;
+    }
+
+
+    public int getStartEdit() {
+        return startEdit;
+    }
+
+    public void setStartEdit(int startEdit) {
+        this.startEdit = startEdit;
     }
 
     public int getFinalSecondStatus() {

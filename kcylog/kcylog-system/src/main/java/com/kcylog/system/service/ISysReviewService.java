@@ -76,4 +76,5 @@ public interface ISysReviewService
 
     public int setSysReviewFinalSecondStatusByReviewId(SysReview sysReview);
 
+    public int updateStartEditByReviewId(SysReview sysReview);
 }

@@ -104,3 +104,11 @@ export function setBatchReviewPass(reviewIds) {
     method: 'put'
   })
 }
+
+// 开启编辑
+export function setStartEdit(reviewId) {
+  return request({
+    url: '/system/review/set_start_edit/' + reviewId,
+    method: 'put'
+  })
+}

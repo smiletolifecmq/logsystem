@@ -407,7 +407,6 @@ export default {
     getDeptTree() {
       deptTreeSelect().then((response) => {
         this.deptOptions = transformIdToValue(response.data);
-        console.log(this.deptOptions);
       });
     },
     finalEmploymentInfo(row) {

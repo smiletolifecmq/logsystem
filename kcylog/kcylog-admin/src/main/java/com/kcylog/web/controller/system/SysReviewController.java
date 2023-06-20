@@ -133,9 +133,11 @@ public class SysReviewController extends BaseController
      * 修改审核单
      */
     @Log(title = "审核单", businessType = BusinessType.UPDATE)
+    @Transactional
     @PutMapping
     public AjaxResult edit(@RequestBody SysReview sysReview)
     {
+        sysReview.setStartEdit(0);
         return toAjax(sysReviewService.updateSysReview(sysReview));
     }
 
@@ -300,5 +302,18 @@ public class SysReviewController extends BaseController
         }
 
         return toAjax(1);
+    }
+
+    /**
+     * 开启编辑
+     */
+    @Log(title = "审核单", businessType = BusinessType.UPDATE)
+    @PutMapping("/set_start_edit/{reviewId}")
+    public AjaxResult setStartEdit(@PathVariable Long reviewId)
+    {
+        SysReview sysReview = new SysReview();
+        sysReview.setStartEdit(1);
+        sysReview.setReviewId(reviewId);
+        return toAjax(sysReviewService.updateStartEditByReviewId(sysReview));
     }
 }

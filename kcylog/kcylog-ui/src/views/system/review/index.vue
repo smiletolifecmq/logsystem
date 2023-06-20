@@ -190,7 +190,11 @@
             type="text"
             icon="el-icon-edit"
             @click="handleUpdate(scope.row)"
-            v-if="scope.row.status === 0 || scope.row.status === 3"
+            v-if="
+              scope.row.status === 0 ||
+              scope.row.status === 3 ||
+              scope.row.startEdit === 1
+            "
             >修改基本信息</el-button
           >
           <el-button
