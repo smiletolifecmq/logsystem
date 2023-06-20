@@ -32,6 +32,14 @@
           @keyup.enter.native="handleQuery"
         />
       </el-form-item>
+      <el-form-item label="部门" prop="deptId">
+        <el-cascader
+          v-model="queryParamsDeptId"
+          :options="deptOptions"
+          @change="handleChangeDept"
+          clearable
+        ></el-cascader>
+      </el-form-item>
       <el-form-item label="创建时间">
         <el-date-picker
           v-model="dateRange"
@@ -339,11 +347,15 @@ import {
   getReviewProcessList,
   getReview,
 } from "@/api/system/review";
+import { deptTreeSelect } from "@/api/system/log";
 
 export default {
   name: "Review",
   data() {
     return {
+      queryParamsDeptId: [],
+      // 部门树选项
+      deptOptions: undefined,
       titleInfo: "",
       openInfo: false,
       startAmPm: "12:00:00",
@@ -379,13 +391,25 @@ export default {
         serialNum: null,
         projectName: null,
         requester: null,
+        deptId: undefined,
       },
     };
   },
   created() {
     this.getUpcomingList();
+    this.getDeptTree();
   },
   methods: {
+    handleChangeDept(value) {
+      this.queryParams.deptId = value[1];
+    },
+    /** 查询部门下拉树结构 */
+    getDeptTree() {
+      deptTreeSelect().then((response) => {
+        this.deptOptions = transformIdToValue(response.data);
+        console.log(this.deptOptions);
+      });
+    },
     finalEmploymentInfo(row) {
       const reviewId = row.reviewId;
       this.$router.push("/system/review-employee/info/" + reviewId);
@@ -514,4 +538,21 @@ export default {
     },
   },
 };
+function transformIdToValue(obj) {
+  if (Array.isArray(obj)) {
+    return obj.map((item) => transformIdToValue(item));
+  } else if (typeof obj === "object" && obj !== null) {
+    const newObj = {};
+    for (let key in obj) {
+      if (key === "id") {
+        newObj.value = obj[key];
+      } else {
+        newObj[key] = transformIdToValue(obj[key]);
+      }
+    }
+    return newObj;
+  } else {
+    return obj;
+  }
+}
 </script>
