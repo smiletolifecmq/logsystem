@@ -370,6 +370,7 @@
             v-model="formInfo.serialNum"
             placeholder="请输入编号"
             disabled
+            class="custom-input"
           />
         </el-form-item>
         <el-form-item label="项目名称" prop="projectName">
@@ -377,6 +378,7 @@
             v-model="formInfo.projectName"
             placeholder="请输入项目名称"
             disabled
+            class="custom-input"
           />
         </el-form-item>
         <el-form-item label="委托单位" prop="requester">
@@ -384,6 +386,7 @@
             v-model="formInfo.requester"
             placeholder="请输入委托单位"
             disabled
+            class="custom-input"
           />
         </el-form-item>
         <el-form-item label="项目金额" prop="porjectMoney">
@@ -394,6 +397,7 @@
             :min="0.0"
             placeholder="请输入项目金额"
             disabled
+            class="custom-input"
           />
         </el-form-item>
         <el-form-item label="工作量" prop="workload">
@@ -402,6 +406,7 @@
             type="textarea"
             placeholder="请输入内容"
             disabled
+            class="textarea-input"
           />
         </el-form-item>
         <el-form-item label="雇工人数" prop="peopleNum">
@@ -411,6 +416,7 @@
             :min="0"
             @change="handleTimeChange"
             disabled
+            class="custom-input"
           />
         </el-form-item>
         <el-form-item label="开始时间" prop="startTime">
@@ -422,6 +428,7 @@
             placeholder="请选择预估雇工工作开始时间"
             @change="handleTimeChange"
             disabled
+            class="custom-input"
           >
           </el-date-picker>
 
@@ -430,6 +437,7 @@
             placeholder="请选择"
             @change="handleTimeChange"
             disabled
+            class="custom-input"
           >
             <el-option label="上午" value="12:00:00"></el-option>
             <el-option label="下午" value="23:59:59"></el-option>
@@ -444,6 +452,7 @@
             placeholder="请选择预估雇工工作结束时间"
             @change="handleTimeChange"
             disabled
+            class="custom-input"
           >
           </el-date-picker>
           <el-select
@@ -451,6 +460,7 @@
             placeholder="请选择"
             @change="handleTimeChange"
             disabled
+            class="custom-input"
           >
             <el-option label="上午" value="12:00:00"></el-option>
             <el-option label="下午" value="23:59:59"></el-option>
@@ -461,6 +471,7 @@
             v-model="formInfo.budgetDay"
             placeholder="请输入预估天数"
             disabled
+            class="custom-input"
           />
         </el-form-item>
         <el-form-item label="预算金额" prop="budgetMoney">
@@ -468,6 +479,7 @@
             v-model="formInfo.budgetMoney"
             placeholder="请输入预算金额"
             disabled
+            class="custom-input"
           />
         </el-form-item>
         <el-form-item>
@@ -488,7 +500,15 @@
     </el-dialog>
   </div>
 </template>
+<style>
+.custom-input input {
+  color: black !important;
+}
 
+.textarea-input textarea {
+  color: black !important;
+}
+</style>
 <script>
 import {
   listReview,
@@ -590,9 +610,9 @@ export default {
         requester: [
           { required: true, message: "委托单位不能为空", trigger: "blur" },
         ],
-        porjectMoney: [
-          { required: true, message: "项目金额不能为空", trigger: "blur" },
-        ],
+        // porjectMoney: [
+        //   { required: true, message: "项目金额不能为空", trigger: "blur" },
+        // ],
         peopleNum: [
           { required: true, message: "人数不能为空", trigger: "blur" },
         ],
@@ -621,31 +641,10 @@ export default {
   },
   methods: {
     showEmployeeButton(finalTime, status, finalSecondStatus) {
-      if (finalTime == null && status == 2) {
+      if (finalSecondStatus == 1 || status == 2) {
         return true;
       }
-      if (finalSecondStatus == 1) {
-        if (finalTime == null) {
-          return true;
-        } else {
-          const now = new Date();
-          const finalTimeDate = new Date(finalTime);
-          const todayStart = new Date(
-            now.getFullYear(),
-            now.getMonth(),
-            now.getDate()
-          );
-          return finalTimeDate > todayStart;
-        }
-      }
-      const now = new Date();
-      const finalTimeDate = new Date(finalTime);
-      const todayStart = new Date(
-        now.getFullYear(),
-        now.getMonth(),
-        now.getDate()
-      );
-      return finalTimeDate > todayStart && status == 2;
+      return false;
     },
     finalEmploymentInfo(row) {
       const reviewId = row.reviewId;
