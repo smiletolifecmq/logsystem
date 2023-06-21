@@ -799,7 +799,7 @@ export default {
     /** 搜索按钮操作 */
     handleQuery() {
       this.queryParams.pageNum = 1;
-      if (this.statusVaule != "") {
+      if (this.statusVaule !== "") {
         this.queryParams.status = this.statusVaule;
       }
       this.getList();
