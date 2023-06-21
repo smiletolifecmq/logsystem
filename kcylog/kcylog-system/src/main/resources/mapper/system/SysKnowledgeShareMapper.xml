@@ -1,0 +1,74 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.kcylog.system.mapper.SysKnowledgeShareMapper">
+    
+    <resultMap type="SysKnowledgeShare" id="SysKnowledgeShareResult">
+        <result property="knowledgeId"    column="knowledge_id"    />
+        <result property="userId"    column="user_id"    />
+        <result property="title"    column="title"    />
+        <result property="introduction"    column="introduction"    />
+        <result property="createTime"    column="create_time"    />
+        <result property="updateTime"    column="update_time"    />
+    </resultMap>
+
+    <sql id="selectSysKnowledgeShareVo">
+        select knowledge_id, user_id, title, introduction, create_time, update_time from sys_knowledge_share
+    </sql>
+
+    <select id="selectSysKnowledgeShareList" parameterType="SysKnowledgeShare" resultMap="SysKnowledgeShareResult">
+        <include refid="selectSysKnowledgeShareVo"/>
+        <where>  
+            <if test="userId != null "> and user_id = #{userId}</if>
+            <if test="title != null  and title != ''"> and title = #{title}</if>
+            <if test="introduction != null  and introduction != ''"> and introduction = #{introduction}</if>
+        </where>
+    </select>
+    
+    <select id="selectSysKnowledgeShareByKnowledgeId" parameterType="Long" resultMap="SysKnowledgeShareResult">
+        <include refid="selectSysKnowledgeShareVo"/>
+        where knowledge_id = #{knowledgeId}
+    </select>
+        
+    <insert id="insertSysKnowledgeShare" parameterType="SysKnowledgeShare" useGeneratedKeys="true" keyProperty="knowledgeId">
+        insert into sys_knowledge_share
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="userId != null">user_id,</if>
+            <if test="title != null and title != ''">title,</if>
+            <if test="introduction != null">introduction,</if>
+            <if test="createTime != null">create_time,</if>
+            <if test="updateTime != null">update_time,</if>
+         </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test="userId != null">#{userId},</if>
+            <if test="title != null and title != ''">#{title},</if>
+            <if test="introduction != null">#{introduction},</if>
+            <if test="createTime != null">#{createTime},</if>
+            <if test="updateTime != null">#{updateTime},</if>
+         </trim>
+    </insert>
+
+    <update id="updateSysKnowledgeShare" parameterType="SysKnowledgeShare">
+        update sys_knowledge_share
+        <trim prefix="SET" suffixOverrides=",">
+            <if test="userId != null">user_id = #{userId},</if>
+            <if test="title != null and title != ''">title = #{title},</if>
+            <if test="introduction != null">introduction = #{introduction},</if>
+            <if test="createTime != null">create_time = #{createTime},</if>
+            <if test="updateTime != null">update_time = #{updateTime},</if>
+        </trim>
+        where knowledge_id = #{knowledgeId}
+    </update>
+
+    <delete id="deleteSysKnowledgeShareByKnowledgeId" parameterType="Long">
+        delete from sys_knowledge_share where knowledge_id = #{knowledgeId}
+    </delete>
+
+    <delete id="deleteSysKnowledgeShareByKnowledgeIds" parameterType="String">
+        delete from sys_knowledge_share where knowledge_id in 
+        <foreach item="knowledgeId" collection="array" open="(" separator="," close=")">
+            #{knowledgeId}
+        </foreach>
+    </delete>
+</mapper>
