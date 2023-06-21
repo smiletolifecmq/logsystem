@@ -30,6 +30,7 @@ public class SysKnowledgeShare extends BaseEntity
     @Excel(name = "简介")
     private String introduction;
 
+
     public void setKnowledgeId(Long knowledgeId) 
     {
         this.knowledgeId = knowledgeId;

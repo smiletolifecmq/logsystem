@@ -38,20 +38,8 @@
           icon="el-icon-plus"
           size="mini"
           @click="handleAdd"
-          v-hasPermi="['system:share:add']"
+          v-hasPermi="['system:knowledgeShare:add']"
           >新增</el-button
-        >
-      </el-col>
-      <el-col :span="1.5">
-        <el-button
-          type="success"
-          plain
-          icon="el-icon-edit"
-          size="mini"
-          :disabled="single"
-          @click="handleUpdate"
-          v-hasPermi="['system:share:edit']"
-          >修改</el-button
         >
       </el-col>
       <el-col :span="1.5">
@@ -62,19 +50,8 @@
           size="mini"
           :disabled="multiple"
           @click="handleDelete"
-          v-hasPermi="['system:share:remove']"
+          v-hasPermi="['system:knowledgeShare:remove']"
           >删除</el-button
-        >
-      </el-col>
-      <el-col :span="1.5">
-        <el-button
-          type="warning"
-          plain
-          icon="el-icon-download"
-          size="mini"
-          @click="handleExport"
-          v-hasPermi="['system:share:export']"
-          >导出</el-button
         >
       </el-col>
       <right-toolbar
@@ -89,8 +66,6 @@
       @selection-change="handleSelectionChange"
     >
       <el-table-column type="selection" width="55" align="center" />
-      <el-table-column label="自增ID" align="center" prop="knowledgeId" />
-      <el-table-column label="用户ID" align="center" prop="userId" />
       <el-table-column label="标题" align="center" prop="title" />
       <el-table-column label="简介" align="center" prop="introduction" />
       <el-table-column
@@ -104,7 +79,7 @@
             type="text"
             icon="el-icon-edit"
             @click="handleUpdate(scope.row)"
-            v-hasPermi="['system:share:edit']"
+            v-hasPermi="['system:knowledgeShare:edit']"
             >修改</el-button
           >
           <el-button
@@ -112,7 +87,7 @@
             type="text"
             icon="el-icon-delete"
             @click="handleDelete(scope.row)"
-            v-hasPermi="['system:share:remove']"
+            v-hasPermi="['system:knowledgeShare:remove']"
             >删除</el-button
           >
         </template>
@@ -140,6 +115,14 @@
             placeholder="请输入内容"
           />
         </el-form-item>
+        <el-form-item label="附件">
+          <FileUpload
+            ref="fileUploadModule"
+            :fileSize="0"
+            :fileType="fileType"
+            :limit="null"
+          ></FileUpload>
+        </el-form-item>
       </el-form>
       <div slot="footer" class="dialog-footer">
         <el-button type="primary" @click="submitForm">确 定</el-button>
@@ -157,9 +140,19 @@ import {
   addShare,
   updateShare,
 } from "@/api/system/knowledgeShare";
+import FileUpload from "@/components/FileUpload";
 
 export default {
   name: "Share",
+  components: {
+    FileUpload,
+  },
+  props: {
+    fileType: {
+      type: Array,
+      default: () => ["doc", "ppt", "pdf"],
+    },
+  },
   data() {
     return {
       // 遮罩层
@@ -190,6 +183,7 @@ export default {
       },
       // 表单参数
       form: {},
+      uploadFileList: [],
       // 表单校验
       rules: {
         userId: [
@@ -219,6 +213,13 @@ export default {
     },
     // 表单重置
     reset() {
+      if (this.$refs.fileUploadModule != null) {
+        this.$refs.fileUploadModule.number = 0;
+        this.$refs.fileUploadModule.uploadList = [];
+        this.$refs.fileUploadModule.fileList = [];
+      }
+
+      this.uploadFileList = [];
       this.form = {
         knowledgeId: null,
         userId: null,
@@ -226,6 +227,7 @@ export default {
         introduction: null,
         createTime: null,
         updateTime: null,
+        uploadFileList: null,
       };
       this.resetForm("form");
     },
@@ -263,6 +265,21 @@ export default {
     },
     /** 提交按钮 */
     submitForm() {
+      const uploadListComponent = this.$refs.fileUploadModule;
+      const fileList = uploadListComponent.fileList;
+      for (let i in fileList) {
+        let obj = {};
+        let fileName = fileList[i].name.split("/");
+        obj.newFileName = fileName[fileName.length - 1];
+        obj.oldFileName =
+          fileName[fileName.length - 1].split("_")[0] +
+          "." +
+          fileName[fileName.length - 1].split(".")[1];
+        obj.fileName = fileList[i].name;
+        obj.url = fileList[i].url;
+        this.uploadFileList.push(obj);
+      }
+      this.form.uploadFileList = this.uploadFileList;
       this.$refs["form"].validate((valid) => {
         if (valid) {
           if (this.form.knowledgeId != null) {
@@ -294,16 +311,6 @@ export default {
           this.$modal.msgSuccess("删除成功");
         })
         .catch(() => {});
-    },
-    /** 导出按钮操作 */
-    handleExport() {
-      this.download(
-        "system/share/export",
-        {
-          ...this.queryParams,
-        },
-        `share_${new Date().getTime()}.xlsx`
-      );
     },
   },
 };
