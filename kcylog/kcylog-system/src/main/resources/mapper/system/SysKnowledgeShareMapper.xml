@@ -12,6 +12,11 @@
         <result property="createTime" column="create_time"/>
         <result property="updateTime" column="update_time"/>
         <collection property="manageFile" javaType="java.util.List" resultMap="manageFileResult"/>
+        <collection property="user" column="user_name" javaType="SysUser" resultMap="knowledgeShareUserResult"/>
+    </resultMap>
+
+    <resultMap id="knowledgeShareUserResult" type="SysUser">
+        <result property="userName" column="user_name"/>
     </resultMap>
 
     <resultMap type="SysManageFile" id="manageFileResult">
@@ -43,7 +48,7 @@
                 AND date_format(create_time,'%y%m%d') &lt;= date_format(#{params.endTime},'%y%m%d')
             </if>
         </where>
-        order by knowledge_id asc 
+        order by knowledge_id asc
     </select>
 
     <select id="selectSysKnowledgeShareByKnowledgeId" parameterType="Long" resultMap="SysKnowledgeShareResult">

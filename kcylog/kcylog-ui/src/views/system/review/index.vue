@@ -84,17 +84,6 @@
           >新增</el-button
         >
       </el-col>
-      <el-col :span="1.5">
-        <el-button
-          type="danger"
-          plain
-          icon="el-icon-delete"
-          size="mini"
-          :disabled="multiple"
-          @click="handleDelete"
-          >删除</el-button
-        >
-      </el-col>
       <right-toolbar
         :showSearch.sync="showSearch"
         @queryTable="getList"

@@ -1,0 +1,72 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.kcylog.system.mapper.SysJobSpecificationMapper">
+    
+    <resultMap type="SysJobSpecification" id="SysJobSpecificationResult">
+        <result property="jobId"    column="job_id"    />
+        <result property="userId"    column="user_id"    />
+        <result property="title"    column="title"    />
+        <result property="createTime"    column="create_time"    />
+        <result property="updateTime"    column="update_time"    />
+    </resultMap>
+
+    <sql id="selectSysJobSpecificationVo">
+        select k.*, f.new_file_name, f.old_file_name, f.url, f.file_name
+        from sys_job_specification k
+                 inner join sys_manage_file f on k.job_id = f.module_id and f.module_type = 3
+    </sql>
+
+    <select id="selectSysJobSpecificationList" parameterType="SysJobSpecification" resultMap="SysJobSpecificationResult">
+        <include refid="selectSysJobSpecificationVo"/>
+        <where>  
+            <if test="userId != null "> and user_id = #{userId}</if>
+            <if test="title != null  and title != ''"> and title = #{title}</if>
+        </where>
+        order by job_id asc
+    </select>
+    
+    <select id="selectSysJobSpecificationByJobId" parameterType="Long" resultMap="SysJobSpecificationResult">
+        <include refid="selectSysJobSpecificationVo"/>
+        where job_id = #{jobId}
+    </select>
+        
+    <insert id="insertSysJobSpecification" parameterType="SysJobSpecification" useGeneratedKeys="true" keyProperty="jobId">
+        insert into sys_job_specification
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="userId != null">user_id,</if>
+            <if test="title != null and title != ''">title,</if>
+            <if test="createTime != null">create_time,</if>
+            <if test="updateTime != null">update_time,</if>
+         </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test="userId != null">#{userId},</if>
+            <if test="title != null and title != ''">#{title},</if>
+            <if test="createTime != null">#{createTime},</if>
+            <if test="updateTime != null">#{updateTime},</if>
+         </trim>
+    </insert>
+
+    <update id="updateSysJobSpecification" parameterType="SysJobSpecification">
+        update sys_job_specification
+        <trim prefix="SET" suffixOverrides=",">
+            <if test="userId != null">user_id = #{userId},</if>
+            <if test="title != null and title != ''">title = #{title},</if>
+            <if test="createTime != null">create_time = #{createTime},</if>
+            <if test="updateTime != null">update_time = #{updateTime},</if>
+        </trim>
+        where job_id = #{jobId}
+    </update>
+
+    <delete id="deleteSysJobSpecificationByJobId" parameterType="Long">
+        delete from sys_job_specification where job_id = #{jobId}
+    </delete>
+
+    <delete id="deleteSysJobSpecificationByJobIds" parameterType="String">
+        delete from sys_job_specification where job_id in 
+        <foreach item="jobId" collection="array" open="(" separator="," close=")">
+            #{jobId}
+        </foreach>
+    </delete>
+</mapper>

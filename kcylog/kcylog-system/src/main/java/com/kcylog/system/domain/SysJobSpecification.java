@@ -1,6 +1,5 @@
 package com.kcylog.system.domain;
 
-import com.kcylog.common.core.domain.entity.SysUser;
 import org.apache.commons.lang3.builder.ToStringBuilder;
 import org.apache.commons.lang3.builder.ToStringStyle;
 import com.kcylog.common.annotation.Excel;
@@ -9,17 +8,17 @@ import com.kcylog.common.core.domain.BaseEntity;
 import java.util.List;
 
 /**
- * 知识分享对象 sys_knowledge_share
+ * 作业规范对象 sys_job_specification
  * 
  * @author ruoyi
- * @date 2023-06-21
+ * @date 2023-06-25
  */
-public class SysKnowledgeShare extends BaseEntity
+public class SysJobSpecification extends BaseEntity
 {
     private static final long serialVersionUID = 1L;
 
-    /** 自增ID */
-    private Long knowledgeId;
+    /** 作业ID */
+    private Long jobId;
 
     /** 用户ID */
     @Excel(name = "用户ID")
@@ -29,22 +28,16 @@ public class SysKnowledgeShare extends BaseEntity
     @Excel(name = "标题")
     private String title;
 
-    /** 简介 */
-    @Excel(name = "简介")
-    private String introduction;
-
     private List<UploadFileList> uploadFileList;
 
     private List<SysManageFile> manageFile;
 
-    private SysUser user;
-
-    public SysUser getUser() {
-        return user;
+    public List<UploadFileList> getUploadFileList() {
+        return uploadFileList;
     }
 
-    public void setUser(SysUser user) {
-        this.user = user;
+    public void setUploadFileList(List<UploadFileList> uploadFileList) {
+        this.uploadFileList = uploadFileList;
     }
 
     public List<SysManageFile> getManageFile() {
@@ -55,22 +48,14 @@ public class SysKnowledgeShare extends BaseEntity
         this.manageFile = manageFile;
     }
 
-    public List<UploadFileList> getUploadFileList() {
-        return uploadFileList;
-    }
-
-    public void setUploadFileList(List<UploadFileList> uploadFileList) {
-        this.uploadFileList = uploadFileList;
-    }
-
-    public void setKnowledgeId(Long knowledgeId)
+    public void setJobId(Long jobId) 
     {
-        this.knowledgeId = knowledgeId;
+        this.jobId = jobId;
     }
 
-    public Long getKnowledgeId() 
+    public Long getJobId() 
     {
-        return knowledgeId;
+        return jobId;
     }
     public void setUserId(Long userId) 
     {
@@ -90,23 +75,13 @@ public class SysKnowledgeShare extends BaseEntity
     {
         return title;
     }
-    public void setIntroduction(String introduction) 
-    {
-        this.introduction = introduction;
-    }
-
-    public String getIntroduction() 
-    {
-        return introduction;
-    }
 
     @Override
     public String toString() {
         return new ToStringBuilder(this,ToStringStyle.MULTI_LINE_STYLE)
-            .append("knowledgeId", getKnowledgeId())
+            .append("jobId", getJobId())
             .append("userId", getUserId())
             .append("title", getTitle())
-            .append("introduction", getIntroduction())
             .append("createTime", getCreateTime())
             .append("updateTime", getUpdateTime())
             .toString();
