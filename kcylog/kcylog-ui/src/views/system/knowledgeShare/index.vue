@@ -16,6 +16,18 @@
           @keyup.enter.native="handleQuery"
         />
       </el-form-item>
+      <el-form-item label="创建时间">
+        <el-date-picker
+          v-model="dateRange"
+          style="width: 240px"
+          value-format="yyyy-MM-dd"
+          type="daterange"
+          range-separator="-"
+          start-placeholder="开始日期"
+          end-placeholder="结束日期"
+          @change="handleQuery"
+        ></el-date-picker>
+      </el-form-item>
       <el-form-item>
         <el-button
           type="primary"
@@ -68,6 +80,26 @@
       <el-table-column type="selection" width="55" align="center" />
       <el-table-column label="标题" align="center" prop="title" />
       <el-table-column label="简介" align="center" prop="introduction" />
+      <el-table-column
+        label="创建时间"
+        align="center"
+        prop="createTime"
+        width="160"
+      >
+        <template slot-scope="scope">
+          <span>{{ parseTime(scope.row.createTime) }}</span>
+        </template>
+      </el-table-column>
+      <el-table-column
+        label="修改时间"
+        align="center"
+        prop="updateTime"
+        width="160"
+      >
+        <template slot-scope="scope">
+          <span>{{ parseTime(scope.row.updateTime) }}</span>
+        </template>
+      </el-table-column>
       <el-table-column
         label="操作"
         align="center"
@@ -155,6 +187,8 @@ export default {
   },
   data() {
     return {
+      // 日期范围
+      dateRange: [],
       // 遮罩层
       loading: true,
       // 选中数组
@@ -200,11 +234,13 @@ export default {
     /** 查询知识分享列表 */
     getList() {
       this.loading = true;
-      listShare(this.queryParams).then((response) => {
-        this.shareList = response.rows;
-        this.total = response.total;
-        this.loading = false;
-      });
+      listShare(this.addDateRange(this.queryParams, this.dateRange)).then(
+        (response) => {
+          this.shareList = response.rows;
+          this.total = response.total;
+          this.loading = false;
+        }
+      );
     },
     // 取消按钮
     cancel() {
@@ -238,6 +274,7 @@ export default {
     },
     /** 重置按钮操作 */
     resetQuery() {
+      this.dateRange = [];
       this.resetForm("queryForm");
       this.handleQuery();
     },

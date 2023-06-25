@@ -5,6 +5,8 @@ import org.apache.commons.lang3.builder.ToStringStyle;
 import com.kcylog.common.annotation.Excel;
 import com.kcylog.common.core.domain.BaseEntity;
 
+import java.util.List;
+
 /**
  * 知识分享对象 sys_knowledge_share
  * 
@@ -30,8 +32,27 @@ public class SysKnowledgeShare extends BaseEntity
     @Excel(name = "简介")
     private String introduction;
 
+    private List<UploadFileList> uploadFileList;
 
-    public void setKnowledgeId(Long knowledgeId) 
+    private List<SysManageFile> manageFile;
+
+    public List<SysManageFile> getManageFile() {
+        return manageFile;
+    }
+
+    public void setManageFile(List<SysManageFile> manageFile) {
+        this.manageFile = manageFile;
+    }
+
+    public List<UploadFileList> getUploadFileList() {
+        return uploadFileList;
+    }
+
+    public void setUploadFileList(List<UploadFileList> uploadFileList) {
+        this.uploadFileList = uploadFileList;
+    }
+
+    public void setKnowledgeId(Long knowledgeId)
     {
         this.knowledgeId = knowledgeId;
     }

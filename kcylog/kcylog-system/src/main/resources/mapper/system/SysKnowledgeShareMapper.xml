@@ -1,37 +1,57 @@
 <?xml version="1.0" encoding="UTF-8" ?>
 <!DOCTYPE mapper
-PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
-"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.kcylog.system.mapper.SysKnowledgeShareMapper">
-    
+
     <resultMap type="SysKnowledgeShare" id="SysKnowledgeShareResult">
-        <result property="knowledgeId"    column="knowledge_id"    />
-        <result property="userId"    column="user_id"    />
-        <result property="title"    column="title"    />
-        <result property="introduction"    column="introduction"    />
-        <result property="createTime"    column="create_time"    />
-        <result property="updateTime"    column="update_time"    />
+        <result property="knowledgeId" column="knowledge_id"/>
+        <result property="userId" column="user_id"/>
+        <result property="title" column="title"/>
+        <result property="introduction" column="introduction"/>
+        <result property="createTime" column="create_time"/>
+        <result property="updateTime" column="update_time"/>
+        <collection property="manageFile" javaType="java.util.List" resultMap="manageFileResult"/>
+    </resultMap>
+
+    <resultMap type="SysManageFile" id="manageFileResult">
+        <result property="fileId" column="file_id"/>
+        <result property="newFileName" column="new_file_name"/>
+        <result property="oldFileName" column="old_file_name"/>
+        <result property="url" column="url"/>
+        <result property="fileName" column="file_name"/>
+        <result property="moduleId" column="module_id"/>
+        <result property="moduleType" column="module_type"/>
     </resultMap>
 
     <sql id="selectSysKnowledgeShareVo">
-        select knowledge_id, user_id, title, introduction, create_time, update_time from sys_knowledge_share
+        select k.*, f.new_file_name, f.old_file_name, f.url, f.file_name
+        from sys_knowledge_share k
+                 inner join sys_manage_file f on k.knowledge_id = f.module_id and f.module_type = 2
     </sql>
 
     <select id="selectSysKnowledgeShareList" parameterType="SysKnowledgeShare" resultMap="SysKnowledgeShareResult">
         <include refid="selectSysKnowledgeShareVo"/>
-        <where>  
-            <if test="userId != null "> and user_id = #{userId}</if>
-            <if test="title != null  and title != ''"> and title = #{title}</if>
-            <if test="introduction != null  and introduction != ''"> and introduction = #{introduction}</if>
+        <where>
+            <if test="userId != null ">and user_id = #{userId}</if>
+            <if test="title != null  and title != ''">and title = #{title}</if>
+            <if test="introduction != null  and introduction != ''">and introduction = #{introduction}</if>
+            <if test="params.beginTime != null and params.beginTime != ''"><!-- 开始时间检索 -->
+                AND date_format(create_time,'%y%m%d') &gt;= date_format(#{params.beginTime},'%y%m%d')
+            </if>
+            <if test="params.endTime != null and params.endTime != ''"><!-- 结束时间检索 -->
+                AND date_format(create_time,'%y%m%d') &lt;= date_format(#{params.endTime},'%y%m%d')
+            </if>
         </where>
     </select>
-    
+
     <select id="selectSysKnowledgeShareByKnowledgeId" parameterType="Long" resultMap="SysKnowledgeShareResult">
         <include refid="selectSysKnowledgeShareVo"/>
         where knowledge_id = #{knowledgeId}
     </select>
-        
-    <insert id="insertSysKnowledgeShare" parameterType="SysKnowledgeShare" useGeneratedKeys="true" keyProperty="knowledgeId">
+
+    <insert id="insertSysKnowledgeShare" parameterType="SysKnowledgeShare" useGeneratedKeys="true"
+            keyProperty="knowledgeId">
         insert into sys_knowledge_share
         <trim prefix="(" suffix=")" suffixOverrides=",">
             <if test="userId != null">user_id,</if>
@@ -39,14 +59,14 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
             <if test="introduction != null">introduction,</if>
             <if test="createTime != null">create_time,</if>
             <if test="updateTime != null">update_time,</if>
-         </trim>
+        </trim>
         <trim prefix="values (" suffix=")" suffixOverrides=",">
             <if test="userId != null">#{userId},</if>
             <if test="title != null and title != ''">#{title},</if>
             <if test="introduction != null">#{introduction},</if>
             <if test="createTime != null">#{createTime},</if>
             <if test="updateTime != null">#{updateTime},</if>
-         </trim>
+        </trim>
     </insert>
 
     <update id="updateSysKnowledgeShare" parameterType="SysKnowledgeShare">
@@ -62,11 +82,13 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
     </update>
 
     <delete id="deleteSysKnowledgeShareByKnowledgeId" parameterType="Long">
-        delete from sys_knowledge_share where knowledge_id = #{knowledgeId}
+        delete
+        from sys_knowledge_share
+        where knowledge_id = #{knowledgeId}
     </delete>
 
     <delete id="deleteSysKnowledgeShareByKnowledgeIds" parameterType="String">
-        delete from sys_knowledge_share where knowledge_id in 
+        delete from sys_knowledge_share where knowledge_id in
         <foreach item="knowledgeId" collection="array" open="(" separator="," close=")">
             #{knowledgeId}
         </foreach>

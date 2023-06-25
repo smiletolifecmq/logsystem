@@ -1,0 +1,81 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.kcylog.system.mapper.SysManageFileMapper">
+    
+    <resultMap type="SysManageFile" id="SysManageFileResult">
+        <result property="fileId"    column="file_id"    />
+        <result property="newFileName"    column="new_file_name"    />
+        <result property="oldFileName"    column="old_file_name"    />
+        <result property="url"    column="url"    />
+        <result property="fileName"    column="file_name"    />
+        <result property="moduleId"    column="module_id"    />
+        <result property="moduleType"    column="module_type"    />
+    </resultMap>
+
+    <sql id="selectSysManageFileVo">
+        select file_id, new_file_name, old_file_name, url, file_name, module_id, module_type from sys_manage_file
+    </sql>
+
+    <select id="selectSysManageFileList" parameterType="SysManageFile" resultMap="SysManageFileResult">
+        <include refid="selectSysManageFileVo"/>
+        <where>  
+            <if test="newFileName != null  and newFileName != ''"> and new_file_name like concat('%', #{newFileName}, '%')</if>
+            <if test="oldFileName != null  and oldFileName != ''"> and old_file_name like concat('%', #{oldFileName}, '%')</if>
+            <if test="url != null  and url != ''"> and url = #{url}</if>
+            <if test="fileName != null  and fileName != ''"> and file_name like concat('%', #{fileName}, '%')</if>
+            <if test="moduleId != null "> and module_id = #{moduleId}</if>
+            <if test="moduleType != null "> and module_type = #{moduleType}</if>
+        </where>
+    </select>
+    
+    <select id="selectSysManageFileByFileId" parameterType="Long" resultMap="SysManageFileResult">
+        <include refid="selectSysManageFileVo"/>
+        where file_id = #{fileId}
+    </select>
+        
+    <insert id="insertSysManageFile" parameterType="SysManageFile" useGeneratedKeys="true" keyProperty="fileId">
+        insert into sys_manage_file
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="newFileName != null and newFileName != ''">new_file_name,</if>
+            <if test="oldFileName != null and oldFileName != ''">old_file_name,</if>
+            <if test="url != null and url != ''">url,</if>
+            <if test="fileName != null and fileName != ''">file_name,</if>
+            <if test="moduleId != null">module_id,</if>
+            <if test="moduleType != null">module_type,</if>
+         </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test="newFileName != null and newFileName != ''">#{newFileName},</if>
+            <if test="oldFileName != null and oldFileName != ''">#{oldFileName},</if>
+            <if test="url != null and url != ''">#{url},</if>
+            <if test="fileName != null and fileName != ''">#{fileName},</if>
+            <if test="moduleId != null">#{moduleId},</if>
+            <if test="moduleType != null">#{moduleType},</if>
+         </trim>
+    </insert>
+
+    <update id="updateSysManageFile" parameterType="SysManageFile">
+        update sys_manage_file
+        <trim prefix="SET" suffixOverrides=",">
+            <if test="newFileName != null and newFileName != ''">new_file_name = #{newFileName},</if>
+            <if test="oldFileName != null and oldFileName != ''">old_file_name = #{oldFileName},</if>
+            <if test="url != null and url != ''">url = #{url},</if>
+            <if test="fileName != null and fileName != ''">file_name = #{fileName},</if>
+            <if test="moduleId != null">module_id = #{moduleId},</if>
+            <if test="moduleType != null">module_type = #{moduleType},</if>
+        </trim>
+        where file_id = #{fileId}
+    </update>
+
+    <delete id="deleteSysManageFileByFileId" parameterType="Long">
+        delete from sys_manage_file where file_id = #{fileId}
+    </delete>
+
+    <delete id="deleteSysManageFileByFileIds" parameterType="String">
+        delete from sys_manage_file where file_id in 
+        <foreach item="fileId" collection="array" open="(" separator="," close=")">
+            #{fileId}
+        </foreach>
+    </delete>
+</mapper>
