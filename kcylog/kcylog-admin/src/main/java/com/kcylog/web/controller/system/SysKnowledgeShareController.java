@@ -82,9 +82,25 @@ public class SysKnowledgeShareController extends BaseController {
      */
     @PreAuthorize("@ss.hasPermi('system:knowledgeShare:edit')")
     @Log(title = "知识分享", businessType = BusinessType.UPDATE)
+    @Transactional
     @PutMapping
     public AjaxResult edit(@RequestBody SysKnowledgeShare sysKnowledgeShare) {
-        return toAjax(sysKnowledgeShareService.updateSysKnowledgeShare(sysKnowledgeShare));
+        sysKnowledgeShareService.updateSysKnowledgeShare(sysKnowledgeShare);
+        SysManageFile sysManageFileObj = new SysManageFile();
+        sysManageFileObj.setModuleId(sysKnowledgeShare.getKnowledgeId());
+        sysManageFileObj.setModuleType((long)2);
+        sysManageFileService.deleteSysManageFileByModuleIdAndType(sysManageFileObj);
+        for (UploadFileList file:sysKnowledgeShare.getUploadFileList()){
+            SysManageFile sysManageFile = new SysManageFile();
+            sysManageFile.setNewFileName(file.getNewFileName());
+            sysManageFile.setOldFileName(file.getOldFileName());
+            sysManageFile.setUrl(file.getUrl());
+            sysManageFile.setFileName(file.getFileName());
+            sysManageFile.setModuleId(sysKnowledgeShare.getKnowledgeId());
+            sysManageFile.setModuleType((long)2);
+            sysManageFileService.insertSysManageFile(sysManageFile);
+        }
+        return toAjax(1);
     }
 
     /**

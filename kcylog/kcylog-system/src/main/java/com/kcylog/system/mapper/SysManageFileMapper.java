@@ -1,7 +1,8 @@
 package com.kcylog.system.mapper;
 
-import java.util.List;
 import com.kcylog.system.domain.SysManageFile;
+
+import java.util.List;
 
 /**
  * 文件存储信息总Mapper接口
@@ -58,4 +59,6 @@ public interface SysManageFileMapper
      * @return 结果
      */
     public int deleteSysManageFileByFileIds(Long[] fileIds);
+
+    public int deleteSysManageFileByModuleIdAndType(SysManageFile sysManageFile);
 }

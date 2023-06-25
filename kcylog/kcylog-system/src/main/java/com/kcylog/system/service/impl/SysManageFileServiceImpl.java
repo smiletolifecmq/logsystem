@@ -1,11 +1,12 @@
 package com.kcylog.system.service.impl;
 
-import java.util.List;
+import com.kcylog.system.domain.SysManageFile;
+import com.kcylog.system.mapper.SysManageFileMapper;
+import com.kcylog.system.service.ISysManageFileService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-import com.kcylog.system.mapper.SysManageFileMapper;
-import com.kcylog.system.domain.SysManageFile;
-import com.kcylog.system.service.ISysManageFileService;
+
+import java.util.List;
 
 /**
  * 文件存储信息总Service业务层处理
@@ -89,5 +90,11 @@ public class SysManageFileServiceImpl implements ISysManageFileService
     public int deleteSysManageFileByFileId(Long fileId)
     {
         return sysManageFileMapper.deleteSysManageFileByFileId(fileId);
+    }
+
+    @Override
+    public int deleteSysManageFileByModuleIdAndType(SysManageFile sysManageFile)
+    {
+        return sysManageFileMapper.deleteSysManageFileByModuleIdAndType(sysManageFile);
     }
 }

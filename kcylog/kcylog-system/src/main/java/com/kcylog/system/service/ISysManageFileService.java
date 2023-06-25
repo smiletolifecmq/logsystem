@@ -1,7 +1,8 @@
 package com.kcylog.system.service;
 
-import java.util.List;
 import com.kcylog.system.domain.SysManageFile;
+
+import java.util.List;
 
 /**
  * 文件存储信息总Service接口
@@ -58,4 +59,6 @@ public interface ISysManageFileService
      * @return 结果
      */
     public int deleteSysManageFileByFileId(Long fileId);
+
+    public int deleteSysManageFileByModuleIdAndType(SysManageFile sysManageFile);
 }

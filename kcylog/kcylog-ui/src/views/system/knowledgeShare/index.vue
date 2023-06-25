@@ -80,6 +80,32 @@
       <el-table-column type="selection" width="55" align="center" />
       <el-table-column label="标题" align="center" prop="title" />
       <el-table-column label="简介" align="center" prop="introduction" />
+      <el-table-column label="附件" align="center">
+        <template slot-scope="scope">
+          <transition-group
+            class="upload-file-list el-upload-list el-upload-list--text"
+            name="el-fade-in-linear"
+            tag="ul"
+          >
+            <li
+              :key="file.url"
+              class="el-upload-list__item ele-upload-list__item-content"
+              v-for="(file, index) in scope.row.manageFile"
+            >
+              <el-link
+                :href="`${baseUrl}${file.url}`"
+                :underline="false"
+                target="_blank"
+              >
+                <span class="el-icon-document">
+                  {{ getFileName(file.fileName) }}
+                </span>
+              </el-link>
+            </li>
+          </transition-group>
+        </template>
+      </el-table-column>
+
       <el-table-column
         label="创建时间"
         align="center"
@@ -187,6 +213,7 @@ export default {
   },
   data() {
     return {
+      baseUrl: process.env.VUE_APP_BASE_API,
       // 日期范围
       dateRange: [],
       // 遮罩层
@@ -231,6 +258,14 @@ export default {
     this.getList();
   },
   methods: {
+    // 获取文件名称
+    getFileName(name) {
+      if (name.lastIndexOf("/") > -1) {
+        return name.slice(name.lastIndexOf("/") + 1);
+      } else {
+        return "";
+      }
+    },
     /** 查询知识分享列表 */
     getList() {
       this.loading = true;
@@ -298,6 +333,19 @@ export default {
         this.form = response.data;
         this.open = true;
         this.title = "修改知识分享";
+        this.$nextTick(() => {
+          if (this.$refs.fileUploadModule) {
+            this.$refs.fileUploadModule.number = 0;
+            this.$refs.fileUploadModule.uploadList = [];
+            this.$refs.fileUploadModule.fileList = [];
+            for (let i = 0; i < response.data.manageFile.length; i++) {
+              let fileTemp = {};
+              fileTemp.name = response.data.manageFile[i].fileName;
+              fileTemp.url = response.data.manageFile[i].url;
+              this.$refs.fileUploadModule.fileList.push(fileTemp);
+            }
+          }
+        });
       });
     },
     /** 提交按钮 */
