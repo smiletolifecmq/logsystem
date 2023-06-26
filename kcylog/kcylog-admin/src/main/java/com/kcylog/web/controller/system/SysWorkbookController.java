@@ -131,6 +131,8 @@ public class SysWorkbookController extends BaseController
     @PutMapping
     public AjaxResult edit(@RequestBody SysWorkbook sysWorkbook)
     {
+        String userName = SecurityUtils.getUsername();
+        sysWorkbook.setUpdateName(userName);
         sysWorkbookService.updateSysWorkbook(sysWorkbook);
         SysManageFile sysManageFileObj = new SysManageFile();
         sysManageFileObj.setModuleId(sysWorkbook.getWorkbookId());

@@ -106,6 +106,7 @@
         </template>
       </el-table-column>
       <el-table-column label="创建人" align="center" prop="user.userName" />
+      <el-table-column label="修改人" align="center" prop="updateName" />
       <el-table-column
         label="创建时间"
         align="center"

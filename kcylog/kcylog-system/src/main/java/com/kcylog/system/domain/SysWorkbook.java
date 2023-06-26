@@ -29,6 +29,8 @@ public class SysWorkbook extends BaseEntity
     @Excel(name = "标题")
     private String title;
 
+    private String updateName;
+
     /** 简介 */
     @Excel(name = "简介")
     private String introduction;
@@ -49,6 +51,14 @@ public class SysWorkbook extends BaseEntity
 
     public SysUser getUser() {
         return user;
+    }
+
+    public String getUpdateName() {
+        return updateName;
+    }
+
+    public void setUpdateName(String updateName) {
+        this.updateName = updateName;
     }
 
     public void setUser(SysUser user) {

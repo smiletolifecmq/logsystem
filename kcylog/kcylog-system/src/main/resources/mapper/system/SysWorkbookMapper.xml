@@ -8,6 +8,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
         <result property="workbookId"    column="workbook_id"    />
         <result property="userId"    column="user_id"    />
         <result property="title"    column="title"    />
+        <result property="updateName"    column="update_name"    />
         <result property="introduction"    column="introduction"    />
         <result property="event"    column="event"    />
         <result property="sort"    column="sort"    />
@@ -85,6 +86,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
         <trim prefix="SET" suffixOverrides=",">
             <if test="userId != null">user_id = #{userId},</if>
             <if test="title != null and title != ''">title = #{title},</if>
+            <if test="updateName != null and updateName != ''">update_name = #{updateName},</if>
             <if test="introduction != null">introduction = #{introduction},</if>
             <if test="event != null">event = #{event},</if>
             <if test="sort != null">sort = #{sort},</if>
