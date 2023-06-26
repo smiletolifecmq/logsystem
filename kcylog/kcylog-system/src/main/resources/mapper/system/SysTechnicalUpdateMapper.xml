@@ -1,0 +1,99 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.kcylog.system.mapper.SysTechnicalUpdateMapper">
+    
+    <resultMap type="SysTechnicalUpdate" id="SysTechnicalUpdateResult">
+        <result property="technicalId"    column="technical_id"    />
+        <result property="userId"    column="user_id"    />
+        <result property="title"    column="title"    />
+        <result property="introduction"    column="introduction"    />
+        <result property="createTime"    column="create_time"    />
+        <result property="updateTime"    column="update_time"    />
+        <collection property="manageFile" javaType="java.util.List" resultMap="manageFileResult"/>
+        <collection property="user" column="user_name" javaType="SysUser" resultMap="technicalUpdateResult"/>
+    </resultMap>
+
+    <resultMap id="technicalUpdateResult" type="SysUser">
+        <result property="userName" column="user_name"/>
+    </resultMap>
+
+    <resultMap type="SysManageFile" id="manageFileResult">
+        <result property="fileId" column="file_id"/>
+        <result property="newFileName" column="new_file_name"/>
+        <result property="oldFileName" column="old_file_name"/>
+        <result property="url" column="url"/>
+        <result property="fileName" column="file_name"/>
+        <result property="moduleId" column="module_id"/>
+        <result property="moduleType" column="module_type"/>
+    </resultMap>
+
+    <sql id="selectSysTechnicalUpdateVo">
+        select k.*, f.new_file_name, f.old_file_name, f.url, f.file_name, u.user_name
+        from sys_technical_update k
+                 inner join sys_manage_file f on k.technical_id = f.module_id and f.module_type = 1
+                 inner join sys_user u on k.user_id = u.user_id
+    </sql>
+
+    <select id="selectSysTechnicalUpdateList" parameterType="SysTechnicalUpdate" resultMap="SysTechnicalUpdateResult">
+        <include refid="selectSysTechnicalUpdateVo"/>
+        <where>  
+            <if test="title != null  and title != ''"> and k.title = #{title}</if>
+            <if test="params.beginTime != null and params.beginTime != ''"><!-- 开始时间检索 -->
+                AND date_format(k.create_time,'%y%m%d') &gt;= date_format(#{params.beginTime},'%y%m%d')
+            </if>
+            <if test="params.endTime != null and params.endTime != ''"><!-- 结束时间检索 -->
+                AND date_format(k.create_time,'%y%m%d') &lt;= date_format(#{params.endTime},'%y%m%d')
+            </if>
+        </where>
+        order by k.technical_id asc
+    </select>
+    
+    <select id="selectSysTechnicalUpdateByTechnicalId" parameterType="Long" resultMap="SysTechnicalUpdateResult">
+        <include refid="selectSysTechnicalUpdateVo"/>
+        where technical_id = #{technicalId}
+    </select>
+        
+    <insert id="insertSysTechnicalUpdate" parameterType="SysTechnicalUpdate" useGeneratedKeys="true" keyProperty="technicalId">
+        insert into sys_technical_update
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="userId != null">user_id,</if>
+            <if test="title != null and title != ''">title,</if>
+            <if test="introduction != null">introduction,</if>
+            <if test="createTime != null">create_time,</if>
+            <if test="updateTime != null">update_time,</if>
+         </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test="userId != null">#{userId},</if>
+            <if test="title != null and title != ''">#{title},</if>
+            <if test="introduction != null">#{introduction},</if>
+            <if test="createTime != null">#{createTime},</if>
+            <if test="updateTime != null">#{updateTime},</if>
+         </trim>
+    </insert>
+
+    <update id="updateSysTechnicalUpdate" parameterType="SysTechnicalUpdate">
+        update sys_technical_update
+        <trim prefix="SET" suffixOverrides=",">
+            <if test="userId != null">user_id = #{userId},</if>
+            <if test="title != null and title != ''">title = #{title},</if>
+            <if test="introduction != null">introduction = #{introduction},</if>
+            <if test="createTime != null">create_time = #{createTime},</if>
+            <if test="updateTime != null">update_time = #{updateTime},</if>
+        </trim>
+        where technical_id = #{technicalId}
+    </update>
+
+    <delete id="deleteSysTechnicalUpdateByTechnicalId" parameterType="Long">
+        delete from sys_technical_update where technical_id = #{technicalId}
+    </delete>
+
+    <delete id="deleteSysTechnicalUpdateByTechnicalIds" parameterType="com.kcylog.system.param.TechnicalUpdateParams">
+        delete from sys_technical_update where technical_id in 
+        <foreach item="technicalId" collection="technicalIds" open="(" separator="," close=")">
+            #{technicalId}
+        </foreach>
+        and user_id = #{userId}
+    </delete>
+</mapper>

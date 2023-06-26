@@ -50,7 +50,7 @@
           icon="el-icon-plus"
           size="mini"
           @click="handleAdd"
-          v-hasPermi="['system:knowledgeShare:add']"
+          v-hasPermi="['system:technicalUpdate:add']"
           >新增</el-button
         >
       </el-col>
@@ -62,11 +62,15 @@
 
     <el-table
       v-loading="loading"
-      :data="shareList"
+      :data="updateList"
       @selection-change="handleSelectionChange"
     >
       <el-table-column label="标题" align="center" prop="title" />
-      <el-table-column label="简介" align="center" prop="introduction" />
+      <el-table-column
+        label="更新内容简介"
+        align="center"
+        prop="introduction"
+      />
       <el-table-column label="附件" align="center">
         <template slot-scope="scope">
           <transition-group
@@ -92,8 +96,7 @@
           </transition-group>
         </template>
       </el-table-column>
-      <el-table-column label="分享人" align="center" prop="user.userName" />
-
+      <el-table-column label="创建人" align="center" prop="user.userName" />
       <el-table-column
         label="创建时间"
         align="center"
@@ -125,7 +128,7 @@
             type="text"
             icon="el-icon-edit"
             @click="handleUpdate(scope.row)"
-            v-hasPermi="['system:knowledgeShare:edit']"
+            v-hasPermi="['system:technicalUpdate:edit']"
             v-if="showButton(scope.row.userId)"
             >修改</el-button
           >
@@ -134,7 +137,7 @@
             type="text"
             icon="el-icon-delete"
             @click="handleDelete(scope.row)"
-            v-hasPermi="['system:knowledgeShare:remove']"
+            v-hasPermi="['system:technicalUpdate:remove']"
             v-if="showButton(scope.row.userId)"
             >删除</el-button
           >
@@ -150,7 +153,7 @@
       @pagination="getList"
     />
 
-    <!-- 添加或修改知识分享对话框 -->
+    <!-- 添加或修改技术更新对话框 -->
     <el-dialog :title="title" :visible.sync="open" width="500px" append-to-body>
       <el-form ref="form" :model="form" :rules="rules" label-width="80px">
         <el-form-item label="标题" prop="title">
@@ -182,17 +185,17 @@
 
 <script>
 import {
-  listShare,
-  getShare,
-  delShare,
-  addShare,
-  updateShare,
-} from "@/api/system/knowledgeShare";
+  listUpdate,
+  getUpdate,
+  delUpdate,
+  addUpdate,
+  updateUpdate,
+} from "@/api/system/technicalUpdate";
 import FileUpload from "@/components/FileUpload";
 import userInfo from "@/store/modules/user";
 
 export default {
-  name: "Share",
+  name: "technicalUpdate",
   components: {
     FileUpload,
   },
@@ -219,8 +222,8 @@ export default {
       showSearch: true,
       // 总条数
       total: 0,
-      // 知识分享表格数据
-      shareList: [],
+      // 技术更新表格数据
+      updateList: [],
       // 弹出层标题
       title: "",
       // 是否显示弹出层
@@ -257,12 +260,12 @@ export default {
         return "";
       }
     },
-    /** 查询知识分享列表 */
+    /** 查询技术更新列表 */
     getList() {
       this.loading = true;
-      listShare(this.addDateRange(this.queryParams, this.dateRange)).then(
+      listUpdate(this.addDateRange(this.queryParams, this.dateRange)).then(
         (response) => {
-          this.shareList = response.rows;
+          this.updateList = response.rows;
           this.total = response.total;
           this.loading = false;
         }
@@ -283,13 +286,12 @@ export default {
 
       this.uploadFileList = [];
       this.form = {
-        knowledgeId: null,
+        technicalId: null,
         userId: null,
         title: null,
         introduction: null,
         createTime: null,
         updateTime: null,
-        uploadFileList: null,
       };
       this.resetForm("form");
     },
@@ -306,7 +308,7 @@ export default {
     },
     // 多选框选中数据
     handleSelectionChange(selection) {
-      this.ids = selection.map((item) => item.knowledgeId);
+      this.ids = selection.map((item) => item.technicalId);
       this.single = selection.length !== 1;
       this.multiple = !selection.length;
     },
@@ -314,16 +316,16 @@ export default {
     handleAdd() {
       this.reset();
       this.open = true;
-      this.title = "添加知识分享";
+      this.title = "添加技术更新";
     },
     /** 修改按钮操作 */
     handleUpdate(row) {
       this.reset();
-      const knowledgeId = row.knowledgeId || this.ids;
-      getShare(knowledgeId).then((response) => {
+      const technicalId = row.technicalId || this.ids;
+      getUpdate(technicalId).then((response) => {
         this.form = response.data;
         this.open = true;
-        this.title = "修改知识分享";
+        this.title = "修改技术更新";
         this.$nextTick(() => {
           if (this.$refs.fileUploadModule) {
             this.$refs.fileUploadModule.number = 0;
@@ -358,14 +360,14 @@ export default {
       this.form.uploadFileList = this.uploadFileList;
       this.$refs["form"].validate((valid) => {
         if (valid) {
-          if (this.form.knowledgeId != null) {
-            updateShare(this.form).then((response) => {
+          if (this.form.technicalId != null) {
+            updateUpdate(this.form).then((response) => {
               this.$modal.msgSuccess("修改成功");
               this.open = false;
               this.getList();
             });
           } else {
-            addShare(this.form).then((response) => {
+            addUpdate(this.form).then((response) => {
               this.$modal.msgSuccess("新增成功");
               this.open = false;
               this.getList();
@@ -376,11 +378,11 @@ export default {
     },
     /** 删除按钮操作 */
     handleDelete(row) {
-      const knowledgeIds = row.knowledgeId || this.ids;
+      const technicalIds = row.technicalId || this.ids;
       this.$modal
-        .confirm('是否确认删除知识分享编号为"' + knowledgeIds + '"的数据项？')
+        .confirm('是否确认删除技术更新编号为"' + technicalIds + '"的数据项？')
         .then(function () {
-          return delShare(knowledgeIds);
+          return delUpdate(technicalIds);
         })
         .then(() => {
           this.getList();
