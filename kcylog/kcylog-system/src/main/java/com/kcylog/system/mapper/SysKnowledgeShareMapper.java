@@ -1,7 +1,9 @@
 package com.kcylog.system.mapper;
 
-import java.util.List;
 import com.kcylog.system.domain.SysKnowledgeShare;
+import com.kcylog.system.param.KnowledgeShareParams;
+
+import java.util.List;
 
 /**
  * 知识分享Mapper接口
@@ -54,8 +56,8 @@ public interface SysKnowledgeShareMapper
     /**
      * 批量删除知识分享
      * 
-     * @param knowledgeIds 需要删除的数据主键集合
+     * @param knowledgeShare 需要删除的数据主键集合
      * @return 结果
      */
-    public int deleteSysKnowledgeShareByKnowledgeIds(Long[] knowledgeIds);
+    public int deleteSysKnowledgeShareByKnowledgeIds(KnowledgeShareParams knowledgeShare);
 }

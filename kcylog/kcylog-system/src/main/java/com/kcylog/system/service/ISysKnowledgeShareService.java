@@ -1,6 +1,7 @@
 package com.kcylog.system.service;
 
 import com.kcylog.system.domain.SysKnowledgeShare;
+import com.kcylog.system.param.KnowledgeShareParams;
 
 import java.util.List;
 
@@ -47,10 +48,10 @@ public interface ISysKnowledgeShareService
     /**
      * 批量删除知识分享
      * 
-     * @param knowledgeIds 需要删除的知识分享主键集合
+     * @param knowledgeShare 需要删除的知识分享主键集合
      * @return 结果
      */
-    public int deleteSysKnowledgeShareByKnowledgeIds(Long[] knowledgeIds);
+    public int deleteSysKnowledgeShareByKnowledgeIds(KnowledgeShareParams knowledgeShare);
 
     /**
      * 删除知识分享信息

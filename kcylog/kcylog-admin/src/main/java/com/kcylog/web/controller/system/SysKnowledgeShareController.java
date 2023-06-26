@@ -11,6 +11,7 @@ import com.kcylog.system.domain.SysManageFile;
 import com.kcylog.system.domain.UploadFileList;
 import com.kcylog.system.service.ISysKnowledgeShareService;
 import com.kcylog.system.service.ISysManageFileService;
+import com.kcylog.system.param.KnowledgeShareParams;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.transaction.annotation.Transactional;
@@ -110,6 +111,9 @@ public class SysKnowledgeShareController extends BaseController {
     @Log(title = "知识分享", businessType = BusinessType.DELETE)
     @DeleteMapping("/{knowledgeIds}")
     public AjaxResult remove(@PathVariable Long[] knowledgeIds) {
-        return toAjax(sysKnowledgeShareService.deleteSysKnowledgeShareByKnowledgeIds(knowledgeIds));
+        KnowledgeShareParams knowledgeShare = new KnowledgeShareParams();
+        knowledgeShare.setKnowledgeIds(knowledgeIds);
+        knowledgeShare.setUserId(SecurityUtils.getUserId());
+        return toAjax(sysKnowledgeShareService.deleteSysKnowledgeShareByKnowledgeIds(knowledgeShare));
     }
 }

@@ -54,18 +54,6 @@
           >新增</el-button
         >
       </el-col>
-      <el-col :span="1.5">
-        <el-button
-          type="danger"
-          plain
-          icon="el-icon-delete"
-          size="mini"
-          :disabled="multiple"
-          @click="handleDelete"
-          v-hasPermi="['system:knowledgeShare:remove']"
-          >删除</el-button
-        >
-      </el-col>
       <right-toolbar
         :showSearch.sync="showSearch"
         @queryTable="getList"
@@ -77,7 +65,6 @@
       :data="shareList"
       @selection-change="handleSelectionChange"
     >
-      <el-table-column type="selection" width="55" align="center" />
       <el-table-column label="标题" align="center" prop="title" />
       <el-table-column label="简介" align="center" prop="introduction" />
       <el-table-column label="附件" align="center">
@@ -105,6 +92,7 @@
           </transition-group>
         </template>
       </el-table-column>
+      <el-table-column label="分享人" align="center" prop="user.userName" />
 
       <el-table-column
         label="创建时间"
@@ -138,6 +126,7 @@
             icon="el-icon-edit"
             @click="handleUpdate(scope.row)"
             v-hasPermi="['system:knowledgeShare:edit']"
+            v-if="showButton(scope.row.userId)"
             >修改</el-button
           >
           <el-button
@@ -146,6 +135,7 @@
             icon="el-icon-delete"
             @click="handleDelete(scope.row)"
             v-hasPermi="['system:knowledgeShare:remove']"
+            v-if="showButton(scope.row.userId)"
             >删除</el-button
           >
         </template>
@@ -199,6 +189,7 @@ import {
   updateShare,
 } from "@/api/system/knowledgeShare";
 import FileUpload from "@/components/FileUpload";
+import userInfo from "@/store/modules/user";
 
 export default {
   name: "Share",
@@ -247,9 +238,6 @@ export default {
       uploadFileList: [],
       // 表单校验
       rules: {
-        userId: [
-          { required: true, message: "用户ID不能为空", trigger: "blur" },
-        ],
         title: [{ required: true, message: "标题不能为空", trigger: "blur" }],
       },
     };
@@ -258,6 +246,9 @@ export default {
     this.getList();
   },
   methods: {
+    showButton(userId) {
+      return userId == userInfo.state.userId;
+    },
     // 获取文件名称
     getFileName(name) {
       if (name.lastIndexOf("/") > -1) {

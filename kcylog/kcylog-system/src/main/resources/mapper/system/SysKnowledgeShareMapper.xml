@@ -30,25 +30,24 @@
     </resultMap>
 
     <sql id="selectSysKnowledgeShareVo">
-        select k.*, f.new_file_name, f.old_file_name, f.url, f.file_name
+        select k.*, f.new_file_name, f.old_file_name, f.url, f.file_name, u.user_name
         from sys_knowledge_share k
                  inner join sys_manage_file f on k.knowledge_id = f.module_id and f.module_type = 2
+                 inner join sys_user u on k.user_id = u.user_id
     </sql>
 
     <select id="selectSysKnowledgeShareList" parameterType="SysKnowledgeShare" resultMap="SysKnowledgeShareResult">
         <include refid="selectSysKnowledgeShareVo"/>
         <where>
-            <if test="userId != null ">and user_id = #{userId}</if>
-            <if test="title != null  and title != ''">and title = #{title}</if>
-            <if test="introduction != null  and introduction != ''">and introduction = #{introduction}</if>
+            <if test="title != null  and title != ''">and k.title = #{title}</if>
             <if test="params.beginTime != null and params.beginTime != ''"><!-- 开始时间检索 -->
-                AND date_format(create_time,'%y%m%d') &gt;= date_format(#{params.beginTime},'%y%m%d')
+                AND date_format(k.create_time,'%y%m%d') &gt;= date_format(#{params.beginTime},'%y%m%d')
             </if>
             <if test="params.endTime != null and params.endTime != ''"><!-- 结束时间检索 -->
-                AND date_format(create_time,'%y%m%d') &lt;= date_format(#{params.endTime},'%y%m%d')
+                AND date_format(k.create_time,'%y%m%d') &lt;= date_format(#{params.endTime},'%y%m%d')
             </if>
         </where>
-        order by knowledge_id asc
+        order by k.knowledge_id asc
     </select>
 
     <select id="selectSysKnowledgeShareByKnowledgeId" parameterType="Long" resultMap="SysKnowledgeShareResult">
@@ -93,10 +92,12 @@
         where knowledge_id = #{knowledgeId}
     </delete>
 
-    <delete id="deleteSysKnowledgeShareByKnowledgeIds" parameterType="String">
+    <delete id="deleteSysKnowledgeShareByKnowledgeIds" parameterType="com.kcylog.system.param.KnowledgeShareParams">
         delete from sys_knowledge_share where knowledge_id in
-        <foreach item="knowledgeId" collection="array" open="(" separator="," close=")">
+        <foreach item="knowledgeId" collection="knowledgeIds" open="(" separator="," close=")">
             #{knowledgeId}
         </foreach>
+        and user_id = #{userId}
     </delete>
+
 </mapper>

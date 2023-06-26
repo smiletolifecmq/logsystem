@@ -16,6 +16,18 @@
           @keyup.enter.native="handleQuery"
         />
       </el-form-item>
+      <el-form-item label="创建时间">
+        <el-date-picker
+          v-model="dateRange"
+          style="width: 240px"
+          value-format="yyyy-MM-dd"
+          type="daterange"
+          range-separator="-"
+          start-placeholder="开始日期"
+          end-placeholder="结束日期"
+          @change="handleQuery"
+        ></el-date-picker>
+      </el-form-item>
       <el-form-item>
         <el-button
           type="primary"
@@ -42,41 +54,6 @@
           >新增</el-button
         >
       </el-col>
-      <el-col :span="1.5">
-        <el-button
-          type="success"
-          plain
-          icon="el-icon-edit"
-          size="mini"
-          :disabled="single"
-          @click="handleUpdate"
-          v-hasPermi="['system:specification:edit']"
-          >修改</el-button
-        >
-      </el-col>
-      <el-col :span="1.5">
-        <el-button
-          type="danger"
-          plain
-          icon="el-icon-delete"
-          size="mini"
-          :disabled="multiple"
-          @click="handleDelete"
-          v-hasPermi="['system:specification:remove']"
-          >删除</el-button
-        >
-      </el-col>
-      <el-col :span="1.5">
-        <el-button
-          type="warning"
-          plain
-          icon="el-icon-download"
-          size="mini"
-          @click="handleExport"
-          v-hasPermi="['system:specification:export']"
-          >导出</el-button
-        >
-      </el-col>
       <right-toolbar
         :showSearch.sync="showSearch"
         @queryTable="getList"
@@ -88,10 +65,54 @@
       :data="specificationList"
       @selection-change="handleSelectionChange"
     >
-      <el-table-column type="selection" width="55" align="center" />
-      <el-table-column label="作业ID" align="center" prop="jobId" />
-      <el-table-column label="用户ID" align="center" prop="userId" />
       <el-table-column label="标题" align="center" prop="title" />
+      <el-table-column label="附件" align="center">
+        <template slot-scope="scope">
+          <transition-group
+            class="upload-file-list el-upload-list el-upload-list--text"
+            name="el-fade-in-linear"
+            tag="ul"
+          >
+            <li
+              :key="file.url"
+              class="el-upload-list__item ele-upload-list__item-content"
+              v-for="(file, index) in scope.row.manageFile"
+            >
+              <el-link
+                :href="`${baseUrl}${file.url}`"
+                :underline="false"
+                target="_blank"
+              >
+                <span class="el-icon-document">
+                  {{ getFileName(file.fileName) }}
+                </span>
+              </el-link>
+            </li>
+          </transition-group>
+        </template>
+      </el-table-column>
+      <el-table-column label="创建人" align="center" prop="user.userName" />
+      <el-table-column
+        label="创建时间"
+        align="center"
+        prop="createTime"
+        width="160"
+      >
+        <template slot-scope="scope">
+          <span>{{ parseTime(scope.row.createTime) }}</span>
+        </template>
+      </el-table-column>
+      <el-table-column
+        label="修改时间"
+        align="center"
+        prop="updateTime"
+        width="160"
+      >
+        <template slot-scope="scope">
+          <span>{{ parseTime(scope.row.updateTime) }}</span>
+        </template>
+      </el-table-column>
+
       <el-table-column
         label="操作"
         align="center"
@@ -104,6 +125,7 @@
             icon="el-icon-edit"
             @click="handleUpdate(scope.row)"
             v-hasPermi="['system:specification:edit']"
+            v-if="showButton(scope.row.userId)"
             >修改</el-button
           >
           <el-button
@@ -112,6 +134,7 @@
             icon="el-icon-delete"
             @click="handleDelete(scope.row)"
             v-hasPermi="['system:specification:remove']"
+            v-if="showButton(scope.row.userId)"
             >删除</el-button
           >
         </template>
@@ -132,6 +155,14 @@
         <el-form-item label="标题" prop="title">
           <el-input v-model="form.title" placeholder="请输入标题" />
         </el-form-item>
+        <el-form-item label="附件">
+          <FileUpload
+            ref="fileUploadModule"
+            :fileSize="0"
+            :fileType="fileType"
+            :limit="null"
+          ></FileUpload>
+        </el-form-item>
       </el-form>
       <div slot="footer" class="dialog-footer">
         <el-button type="primary" @click="submitForm">确 定</el-button>
@@ -149,11 +180,25 @@ import {
   addSpecification,
   updateSpecification,
 } from "@/api/system/jobSpecification";
+import FileUpload from "@/components/FileUpload";
+import userInfo from "@/store/modules/user";
 
 export default {
   name: "Specification",
+  components: {
+    FileUpload,
+  },
+  props: {
+    fileType: {
+      type: Array,
+      default: () => ["pdf"],
+    },
+  },
   data() {
     return {
+      baseUrl: process.env.VUE_APP_BASE_API,
+      // 日期范围
+      dateRange: [],
       // 遮罩层
       loading: true,
       // 选中数组
@@ -181,11 +226,9 @@ export default {
       },
       // 表单参数
       form: {},
+      uploadFileList: [],
       // 表单校验
       rules: {
-        userId: [
-          { required: true, message: "用户ID不能为空", trigger: "blur" },
-        ],
         title: [{ required: true, message: "标题不能为空", trigger: "blur" }],
       },
     };
@@ -194,10 +237,23 @@ export default {
     this.getList();
   },
   methods: {
+    showButton(userId) {
+      return userId == userInfo.state.userId;
+    },
+    // 获取文件名称
+    getFileName(name) {
+      if (name.lastIndexOf("/") > -1) {
+        return name.slice(name.lastIndexOf("/") + 1);
+      } else {
+        return "";
+      }
+    },
     /** 查询作业规范列表 */
     getList() {
       this.loading = true;
-      listSpecification(this.queryParams).then((response) => {
+      listSpecification(
+        this.addDateRange(this.queryParams, this.dateRange)
+      ).then((response) => {
         this.specificationList = response.rows;
         this.total = response.total;
         this.loading = false;
@@ -210,6 +266,13 @@ export default {
     },
     // 表单重置
     reset() {
+      if (this.$refs.fileUploadModule != null) {
+        this.$refs.fileUploadModule.number = 0;
+        this.$refs.fileUploadModule.uploadList = [];
+        this.$refs.fileUploadModule.fileList = [];
+      }
+
+      this.uploadFileList = [];
       this.form = {
         jobId: null,
         userId: null,
@@ -226,6 +289,7 @@ export default {
     },
     /** 重置按钮操作 */
     resetQuery() {
+      this.dateRange = [];
       this.resetForm("queryForm");
       this.handleQuery();
     },
@@ -249,10 +313,38 @@ export default {
         this.form = response.data;
         this.open = true;
         this.title = "修改作业规范";
+        this.$nextTick(() => {
+          if (this.$refs.fileUploadModule) {
+            this.$refs.fileUploadModule.number = 0;
+            this.$refs.fileUploadModule.uploadList = [];
+            this.$refs.fileUploadModule.fileList = [];
+            for (let i = 0; i < response.data.manageFile.length; i++) {
+              let fileTemp = {};
+              fileTemp.name = response.data.manageFile[i].fileName;
+              fileTemp.url = response.data.manageFile[i].url;
+              this.$refs.fileUploadModule.fileList.push(fileTemp);
+            }
+          }
+        });
       });
     },
     /** 提交按钮 */
     submitForm() {
+      const uploadListComponent = this.$refs.fileUploadModule;
+      const fileList = uploadListComponent.fileList;
+      for (let i in fileList) {
+        let obj = {};
+        let fileName = fileList[i].name.split("/");
+        obj.newFileName = fileName[fileName.length - 1];
+        obj.oldFileName =
+          fileName[fileName.length - 1].split("_")[0] +
+          "." +
+          fileName[fileName.length - 1].split(".")[1];
+        obj.fileName = fileList[i].name;
+        obj.url = fileList[i].url;
+        this.uploadFileList.push(obj);
+      }
+      this.form.uploadFileList = this.uploadFileList;
       this.$refs["form"].validate((valid) => {
         if (valid) {
           if (this.form.jobId != null) {

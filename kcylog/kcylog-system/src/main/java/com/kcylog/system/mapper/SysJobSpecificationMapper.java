@@ -1,6 +1,7 @@
 package com.kcylog.system.mapper;
 
 import com.kcylog.system.domain.SysJobSpecification;
+import com.kcylog.system.param.JobSpecificationParams;
 
 import java.util.List;
 
@@ -55,8 +56,8 @@ public interface SysJobSpecificationMapper
     /**
      * 批量删除作业规范
      * 
-     * @param jobIds 需要删除的数据主键集合
+     * @param jobSpecificationParams 需要删除的数据主键集合
      * @return 结果
      */
-    public int deleteSysJobSpecificationByJobIds(Long[] jobIds);
+    public int deleteSysJobSpecificationByJobIds(JobSpecificationParams jobSpecificationParams);
 }

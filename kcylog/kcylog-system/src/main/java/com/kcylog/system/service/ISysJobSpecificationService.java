@@ -1,6 +1,7 @@
 package com.kcylog.system.service;
 
 import com.kcylog.system.domain.SysJobSpecification;
+import com.kcylog.system.param.JobSpecificationParams;
 
 import java.util.List;
 
@@ -47,10 +48,10 @@ public interface ISysJobSpecificationService
     /**
      * 批量删除作业规范
      * 
-     * @param jobIds 需要删除的作业规范主键集合
+     * @param jobSpecificationParams 需要删除的作业规范主键集合
      * @return 结果
      */
-    public int deleteSysJobSpecificationByJobIds(Long[] jobIds);
+    public int deleteSysJobSpecificationByJobIds(JobSpecificationParams jobSpecificationParams);
 
     /**
      * 删除作业规范信息

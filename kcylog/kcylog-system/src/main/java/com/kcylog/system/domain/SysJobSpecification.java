@@ -1,5 +1,6 @@
 package com.kcylog.system.domain;
 
+import com.kcylog.common.core.domain.entity.SysUser;
 import org.apache.commons.lang3.builder.ToStringBuilder;
 import org.apache.commons.lang3.builder.ToStringStyle;
 import com.kcylog.common.annotation.Excel;
@@ -31,6 +32,16 @@ public class SysJobSpecification extends BaseEntity
     private List<UploadFileList> uploadFileList;
 
     private List<SysManageFile> manageFile;
+
+    private SysUser user;
+
+    public SysUser getUser() {
+        return user;
+    }
+
+    public void setUser(SysUser user) {
+        this.user = user;
+    }
 
     public List<UploadFileList> getUploadFileList() {
         return uploadFileList;
