@@ -166,7 +166,7 @@
         <el-form-item label="附件">
           <FileUpload
             ref="fileUploadModule"
-            :fileSize="0"
+            :fileSize="200"
             :fileType="fileType"
             :limit="null"
           ></FileUpload>
