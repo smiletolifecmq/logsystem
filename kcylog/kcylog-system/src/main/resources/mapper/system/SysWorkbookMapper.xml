@@ -1,0 +1,107 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.kcylog.system.mapper.SysWorkbookMapper">
+    
+    <resultMap type="SysWorkbook" id="SysWorkbookResult">
+        <result property="workbookId"    column="workbook_id"    />
+        <result property="userId"    column="user_id"    />
+        <result property="title"    column="title"    />
+        <result property="introduction"    column="introduction"    />
+        <result property="event"    column="event"    />
+        <result property="sort"    column="sort"    />
+        <result property="createTime"    column="create_time"    />
+        <result property="updateTime"    column="update_time"    />
+        <collection property="manageFile" javaType="java.util.List" resultMap="manageFileResult"/>
+        <collection property="user" column="user_name" javaType="SysUser" resultMap="workbookUserResult"/>
+    </resultMap>
+
+    <resultMap id="workbookUserResult" type="SysUser">
+        <result property="userName" column="user_name"/>
+    </resultMap>
+
+    <resultMap type="SysManageFile" id="manageFileResult">
+        <result property="fileId" column="file_id"/>
+        <result property="newFileName" column="new_file_name"/>
+        <result property="oldFileName" column="old_file_name"/>
+        <result property="url" column="url"/>
+        <result property="fileName" column="file_name"/>
+        <result property="moduleId" column="module_id"/>
+        <result property="moduleType" column="module_type"/>
+    </resultMap>
+
+    <sql id="selectSysWorkbookVo">
+        select k.*, f.new_file_name, f.old_file_name, f.url, f.file_name, u.user_name
+        from sys_workbook k
+                 inner join sys_manage_file f on k.workbook_id = f.module_id and f.module_type = 4
+                 inner join sys_user u on k.user_id = u.user_id
+
+    </sql>
+
+    <select id="selectSysWorkbookList" parameterType="SysWorkbook" resultMap="SysWorkbookResult">
+        <include refid="selectSysWorkbookVo"/>
+        <where>  
+            <if test="title != null  and title != ''"> and k.title = #{title}</if>
+            <if test="params.beginTime != null and params.beginTime != ''"><!-- 开始时间检索 -->
+                AND date_format(k.create_time,'%y%m%d') &gt;= date_format(#{params.beginTime},'%y%m%d')
+            </if>
+            <if test="params.endTime != null and params.endTime != ''"><!-- 结束时间检索 -->
+                AND date_format(k.create_time,'%y%m%d') &lt;= date_format(#{params.endTime},'%y%m%d')
+            </if>
+        </where>
+        order by k.sort asc
+    </select>
+    
+    <select id="selectSysWorkbookByWorkbookId" parameterType="Long" resultMap="SysWorkbookResult">
+        <include refid="selectSysWorkbookVo"/>
+        where workbook_id = #{workbookId}
+    </select>
+        
+    <insert id="insertSysWorkbook" parameterType="SysWorkbook" useGeneratedKeys="true" keyProperty="workbookId">
+        insert into sys_workbook
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="userId != null">user_id,</if>
+            <if test="title != null and title != ''">title,</if>
+            <if test="introduction != null">introduction,</if>
+            <if test="event != null">event,</if>
+            <if test="sort != null">sort,</if>
+            <if test="createTime != null">create_time,</if>
+            <if test="updateTime != null">update_time,</if>
+         </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test="userId != null">#{userId},</if>
+            <if test="title != null and title != ''">#{title},</if>
+            <if test="introduction != null">#{introduction},</if>
+            <if test="event != null">#{event},</if>
+            <if test="sort != null">#{sort},</if>
+            <if test="createTime != null">#{createTime},</if>
+            <if test="updateTime != null">#{updateTime},</if>
+         </trim>
+    </insert>
+
+    <update id="updateSysWorkbook" parameterType="SysWorkbook">
+        update sys_workbook
+        <trim prefix="SET" suffixOverrides=",">
+            <if test="userId != null">user_id = #{userId},</if>
+            <if test="title != null and title != ''">title = #{title},</if>
+            <if test="introduction != null">introduction = #{introduction},</if>
+            <if test="event != null">event = #{event},</if>
+            <if test="sort != null">sort = #{sort},</if>
+            <if test="createTime != null">create_time = #{createTime},</if>
+            <if test="updateTime != null">update_time = #{updateTime},</if>
+        </trim>
+        where workbook_id = #{workbookId}
+    </update>
+
+    <delete id="deleteSysWorkbookByWorkbookId" parameterType="Long">
+        delete from sys_workbook where workbook_id = #{workbookId}
+    </delete>
+
+    <delete id="deleteSysWorkbookByWorkbookIds" parameterType="com.kcylog.system.param.WorkbookParams">
+        delete from sys_workbook where workbook_id in 
+        <foreach item="workbookId" collection="workbookIds" open="(" separator="," close=")">
+            #{workbookId}
+        </foreach>
+    </delete>
+</mapper>

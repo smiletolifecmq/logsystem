@@ -50,8 +50,19 @@
           icon="el-icon-plus"
           size="mini"
           @click="handleAdd"
-          v-hasPermi="['system:technicalUpdate:add']"
+          v-hasPermi="['system:workbook:add']"
           >新增</el-button
+        >
+      </el-col>
+      <el-col :span="1.5">
+        <el-button
+          type="warning"
+          plain
+          icon="el-icon-download"
+          size="mini"
+          @click="handleExport"
+          v-hasPermi="['system:workbook:export']"
+          >合并导出pdf</el-button
         >
       </el-col>
       <right-toolbar
@@ -62,15 +73,13 @@
 
     <el-table
       v-loading="loading"
-      :data="updateList"
+      :data="workbookList"
       @selection-change="handleSelectionChange"
     >
+      <el-table-column label="排序" align="center" prop="sort" />
       <el-table-column label="标题" align="center" prop="title" />
-      <el-table-column
-        label="更新内容简介"
-        align="center"
-        prop="introduction"
-      />
+      <el-table-column label="简介" align="center" prop="introduction" />
+      <el-table-column label="事件" align="center" prop="event" />
       <el-table-column label="附件" align="center">
         <template slot-scope="scope">
           <transition-group
@@ -128,8 +137,7 @@
             type="text"
             icon="el-icon-edit"
             @click="handleUpdate(scope.row)"
-            v-hasPermi="['system:technicalUpdate:edit']"
-            v-if="showButton(scope.row.userId)"
+            v-hasPermi="['system:workbook:edit']"
             >修改</el-button
           >
           <el-button
@@ -137,8 +145,7 @@
             type="text"
             icon="el-icon-delete"
             @click="handleDelete(scope.row)"
-            v-hasPermi="['system:technicalUpdate:remove']"
-            v-if="showButton(scope.row.userId)"
+            v-hasPermi="['system:workbook:remove']"
             >删除</el-button
           >
         </template>
@@ -153,7 +160,7 @@
       @pagination="getList"
     />
 
-    <!-- 添加或修改技术更新对话框 -->
+    <!-- 添加或修改作业手册对话框 -->
     <el-dialog :title="title" :visible.sync="open" width="500px" append-to-body>
       <el-form ref="form" :model="form" :rules="rules" label-width="80px">
         <el-form-item label="标题" prop="title">
@@ -166,12 +173,26 @@
             placeholder="请输入内容"
           />
         </el-form-item>
-        <el-form-item label="附件">
+        <el-form-item label="事件" prop="event">
+          <el-input
+            v-model="form.event"
+            type="textarea"
+            placeholder="请输入事件内容"
+          />
+        </el-form-item>
+        <el-form-item label="排序" prop="sort">
+          <el-input-number
+            v-model="form.sort"
+            :min="1"
+            label="请输入排序"
+          ></el-input-number>
+        </el-form-item>
+        <el-form-item label="附件" required>
           <FileUpload
             ref="fileUploadModule"
             :fileSize="200"
             :fileType="fileType"
-            :limit="null"
+            :limit="1"
           ></FileUpload>
         </el-form-item>
       </el-form>
@@ -185,24 +206,23 @@
 
 <script>
 import {
-  listUpdate,
-  getUpdate,
-  delUpdate,
-  addUpdate,
-  updateUpdate,
-} from "@/api/system/technicalUpdate";
+  listWorkbook,
+  getWorkbook,
+  delWorkbook,
+  addWorkbook,
+  updateWorkbook,
+} from "@/api/system/workbook";
 import FileUpload from "@/components/FileUpload";
-import userInfo from "@/store/modules/user";
 
 export default {
-  name: "technicalUpdate",
+  name: "Workbook",
   components: {
     FileUpload,
   },
   props: {
     fileType: {
       type: Array,
-      default: () => ["docx", "doc", "ppt", "pdf"],
+      default: () => ["pdf"],
     },
   },
   data() {
@@ -222,8 +242,8 @@ export default {
       showSearch: true,
       // 总条数
       total: 0,
-      // 技术更新表格数据
-      updateList: [],
+      // 作业手册表格数据
+      workbookList: [],
       // 弹出层标题
       title: "",
       // 是否显示弹出层
@@ -235,6 +255,8 @@ export default {
         userId: null,
         title: null,
         introduction: null,
+        event: null,
+        sort: null,
       },
       // 表单参数
       form: {},
@@ -242,6 +264,7 @@ export default {
       // 表单校验
       rules: {
         title: [{ required: true, message: "标题不能为空", trigger: "blur" }],
+        sort: [{ required: true, message: "排序不能为空", trigger: "blur" }],
       },
     };
   },
@@ -249,9 +272,6 @@ export default {
     this.getList();
   },
   methods: {
-    showButton(userId) {
-      return userId == userInfo.state.userId;
-    },
     // 获取文件名称
     getFileName(name) {
       if (name.lastIndexOf("/") > -1) {
@@ -260,12 +280,12 @@ export default {
         return "";
       }
     },
-    /** 查询技术更新列表 */
+    /** 查询作业手册列表 */
     getList() {
       this.loading = true;
-      listUpdate(this.addDateRange(this.queryParams, this.dateRange)).then(
+      listWorkbook(this.addDateRange(this.queryParams, this.dateRange)).then(
         (response) => {
-          this.updateList = response.rows;
+          this.workbookList = response.rows;
           this.total = response.total;
           this.loading = false;
         }
@@ -286,10 +306,12 @@ export default {
 
       this.uploadFileList = [];
       this.form = {
-        technicalId: null,
+        workbookId: null,
         userId: null,
         title: null,
         introduction: null,
+        event: null,
+        sort: null,
         createTime: null,
         updateTime: null,
       };
@@ -308,7 +330,7 @@ export default {
     },
     // 多选框选中数据
     handleSelectionChange(selection) {
-      this.ids = selection.map((item) => item.technicalId);
+      this.ids = selection.map((item) => item.workbookId);
       this.single = selection.length !== 1;
       this.multiple = !selection.length;
     },
@@ -316,16 +338,16 @@ export default {
     handleAdd() {
       this.reset();
       this.open = true;
-      this.title = "添加技术更新";
+      this.title = "添加作业手册";
     },
     /** 修改按钮操作 */
     handleUpdate(row) {
       this.reset();
-      const technicalId = row.technicalId || this.ids;
-      getUpdate(technicalId).then((response) => {
+      const workbookId = row.workbookId || this.ids;
+      getWorkbook(workbookId).then((response) => {
         this.form = response.data;
         this.open = true;
-        this.title = "修改技术更新";
+        this.title = "修改作业手册";
         this.$nextTick(() => {
           if (this.$refs.fileUploadModule) {
             this.$refs.fileUploadModule.number = 0;
@@ -364,14 +386,14 @@ export default {
       this.form.uploadFileList = this.uploadFileList;
       this.$refs["form"].validate((valid) => {
         if (valid) {
-          if (this.form.technicalId != null) {
-            updateUpdate(this.form).then((response) => {
+          if (this.form.workbookId != null) {
+            updateWorkbook(this.form).then((response) => {
               this.$modal.msgSuccess("修改成功");
               this.open = false;
               this.getList();
             });
           } else {
-            addUpdate(this.form).then((response) => {
+            addWorkbook(this.form).then((response) => {
               this.$modal.msgSuccess("新增成功");
               this.open = false;
               this.getList();
@@ -382,17 +404,27 @@ export default {
     },
     /** 删除按钮操作 */
     handleDelete(row) {
-      const technicalIds = row.technicalId || this.ids;
+      const workbookIds = row.workbookId || this.ids;
       this.$modal
-        .confirm('是否确认删除技术更新编号为"' + technicalIds + '"的数据项？')
+        .confirm('是否确认删除作业手册编号为"' + workbookIds + '"的数据项？')
         .then(function () {
-          return delUpdate(technicalIds);
+          return delWorkbook(workbookIds);
         })
         .then(() => {
           this.getList();
           this.$modal.msgSuccess("删除成功");
         })
         .catch(() => {});
+    },
+    /** 导出按钮操作 */
+    handleExport() {
+      this.download(
+        "system/workbook/export",
+        {
+          ...this.queryParams,
+        },
+        `workbook_${new Date().getTime()}.xlsx`
+      );
     },
   },
 };

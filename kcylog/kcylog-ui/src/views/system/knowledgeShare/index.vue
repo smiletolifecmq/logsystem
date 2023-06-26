@@ -355,6 +355,10 @@ export default {
         obj.url = fileList[i].url;
         this.uploadFileList.push(obj);
       }
+      if (this.uploadFileList.length == 0) {
+        this.$message.error("请上传附件～");
+        return;
+      }
       this.form.uploadFileList = this.uploadFileList;
       this.$refs["form"].validate((valid) => {
         if (valid) {
