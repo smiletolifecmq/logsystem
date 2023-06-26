@@ -61,6 +61,12 @@
             <artifactId>kcylog-generator</artifactId>
         </dependency>
 
+        <dependency>
+            <groupId>org.apache.pdfbox</groupId>
+            <artifactId>pdfbox</artifactId>
+            <version>2.0.27</version> <!-- 根据需要使用适当的版本号 -->
+        </dependency>
+
     </dependencies>
 
     <build>

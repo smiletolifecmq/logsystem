@@ -423,7 +423,7 @@ export default {
         {
           ...this.queryParams,
         },
-        `workbook_${new Date().getTime()}.xlsx`
+        `作业手册_${new Date().getTime()}.pdf`
       );
     },
   },
