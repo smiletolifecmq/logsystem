@@ -154,7 +154,14 @@
     />
 
     <!-- 添加或修改技术更新对话框 -->
-    <el-dialog :title="title" :visible.sync="open" width="500px" append-to-body>
+    <el-dialog
+      :title="title"
+      :visible.sync="open"
+      width="500px"
+      append-to-body
+      :close-on-click-modal="false"
+      :close-on-press-escape="false"
+    >
       <el-form ref="form" :model="form" :rules="rules" label-width="80px">
         <el-form-item label="标题" prop="title">
           <el-input v-model="form.title" placeholder="请输入标题" />
@@ -166,7 +173,7 @@
             placeholder="请输入内容"
           />
         </el-form-item>
-        <el-form-item label="附件">
+        <el-form-item label="附件" required>
           <FileUpload
             ref="fileUploadModule"
             :fileSize="200"

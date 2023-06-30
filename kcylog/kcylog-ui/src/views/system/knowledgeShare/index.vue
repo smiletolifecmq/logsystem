@@ -8,10 +8,10 @@
       v-show="showSearch"
       label-width="68px"
     >
-      <el-form-item label="标题" prop="title">
+      <el-form-item label="关键字" prop="title">
         <el-input
           v-model="queryParams.title"
-          placeholder="请输入标题"
+          placeholder="请输入标签或文件名称"
           clearable
           @keyup.enter.native="handleQuery"
         />
@@ -65,9 +65,7 @@
       :data="shareList"
       @selection-change="handleSelectionChange"
     >
-      <el-table-column label="标题" align="center" prop="title" />
-      <el-table-column label="简介" align="center" prop="introduction" />
-      <el-table-column label="附件" align="center">
+      <el-table-column label="文件" align="center">
         <template slot-scope="scope">
           <transition-group
             class="upload-file-list el-upload-list el-upload-list--text"
@@ -92,26 +90,18 @@
           </transition-group>
         </template>
       </el-table-column>
+      <el-table-column label="简介" align="center" prop="introduction" />
+      <el-table-column label="标签" align="center" prop="title" />
       <el-table-column label="分享人" align="center" prop="user.userName" />
 
       <el-table-column
-        label="创建时间"
+        label="分享时间"
         align="center"
         prop="createTime"
         width="160"
       >
         <template slot-scope="scope">
           <span>{{ parseTime(scope.row.createTime) }}</span>
-        </template>
-      </el-table-column>
-      <el-table-column
-        label="修改时间"
-        align="center"
-        prop="updateTime"
-        width="160"
-      >
-        <template slot-scope="scope">
-          <span>{{ parseTime(scope.row.updateTime) }}</span>
         </template>
       </el-table-column>
       <el-table-column
@@ -151,10 +141,23 @@
     />
 
     <!-- 添加或修改知识分享对话框 -->
-    <el-dialog :title="title" :visible.sync="open" width="500px" append-to-body>
+    <el-dialog
+      :title="title"
+      :visible.sync="open"
+      width="500px"
+      append-to-body
+      :close-on-click-modal="false"
+      :close-on-press-escape="false"
+    >
       <el-form ref="form" :model="form" :rules="rules" label-width="80px">
-        <el-form-item label="标题" prop="title">
-          <el-input v-model="form.title" placeholder="请输入标题" />
+        <el-form-item label="文件" required>
+          <FileUpload
+            ref="fileUploadModule"
+            :fileSize="200"
+            :fileType="fileType"
+            :limit="1"
+            @fileUploaded="handleFileUploaded"
+          ></FileUpload>
         </el-form-item>
         <el-form-item label="简介" prop="introduction">
           <el-input
@@ -163,13 +166,19 @@
             placeholder="请输入内容"
           />
         </el-form-item>
-        <el-form-item label="附件">
-          <FileUpload
-            ref="fileUploadModule"
-            :fileSize="200"
-            :fileType="fileType"
-            :limit="null"
-          ></FileUpload>
+        <el-form-item label="标签" prop="title">
+          <el-input
+            v-model="form.title"
+            placeholder="提示:多个标签用英文的;进行隔开"
+          />
+        </el-form-item>
+
+        <el-form-item label="可选字符">
+          <el-row>
+            <el-col :span="4" v-for="letter in letters">
+              <el-button @click="selectLetter(letter)">{{ letter }}</el-button>
+            </el-col>
+          </el-row>
         </el-form-item>
       </el-form>
       <div slot="footer" class="dialog-footer">
@@ -204,6 +213,7 @@ export default {
   },
   data() {
     return {
+      letters: [],
       baseUrl: process.env.VUE_APP_BASE_API,
       // 日期范围
       dateRange: [],
@@ -238,7 +248,7 @@ export default {
       uploadFileList: [],
       // 表单校验
       rules: {
-        title: [{ required: true, message: "标题不能为空", trigger: "blur" }],
+        title: [{ required: true, message: "标签不能为空", trigger: "blur" }],
       },
     };
   },
@@ -246,6 +256,23 @@ export default {
     this.getList();
   },
   methods: {
+    handleFileUploaded(uploadedFile) {
+      this.letters = [];
+      let selectStr = uploadedFile.originalFilename.split(".")[0] + ";";
+      for (let i = 0; i < selectStr.length; i++) {
+        let letter = selectStr.charAt(i);
+        if (letter == " ") {
+          continue;
+        }
+        this.letters.push(letter);
+      }
+    },
+    selectLetter(letter) {
+      if (this.form.title == null) {
+        this.form.title = "";
+      }
+      this.form.title = this.form.title + letter;
+    },
     showButton(userId) {
       return userId == userInfo.state.userId;
     },
@@ -291,6 +318,7 @@ export default {
         updateTime: null,
         uploadFileList: null,
       };
+      this.letters = [];
       this.resetForm("form");
     },
     /** 搜索按钮操作 */
@@ -324,6 +352,15 @@ export default {
         this.form = response.data;
         this.open = true;
         this.title = "修改知识分享";
+        let selectStr =
+          response.data.manageFile[0].oldFileName.split(".")[0] + ";";
+        for (let i = 0; i < selectStr.length; i++) {
+          let letter = selectStr.charAt(i);
+          if (letter == " ") {
+            continue;
+          }
+          this.letters.push(letter);
+        }
         this.$nextTick(() => {
           if (this.$refs.fileUploadModule) {
             this.$refs.fileUploadModule.number = 0;
@@ -356,7 +393,7 @@ export default {
         this.uploadFileList.push(obj);
       }
       if (this.uploadFileList.length == 0) {
-        this.$message.error("请上传附件～");
+        this.$message.error("请上传文件～");
         return;
       }
       this.form.uploadFileList = this.uploadFileList;

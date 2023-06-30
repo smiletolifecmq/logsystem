@@ -245,7 +245,14 @@
     </el-dialog>
 
     <!-- 添加或修改审核单对话框 -->
-    <el-dialog :title="title" :visible.sync="open" width="600px" append-to-body>
+    <el-dialog
+      :title="title"
+      :visible.sync="open"
+      width="600px"
+      append-to-body
+      :close-on-click-modal="false"
+      :close-on-press-escape="false"
+    >
       <el-form ref="form" :model="form" :rules="rules" label-width="80px">
         <!-- <el-form-item label="关联项目" prop="userId">
           <el-autocomplete
@@ -356,6 +363,8 @@
       :visible.sync="openInfo"
       width="600px"
       append-to-body
+      :close-on-click-modal="false"
+      :close-on-press-escape="false"
     >
       <el-form ref="formInfo" :model="formInfo" label-width="80px">
         <el-form-item label="编号" prop="serialNum">

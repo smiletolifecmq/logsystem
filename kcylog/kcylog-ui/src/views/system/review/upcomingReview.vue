@@ -203,6 +203,8 @@
       :visible.sync="openInfo"
       width="600px"
       append-to-body
+      :close-on-click-modal="false"
+      :close-on-press-escape="false"
     >
       <el-form ref="formInfo" :model="formInfo" label-width="80px">
         <el-form-item label="编号" prop="serialNum">
@@ -491,6 +493,8 @@ export default {
       this.$prompt("请输入理由(非必填)", "提示", {
         confirmButtonText: "确定",
         cancelButtonText: "取消",
+        closeOnClickModal: false,
+        closeOnPressEscape: false,
       })
         .then(({ value }) => {
           this.form.reviewId = row.reviewId;

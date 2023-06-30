@@ -214,6 +214,8 @@
       :visible.sync="openInfo"
       width="600px"
       append-to-body
+      :close-on-click-modal="false"
+      :close-on-press-escape="false"
     >
       <el-form ref="formInfo" :model="formInfo" label-width="80px">
         <el-form-item label="编号" prop="serialNum">

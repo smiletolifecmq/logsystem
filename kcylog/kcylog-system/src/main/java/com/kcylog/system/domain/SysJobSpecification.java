@@ -29,6 +29,10 @@ public class SysJobSpecification extends BaseEntity
     @Excel(name = "标题")
     private String title;
 
+    private String standard;
+
+    private String remark;
+
     private List<UploadFileList> uploadFileList;
 
     private List<SysManageFile> manageFile;
@@ -38,6 +42,25 @@ public class SysJobSpecification extends BaseEntity
     public SysUser getUser() {
         return user;
     }
+
+    public String getStandard() {
+        return standard;
+    }
+
+    public void setStandard(String standard) {
+        this.standard = standard;
+    }
+
+    @Override
+    public String getRemark() {
+        return remark;
+    }
+
+    @Override
+    public void setRemark(String remark) {
+        this.remark = remark;
+    }
+
 
     public void setUser(SysUser user) {
         this.user = user;

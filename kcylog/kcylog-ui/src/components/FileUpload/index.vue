@@ -169,6 +169,7 @@ export default {
       if (res.code === 200) {
         this.uploadList.push({ name: res.fileName, url: res.fileName });
         this.uploadedSuccessfully();
+        this.$emit("fileUploaded", { originalFilename: res.originalFilename });
       } else {
         this.number--;
         this.$modal.closeLoading();

@@ -8,6 +8,8 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
         <result property="jobId"    column="job_id"    />
         <result property="userId"    column="user_id"    />
         <result property="title"    column="title"    />
+        <result property="standard"    column="standard"    />
+        <result property="remark"    column="remark"    />
         <result property="createTime"    column="create_time"    />
         <result property="updateTime"    column="update_time"    />
         <collection property="manageFile" javaType="java.util.List" resultMap="manageFileResult"/>
@@ -37,8 +39,11 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 
     <select id="selectSysJobSpecificationList" parameterType="SysJobSpecification" resultMap="SysJobSpecificationResult">
         <include refid="selectSysJobSpecificationVo"/>
-        <where>  
-            <if test="title != null  and title != ''"> and k.title = #{title}</if>
+        <where>
+            <if test="title != null  and title != ''">and (k.title LIKE CONCAT('%', #{title}, '%') or f.old_file_name
+                LIKE CONCAT('%', #{title}, '%'))
+            </if>
+            <if test="standard != null  and standard != ''">and k.standard LIKE CONCAT('%', #{standard}, '%')</if>
             <if test="params.beginTime != null and params.beginTime != ''"><!-- 开始时间检索 -->
                 AND date_format(k.create_time,'%y%m%d') &gt;= date_format(#{params.beginTime},'%y%m%d')
             </if>
@@ -46,7 +51,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
                 AND date_format(k.create_time,'%y%m%d') &lt;= date_format(#{params.endTime},'%y%m%d')
             </if>
         </where>
-        order by k.job_id asc
+        order by k.job_id desc
     </select>
     
     <select id="selectSysJobSpecificationByJobId" parameterType="Long" resultMap="SysJobSpecificationResult">
@@ -59,12 +64,16 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
         <trim prefix="(" suffix=")" suffixOverrides=",">
             <if test="userId != null">user_id,</if>
             <if test="title != null and title != ''">title,</if>
+            <if test="standard != null and standard != ''">standard,</if>
+            <if test="remark != null and remark != ''">remark,</if>
             <if test="createTime != null">create_time,</if>
             <if test="updateTime != null">update_time,</if>
          </trim>
         <trim prefix="values (" suffix=")" suffixOverrides=",">
             <if test="userId != null">#{userId},</if>
             <if test="title != null and title != ''">#{title},</if>
+            <if test="standard != null and standard != ''">#{standard},</if>
+            <if test="remark != null and remark != ''">#{remark},</if>
             <if test="createTime != null">#{createTime},</if>
             <if test="updateTime != null">#{updateTime},</if>
          </trim>
@@ -75,6 +84,8 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
         <trim prefix="SET" suffixOverrides=",">
             <if test="userId != null">user_id = #{userId},</if>
             <if test="title != null and title != ''">title = #{title},</if>
+            <if test="standard != null and standard != ''">standard = #{standard},</if>
+            <if test="remark != null and remark != ''">remark = #{remark},</if>
             <if test="createTime != null">create_time = #{createTime},</if>
             <if test="updateTime != null">update_time = #{updateTime},</if>
         </trim>

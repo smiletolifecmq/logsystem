@@ -8,10 +8,18 @@
       v-show="showSearch"
       label-width="68px"
     >
-      <el-form-item label="标题" prop="title">
+      <el-form-item label="关键字" prop="title">
         <el-input
           v-model="queryParams.title"
-          placeholder="请输入标题"
+          placeholder="请输入标签或文件名称"
+          clearable
+          @keyup.enter.native="handleQuery"
+        />
+      </el-form-item>
+      <el-form-item label="标准号" prop="standard">
+        <el-input
+          v-model="queryParams.standard"
+          placeholder="请输入标准号"
           clearable
           @keyup.enter.native="handleQuery"
         />
@@ -65,8 +73,7 @@
       :data="specificationList"
       @selection-change="handleSelectionChange"
     >
-      <el-table-column label="标题" align="center" prop="title" />
-      <el-table-column label="附件" align="center">
+      <el-table-column label="文件" align="center">
         <template slot-scope="scope">
           <transition-group
             class="upload-file-list el-upload-list el-upload-list--text"
@@ -91,25 +98,18 @@
           </transition-group>
         </template>
       </el-table-column>
+      <el-table-column label="标签" align="center" prop="title" />
+      <el-table-column label="标准号" align="center" prop="standard" />
+      <el-table-column label="备注" align="center" prop="remark" />
       <el-table-column label="创建人" align="center" prop="user.userName" />
       <el-table-column
-        label="创建时间"
+        label="上传时间"
         align="center"
         prop="createTime"
         width="160"
       >
         <template slot-scope="scope">
           <span>{{ parseTime(scope.row.createTime) }}</span>
-        </template>
-      </el-table-column>
-      <el-table-column
-        label="修改时间"
-        align="center"
-        prop="updateTime"
-        width="160"
-      >
-        <template slot-scope="scope">
-          <span>{{ parseTime(scope.row.updateTime) }}</span>
         </template>
       </el-table-column>
 
@@ -150,18 +150,49 @@
     />
 
     <!-- 添加或修改作业规范对话框 -->
-    <el-dialog :title="title" :visible.sync="open" width="500px" append-to-body>
+    <el-dialog
+      :title="title"
+      :visible.sync="open"
+      width="500px"
+      append-to-body
+      :close-on-click-modal="false"
+      :close-on-press-escape="false"
+    >
       <el-form ref="form" :model="form" :rules="rules" label-width="80px">
-        <el-form-item label="标题" prop="title">
-          <el-input v-model="form.title" placeholder="请输入标题" />
-        </el-form-item>
-        <el-form-item label="附件">
+        <el-form-item label="文件" required>
           <FileUpload
             ref="fileUploadModule"
             :fileSize="200"
             :fileType="fileType"
-            :limit="null"
+            :limit="1"
+            @fileUploaded="handleFileUploaded"
           ></FileUpload>
+        </el-form-item>
+
+        <el-form-item label="标准号" prop="standard">
+          <el-input v-model="form.standard" placeholder="请输入标准号" />
+        </el-form-item>
+
+        <el-form-item label="备注" prop="remark">
+          <el-input
+            v-model="form.remark"
+            type="textarea"
+            placeholder="请输入备注内容"
+          />
+        </el-form-item>
+
+        <el-form-item label="标签" prop="title">
+          <el-input
+            v-model="form.title"
+            placeholder="提示:多个标签用英文的;进行隔开"
+          />
+        </el-form-item>
+        <el-form-item label="可选字符">
+          <el-row>
+            <el-col :span="4" v-for="letter in letters">
+              <el-button @click="selectLetter(letter)">{{ letter }}</el-button>
+            </el-col>
+          </el-row>
         </el-form-item>
       </el-form>
       <div slot="footer" class="dialog-footer">
@@ -196,6 +227,7 @@ export default {
   },
   data() {
     return {
+      letters: [],
       baseUrl: process.env.VUE_APP_BASE_API,
       // 日期范围
       dateRange: [],
@@ -229,7 +261,7 @@ export default {
       uploadFileList: [],
       // 表单校验
       rules: {
-        title: [{ required: true, message: "标题不能为空", trigger: "blur" }],
+        title: [{ required: true, message: "标签不能为空", trigger: "blur" }],
       },
     };
   },
@@ -237,6 +269,23 @@ export default {
     this.getList();
   },
   methods: {
+    handleFileUploaded(uploadedFile) {
+      this.letters = [];
+      let selectStr = uploadedFile.originalFilename.split(".")[0] + ";";
+      for (let i = 0; i < selectStr.length; i++) {
+        let letter = selectStr.charAt(i);
+        if (letter == " ") {
+          continue;
+        }
+        this.letters.push(letter);
+      }
+    },
+    selectLetter(letter) {
+      if (this.form.title == null) {
+        this.form.title = "";
+      }
+      this.form.title = this.form.title + letter;
+    },
     showButton(userId) {
       return userId == userInfo.state.userId;
     },
@@ -280,6 +329,7 @@ export default {
         createTime: null,
         updateTime: null,
       };
+      this.letters = [];
       this.resetForm("form");
     },
     /** 搜索按钮操作 */
@@ -313,6 +363,15 @@ export default {
         this.form = response.data;
         this.open = true;
         this.title = "修改作业规范";
+        let selectStr =
+          response.data.manageFile[0].oldFileName.split(".")[0] + ";";
+        for (let i = 0; i < selectStr.length; i++) {
+          let letter = selectStr.charAt(i);
+          if (letter == " ") {
+            continue;
+          }
+          this.letters.push(letter);
+        }
         this.$nextTick(() => {
           if (this.$refs.fileUploadModule) {
             this.$refs.fileUploadModule.number = 0;

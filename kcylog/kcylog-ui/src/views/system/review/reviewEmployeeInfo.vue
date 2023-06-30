@@ -28,7 +28,14 @@
     />
 
     <!-- 添加或修改雇工实际工作内容记录对话框 -->
-    <el-dialog :title="title" :visible.sync="open" width="500px" append-to-body>
+    <el-dialog
+      :title="title"
+      :visible.sync="open"
+      width="500px"
+      append-to-body
+      :close-on-click-modal="false"
+      :close-on-press-escape="false"
+    >
       <el-form ref="form" :model="form" :rules="rules" label-width="80px">
         <el-form-item label="雇工列表">
           <el-select
@@ -119,6 +126,8 @@
       :visible.sync="employeeOpen"
       width="500px"
       append-to-body
+      :close-on-click-modal="false"
+      :close-on-press-escape="false"
     >
       <el-form
         ref="form"
