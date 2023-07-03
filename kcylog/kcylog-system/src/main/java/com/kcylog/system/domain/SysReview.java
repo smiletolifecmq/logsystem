@@ -2,12 +2,12 @@ package com.kcylog.system.domain;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
 import com.kcylog.common.annotation.Excel;
-import com.kcylog.common.annotation.Excels;
 import com.kcylog.common.core.domain.BaseEntity;
 import com.kcylog.common.core.domain.entity.SysDept;
 import com.kcylog.common.core.domain.entity.SysUser;
 import org.apache.commons.lang3.builder.ToStringBuilder;
 import org.apache.commons.lang3.builder.ToStringStyle;
+import org.apache.poi.ss.usermodel.IndexedColors;
 
 import java.math.BigDecimal;
 import java.util.Date;
@@ -23,36 +23,38 @@ public class SysReview extends BaseEntity
 {
     private static final long serialVersionUID = 1L;
 
+    @Excel(name = "序号", headerBackgroundColor = IndexedColors.WHITE, headerColor = IndexedColors.BLACK, width = 6)
+    private int exportSerialNumber;
+
     /**
      * 部门对象
      */
-    @Excels({
-            @Excel(name = "部门", targetAttr = "deptName", type = Excel.Type.EXPORT ,width = 20, needMerge = true),
-    })
+
     private SysDept dept;
 
     /** 审核单ID */
     private Long reviewId;
 
     /** 编号 */
-    @Excel(name = "工程编号",width = 20, needMerge = true)
+    @Excel(name = "项目编号",width = 20, headerBackgroundColor = IndexedColors.WHITE, headerColor = IndexedColors.BLACK)
     private String serialNum;
 
     /** 项目名称 */
-    @Excel(name = "项目名称",width = 20, needMerge = true)
+    @Excel(name = "项目名称",width = 60, headerBackgroundColor = IndexedColors.WHITE, headerColor = IndexedColors.BLACK)
     private String projectName;
 
     /** 委托单位 */
-    @Excel(name = "委托单位",width = 20, needMerge = true)
     private String requester;
 
     /** 项目金额 */
-    @Excel(name = "项目金额",width = 20, needMerge = true)
     private BigDecimal porjectMoney;
 
     /** 工作量 */
-    @Excel(name = "工作量",width = 20, needMerge = true)
+    @Excel(name = "工作量",width = 40, height = 28, headerBackgroundColor = IndexedColors.WHITE, headerColor = IndexedColors.BLACK)
     private String workload;
+
+    @Excel(name = "姓名",width = 20, headerBackgroundColor = IndexedColors.WHITE, headerColor = IndexedColors.BLACK)
+    private String hiredWorkerName;
 
     /** 用户ID(负责人) */
     private Long userId;
@@ -87,22 +89,33 @@ public class SysReview extends BaseEntity
     /**
      * 用户对象
      */
-    @Excels({
-            @Excel(name = "负责人", targetAttr = "userName", type = Excel.Type.EXPORT,width = 20, needMerge = true),
-    })
     private SysUser user;
 
     private int finalSecondStatus;
 
     private int startEdit;
 
-    @Excel(name = "雇工")
     private List<SysReviewEmployee> reviewEmployee;
+
+    public String getHiredWorkerName() {
+        return hiredWorkerName;
+    }
+
+    public void setHiredWorkerName(String hiredWorkerName) {
+        this.hiredWorkerName = hiredWorkerName;
+    }
 
     public List<SysReviewEmployee> getReviewEmployee() {
         return reviewEmployee;
     }
 
+    public int getExportSerialNumber() {
+        return exportSerialNumber;
+    }
+
+    public void setExportSerialNumber(int exportSerialNumber) {
+        this.exportSerialNumber = exportSerialNumber;
+    }
 
     public int getStartEdit() {
         return startEdit;

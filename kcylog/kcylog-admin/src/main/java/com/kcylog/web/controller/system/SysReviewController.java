@@ -7,7 +7,6 @@ import com.kcylog.common.core.page.TableDataInfo;
 import com.kcylog.common.enums.BusinessType;
 import com.kcylog.common.utils.DateUtils;
 import com.kcylog.common.utils.SecurityUtils;
-import com.kcylog.common.utils.poi.ExcelUtil;
 import com.kcylog.system.domain.SysProcessConfigInfo;
 import com.kcylog.system.domain.SysReview;
 import com.kcylog.system.domain.SysReviewEmployee;
@@ -16,14 +15,20 @@ import com.kcylog.system.service.ISysProcessConfigInfoService;
 import com.kcylog.system.service.ISysReviewEmployeeService;
 import com.kcylog.system.service.ISysReviewProcessService;
 import com.kcylog.system.service.ISysReviewService;
+import org.apache.poi.ss.usermodel.*;
+import org.apache.poi.xssf.usermodel.XSSFWorkbook;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.bind.annotation.*;
 
 import javax.servlet.http.HttpServletResponse;
+import java.io.IOException;
+import java.io.OutputStream;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 /**
  * 审核单Controller
@@ -72,24 +77,110 @@ public class SysReviewController extends BaseController
     public void export(HttpServletResponse response, SysReview sysReview)
     {
         List<SysReview> list = sysReviewService.selectSysReviewList(sysReview);
-        List<SysReview> reviewList = new ArrayList<SysReview>();
-
+        int num = 0;
         for (SysReview sysReviewTemp:list){
-            SysReview sysReviewObj = new SysReview();
+            num ++;
+            float day = 0;
+            Map<String, Integer> map = new HashMap<>();
+            String hiredWorkerName = "";
+            String workload = "";
             List<SysReviewEmployee> reviewEmployee = sysReviewEmployeeService.selectSysReviewEmployeeByReviewId(sysReviewTemp.getReviewId());
-            sysReviewObj.setDept(sysReviewTemp.getDept());
-            sysReviewObj.setSerialNum(sysReviewTemp.getSerialNum());
-            sysReviewObj.setProjectName(sysReviewTemp.getProjectName());
-            sysReviewObj.setRequester(sysReviewTemp.getRequester());
-            sysReviewObj.setPorjectMoney(sysReviewTemp.getPorjectMoney());
-            sysReviewObj.setWorkload(sysReviewTemp.getWorkload());
-            sysReviewObj.setUser(sysReviewTemp.getUser());
-            sysReviewObj.setReviewEmployee(reviewEmployee);
-            reviewList.add(sysReviewObj);
+            sysReviewTemp.setExportSerialNumber(num);
+            for (SysReviewEmployee employee:reviewEmployee){
+                hiredWorkerName = hiredWorkerName + (employee.getName() + "、");
+                day += employee.getWorkDay();
+                String workloadTemp = employee.getWorkTime();
+                String[] strArray = workloadTemp.split(";");
+                for (String dayTime:strArray){
+                    if (dayTime != ""){
+                        map.put(dayTime, 1);
+                    }
+                }
+            }
+            if (hiredWorkerName != ""){
+                hiredWorkerName = hiredWorkerName.substring(0, hiredWorkerName.length() - 1);
+            }
+            if (reviewEmployee.size() > 0){
+                workload += (reviewEmployee.size() + "人" + day + "天");
+            }
+            if (map.size() > 0){
+                workload += "(";
+            }
+            for (String key : map.keySet()) {
+                workload += (key + "、");
+            }
+            if (map.size() > 0){
+                workload = workload.substring(0, workload.length() - 1);
+                workload += ")";
+            }
+            sysReviewTemp.setHiredWorkerName(hiredWorkerName);
+            sysReviewTemp.setWorkload(workload);
+        }
+        Workbook workbook = new XSSFWorkbook();
+        CellStyle wrapCellStyle = workbook.createCellStyle();
+        wrapCellStyle.setWrapText(true);
+        wrapCellStyle.setVerticalAlignment(VerticalAlignment.CENTER); // 设置垂直居中对齐
+        wrapCellStyle.setAlignment(HorizontalAlignment.CENTER); // 设置水平居中对齐
+
+        Sheet sheet = workbook.createSheet("Sheet1");
+        // 设置行头
+        Row headerRow = sheet.createRow(0);
+        Cell headerCell1 = headerRow.createCell(0);
+        headerCell1.setCellValue("序号");
+        headerCell1.setCellStyle(wrapCellStyle);
+        Cell headerCell2 = headerRow.createCell(1);
+        headerCell2.setCellValue("项目编号");
+        headerCell2.setCellStyle(wrapCellStyle);
+
+        Cell headerCell3 = headerRow.createCell(2);
+        headerCell3.setCellValue("项目名称");
+        headerCell3.setCellStyle(wrapCellStyle);
+        Cell headerCell4 = headerRow.createCell(3);
+        headerCell4.setCellValue("工作量");
+        headerCell4.setCellStyle(wrapCellStyle);
+        Cell headerCell5 = headerRow.createCell(4);
+        headerCell5.setCellValue("姓名");
+        headerCell5.setCellStyle(wrapCellStyle);
+
+        sheet.setColumnWidth(1, 5000);
+        sheet.setColumnWidth(2, 17000); // 设置第一列宽度
+        sheet.setColumnWidth(3, 15000);
+        sheet.setColumnWidth(4, 9000);
+
+        int rowIndex = 1; // 从第二行开始，留给行头
+        for (SysReview sysReviewTemp : list) {
+            Row row = sheet.createRow(rowIndex);
+
+            Cell cell1 = row.createCell(0);
+            cell1.setCellValue(sysReviewTemp.getExportSerialNumber());
+            cell1.setCellStyle(wrapCellStyle);
+
+            Cell cell2 = row.createCell(1);
+            cell2.setCellValue(sysReviewTemp.getSerialNum());
+            cell2.setCellStyle(wrapCellStyle);
+
+            Cell cell3 = row.createCell(2);
+            cell3.setCellValue(sysReviewTemp.getProjectName());
+            cell3.setCellStyle(wrapCellStyle);
+
+            Cell cell4 = row.createCell(3);
+            cell4.setCellValue(sysReviewTemp.getWorkload());
+            cell4.setCellStyle(wrapCellStyle);
+
+            Cell cell5 = row.createCell(4);
+            cell5.setCellValue(sysReviewTemp.getHiredWorkerName());
+            cell5.setCellStyle(wrapCellStyle);
+
+
+            rowIndex++;
         }
 
-        ExcelUtil<SysReview> util = new ExcelUtil<SysReview>(SysReview.class);
-        util.exportExcel(response, reviewList, "审核单数据");
+        try (OutputStream outputStream = response.getOutputStream()) {
+            workbook.write(outputStream);
+            workbook.close();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
     }
 
     /**
