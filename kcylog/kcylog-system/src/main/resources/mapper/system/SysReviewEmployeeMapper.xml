@@ -94,7 +94,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 
     <select id="selectSysReviewEmployeeListJoinReview" parameterType="SysReview" resultMap="SysReviewEmployeeResult">
         select e.*, r.create_time from sys_review_employee e
-        inner join sys_review r on e.review_id = r.review_id
+        inner join sys_review r on e.review_id = r.review_id and r.status = 2
         <where>
             <if test="serialNum != null  and serialNum != ''"> and r.serial_num = #{serialNum}</if>
             <if test="projectName != null  and projectName != ''"> and r.project_name like concat('%', #{projectName}, '%')</if>

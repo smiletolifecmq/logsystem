@@ -61,6 +61,11 @@ public class SysReviewEmployeeController extends BaseController
     public void export(HttpServletResponse response, SysReview sysReview)
     {
         List<SysReviewEmployee> list = sysReviewEmployeeService.selectSysReviewEmployeeListJoinReview(sysReview);
+        int num = 0;
+        for (SysReviewEmployee reviewEmployee:list){
+            num ++;
+            reviewEmployee.setExportSerialNumber(num);
+        }
         ExcelUtil<SysReviewEmployee> util = new ExcelUtil<SysReviewEmployee>(SysReviewEmployee.class);
         util.exportExcel(response, list, "雇工实际工作记录数据");
     }
