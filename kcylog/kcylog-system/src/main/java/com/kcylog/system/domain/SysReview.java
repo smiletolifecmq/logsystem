@@ -65,6 +65,8 @@ public class SysReview extends BaseEntity
     /** 审核状态(0:未开始;1进行中;2通过;3:未通过) */
     private Long status;
 
+    private Long subcontract;
+
     /** 人数 */
     private String peopleNum;
 
@@ -96,6 +98,14 @@ public class SysReview extends BaseEntity
     private int startEdit;
 
     private List<SysReviewEmployee> reviewEmployee;
+
+    public Long getSubcontract() {
+        return subcontract;
+    }
+
+    public void setSubcontract(Long subcontract) {
+        this.subcontract = subcontract;
+    }
 
     public String getHiredWorkerName() {
         return hiredWorkerName;

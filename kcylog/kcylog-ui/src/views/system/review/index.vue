@@ -107,6 +107,13 @@
       <el-table-column label="委托单位" align="center" prop="requester" />
       <el-table-column label="项目金额" align="center" prop="porjectMoney" />
       <el-table-column label="工作量" align="center" prop="workload" />
+      <el-table-column label="分包情况" align="center" prop="subcontract">
+        <template slot-scope="scope">
+          <span v-if="scope.row.subcontract === 1">是</span>
+          <span v-else-if="scope.row.subcontract === 2">否</span>
+          <span v-else></span>
+        </template>
+      </el-table-column>
       <el-table-column label="雇工金额" align="center" prop="budgetMoney" />
       <el-table-column label="负责人" align="center" prop="user.userName" />
       <el-table-column label="部门" align="center" prop="dept.deptName" />
@@ -289,6 +296,21 @@
             placeholder="请输入内容"
           />
         </el-form-item>
+        <el-form-item label="分包情况" prop="subcontract">
+          <el-select v-model="form.subcontract" placeholder="请选择">
+            <el-option
+              label="是"
+              :value="1"
+              :selected="form.subcontract === 1"
+            ></el-option>
+            <el-option
+              label="否"
+              :value="2"
+              :selected="form.subcontract === 2"
+            ></el-option>
+          </el-select>
+        </el-form-item>
+
         <el-form-item label="雇工人数" prop="peopleNum">
           <el-input-number
             v-model="form.peopleNum"
@@ -527,6 +549,7 @@ export default {
   name: "Review",
   data() {
     return {
+      subcontract: "2",
       money: 100,
       reviewProcessActive: -1,
       queryUserParams: {
@@ -835,6 +858,9 @@ export default {
           response.data.endTime = response.data.endTime.substring(0, 10);
         }
         this.form = response.data;
+        if (this.form.subcontract == 0) {
+          this.form.subcontract = null;
+        }
         this.open = true;
         this.title = "修改审核单";
       });

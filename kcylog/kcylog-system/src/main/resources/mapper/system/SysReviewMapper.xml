@@ -17,6 +17,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
         <result property="finalSecondStatus"    column="final_second_status"    />
         <result property="peopleNum"    column="people_num"    />
         <result property="startEdit"    column="start_edit"    />
+        <result property="subcontract"    column="subcontract"    />
         <result property="startTime"    column="start_time"    />
         <result property="endTime"    column="end_time"    />
         <result property="budgetDay"    column="budget_day"    />
@@ -97,6 +98,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
             <if test="createTime != null">create_time,</if>
             <if test="updateTime != null">update_time,</if>
             <if test="finalTime != null">final_time,</if>
+            <if test="subcontract != null">subcontract,</if>
          </trim>
         <trim prefix="values (" suffix=")" suffixOverrides=",">
             <if test="serialNum != null and serialNum != ''">#{serialNum},</if>
@@ -115,6 +117,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
             <if test="createTime != null">#{createTime},</if>
             <if test="updateTime != null">#{updateTime},</if>
             <if test="finalTime != null">#{finalTime},</if>
+            <if test="subcontract != null">#{subcontract},</if>
          </trim>
     </insert>
 
@@ -138,6 +141,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
             <if test="createTime != null">create_time = #{createTime},</if>
             <if test="updateTime != null">update_time = #{updateTime},</if>
             <if test="finalTime != null">final_time = #{finalTime},</if>
+            <if test="subcontract != null">subcontract = #{subcontract},</if>
         </trim>
         where review_id = #{reviewId}
     </update>
