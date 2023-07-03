@@ -7,17 +7,22 @@ import com.kcylog.common.core.page.TableDataInfo;
 import com.kcylog.common.enums.BusinessType;
 import com.kcylog.common.exception.ServiceException;
 import com.kcylog.common.utils.DateUtils;
-import com.kcylog.common.utils.poi.ExcelUtil;
 import com.kcylog.system.domain.*;
 import com.kcylog.system.service.ISysEmployeeService;
 import com.kcylog.system.service.ISysEmployeeWorktimeService;
 import com.kcylog.system.service.ISysReviewEmployeeService;
 import com.kcylog.system.service.ISysReviewService;
+import org.apache.poi.ss.usermodel.*;
+import org.apache.poi.ss.util.CellRangeAddress;
+import org.apache.poi.ss.util.RegionUtil;
+import org.apache.poi.xssf.usermodel.XSSFWorkbook;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.bind.annotation.*;
 
 import javax.servlet.http.HttpServletResponse;
+import java.io.IOException;
+import java.io.OutputStream;
 import java.math.BigDecimal;
 import java.util.List;
 
@@ -66,8 +71,234 @@ public class SysReviewEmployeeController extends BaseController
             num ++;
             reviewEmployee.setExportSerialNumber(num);
         }
-        ExcelUtil<SysReviewEmployee> util = new ExcelUtil<SysReviewEmployee>(SysReviewEmployee.class);
-        util.exportExcel(response, list, "雇工实际工作记录数据");
+
+        Workbook workbook = new XSSFWorkbook();
+        CellStyle wrapCellStyle = workbook.createCellStyle();
+        wrapCellStyle.setWrapText(true);
+        wrapCellStyle.setVerticalAlignment(VerticalAlignment.CENTER); // 设置垂直居中对齐
+        wrapCellStyle.setAlignment(HorizontalAlignment.CENTER); // 设置水平居中对齐
+        wrapCellStyle.setBorderTop(BorderStyle.THIN);
+        wrapCellStyle.setBorderRight(BorderStyle.THIN);
+        wrapCellStyle.setBorderBottom(BorderStyle.THIN);
+        wrapCellStyle.setBorderLeft(BorderStyle.THIN);
+        wrapCellStyle.setTopBorderColor(IndexedColors.BLACK.getIndex());
+        wrapCellStyle.setRightBorderColor(IndexedColors.BLACK.getIndex());
+        wrapCellStyle.setBottomBorderColor(IndexedColors.BLACK.getIndex());
+        wrapCellStyle.setLeftBorderColor(IndexedColors.BLACK.getIndex());
+
+        Sheet sheet = workbook.createSheet("Sheet1");
+        // 设置行头
+        Row headerRow = sheet.createRow(0);
+        Cell headerCell1 = headerRow.createCell(0);
+        headerCell1.setCellValue("序号");
+        headerCell1.setCellStyle(wrapCellStyle);
+        Cell headerCell2 = headerRow.createCell(1);
+        headerCell2.setCellValue("姓名");
+        headerCell2.setCellStyle(wrapCellStyle);
+
+        Cell headerCell3 = headerRow.createCell(2);
+        headerCell3.setCellValue("天数");
+        headerCell3.setCellStyle(wrapCellStyle);
+        Cell headerCell4 = headerRow.createCell(3);
+        headerCell4.setCellValue("金额/天（元）");
+        headerCell4.setCellStyle(wrapCellStyle);
+        Cell headerCell5 = headerRow.createCell(4);
+        headerCell5.setCellValue("应付劳务费");
+        headerCell5.setCellStyle(wrapCellStyle);
+
+        Cell headerCell6 = headerRow.createCell(5);
+        headerCell6.setCellValue("应扣税费");
+        headerCell6.setCellStyle(wrapCellStyle);
+        Cell headerCell7 = headerRow.createCell(6);
+        headerCell7.setCellValue("应扣个税");
+        headerCell7.setCellStyle(wrapCellStyle);
+        Cell headerCell8 = headerRow.createCell(7);
+        headerCell8.setCellValue("实发劳务费");
+        headerCell8.setCellStyle(wrapCellStyle);
+        Cell headerCell9 = headerRow.createCell(8);
+        headerCell9.setCellValue("开户行和银行卡号");
+        headerCell9.setCellStyle(wrapCellStyle);
+        Cell headerCell10 = headerRow.createCell(9);
+        headerCell10.setCellValue("身份证号");
+        headerCell10.setCellStyle(wrapCellStyle);
+        Cell headerCell11 = headerRow.createCell(10);
+        headerCell11.setCellValue("领取人签字");
+        headerCell11.setCellStyle(wrapCellStyle);
+
+        sheet.setColumnWidth(1, 4000);
+        sheet.setColumnWidth(2, 2000);
+        sheet.setColumnWidth(3, 3000);
+        sheet.setColumnWidth(4, 3000);
+        sheet.setColumnWidth(5, 3000);
+        sheet.setColumnWidth(6, 3000);
+        sheet.setColumnWidth(7, 3000);
+        sheet.setColumnWidth(8, 6000);
+        sheet.setColumnWidth(9, 7000);
+        sheet.setColumnWidth(10, 4000);
+
+        float totalDay = 0;
+        BigDecimal totalCost = new BigDecimal(0);
+
+        int rowIndex = 1; // 从第二行开始，留给行头
+        for (SysReviewEmployee sysReviewEmployee : list) {
+            Row row = sheet.createRow(rowIndex);
+
+            Cell cell1 = row.createCell(0);
+            cell1.setCellValue(sysReviewEmployee.getExportSerialNumber());
+            cell1.setCellStyle(wrapCellStyle);
+
+            Cell cell2 = row.createCell(1);
+            cell2.setCellValue(sysReviewEmployee.getName());
+            cell2.setCellStyle(wrapCellStyle);
+
+            Cell cell3 = row.createCell(2);
+            cell3.setCellValue(sysReviewEmployee.getWorkDay());
+            cell3.setCellStyle(wrapCellStyle);
+
+            Cell cell4 = row.createCell(3);
+            cell4.setCellValue(200);
+            cell4.setCellStyle(wrapCellStyle);
+
+            Cell cell5 = row.createCell(4);
+            cell5.setCellValue(sysReviewEmployee.getExportPayableServiceFee());
+            cell5.setCellStyle(wrapCellStyle);
+
+            Cell cell6 = row.createCell(5);
+            cell6.setCellValue(sysReviewEmployee.getExportTaxDeductible());
+            cell6.setCellStyle(wrapCellStyle);
+
+            Cell cell7 = row.createCell(6);
+            cell7.setCellValue(sysReviewEmployee.getExportSelfDeductible());
+            cell7.setCellStyle(wrapCellStyle);
+
+            Cell cell8 = row.createCell(7);
+            cell8.setCellValue(sysReviewEmployee.getCost().toString());
+            cell8.setCellStyle(wrapCellStyle);
+
+            Cell cell9 = row.createCell(8);
+            cell9.setCellValue(sysReviewEmployee.getExportBankAndCardNumber());
+            cell9.setCellStyle(wrapCellStyle);
+
+            Cell cell10 = row.createCell(9);
+            cell10.setCellValue(sysReviewEmployee.getIdCard());
+            cell10.setCellStyle(wrapCellStyle);
+
+            Cell cell11 = row.createCell(10);
+            cell11.setCellValue(sysReviewEmployee.getExportRecipients());
+            cell11.setCellStyle(wrapCellStyle);
+
+            totalDay += sysReviewEmployee.getWorkDay();
+            totalCost = totalCost.add(sysReviewEmployee.getCost());
+
+            rowIndex++;
+        }
+
+        // 合并前两个单元格，第 n 行
+        int firstColIndex = 0; // 第一个单元格的列索引（从 0 开始）
+        int lastColIndex = 1;  // 最后一个单元格的列索引（从 0 开始）
+        sheet.addMergedRegion(new CellRangeAddress(rowIndex, rowIndex, firstColIndex, lastColIndex));
+        // 创建第 n 行，并设置行高
+        Row row = sheet.createRow(rowIndex);
+        row.setHeight((short) 500); // 设置行高，这里设置为500个点
+        // 创建第一个合并后的单元格
+        Cell mergedCell = row.createCell(firstColIndex);
+        mergedCell.setCellValue("合计"); // 留空
+        mergedCell.setCellStyle(wrapCellStyle);
+        RegionUtil.setBorderTop(BorderStyle.THIN, new CellRangeAddress(rowIndex, rowIndex, firstColIndex, lastColIndex), sheet);
+        RegionUtil.setTopBorderColor(IndexedColors.BLACK.getIndex(), new CellRangeAddress(rowIndex, rowIndex, firstColIndex, lastColIndex), sheet);
+        RegionUtil.setBorderRight(BorderStyle.THIN, new CellRangeAddress(rowIndex, rowIndex, firstColIndex, lastColIndex), sheet);
+        RegionUtil.setRightBorderColor(IndexedColors.BLACK.getIndex(), new CellRangeAddress(rowIndex, rowIndex, firstColIndex, lastColIndex), sheet);
+        RegionUtil.setBorderBottom(BorderStyle.THIN, new CellRangeAddress(rowIndex, rowIndex, firstColIndex, lastColIndex), sheet);
+        RegionUtil.setBottomBorderColor(IndexedColors.BLACK.getIndex(), new CellRangeAddress(rowIndex, rowIndex, firstColIndex, lastColIndex), sheet);
+        RegionUtil.setBorderLeft(BorderStyle.THIN, new CellRangeAddress(rowIndex, rowIndex, firstColIndex, lastColIndex), sheet);
+        RegionUtil.setLeftBorderColor(IndexedColors.BLACK.getIndex(), new CellRangeAddress(rowIndex, rowIndex, firstColIndex, lastColIndex), sheet);
+        Cell cell12 = row.createCell(2);
+        cell12.setCellValue(totalDay);
+        cell12.setCellStyle(wrapCellStyle);
+        Cell cell13 = row.createCell(3);
+        cell13.setCellValue(200);
+        cell13.setCellStyle(wrapCellStyle);
+        Cell cell15 = row.createCell(4);
+        cell15.setCellValue("");
+        cell15.setCellStyle(wrapCellStyle);
+        Cell cell16 = row.createCell(5);
+        cell16.setCellValue("");
+        cell16.setCellStyle(wrapCellStyle);
+        Cell cell17 = row.createCell(6);
+        cell17.setCellValue("");
+        cell17.setCellStyle(wrapCellStyle);
+        Cell cell18 = row.createCell(7);
+        cell18.setCellValue(totalCost.toString());
+        cell18.setCellStyle(wrapCellStyle);
+        Cell cell19 = row.createCell(8);
+        cell19.setCellValue("");
+        cell19.setCellStyle(wrapCellStyle);
+        Cell cell20 = row.createCell(9);
+        cell20.setCellValue("");
+        cell20.setCellStyle(wrapCellStyle);
+        Cell cell21 = row.createCell(10);
+        cell21.setCellValue("");
+        cell21.setCellStyle(wrapCellStyle);
+
+        rowIndex++;
+        // 合并前两个单元格，第 n 行
+        int firstColIndex1 = 0; // 第一个单元格的列索引（从 0 开始）
+        int lastColIndex1 = 1;  // 最后一个单元格的列索引（从 0 开始）
+        int firstColIndex2 = 2; // 第一个单元格的列索引（从 0 开始）
+        int lastColIndex2 = 10;  // 最后一个单元格的列索引（从 0 开始）
+        sheet.addMergedRegion(new CellRangeAddress(rowIndex, rowIndex, firstColIndex1, lastColIndex1));
+        sheet.addMergedRegion(new CellRangeAddress(rowIndex, rowIndex, firstColIndex2, lastColIndex2));
+        // 创建第 n 行，并设置行高
+        row = sheet.createRow(rowIndex);
+        row.setHeight((short) 500); // 设置行高，这里设置为500个点
+        // 创建第一个合并后的单元格
+        mergedCell = row.createCell(firstColIndex1);
+        mergedCell.setCellValue("大写合计");
+        mergedCell.setCellStyle(wrapCellStyle);
+        mergedCell = row.createCell(firstColIndex2);
+        mergedCell.setCellValue("应付劳务费合计： ，实发劳务费合计： 。");
+        mergedCell.setCellStyle(wrapCellStyle);
+        RegionUtil.setBorderTop(BorderStyle.THIN, new CellRangeAddress(rowIndex, rowIndex, firstColIndex1, lastColIndex1), sheet);
+        RegionUtil.setTopBorderColor(IndexedColors.BLACK.getIndex(), new CellRangeAddress(rowIndex, rowIndex, firstColIndex1, lastColIndex1), sheet);
+        RegionUtil.setBorderRight(BorderStyle.THIN, new CellRangeAddress(rowIndex, rowIndex, firstColIndex1, lastColIndex1), sheet);
+        RegionUtil.setRightBorderColor(IndexedColors.BLACK.getIndex(), new CellRangeAddress(rowIndex, rowIndex, firstColIndex1, lastColIndex1), sheet);
+        RegionUtil.setBorderBottom(BorderStyle.THIN, new CellRangeAddress(rowIndex, rowIndex, firstColIndex1, lastColIndex1), sheet);
+        RegionUtil.setBottomBorderColor(IndexedColors.BLACK.getIndex(), new CellRangeAddress(rowIndex, rowIndex, firstColIndex1, lastColIndex1), sheet);
+        RegionUtil.setBorderLeft(BorderStyle.THIN, new CellRangeAddress(rowIndex, rowIndex, firstColIndex1, lastColIndex1), sheet);
+        RegionUtil.setLeftBorderColor(IndexedColors.BLACK.getIndex(), new CellRangeAddress(rowIndex, rowIndex, firstColIndex1, lastColIndex1), sheet);
+
+        RegionUtil.setBorderTop(BorderStyle.THIN, new CellRangeAddress(rowIndex, rowIndex, firstColIndex2, lastColIndex2), sheet);
+        RegionUtil.setTopBorderColor(IndexedColors.BLACK.getIndex(), new CellRangeAddress(rowIndex, rowIndex, firstColIndex2, lastColIndex2), sheet);
+        RegionUtil.setBorderRight(BorderStyle.THIN, new CellRangeAddress(rowIndex, rowIndex, firstColIndex2, lastColIndex2), sheet);
+        RegionUtil.setRightBorderColor(IndexedColors.BLACK.getIndex(), new CellRangeAddress(rowIndex, rowIndex, firstColIndex2, lastColIndex2), sheet);
+        RegionUtil.setBorderBottom(BorderStyle.THIN, new CellRangeAddress(rowIndex, rowIndex, firstColIndex2, lastColIndex2), sheet);
+        RegionUtil.setBottomBorderColor(IndexedColors.BLACK.getIndex(), new CellRangeAddress(rowIndex, rowIndex, firstColIndex2, lastColIndex2), sheet);
+        RegionUtil.setBorderLeft(BorderStyle.THIN, new CellRangeAddress(rowIndex, rowIndex, firstColIndex2, lastColIndex2), sheet);
+        RegionUtil.setLeftBorderColor(IndexedColors.BLACK.getIndex(), new CellRangeAddress(rowIndex, rowIndex, firstColIndex2, lastColIndex2), sheet);
+
+        rowIndex ++;
+        sheet.addMergedRegion(new CellRangeAddress(rowIndex, rowIndex, 0, 3));
+        sheet.addMergedRegion(new CellRangeAddress(rowIndex, rowIndex, 4, 6));
+        sheet.addMergedRegion(new CellRangeAddress(rowIndex, rowIndex, 7, 8));
+        sheet.addMergedRegion(new CellRangeAddress(rowIndex, rowIndex, 9, 10));
+        row = sheet.createRow(rowIndex);
+        row.setHeight((short) 1000); // 设置行高，这里设置为500个点
+        // 创建第一个合并后的单元格
+        mergedCell = row.createCell(0);
+        mergedCell.setCellValue("分公司分管领导:");
+        mergedCell = row.createCell(4);
+        mergedCell.setCellValue("部门负责人:");
+        mergedCell = row.createCell(7);
+        mergedCell.setCellValue("项目负责人:");
+        mergedCell = row.createCell(9);
+        mergedCell.setCellValue("制表人:");
+
+        try (OutputStream outputStream = response.getOutputStream()) {
+            workbook.write(outputStream);
+            workbook.close();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
     }
 
     /**
