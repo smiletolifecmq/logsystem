@@ -205,6 +205,36 @@ export const dynamicRoutes = [
       }
     ]
   },
+
+  {
+    path: '/manual/work_log',
+    component: Layout,
+    hidden: true,
+    permissions: ["system:log:list"],
+    children: [
+      {
+        path: 'info',
+        component: () => import('@/views/manual/workLog'),
+        name: 'workLog',
+        meta: { title: '日志模块使用说明', activeMenu: '/manual/workLog' }
+      }
+    ]
+  },
+
+  {
+    path: '/manual/hired_worker',
+    component: Layout,
+    hidden: true,
+    permissions: ["system:review:list"],
+    children: [
+      {
+        path: 'info',
+        component: () => import('@/views/manual/hiredWorker'),
+        name: 'hiredWorker',
+        meta: { title: '雇工模块使用说明', activeMenu: '/manual/hiredWorker' }
+      }
+    ]
+  },
 ]
 
 // 防止连续点击多次路由报错
