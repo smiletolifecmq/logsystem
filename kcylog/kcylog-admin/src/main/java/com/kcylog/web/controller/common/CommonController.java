@@ -1,9 +1,12 @@
 package com.kcylog.web.controller.common;
 
-import java.util.ArrayList;
-import java.util.List;
-import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpServletResponse;
+import com.kcylog.common.config.RuoYiConfig;
+import com.kcylog.common.constant.Constants;
+import com.kcylog.common.core.domain.AjaxResult;
+import com.kcylog.common.utils.StringUtils;
+import com.kcylog.common.utils.file.FileUploadUtils;
+import com.kcylog.common.utils.file.FileUtils;
+import com.kcylog.framework.config.ServerConfig;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -13,13 +16,11 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.multipart.MultipartFile;
-import com.kcylog.common.config.RuoYiConfig;
-import com.kcylog.common.constant.Constants;
-import com.kcylog.common.core.domain.AjaxResult;
-import com.kcylog.common.utils.StringUtils;
-import com.kcylog.common.utils.file.FileUploadUtils;
-import com.kcylog.common.utils.file.FileUtils;
-import com.kcylog.framework.config.ServerConfig;
+
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
+import java.util.ArrayList;
+import java.util.List;
 
 /**
  * 通用请求处理

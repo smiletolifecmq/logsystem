@@ -86,6 +86,11 @@
                   {{ getFileName(file.fileName) }}
                 </span>
               </el-link>
+              <el-button
+                size="mini"
+                @click="downloadFile(file.fileName, file.oldFileName)"
+                >预览失败点此下载</el-button
+              >
             </li>
           </transition-group>
         </template>
@@ -256,6 +261,9 @@ export default {
     this.getList();
   },
   methods: {
+    downloadFile(url, fileName) {
+      this.downloadGet("/common/download/resource?resource=" + url, fileName);
+    },
     handleFileUploaded(uploadedFile) {
       this.letters = [];
       let selectStr = uploadedFile.originalFilename.split(".")[0] + ";";

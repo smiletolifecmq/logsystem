@@ -391,6 +391,12 @@ export default {
     submitForm() {
       const uploadListComponent = this.$refs.fileUploadModule;
       const fileList = uploadListComponent.fileList;
+      var pattern = /[\u4e00-\u9fa5]/; // 使用 Unicode 范围表示中文字符
+      const status = pattern.test(this.form.standard);
+      if (status) {
+        this.$message.error("标准号不能包含中文～");
+        return;
+      }
       for (let i in fileList) {
         let obj = {};
         let fileName = fileList[i].name.split("/");
