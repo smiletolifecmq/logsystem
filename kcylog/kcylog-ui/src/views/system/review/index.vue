@@ -433,6 +433,25 @@
             class="textarea-input"
           />
         </el-form-item>
+        <el-form-item label="分包情况" prop="subcontract">
+          <el-select
+            v-model="formInfo.subcontract"
+            placeholder="请选择"
+            class="custom-input"
+            disabled
+          >
+            <el-option
+              label="是"
+              :value="1"
+              :selected="formInfo.subcontract === 1"
+            ></el-option>
+            <el-option
+              label="否"
+              :value="2"
+              :selected="formInfo.subcontract === 2"
+            ></el-option>
+          </el-select>
+        </el-form-item>
         <el-form-item label="雇工人数" prop="peopleNum">
           <el-input-number
             v-model="formInfo.peopleNum"
@@ -976,6 +995,9 @@ export default {
           response.data.endTime = response.data.endTime.substring(0, 10);
         }
         this.formInfo = response.data;
+        if (this.formInfo.subcontract == 0) {
+          this.formInfo.subcontract = null;
+        }
         this.openInfo = true;
         this.titleInfo = "审核单详情";
       });
