@@ -201,6 +201,7 @@
             :fileSize="200"
             :fileType="fileType"
             :limit="1"
+            :showEncryption="true"
           ></FileUpload>
         </el-form-item>
       </el-form>
@@ -230,7 +231,7 @@ export default {
   props: {
     fileType: {
       type: Array,
-      default: () => ["pdf"],
+      default: () => ["doc", "pdf"],
     },
   },
   data() {

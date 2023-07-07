@@ -19,6 +19,9 @@
       <!-- 上传提示 -->
       <div class="el-upload__tip" slot="tip" v-if="showTip">
         请上传
+        <template v-if="showEncryption">
+          <b style="color: #f56c6c">非加密文件</b>且
+        </template>
         <template v-if="fileSize">
           大小不超过 <b style="color: #f56c6c">{{ fileSize }}MB</b>
         </template>
@@ -84,6 +87,10 @@ export default {
     isShowTip: {
       type: Boolean,
       default: true,
+    },
+    showEncryption: {
+      type: Boolean,
+      default: false,
     },
   },
   data() {
