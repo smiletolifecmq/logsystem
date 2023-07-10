@@ -93,29 +93,7 @@ public class SysWorkbookController extends BaseController
         // 关闭输出流
         IOUtils.closeQuietly(outputStream);
     }
-    private void copyTableOfContents(String fileUrl, XWPFDocument mergedDocument) throws IOException {
-        FileInputStream inputStream = new FileInputStream(new File(fileUrl));
-        XWPFDocument document = new XWPFDocument(inputStream);
-
-        // 遍历段落查找目录
-        for (XWPFParagraph paragraph : document.getParagraphs()) {
-            String text = paragraph.getText();
-            if (text != null && text.toLowerCase().contains("目录")) {
-                // 复制目录段落
-                XWPFParagraph newParagraph = mergedDocument.createParagraph();
-                newParagraph.getCTP().setPPr(paragraph.getCTP().getPPr());
-                for (XWPFRun run : paragraph.getRuns()) {
-                    XWPFRun newRun = newParagraph.createRun();
-                    newRun.getCTR().setRPr(run.getCTR().getRPr());
-                    newRun.setText(run.getText(0));
-                }
-                break;
-            }
-        }
-
-        // 关闭输入流
-        inputStream.close();
-    }
+    
     /**
      * 获取作业手册详细信息
      */
