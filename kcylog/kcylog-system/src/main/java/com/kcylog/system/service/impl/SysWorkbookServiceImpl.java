@@ -95,4 +95,10 @@ public class SysWorkbookServiceImpl implements ISysWorkbookService
     {
         return sysWorkbookMapper.deleteSysWorkbookByWorkbookId(workbookId);
     }
+
+    @Override
+    public List<SysWorkbook> selectSysWorkbookListExport(SysWorkbook sysWorkbook)
+    {
+        return sysWorkbookMapper.selectSysWorkbookListExport(sysWorkbook);
+    }
 }

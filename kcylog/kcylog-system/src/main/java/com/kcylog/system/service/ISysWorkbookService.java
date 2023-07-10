@@ -60,4 +60,7 @@ public interface ISysWorkbookService
      * @return 结果
      */
     public int deleteSysWorkbookByWorkbookId(Long workbookId);
+
+    public List<SysWorkbook> selectSysWorkbookListExport(SysWorkbook sysWorkbook);
+
 }

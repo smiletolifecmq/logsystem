@@ -60,4 +60,6 @@ public interface SysWorkbookMapper
      * @return 结果
      */
     public int deleteSysWorkbookByWorkbookIds(WorkbookParams workbookParams);
+
+    public List<SysWorkbook> selectSysWorkbookListExport(SysWorkbook sysWorkbook);
 }

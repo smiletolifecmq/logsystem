@@ -16,6 +16,21 @@
           @keyup.enter.native="handleQuery"
         />
       </el-form-item>
+      <el-form-item label="文件类型" prop="fileType">
+        <el-select
+          v-model="queryParams.fileType"
+          placeholder="请选择"
+          clearable
+        >
+          <el-option
+            v-for="item in fileTypes"
+            :key="item.value"
+            :label="item.label"
+            :value="item.value"
+          >
+          </el-option>
+        </el-select>
+      </el-form-item>
       <el-form-item label="创建时间">
         <el-date-picker
           v-model="dateRange"
@@ -231,11 +246,21 @@ export default {
   props: {
     fileType: {
       type: Array,
-      default: () => ["doc", "pdf"],
+      default: () => ["docx", "pdf"],
     },
   },
   data() {
     return {
+      fileTypes: [
+        {
+          value: "pdf",
+          label: "pdf",
+        },
+        {
+          value: "docx",
+          label: "word",
+        },
+      ],
       baseUrl: process.env.VUE_APP_BASE_API,
       // 日期范围
       dateRange: [],
@@ -374,16 +399,14 @@ export default {
     },
     /** 提交按钮 */
     submitForm() {
+      this.uploadFileList = [];
       const uploadListComponent = this.$refs.fileUploadModule;
       const fileList = uploadListComponent.fileList;
       for (let i in fileList) {
         let obj = {};
         let fileName = fileList[i].name.split("/");
         obj.newFileName = fileName[fileName.length - 1];
-        obj.oldFileName =
-          fileName[fileName.length - 1].split("_")[0] +
-          "." +
-          fileName[fileName.length - 1].split(".")[1];
+        obj.oldFileName = fileList[i].oldName;
         obj.fileName = fileList[i].name;
         obj.url = fileList[i].url;
         this.uploadFileList.push(obj);
@@ -393,6 +416,9 @@ export default {
         return;
       }
       this.form.uploadFileList = this.uploadFileList;
+      this.form.fileType = this.form.uploadFileList[0].newFileName
+        .split(".")
+        .pop();
       this.$refs["form"].validate((valid) => {
         if (valid) {
           if (this.form.workbookId != null) {
@@ -427,12 +453,22 @@ export default {
     },
     /** 导出按钮操作 */
     handleExport() {
+      if (
+        this.queryParams.fileType == null ||
+        this.queryParams.fileType == ""
+      ) {
+        this.$message({
+          message: "请先选择文件类型～",
+          type: "warning",
+        });
+        return;
+      }
       this.download(
         "system/workbook/export",
         {
           ...this.queryParams,
         },
-        `作业手册_${new Date().getTime()}.pdf`
+        `作业手册_${new Date().getTime()}.` + this.queryParams.fileType
       );
     },
   },

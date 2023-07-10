@@ -386,16 +386,14 @@ export default {
     },
     /** 提交按钮 */
     submitForm() {
+      this.uploadFileList = [];
       const uploadListComponent = this.$refs.fileUploadModule;
       const fileList = uploadListComponent.fileList;
       for (let i in fileList) {
         let obj = {};
         let fileName = fileList[i].name.split("/");
         obj.newFileName = fileName[fileName.length - 1];
-        obj.oldFileName =
-          fileName[fileName.length - 1].split("_")[0] +
-          "." +
-          fileName[fileName.length - 1].split(".")[1];
+        obj.oldFileName = fileList[i].oldName;
         obj.fileName = fileList[i].name;
         obj.url = fileList[i].url;
         this.uploadFileList.push(obj);

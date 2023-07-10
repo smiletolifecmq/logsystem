@@ -14,6 +14,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
         <result property="sort"    column="sort"    />
         <result property="createTime"    column="create_time"    />
         <result property="updateTime"    column="update_time"    />
+        <result property="fileType"    column="file_type"    />
         <collection property="manageFile" javaType="java.util.List" resultMap="manageFileResult"/>
         <collection property="user" column="user_name" javaType="SysUser" resultMap="workbookUserResult"/>
     </resultMap>
@@ -42,8 +43,9 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 
     <select id="selectSysWorkbookList" parameterType="SysWorkbook" resultMap="SysWorkbookResult">
         <include refid="selectSysWorkbookVo"/>
-        <where>  
+        <where>
             <if test="title != null  and title != ''"> and k.title = #{title}</if>
+            <if test="fileType != null  and fileType != ''"> and k.file_type = #{fileType}</if>
             <if test="params.beginTime != null and params.beginTime != ''"><!-- 开始时间检索 -->
                 AND date_format(k.create_time,'%y%m%d') &gt;= date_format(#{params.beginTime},'%y%m%d')
             </if>
@@ -53,17 +55,28 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
         </where>
         order by k.sort asc
     </select>
-    
+
+    <select id="selectSysWorkbookListExport" parameterType="SysWorkbook" resultMap="SysWorkbookResult">
+        select k.*, f.new_file_name, f.old_file_name, f.url, f.file_name
+        from sys_workbook k
+        inner join sys_manage_file f on k.workbook_id = f.module_id and f.module_type = 4
+        <where>
+            <if test="fileType != null  and fileType != ''"> and k.file_type = #{fileType}</if>
+        </where>
+        order by k.sort asc
+    </select>
+
     <select id="selectSysWorkbookByWorkbookId" parameterType="Long" resultMap="SysWorkbookResult">
         <include refid="selectSysWorkbookVo"/>
         where workbook_id = #{workbookId}
     </select>
-        
+
     <insert id="insertSysWorkbook" parameterType="SysWorkbook" useGeneratedKeys="true" keyProperty="workbookId">
         insert into sys_workbook
         <trim prefix="(" suffix=")" suffixOverrides=",">
             <if test="userId != null">user_id,</if>
             <if test="title != null and title != ''">title,</if>
+            <if test="fileType != null and fileType != ''">file_type,</if>
             <if test="introduction != null">introduction,</if>
             <if test="event != null">event,</if>
             <if test="sort != null">sort,</if>
@@ -73,6 +86,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
         <trim prefix="values (" suffix=")" suffixOverrides=",">
             <if test="userId != null">#{userId},</if>
             <if test="title != null and title != ''">#{title},</if>
+            <if test="fileType != null and fileType != ''">#{fileType},</if>
             <if test="introduction != null">#{introduction},</if>
             <if test="event != null">#{event},</if>
             <if test="sort != null">#{sort},</if>
@@ -86,6 +100,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
         <trim prefix="SET" suffixOverrides=",">
             <if test="userId != null">user_id = #{userId},</if>
             <if test="title != null and title != ''">title = #{title},</if>
+            <if test="fileType != null and fileType != ''">file_type = #{fileType},</if>
             <if test="updateName != null and updateName != ''">update_name = #{updateName},</if>
             <if test="introduction != null">introduction = #{introduction},</if>
             <if test="event != null">event = #{event},</if>

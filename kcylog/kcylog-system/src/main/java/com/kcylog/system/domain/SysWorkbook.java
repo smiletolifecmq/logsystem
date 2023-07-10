@@ -31,6 +31,8 @@ public class SysWorkbook extends BaseEntity
 
     private String updateName;
 
+    private String fileType;
+
     /** 简介 */
     @Excel(name = "简介")
     private String introduction;
@@ -48,6 +50,14 @@ public class SysWorkbook extends BaseEntity
     private List<SysManageFile> manageFile;
 
     private SysUser user;
+
+    public String getFileType() {
+        return fileType;
+    }
+
+    public void setFileType(String fileType) {
+        this.fileType = fileType;
+    }
 
     public SysUser getUser() {
         return user;

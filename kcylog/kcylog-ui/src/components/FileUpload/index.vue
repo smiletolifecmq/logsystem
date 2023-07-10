@@ -174,7 +174,11 @@ export default {
     // 上传成功回调
     handleUploadSuccess(res, file) {
       if (res.code === 200) {
-        this.uploadList.push({ name: res.fileName, url: res.fileName });
+        this.uploadList.push({
+          name: res.fileName,
+          url: res.fileName,
+          oldName: res.originalFilename,
+        });
         this.uploadedSuccessfully();
         this.$emit("fileUploaded", { originalFilename: res.originalFilename });
       } else {
