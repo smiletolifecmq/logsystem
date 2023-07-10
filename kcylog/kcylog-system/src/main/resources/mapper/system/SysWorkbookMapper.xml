@@ -60,9 +60,6 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
         select k.*, f.new_file_name, f.old_file_name, f.url, f.file_name
         from sys_workbook k
         inner join sys_manage_file f on k.workbook_id = f.module_id and f.module_type = 4
-        <where>
-            <if test="fileType != null  and fileType != ''"> and k.file_type = #{fileType}</if>
-        </where>
         order by k.sort asc
     </select>
 

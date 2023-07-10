@@ -16,7 +16,7 @@
           @keyup.enter.native="handleQuery"
         />
       </el-form-item>
-      <el-form-item label="文件类型" prop="fileType">
+      <el-form-item label="文件类型" prop="fileType" style="display: none">
         <el-select
           v-model="queryParams.fileType"
           placeholder="请选择"
@@ -246,7 +246,7 @@ export default {
   props: {
     fileType: {
       type: Array,
-      default: () => ["docx", "pdf"],
+      default: () => ["pdf"],
     },
   },
   data() {
@@ -453,16 +453,7 @@ export default {
     },
     /** 导出按钮操作 */
     handleExport() {
-      if (
-        this.queryParams.fileType == null ||
-        this.queryParams.fileType == ""
-      ) {
-        this.$message({
-          message: "请先选择文件类型～",
-          type: "warning",
-        });
-        return;
-      }
+      this.queryParams.fileType = "pdf";
       this.download(
         "system/workbook/export",
         {

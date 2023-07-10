@@ -16,12 +16,17 @@ import com.kcylog.system.service.ISysWorkbookService;
 import org.apache.pdfbox.io.IOUtils;
 import org.apache.pdfbox.io.MemoryUsageSetting;
 import org.apache.pdfbox.multipdf.PDFMergerUtility;
+import org.apache.poi.openxml4j.exceptions.InvalidFormatException;
+import org.apache.poi.xwpf.usermodel.XWPFDocument;
+import org.apache.poi.xwpf.usermodel.XWPFParagraph;
+import org.apache.poi.xwpf.usermodel.XWPFRun;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
 import javax.servlet.http.HttpServletResponse;
 import java.io.File;
+import java.io.FileInputStream;
 import java.io.IOException;
 import java.io.OutputStream;
 import java.util.ArrayList;
@@ -61,8 +66,8 @@ public class SysWorkbookController extends BaseController
     @PreAuthorize("@ss.hasPermi('system:workbook:export')")
     @Log(title = "作业手册", businessType = BusinessType.EXPORT)
     @PostMapping("/export")
-    public void export(HttpServletResponse response, SysWorkbook sysWorkbook) throws IOException {
-        List<SysWorkbook> list = sysWorkbookService.selectSysWorkbookList(sysWorkbook);
+    public void export(HttpServletResponse response, SysWorkbook sysWorkbook) throws IOException, InvalidFormatException {
+        List<SysWorkbook> list = sysWorkbookService.selectSysWorkbookListExport(sysWorkbook);
         List<String> fileUrl = new ArrayList<>();
         String filePath = RuoYiConfig.getUploadPath();
         for (SysWorkbook workbook:list){
@@ -70,10 +75,10 @@ public class SysWorkbookController extends BaseController
                 fileUrl.add(filePath + fileList.getUrl().replace("/profile/upload", ""));
             }
         }
-
         // 设置响应头信息
-        response.setContentType("application/pdf");
-        response.setHeader("Content-Disposition", "attachment; filename=\"output.pdf\"");
+        String headerType = sysWorkbook.getFileType();
+        response.setContentType("application/"+ headerType);
+        response.setHeader("Content-Disposition", "attachment; filename=\"output." + headerType + "\"");
 
         // 获取响应输出流
         OutputStream outputStream = response.getOutputStream();
@@ -88,7 +93,29 @@ public class SysWorkbookController extends BaseController
         // 关闭输出流
         IOUtils.closeQuietly(outputStream);
     }
+    private void copyTableOfContents(String fileUrl, XWPFDocument mergedDocument) throws IOException {
+        FileInputStream inputStream = new FileInputStream(new File(fileUrl));
+        XWPFDocument document = new XWPFDocument(inputStream);
 
+        // 遍历段落查找目录
+        for (XWPFParagraph paragraph : document.getParagraphs()) {
+            String text = paragraph.getText();
+            if (text != null && text.toLowerCase().contains("目录")) {
+                // 复制目录段落
+                XWPFParagraph newParagraph = mergedDocument.createParagraph();
+                newParagraph.getCTP().setPPr(paragraph.getCTP().getPPr());
+                for (XWPFRun run : paragraph.getRuns()) {
+                    XWPFRun newRun = newParagraph.createRun();
+                    newRun.getCTR().setRPr(run.getCTR().getRPr());
+                    newRun.setText(run.getText(0));
+                }
+                break;
+            }
+        }
+
+        // 关闭输入流
+        inputStream.close();
+    }
     /**
      * 获取作业手册详细信息
      */
