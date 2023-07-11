@@ -40,6 +40,18 @@
           </el-option>
         </el-select>
       </el-form-item>
+      <el-form-item label="上传时间">
+        <el-date-picker
+          v-model="dateRange"
+          style="width: 240px"
+          value-format="yyyy-MM-dd"
+          type="daterange"
+          range-separator="-"
+          start-placeholder="开始日期"
+          end-placeholder="结束日期"
+          @change="handleQuery"
+        ></el-date-picker>
+      </el-form-item>
       <el-form-item>
         <el-button
           type="primary"
@@ -315,6 +327,7 @@ export default {
   },
   data() {
     return {
+      dateRange: [],
       meetingTypeArr: [
         {
           value: 1,
@@ -428,11 +441,13 @@ export default {
     /** 查询部门日常列表 */
     getList() {
       this.loading = true;
-      listDaily(this.queryParams).then((response) => {
-        this.dailyList = response.rows;
-        this.total = response.total;
-        this.loading = false;
-      });
+      listDaily(this.addDateRange(this.queryParams, this.dateRange)).then(
+        (response) => {
+          this.dailyList = response.rows;
+          this.total = response.total;
+          this.loading = false;
+        }
+      );
     },
     // 取消按钮
     cancel() {
@@ -478,6 +493,7 @@ export default {
     },
     /** 重置按钮操作 */
     resetQuery() {
+      this.dateRange = [];
       this.meetingType = "";
       this.queryParamsDeptId = [];
       this.resetForm("queryForm");

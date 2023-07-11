@@ -41,7 +41,14 @@
             <if test="deptId != null ">and d.dept_id = #{deptId}</if>
             <if test="meetingType != null ">and d.meeting_type = #{meetingType}</if>
             <if test="theme != null  and theme != ''">and d.theme = #{theme}</if>
+            <if test="params.beginTime != null and params.beginTime != ''"><!-- 开始时间检索 -->
+                AND date_format(d.create_time,'%y%m%d') &gt;= date_format(#{params.beginTime},'%y%m%d')
+            </if>
+            <if test="params.endTime != null and params.endTime != ''"><!-- 结束时间检索 -->
+                AND date_format(d.create_time,'%y%m%d') &lt;= date_format(#{params.endTime},'%y%m%d')
+            </if>
         </where>
+        order by d.dept_id desc 
     </select>
 
     <select id="selectSysDepartmentDailyByDailyId" parameterType="Long" resultMap="SysDepartmentDailyResult">
