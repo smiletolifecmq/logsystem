@@ -519,6 +519,7 @@ export default {
     resetQuery() {
       this.statusVaule = "";
       this.dateRange = [];
+      this.queryParamsDeptId = [];
       this.resetForm("queryForm");
       this.handleQuery();
     },

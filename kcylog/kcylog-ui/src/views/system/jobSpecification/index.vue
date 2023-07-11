@@ -389,6 +389,9 @@ export default {
               let fileTemp = {};
               fileTemp.name = response.data.manageFile[i].fileName;
               fileTemp.url = response.data.manageFile[i].url;
+              fileTemp.fileName = response.data.manageFile[i].fileName;
+              fileTemp.newFileName = response.data.manageFile[i].newFileName;
+              fileTemp.oldFileName = response.data.manageFile[i].oldFileName;
               this.$refs.fileUploadModule.fileList.push(fileTemp);
             }
           }
@@ -410,7 +413,12 @@ export default {
         let obj = {};
         let fileName = fileList[i].name.split("/");
         obj.newFileName = fileName[fileName.length - 1];
-        obj.oldFileName = fileList[i].oldName;
+        obj.oldFileName = "";
+        if (fileList[i].oldFileName == null || fileList[i].oldFileName == "") {
+          obj.oldFileName = fileList[i].oldName;
+        } else {
+          obj.oldFileName = fileList[i].oldFileName;
+        }
         obj.fileName = fileList[i].name;
         obj.url = fileList[i].url;
         this.uploadFileList.push(obj);

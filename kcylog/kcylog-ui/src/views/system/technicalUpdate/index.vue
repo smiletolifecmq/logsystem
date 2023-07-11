@@ -183,7 +183,7 @@
             ref="fileUploadModule"
             :fileSize="200"
             :fileType="fileType"
-            :limit="null"
+            :limit="1"
           ></FileUpload>
         </el-form-item>
       </el-form>
@@ -350,6 +350,9 @@ export default {
               let fileTemp = {};
               fileTemp.name = response.data.manageFile[i].fileName;
               fileTemp.url = response.data.manageFile[i].url;
+              fileTemp.fileName = response.data.manageFile[i].fileName;
+              fileTemp.newFileName = response.data.manageFile[i].newFileName;
+              fileTemp.oldFileName = response.data.manageFile[i].oldFileName;
               this.$refs.fileUploadModule.fileList.push(fileTemp);
             }
           }
@@ -365,7 +368,12 @@ export default {
         let obj = {};
         let fileName = fileList[i].name.split("/");
         obj.newFileName = fileName[fileName.length - 1];
-        obj.oldFileName = fileList[i].oldName;
+        obj.oldFileName = "";
+        if (fileList[i].oldName == null || fileList[i].oldName == "") {
+          obj.oldFileName = fileList[i].oldFileName;
+        } else {
+          obj.oldFileName = fileList[i].oldName;
+        }
         obj.fileName = fileList[i].name;
         obj.url = fileList[i].url;
         this.uploadFileList.push(obj);

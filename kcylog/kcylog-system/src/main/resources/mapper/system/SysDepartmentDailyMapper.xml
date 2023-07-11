@@ -1,0 +1,107 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.kcylog.system.mapper.SysDepartmentDailyMapper">
+
+    <resultMap type="SysDepartmentDaily" id="SysDepartmentDailyResult">
+        <result property="dailyId" column="daily_id"/>
+        <result property="userId" column="user_id"/>
+        <result property="deptId" column="dept_id"/>
+        <result property="meetingType" column="meeting_type"/>
+        <result property="theme" column="theme"/>
+        <result property="content" column="content"/>
+        <result property="img" column="img"/>
+        <result property="checkIn" column="check_in"/>
+        <result property="createTime" column="create_time"/>
+        <result property="updateTime" column="update_time"/>
+        <association property="dept" column="dept_name" javaType="SysDept" resultMap="sysDepartmentDailyDeptResult"/>
+        <association property="user" column="user_name" javaType="SysUser" resultMap="sysDepartmentDailyUserResult"/>
+    </resultMap>
+
+    <resultMap id="sysDepartmentDailyDeptResult" type="SysDept">
+        <result property="deptName" column="dept_name"/>
+    </resultMap>
+
+    <resultMap id="sysDepartmentDailyUserResult" type="SysUser">
+        <result property="userName" column="user_name"/>
+        <result property="userId" column="user_id"/>
+    </resultMap>
+
+    <sql id="selectSysDepartmentDailyVo">
+        select d.*, u.user_id, u.user_name, t.dept_name
+        from sys_department_daily d
+                 inner join sys_user u on d.user_id = u.user_id
+                 inner join sys_dept t on d.dept_id = t.dept_id
+    </sql>
+
+    <select id="selectSysDepartmentDailyList" parameterType="SysDepartmentDaily" resultMap="SysDepartmentDailyResult">
+        <include refid="selectSysDepartmentDailyVo"/>
+        <where>
+            <if test="deptId != null ">and d.dept_id = #{deptId}</if>
+            <if test="meetingType != null ">and d.meeting_type = #{meetingType}</if>
+            <if test="theme != null  and theme != ''">and d.theme = #{theme}</if>
+        </where>
+    </select>
+
+    <select id="selectSysDepartmentDailyByDailyId" parameterType="Long" resultMap="SysDepartmentDailyResult">
+        <include refid="selectSysDepartmentDailyVo"/>
+        where daily_id = #{dailyId}
+    </select>
+
+    <insert id="insertSysDepartmentDaily" parameterType="SysDepartmentDaily" useGeneratedKeys="true"
+            keyProperty="dailyId">
+        insert into sys_department_daily
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="userId != null">user_id,</if>
+            <if test="deptId != null">dept_id,</if>
+            <if test="meetingType != null">meeting_type,</if>
+            <if test="theme != null and theme != ''">theme,</if>
+            <if test="content != null">content,</if>
+            <if test="img != null">img,</if>
+            <if test="checkIn != null">check_in,</if>
+            <if test="createTime != null">create_time,</if>
+            <if test="updateTime != null">update_time,</if>
+        </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test="userId != null">#{userId},</if>
+            <if test="deptId != null">#{deptId},</if>
+            <if test="meetingType != null">#{meetingType},</if>
+            <if test="theme != null and theme != ''">#{theme},</if>
+            <if test="content != null">#{content},</if>
+            <if test="img != null">#{img},</if>
+            <if test="checkIn != null">#{checkIn},</if>
+            <if test="createTime != null">#{createTime},</if>
+            <if test="updateTime != null">#{updateTime},</if>
+        </trim>
+    </insert>
+
+    <update id="updateSysDepartmentDaily" parameterType="SysDepartmentDaily">
+        update sys_department_daily
+        <trim prefix="SET" suffixOverrides=",">
+            <if test="userId != null">user_id = #{userId},</if>
+            <if test="deptId != null">dept_id = #{deptId},</if>
+            <if test="meetingType != null">meeting_type = #{meetingType},</if>
+            <if test="theme != null and theme != ''">theme = #{theme},</if>
+            <if test="content != null">content = #{content},</if>
+            <if test="img != null">img = #{img},</if>
+            <if test="checkIn != null">check_in = #{checkIn},</if>
+            <if test="createTime != null">create_time = #{createTime},</if>
+            <if test="updateTime != null">update_time = #{updateTime},</if>
+        </trim>
+        where daily_id = #{dailyId}
+    </update>
+
+    <delete id="deleteSysDepartmentDailyByDailyId" parameterType="Long">
+        delete
+        from sys_department_daily
+        where daily_id = #{dailyId}
+    </delete>
+
+    <delete id="deleteSysDepartmentDailyByDailyIds" parameterType="String">
+        delete from sys_department_daily where daily_id in
+        <foreach item="dailyId" collection="array" open="(" separator="," close=")">
+            #{dailyId}
+        </foreach>
+    </delete>
+</mapper>
