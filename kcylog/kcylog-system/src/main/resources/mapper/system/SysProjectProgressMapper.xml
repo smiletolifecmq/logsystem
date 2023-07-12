@@ -48,13 +48,13 @@
     <select id="selectSysProjectProgressList" parameterType="SysProjectProgress" resultMap="SysProjectProgressResult">
         <include refid="selectSysProjectProgressVo"/>
         <where>
-            <if test="itemNumber != null  and itemNumber != ''">and item_number = #{itemNumber}</if>
-            <if test="ownerUnit != null  and ownerUnit != ''">and owner_unit = #{ownerUnit}</if>
-            <if test="projectName != null  and projectName != ''">and project_name like concat('%', #{projectName},
+            <if test="itemNumber != null  and itemNumber != ''">and p.item_number = #{itemNumber}</if>
+            <if test="ownerUnit != null  and ownerUnit != ''">and p.owner_unit = #{ownerUnit}</if>
+            <if test="projectName != null  and projectName != ''">and p.project_name like concat('%', #{projectName},
                 '%')
             </if>
-            <if test="userId != null ">and user_id = #{userId}</if>
         </where>
+        order by p.progress_id desc 
     </select>
 
     <select id="selectSysProjectProgressByProgressId" parameterType="Long" resultMap="SysProjectProgressResult">
