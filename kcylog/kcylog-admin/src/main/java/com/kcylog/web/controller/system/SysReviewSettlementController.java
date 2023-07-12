@@ -113,6 +113,7 @@ public class SysReviewSettlementController extends BaseController
                 review.setStatus((long)this.PassStatus);
                 sysReviewService.setSysReviewStatusByReviewId(review);
             }
+            sysSettlementAssociateService.deleteSysSettlementAssociateBySettlementId(settlementId);
         }
         return toAjax(1);
     }

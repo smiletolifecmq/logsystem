@@ -1,7 +1,8 @@
 package com.kcylog.system.mapper;
 
-import java.util.List;
 import com.kcylog.system.domain.SysSettlementAssociate;
+
+import java.util.List;
 
 /**
  * 结算单关联Mapper接口
@@ -58,4 +59,6 @@ public interface SysSettlementAssociateMapper
      * @return 结果
      */
     public int deleteSysSettlementAssociateByAssociateIds(Long[] associateIds);
+
+    public int deleteSysSettlementAssociateBySettlementId(Long settlementId);
 }

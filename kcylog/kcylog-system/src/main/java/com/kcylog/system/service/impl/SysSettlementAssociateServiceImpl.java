@@ -90,4 +90,9 @@ public class SysSettlementAssociateServiceImpl implements ISysSettlementAssociat
     {
         return sysSettlementAssociateMapper.deleteSysSettlementAssociateByAssociateId(associateId);
     }
+
+    public int deleteSysSettlementAssociateBySettlementId(Long settlementId)
+    {
+        return sysSettlementAssociateMapper.deleteSysSettlementAssociateBySettlementId(settlementId);
+    }
 }

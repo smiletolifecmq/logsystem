@@ -59,4 +59,6 @@ public interface ISysSettlementAssociateService
      * @return 结果
      */
     public int deleteSysSettlementAssociateByAssociateId(Long associateId);
+
+    public int deleteSysSettlementAssociateBySettlementId(Long settlementId);
 }

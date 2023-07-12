@@ -58,4 +58,8 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
             #{associateId}
         </foreach>
     </delete>
+
+    <delete id="deleteSysSettlementAssociateBySettlementId" parameterType="Long">
+        delete from sys_settlement_associate where settlement_id = #{settlementId}
+    </delete>
 </mapper>

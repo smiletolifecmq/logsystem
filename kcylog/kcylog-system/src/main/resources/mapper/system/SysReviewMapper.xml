@@ -276,4 +276,19 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
         </where>
         order by review_id desc
     </select>
+
+    <sql id="selectSysReviewSettlementVo">
+        select r.*, d.dept_name, u.user_name from sys_review r
+        inner join sys_dept d on r.dept_id = d.dept_id
+        inner join sys_user u on r.user_id = u.user_id
+        inner join sys_settlement_associate a on r.review_id = a.review_id
+    </sql>
+    <select id="selectSysReviewListBySettlementId" parameterType="SysReview" resultMap="SysReviewResult">
+        <include refid="selectSysReviewSettlementVo"/>
+        <where>
+            <if test="status != null "> and r.status = #{status}</if>
+             and a.settlement_id = #{settlementId}
+        </where>
+        order by review_id desc
+    </select>
 </mapper>

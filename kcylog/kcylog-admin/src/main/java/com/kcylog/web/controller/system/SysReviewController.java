@@ -78,7 +78,7 @@ public class SysReviewController extends BaseController
     @PostMapping("/export")
     public void export(HttpServletResponse response, SysReview sysReview)
     {
-        List<SysReview> list = sysReviewService.selectSysReviewList(sysReview);
+        List<SysReview> list = sysReviewService.selectSysReviewListBySettlementId(sysReview);
         int num = 0;
         for (SysReview sysReviewTemp:list){
             num ++;

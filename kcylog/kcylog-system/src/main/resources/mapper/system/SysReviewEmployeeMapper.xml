@@ -94,7 +94,8 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 
     <select id="selectSysReviewEmployeeListJoinReview" parameterType="SysReview" resultMap="SysReviewEmployeeResult">
         select e.*, r.create_time from sys_review_employee e
-        inner join sys_review r on e.review_id = r.review_id and r.status = 2
+        inner join sys_review r on e.review_id = r.review_id and r.status = 4
+        inner join sys_settlement_associate a on r.review_id = a.review_id
         <where>
             <if test="serialNum != null  and serialNum != ''"> and r.serial_num = #{serialNum}</if>
             <if test="projectName != null  and projectName != ''"> and r.project_name like concat('%', #{projectName}, '%')</if>
@@ -106,6 +107,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
             <if test="params.endTime != null and params.endTime != ''"><!-- 结束时间检索 -->
                 AND date_format(r.create_time,'%y%m%d') &lt;= date_format(#{params.endTime},'%y%m%d')
             </if>
+            AND a.settlement_id = #{settlementId}
         </where>
     </select>
 </mapper>

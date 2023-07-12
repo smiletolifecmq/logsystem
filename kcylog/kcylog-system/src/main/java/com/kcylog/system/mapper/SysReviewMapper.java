@@ -81,4 +81,6 @@ public interface SysReviewMapper
     public int generateStatement(SysReview sysReview);
 
     public List<SysReview> settlementListReview(SysReview sysReview);
+
+    public List<SysReview> selectSysReviewListBySettlementId(SysReview sysReview);
 }

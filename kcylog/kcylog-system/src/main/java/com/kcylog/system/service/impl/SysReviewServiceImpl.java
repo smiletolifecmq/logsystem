@@ -154,4 +154,10 @@ public class SysReviewServiceImpl implements ISysReviewService
     {
         return sysReviewMapper.settlementListReview(sysReview);
     }
+
+    @Override
+    public List<SysReview> selectSysReviewListBySettlementId(SysReview sysReview)
+    {
+        return sysReviewMapper.selectSysReviewListBySettlementId(sysReview);
+    }
 }

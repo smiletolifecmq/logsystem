@@ -78,6 +78,20 @@
             @click="semploymentReview(scope.row)"
             >审核单</el-button
           >
+          <el-button
+            size="mini"
+            type="text"
+            icon="el-icon-user"
+            @click="handleEmployeeExport(scope.row)"
+            >按雇工导出</el-button
+          >
+          <el-button
+            size="mini"
+            type="text"
+            icon="el-icon-s-shop"
+            @click="handleDeptExport(scope.row)"
+            >按部门导出</el-button
+          >
         </template>
       </el-table-column>
     </el-table>
@@ -147,6 +161,7 @@ export default {
         settlementName: null,
         userName: null,
       },
+      queryParamsExport: {},
       // 表单参数
       form: {},
       // 表单校验
@@ -157,6 +172,23 @@ export default {
     this.getList();
   },
   methods: {
+    handleDeptExport(settlement) {
+      this.queryParamsExport.settlementId = settlement.settlementId;
+      this.queryParamsExport.status = 4;
+      this.download(
+        "system/review/export",
+        { ...this.queryParamsExport },
+        settlement.settlementName + `_部门_${new Date().getTime()}.xlsx`
+      );
+    },
+    handleEmployeeExport(settlement) {
+      this.queryParamsExport.settlementId = settlement.settlementId;
+      this.download(
+        "system/reviewEmployee/export",
+        { ...this.queryParamsExport },
+        settlement.settlementName + `_雇工_${new Date().getTime()}.xlsx`
+      );
+    },
     semploymentReview(row) {
       const settlementId = row.settlementId;
       this.$router.push("/system/settlement-review/list/" + settlementId);
