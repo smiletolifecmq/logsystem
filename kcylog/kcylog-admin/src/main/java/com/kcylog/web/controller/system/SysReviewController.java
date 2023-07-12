@@ -458,6 +458,7 @@ public class SysReviewController extends BaseController
         SysReviewSettlement sysReviewSettlement = new SysReviewSettlement();
         sysReviewSettlement.setSettlementName(sysReview.getSettlementName());
         sysReviewSettlement.setUserName(SecurityUtils.getUsername());
+        sysReviewSettlement.setUserId(SecurityUtils.getUserId());
         sysReviewSettlementService.insertSysReviewSettlement(sysReviewSettlement);
         //新增关联关系
         SysSettlementAssociate sysSettlementAssociate = new SysSettlementAssociate();
@@ -467,5 +468,13 @@ public class SysReviewController extends BaseController
             sysSettlementAssociateService.insertSysSettlementAssociate(sysSettlementAssociate);
         }
         return toAjax(1);
+    }
+
+    @GetMapping("/settlementListReview")
+    public TableDataInfo settlementListReview(SysReview sysReview)
+    {
+        startPage();
+        List<SysReview> list = sysReviewService.settlementListReview(sysReview);
+        return getDataTable(list);
     }
 }

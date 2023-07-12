@@ -48,6 +48,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
         <result property="userName" column="user_name"/>
     </resultMap>
 
+
     <sql id="selectSysReviewVo">
         select r.*, d.dept_name, u.user_name from sys_review r
         inner join sys_dept d on r.dept_id = d.dept_id
@@ -249,4 +250,30 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
             #{reviewId}
         </foreach>
     </update>
+
+    <sql id="selectSysReviewBySettlementVo">
+        select r.*, d.dept_name, u.user_name from sys_review r
+        inner join sys_dept d on r.dept_id = d.dept_id
+        inner join sys_user u on r.user_id = u.user_id
+        inner join sys_settlement_associate a on r.review_id = a.review_id
+    </sql>
+
+    <select id="settlementListReview" parameterType="SysReview" resultMap="SysReviewResult">
+        <include refid="selectSysReviewBySettlementVo"/>
+        and a.settlement_id = #{settlementId}
+        <where>
+            <if test="serialNum != null  and serialNum != ''"> and r.serial_num = #{serialNum}</if>
+            <if test="projectName != null  and projectName != ''"> and r.project_name like concat('%', #{projectName}, '%')</if>
+            <if test="requester != null  and requester != ''"> and r.requester = #{requester}</if>
+            <if test="status != null "> and r.status = #{status}</if>
+            <if test="deptId != null "> and r.dept_id = #{deptId}</if>
+            <if test="params.beginTime != null and params.beginTime != ''"><!-- 开始时间检索 -->
+                AND date_format(r.create_time,'%y%m%d') &gt;= date_format(#{params.beginTime},'%y%m%d')
+            </if>
+            <if test="params.endTime != null and params.endTime != ''"><!-- 结束时间检索 -->
+                AND date_format(r.create_time,'%y%m%d') &lt;= date_format(#{params.endTime},'%y%m%d')
+            </if>
+        </where>
+        order by review_id desc
+    </select>
 </mapper>

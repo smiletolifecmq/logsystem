@@ -121,3 +121,11 @@ export function setBatchEttlement(data) {
     data: data
   })
 }
+
+export function settlementListReview(query) {
+  return request({
+    url: '/system/review/settlementListReview',
+    method: 'get',
+    params: query
+  })
+}

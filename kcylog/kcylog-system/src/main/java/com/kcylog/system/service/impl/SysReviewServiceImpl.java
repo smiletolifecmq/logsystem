@@ -147,4 +147,11 @@ public class SysReviewServiceImpl implements ISysReviewService
     {
         return sysReviewMapper.generateStatement(sysReview);
     }
+
+
+    @Override
+    public List<SysReview> settlementListReview(SysReview sysReview)
+    {
+        return sysReviewMapper.settlementListReview(sysReview);
+    }
 }

@@ -26,6 +26,16 @@ public class SysReviewSettlement extends BaseEntity
     @Excel(name = "创建人")
     private String userName;
 
+    private Long userId;
+
+    public Long getUserId() {
+        return userId;
+    }
+
+    public void setUserId(Long userId) {
+        this.userId = userId;
+    }
+
     public void setSettlementId(Long settlementId) 
     {
         this.settlementId = settlementId;

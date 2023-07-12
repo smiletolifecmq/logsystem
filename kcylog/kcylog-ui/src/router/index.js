@@ -235,6 +235,21 @@ export const dynamicRoutes = [
       }
     ]
   },
+
+  {
+    path: '/system/settlement-review',
+    component: Layout,
+    hidden: true,
+    permissions: ['system:settlement:list'],
+    children: [
+      {
+        path: 'list/:settlementId(\\d+)',
+        component: () => import('@/views/system/settlement/settlementReview'),
+        name: 'SettlementReview',
+        meta: { title: '结算单包含的审核单列表', activeMenu: '/system/settlementReview' }
+      }
+    ]
+  },
 ]
 
 // 防止连续点击多次路由报错

@@ -79,4 +79,6 @@ public interface ISysReviewService
     public int updateStartEditByReviewId(SysReview sysReview);
 
     public int generateStatement(SysReview sysReview);
+
+    public List<SysReview> settlementListReview(SysReview sysReview);
 }

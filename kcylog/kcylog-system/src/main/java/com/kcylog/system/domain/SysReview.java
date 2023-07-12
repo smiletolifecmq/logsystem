@@ -103,6 +103,16 @@ public class SysReview extends BaseEntity
 
     private String settlementName;
 
+    private Long settlementId;
+
+    public Long getSettlementId() {
+        return settlementId;
+    }
+
+    public void setSettlementId(Long settlementId) {
+        this.settlementId = settlementId;
+    }
+
     public List<Long> getReviewIds() {
         return reviewIds;
     }
