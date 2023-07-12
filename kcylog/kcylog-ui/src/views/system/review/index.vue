@@ -685,7 +685,7 @@ export default {
   },
   methods: {
     showEmployeeButton(finalTime, status, finalSecondStatus) {
-      if (finalSecondStatus == 1 || status == 2) {
+      if ((finalSecondStatus == 1 || status == 2) && status != 4) {
         return true;
       }
       return false;

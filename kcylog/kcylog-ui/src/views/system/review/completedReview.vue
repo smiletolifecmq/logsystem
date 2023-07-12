@@ -73,7 +73,7 @@
       ></right-toolbar>
     </el-row> -->
     <el-row :gutter="10" class="mb8">
-      <el-col :span="1.5">
+      <!-- <el-col :span="1.5">
         <el-button
           type="warning"
           plain
@@ -93,10 +93,26 @@
           @click="handleDeptExport"
           >按部门导出</el-button
         >
+      </el-col> -->
+      <el-col :span="1.5">
+        <el-button
+          type="warning"
+          plain
+          icon="el-icon-download"
+          size="mini"
+          @click="generateStatement"
+          :disabled="multiple"
+          >生成结算办结单</el-button
+        >
       </el-col>
     </el-row>
 
-    <el-table v-loading="loading" :data="reviewList">
+    <el-table
+      v-loading="loading"
+      :data="reviewList"
+      @selection-change="handleSelectionChange"
+    >
+      <el-table-column type="selection" width="55" align="center" />
       <el-table-column label="编号" align="center" prop="serialNum">
         <template slot-scope="scope">
           <a @click="showReviewInfo(scope.row)" style="color: blue">
@@ -197,6 +213,7 @@
       :total="total"
       :page.sync="queryParams.pageNum"
       :limit.sync="queryParams.pageSize"
+      :page-sizes="[10, 20, 50, 100]"
       @pagination="getUpcomingList"
     />
     <!-- 具体流程 -->
@@ -374,6 +391,7 @@ import {
   completedListReview,
   getReviewProcessList,
   getReview,
+  setBatchEttlement,
 } from "@/api/system/review";
 import { deptTreeSelect } from "@/api/system/log";
 
@@ -412,6 +430,7 @@ export default {
       // 表单参数
       form: {},
       formInfo: {},
+      formEttlement: {},
       // 查询参数
       queryParams: {
         pageNum: 1,
@@ -428,6 +447,34 @@ export default {
     this.getDeptTree();
   },
   methods: {
+    generateStatement() {
+      const reviewIds = this.ids;
+      this.$prompt("请输入结算单名称", "提示", {
+        confirmButtonText: "确定",
+        cancelButtonText: "取消",
+        closeOnClickModal: false,
+        closeOnPressEscape: false,
+        inputPattern: /^.+$/,
+        inputErrorMessage: "请输入结算单名称",
+      })
+        .then(({ value }) => {
+          this.formEttlement.reviewIds = reviewIds;
+          this.formEttlement.settlementName = value;
+          setBatchEttlement(this.formEttlement).then((response) => {
+            if (response.code == 200) {
+              this.$modal.msgSuccess("已生成结算单");
+              this.getUpcomingList();
+            } else {
+              this.$message({
+                showClose: true,
+                message: "生成结算单失败",
+                type: "error",
+              });
+            }
+          });
+        })
+        .catch(() => {});
+    },
     handleChangeDept(value) {
       this.queryParams.deptId = value[1];
     },
@@ -523,12 +570,12 @@ export default {
       this.resetForm("queryForm");
       this.handleQuery();
     },
-    // // 多选框选中数据
-    // handleSelectionChange(selection) {
-    //   this.ids = selection.map((item) => item.reviewId);
-    //   this.single = selection.length !== 1;
-    //   this.multiple = !selection.length;
-    // },
+    // 多选框选中数据
+    handleSelectionChange(selection) {
+      this.ids = selection.map((item) => item.reviewId);
+      this.single = selection.length !== 1;
+      this.multiple = !selection.length;
+    },
 
     /** 导出按钮操作 */
     handleEmployeeExport() {
@@ -549,7 +596,7 @@ export default {
     },
 
     showReviewInfo(row) {
-      const reviewId = row.reviewId || this.ids;
+      const reviewId = row.reviewId;
       getReview(reviewId).then((response) => {
         if (response.data.startTime != null && response.data.startTime != "") {
           this.startAmPm = response.data.startTime.substring(11);

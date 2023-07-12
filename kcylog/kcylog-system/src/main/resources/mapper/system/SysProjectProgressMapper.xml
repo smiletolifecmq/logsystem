@@ -54,7 +54,7 @@
                 '%')
             </if>
         </where>
-        order by p.progress_id desc 
+        order by p.progress_id desc
     </select>
 
     <select id="selectSysProjectProgressByProgressId" parameterType="Long" resultMap="SysProjectProgressResult">

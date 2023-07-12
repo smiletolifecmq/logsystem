@@ -112,3 +112,12 @@ export function setStartEdit(reviewId) {
     method: 'put'
   })
 }
+
+// 生成结算单
+export function setBatchEttlement(data) {
+  return request({
+    url: '/system/review/set_batch_review_settlement',
+    method: 'put',
+    data: data
+  })
+}

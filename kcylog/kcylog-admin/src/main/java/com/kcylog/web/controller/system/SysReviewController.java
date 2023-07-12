@@ -443,4 +443,16 @@ public class SysReviewController extends BaseController
         sheet.setColumnWidth(4, 9000);
         return sheet;
     }
+
+    /**
+     * 修改审核是否通过
+     */
+    @Log(title = "审核单", businessType = BusinessType.UPDATE)
+    @Transactional
+    @PutMapping("/set_batch_review_settlement")
+    public AjaxResult setReviewSettlementStatus(@RequestBody SysReview sysReview)
+    {
+        sysReviewService.generateStatement(sysReview);
+        return toAjax(1);
+    }
 }

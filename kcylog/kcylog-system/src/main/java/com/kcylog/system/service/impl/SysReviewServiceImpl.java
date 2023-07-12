@@ -140,4 +140,11 @@ public class SysReviewServiceImpl implements ISysReviewService
     {
         return sysReviewMapper.updateStartEditByReviewId(sysReview);
     }
+
+
+    @Override
+    public int generateStatement(SysReview sysReview)
+    {
+        return sysReviewMapper.generateStatement(sysReview);
+    }
 }
