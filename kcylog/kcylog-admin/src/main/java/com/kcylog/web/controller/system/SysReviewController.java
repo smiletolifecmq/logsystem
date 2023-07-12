@@ -7,14 +7,8 @@ import com.kcylog.common.core.page.TableDataInfo;
 import com.kcylog.common.enums.BusinessType;
 import com.kcylog.common.utils.DateUtils;
 import com.kcylog.common.utils.SecurityUtils;
-import com.kcylog.system.domain.SysProcessConfigInfo;
-import com.kcylog.system.domain.SysReview;
-import com.kcylog.system.domain.SysReviewEmployee;
-import com.kcylog.system.domain.SysReviewProcess;
-import com.kcylog.system.service.ISysProcessConfigInfoService;
-import com.kcylog.system.service.ISysReviewEmployeeService;
-import com.kcylog.system.service.ISysReviewProcessService;
-import com.kcylog.system.service.ISysReviewService;
+import com.kcylog.system.domain.*;
+import com.kcylog.system.service.*;
 import org.apache.poi.ss.usermodel.*;
 import org.apache.poi.ss.util.CellRangeAddress;
 import org.apache.poi.ss.util.RegionUtil;
@@ -55,6 +49,12 @@ public class SysReviewController extends BaseController
 
     @Autowired
     private ISysReviewEmployeeService sysReviewEmployeeService;
+
+    @Autowired
+    private ISysReviewSettlementService sysReviewSettlementService;
+
+    @Autowired
+    private ISysSettlementAssociateService sysSettlementAssociateService;
 
     /**
      * 查询审核单列表
@@ -452,7 +452,20 @@ public class SysReviewController extends BaseController
     @PutMapping("/set_batch_review_settlement")
     public AjaxResult setReviewSettlementStatus(@RequestBody SysReview sysReview)
     {
+        //修改审核单状态
         sysReviewService.generateStatement(sysReview);
+        //生成结算单
+        SysReviewSettlement sysReviewSettlement = new SysReviewSettlement();
+        sysReviewSettlement.setSettlementName(sysReview.getSettlementName());
+        sysReviewSettlement.setUserName(SecurityUtils.getUsername());
+        sysReviewSettlementService.insertSysReviewSettlement(sysReviewSettlement);
+        //新增关联关系
+        SysSettlementAssociate sysSettlementAssociate = new SysSettlementAssociate();
+        for (Long reviewId:sysReview.getReviewIds()){
+            sysSettlementAssociate.setSettlementId(sysReviewSettlement.getSettlementId());
+            sysSettlementAssociate.setReviewId(reviewId);
+            sysSettlementAssociateService.insertSysSettlementAssociate(sysSettlementAssociate);
+        }
         return toAjax(1);
     }
 }

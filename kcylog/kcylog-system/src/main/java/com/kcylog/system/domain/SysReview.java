@@ -99,15 +99,15 @@ public class SysReview extends BaseEntity
 
     private List<SysReviewEmployee> reviewEmployee;
 
-    private List<String> reviewIds;
+    private List<Long> reviewIds;
 
     private String settlementName;
 
-    public List<String> getReviewIds() {
+    public List<Long> getReviewIds() {
         return reviewIds;
     }
 
-    public void setReviewIds(List<String> reviewIds) {
+    public void setReviewIds(List<Long> reviewIds) {
         this.reviewIds = reviewIds;
     }
 

@@ -1,0 +1,61 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.kcylog.system.mapper.SysSettlementAssociateMapper">
+    
+    <resultMap type="SysSettlementAssociate" id="SysSettlementAssociateResult">
+        <result property="associateId"    column="associate_id"    />
+        <result property="settlementId"    column="settlement_id"    />
+        <result property="reviewId"    column="review_id"    />
+    </resultMap>
+
+    <sql id="selectSysSettlementAssociateVo">
+        select associate_id, settlement_id, review_id from sys_settlement_associate
+    </sql>
+
+    <select id="selectSysSettlementAssociateList" parameterType="SysSettlementAssociate" resultMap="SysSettlementAssociateResult">
+        <include refid="selectSysSettlementAssociateVo"/>
+        <where>  
+            <if test="settlementId != null "> and settlement_id = #{settlementId}</if>
+            <if test="reviewId != null "> and review_id = #{reviewId}</if>
+        </where>
+    </select>
+    
+    <select id="selectSysSettlementAssociateByAssociateId" parameterType="Long" resultMap="SysSettlementAssociateResult">
+        <include refid="selectSysSettlementAssociateVo"/>
+        where associate_id = #{associateId}
+    </select>
+        
+    <insert id="insertSysSettlementAssociate" parameterType="SysSettlementAssociate" useGeneratedKeys="true" keyProperty="associateId">
+        insert into sys_settlement_associate
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="settlementId != null">settlement_id,</if>
+            <if test="reviewId != null">review_id,</if>
+         </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test="settlementId != null">#{settlementId},</if>
+            <if test="reviewId != null">#{reviewId},</if>
+         </trim>
+    </insert>
+
+    <update id="updateSysSettlementAssociate" parameterType="SysSettlementAssociate">
+        update sys_settlement_associate
+        <trim prefix="SET" suffixOverrides=",">
+            <if test="settlementId != null">settlement_id = #{settlementId},</if>
+            <if test="reviewId != null">review_id = #{reviewId},</if>
+        </trim>
+        where associate_id = #{associateId}
+    </update>
+
+    <delete id="deleteSysSettlementAssociateByAssociateId" parameterType="Long">
+        delete from sys_settlement_associate where associate_id = #{associateId}
+    </delete>
+
+    <delete id="deleteSysSettlementAssociateByAssociateIds" parameterType="String">
+        delete from sys_settlement_associate where associate_id in 
+        <foreach item="associateId" collection="array" open="(" separator="," close=")">
+            #{associateId}
+        </foreach>
+    </delete>
+</mapper>
