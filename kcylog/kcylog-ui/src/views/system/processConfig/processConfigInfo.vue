@@ -211,7 +211,6 @@ export default {
     selectReviewer(item) {
       this.form.userId = item.userId;
       this.form.processConfigId = this.processConfigId;
-      console.log(this.form);
     },
     createStateFilter(queryString) {
       return (state) => {

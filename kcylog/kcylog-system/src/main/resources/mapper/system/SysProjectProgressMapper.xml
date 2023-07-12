@@ -1,0 +1,144 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.kcylog.system.mapper.SysProjectProgressMapper">
+
+    <resultMap type="SysProjectProgress" id="SysProjectProgressResult">
+        <result property="progressId" column="progress_id"/>
+        <result property="itemNumber" column="item_number"/>
+        <result property="ownerUnit" column="owner_unit"/>
+        <result property="projectName" column="project_name"/>
+        <result property="userId" column="user_id"/>
+        <result property="viewPeople" column="view_people"/>
+        <result property="sharpening" column="sharpening"/>
+        <result property="bidding" column="bidding"/>
+        <result property="tender" column="tender"/>
+        <result property="contract" column="contract"/>
+        <result property="designBook" column="design_book"/>
+        <result property="jobProcess" column="job_process"/>
+        <result property="workSummary" column="work_summary"/>
+        <result property="inspectionReport" column="inspection_report"/>
+        <result property="initialTest" column="initial_test"/>
+        <result property="finalInspection" column="final_inspection"/>
+        <result property="createTime" column="create_time"/>
+        <result property="updateTime" column="update_time"/>
+        <association property="user" column="user_name" javaType="SysUser" resultMap="sysProgressUserResult"/>
+    </resultMap>
+
+    <resultMap id="sysProgressUserResult" type="SysUser">
+        <result property="userName" column="user_name"/>
+        <result property="userId" column="user_id"/>
+    </resultMap>
+
+    <sql id="selectSysProjectProgressVo">
+        select p.progress_id,
+               p.item_number,
+               p.owner_unit,
+               p.project_name,
+               p.view_people,
+               p.user_id,
+               p.create_time,
+               p.update_time,
+               u.user_name
+        from sys_project_progress p
+                 inner join sys_user u on p.user_id = u.user_id
+    </sql>
+
+    <select id="selectSysProjectProgressList" parameterType="SysProjectProgress" resultMap="SysProjectProgressResult">
+        <include refid="selectSysProjectProgressVo"/>
+        <where>
+            <if test="itemNumber != null  and itemNumber != ''">and item_number = #{itemNumber}</if>
+            <if test="ownerUnit != null  and ownerUnit != ''">and owner_unit = #{ownerUnit}</if>
+            <if test="projectName != null  and projectName != ''">and project_name like concat('%', #{projectName},
+                '%')
+            </if>
+            <if test="userId != null ">and user_id = #{userId}</if>
+        </where>
+    </select>
+
+    <select id="selectSysProjectProgressByProgressId" parameterType="Long" resultMap="SysProjectProgressResult">
+        <include refid="selectSysProjectProgressVo"/>
+        where progress_id = #{progressId}
+    </select>
+
+    <insert id="insertSysProjectProgress" parameterType="SysProjectProgress" useGeneratedKeys="true"
+            keyProperty="progressId">
+        insert into sys_project_progress
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="itemNumber != null and itemNumber != ''">item_number,</if>
+            <if test="ownerUnit != null and ownerUnit != ''">owner_unit,</if>
+            <if test="projectName != null and projectName != ''">project_name,</if>
+            <if test="userId != null">user_id,</if>
+            <if test="viewPeople != null">view_people,</if>
+            <if test="sharpening != null">sharpening,</if>
+            <if test="bidding != null">bidding,</if>
+            <if test="tender != null">tender,</if>
+            <if test="contract != null">contract,</if>
+            <if test="designBook != null">design_book,</if>
+            <if test="jobProcess != null">job_process,</if>
+            <if test="workSummary != null">work_summary,</if>
+            <if test="inspectionReport != null">inspection_report,</if>
+            <if test="initialTest != null">initial_test,</if>
+            <if test="finalInspection != null">final_inspection,</if>
+            <if test="createTime != null">create_time,</if>
+            <if test="updateTime != null">update_time,</if>
+        </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test="itemNumber != null and itemNumber != ''">#{itemNumber},</if>
+            <if test="ownerUnit != null and ownerUnit != ''">#{ownerUnit},</if>
+            <if test="projectName != null and projectName != ''">#{projectName},</if>
+            <if test="userId != null">#{userId},</if>
+            <if test="viewPeople != null">#{viewPeople},</if>
+            <if test="sharpening != null">#{sharpening},</if>
+            <if test="bidding != null">#{bidding},</if>
+            <if test="tender != null">#{tender},</if>
+            <if test="contract != null">#{contract},</if>
+            <if test="designBook != null">#{designBook},</if>
+            <if test="jobProcess != null">#{jobProcess},</if>
+            <if test="workSummary != null">#{workSummary},</if>
+            <if test="inspectionReport != null">#{inspectionReport},</if>
+            <if test="initialTest != null">#{initialTest},</if>
+            <if test="finalInspection != null">#{finalInspection},</if>
+            <if test="createTime != null">#{createTime},</if>
+            <if test="updateTime != null">#{updateTime},</if>
+        </trim>
+    </insert>
+
+    <update id="updateSysProjectProgress" parameterType="SysProjectProgress">
+        update sys_project_progress
+        <trim prefix="SET" suffixOverrides=",">
+            <if test="itemNumber != null and itemNumber != ''">item_number = #{itemNumber},</if>
+            <if test="ownerUnit != null and ownerUnit != ''">owner_unit = #{ownerUnit},</if>
+            <if test="projectName != null and projectName != ''">project_name = #{projectName},</if>
+            <if test="userId != null">user_id = #{userId},</if>
+            <if test="viewPeople != null">view_people = #{viewPeople},</if>
+            <if test="sharpening != null">sharpening = #{sharpening},</if>
+            <if test="bidding != null">bidding = #{bidding},</if>
+            <if test="tender != null">tender = #{tender},</if>
+            <if test="contract != null">contract = #{contract},</if>
+            <if test="designBook != null">design_book = #{designBook},</if>
+            <if test="jobProcess != null">job_process = #{jobProcess},</if>
+            <if test="workSummary != null">work_summary = #{workSummary},</if>
+            <if test="inspectionReport != null">inspection_report = #{inspectionReport},</if>
+            <if test="initialTest != null">initial_test = #{initialTest},</if>
+            <if test="finalInspection != null">final_inspection = #{finalInspection},</if>
+            <if test="createTime != null">create_time = #{createTime},</if>
+            <if test="updateTime != null">update_time = #{updateTime},</if>
+        </trim>
+        where progress_id = #{progressId}
+    </update>
+
+    <delete id="deleteSysProjectProgressByProgressId" parameterType="Long">
+        delete
+        from sys_project_progress
+        where progress_id = #{progressId}
+    </delete>
+
+    <delete id="deleteSysProjectProgressByProgressIds" parameterType="String">
+        delete from sys_project_progress where progress_id in
+        <foreach item="progressId" collection="array" open="(" separator="," close=")">
+            #{progressId}
+        </foreach>
+    </delete>
+</mapper>

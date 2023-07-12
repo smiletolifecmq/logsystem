@@ -48,7 +48,7 @@
                 AND date_format(d.create_time,'%y%m%d') &lt;= date_format(#{params.endTime},'%y%m%d')
             </if>
         </where>
-        order by d.dept_id desc 
+        order by d.dept_id desc
     </select>
 
     <select id="selectSysDepartmentDailyByDailyId" parameterType="Long" resultMap="SysDepartmentDailyResult">
