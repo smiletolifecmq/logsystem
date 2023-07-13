@@ -10,19 +10,26 @@
             操作：新增、修改、删除、发起审核、查看审核单流程详情、填写最终雇工信息
           </li>
           <h3>部门长职责</h3>
-          <img :src="upcomingReview" class="sidebar-logo" />
-          <img :src="doneReview" class="sidebar-logo" />
-          <img :src="passedReview" class="sidebar-logo" />
+          <img style="width: 95%" :src="upcomingReview" class="sidebar-logo" />
+          <img style="width: 95%" :src="doneReview" class="sidebar-logo" />
+          <img style="width: 95%" :src="passedReview" class="sidebar-logo" />
+          <img style="width: 95%" :src="settlement" class="sidebar-logo" />
           <li>拥有雇工审核管理模块</li>
           <div>待办审核单：查看需要审核的审核单</div>
           <div>已办理审核单：查看当前审核人已经审核的审核单</div>
-          <div>已通过审核单：查看已经通过审核流程的审核单</div>
+          <div>待结算审核单：可选取多个审核单，并生成结算单</div>
+          <div>结算办结：可查看生成的结算单，并根据雇工或者部门进行导出</div>
           <li>操作</li>
           <div>待办审核单模块：对审核单进行通过或者不通过操作</div>
           <div>已办理审核单模块：展示当前审核人已经办理好了的审核单</div>
           <div>
-            已通过审核单模块：展示已经通过审核流程的审核单，并可以按部门或者雇工进行导出审核单信息
+            待结算审核单模块：展示已经通过审核流程未结算的审核单，可选取多个审核单并生成结算单
           </div>
+          <div>结算办结模块：对结算单进行修改、删除、导出</div>
+          <h3>按雇工导出</h3>
+          <img style="width: 95%" :src="laborExport" class="sidebar-logo" />
+          <h3>按部门导出</h3>
+          <img style="width: 95%" :src="deptExport" class="sidebar-logo" />
           <h3>分管职责</h3>
           <li>拥有部门长的所有职责，在此基础上还拥有以下权限</li>
           <div>已办理审核单模块：可以对审核单开启编辑功能</div>
@@ -30,7 +37,7 @@
           <h3>总经理职责</h3>
           <li>拥有分管的所有职责，在此基础上还拥有以下权限</li>
           <div>
-            已通过审核单：只有总经理审核通过的审核单才能在这里进行展示、导出
+            待结算审核单：只有总经理审核通过的审核单才能在这里进行展示、并生成结算单
           </div>
         </blockquote>
 
@@ -46,6 +53,9 @@ import principal from "@/assets/images/principal.png";
 import upcomingReview from "@/assets/images/upcomingReview.png";
 import doneReview from "@/assets/images/doneReview.png";
 import passedReview from "@/assets/images/passedReview.png";
+import settlement from "@/assets/images/settlement.png";
+import laborExport from "@/assets/images/laborExport.png";
+import deptExport from "@/assets/images/deptExport.png";
 
 export default {
   name: "Index",
@@ -55,6 +65,9 @@ export default {
       upcomingReview: upcomingReview,
       doneReview: doneReview,
       passedReview: passedReview,
+      settlement: settlement,
+      laborExport: laborExport,
+      deptExport: deptExport,
     };
   },
   methods: {
