@@ -401,6 +401,10 @@ export default {
   },
   methods: {
     startEdit(row) {
+      if (row.status === 4) {
+        this.$message.error("无法开启编辑,该审核单已结单");
+        return;
+      }
       this.$modal
         .confirm('是否开启该审核单的编辑"')
         .then(function () {

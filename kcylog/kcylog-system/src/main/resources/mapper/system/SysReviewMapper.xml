@@ -219,7 +219,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
         </where>
         AND rp.user_id = #{userId}
         AND (rp.status = 2 OR rp.status = 3)
-        order by review_id desc
+        order by r.review_id desc
     </select>
 
     <update id="updateSysReviewFinalTime" parameterType="SysReview">
