@@ -24,7 +24,10 @@ import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 import java.io.OutputStream;
 import java.math.BigDecimal;
+import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 /**
  * 雇工实际工作内容记录Controller
@@ -65,7 +68,24 @@ public class SysReviewEmployeeController extends BaseController
     @PostMapping("/export")
     public void export(HttpServletResponse response, SysReview sysReview)
     {
-        List<SysReviewEmployee> list = sysReviewEmployeeService.selectSysReviewEmployeeListJoinReview(sysReview);
+        Map<String, Integer> keyValueMap = new HashMap<>();
+        List<SysReviewEmployee> listTemp = sysReviewEmployeeService.selectSysReviewEmployeeListJoinReview(sysReview);
+        List<SysReviewEmployee> list = new ArrayList<>();
+
+        int keyIndex = 0;
+        for (SysReviewEmployee reviewEmployee:listTemp){
+            boolean containsValue = keyValueMap.containsKey(reviewEmployee.getIdCard());
+            if (containsValue) {
+                int index =  keyValueMap.get(reviewEmployee.getIdCard());
+                list.get(index).setWorkDay(list.get(index).getWorkDay() + reviewEmployee.getWorkDay());
+                list.get(index).setCost(list.get(index).getCost().add(reviewEmployee.getCost()));
+            } else {
+                keyValueMap.put(reviewEmployee.getIdCard(), keyIndex);
+                list.add(reviewEmployee);
+                keyIndex ++;
+            }
+        }
+
         int num = 0;
         for (SysReviewEmployee reviewEmployee:list){
             num ++;
