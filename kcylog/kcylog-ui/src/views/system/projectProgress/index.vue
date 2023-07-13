@@ -105,6 +105,24 @@
             v-hasPermi="['system:progress:remove']"
             >删除</el-button
           >
+          <el-dropdown
+            size="mini"
+            @command="(command) => handleCommand(command, scope.row)"
+          >
+            <el-button size="mini" type="text" icon="el-icon-d-arrow-right"
+              >更多</el-button
+            >
+            <el-dropdown-menu slot="dropdown">
+              <el-dropdown-item
+                command="progressDetails"
+                icon="el-icon-circle-check"
+                >项目进度详情</el-dropdown-item
+              >
+              <el-dropdown-item command="handleAuthUser" icon="el-icon-user"
+                >可查看用户</el-dropdown-item
+              >
+            </el-dropdown-menu>
+          </el-dropdown>
         </template>
       </el-table-column>
     </el-table>
@@ -218,6 +236,24 @@ export default {
     this.loadAllUsers();
   },
   methods: {
+    // 更多操作触发
+    handleCommand(command, row) {
+      switch (command) {
+        case "progressDetails":
+          // console.log(12);
+          // this.handleDataScope(row);
+          break;
+        case "handleAuthUser":
+          this.handleAuthUser(row);
+          break;
+        default:
+          break;
+      }
+    },
+    handleAuthUser: function (row) {
+      const progressId = row.progressId;
+      this.$router.push("/system/progress-auth/user/" + progressId);
+    },
     querySearchUser(queryString, cb) {
       var restaurants = this.restaurants;
       var results = queryString

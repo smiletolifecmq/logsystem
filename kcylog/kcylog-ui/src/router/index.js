@@ -250,6 +250,21 @@ export const dynamicRoutes = [
       }
     ]
   },
+
+  {
+    path: '/system/progress-auth',
+    component: Layout,
+    hidden: true,
+    permissions: ['system:projectProgress:list'],
+    children: [
+      {
+        path: 'user/:progressId(\\d+)',
+        component: () => import('@/views/system/projectProgress/authUser'),
+        name: 'AuthUser',
+        meta: { title: '分配可查看用户', activeMenu: '/system/projectProgress' }
+      }
+    ]
+  }
 ]
 
 // 防止连续点击多次路由报错
