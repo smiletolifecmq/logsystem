@@ -17,6 +17,8 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 
     <resultMap id="SysReviewEmployeeReviewResult" type="SysReview">
         <result property="createTime" column="create_time"/>
+        <result property="serialNum" column="serial_num"/>
+        <result property="projectName" column="project_name"/>
     </resultMap>
 
     <sql id="selectSysReviewEmployeeVo">
@@ -93,7 +95,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
     </select>
 
     <select id="selectSysReviewEmployeeListJoinReview" parameterType="SysReview" resultMap="SysReviewEmployeeResult">
-        select e.*, r.create_time from sys_review_employee e
+        select e.*, r.create_time, r.serial_num, r.project_name from sys_review_employee e
         inner join sys_review r on e.review_id = r.review_id and r.status = 4
         inner join sys_settlement_associate a on r.review_id = a.review_id
         <where>
