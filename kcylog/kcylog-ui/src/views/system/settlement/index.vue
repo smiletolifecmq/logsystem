@@ -81,9 +81,16 @@
           <el-button
             size="mini"
             type="text"
-            icon="el-icon-user"
+            icon="el-icon-document"
             @click="handleEmployeeExport(scope.row)"
-            >按雇工导出</el-button
+            >签领表导出</el-button
+          >
+          <el-button
+            size="mini"
+            type="text"
+            icon="el-icon-document"
+            @click="handleOutsourcingExport(scope.row)"
+            >外包申请表导出</el-button
           >
           <el-button
             size="mini"
@@ -186,7 +193,16 @@ export default {
       this.download(
         "system/reviewEmployee/export",
         { ...this.queryParamsExport },
-        settlement.settlementName + `_雇工_${new Date().getTime()}.xlsx`
+        settlement.settlementName + `_劳务费签领表_${new Date().getTime()}.xlsx`
+      );
+    },
+    handleOutsourcingExport(settlement) {
+      this.queryParamsExport.settlementId = settlement.settlementId;
+      this.download(
+        "system/reviewEmployee/outsourcingExport",
+        { ...this.queryParamsExport },
+        settlement.settlementName +
+          `_劳务外包申请表_${new Date().getTime()}.xlsx`
       );
     },
     semploymentReview(row) {
