@@ -89,9 +89,10 @@ public class SysReviewEmployeeController extends BaseController
                 keyIndex ++;
             }
         }
-        serialNum = serialNum.substring(0, serialNum.lastIndexOf("、"));
-        projectName = projectName.substring(0, projectName.lastIndexOf("、"));
-
+        if (serialNum != ""){
+            serialNum = serialNum.substring(0, serialNum.lastIndexOf("、"));
+            projectName = projectName.substring(0, projectName.lastIndexOf("、"));
+        }
         int num = 0;
         for (SysReviewEmployee reviewEmployee:list){
             num ++;
@@ -526,8 +527,10 @@ public class SysReviewEmployeeController extends BaseController
                 keyIndex ++;
             }
         }
-        serialNum = serialNum.substring(0, serialNum.lastIndexOf("、"));
-        projectName = projectName.substring(0, projectName.lastIndexOf("、"));
+        if (serialNum != ""){
+            serialNum = serialNum.substring(0, serialNum.lastIndexOf("、"));
+            projectName = projectName.substring(0, projectName.lastIndexOf("、"));
+        }
 
         int num = 0;
         for (SysReviewEmployee reviewEmployee:list){
@@ -664,9 +667,9 @@ public class SysReviewEmployeeController extends BaseController
         RegionUtil.setBorderLeft(BorderStyle.THIN, new CellRangeAddress(4, 4, 0, 10), sheet);
         RegionUtil.setLeftBorderColor(IndexedColors.BLACK.getIndex(), new CellRangeAddress(4, 4, 0, 10), sheet);
 
-        String workInfo = "";
+        String workInfo = "姓名、总天数：";
         for (SysReviewEmployee sysReviewEmployee : list) {
-            workInfo = workInfo + sysReviewEmployee.getName() + "，总共" + sysReviewEmployee.getCost() + "天、";
+            workInfo = workInfo + sysReviewEmployee.getName() + "，总共" + sysReviewEmployee.getWorkDay() + "天、";
         }
         workInfo = workInfo.substring(0, workInfo.lastIndexOf("、"));
 
