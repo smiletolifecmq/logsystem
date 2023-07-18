@@ -693,7 +693,9 @@ export default {
     finalEmploymentInfo(row) {
       const reviewId = row.reviewId;
       this.openInfo = false;
-      this.$router.push("/system/review-employee/edit/" + reviewId);
+      this.$router.push(
+        "/system/review-employee/edit/" + reviewId + "/" + row.finalHire
+      );
     },
     filterTime(timeString) {
       if (timeString != "" && timeString != null) {

@@ -183,7 +183,7 @@ export const dynamicRoutes = [
     permissions: ['system:review:list'],
     children: [
       {
-        path: 'edit/:reviewId(\\d+)',
+        path: 'edit/:reviewId(\\d+)/:finalHire(\\d+)',
         component: () => import('@/views/system/review/reviewEmployee'),
         name: 'ReviewEmployee',
         meta: { title: '填写最终雇佣信息', activeMenu: '/system/reviewEmployee' }

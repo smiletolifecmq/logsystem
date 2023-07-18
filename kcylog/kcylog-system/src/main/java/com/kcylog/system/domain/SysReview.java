@@ -95,6 +95,8 @@ public class SysReview extends BaseEntity
 
     private int finalSecondStatus;
 
+    private int finalHire;
+
     private int startEdit;
 
     private List<SysReviewEmployee> reviewEmployee;
@@ -104,6 +106,14 @@ public class SysReview extends BaseEntity
     private String settlementName;
 
     private Long settlementId;
+
+    public int getFinalHire() {
+        return finalHire;
+    }
+
+    public void setFinalHire(int finalHire) {
+        this.finalHire = finalHire;
+    }
 
     public Long getSettlementId() {
         return settlementId;

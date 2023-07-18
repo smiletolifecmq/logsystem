@@ -23,6 +23,18 @@
         >
       </el-col>
 
+      <el-col :span="1.5">
+        <el-button
+          type="success"
+          plain
+          icon="el-icon-plus"
+          size="mini"
+          v-if="finalHireShow"
+          @click="confirmEmployeeInfo"
+          >确认最终雇工信息并发起审核</el-button
+        >
+      </el-col>
+
       <right-toolbar
         :showSearch.sync="showSearch"
         @queryTable="getList"
@@ -203,6 +215,7 @@ import {
   updateEmployee,
 } from "@/api/system/reviewEmployee";
 import { listReviewEmployee, addReviewEmployee } from "@/api/system/employee";
+import { getReview } from "@/api/system/review";
 
 export default {
   name: "Employee",
@@ -253,6 +266,7 @@ export default {
         reviewId: null,
       },
       workTimeStamp: [],
+      finalHireShow: false,
       // 表单参数
       form: {},
       // 表单校验
@@ -277,6 +291,11 @@ export default {
   },
   created() {
     this.reviewId = this.$route.params && this.$route.params.reviewId;
+    getReview(this.reviewId).then((response) => {
+      if (response.data.finalHire === 0) {
+        this.finalHireShow = true;
+      }
+    });
     this.getList();
     this.getEmployeeList();
   },
@@ -508,6 +527,19 @@ export default {
           }
         }
       });
+    },
+    confirmEmployeeInfo() {
+      this.$modal
+        .confirm("是否确认发起审核，一旦确认将不可修改该审核单的雇工信息～")
+        .then(function () {
+          // return delEmployee(reviewEmployeeIds);
+        })
+        .then(() => {
+          this.finalHireShow = false;
+          this.getList();
+          this.$modal.msgSuccess("提交成功～");
+        })
+        .catch(() => {});
     },
     /** 删除按钮操作 */
     handleDelete(row) {
