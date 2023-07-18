@@ -83,4 +83,6 @@ public interface SysReviewMapper
     public List<SysReview> settlementListReview(SysReview sysReview);
 
     public List<SysReview> selectSysReviewListBySettlementId(SysReview sysReview);
+
+    public int updateFinalHireByReviewId(Long reviewId);
 }

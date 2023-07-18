@@ -151,4 +151,16 @@ public class SysReviewProcessServiceImpl implements ISysReviewProcessService
     {
         return sysReviewProcessMapper.setStatusNotStartByReviewId(reviewId);
     }
+
+    @Override
+    public int updateStatusByUserIdReviewId(Long reviewId)
+    {
+        return sysReviewProcessMapper.updateStatusByUserIdReviewId(reviewId);
+    }
+
+    @Override
+    public int reSetStatusByReviewProcessId(Long reviewProcessId)
+    {
+        return sysReviewProcessMapper.reSetStatusByReviewProcessId(reviewProcessId);
+    }
 }

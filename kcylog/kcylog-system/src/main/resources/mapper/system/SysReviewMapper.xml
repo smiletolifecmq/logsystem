@@ -163,7 +163,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
         update sys_review
         <trim prefix="SET" suffixOverrides=",">
             <if test="status != null and status != ''">status = #{status},</if>
-            <if test="status != null and status != '' and status == 3">final_second_status = 0,</if>
+            <if test="status != null and status != '' and status == 3">final_second_status = 0, final_hire = 0</if>
         </trim>
         where review_id = #{reviewId}
     </update>
@@ -295,4 +295,10 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
         </where>
         order by review_id desc
     </select>
+
+    <update id="updateFinalHireByReviewId" parameterType="Long">
+        update sys_review
+        set final_hire = 1
+        where review_id = #{reviewId}
+    </update>
 </mapper>

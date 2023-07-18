@@ -283,7 +283,7 @@ public class SysReviewController extends BaseController
                 //审核单通过
                 review.setStatus((long)this.PassStatus);
                 sysReviewService.setSysReviewStatusByReviewId(review);
-            } else if (passNum == list.size() - 1) {
+            } else if (passNum == list.size() - 2) {
                 //审核到终审的前一个
                 review.setFinalSecondStatus(1);
                 sysReviewService.setSysReviewFinalSecondStatusByReviewId(review);
@@ -356,7 +356,7 @@ public class SysReviewController extends BaseController
                 //审核单通过
                 review.setStatus((long)this.PassStatus);
                 sysReviewService.setSysReviewStatusByReviewId(review);
-            } else if (passNum == list.size() - 1) {
+            } else if (passNum == list.size() - 2) {
                 //审核到终审的前一个
                 review.setFinalSecondStatus(1);
                 sysReviewService.setSysReviewFinalSecondStatusByReviewId(review);

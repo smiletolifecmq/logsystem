@@ -8,10 +8,7 @@ import com.kcylog.common.enums.BusinessType;
 import com.kcylog.common.exception.ServiceException;
 import com.kcylog.common.utils.DateUtils;
 import com.kcylog.system.domain.*;
-import com.kcylog.system.service.ISysEmployeeService;
-import com.kcylog.system.service.ISysEmployeeWorktimeService;
-import com.kcylog.system.service.ISysReviewEmployeeService;
-import com.kcylog.system.service.ISysReviewService;
+import com.kcylog.system.service.*;
 import org.apache.poi.ss.usermodel.*;
 import org.apache.poi.ss.util.CellRangeAddress;
 import org.apache.poi.ss.util.RegionUtil;
@@ -50,6 +47,9 @@ public class SysReviewEmployeeController extends BaseController
 
     @Autowired
     private ISysEmployeeService sysEmployeeService;
+
+    @Autowired
+    private ISysReviewProcessService sysReviewProcessService;
     /**
      * 查询雇工实际工作内容记录列表
      */
@@ -755,5 +755,24 @@ public class SysReviewEmployeeController extends BaseController
         } catch (IOException e) {
             e.printStackTrace();
         }
+    }
+
+
+    @Log(title = "审核单", businessType = BusinessType.UPDATE)
+    @Transactional
+    @PutMapping("/confirm_employee_info/{reviewId}")
+    public AjaxResult confirmEmployeeInfo(@PathVariable Long reviewId)
+    {
+        //修改是否填写雇工信息
+        sysReviewService.updateFinalHireByReviewId(reviewId);
+        //修改填写雇工审核状态
+        sysReviewProcessService.updateStatusByUserIdReviewId(reviewId);
+        //重新开启审核
+        SysReviewProcess sysReviewProcess = new SysReviewProcess();
+        sysReviewProcess.setReviewId(reviewId);
+        List<SysReviewProcess> list = sysReviewProcessService.selectSysReviewProcessList(sysReviewProcess);
+        Long reviewProcessId = list.get(list.size()-3).getReviewProcessId();
+        sysReviewProcessService.reSetStatusByReviewProcessId(reviewProcessId);
+        return toAjax(1);
     }
 }

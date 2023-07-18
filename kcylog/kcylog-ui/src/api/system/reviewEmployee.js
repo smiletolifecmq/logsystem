@@ -42,3 +42,11 @@ export function delEmployee(reviewEmployeeId) {
     method: 'delete'
   })
 }
+
+export function confirmEmployee(reviewId) {
+  console.log(reviewId)
+  return request({
+    url: '/system/reviewEmployee/confirm_employee_info/' + reviewId,
+    method: 'put'
+  })
+}

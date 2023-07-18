@@ -224,9 +224,19 @@
           <el-step
             v-for="reviewProcess in reviewProcessList"
             :key="reviewProcess.id"
-            :title="reviewProcess.user.userName"
+            :title="
+              reviewProcess.userId === 1 &&
+              (reviewProcess.status != 2 || reviewProcess.status != 4)
+                ? '填写最终雇工信息中～'
+                : reviewProcess.user.userName
+            "
             :status="reviewProcessStatus(reviewProcess)"
-            :description="reviewProcessDescription(reviewProcess)"
+            :description="
+              reviewProcess.userId === 1 && reviewProcess.status === 2
+                ? ''
+                : reviewProcessDescription(reviewProcess)
+            "
+            v-if="!(reviewProcess.userId === 1 && reviewProcess.status === 2)"
           ></el-step>
         </el-steps>
       </div>

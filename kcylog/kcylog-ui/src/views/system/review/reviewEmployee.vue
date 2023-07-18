@@ -213,6 +213,7 @@ import {
   delEmployee,
   addEmployee,
   updateEmployee,
+  confirmEmployee,
 } from "@/api/system/reviewEmployee";
 import { listReviewEmployee, addReviewEmployee } from "@/api/system/employee";
 import { getReview } from "@/api/system/review";
@@ -528,11 +529,17 @@ export default {
         }
       });
     },
+    /** 删除按钮操作 */
     confirmEmployeeInfo() {
+      if (this.employeeList.length == 0) {
+        this.$modal.msgError("提交失败,请填写实际的雇工信息～");
+        return;
+      }
+      const reviewId = this.reviewId;
       this.$modal
         .confirm("是否确认发起审核，一旦确认将不可修改该审核单的雇工信息～")
         .then(function () {
-          // return delEmployee(reviewEmployeeIds);
+          return confirmEmployee(reviewId);
         })
         .then(() => {
           this.finalHireShow = false;

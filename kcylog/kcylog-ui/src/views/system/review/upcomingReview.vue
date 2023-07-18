@@ -177,6 +177,13 @@
             @click="handleReviewProcess(scope.row)"
             >流程详情</el-button
           >
+          <el-button
+            size="mini"
+            type="text"
+            icon="el-icon-user-solid"
+            @click="finalEmploymentInfo(scope.row)"
+            >最终雇工信息</el-button
+          >
         </template>
       </el-table-column>
     </el-table>
@@ -196,9 +203,19 @@
           <el-step
             v-for="reviewProcess in reviewProcessList"
             :key="reviewProcess.id"
-            :title="reviewProcess.user.userName"
+            :title="
+              reviewProcess.userId === 1 &&
+              (reviewProcess.status != 2 || reviewProcess.status != 4)
+                ? '填写最终雇工信息中～'
+                : reviewProcess.user.userName
+            "
             :status="reviewProcessStatus(reviewProcess)"
-            :description="reviewProcessDescription(reviewProcess)"
+            :description="
+              reviewProcess.userId === 1 && reviewProcess.status === 2
+                ? ''
+                : reviewProcessDescription(reviewProcess)
+            "
+            v-if="!(reviewProcess.userId === 1 && reviewProcess.status === 2)"
           ></el-step>
         </el-steps>
       </div>
@@ -413,6 +430,10 @@ export default {
     this.getUpcomingList();
   },
   methods: {
+    finalEmploymentInfo(row) {
+      const reviewId = row.reviewId;
+      this.$router.push("/system/review-employee/info/" + reviewId);
+    },
     batchReviewPass() {
       const reviewIds = this.ids;
 

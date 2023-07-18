@@ -160,4 +160,10 @@ public class SysReviewServiceImpl implements ISysReviewService
     {
         return sysReviewMapper.selectSysReviewListBySettlementId(sysReview);
     }
+
+    @Override
+    public int updateFinalHireByReviewId(Long reviewId)
+    {
+        return sysReviewMapper.updateFinalHireByReviewId(reviewId);
+    }
 }

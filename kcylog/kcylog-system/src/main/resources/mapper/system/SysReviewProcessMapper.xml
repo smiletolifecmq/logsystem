@@ -138,4 +138,16 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
     <update id="setStatusNotStartByReviewId" parameterType="Long">
         UPDATE sys_review_process set status = 0, review_time = NULL where review_id = #{reviewId}
     </update>
+
+    <update id="updateStatusByUserIdReviewId" parameterType="Long">
+        update sys_review_process
+        set status = 2
+        where review_id = #{reviewId} and user_id = 1
+    </update>
+
+    <update id="reSetStatusByReviewProcessId" parameterType="Long">
+        update sys_review_process
+        set status = 1
+        where review_process_id = #{reviewProcessId}
+    </update>
 </mapper>

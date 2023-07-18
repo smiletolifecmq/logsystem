@@ -95,4 +95,8 @@ public interface SysReviewProcessMapper
     public int setNextStatusByReviewId(Long reviewId);
 
     public int setStatusNotStartByReviewId(Long reviewId);
+
+    public int updateStatusByUserIdReviewId(Long reviewId);
+
+    public int reSetStatusByReviewProcessId(Long reviewProcessId);
 }
