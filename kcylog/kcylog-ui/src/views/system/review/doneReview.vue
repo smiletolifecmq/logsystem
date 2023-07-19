@@ -427,7 +427,7 @@ export default {
         return;
       }
       this.$modal
-        .confirm('是否开启该审核单的编辑"')
+        .confirm("是否开启该审核单的编辑")
         .then(function () {
           return setStartEdit(row.reviewId);
         })
