@@ -59,4 +59,6 @@ public interface ISysReviewSettlementService
      * @return 结果
      */
     public int deleteSysReviewSettlementBySettlementId(Long settlementId);
+
+    public int updateIsSettlementBySettlementId(Long settlementId);
 }

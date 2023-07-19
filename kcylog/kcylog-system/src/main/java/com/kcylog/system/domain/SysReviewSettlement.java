@@ -28,6 +28,16 @@ public class SysReviewSettlement extends BaseEntity
 
     private Long userId;
 
+    private Long isSettlement;
+
+    public Long getIsSettlement() {
+        return isSettlement;
+    }
+
+    public void setIsSettlement(Long isSettlement) {
+        this.isSettlement = isSettlement;
+    }
+
     public Long getUserId() {
         return userId;
     }

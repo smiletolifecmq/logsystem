@@ -9,12 +9,13 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
         <result property="settlementName"    column="settlement_name"    />
         <result property="userName"    column="user_name"    />
         <result property="userId"    column="user_id"    />
+        <result property="isSettlement"    column="is_settlement"    />
         <result property="createTime"    column="create_time"    />
         <result property="updateTime"    column="update_time"    />
     </resultMap>
 
     <sql id="selectSysReviewSettlementVo">
-        select settlement_id, settlement_name, user_name, user_id, create_time, update_time from sys_review_settlement
+        select settlement_id, settlement_name, user_name, user_id, is_settlement, create_time, update_time from sys_review_settlement
     </sql>
 
     <select id="selectSysReviewSettlementList" parameterType="SysReviewSettlement" resultMap="SysReviewSettlementResult">
@@ -22,6 +23,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
         <where>  
             <if test="settlementName != null  and settlementName != ''"> and settlement_name like concat('%', #{settlementName}, '%')</if>
             <if test="userName != null  and userName != ''"> and user_name like concat('%', #{userName}, '%')</if>
+            <if test="isSettlement != null"> and is_settlement = #{isSettlement}</if>
         </where>
         order by settlement_id desc
     </select>
@@ -37,6 +39,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
             <if test="settlementName != null and settlementName != ''">settlement_name,</if>
             <if test="userName != null and userName != ''">user_name,</if>
             <if test="userId != null and userId != ''">user_id,</if>
+            <if test="isSettlement != null and isSettlement != ''">is_settlement,</if>
             <if test="createTime != null">create_time,</if>
             <if test="updateTime != null">update_time,</if>
          </trim>
@@ -44,6 +47,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
             <if test="settlementName != null and settlementName != ''">#{settlementName},</if>
             <if test="userName != null and userName != ''">#{userName},</if>
             <if test="userId != null and userId != ''">#{userId},</if>
+            <if test="isSettlement != null and isSettlement != ''">#{isSettlement},</if>
             <if test="createTime != null">#{createTime},</if>
             <if test="updateTime != null">#{updateTime},</if>
          </trim>
@@ -55,6 +59,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
             <if test="settlementName != null and settlementName != ''">settlement_name = #{settlementName},</if>
             <if test="userName != null and userName != ''">user_name = #{userName},</if>
             <if test="userId != null and userId != ''">user_id = #{userId},</if>
+            <if test="isSettlement != null and isSettlement != ''">is_settlement = #{isSettlement},</if>
             <if test="createTime != null">create_time = #{createTime},</if>
             <if test="updateTime != null">update_time = #{updateTime},</if>
         </trim>
@@ -71,4 +76,10 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
             #{settlementId}
         </foreach>
     </delete>
+
+    <update id="updateIsSettlementBySettlementId" parameterType="Long">
+        update sys_review_settlement
+        set is_settlement = 1
+        where settlement_id = #{settlementId}
+    </update>
 </mapper>

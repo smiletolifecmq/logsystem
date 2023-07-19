@@ -65,7 +65,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
             <if test="status != null "> and r.status = #{status}</if>
             <if test="userId != null  and userId != ''"> and r.user_id = #{userId}</if>
             <if test="deptId != null  and deptId != ''"> and r.dept_id = #{deptId}</if>
-
+            <if test="finalHire != null"> and r.final_hire = #{finalHire}</if>
             <if test="params.beginTime != null and params.beginTime != ''"><!-- 开始时间检索 -->
                 AND date_format(r.create_time,'%y%m%d') &gt;= date_format(#{params.beginTime},'%y%m%d')
             </if>

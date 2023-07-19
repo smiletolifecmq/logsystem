@@ -1,7 +1,8 @@
 package com.kcylog.system.mapper;
 
-import java.util.List;
 import com.kcylog.system.domain.SysReviewSettlement;
+
+import java.util.List;
 
 /**
  * 结算单Mapper接口
@@ -58,4 +59,6 @@ public interface SysReviewSettlementMapper
      * @return 结果
      */
     public int deleteSysReviewSettlementBySettlementIds(Long[] settlementIds);
+
+    public int updateIsSettlementBySettlementId(Long settlementId);
 }

@@ -42,3 +42,11 @@ export function delSettlement(settlementId) {
     method: 'delete'
   })
 }
+
+// 确认结算单
+export function confirmSettlement(settlementId) {
+  return request({
+    url: '/system/settlement/confirm_settlement/' + settlementId,
+    method: 'put'
+  })
+}

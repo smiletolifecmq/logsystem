@@ -183,7 +183,7 @@
         <el-steps direction="vertical" :active="reviewProcessActive">
           <el-step
             v-for="reviewProcess in reviewProcessList"
-            :key="reviewProcess.id"
+            :key="reviewProcess.reviewProcessId"
             :title="
               reviewProcess.userId === 1 &&
               (reviewProcess.status != 2 || reviewProcess.status != 4)

@@ -47,6 +47,21 @@
           </el-option>
         </el-select>
       </el-form-item>
+      <el-form-item label="雇工提交" prop="finalHire">
+        <el-select
+          v-model="finalHireValue"
+          placeholder="请选择"
+          @change="handleQuery"
+        >
+          <el-option
+            v-for="item in finalHireArr"
+            :key="item.value"
+            :label="item.label"
+            :value="item.value"
+          >
+          </el-option>
+        </el-select>
+      </el-form-item>
       <el-form-item label="创建时间">
         <el-date-picker
           v-model="dateRange"
@@ -242,7 +257,7 @@
         <el-steps direction="vertical" :active="reviewProcessActive">
           <el-step
             v-for="reviewProcess in reviewProcessList"
-            :key="reviewProcess.id"
+            :key="reviewProcess.reviewProcessId"
             :title="
               reviewProcess.userId === 1 &&
               (reviewProcess.status != 2 || reviewProcess.status != 4)
@@ -606,7 +621,18 @@ export default {
           label: "未通过",
         },
       ],
+      finalHireArr: [
+        {
+          value: 0,
+          label: "否",
+        },
+        {
+          value: 1,
+          label: "是",
+        },
+      ],
       statusVaule: "",
+      finalHireValue: "",
       // 日期范围
       dateRange: [],
       // 遮罩层
@@ -854,11 +880,15 @@ export default {
       if (this.statusVaule !== "") {
         this.queryParams.status = this.statusVaule;
       }
+      if (this.finalHireValue !== "") {
+        this.queryParams.finalHire = this.finalHireValue;
+      }
       this.getList();
     },
     /** 重置按钮操作 */
     resetQuery() {
       this.statusVaule = "";
+      this.finalHireValue = "";
       this.dateRange = [];
       this.resetForm("queryForm");
       this.handleQuery();

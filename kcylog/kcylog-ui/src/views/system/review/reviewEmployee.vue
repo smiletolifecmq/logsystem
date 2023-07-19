@@ -7,6 +7,7 @@
           plain
           icon="el-icon-plus"
           size="mini"
+          v-if="addShow"
           @click="handleAdd"
           >新增雇佣信息</el-button
         >
@@ -55,6 +56,7 @@
         label="操作"
         align="center"
         class-name="small-padding fixed-width"
+        v-if="editShow"
       >
         <template slot-scope="scope">
           <el-button
@@ -267,7 +269,9 @@ export default {
         reviewId: null,
       },
       workTimeStamp: [],
+      addShow: false,
       finalHireShow: false,
+      editShow: false,
       // 表单参数
       form: {},
       // 表单校验
@@ -295,6 +299,8 @@ export default {
     getReview(this.reviewId).then((response) => {
       if (response.data.finalHire === 0) {
         this.finalHireShow = true;
+        this.addShow = true;
+        this.editShow = true;
       }
     });
     this.getList();
@@ -529,7 +535,6 @@ export default {
         }
       });
     },
-    /** 删除按钮操作 */
     confirmEmployeeInfo() {
       if (this.employeeList.length == 0) {
         this.$modal.msgError("提交失败,请填写实际的雇工信息～");
@@ -543,6 +548,8 @@ export default {
         })
         .then(() => {
           this.finalHireShow = false;
+          this.addShow = false;
+          this.editShow = false;
           this.getList();
           this.$modal.msgSuccess("提交成功～");
         })

@@ -94,4 +94,10 @@ public class SysReviewSettlementServiceImpl implements ISysReviewSettlementServi
     {
         return sysReviewSettlementMapper.deleteSysReviewSettlementBySettlementId(settlementId);
     }
+
+    @Override
+    public int updateIsSettlementBySettlementId(Long settlementId)
+    {
+        return sysReviewSettlementMapper.updateIsSettlementBySettlementId(settlementId);
+    }
 }

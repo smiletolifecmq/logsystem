@@ -16,6 +16,21 @@
           @keyup.enter.native="handleQuery"
         />
       </el-form-item>
+      <el-form-item label="结算状态" prop="isSettlement">
+        <el-select
+          v-model="isSettlementVaule"
+          placeholder="请选择"
+          @change="handleQuery"
+        >
+          <el-option
+            v-for="item in isSettlementArr"
+            :key="item.value"
+            :label="item.label"
+            :value="item.value"
+          >
+          </el-option>
+        </el-select>
+      </el-form-item>
       <el-form-item label="创建人" prop="userName">
         <el-input
           v-model="queryParams.userName"
@@ -50,6 +65,19 @@
       />
       <el-table-column label="创建人" align="center" prop="userName" />
       <el-table-column
+        label="是否已确认结算"
+        align="center"
+        prop="isSettlement"
+      >
+        <template slot-scope="scope">
+          <span v-if="scope.row.isSettlement === 0" style="color: red">否</span>
+          <span v-else-if="scope.row.isSettlement === 1" style="color: blue"
+            >是</span
+          >
+          <span v-else>其他状态</span>
+        </template>
+      </el-table-column>
+      <el-table-column
         label="操作"
         align="center"
         class-name="small-padding fixed-width"
@@ -60,7 +88,7 @@
             type="text"
             icon="el-icon-edit"
             @click="handleUpdate(scope.row)"
-            v-if="showButton(scope.row.userId)"
+            v-if="showButton(scope.row)"
             >修改</el-button
           >
           <el-button
@@ -68,8 +96,8 @@
             type="text"
             icon="el-icon-delete"
             @click="handleDelete(scope.row)"
-            v-if="showButton(scope.row.userId)"
-            >删除</el-button
+            v-if="showButton(scope.row)"
+            >回退上一流程</el-button
           >
           <el-button
             size="mini"
@@ -98,6 +126,15 @@
             icon="el-icon-s-shop"
             @click="handleDeptExport(scope.row)"
             >按部门导出</el-button
+          >
+
+          <el-button
+            size="mini"
+            type="text"
+            icon="el-icon-success"
+            v-if="showButton(scope.row)"
+            @click="confirmSettlementInfo(scope.row)"
+            >确认结算办结</el-button
           >
         </template>
       </el-table-column>
@@ -136,6 +173,7 @@ import {
   delSettlement,
   addSettlement,
   updateSettlement,
+  confirmSettlement,
 } from "@/api/system/settlement";
 import userInfo from "@/store/modules/user";
 
@@ -143,8 +181,19 @@ export default {
   name: "Settlement",
   data() {
     return {
+      isSettlementArr: [
+        {
+          value: 0,
+          label: "否",
+        },
+        {
+          value: 1,
+          label: "是",
+        },
+      ],
       // 遮罩层
       loading: true,
+      isSettlementVaule: "",
       // 选中数组
       ids: [],
       // 非单个禁用
@@ -179,6 +228,19 @@ export default {
     this.getList();
   },
   methods: {
+    confirmSettlementInfo(row) {
+      const settlementId = row.settlementId;
+      this.$modal
+        .confirm("是否确认，一旦确认将不可修改和回退上一流程～")
+        .then(function () {
+          return confirmSettlement(settlementId);
+        })
+        .then(() => {
+          this.getList();
+          this.$modal.msgSuccess("提交成功～");
+        })
+        .catch(() => {});
+    },
     handleDeptExport(settlement) {
       this.queryParamsExport.settlementId = settlement.settlementId;
       this.queryParamsExport.status = 4;
@@ -209,8 +271,8 @@ export default {
       const settlementId = row.settlementId;
       this.$router.push("/system/settlement-review/list/" + settlementId);
     },
-    showButton(userId) {
-      return userId == userInfo.state.userId;
+    showButton(row) {
+      return row.userId == userInfo.state.userId && row.isSettlement === 0;
     },
     /** 查询结算单列表 */
     getList() {
@@ -240,10 +302,14 @@ export default {
     /** 搜索按钮操作 */
     handleQuery() {
       this.queryParams.pageNum = 1;
+      if (this.isSettlementVaule !== "") {
+        this.queryParams.isSettlement = this.isSettlementVaule;
+      }
       this.getList();
     },
     /** 重置按钮操作 */
     resetQuery() {
+      this.isSettlementVaule = "";
       this.resetForm("queryForm");
       this.handleQuery();
     },

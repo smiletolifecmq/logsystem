@@ -117,4 +117,12 @@ public class SysReviewSettlementController extends BaseController
         }
         return toAjax(1);
     }
+
+    @Log(title = "结算单", businessType = BusinessType.UPDATE)
+    @Transactional
+    @PutMapping("/confirm_settlement/{settlementId}")
+    public AjaxResult confirmSettlement(@PathVariable Long settlementId)
+    {
+        return toAjax(sysReviewSettlementService.updateIsSettlementBySettlementId(settlementId));
+    }
 }
