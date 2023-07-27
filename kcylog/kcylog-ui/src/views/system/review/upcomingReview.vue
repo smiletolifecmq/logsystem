@@ -227,6 +227,7 @@
       :visible.sync="openInfo"
       width="600px"
       append-to-body
+      v-el-drag-dialog
       :close-on-click-modal="false"
       :close-on-press-escape="false"
     >
@@ -383,9 +384,13 @@ import {
   getReview,
   setBatchReviewPass,
 } from "@/api/system/review";
+import elDragDialog from "@/api/components/el-drag";
 
 export default {
   name: "Review",
+  directives: {
+    elDragDialog,
+  },
   data() {
     return {
       openInfo: false,

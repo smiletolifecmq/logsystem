@@ -210,6 +210,7 @@
       append-to-body
       :close-on-click-modal="false"
       :close-on-press-escape="false"
+      v-el-drag-dialog
     >
       <el-form ref="formInfo" :model="formInfo" label-width="80px">
         <el-form-item label="编号" prop="serialNum">
@@ -364,9 +365,13 @@ import {
   setStartEdit,
 } from "@/api/system/review";
 import userInfo from "@/store/modules/user";
+import elDragDialog from "@/api/components/el-drag";
 
 export default {
   name: "Review",
+  directives: {
+    elDragDialog,
+  },
   data() {
     return {
       showStartEdit: false,
