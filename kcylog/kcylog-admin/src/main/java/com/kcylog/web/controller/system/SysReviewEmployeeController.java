@@ -69,6 +69,7 @@ public class SysReviewEmployeeController extends BaseController
     public void export(HttpServletResponse response, SysReview sysReview)
     {
         Map<String, Integer> keyValueMap = new HashMap<>();
+        Map<String, Integer> serialNumMap = new HashMap<>();
         List<SysReviewEmployee> listTemp = sysReviewEmployeeService.selectSysReviewEmployeeListJoinReview(sysReview);
         List<SysReviewEmployee> list = new ArrayList<>();
 
@@ -76,8 +77,12 @@ public class SysReviewEmployeeController extends BaseController
         String serialNum = "";
         String projectName = "";
         for (SysReviewEmployee reviewEmployee:listTemp){
-            serialNum = serialNum + reviewEmployee.getReview().getSerialNum() + "、";
-            projectName = projectName + reviewEmployee.getReview().getProjectName() + "、";
+            boolean serialNumValue = serialNumMap.containsKey(reviewEmployee.getReview().getSerialNum());
+            if (!serialNumValue) {
+                serialNum = serialNum + reviewEmployee.getReview().getSerialNum() + "、";
+                projectName = projectName + reviewEmployee.getReview().getProjectName() + "、";
+                serialNumMap.put(reviewEmployee.getReview().getSerialNum(),1);
+            }
             boolean containsValue = keyValueMap.containsKey(reviewEmployee.getIdCard());
             if (containsValue) {
                 int index =  keyValueMap.get(reviewEmployee.getIdCard());
@@ -507,6 +512,8 @@ public class SysReviewEmployeeController extends BaseController
     public void outsourcingExport(HttpServletResponse response, SysReview sysReview)
     {
         Map<String, Integer> keyValueMap = new HashMap<>();
+        Map<String, Integer> serialNumMap = new HashMap<>();
+
         List<SysReviewEmployee> listTemp = sysReviewEmployeeService.selectSysReviewEmployeeListJoinReview(sysReview);
         List<SysReviewEmployee> list = new ArrayList<>();
 
@@ -514,8 +521,12 @@ public class SysReviewEmployeeController extends BaseController
         String serialNum = "";
         String projectName = "";
         for (SysReviewEmployee reviewEmployee:listTemp){
-            serialNum = serialNum + reviewEmployee.getReview().getSerialNum() + "、";
-            projectName = projectName + reviewEmployee.getReview().getProjectName() + "、";
+            boolean serialNumValue = serialNumMap.containsKey(reviewEmployee.getReview().getSerialNum());
+            if (!serialNumValue) {
+                serialNum = serialNum + reviewEmployee.getReview().getSerialNum() + "、";
+                projectName = projectName + reviewEmployee.getReview().getProjectName() + "、";
+                serialNumMap.put(reviewEmployee.getReview().getSerialNum(),1);
+            }
             boolean containsValue = keyValueMap.containsKey(reviewEmployee.getIdCard());
             if (containsValue) {
                 int index =  keyValueMap.get(reviewEmployee.getIdCard());
