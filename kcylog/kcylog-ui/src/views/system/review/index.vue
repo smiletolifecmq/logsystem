@@ -384,10 +384,13 @@
           </el-select>
         </el-form-item>
         <el-form-item label="预估天数" prop="budgetDay">
-          <el-input
+          <el-input-number
+            :precision="1"
+            :step="0.5"
+            :min="0.0"
             v-model="form.budgetDay"
             placeholder="请输入预估天数"
-            disabled
+            @change="handleTimeChange(1)"
           />
         </el-form-item>
         <el-form-item label="预算金额" prop="budgetMoney">
@@ -743,7 +746,7 @@ export default {
         }
       }
     },
-    handleTimeChange() {
+    handleTimeChange(budgetDayType) {
       if (this.form.startTime != null && this.form.endTime != null) {
         let startTimeTemp = "";
         if (this.startAmPm == "23:59:59") {
@@ -762,7 +765,9 @@ export default {
         const date2 = new Date(endTimeTemp);
         const diffInMs = date2 - date1;
         const diffInHours = diffInMs / (1000 * 60 * 60);
-        this.form.budgetDay = (diffInHours / 12 + 1) * 0.5;
+        if (budgetDayType != 1) {
+          this.form.budgetDay = (diffInHours / 12 + 1) * 0.5;
+        }
         this.form.budgetMoney =
           (this.form.budgetDay / 0.5) * this.money * this.form.peopleNum;
       }
