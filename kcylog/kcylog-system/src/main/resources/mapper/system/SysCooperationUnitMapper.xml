@@ -1,0 +1,56 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.kcylog.system.mapper.SysCooperationUnitMapper">
+    
+    <resultMap type="SysCooperationUnit" id="SysCooperationUnitResult">
+        <result property="unitId"    column="unit_id"    />
+        <result property="unitName"    column="unit_name"    />
+    </resultMap>
+
+    <sql id="selectSysCooperationUnitVo">
+        select unit_id, unit_name from sys_cooperation_unit
+    </sql>
+
+    <select id="selectSysCooperationUnitList" parameterType="SysCooperationUnit" resultMap="SysCooperationUnitResult">
+        <include refid="selectSysCooperationUnitVo"/>
+        <where>  
+            <if test="unitName != null  and unitName != ''"> and unit_name like concat('%', #{unitName}, '%')</if>
+        </where>
+    </select>
+    
+    <select id="selectSysCooperationUnitByUnitId" parameterType="Long" resultMap="SysCooperationUnitResult">
+        <include refid="selectSysCooperationUnitVo"/>
+        where unit_id = #{unitId}
+    </select>
+        
+    <insert id="insertSysCooperationUnit" parameterType="SysCooperationUnit" useGeneratedKeys="true" keyProperty="unitId">
+        insert into sys_cooperation_unit
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="unitName != null">unit_name,</if>
+         </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test="unitName != null">#{unitName},</if>
+         </trim>
+    </insert>
+
+    <update id="updateSysCooperationUnit" parameterType="SysCooperationUnit">
+        update sys_cooperation_unit
+        <trim prefix="SET" suffixOverrides=",">
+            <if test="unitName != null">unit_name = #{unitName},</if>
+        </trim>
+        where unit_id = #{unitId}
+    </update>
+
+    <delete id="deleteSysCooperationUnitByUnitId" parameterType="Long">
+        delete from sys_cooperation_unit where unit_id = #{unitId}
+    </delete>
+
+    <delete id="deleteSysCooperationUnitByUnitIds" parameterType="String">
+        delete from sys_cooperation_unit where unit_id in 
+        <foreach item="unitId" collection="array" open="(" separator="," close=")">
+            #{unitId}
+        </foreach>
+    </delete>
+</mapper>

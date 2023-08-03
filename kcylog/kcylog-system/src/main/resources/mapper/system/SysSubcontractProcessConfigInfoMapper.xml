@@ -1,0 +1,78 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.kcylog.system.mapper.SysSubcontractProcessConfigInfoMapper">
+
+    <resultMap type="SysSubcontractProcessConfigInfo" id="SysSubcontractProcessConfigInfoResult">
+        <result property="infoId" column="info_id"/>
+        <result property="processConfigId" column="process_config_id"/>
+        <result property="node" column="node"/>
+        <result property="userId" column="user_id"/>
+        <association property="user" column="user_name" javaType="SysUser" resultMap="processConfigInfoUserResult"/>
+    </resultMap>
+
+    <resultMap id="processConfigInfoUserResult" type="SysUser">
+        <result property="userName" column="user_name"/>
+    </resultMap>
+
+    <sql id="selectSysSubcontractProcessConfigInfoVo">
+        select p.info_id, p.process_config_id, p.node, p.user_id, u.user_name
+        from sys_subcontract_process_config_info p
+                 inner join sys_user u on p.user_id = u.user_id
+    </sql>
+
+    <select id="selectSysSubcontractProcessConfigInfoList" parameterType="SysSubcontractProcessConfigInfo"
+            resultMap="SysSubcontractProcessConfigInfoResult">
+        <include refid="selectSysSubcontractProcessConfigInfoVo"/>
+        <where>
+            <if test="processConfigId != null ">and process_config_id = #{processConfigId}</if>
+            <if test="node != null  and node != ''">and node = #{node}</if>
+            <if test="userId != null ">and user_id = #{userId}</if>
+        </where>
+    </select>
+
+    <select id="selectSysSubcontractProcessConfigInfoByInfoId" parameterType="Long"
+            resultMap="SysSubcontractProcessConfigInfoResult">
+        <include refid="selectSysSubcontractProcessConfigInfoVo"/>
+        where info_id = #{infoId}
+    </select>
+
+    <insert id="insertSysSubcontractProcessConfigInfo" parameterType="SysSubcontractProcessConfigInfo"
+            useGeneratedKeys="true" keyProperty="infoId">
+        insert into sys_subcontract_process_config_info
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="processConfigId != null">process_config_id,</if>
+            <if test="node != null and node != ''">node,</if>
+            <if test="userId != null">user_id,</if>
+        </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test="processConfigId != null">#{processConfigId},</if>
+            <if test="node != null and node != ''">#{node},</if>
+            <if test="userId != null">#{userId},</if>
+        </trim>
+    </insert>
+
+    <update id="updateSysSubcontractProcessConfigInfo" parameterType="SysSubcontractProcessConfigInfo">
+        update sys_subcontract_process_config_info
+        <trim prefix="SET" suffixOverrides=",">
+            <if test="processConfigId != null">process_config_id = #{processConfigId},</if>
+            <if test="node != null and node != ''">node = #{node},</if>
+            <if test="userId != null">user_id = #{userId},</if>
+        </trim>
+        where info_id = #{infoId}
+    </update>
+
+    <delete id="deleteSysSubcontractProcessConfigInfoByInfoId" parameterType="Long">
+        delete
+        from sys_subcontract_process_config_info
+        where info_id = #{infoId}
+    </delete>
+
+    <delete id="deleteSysSubcontractProcessConfigInfoByInfoIds" parameterType="String">
+        delete from sys_subcontract_process_config_info where info_id in
+        <foreach item="infoId" collection="array" open="(" separator="," close=")">
+            #{infoId}
+        </foreach>
+    </delete>
+</mapper>

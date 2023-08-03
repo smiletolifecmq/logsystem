@@ -1,0 +1,81 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.kcylog.system.mapper.SysSubcontractProcessConfigMapper">
+
+    <resultMap type="SysSubcontractProcessConfig" id="SysSubcontractProcessConfigResult">
+        <result property="processConfigId" column="process_config_id"/>
+        <result property="title" column="title"/>
+        <result property="deptId" column="dept_id"/>
+        <result property="createTime" column="create_time"/>
+        <result property="updateTime" column="update_time"/>
+        <association property="dept" column="dept_name" javaType="SysDept" resultMap="processConfigLogDeptResult"/>
+    </resultMap>
+
+    <resultMap id="processConfigLogDeptResult" type="SysDept">
+        <result property="deptName" column="dept_name"/>
+    </resultMap>
+
+    <sql id="selectSysSubcontractProcessConfigVo">
+        select u.process_config_id, u.title, u.dept_id, u.create_time, u.update_time, d.dept_name
+        from sys_subcontract_process_config u
+                 inner join sys_dept d on u.dept_id = d.dept_id
+    </sql>
+
+    <select id="selectSysSubcontractProcessConfigList" parameterType="SysSubcontractProcessConfig"
+            resultMap="SysSubcontractProcessConfigResult">
+        <include refid="selectSysSubcontractProcessConfigVo"/>
+        <where>
+            <if test="title != null  and title != ''">and title = #{title}</if>
+            <if test="deptId != null ">and dept_id = #{deptId}</if>
+        </where>
+    </select>
+
+    <select id="selectSysSubcontractProcessConfigByProcessConfigId" parameterType="Long"
+            resultMap="SysSubcontractProcessConfigResult">
+        <include refid="selectSysSubcontractProcessConfigVo"/>
+        where process_config_id = #{processConfigId}
+    </select>
+
+    <insert id="insertSysSubcontractProcessConfig" parameterType="SysSubcontractProcessConfig" useGeneratedKeys="true"
+            keyProperty="processConfigId">
+        insert into sys_subcontract_process_config
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="title != null and title != ''">title,</if>
+            <if test="deptId != null">dept_id,</if>
+            <if test="createTime != null">create_time,</if>
+            <if test="updateTime != null">update_time,</if>
+        </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test="title != null and title != ''">#{title},</if>
+            <if test="deptId != null">#{deptId},</if>
+            <if test="createTime != null">#{createTime},</if>
+            <if test="updateTime != null">#{updateTime},</if>
+        </trim>
+    </insert>
+
+    <update id="updateSysSubcontractProcessConfig" parameterType="SysSubcontractProcessConfig">
+        update sys_subcontract_process_config
+        <trim prefix="SET" suffixOverrides=",">
+            <if test="title != null and title != ''">title = #{title},</if>
+            <if test="deptId != null">dept_id = #{deptId},</if>
+            <if test="createTime != null">create_time = #{createTime},</if>
+            <if test="updateTime != null">update_time = #{updateTime},</if>
+        </trim>
+        where process_config_id = #{processConfigId}
+    </update>
+
+    <delete id="deleteSysSubcontractProcessConfigByProcessConfigId" parameterType="Long">
+        delete
+        from sys_subcontract_process_config
+        where process_config_id = #{processConfigId}
+    </delete>
+
+    <delete id="deleteSysSubcontractProcessConfigByProcessConfigIds" parameterType="String">
+        delete from sys_subcontract_process_config where process_config_id in
+        <foreach item="processConfigId" collection="array" open="(" separator="," close=")">
+            #{processConfigId}
+        </foreach>
+    </delete>
+</mapper>

@@ -8,10 +8,10 @@
       v-show="showSearch"
       label-width="68px"
     >
-      <el-form-item label="配置名称" prop="title">
+      <el-form-item label="协作单位名称" prop="unitName">
         <el-input
-          v-model="queryParams.title"
-          placeholder="请输入配置名称"
+          v-model="queryParams.unitName"
+          placeholder="请输入协作单位名称"
           clearable
           @keyup.enter.native="handleQuery"
         />
@@ -38,7 +38,7 @@
           icon="el-icon-plus"
           size="mini"
           @click="handleAdd"
-          v-hasPermi="['system:config:add']"
+          v-hasPermi="['system:unit:add']"
           >新增</el-button
         >
       </el-col>
@@ -50,7 +50,7 @@
           size="mini"
           :disabled="single"
           @click="handleUpdate"
-          v-hasPermi="['system:config:edit']"
+          v-hasPermi="['system:unit:edit']"
           >修改</el-button
         >
       </el-col>
@@ -62,7 +62,7 @@
           size="mini"
           :disabled="multiple"
           @click="handleDelete"
-          v-hasPermi="['system:config:remove']"
+          v-hasPermi="['system:unit:remove']"
           >删除</el-button
         >
       </el-col>
@@ -73,7 +73,7 @@
           icon="el-icon-download"
           size="mini"
           @click="handleExport"
-          v-hasPermi="['system:config:export']"
+          v-hasPermi="['system:unit:export']"
           >导出</el-button
         >
       </el-col>
@@ -85,12 +85,11 @@
 
     <el-table
       v-loading="loading"
-      :data="configList"
+      :data="unitList"
       @selection-change="handleSelectionChange"
     >
       <el-table-column type="selection" width="55" align="center" />
-      <el-table-column label="配置名称" align="center" prop="title" />
-      <el-table-column label="部门名称" align="center" prop="dept.deptName" />
+      <el-table-column label="协作单位名称" align="center" prop="unitName" />
       <el-table-column
         label="操作"
         align="center"
@@ -102,7 +101,7 @@
             type="text"
             icon="el-icon-edit"
             @click="handleUpdate(scope.row)"
-            v-hasPermi="['system:config:edit']"
+            v-hasPermi="['system:unit:edit']"
             >修改</el-button
           >
           <el-button
@@ -110,24 +109,9 @@
             type="text"
             icon="el-icon-delete"
             @click="handleDelete(scope.row)"
-            v-hasPermi="['system:config:remove']"
+            v-hasPermi="['system:unit:remove']"
             >删除</el-button
           >
-          <el-dropdown
-            size="mini"
-            @command="(command) => handleCommand(command, scope.row)"
-          >
-            <el-button size="mini" type="text" icon="el-icon-d-arrow-right"
-              >更多</el-button
-            >
-            <el-dropdown-menu slot="dropdown">
-              <el-dropdown-item
-                command="configReviewProcess"
-                icon="el-icon-circle-check"
-                >配置审核流程</el-dropdown-item
-              >
-            </el-dropdown-menu>
-          </el-dropdown>
         </template>
       </el-table-column>
     </el-table>
@@ -140,19 +124,11 @@
       @pagination="getList"
     />
 
-    <!-- 添加或修改流程配置对话框 -->
+    <!-- 添加或修改协作单位对话框 -->
     <el-dialog :title="title" :visible.sync="open" width="500px" append-to-body>
       <el-form ref="form" :model="form" :rules="rules" label-width="80px">
-        <el-form-item label="配置名称" prop="title">
-          <el-input v-model="form.title" placeholder="请输入配置名称" />
-        </el-form-item>
-        <el-form-item label="归属部门" prop="deptId">
-          <treeselect
-            v-model="form.deptId"
-            :options="deptOptions"
-            :show-count="true"
-            placeholder="请选择归属部门"
-          />
+        <el-form-item label="协作单位名称" prop="unitName">
+          <el-input v-model="form.unitName" placeholder="请输入协作单位名称" />
         </el-form-item>
       </el-form>
       <div slot="footer" class="dialog-footer">
@@ -165,23 +141,17 @@
 
 <script>
 import {
-  listConfig,
-  getConfig,
-  delConfig,
-  addConfig,
-  updateConfig,
-} from "@/api/system/processConfig";
-import { deptTreeSelect } from "@/api/system/user";
-import Treeselect from "@riophae/vue-treeselect";
-import "@riophae/vue-treeselect/dist/vue-treeselect.css";
+  listUnit,
+  getUnit,
+  delUnit,
+  addUnit,
+  updateUnit,
+} from "@/api/system/unit";
 
 export default {
-  name: "Config",
-  components: { Treeselect },
+  name: "Unit",
   data() {
     return {
-      // 部门树选项
-      deptOptions: undefined,
       // 遮罩层
       loading: true,
       // 选中数组
@@ -194,8 +164,8 @@ export default {
       showSearch: true,
       // 总条数
       total: 0,
-      // 流程配置表格数据
-      configList: [],
+      // 协作单位表格数据
+      unitList: [],
       // 弹出层标题
       title: "",
       // 是否显示弹出层
@@ -204,56 +174,23 @@ export default {
       queryParams: {
         pageNum: 1,
         pageSize: 10,
-        title: null,
-        deptId: null,
+        unitName: null,
       },
       // 表单参数
       form: {},
       // 表单校验
-      rules: {
-        title: [
-          { required: true, message: "配置标题不能为空", trigger: "blur" },
-        ],
-        deptId: [
-          { required: true, message: "请选择归属部门", trigger: "change" },
-        ],
-      },
+      rules: {},
     };
   },
   created() {
     this.getList();
-    this.getDeptTree();
   },
   methods: {
-    // 更多操作触发
-    handleCommand(command, row) {
-      switch (command) {
-        case "configReviewProcess":
-          this.configReviewProcess(row);
-          break;
-        default:
-          break;
-      }
-    },
-    /** 进入配置流程页面 */
-    configReviewProcess: function (row) {
-      const processConfigId = row.processConfigId;
-      const deptId = row.deptId;
-      this.$router.push(
-        "/system/process-config/info/" + processConfigId + "/" + deptId
-      );
-    },
-    /** 查询部门下拉树结构 */
-    getDeptTree() {
-      deptTreeSelect().then((response) => {
-        this.deptOptions = response.data;
-      });
-    },
-    /** 查询流程配置列表 */
+    /** 查询协作单位列表 */
     getList() {
       this.loading = true;
-      listConfig(this.queryParams).then((response) => {
-        this.configList = response.rows;
+      listUnit(this.queryParams).then((response) => {
+        this.unitList = response.rows;
         this.total = response.total;
         this.loading = false;
       });
@@ -266,11 +203,8 @@ export default {
     // 表单重置
     reset() {
       this.form = {
-        processConfigId: null,
-        title: null,
-        deptId: null,
-        createTime: null,
-        updateTime: null,
+        unitId: null,
+        unitName: null,
       };
       this.resetForm("form");
     },
@@ -286,7 +220,7 @@ export default {
     },
     // 多选框选中数据
     handleSelectionChange(selection) {
-      this.ids = selection.map((item) => item.processConfigId);
+      this.ids = selection.map((item) => item.unitId);
       this.single = selection.length !== 1;
       this.multiple = !selection.length;
     },
@@ -294,30 +228,30 @@ export default {
     handleAdd() {
       this.reset();
       this.open = true;
-      this.title = "添加流程配置";
+      this.title = "添加协作单位";
     },
     /** 修改按钮操作 */
     handleUpdate(row) {
       this.reset();
-      const processConfigId = row.processConfigId || this.ids;
-      getConfig(processConfigId).then((response) => {
+      const unitId = row.unitId || this.ids;
+      getUnit(unitId).then((response) => {
         this.form = response.data;
         this.open = true;
-        this.title = "修改流程配置";
+        this.title = "修改协作单位";
       });
     },
     /** 提交按钮 */
     submitForm() {
       this.$refs["form"].validate((valid) => {
         if (valid) {
-          if (this.form.processConfigId != null) {
-            updateConfig(this.form).then((response) => {
+          if (this.form.unitId != null) {
+            updateUnit(this.form).then((response) => {
               this.$modal.msgSuccess("修改成功");
               this.open = false;
               this.getList();
             });
           } else {
-            addConfig(this.form).then((response) => {
+            addUnit(this.form).then((response) => {
               this.$modal.msgSuccess("新增成功");
               this.open = false;
               this.getList();
@@ -328,13 +262,11 @@ export default {
     },
     /** 删除按钮操作 */
     handleDelete(row) {
-      const processConfigIds = row.processConfigId || this.ids;
+      const unitIds = row.unitId || this.ids;
       this.$modal
-        .confirm(
-          '是否确认删除流程配置编号为"' + processConfigIds + '"的数据项？'
-        )
+        .confirm('是否确认删除协作单位编号为"' + unitIds + '"的数据项？')
         .then(function () {
-          return delConfig(processConfigIds);
+          return delUnit(unitIds);
         })
         .then(() => {
           this.getList();
@@ -345,11 +277,11 @@ export default {
     /** 导出按钮操作 */
     handleExport() {
       this.download(
-        "system/config/export",
+        "system/unit/export",
         {
           ...this.queryParams,
         },
-        `config_${new Date().getTime()}.xlsx`
+        `unit_${new Date().getTime()}.xlsx`
       );
     },
   },

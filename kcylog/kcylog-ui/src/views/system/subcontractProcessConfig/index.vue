@@ -140,7 +140,7 @@
       @pagination="getList"
     />
 
-    <!-- 添加或修改流程配置对话框 -->
+    <!-- 添加或修改分包审核流程配置对话框 -->
     <el-dialog :title="title" :visible.sync="open" width="500px" append-to-body>
       <el-form ref="form" :model="form" :rules="rules" label-width="80px">
         <el-form-item label="配置名称" prop="title">
@@ -170,7 +170,7 @@ import {
   delConfig,
   addConfig,
   updateConfig,
-} from "@/api/system/processConfig";
+} from "@/api/system/subcontractProcessConfig";
 import { deptTreeSelect } from "@/api/system/user";
 import Treeselect from "@riophae/vue-treeselect";
 import "@riophae/vue-treeselect/dist/vue-treeselect.css";
@@ -194,7 +194,7 @@ export default {
       showSearch: true,
       // 总条数
       total: 0,
-      // 流程配置表格数据
+      // 分包审核流程配置表格数据
       configList: [],
       // 弹出层标题
       title: "",
@@ -212,7 +212,7 @@ export default {
       // 表单校验
       rules: {
         title: [
-          { required: true, message: "配置标题不能为空", trigger: "blur" },
+          { required: true, message: "配置名称不能为空", trigger: "blur" },
         ],
         deptId: [
           { required: true, message: "请选择归属部门", trigger: "change" },
@@ -240,7 +240,7 @@ export default {
       const processConfigId = row.processConfigId;
       const deptId = row.deptId;
       this.$router.push(
-        "/system/process-config/info/" + processConfigId + "/" + deptId
+        "/system/sub-process-config/info/" + processConfigId + "/" + deptId
       );
     },
     /** 查询部门下拉树结构 */
@@ -249,7 +249,7 @@ export default {
         this.deptOptions = response.data;
       });
     },
-    /** 查询流程配置列表 */
+    /** 查询分包审核流程配置列表 */
     getList() {
       this.loading = true;
       listConfig(this.queryParams).then((response) => {
@@ -294,7 +294,7 @@ export default {
     handleAdd() {
       this.reset();
       this.open = true;
-      this.title = "添加流程配置";
+      this.title = "添加分包审核流程配置";
     },
     /** 修改按钮操作 */
     handleUpdate(row) {
@@ -303,7 +303,7 @@ export default {
       getConfig(processConfigId).then((response) => {
         this.form = response.data;
         this.open = true;
-        this.title = "修改流程配置";
+        this.title = "修改分包审核流程配置";
       });
     },
     /** 提交按钮 */
@@ -331,7 +331,9 @@ export default {
       const processConfigIds = row.processConfigId || this.ids;
       this.$modal
         .confirm(
-          '是否确认删除流程配置编号为"' + processConfigIds + '"的数据项？'
+          '是否确认删除分包审核流程配置编号为"' +
+            processConfigIds +
+            '"的数据项？'
         )
         .then(function () {
           return delConfig(processConfigIds);

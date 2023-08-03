@@ -177,6 +177,20 @@ export const dynamicRoutes = [
     ]
   },
   {
+    path: '/system/sub-process-config',
+    component: Layout,
+    hidden: true,
+    permissions: ['system:subcontractProcessConfig:edit'],
+    children: [
+      {
+        path: 'info/:processConfigId(\\d+)/:deptId(\\d+)',
+        component: () => import('@/views/system/subcontractProcessConfig/subcontractProcessConfigInfo'),
+        name: 'SubcontractProcessConfigInfo',
+        meta: { title: '配置流程', activeMenu: '/system/subcontractProcessConfig' }
+      }
+    ]
+  },
+  {
     path: '/system/review-employee',
     component: Layout,
     hidden: true,
