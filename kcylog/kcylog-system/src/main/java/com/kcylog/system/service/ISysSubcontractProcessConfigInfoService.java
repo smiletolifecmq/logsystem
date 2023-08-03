@@ -59,4 +59,6 @@ public interface ISysSubcontractProcessConfigInfoService
      * @return 结果
      */
     public int deleteSysSubcontractProcessConfigInfoByInfoId(Long infoId);
+
+    public List<SysSubcontractProcessConfigInfo> selectSysSubcontractProcessConfigInfoListByDeptId(Long deptId);
 }

@@ -1,11 +1,15 @@
 package com.kcylog.system.domain;
 
-import java.util.Date;
 import com.fasterxml.jackson.annotation.JsonFormat;
-import org.apache.commons.lang3.builder.ToStringBuilder;
-import org.apache.commons.lang3.builder.ToStringStyle;
 import com.kcylog.common.annotation.Excel;
 import com.kcylog.common.core.domain.BaseEntity;
+import com.kcylog.common.core.domain.entity.SysDept;
+import com.kcylog.common.core.domain.entity.SysUser;
+import org.apache.commons.lang3.builder.ToStringBuilder;
+import org.apache.commons.lang3.builder.ToStringStyle;
+
+import java.util.Date;
+import java.util.List;
 
 /**
  * 分包对象 sys_subcontract
@@ -40,6 +44,8 @@ public class SysSubcontract extends BaseEntity
     /** 协作单位 */
     @Excel(name = "协作单位")
     private String cooperationUnit;
+
+    private List<String> cooperationUnitJson;
 
     /** 中签单位 */
     @Excel(name = "中签单位")
@@ -78,6 +84,40 @@ public class SysSubcontract extends BaseEntity
     @JsonFormat(pattern = "yyyy-MM-dd")
     @Excel(name = "工期结束时间", width = 30, dateFormat = "yyyy-MM-dd")
     private Date endTime;
+
+    /**
+     * 部门对象
+     */
+    private SysDept dept;
+
+    /**
+     * 用户对象
+     */
+    private SysUser user;
+
+    public SysDept getDept() {
+        return dept;
+    }
+
+    public void setDept(SysDept dept) {
+        this.dept = dept;
+    }
+
+    public SysUser getUser() {
+        return user;
+    }
+
+    public void setUser(SysUser user) {
+        this.user = user;
+    }
+
+    public List<String> getCooperationUnitJson() {
+        return cooperationUnitJson;
+    }
+
+    public void setCooperationUnitJson(List<String> cooperationUnitJson) {
+        this.cooperationUnitJson = cooperationUnitJson;
+    }
 
     public void setSubcontractId(Long subcontractId) 
     {

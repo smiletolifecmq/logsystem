@@ -1,59 +1,77 @@
 <?xml version="1.0" encoding="UTF-8" ?>
 <!DOCTYPE mapper
-PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
-"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.kcylog.system.mapper.SysSubcontractMapper">
-    
+
     <resultMap type="SysSubcontract" id="SysSubcontractResult">
-        <result property="subcontractId"    column="subcontract_id"    />
-        <result property="serialNum"    column="serial_num"    />
-        <result property="lotTime"    column="lot_time"    />
-        <result property="projectName"    column="project_name"    />
-        <result property="businessName"    column="business_name"    />
-        <result property="cooperationUnit"    column="cooperation_unit"    />
-        <result property="winUnit"    column="win_unit"    />
-        <result property="entrustUnit"    column="entrust_unit"    />
-        <result property="workload"    column="workload"    />
-        <result property="workcontent"    column="workcontent"    />
-        <result property="userId"    column="user_id"    />
-        <result property="deptId"    column="dept_id"    />
-        <result property="status"    column="status"    />
-        <result property="startTime"    column="start_time"    />
-        <result property="endTime"    column="end_time"    />
-        <result property="createTime"    column="create_time"    />
-        <result property="updateTime"    column="update_time"    />
+        <result property="subcontractId" column="subcontract_id"/>
+        <result property="serialNum" column="serial_num"/>
+        <result property="lotTime" column="lot_time"/>
+        <result property="projectName" column="project_name"/>
+        <result property="businessName" column="business_name"/>
+        <result property="cooperationUnit" column="cooperation_unit"/>
+        <result property="winUnit" column="win_unit"/>
+        <result property="entrustUnit" column="entrust_unit"/>
+        <result property="workload" column="workload"/>
+        <result property="workcontent" column="workcontent"/>
+        <result property="userId" column="user_id"/>
+        <result property="deptId" column="dept_id"/>
+        <result property="status" column="status"/>
+        <result property="startTime" column="start_time"/>
+        <result property="endTime" column="end_time"/>
+        <result property="createTime" column="create_time"/>
+        <result property="updateTime" column="update_time"/>
+        <association property="dept" column="dept_name" javaType="SysDept" resultMap="sysReviewDeptResult"/>
+        <association property="user" column="user_name" javaType="SysUser" resultMap="sysReviewUserResult"/>
+    </resultMap>
+
+    <resultMap id="sysReviewDeptResult" type="SysDept">
+        <result property="deptName" column="dept_name"/>
+    </resultMap>
+
+    <resultMap id="sysReviewUserResult" type="SysUser">
+        <result property="userName" column="user_name"/>
     </resultMap>
 
     <sql id="selectSysSubcontractVo">
-        select subcontract_id, serial_num, lot_time, project_name, business_name, cooperation_unit, win_unit, entrust_unit, workload, workcontent, user_id, dept_id, status, start_time, end_time, create_time, update_time from sys_subcontract
+        select r.*, d.dept_name, u.user_name
+        from sys_subcontract r
+                 inner join sys_dept d on r.dept_id = d.dept_id
+                 inner join sys_user u on r.user_id = u.user_id
     </sql>
 
     <select id="selectSysSubcontractList" parameterType="SysSubcontract" resultMap="SysSubcontractResult">
         <include refid="selectSysSubcontractVo"/>
-        <where>  
-            <if test="serialNum != null  and serialNum != ''"> and serial_num = #{serialNum}</if>
-            <if test="lotTime != null "> and lot_time = #{lotTime}</if>
-            <if test="projectName != null  and projectName != ''"> and project_name like concat('%', #{projectName}, '%')</if>
-            <if test="businessName != null  and businessName != ''"> and business_name like concat('%', #{businessName}, '%')</if>
-            <if test="cooperationUnit != null  and cooperationUnit != ''"> and cooperation_unit = #{cooperationUnit}</if>
-            <if test="winUnit != null  and winUnit != ''"> and win_unit = #{winUnit}</if>
-            <if test="entrustUnit != null  and entrustUnit != ''"> and entrust_unit = #{entrustUnit}</if>
-            <if test="workload != null  and workload != ''"> and workload = #{workload}</if>
-            <if test="workcontent != null  and workcontent != ''"> and workcontent = #{workcontent}</if>
-            <if test="userId != null "> and user_id = #{userId}</if>
-            <if test="deptId != null "> and dept_id = #{deptId}</if>
-            <if test="status != null "> and status = #{status}</if>
-            <if test="startTime != null "> and start_time = #{startTime}</if>
-            <if test="endTime != null "> and end_time = #{endTime}</if>
+        <where>
+            <if test="serialNum != null  and serialNum != ''">and serial_num = #{serialNum}</if>
+            <if test="lotTime != null ">and lot_time = #{lotTime}</if>
+            <if test="projectName != null  and projectName != ''">and project_name like concat('%', #{projectName},
+                '%')
+            </if>
+            <if test="businessName != null  and businessName != ''">and business_name like concat('%', #{businessName},
+                '%')
+            </if>
+            <if test="cooperationUnit != null  and cooperationUnit != ''">and cooperation_unit = #{cooperationUnit}</if>
+            <if test="winUnit != null  and winUnit != ''">and win_unit = #{winUnit}</if>
+            <if test="entrustUnit != null  and entrustUnit != ''">and entrust_unit = #{entrustUnit}</if>
+            <if test="workload != null  and workload != ''">and workload = #{workload}</if>
+            <if test="workcontent != null  and workcontent != ''">and workcontent = #{workcontent}</if>
+            <if test="userId != null ">and user_id = #{userId}</if>
+            <if test="deptId != null ">and dept_id = #{deptId}</if>
+            <if test="status != null ">and status = #{status}</if>
+            <if test="startTime != null ">and start_time = #{startTime}</if>
+            <if test="endTime != null ">and end_time = #{endTime}</if>
         </where>
     </select>
-    
+
     <select id="selectSysSubcontractBySubcontractId" parameterType="Long" resultMap="SysSubcontractResult">
         <include refid="selectSysSubcontractVo"/>
         where subcontract_id = #{subcontractId}
     </select>
-        
-    <insert id="insertSysSubcontract" parameterType="SysSubcontract" useGeneratedKeys="true" keyProperty="subcontractId">
+
+    <insert id="insertSysSubcontract" parameterType="SysSubcontract" useGeneratedKeys="true"
+            keyProperty="subcontractId">
         insert into sys_subcontract
         <trim prefix="(" suffix=")" suffixOverrides=",">
             <if test="serialNum != null and serialNum != ''">serial_num,</if>
@@ -72,7 +90,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
             <if test="endTime != null">end_time,</if>
             <if test="createTime != null">create_time,</if>
             <if test="updateTime != null">update_time,</if>
-         </trim>
+        </trim>
         <trim prefix="values (" suffix=")" suffixOverrides=",">
             <if test="serialNum != null and serialNum != ''">#{serialNum},</if>
             <if test="lotTime != null">#{lotTime},</if>
@@ -90,7 +108,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
             <if test="endTime != null">#{endTime},</if>
             <if test="createTime != null">#{createTime},</if>
             <if test="updateTime != null">#{updateTime},</if>
-         </trim>
+        </trim>
     </insert>
 
     <update id="updateSysSubcontract" parameterType="SysSubcontract">
@@ -117,11 +135,13 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
     </update>
 
     <delete id="deleteSysSubcontractBySubcontractId" parameterType="Long">
-        delete from sys_subcontract where subcontract_id = #{subcontractId}
+        delete
+        from sys_subcontract
+        where subcontract_id = #{subcontractId}
     </delete>
 
     <delete id="deleteSysSubcontractBySubcontractIds" parameterType="String">
-        delete from sys_subcontract where subcontract_id in 
+        delete from sys_subcontract where subcontract_id in
         <foreach item="subcontractId" collection="array" open="(" separator="," close=")">
             #{subcontractId}
         </foreach>

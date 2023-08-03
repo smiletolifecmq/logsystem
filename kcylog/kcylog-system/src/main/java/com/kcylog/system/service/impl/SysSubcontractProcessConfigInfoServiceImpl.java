@@ -1,11 +1,12 @@
 package com.kcylog.system.service.impl;
 
-import java.util.List;
+import com.kcylog.system.domain.SysSubcontractProcessConfigInfo;
+import com.kcylog.system.mapper.SysSubcontractProcessConfigInfoMapper;
+import com.kcylog.system.service.ISysSubcontractProcessConfigInfoService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-import com.kcylog.system.mapper.SysSubcontractProcessConfigInfoMapper;
-import com.kcylog.system.domain.SysSubcontractProcessConfigInfo;
-import com.kcylog.system.service.ISysSubcontractProcessConfigInfoService;
+
+import java.util.List;
 
 /**
  * 流程配置过程Service业务层处理
@@ -89,5 +90,11 @@ public class SysSubcontractProcessConfigInfoServiceImpl implements ISysSubcontra
     public int deleteSysSubcontractProcessConfigInfoByInfoId(Long infoId)
     {
         return sysSubcontractProcessConfigInfoMapper.deleteSysSubcontractProcessConfigInfoByInfoId(infoId);
+    }
+
+    @Override
+    public List<SysSubcontractProcessConfigInfo> selectSysSubcontractProcessConfigInfoListByDeptId(Long deptId)
+    {
+        return sysSubcontractProcessConfigInfoMapper.selectSysSubcontractProcessConfigInfoListByDeptId(deptId);
     }
 }

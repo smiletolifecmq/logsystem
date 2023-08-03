@@ -75,4 +75,13 @@
             #{infoId}
         </foreach>
     </delete>
+
+    <select id="selectSysSubcontractProcessConfigInfoListByDeptId" parameterType="Long" resultMap="SysSubcontractProcessConfigInfoResult">
+        select p.* from sys_subcontract_process_config_info p
+        inner join sys_subcontract_process_config e on p.process_config_id = e.process_config_id
+        <where>
+            e.dept_id = #{deptId}
+        </where>
+        order by p.node asc
+    </select>
 </mapper>
