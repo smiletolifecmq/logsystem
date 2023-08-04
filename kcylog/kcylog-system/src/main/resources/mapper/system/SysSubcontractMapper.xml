@@ -44,24 +44,17 @@
     <select id="selectSysSubcontractList" parameterType="SysSubcontract" resultMap="SysSubcontractResult">
         <include refid="selectSysSubcontractVo"/>
         <where>
-            <if test="serialNum != null  and serialNum != ''">and serial_num = #{serialNum}</if>
-            <if test="lotTime != null ">and lot_time = #{lotTime}</if>
-            <if test="projectName != null  and projectName != ''">and project_name like concat('%', #{projectName},
+            <if test="serialNum != null  and serialNum != ''">and r.serial_num = #{serialNum}</if>
+            <if test="projectName != null  and projectName != ''">and r.project_name like concat('%', #{projectName},
                 '%')
             </if>
-            <if test="businessName != null  and businessName != ''">and business_name like concat('%', #{businessName},
+            <if test="businessName != null  and businessName != ''">and r.business_name like concat('%', #{businessName},
                 '%')
             </if>
-            <if test="cooperationUnit != null  and cooperationUnit != ''">and cooperation_unit = #{cooperationUnit}</if>
-            <if test="winUnit != null  and winUnit != ''">and win_unit = #{winUnit}</if>
-            <if test="entrustUnit != null  and entrustUnit != ''">and entrust_unit = #{entrustUnit}</if>
-            <if test="workload != null  and workload != ''">and workload = #{workload}</if>
-            <if test="workcontent != null  and workcontent != ''">and workcontent = #{workcontent}</if>
-            <if test="userId != null ">and user_id = #{userId}</if>
-            <if test="deptId != null ">and dept_id = #{deptId}</if>
-            <if test="status != null ">and status = #{status}</if>
-            <if test="startTime != null ">and start_time = #{startTime}</if>
-            <if test="endTime != null ">and end_time = #{endTime}</if>
+            <if test="winUnit != null  and winUnit != ''">and r.win_unit = #{winUnit}</if>
+            <if test="deptId != null ">and r.dept_id = #{deptId}</if>
+            <if test="status != null ">and r.status = #{status}</if>
+            <if test="userId != null  and userId != ''"> and r.user_id = #{userId}</if>
         </where>
     </select>
 

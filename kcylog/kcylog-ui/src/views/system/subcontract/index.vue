@@ -98,19 +98,18 @@
       :data="subcontractList"
       @selection-change="handleSelectionChange"
     >
-      <el-table-column label="工程编号" align="center" prop="serialNum" />
-      <el-table-column
-        label="抽签时间"
-        align="center"
-        prop="lotTime"
-        width="180"
-      >
+      <el-table-column label="工程编号" align="center" prop="serialNum">
         <template slot-scope="scope">
-          <span>{{ parseTime(scope.row.lotTime, "{y}-{m}-{d}") }}</span>
+          <a @click="showSubcontractInfo(scope.row)" style="color: blue">
+            {{ scope.row.serialNum }}
+          </a>
         </template>
       </el-table-column>
       <el-table-column label="项目名称" align="center" prop="projectName" />
       <el-table-column label="业务名称" align="center" prop="businessName" />
+      <el-table-column label="工作量" align="center" prop="workload" />
+      <el-table-column label="工作内容" align="center" prop="workcontent" />
+      <el-table-column label="委托单位" align="center" prop="entrustUnit" />
       <el-table-column
         label="协作单位"
         align="center"
@@ -126,9 +125,16 @@
         </template>
       </el-table-column>
       <el-table-column label="中签单位" align="center" prop="winUnit" />
-      <el-table-column label="委托单位" align="center" prop="entrustUnit" />
-      <el-table-column label="工作量" align="center" prop="workload" />
-      <el-table-column label="工作内容" align="center" prop="workcontent" />
+      <el-table-column
+        label="抽签时间"
+        align="center"
+        prop="lotTime"
+        width="180"
+      >
+        <template slot-scope="scope">
+          <span>{{ parseTime(scope.row.lotTime, "{y}-{m}-{d}") }}</span>
+        </template>
+      </el-table-column>
       <el-table-column label="负责人" align="center" prop="user.userName" />
       <el-table-column label="部门" align="center" prop="dept.deptName" />
       <el-table-column label="审核状态" align="center" prop="status">
@@ -198,21 +204,28 @@
         <el-form-item label="工程编号" prop="serialNum">
           <el-input v-model="form.serialNum" placeholder="请输入工程编号" />
         </el-form-item>
-        <el-form-item label="抽签时间" prop="lotTime">
-          <el-date-picker
-            clearable
-            v-model="form.lotTime"
-            type="date"
-            value-format="yyyy-MM-dd"
-            placeholder="请选择抽签时间"
-          >
-          </el-date-picker>
-        </el-form-item>
         <el-form-item label="项目名称" prop="projectName">
           <el-input v-model="form.projectName" placeholder="请输入项目名称" />
         </el-form-item>
         <el-form-item label="业务名称" prop="businessName">
           <el-input v-model="form.businessName" placeholder="请输入业务名称" />
+        </el-form-item>
+        <el-form-item label="委托单位" prop="entrustUnit">
+          <el-input v-model="form.entrustUnit" placeholder="请输入内容" />
+        </el-form-item>
+        <el-form-item label="工作量" prop="workload">
+          <el-input
+            v-model="form.workload"
+            type="textarea"
+            placeholder="请输入工作量"
+          />
+        </el-form-item>
+        <el-form-item label="工作内容">
+          <el-input
+            v-model="form.workcontent"
+            type="textarea"
+            placeholder="请输入工作内容"
+          />
         </el-form-item>
         <el-form-item label="协作单位" prop="cooperationUnitJson">
           <el-select
@@ -245,22 +258,15 @@
             </el-option>
           </el-select>
         </el-form-item>
-        <el-form-item label="委托单位" prop="entrustUnit">
-          <el-input v-model="form.entrustUnit" placeholder="请输入内容" />
-        </el-form-item>
-        <el-form-item label="工作量" prop="workload">
-          <el-input
-            v-model="form.workload"
-            type="textarea"
-            placeholder="请输入工作量"
-          />
-        </el-form-item>
-        <el-form-item label="工作内容">
-          <el-input
-            v-model="form.workcontent"
-            type="textarea"
-            placeholder="请输入工作内容"
-          />
+        <el-form-item label="抽签时间" prop="lotTime">
+          <el-date-picker
+            clearable
+            v-model="form.lotTime"
+            type="date"
+            value-format="yyyy-MM-dd"
+            placeholder="请选择抽签时间"
+          >
+          </el-date-picker>
         </el-form-item>
         <el-form-item label="工期开始" prop="startTime">
           <el-date-picker
@@ -288,6 +294,127 @@
         <el-button @click="cancel">取 消</el-button>
       </div>
     </el-dialog>
+
+    <!-- 详情框 -->
+    <el-dialog
+      :title="titleInfo"
+      :visible.sync="openInfo"
+      width="500px"
+      append-to-body
+    >
+      <el-form ref="formInfo" :model="formInfo" label-width="80px">
+        <el-form-item label="工程编号" prop="serialNum">
+          <el-input
+            v-model="formInfo.serialNum"
+            placeholder="请输入工程编号"
+            disabled
+          />
+        </el-form-item>
+        <el-form-item label="项目名称" prop="projectName">
+          <el-input
+            v-model="formInfo.projectName"
+            placeholder="请输入项目名称"
+            disabled
+          />
+        </el-form-item>
+        <el-form-item label="业务名称" prop="businessName">
+          <el-input
+            v-model="formInfo.businessName"
+            placeholder="请输入业务名称"
+            disabled
+          />
+        </el-form-item>
+        <el-form-item label="委托单位" prop="entrustUnit">
+          <el-input
+            v-model="formInfo.entrustUnit"
+            placeholder="请输入内容"
+            disabled
+          />
+        </el-form-item>
+        <el-form-item label="工作量" prop="workload">
+          <el-input
+            v-model="formInfo.workload"
+            type="textarea"
+            placeholder="请输入工作量"
+            disabled
+          />
+        </el-form-item>
+        <el-form-item label="工作内容">
+          <el-input
+            v-model="formInfo.workcontent"
+            type="textarea"
+            placeholder="请输入工作内容"
+            disabled
+          />
+        </el-form-item>
+        <el-form-item label="协作单位" prop="cooperationUnitJson">
+          <el-select
+            v-model="formInfo.cooperationUnitJson"
+            placeholder="协作单位"
+            multiple
+            style="width: 260px"
+            disabled
+          >
+            <el-option
+              v-for="item in winUnits"
+              :key="item.value"
+              :label="item.label"
+              :value="item.value"
+            >
+            </el-option>
+          </el-select>
+        </el-form-item>
+        <el-form-item label="中签单位" prop="winUnit">
+          <el-select
+            v-model="formInfo.winUnit"
+            placeholder="请选择中签单位"
+            style="width: 260px"
+            disabled
+          >
+            <el-option
+              v-for="item in winUnits"
+              :key="item.value"
+              :label="item.label"
+              :value="item.value"
+            >
+            </el-option>
+          </el-select>
+        </el-form-item>
+        <el-form-item label="抽签时间" prop="lotTime">
+          <el-date-picker
+            clearable
+            v-model="formInfo.lotTime"
+            type="date"
+            value-format="yyyy-MM-dd"
+            placeholder="请选择抽签时间"
+            disabled
+          >
+          </el-date-picker>
+        </el-form-item>
+        <el-form-item label="工期开始" prop="startTime">
+          <el-date-picker
+            clearable
+            v-model="formInfo.startTime"
+            type="date"
+            value-format="yyyy-MM-dd"
+            placeholder="请选择工期开始时间"
+            disabled
+          >
+          </el-date-picker>
+        </el-form-item>
+        <el-form-item label="工期结束" prop="endTime">
+          <el-date-picker
+            clearable
+            v-model="formInfo.endTime"
+            type="date"
+            value-format="yyyy-MM-dd"
+            placeholder="请选择工期结束时间"
+            disabled
+          >
+          </el-date-picker>
+        </el-form-item>
+      </el-form>
+    </el-dialog>
   </div>
 </template>
 
@@ -305,6 +432,8 @@ export default {
   name: "Subcontract",
   data() {
     return {
+      titleInfo: "",
+      openInfo: false,
       statusArr: [
         {
           value: 0,
@@ -364,6 +493,7 @@ export default {
       winUnits: [],
       // 表单参数
       form: {},
+      formInfo: {},
       // 表单校验
       rules: {
         serialNum: [
@@ -522,6 +652,14 @@ export default {
         },
         `subcontract_${new Date().getTime()}.xlsx`
       );
+    },
+    showSubcontractInfo(row) {
+      const subcontractId = row.subcontractId;
+      getSubcontract(subcontractId).then((response) => {
+        this.formInfo = response.data;
+        this.openInfo = true;
+        this.titleInfo = "分包详情";
+      });
     },
   },
 };

@@ -86,4 +86,11 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
             (#{item.subcontractId}, #{item.userId}, #{item.status}, #{item.node}, #{item.reason}, #{item.reviewTime})
         </foreach>
     </insert>
+
+    <delete id="deleteSysSubcontractProcessByReviewIds" parameterType="String">
+        delete from sys_subcontract_process where subcontract_id in
+        <foreach item="subcontractId" collection="array" open="(" separator="," close=")">
+            #{subcontractId}
+        </foreach>
+    </delete>
 </mapper>

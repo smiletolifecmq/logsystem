@@ -1,13 +1,12 @@
 package com.kcylog.system.service.impl;
 
-import java.util.List;
-
-import com.kcylog.system.domain.SysReviewProcess;
+import com.kcylog.system.domain.SysSubcontractProcess;
+import com.kcylog.system.mapper.SysSubcontractProcessMapper;
+import com.kcylog.system.service.ISysSubcontractProcessService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-import com.kcylog.system.mapper.SysSubcontractProcessMapper;
-import com.kcylog.system.domain.SysSubcontractProcess;
-import com.kcylog.system.service.ISysSubcontractProcessService;
+
+import java.util.List;
 
 /**
  * 分包审核单流程Service业务层处理
@@ -97,5 +96,11 @@ public class SysSubcontractProcessServiceImpl implements ISysSubcontractProcessS
     public int insertSysSubcontractProcessBatch(List<SysSubcontractProcess> sysSubcontractProcess)
     {
         return sysSubcontractProcessMapper.insertSysSubcontractProcessBatch(sysSubcontractProcess);
+    }
+
+    @Override
+    public int deleteSysSubcontractProcessByReviewIds(Long[] subcontractIds)
+    {
+        return sysSubcontractProcessMapper.deleteSysSubcontractProcessByReviewIds(subcontractIds);
     }
 }

@@ -51,6 +51,8 @@ public class SysSubcontractController extends BaseController
     @GetMapping("/list")
     public TableDataInfo list(SysSubcontract sysSubcontract) throws JsonProcessingException {
         startPage();
+        Long userId = SecurityUtils.getUserId();
+        sysSubcontract.setUserId(userId);
         List<SysSubcontract> list = sysSubcontractService.selectSysSubcontractList(sysSubcontract);
         for(SysSubcontract subcontract:list){
             ObjectMapper objectMapper = new ObjectMapper();
@@ -130,9 +132,12 @@ public class SysSubcontractController extends BaseController
      * 删除分包
      */
     @Log(title = "分包", businessType = BusinessType.DELETE)
+    @Transactional
 	@DeleteMapping("/{subcontractIds}")
     public AjaxResult remove(@PathVariable Long[] subcontractIds)
     {
-        return toAjax(sysSubcontractService.deleteSysSubcontractBySubcontractIds(subcontractIds));
+        sysSubcontractService.deleteSysSubcontractBySubcontractIds(subcontractIds);
+        int result = sysSubcontractProcessService.deleteSysSubcontractProcessByReviewIds(subcontractIds);
+        return toAjax(result);
     }
 }
