@@ -266,4 +266,12 @@ public class SysSubcontractController extends BaseController
         List<SysSubcontract> list = sysSubcontractService.selectDoneReviewList(sysSubcontract);
         return getDataTable(list);
     }
+
+    @GetMapping("/completedListReview")
+    public TableDataInfo completedReview(SysSubcontract sysSubcontract)
+    {
+        startPage();
+        List<SysSubcontract> list = sysSubcontractService.selectCompletedReviewList(sysSubcontract);
+        return getDataTable(list);
+    }
 }

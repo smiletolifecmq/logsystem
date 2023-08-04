@@ -118,4 +118,10 @@ public class SysSubcontractServiceImpl implements ISysSubcontractService
     {
         return sysSubcontractMapper.selectDoneReviewList(sysSubcontract);
     }
+
+    @Override
+    public List<SysSubcontract> selectCompletedReviewList(SysSubcontract sysSubcontract)
+    {
+        return sysSubcontractMapper.selectCompletedReviewList(sysSubcontract);
+    }
 }

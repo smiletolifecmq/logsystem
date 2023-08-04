@@ -67,4 +67,6 @@ public interface ISysSubcontractService
     public int setSysReviewStatusBySubcontractId(SysSubcontract sysSubcontract);
 
     public List<SysSubcontract> selectDoneReviewList(SysSubcontract sysSubcontract);
+
+    public List<SysSubcontract> selectCompletedReviewList(SysSubcontract sysSubcontract);
 }

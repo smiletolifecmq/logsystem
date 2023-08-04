@@ -49,14 +49,16 @@
             <if test="projectName != null  and projectName != ''">and r.project_name like concat('%', #{projectName},
                 '%')
             </if>
-            <if test="businessName != null  and businessName != ''">and r.business_name like concat('%', #{businessName},
+            <if test="businessName != null  and businessName != ''">and r.business_name like concat('%',
+                #{businessName},
                 '%')
             </if>
             <if test="winUnit != null  and winUnit != ''">and r.win_unit = #{winUnit}</if>
             <if test="deptId != null ">and r.dept_id = #{deptId}</if>
             <if test="status != null ">and r.status = #{status}</if>
-            <if test="userId != null  and userId != ''"> and r.user_id = #{userId}</if>
+            <if test="userId != null  and userId != ''">and r.user_id = #{userId}</if>
         </where>
+        order by r.subcontract_id desc
     </select>
 
     <select id="selectSysSubcontractBySubcontractId" parameterType="Long" resultMap="SysSubcontractResult">
@@ -160,7 +162,8 @@
             <if test="projectName != null  and projectName != ''">and r.project_name like concat('%', #{projectName},
                 '%')
             </if>
-            <if test="businessName != null  and businessName != ''">and r.business_name like concat('%', #{businessName},
+            <if test="businessName != null  and businessName != ''">and r.business_name like concat('%',
+                #{businessName},
                 '%')
             </if>
             <if test="winUnit != null  and winUnit != ''">and r.win_unit = #{winUnit}</if>
@@ -185,7 +188,8 @@
             <if test="projectName != null  and projectName != ''">and r.project_name like concat('%', #{projectName},
                 '%')
             </if>
-            <if test="businessName != null  and businessName != ''">and r.business_name like concat('%', #{businessName},
+            <if test="businessName != null  and businessName != ''">and r.business_name like concat('%',
+                #{businessName},
                 '%')
             </if>
             <if test="winUnit != null  and winUnit != ''">and r.win_unit = #{winUnit}</if>
@@ -193,5 +197,23 @@
         AND rp.user_id = #{userId}
         AND (rp.status = 2 OR rp.status = 3)
         order by r.subcontract_id desc
+    </select>
+
+    <select id="selectCompletedReviewList" parameterType="SysSubcontract" resultMap="SysSubcontractResult">
+        <include refid="selectSysSubcontractVo"/>
+        <where>
+            <if test="serialNum != null  and serialNum != ''">and r.serial_num = #{serialNum}</if>
+            <if test="projectName != null  and projectName != ''">and r.project_name like concat('%', #{projectName},
+                '%')
+            </if>
+            <if test="businessName != null  and businessName != ''">and r.business_name like concat('%',
+                #{businessName},
+                '%')
+            </if>
+            <if test="winUnit != null  and winUnit != ''">and r.win_unit = #{winUnit}</if>
+            <if test="status != null "> and r.status = #{status}</if>
+            <if test="isPrint != null  and isPrint != ''">and r.is_print = #{isPrint}</if>
+        </where>
+        order by subcontract_id desc
     </select>
 </mapper>

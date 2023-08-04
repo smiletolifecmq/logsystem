@@ -47,9 +47,9 @@
           </el-option>
         </el-select>
       </el-form-item>
-      <el-form-item label="审核状态" prop="status">
+      <el-form-item label="打印签收" prop="isPrint">
         <el-select
-          v-model="statusVaule"
+          v-model="queryParams.isPrint"
           placeholder="请选择"
           @change="handleQuery"
         >
@@ -75,23 +75,6 @@
         >
       </el-form-item>
     </el-form>
-
-    <el-row :gutter="10" class="mb8">
-      <el-col :span="1.5">
-        <el-button
-          type="primary"
-          plain
-          icon="el-icon-plus"
-          size="mini"
-          @click="handleAdd"
-          >新增</el-button
-        >
-      </el-col>
-      <right-toolbar
-        :showSearch.sync="showSearch"
-        @queryTable="getList"
-      ></right-toolbar>
-    </el-row>
 
     <el-table
       v-loading="loading"
@@ -137,15 +120,13 @@
       </el-table-column>
       <el-table-column label="负责人" align="center" prop="user.userName" />
       <el-table-column label="部门" align="center" prop="dept.deptName" />
-      <el-table-column label="审核状态" align="center" prop="status">
+      <el-table-column label="是否已打印签收" align="center" prop="isPrint">
         <template slot-scope="scope">
-          <span v-if="scope.row.status === 0">未开始</span>
-          <span v-else-if="scope.row.status === 1">进行中</span>
-          <span v-else-if="scope.row.status === 2">通过</span>
-          <span v-else-if="scope.row.status === 3">未通过</span>
-          <span v-else>其他状态</span>
-        </template>
-      </el-table-column>
+          <span v-if="scope.row.isPrint === 0" style="color: red">否</span>
+          <span v-else-if="scope.row.status === 1" style="color: blue">是</span>
+          <span v-else>其他状态</span> </template
+        >> </el-table-column
+      >>
       <el-table-column
         label="工期开始时间"
         align="center"
@@ -175,34 +156,6 @@
           <el-button
             size="mini"
             type="text"
-            icon="el-icon-edit-outline"
-            @click="handleReview(scope.row)"
-            v-if="scope.row.status === 0 || scope.row.status === 3"
-            >发起审核</el-button
-          >
-          <el-button
-            size="mini"
-            type="text"
-            icon="el-icon-edit"
-            @click="handleUpdate(scope.row)"
-            v-if="
-              scope.row.status === 0 ||
-              scope.row.status === 3 ||
-              scope.row.startEdit === 1
-            "
-            >编辑</el-button
-          >
-          <el-button
-            size="mini"
-            type="text"
-            icon="el-icon-delete"
-            @click="handleDelete(scope.row)"
-            v-if="scope.row.status === 0 || scope.row.status === 3"
-            >删除</el-button
-          >
-          <el-button
-            size="mini"
-            type="text"
             icon="el-icon-s-operation"
             @click="handleReviewProcess(scope.row)"
             >流程详情</el-button
@@ -216,105 +169,8 @@
       :total="total"
       :page.sync="queryParams.pageNum"
       :limit.sync="queryParams.pageSize"
-      @pagination="getList"
+      @pagination="getUpcomingList"
     />
-
-    <!-- 添加或修改分包对话框 -->
-    <el-dialog :title="title" :visible.sync="open" width="500px" append-to-body>
-      <el-form ref="form" :model="form" :rules="rules" label-width="80px">
-        <el-form-item label="工程编号" prop="serialNum">
-          <el-input v-model="form.serialNum" placeholder="请输入工程编号" />
-        </el-form-item>
-        <el-form-item label="项目名称" prop="projectName">
-          <el-input v-model="form.projectName" placeholder="请输入项目名称" />
-        </el-form-item>
-        <el-form-item label="业务名称" prop="businessName">
-          <el-input v-model="form.businessName" placeholder="请输入业务名称" />
-        </el-form-item>
-        <el-form-item label="委托单位" prop="entrustUnit">
-          <el-input v-model="form.entrustUnit" placeholder="请输入内容" />
-        </el-form-item>
-        <el-form-item label="工作量" prop="workload">
-          <el-input
-            v-model="form.workload"
-            type="textarea"
-            placeholder="请输入工作量"
-          />
-        </el-form-item>
-        <el-form-item label="工作内容">
-          <el-input
-            v-model="form.workcontent"
-            type="textarea"
-            placeholder="请输入工作内容"
-          />
-        </el-form-item>
-        <el-form-item label="协作单位" prop="cooperationUnitJson">
-          <el-select
-            v-model="form.cooperationUnitJson"
-            placeholder="协作单位"
-            multiple
-            style="width: 260px"
-          >
-            <el-option
-              v-for="item in winUnits"
-              :key="item.value"
-              :label="item.label"
-              :value="item.value"
-            >
-            </el-option>
-          </el-select>
-        </el-form-item>
-        <el-form-item label="中签单位" prop="winUnit">
-          <el-select
-            v-model="form.winUnit"
-            placeholder="请选择中签单位"
-            style="width: 260px"
-          >
-            <el-option
-              v-for="item in winUnits"
-              :key="item.value"
-              :label="item.label"
-              :value="item.value"
-            >
-            </el-option>
-          </el-select>
-        </el-form-item>
-        <el-form-item label="抽签时间" prop="lotTime">
-          <el-date-picker
-            clearable
-            v-model="form.lotTime"
-            type="date"
-            value-format="yyyy-MM-dd"
-            placeholder="请选择抽签时间"
-          >
-          </el-date-picker>
-        </el-form-item>
-        <el-form-item label="工期开始" prop="startTime">
-          <el-date-picker
-            clearable
-            v-model="form.startTime"
-            type="date"
-            value-format="yyyy-MM-dd"
-            placeholder="请选择工期开始时间"
-          >
-          </el-date-picker>
-        </el-form-item>
-        <el-form-item label="工期结束" prop="endTime">
-          <el-date-picker
-            clearable
-            v-model="form.endTime"
-            type="date"
-            value-format="yyyy-MM-dd"
-            placeholder="请选择工期结束时间"
-          >
-          </el-date-picker>
-        </el-form-item>
-      </el-form>
-      <div slot="footer" class="dialog-footer">
-        <el-button type="primary" @click="submitForm">确 定</el-button>
-        <el-button @click="cancel">取 消</el-button>
-      </div>
-    </el-dialog>
 
     <!-- 详情框 -->
     <el-dialog
@@ -322,12 +178,16 @@
       :visible.sync="openInfo"
       width="500px"
       append-to-body
+      v-el-drag-dialog
+      :close-on-click-modal="false"
+      :close-on-press-escape="false"
     >
       <el-form ref="formInfo" :model="formInfo" label-width="80px">
         <el-form-item label="工程编号" prop="serialNum">
           <el-input
             v-model="formInfo.serialNum"
             placeholder="请输入工程编号"
+            class="custom-input"
             disabled
           />
         </el-form-item>
@@ -335,6 +195,7 @@
           <el-input
             v-model="formInfo.projectName"
             placeholder="请输入项目名称"
+            class="custom-input"
             disabled
           />
         </el-form-item>
@@ -342,6 +203,7 @@
           <el-input
             v-model="formInfo.businessName"
             placeholder="请输入业务名称"
+            class="custom-input"
             disabled
           />
         </el-form-item>
@@ -349,6 +211,7 @@
           <el-input
             v-model="formInfo.entrustUnit"
             placeholder="请输入内容"
+            class="custom-input"
             disabled
           />
         </el-form-item>
@@ -357,6 +220,7 @@
             v-model="formInfo.workload"
             type="textarea"
             placeholder="请输入工作量"
+            class="textarea-input"
             disabled
           />
         </el-form-item>
@@ -365,6 +229,7 @@
             v-model="formInfo.workcontent"
             type="textarea"
             placeholder="请输入工作内容"
+            class="textarea-input"
             disabled
           />
         </el-form-item>
@@ -375,6 +240,7 @@
             multiple
             style="width: 260px"
             disabled
+            class="custom-input"
           >
             <el-option
               v-for="item in winUnits"
@@ -391,6 +257,7 @@
             placeholder="请选择中签单位"
             style="width: 260px"
             disabled
+            class="custom-input"
           >
             <el-option
               v-for="item in winUnits"
@@ -409,6 +276,7 @@
             value-format="yyyy-MM-dd"
             placeholder="请选择抽签时间"
             disabled
+            class="custom-input"
           >
           </el-date-picker>
         </el-form-item>
@@ -420,6 +288,7 @@
             value-format="yyyy-MM-dd"
             placeholder="请选择工期开始时间"
             disabled
+            class="custom-input"
           >
           </el-date-picker>
         </el-form-item>
@@ -431,6 +300,7 @@
             value-format="yyyy-MM-dd"
             placeholder="请选择工期结束时间"
             disabled
+            class="custom-input"
           >
           </el-date-picker>
         </el-form-item>
@@ -454,21 +324,31 @@
     </el-dialog>
   </div>
 </template>
+<style>
+.custom-input input {
+  color: black !important;
+}
 
+.textarea-input textarea {
+  color: black !important;
+}
+</style>
 <script>
 import {
-  listSubcontract,
   getSubcontract,
-  delSubcontract,
   addSubcontract,
   updateSubcontract,
   getSubcontractProcessList,
-  setReviewStatus,
+  completedListReview,
 } from "@/api/system/subcontract";
 import { listUnit } from "@/api/system/unit";
+import elDragDialog from "@/api/components/el-drag";
 
 export default {
   name: "Subcontract",
+  directives: {
+    elDragDialog,
+  },
   data() {
     return {
       reviewProcessOpen: false,
@@ -479,19 +359,11 @@ export default {
       statusArr: [
         {
           value: 0,
-          label: "未开始",
+          label: "否",
         },
         {
           value: 1,
-          label: "进行中",
-        },
-        {
-          value: 2,
-          label: "通过",
-        },
-        {
-          value: 3,
-          label: "未通过",
+          label: "是",
         },
       ],
       statusVaule: "",
@@ -564,7 +436,7 @@ export default {
     };
   },
   created() {
-    this.getList();
+    this.getUpcomingList();
     this.loadAllUnits();
   },
   methods: {
@@ -600,22 +472,6 @@ export default {
         return description;
       }
     },
-    /** 发起审核 */
-    handleReview(row) {
-      this.$modal
-        .confirm(
-          '是否确认对审核单编号为"' + row.serialNum + '"的审核单发起审核申请?'
-        )
-        .then(() => {
-          this.form.subcontractId = row.subcontractId;
-          this.form.status = 1;
-          setReviewStatus(this.form).then((response) => {
-            this.getList();
-            this.$modal.msgSuccess("已发起审核");
-          });
-        })
-        .catch(() => {});
-    },
     /** 显示具体流程按钮操作 */
     handleReviewProcess(row) {
       let formObj = {};
@@ -642,9 +498,10 @@ export default {
       });
     },
     /** 查询分包列表 */
-    getList() {
+    getUpcomingList() {
       this.loading = true;
-      listSubcontract(this.queryParams).then((response) => {
+      this.queryParams.status = 2;
+      completedListReview(this.queryParams).then((response) => {
         this.subcontractList = response.rows;
         this.total = response.total;
         this.loading = false;
@@ -684,7 +541,7 @@ export default {
       if (this.statusVaule !== "") {
         this.queryParams.status = this.statusVaule;
       }
-      this.getList();
+      this.getUpcomingList();
     },
     /** 重置按钮操作 */
     resetQuery() {
@@ -722,41 +579,17 @@ export default {
             updateSubcontract(this.form).then((response) => {
               this.$modal.msgSuccess("修改成功");
               this.open = false;
-              this.getList();
+              this.getUpcomingList();
             });
           } else {
             addSubcontract(this.form).then((response) => {
               this.$modal.msgSuccess("新增成功");
               this.open = false;
-              this.getList();
+              this.getUpcomingList();
             });
           }
         }
       });
-    },
-    /** 删除按钮操作 */
-    handleDelete(row) {
-      const subcontractIds = row.subcontractId || this.ids;
-      this.$modal
-        .confirm('是否确认删除分包编号为"' + subcontractIds + '"的数据项？')
-        .then(function () {
-          return delSubcontract(subcontractIds);
-        })
-        .then(() => {
-          this.getList();
-          this.$modal.msgSuccess("删除成功");
-        })
-        .catch(() => {});
-    },
-    /** 导出按钮操作 */
-    handleExport() {
-      this.download(
-        "system/subcontract/export",
-        {
-          ...this.queryParams,
-        },
-        `subcontract_${new Date().getTime()}.xlsx`
-      );
     },
     showSubcontractInfo(row) {
       const subcontractId = row.subcontractId;

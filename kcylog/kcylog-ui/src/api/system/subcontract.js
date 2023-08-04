@@ -92,3 +92,12 @@ export function doneListReview(query) {
     params: query
   })
 }
+
+// 查询已完成审核单列表
+export function completedListReview(query) {
+  return request({
+    url: '/system/subcontract/completedListReview',
+    method: 'get',
+    params: query
+  })
+}
