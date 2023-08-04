@@ -175,16 +175,37 @@
           <el-button
             size="mini"
             type="text"
+            icon="el-icon-edit-outline"
+            @click="handleReview(scope.row)"
+            v-if="scope.row.status === 0 || scope.row.status === 3"
+            >发起审核</el-button
+          >
+          <el-button
+            size="mini"
+            type="text"
             icon="el-icon-edit"
             @click="handleUpdate(scope.row)"
-            >修改</el-button
+            v-if="
+              scope.row.status === 0 ||
+              scope.row.status === 3 ||
+              scope.row.startEdit === 1
+            "
+            >编辑</el-button
           >
           <el-button
             size="mini"
             type="text"
             icon="el-icon-delete"
             @click="handleDelete(scope.row)"
+            v-if="scope.row.status === 0 || scope.row.status === 3"
             >删除</el-button
+          >
+          <el-button
+            size="mini"
+            type="text"
+            icon="el-icon-s-operation"
+            @click="handleReviewProcess(scope.row)"
+            >流程详情</el-button
           >
         </template>
       </el-table-column>
@@ -301,12 +322,15 @@
       :visible.sync="openInfo"
       width="500px"
       append-to-body
+      :close-on-click-modal="false"
+      :close-on-press-escape="false"
     >
       <el-form ref="formInfo" :model="formInfo" label-width="80px">
         <el-form-item label="工程编号" prop="serialNum">
           <el-input
             v-model="formInfo.serialNum"
             placeholder="请输入工程编号"
+            class="custom-input"
             disabled
           />
         </el-form-item>
@@ -314,6 +338,7 @@
           <el-input
             v-model="formInfo.projectName"
             placeholder="请输入项目名称"
+            class="custom-input"
             disabled
           />
         </el-form-item>
@@ -321,6 +346,7 @@
           <el-input
             v-model="formInfo.businessName"
             placeholder="请输入业务名称"
+            class="custom-input"
             disabled
           />
         </el-form-item>
@@ -328,6 +354,7 @@
           <el-input
             v-model="formInfo.entrustUnit"
             placeholder="请输入内容"
+            class="custom-input"
             disabled
           />
         </el-form-item>
@@ -336,6 +363,7 @@
             v-model="formInfo.workload"
             type="textarea"
             placeholder="请输入工作量"
+            class="textarea-input"
             disabled
           />
         </el-form-item>
@@ -344,6 +372,7 @@
             v-model="formInfo.workcontent"
             type="textarea"
             placeholder="请输入工作内容"
+            class="textarea-input"
             disabled
           />
         </el-form-item>
@@ -354,6 +383,7 @@
             multiple
             style="width: 260px"
             disabled
+            class="custom-input"
           >
             <el-option
               v-for="item in winUnits"
@@ -370,6 +400,7 @@
             placeholder="请选择中签单位"
             style="width: 260px"
             disabled
+            class="custom-input"
           >
             <el-option
               v-for="item in winUnits"
@@ -388,6 +419,7 @@
             value-format="yyyy-MM-dd"
             placeholder="请选择抽签时间"
             disabled
+            class="custom-input"
           >
           </el-date-picker>
         </el-form-item>
@@ -399,6 +431,7 @@
             value-format="yyyy-MM-dd"
             placeholder="请选择工期开始时间"
             disabled
+            class="custom-input"
           >
           </el-date-picker>
         </el-form-item>
@@ -410,14 +443,39 @@
             value-format="yyyy-MM-dd"
             placeholder="请选择工期结束时间"
             disabled
+            class="custom-input"
           >
           </el-date-picker>
         </el-form-item>
       </el-form>
     </el-dialog>
+
+    <!-- 具体流程 -->
+
+    <el-dialog :visible.sync="reviewProcessOpen" width="300px" append-to-body>
+      <div style="height: 300px">
+        <el-steps direction="vertical" :active="reviewProcessActive">
+          <el-step
+            v-for="reviewProcess in reviewProcessList"
+            :key="reviewProcess.reviewProcessId"
+            :title="reviewProcess.user.userName"
+            :status="reviewProcessStatus(reviewProcess)"
+            :description="reviewProcessDescription(reviewProcess)"
+          ></el-step>
+        </el-steps>
+      </div>
+    </el-dialog>
   </div>
 </template>
+<style>
+.custom-input input {
+  color: black !important;
+}
 
+.textarea-input textarea {
+  color: black !important;
+}
+</style>
 <script>
 import {
   listSubcontract,
@@ -425,6 +483,8 @@ import {
   delSubcontract,
   addSubcontract,
   updateSubcontract,
+  getSubcontractProcessList,
+  setReviewStatus,
 } from "@/api/system/subcontract";
 import { listUnit } from "@/api/system/unit";
 
@@ -432,6 +492,9 @@ export default {
   name: "Subcontract",
   data() {
     return {
+      reviewProcessOpen: false,
+      reviewProcessActive: -1,
+      reviewProcessList: [],
       titleInfo: "",
       openInfo: false,
       statusArr: [
@@ -526,6 +589,69 @@ export default {
     this.loadAllUnits();
   },
   methods: {
+    reviewProcessStatus(reviewProcess) {
+      if (reviewProcess.status === 0) {
+        return "";
+      } else if (reviewProcess.status === 1) {
+        return "finish";
+      } else if (reviewProcess.status === 2) {
+        return "success";
+      } else if (reviewProcess.status === 3) {
+        return "error";
+      }
+    },
+    reviewProcessDescription(reviewProcess) {
+      if (reviewProcess.status === 0) {
+        return "审核状态:未开始";
+      } else if (reviewProcess.status === 1) {
+        return "审核状态:进行中";
+      } else if (reviewProcess.status === 2) {
+        let description = "审核状态:通过；";
+        if (reviewProcess.reason != "" && reviewProcess.reason != null) {
+          description = description + "理由:" + reviewProcess.reason + "；";
+        }
+        description = description + "审核时间:" + reviewProcess.reviewTime;
+        return description;
+      } else if (reviewProcess.status === 3) {
+        let description = "审核状态:拒绝；";
+        if (reviewProcess.reason != "" && reviewProcess.reason != null) {
+          description = description + "理由:" + reviewProcess.reason + "；";
+        }
+        description = description + "审核时间:" + reviewProcess.reviewTime;
+        return description;
+      }
+    },
+    /** 发起审核 */
+    handleReview(row) {
+      this.$modal
+        .confirm(
+          '是否确认对审核单编号为"' + row.serialNum + '"的审核单发起审核申请?'
+        )
+        .then(() => {
+          this.form.subcontractId = row.subcontractId;
+          this.form.status = 1;
+          setReviewStatus(this.form).then((response) => {
+            this.getList();
+            this.$modal.msgSuccess("已发起审核");
+          });
+        })
+        .catch(() => {});
+    },
+    /** 显示具体流程按钮操作 */
+    handleReviewProcess(row) {
+      let formObj = {};
+      formObj.subcontractId = row.subcontractId;
+      getSubcontractProcessList(formObj).then((response) => {
+        this.reviewProcessList = response.rows;
+        this.reviewProcessActive = -1;
+        for (let i = 0; i < response.rows.length; i++) {
+          if (response.rows[i].status != 0) {
+            this.reviewProcessActive = this.reviewProcessActive + 1;
+          }
+        }
+        this.reviewProcessOpen = true;
+      });
+    },
     loadAllUnits() {
       listUnit().then((response) => {
         for (let i = 0; i < response.rows.length; i++) {

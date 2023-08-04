@@ -59,4 +59,12 @@ public interface SysSubcontractMapper
      * @return 结果
      */
     public int deleteSysSubcontractBySubcontractIds(Long[] subcontractIds);
+
+    public int setSysSubcontractStatusBySubcontractId(SysSubcontract sysSubcontract);
+
+    public List<SysSubcontract> selectSysUpcomingSubcontractList(SysSubcontract sysSubcontract);
+
+    public int setSysReviewStatusBySubcontractId(SysSubcontract sysSubcontract);
+
+    public List<SysSubcontract> selectDoneReviewList(SysSubcontract sysSubcontract);
 }

@@ -63,4 +63,12 @@ public interface ISysSubcontractProcessService
     public int insertSysSubcontractProcessBatch(List<SysSubcontractProcess> sysSubcontractProcess);
 
     public int deleteSysSubcontractProcessByReviewIds(Long[] subcontractIds);
+
+    public int setStatusNotStartBySubcontractId(Long subcontractId);
+
+    public int setStatusBySubcontractIdFirst(Long subcontractId);
+
+    public int setStatusByUserIdAndSubcontractId(SysSubcontractProcess sysSubcontractProcess);
+
+    public int setNextStatusBySubcontractId(Long subcontractId);
 }

@@ -1,12 +1,13 @@
 package com.kcylog.system.service.impl;
 
-import java.util.List;
 import com.kcylog.common.utils.DateUtils;
+import com.kcylog.system.domain.SysSubcontract;
+import com.kcylog.system.mapper.SysSubcontractMapper;
+import com.kcylog.system.service.ISysSubcontractService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-import com.kcylog.system.mapper.SysSubcontractMapper;
-import com.kcylog.system.domain.SysSubcontract;
-import com.kcylog.system.service.ISysSubcontractService;
+
+import java.util.List;
 
 /**
  * 分包Service业务层处理
@@ -92,5 +93,29 @@ public class SysSubcontractServiceImpl implements ISysSubcontractService
     public int deleteSysSubcontractBySubcontractId(Long subcontractId)
     {
         return sysSubcontractMapper.deleteSysSubcontractBySubcontractId(subcontractId);
+    }
+
+    @Override
+    public int setSysSubcontractStatusBySubcontractId(SysSubcontract sysSubcontract)
+    {
+        return sysSubcontractMapper.setSysSubcontractStatusBySubcontractId(sysSubcontract);
+    }
+
+    @Override
+    public List<SysSubcontract> selectSysUpcomingSubcontractList(SysSubcontract sysSubcontract)
+    {
+        return sysSubcontractMapper.selectSysUpcomingSubcontractList(sysSubcontract);
+    }
+
+    @Override
+    public int setSysReviewStatusBySubcontractId(SysSubcontract sysSubcontract)
+    {
+        return sysSubcontractMapper.setSysReviewStatusBySubcontractId(sysSubcontract);
+    }
+
+    @Override
+    public List<SysSubcontract> selectDoneReviewList(SysSubcontract sysSubcontract)
+    {
+        return sysSubcontractMapper.selectDoneReviewList(sysSubcontract);
     }
 }

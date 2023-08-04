@@ -95,6 +95,16 @@ public class SysSubcontract extends BaseEntity
      */
     private SysUser user;
 
+    private Long isPrint;
+
+    public Long getIsPrint() {
+        return isPrint;
+    }
+
+    public void setIsPrint(Long isPrint) {
+        this.isPrint = isPrint;
+    }
+
     public SysDept getDept() {
         return dept;
     }

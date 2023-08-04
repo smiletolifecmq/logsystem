@@ -103,4 +103,28 @@ public class SysSubcontractProcessServiceImpl implements ISysSubcontractProcessS
     {
         return sysSubcontractProcessMapper.deleteSysSubcontractProcessByReviewIds(subcontractIds);
     }
+
+    @Override
+    public int setStatusNotStartBySubcontractId(Long subcontractId)
+    {
+        return sysSubcontractProcessMapper.setStatusNotStartBySubcontractId(subcontractId);
+    }
+
+    @Override
+    public int setStatusBySubcontractIdFirst(Long subcontractId)
+    {
+        return sysSubcontractProcessMapper.setStatusBySubcontractIdFirst(subcontractId);
+    }
+
+    @Override
+    public int setStatusByUserIdAndSubcontractId(SysSubcontractProcess sysSubcontractProcess)
+    {
+        return sysSubcontractProcessMapper.setStatusByUserIdAndSubcontractId(sysSubcontractProcess);
+    }
+
+    @Override
+    public int setNextStatusBySubcontractId(Long subcontractId)
+    {
+        return sysSubcontractProcessMapper.setNextStatusBySubcontractId(subcontractId);
+    }
 }

@@ -18,6 +18,7 @@
         <result property="userId" column="user_id"/>
         <result property="deptId" column="dept_id"/>
         <result property="status" column="status"/>
+        <result property="isPrint" column="is_print"/>
         <result property="startTime" column="start_time"/>
         <result property="endTime" column="end_time"/>
         <result property="createTime" column="create_time"/>
@@ -79,6 +80,7 @@
             <if test="userId != null">user_id,</if>
             <if test="deptId != null">dept_id,</if>
             <if test="status != null">status,</if>
+            <if test="isPrint != null">is_print,</if>
             <if test="startTime != null">start_time,</if>
             <if test="endTime != null">end_time,</if>
             <if test="createTime != null">create_time,</if>
@@ -96,6 +98,7 @@
             <if test="workcontent != null">#{workcontent},</if>
             <if test="userId != null">#{userId},</if>
             <if test="deptId != null">#{deptId},</if>
+            <if test="isPrint != null">#{isPrint},</if>
             <if test="status != null">#{status},</if>
             <if test="startTime != null">#{startTime},</if>
             <if test="endTime != null">#{endTime},</if>
@@ -118,6 +121,7 @@
             <if test="workcontent != null">workcontent = #{workcontent},</if>
             <if test="userId != null">user_id = #{userId},</if>
             <if test="deptId != null">dept_id = #{deptId},</if>
+            <if test="isPrint != null">dept_id = #{isPrint},</if>
             <if test="status != null">status = #{status},</if>
             <if test="startTime != null">start_time = #{startTime},</if>
             <if test="endTime != null">end_time = #{endTime},</if>
@@ -139,4 +143,55 @@
             #{subcontractId}
         </foreach>
     </delete>
+
+    <update id="setSysSubcontractStatusBySubcontractId" parameterType="SysSubcontract">
+        update sys_subcontract
+        <trim prefix="SET" suffixOverrides=",">
+            <if test="status != null and status != ''">status = #{status},</if>
+        </trim>
+        where subcontract_id = #{subcontractId}
+    </update>
+
+    <select id="selectSysUpcomingSubcontractList" parameterType="SysSubcontract" resultMap="SysSubcontractResult">
+        <include refid="selectSysSubcontractVo"/>
+        inner join sys_subcontract_process rp on r.subcontract_id = rp.subcontract_id
+        <where>
+            <if test="serialNum != null  and serialNum != ''">and r.serial_num = #{serialNum}</if>
+            <if test="projectName != null  and projectName != ''">and r.project_name like concat('%', #{projectName},
+                '%')
+            </if>
+            <if test="businessName != null  and businessName != ''">and r.business_name like concat('%', #{businessName},
+                '%')
+            </if>
+            <if test="winUnit != null  and winUnit != ''">and r.win_unit = #{winUnit}</if>
+        </where>
+        AND rp.user_id = #{userId}
+        AND rp.status = 1
+    </select>
+
+    <update id="setSysReviewStatusBySubcontractId" parameterType="SysSubcontract">
+        update sys_subcontract
+        <trim prefix="SET" suffixOverrides=",">
+            <if test="status != null and status != ''">status = #{status},</if>
+        </trim>
+        where subcontract_id = #{subcontractId}
+    </update>
+
+    <select id="selectDoneReviewList" parameterType="SysSubcontract" resultMap="SysSubcontractResult">
+        <include refid="selectSysSubcontractVo"/>
+        inner join sys_subcontract_process rp on r.subcontract_id = rp.subcontract_id
+        <where>
+            <if test="serialNum != null  and serialNum != ''">and r.serial_num = #{serialNum}</if>
+            <if test="projectName != null  and projectName != ''">and r.project_name like concat('%', #{projectName},
+                '%')
+            </if>
+            <if test="businessName != null  and businessName != ''">and r.business_name like concat('%', #{businessName},
+                '%')
+            </if>
+            <if test="winUnit != null  and winUnit != ''">and r.win_unit = #{winUnit}</if>
+        </where>
+        AND rp.user_id = #{userId}
+        AND (rp.status = 2 OR rp.status = 3)
+        order by r.subcontract_id desc
+    </select>
 </mapper>

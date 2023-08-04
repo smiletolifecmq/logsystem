@@ -1,41 +1,47 @@
 <?xml version="1.0" encoding="UTF-8" ?>
 <!DOCTYPE mapper
-PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
-"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.kcylog.system.mapper.SysSubcontractProcessMapper">
-    
+
     <resultMap type="SysSubcontractProcess" id="SysSubcontractProcessResult">
-        <result property="subcontractProcessId"    column="subcontract_process_id"    />
-        <result property="subcontractId"    column="subcontract_id"    />
-        <result property="userId"    column="user_id"    />
-        <result property="status"    column="status"    />
-        <result property="node"    column="node"    />
-        <result property="reason"    column="reason"    />
-        <result property="reviewTime"    column="review_time"    />
+        <result property="subcontractProcessId" column="subcontract_process_id"/>
+        <result property="subcontractId" column="subcontract_id"/>
+        <result property="userId" column="user_id"/>
+        <result property="status" column="status"/>
+        <result property="node" column="node"/>
+        <result property="reason" column="reason"/>
+        <result property="reviewTime" column="review_time"/>
+        <association property="user" column="user_name" javaType="SysUser" resultMap="sysReviewUserResult"/>
+    </resultMap>
+
+    <resultMap id="sysReviewUserResult" type="SysUser">
+        <result property="userName" column="user_name"/>
     </resultMap>
 
     <sql id="selectSysSubcontractProcessVo">
-        select subcontract_process_id, subcontract_id, user_id, status, node, reason, review_time from sys_subcontract_process
+        select rp.*, u.user_name
+        from sys_subcontract_process rp
+                 inner join sys_user u on rp.user_id = u.user_id
     </sql>
 
-    <select id="selectSysSubcontractProcessList" parameterType="SysSubcontractProcess" resultMap="SysSubcontractProcessResult">
+    <select id="selectSysSubcontractProcessList" parameterType="SysSubcontractProcess"
+            resultMap="SysSubcontractProcessResult">
         <include refid="selectSysSubcontractProcessVo"/>
-        <where>  
-            <if test="subcontractId != null "> and subcontract_id = #{subcontractId}</if>
-            <if test="userId != null "> and user_id = #{userId}</if>
-            <if test="status != null "> and status = #{status}</if>
-            <if test="node != null "> and node = #{node}</if>
-            <if test="reason != null  and reason != ''"> and reason = #{reason}</if>
-            <if test="reviewTime != null "> and review_time = #{reviewTime}</if>
+        <where>
+            <if test="subcontractId != null ">and subcontract_id = #{subcontractId}</if>
         </where>
+        order by node asc
     </select>
-    
-    <select id="selectSysSubcontractProcessBySubcontractProcessId" parameterType="Long" resultMap="SysSubcontractProcessResult">
+
+    <select id="selectSysSubcontractProcessBySubcontractProcessId" parameterType="Long"
+            resultMap="SysSubcontractProcessResult">
         <include refid="selectSysSubcontractProcessVo"/>
         where subcontract_process_id = #{subcontractProcessId}
     </select>
-        
-    <insert id="insertSysSubcontractProcess" parameterType="SysSubcontractProcess" useGeneratedKeys="true" keyProperty="subcontractProcessId">
+
+    <insert id="insertSysSubcontractProcess" parameterType="SysSubcontractProcess" useGeneratedKeys="true"
+            keyProperty="subcontractProcessId">
         insert into sys_subcontract_process
         <trim prefix="(" suffix=")" suffixOverrides=",">
             <if test="subcontractId != null">subcontract_id,</if>
@@ -44,7 +50,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
             <if test="node != null">node,</if>
             <if test="reason != null">reason,</if>
             <if test="reviewTime != null">review_time,</if>
-         </trim>
+        </trim>
         <trim prefix="values (" suffix=")" suffixOverrides=",">
             <if test="subcontractId != null">#{subcontractId},</if>
             <if test="userId != null">#{userId},</if>
@@ -52,7 +58,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
             <if test="node != null">#{node},</if>
             <if test="reason != null">#{reason},</if>
             <if test="reviewTime != null">#{reviewTime},</if>
-         </trim>
+        </trim>
     </insert>
 
     <update id="updateSysSubcontractProcess" parameterType="SysSubcontractProcess">
@@ -69,11 +75,13 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
     </update>
 
     <delete id="deleteSysSubcontractProcessBySubcontractProcessId" parameterType="Long">
-        delete from sys_subcontract_process where subcontract_process_id = #{subcontractProcessId}
+        delete
+        from sys_subcontract_process
+        where subcontract_process_id = #{subcontractProcessId}
     </delete>
 
     <delete id="deleteSysSubcontractProcessBySubcontractProcessIds" parameterType="String">
-        delete from sys_subcontract_process where subcontract_process_id in 
+        delete from sys_subcontract_process where subcontract_process_id in
         <foreach item="subcontractProcessId" collection="array" open="(" separator="," close=")">
             #{subcontractProcessId}
         </foreach>
@@ -93,4 +101,48 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
             #{subcontractId}
         </foreach>
     </delete>
+
+    <update id="setStatusNotStartBySubcontractId" parameterType="Long">
+        UPDATE sys_subcontract_process
+        set status      = 0,
+            review_time = NULL
+        where subcontract_id = #{subcontractId}
+    </update>
+
+    <update id="setStatusBySubcontractIdFirst" parameterType="Long">
+        UPDATE sys_subcontract_process AS r1
+            INNER JOIN (
+            SELECT subcontract_process_id
+            FROM sys_subcontract_process
+            WHERE subcontract_id = #{subcontractId}
+            ORDER BY node ASC
+            LIMIT 1
+            ) AS r2
+        ON r1.subcontract_process_id = r2.subcontract_process_id
+            SET r1.status = 1;
+    </update>
+
+    <update id="setStatusByUserIdAndSubcontractId" parameterType="SysSubcontractProcess">
+        UPDATE sys_subcontract_process
+        set status      = #{status},
+            reason      = #{reason},
+            review_time = #{reviewTime}
+        where subcontract_id = #{subcontractId}
+          AND user_id = #{userId}
+    </update>
+
+    <update id="setNextStatusBySubcontractId" parameterType="Long">
+        UPDATE sys_subcontract_process
+        SET status = 1
+        WHERE subcontract_process_id IN (
+            SELECT t.subcontract_process_id
+            FROM (
+                     SELECT subcontract_process_id
+                     FROM sys_subcontract_process
+                     WHERE subcontract_id = #{subcontractId}
+                       AND status = 0
+                     ORDER BY node ASC LIMIT 1
+                 ) AS t
+        );
+    </update>
 </mapper>

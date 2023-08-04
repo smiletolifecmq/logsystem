@@ -3,6 +3,7 @@ package com.kcylog.system.domain;
 import com.fasterxml.jackson.annotation.JsonFormat;
 import com.kcylog.common.annotation.Excel;
 import com.kcylog.common.core.domain.BaseEntity;
+import com.kcylog.common.core.domain.entity.SysUser;
 import org.apache.commons.lang3.builder.ToStringBuilder;
 import org.apache.commons.lang3.builder.ToStringStyle;
 
@@ -45,6 +46,19 @@ public class SysSubcontractProcess extends BaseEntity
     @JsonFormat(pattern = "yyyy-MM-dd")
     @Excel(name = "审核时间", width = 30, dateFormat = "yyyy-MM-dd")
     private Date reviewTime;
+
+    /**
+     * 用户对象
+     */
+    private SysUser user;
+
+    public SysUser getUser() {
+        return user;
+    }
+
+    public void setUser(SysUser user) {
+        this.user = user;
+    }
 
     public void setSubcontractProcessId(Long subcontractProcessId) 
     {

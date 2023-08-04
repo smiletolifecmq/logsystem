@@ -59,4 +59,12 @@ public interface ISysSubcontractService
      * @return 结果
      */
     public int deleteSysSubcontractBySubcontractId(Long subcontractId);
+
+    public int setSysSubcontractStatusBySubcontractId(SysSubcontract sysSubcontract);
+
+    public List<SysSubcontract> selectSysUpcomingSubcontractList(SysSubcontract sysSubcontract);
+
+    public int setSysReviewStatusBySubcontractId(SysSubcontract sysSubcontract);
+
+    public List<SysSubcontract> selectDoneReviewList(SysSubcontract sysSubcontract);
 }

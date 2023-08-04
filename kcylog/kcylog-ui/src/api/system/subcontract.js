@@ -42,3 +42,53 @@ export function delSubcontract(subcontractId) {
     method: 'delete'
   })
 }
+
+export function getSubcontractProcessList(query) {
+  return request({
+    url: '/system/subcontractProcess/list',
+    method: 'get',
+    params: query
+  })
+}
+
+// 发起审核单申请
+export function setReviewStatus(data) {
+  return request({
+    url: '/system/subcontract/set_status',
+    method: 'put',
+    data: data
+  })
+}
+
+export function upcomingListReview(query) {
+  return request({
+    url: '/system/subcontract/upcomingListReview',
+    method: 'get',
+    params: query
+  })
+}
+
+// 修改审核是否通过
+export function setSubcontractProcessStatus(data) {
+  return request({
+    url: '/system/subcontract/set_review_process',
+    method: 'put',
+    data: data
+  })
+}
+
+// 批量通过
+export function setBatchReviewPass(subcontractIds) {
+  return request({
+    url: '/system/subcontract/set_batch_review_pass/' + subcontractIds,
+    method: 'put'
+  })
+}
+
+export function doneListReview(query) {
+  return request({
+    url: '/system/subcontract/doneListReview',
+    method: 'get',
+    params: query
+  })
+}
