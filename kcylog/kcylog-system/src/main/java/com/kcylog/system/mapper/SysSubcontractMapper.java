@@ -69,4 +69,6 @@ public interface SysSubcontractMapper
     public List<SysSubcontract> selectDoneReviewList(SysSubcontract sysSubcontract);
 
     public List<SysSubcontract> selectCompletedReviewList(SysSubcontract sysSubcontract);
+
+    public int setSubcontractIsPrintBySubcontractId(Long subcontractId);
 }

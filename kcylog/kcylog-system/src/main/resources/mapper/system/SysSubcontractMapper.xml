@@ -212,8 +212,14 @@
             </if>
             <if test="winUnit != null  and winUnit != ''">and r.win_unit = #{winUnit}</if>
             <if test="status != null "> and r.status = #{status}</if>
-            <if test="isPrint != null  and isPrint != ''">and r.is_print = #{isPrint}</if>
+            <if test="isPrint != null">and r.is_print = #{isPrint}</if>
         </where>
         order by subcontract_id desc
     </select>
+
+    <update id="setSubcontractIsPrintBySubcontractId" parameterType="Long">
+        update sys_subcontract
+        set is_print = 1
+        where subcontract_id = #{subcontractId}
+    </update>
 </mapper>

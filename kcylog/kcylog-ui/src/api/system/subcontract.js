@@ -101,3 +101,11 @@ export function completedListReview(query) {
     params: query
   })
 }
+
+// 确认打印
+export function confirmIsPrint(subcontractId) {
+  return request({
+    url: '/system/subcontract/set_is_print/' + subcontractId,
+    method: 'put'
+  })
+}

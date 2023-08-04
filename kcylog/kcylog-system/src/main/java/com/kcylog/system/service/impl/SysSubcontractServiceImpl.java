@@ -124,4 +124,10 @@ public class SysSubcontractServiceImpl implements ISysSubcontractService
     {
         return sysSubcontractMapper.selectCompletedReviewList(sysSubcontract);
     }
+
+    @Override
+    public int setSubcontractIsPrintBySubcontractId(Long subcontractId)
+    {
+        return sysSubcontractMapper.setSubcontractIsPrintBySubcontractId(subcontractId);
+    }
 }

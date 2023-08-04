@@ -123,7 +123,9 @@
       <el-table-column label="是否已打印签收" align="center" prop="isPrint">
         <template slot-scope="scope">
           <span v-if="scope.row.isPrint === 0" style="color: red">否</span>
-          <span v-else-if="scope.row.status === 1" style="color: blue">是</span>
+          <span v-else-if="scope.row.isPrint === 1" style="color: blue"
+            >是</span
+          >
           <span v-else>其他状态</span> </template
         >> </el-table-column
       >>
@@ -153,6 +155,20 @@
         class-name="small-padding fixed-width"
       >
         <template slot-scope="scope">
+          <el-button
+            size="mini"
+            type="text"
+            icon="el-icon-thumb"
+            @click="confirmPrint(scope.row)"
+            >打印签收</el-button
+          >
+          <el-button
+            size="mini"
+            type="text"
+            icon="el-icon-download"
+            @click="confirmExport(scope.row)"
+            >导出</el-button
+          >
           <el-button
             size="mini"
             type="text"
@@ -340,6 +356,7 @@ import {
   updateSubcontract,
   getSubcontractProcessList,
   completedListReview,
+  confirmIsPrint,
 } from "@/api/system/subcontract";
 import { listUnit } from "@/api/system/unit";
 import elDragDialog from "@/api/components/el-drag";
@@ -351,6 +368,7 @@ export default {
   },
   data() {
     return {
+      queryParamsExport: {},
       reviewProcessOpen: false,
       reviewProcessActive: -1,
       reviewProcessList: [],
@@ -440,6 +458,29 @@ export default {
     this.loadAllUnits();
   },
   methods: {
+    confirmExport(row) {
+      this.queryParamsExport.subcontractId = row.subcontractId;
+      this.download(
+        "system/subcontract/export",
+        { ...this.queryParamsExport },
+        row.serialNum + `_${new Date().getTime()}.xlsx`
+      );
+    },
+    confirmPrint(row) {
+      const subcontractId = row.subcontractId;
+      this.$modal
+        .confirm(
+          '是否确认工程编号为:"' + row.serialNum + '"的数据项已打印签收？'
+        )
+        .then(function () {
+          return confirmIsPrint(subcontractId);
+        })
+        .then(() => {
+          this.getUpcomingList();
+          this.$modal.msgSuccess("确认成功～");
+        })
+        .catch(() => {});
+    },
     reviewProcessStatus(reviewProcess) {
       if (reviewProcess.status === 0) {
         return "";
