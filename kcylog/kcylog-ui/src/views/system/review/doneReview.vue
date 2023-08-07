@@ -262,7 +262,7 @@
                 <el-input
                   v-model="formInfo.workload"
                   type="textarea"
-                  placeholder="请输入内容"
+                  placeholder="未填写"
                   disabled
                   class="textarea-input"
                 />
@@ -293,6 +293,15 @@
                   :min="0"
                   disabled
                   class="custom-input"
+                />
+              </el-form-item>
+              <el-form-item label="雇工原因" prop="employmentReason">
+                <el-input
+                  v-model="formInfo.employmentReason"
+                  type="textarea"
+                  placeholder="未填写"
+                  disabled
+                  class="textarea-input"
                 />
               </el-form-item>
               <el-form-item label="开始时间" prop="startTime">

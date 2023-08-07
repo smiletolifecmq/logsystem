@@ -97,7 +97,7 @@
           <span v-else></span>
         </template>
       </el-table-column>
-      <el-table-column label="雇工金额" align="center" prop="budgetMoney" />
+      <el-table-column label="预算金额" align="center" prop="budgetMoney" />
       <el-table-column label="负责人" align="center" prop="user.userName" />
       <el-table-column label="部门" align="center" prop="dept.deptName" />
       <!-- <el-table-column label="审核状态" align="center" prop="status">
@@ -156,7 +156,7 @@
         fixed="right"
       >
         <template slot-scope="scope">
-          <el-button
+          <!-- <el-button
             size="mini"
             type="text"
             icon="el-icon-success"
@@ -169,7 +169,7 @@
             icon="el-icon-error"
             @click="handleReview(scope.row, 3)"
             >不通过</el-button
-          >
+          > -->
           <el-button
             size="mini"
             type="text"
@@ -281,7 +281,7 @@
                 <el-input
                   v-model="formInfo.workload"
                   type="textarea"
-                  placeholder="请输入内容"
+                  placeholder="未填写"
                   disabled
                   class="textarea-input"
                 />
@@ -312,6 +312,15 @@
                   :min="0"
                   disabled
                   class="custom-input"
+                />
+              </el-form-item>
+              <el-form-item label="雇工原因" prop="employmentReason">
+                <el-input
+                  v-model="formInfo.employmentReason"
+                  type="textarea"
+                  placeholder="未填写"
+                  disabled
+                  class="textarea-input"
                 />
               </el-form-item>
               <el-form-item label="开始时间" prop="startTime">
@@ -373,7 +382,32 @@
                   class="custom-input"
                 />
               </el-form-item>
+              <el-form-item label="负责人">
+                <el-input
+                  v-if="formInfo.user"
+                  v-model="formInfo.user.userName"
+                  placeholder="请输入委托单位"
+                  disabled
+                  class="custom-input"
+                />
+              </el-form-item>
+              <el-form-item label="审核意见">
+                <el-input
+                  v-model="formInfo.auditOpinion"
+                  placeholder="请输入审核意见"
+                  class="custom-input"
+                />
+              </el-form-item>
             </el-form>
+
+            <div class="button-container">
+              <el-button type="success" @click="handleReview(formInfo, 2)"
+                >通过</el-button
+              >
+              <el-button type="danger" @click="handleReview(formInfo, 3)"
+                >不通过</el-button
+              >
+            </div>
           </el-card>
         </el-col>
 
@@ -414,6 +448,12 @@
 
 .textarea-input textarea {
   color: black !important;
+}
+
+.button-container {
+  display: flex;
+  justify-content: flex-end;
+  padding: 10px;
 }
 </style>
 <script>
@@ -589,16 +629,21 @@ export default {
 
     /** 操作审核状态 */
     handleReview(row, status) {
-      this.$prompt("请输入理由(非必填)", "提示", {
+      let reason = "";
+      if (status == 2) {
+        reason = "此操作将确认审核为通过,是否继续?";
+      } else {
+        reason = "此操作将确认审核为不通过,是否继续?";
+      }
+      this.$confirm(reason, "提示", {
         confirmButtonText: "确定",
         cancelButtonText: "取消",
-        closeOnClickModal: false,
-        closeOnPressEscape: false,
+        type: "warning",
       })
-        .then(({ value }) => {
+        .then(() => {
           this.form.reviewId = row.reviewId;
           this.form.status = status;
-          this.form.reason = value;
+          this.form.reason = this.formInfo.auditOpinion;
           setReviewProcessStatus(this.form).then((response) => {
             this.getUpcomingList();
             if (this.form.status == 2) {
@@ -606,6 +651,8 @@ export default {
             } else {
               this.$modal.msgSuccess("已拒绝审核");
             }
+            this.openInfo = false;
+            this.formInfo.auditOpinion = "";
           });
         })
         .catch(() => {});

@@ -11,6 +11,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
         <result property="requester"    column="requester"    />
         <result property="porjectMoney"    column="porject_money"    />
         <result property="workload"    column="workload"    />
+        <result property="employmentReason"    column="employment_reason"    />
         <result property="userId"    column="user_id"    />
         <result property="deptId"    column="dept_id"    />
         <result property="status"    column="status"    />
@@ -89,6 +90,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
             <if test="requester != null and requester != ''">requester,</if>
             <if test="porjectMoney != null">porject_money,</if>
             <if test="workload != null">workload,</if>
+            <if test="employmentReason != null">employment_reason,</if>
             <if test="userId != null and userId != ''">user_id,</if>
             <if test="deptId != null and deptId != ''">dept_id,</if>
             <if test="status != null">status,</if>
@@ -108,6 +110,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
             <if test="requester != null and requester != ''">#{requester},</if>
             <if test="porjectMoney != null">#{porjectMoney},</if>
             <if test="workload != null">#{workload},</if>
+            <if test="employmentReason != null">#{employmentReason},</if>
             <if test="userId != null and userId != ''">#{userId},</if>
             <if test="deptId != null and deptId != ''">#{deptId},</if>
             <if test="status != null">#{status},</if>
@@ -131,6 +134,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
             <if test="requester != null and requester != ''">requester = #{requester},</if>
             <if test="porjectMoney != null">porject_money = #{porjectMoney},</if>
             <if test="workload != null">workload = #{workload},</if>
+            <if test="employmentReason != null">employment_reason = #{employmentReason},</if>
             <if test="userId != null and userId != ''">user_id = #{userId},</if>
             <if test="deptId != null and deptId != ''">dept_id = #{deptId},</if>
             <if test="status != null">status = #{status},</if>

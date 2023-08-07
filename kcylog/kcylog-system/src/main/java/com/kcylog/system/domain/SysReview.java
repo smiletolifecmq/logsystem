@@ -70,6 +70,8 @@ public class SysReview extends BaseEntity
     /** 人数 */
     private String peopleNum;
 
+    private String employmentReason;
+
     /** 预估雇工工作开始时间 */
     @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss")
     private Date startTime;
@@ -106,6 +108,14 @@ public class SysReview extends BaseEntity
     private String settlementName;
 
     private Long settlementId;
+
+    public String getEmploymentReason() {
+        return employmentReason;
+    }
+
+    public void setEmploymentReason(String employmentReason) {
+        this.employmentReason = employmentReason;
+    }
 
     public Long getFinalHire() {
         return finalHire;
