@@ -316,6 +316,74 @@
       </div>
     </el-dialog>
 
+    <!-- 项目编号选择 -->
+    <el-dialog
+      :title="projectInfo"
+      :visible.sync="projectOpen"
+      width="700px"
+      append-to-body
+      :close-on-click-modal="false"
+      :close-on-press-escape="false"
+    >
+      <el-form
+        :model="queryProjectParams"
+        ref="queryProjectForm"
+        size="small"
+        :inline="true"
+        v-show="showProjectSearch"
+        label-width="68px"
+      >
+        <el-form-item label="工程编号" prop="serialNum">
+          <el-input
+            v-model="queryProjectParams.serialNum"
+            placeholder="请输入工程编号"
+            clearable
+            @keyup.enter.native="handleProjectQuery"
+          />
+        </el-form-item>
+        <el-form-item>
+          <el-button
+            type="primary"
+            icon="el-icon-search"
+            size="mini"
+            @click="handleProjectQuery"
+            >搜索</el-button
+          >
+        </el-form-item>
+      </el-form>
+
+      <el-table v-loading="loading" :data="projectList">
+        <el-table-column label="工程编号" align="center" prop="serialNum" />
+        <el-table-column label="项目名称" align="center" prop="projectName" />
+        <el-table-column label="工作量" align="center" prop="workload" />
+        <el-table-column label="工作内容" align="center" prop="workcontent" />
+        <el-table-column label="委托单位" align="center" prop="entrustUnit" />
+        <el-table-column
+          label="操作"
+          align="center"
+          class-name="small-padding fixed-width"
+        >
+          <template slot-scope="scope">
+            <el-button
+              size="mini"
+              type="text"
+              icon="el-icon-upload"
+              @click="importProject(scope.row)"
+              >导入</el-button
+            >
+          </template>
+        </el-table-column>
+      </el-table>
+
+      <pagination
+        v-show="projectTotal > 0"
+        :total="projectTotal"
+        :page.sync="queryProjectParams.pageNum"
+        :limit.sync="queryProjectParams.pageSize"
+        @pagination="getProjectList"
+      />
+    </el-dialog>
+
     <!-- 详情框 -->
     <el-dialog
       :title="titleInfo"
@@ -516,6 +584,8 @@ export default {
         },
       ],
       statusVaule: "",
+      projectInfo: "",
+      projectOpen: false,
       // 遮罩层
       loading: true,
       // 选中数组
@@ -526,10 +596,13 @@ export default {
       multiple: true,
       // 显示搜索条件
       showSearch: true,
+      showProjectSearch: true,
       // 总条数
       total: 0,
+      projectTotal: 0,
       // 分包表格数据
       subcontractList: [],
+      projectList: [],
       // 弹出层标题
       title: "",
       // 是否显示弹出层
@@ -553,6 +626,11 @@ export default {
         startTime: null,
         endTime: null,
       },
+      queryProjectParams: {
+        pageNum: 1,
+        pageSize: 10,
+        serialNum: null,
+      },
       winUnits: [],
       // 表单参数
       form: {},
@@ -569,6 +647,9 @@ export default {
           { required: true, message: "业务名称不能为空", trigger: "blur" },
         ],
         winUnit: [
+          { required: true, message: "中签单位不能为空", trigger: "blur" },
+        ],
+        cooperationUnitJson: [
           { required: true, message: "中签单位不能为空", trigger: "blur" },
         ],
         userId: [
@@ -589,6 +670,18 @@ export default {
     this.loadAllUnits();
   },
   methods: {
+    importProject(row) {
+      this.reset();
+      this.resetForm("queryProjectForm");
+      this.open = true;
+      this.title = "添加分包";
+      this.projectOpen = false;
+      this.form.serialNum = row.serialNum;
+      this.form.projectName = row.projectName;
+      this.form.entrustUnit = row.entrustUnit;
+      this.form.workload = row.workload;
+      this.form.workcontent = row.workcontent;
+    },
     reviewProcessStatus(reviewProcess) {
       if (reviewProcess.status === 0) {
         return "";
@@ -671,6 +764,41 @@ export default {
         this.loading = false;
       });
     },
+
+    getProjectList() {
+      this.loading = true;
+      const xhr = new XMLHttpRequest();
+      let projectUrl =
+        "http://localhost:1024/dev-api/system/website/web_list?" +
+        "pageNum=" +
+        this.queryProjectParams.pageNum +
+        "&pageSize=" +
+        this.queryProjectParams.pageSize;
+
+      if (
+        this.queryProjectParams.serialNum != null &&
+        this.queryProjectParams.serialNum != ""
+      ) {
+        projectUrl =
+          projectUrl + "&serialNum=" + this.queryProjectParams.serialNum;
+      }
+
+      xhr.open("GET", projectUrl, true);
+      xhr.onreadystatechange = function () {
+        if (xhr.readyState === 4 && xhr.status === 200) {
+          var response = JSON.parse(xhr.responseText);
+          console.log(response);
+        }
+      };
+      xhr.send();
+
+      listSubcontract(this.queryProjectParams).then((response) => {
+        this.projectList = response.rows;
+        this.projectTotal = response.total;
+        this.loading = false;
+      });
+    },
+
     // 取消按钮
     cancel() {
       this.open = false;
@@ -707,6 +835,10 @@ export default {
       }
       this.getList();
     },
+    handleProjectQuery() {
+      this.queryProjectParams.pageNum = 1;
+      this.getProjectList();
+    },
     /** 重置按钮操作 */
     resetQuery() {
       this.statusVaule = "";
@@ -722,8 +854,9 @@ export default {
     /** 新增按钮操作 */
     handleAdd() {
       this.reset();
-      this.open = true;
-      this.title = "添加分包";
+      this.projectInfo = "工程项目列表";
+      this.projectOpen = true;
+      this.getProjectList();
     },
     /** 修改按钮操作 */
     handleUpdate(row) {
