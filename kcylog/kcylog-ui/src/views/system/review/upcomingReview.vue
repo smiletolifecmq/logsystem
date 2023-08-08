@@ -225,15 +225,28 @@
                 type="text"
               ></el-button>
             </div>
+
             <el-form ref="formInfo" :model="formInfo" label-width="80px">
-              <el-form-item label="工程编号" prop="serialNum">
-                <el-input
-                  v-model="formInfo.serialNum"
-                  placeholder="请输入编号"
-                  disabled
-                  class="custom-input"
-                />
-              </el-form-item>
+              <div class="form-container">
+                <el-form-item label="工程编号" prop="serialNum">
+                  <el-input
+                    v-model="formInfo.serialNum"
+                    placeholder="请输入编号"
+                    disabled
+                    class="custom-input"
+                  />
+                </el-form-item>
+                <el-form-item label="负责人">
+                  <el-input
+                    v-if="formInfo.user"
+                    v-model="formInfo.user.userName"
+                    placeholder="请输入委托单位"
+                    disabled
+                    class="custom-input"
+                  />
+                </el-form-item>
+              </div>
+
               <el-form-item label="项目名称" prop="projectName">
                 <el-input
                   v-model="formInfo.projectName"
@@ -250,17 +263,6 @@
                   class="custom-input"
                 />
               </el-form-item>
-              <el-form-item label="项目金额" prop="porjectMoney">
-                <el-input-number
-                  v-model="formInfo.porjectMoney"
-                  :precision="2"
-                  :step="0.1"
-                  :min="0.0"
-                  placeholder="请输入项目金额"
-                  disabled
-                  class="custom-input"
-                />
-              </el-form-item>
               <el-form-item label="工作量" prop="workload">
                 <el-input
                   v-model="formInfo.workload"
@@ -270,34 +272,39 @@
                   class="textarea-input"
                 />
               </el-form-item>
-              <el-form-item label="分包情况" prop="subcontract">
-                <el-select
-                  v-model="formInfo.subcontract"
-                  placeholder="请选择"
-                  class="custom-input"
-                  disabled
-                >
-                  <el-option
-                    label="是"
-                    :value="1"
-                    :selected="formInfo.subcontract === 1"
-                  ></el-option>
-                  <el-option
-                    label="否"
-                    :value="2"
-                    :selected="formInfo.subcontract === 2"
-                  ></el-option>
-                </el-select>
-              </el-form-item>
-              <el-form-item label="雇工人数" prop="peopleNum">
-                <el-input-number
-                  v-model="formInfo.peopleNum"
-                  placeholder="请预估雇工人数"
-                  :min="0"
-                  disabled
-                  class="custom-input"
-                />
-              </el-form-item>
+              <div class="form-container">
+                <el-form-item label="项目金额" prop="porjectMoney">
+                  <el-input-number
+                    v-model="formInfo.porjectMoney"
+                    :precision="2"
+                    :step="0.1"
+                    :min="0.0"
+                    placeholder="请输入项目金额"
+                    disabled
+                    class="custom-input"
+                  />
+                </el-form-item>
+                <el-form-item label="分包情况" prop="subcontract">
+                  <el-select
+                    v-model="formInfo.subcontract"
+                    placeholder="请选择"
+                    class="custom-input"
+                    disabled
+                  >
+                    <el-option
+                      label="是"
+                      :value="1"
+                      :selected="formInfo.subcontract === 1"
+                    ></el-option>
+                    <el-option
+                      label="否"
+                      :value="2"
+                      :selected="formInfo.subcontract === 2"
+                    ></el-option>
+                  </el-select>
+                </el-form-item>
+              </div>
+
               <el-form-item label="雇工内容" prop="employmentReason">
                 <el-input
                   v-model="formInfo.employmentReason"
@@ -350,48 +357,54 @@
                   <el-option label="下午" value="23:59:59"></el-option>
                 </el-select>
               </el-form-item>
-              <el-form-item label="预估天数" prop="budgetDay">
-                <el-input
-                  v-model="formInfo.budgetDay"
-                  placeholder="请输入预估天数"
-                  disabled
-                  class="custom-input"
-                />
-              </el-form-item>
-              <el-form-item label="预算金额" prop="budgetMoney">
-                <el-input
-                  v-model="formInfo.budgetMoney"
-                  placeholder="请输入预算金额"
-                  disabled
-                  class="custom-input"
-                />
-              </el-form-item>
-              <el-form-item label="负责人">
-                <el-input
-                  v-if="formInfo.user"
-                  v-model="formInfo.user.userName"
-                  placeholder="请输入委托单位"
-                  disabled
-                  class="custom-input"
-                />
-              </el-form-item>
-              <el-form-item label="审核意见">
-                <el-input
-                  v-model="formInfo.auditOpinion"
-                  placeholder="请输入审核意见"
-                  class="custom-input"
-                />
-              </el-form-item>
-            </el-form>
+              <div class="form-container">
+                <el-form-item label="雇工人数" prop="peopleNum">
+                  <el-input
+                    v-model="formInfo.peopleNum"
+                    placeholder="请预估雇工人数"
+                    disabled
+                    class="custom-input"
+                  />
+                </el-form-item>
+                <el-form-item label="天数" prop="budgetDay">
+                  <el-input
+                    v-model="formInfo.budgetDay"
+                    placeholder="请输入预估天数"
+                    disabled
+                    class="custom-input"
+                  />
+                </el-form-item>
+                <el-form-item label="预算" prop="budgetMoney">
+                  <el-input
+                    v-model="formInfo.budgetMoney"
+                    placeholder="请输入预算金额"
+                    disabled
+                    class="custom-input"
+                  />
+                </el-form-item>
+              </div>
 
-            <div class="button-container">
-              <el-button type="success" @click="handleReview(formInfo, 2)"
-                >通过</el-button
-              >
-              <el-button type="danger" @click="handleReview(formInfo, 3)"
-                >回退</el-button
-              >
-            </div>
+              <div class="form-container">
+                <el-form-item label="审核意见">
+                  <el-input
+                    v-model="formInfo.auditOpinion"
+                    placeholder="请输入审核意见"
+                    class="custom-input"
+                  />
+                </el-form-item>
+
+                <el-form-item>
+                  <div class="form-container">
+                    <el-button type="success" @click="handleReview(formInfo, 2)"
+                      >通过</el-button
+                    >
+                    <el-button type="danger" @click="handleReview(formInfo, 3)"
+                      >回退</el-button
+                    >
+                  </div>
+                </el-form-item>
+              </div>
+            </el-form>
           </el-card>
         </el-col>
 
@@ -441,11 +454,15 @@
 }
 
 .el-form-item__label {
-  width: 112px !important;
+  width: 100px !important;
 }
 
 .el-form-item--medium .el-form-item__content {
-  margin-left: 112px !important;
+  margin-left: 100px !important;
+}
+
+.form-container {
+  display: flex;
 }
 </style>
 <script>

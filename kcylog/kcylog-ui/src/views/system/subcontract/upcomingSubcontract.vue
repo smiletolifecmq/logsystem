@@ -84,13 +84,7 @@
       @selection-change="handleSelectionChange"
     >
       <el-table-column type="selection" width="55" align="center" />
-      <el-table-column label="工程编号" align="center" prop="serialNum">
-        <template slot-scope="scope">
-          <a @click="showSubcontractInfo(scope.row)" style="color: blue">
-            {{ scope.row.serialNum }}
-          </a>
-        </template>
-      </el-table-column>
+      <el-table-column label="工程编号" align="center" prop="serialNum" />
       <el-table-column label="项目名称" align="center" prop="projectName" />
       <el-table-column label="业务名称" align="center" prop="businessName" />
       <el-table-column label="工作量" align="center" prop="workload" />
@@ -149,27 +143,24 @@
         class-name="small-padding fixed-width"
       >
         <template slot-scope="scope">
-          <!-- <el-button
-            size="mini"
-            type="text"
-            icon="el-icon-success"
-            @click="handleReview(scope.row, 2)"
-            >通过</el-button
-          >
-          <el-button
-            size="mini"
-            type="text"
-            icon="el-icon-error"
-            @click="handleReview(scope.row, 3)"
-            >不通过</el-button
-          > -->
-          <el-button
-            size="mini"
-            type="text"
-            icon="el-icon-s-operation"
-            @click="handleReviewProcess(scope.row)"
-            >流程详情</el-button
-          >
+          <div>
+            <el-button
+              size="mini"
+              type="text"
+              icon="el-icon-edit-outline"
+              @click="showSubcontractInfo(scope.row)"
+              >分包审核</el-button
+            >
+          </div>
+          <div>
+            <el-button
+              size="mini"
+              type="text"
+              icon="el-icon-s-operation"
+              @click="handleReviewProcess(scope.row)"
+              >流程详情</el-button
+            >
+          </div>
         </template>
       </el-table-column>
     </el-table>
