@@ -106,16 +106,10 @@
       :data="subcontractList"
       @selection-change="handleSelectionChange"
     >
-      <el-table-column label="工程编号" align="center" prop="serialNum">
-        <template slot-scope="scope">
-          <a @click="showSubcontractInfo(scope.row)" style="color: blue">
-            {{ scope.row.serialNum }}
-          </a>
-        </template>
-      </el-table-column>
+      <el-table-column label="工程编号" align="center" prop="serialNum" />
       <el-table-column label="项目名称" align="center" prop="projectName" />
       <el-table-column label="业务名称" align="center" prop="businessName" />
-      <el-table-column label="工作量" align="center" prop="workload" />
+      <el-table-column label="分包工作量" align="center" prop="workload" />
       <el-table-column label="工作内容" align="center" prop="workcontent" />
       <el-table-column label="委托单位" align="center" prop="entrustUnit" />
       <el-table-column
@@ -180,41 +174,58 @@
         class-name="small-padding fixed-width"
       >
         <template slot-scope="scope">
-          <el-button
-            size="mini"
-            type="text"
-            icon="el-icon-edit-outline"
-            @click="handleReview(scope.row)"
-            v-if="scope.row.status === 0 || scope.row.status === 3"
-            >发起审核</el-button
-          >
-          <el-button
-            size="mini"
-            type="text"
-            icon="el-icon-edit"
-            @click="handleUpdate(scope.row)"
-            v-if="
-              scope.row.status === 0 ||
-              scope.row.status === 3 ||
-              scope.row.startEdit === 1
-            "
-            >编辑</el-button
-          >
-          <el-button
-            size="mini"
-            type="text"
-            icon="el-icon-delete"
-            @click="handleDelete(scope.row)"
-            v-if="scope.row.status === 0 || scope.row.status === 3"
-            >删除</el-button
-          >
-          <el-button
-            size="mini"
-            type="text"
-            icon="el-icon-s-operation"
-            @click="handleReviewProcess(scope.row)"
-            >流程详情</el-button
-          >
+          <div>
+            <el-button
+              size="mini"
+              type="text"
+              icon="el-icon-s-comment"
+              @click="showSubcontractInfo(scope.row)"
+              >分包详情</el-button
+            >
+          </div>
+          <div>
+            <el-button
+              size="mini"
+              type="text"
+              icon="el-icon-edit-outline"
+              @click="handleReview(scope.row)"
+              v-if="scope.row.status === 0 || scope.row.status === 3"
+              >发起审核</el-button
+            >
+          </div>
+          <div>
+            <el-button
+              size="mini"
+              type="text"
+              icon="el-icon-edit"
+              @click="handleUpdate(scope.row)"
+              v-if="
+                scope.row.status === 0 ||
+                scope.row.status === 3 ||
+                scope.row.startEdit === 1
+              "
+              >编辑</el-button
+            >
+          </div>
+          <div>
+            <el-button
+              size="mini"
+              type="text"
+              icon="el-icon-delete"
+              @click="handleDelete(scope.row)"
+              v-if="scope.row.status === 0 || scope.row.status === 3"
+              >删除</el-button
+            >
+          </div>
+          <div>
+            <el-button
+              size="mini"
+              type="text"
+              icon="el-icon-s-operation"
+              @click="handleReviewProcess(scope.row)"
+              >流程详情</el-button
+            >
+          </div>
         </template>
       </el-table-column>
     </el-table>
@@ -228,7 +239,7 @@
     />
 
     <!-- 添加或修改分包对话框 -->
-    <el-dialog :title="title" :visible.sync="open" width="500px" append-to-body>
+    <el-dialog :title="title" :visible.sync="open" width="700px" append-to-body>
       <el-form ref="form" :model="form" :rules="rules" label-width="80px">
         <el-form-item label="工程编号" prop="serialNum">
           <el-input v-model="form.serialNum" placeholder="请输入工程编号" />
@@ -254,11 +265,11 @@
         <el-form-item label="委托单位" prop="entrustUnit">
           <el-input v-model="form.entrustUnit" placeholder="请输入内容" />
         </el-form-item>
-        <el-form-item label="工作量" prop="workload">
+        <el-form-item label="分包工作量" prop="workload">
           <el-input
             v-model="form.workload"
             type="textarea"
-            placeholder="请输入工作量"
+            placeholder="请输入分包工作量"
           />
         </el-form-item>
         <el-form-item label="工作内容">
@@ -309,26 +320,28 @@
           >
           </el-date-picker>
         </el-form-item>
-        <el-form-item label="工期开始" prop="startTime">
-          <el-date-picker
-            clearable
-            v-model="form.startTime"
-            type="date"
-            value-format="yyyy-MM-dd"
-            placeholder="请选择工期开始时间"
-          >
-          </el-date-picker>
-        </el-form-item>
-        <el-form-item label="工期结束" prop="endTime">
-          <el-date-picker
-            clearable
-            v-model="form.endTime"
-            type="date"
-            value-format="yyyy-MM-dd"
-            placeholder="请选择工期结束时间"
-          >
-          </el-date-picker>
-        </el-form-item>
+        <div class="form-container">
+          <el-form-item label="项目工期" prop="startTime">
+            <el-date-picker
+              clearable
+              v-model="form.startTime"
+              type="date"
+              value-format="yyyy-MM-dd"
+              placeholder="请选择工期开始时间"
+            >
+            </el-date-picker>
+          </el-form-item>
+          <el-form-item label="" style="margin-left: -100px" prop="endTime">
+            <el-date-picker
+              clearable
+              v-model="form.endTime"
+              type="date"
+              value-format="yyyy-MM-dd"
+              placeholder="请选择工期结束时间"
+            >
+            </el-date-picker>
+          </el-form-item>
+        </div>
       </el-form>
       <div slot="footer" class="dialog-footer">
         <el-button type="primary" @click="submitForm">确 定</el-button>
@@ -340,7 +353,7 @@
     <el-dialog
       :title="projectInfo"
       :visible.sync="projectOpen"
-      width="700px"
+      width="1000px"
       append-to-body
       :close-on-click-modal="false"
       :close-on-press-escape="false"
@@ -373,24 +386,36 @@
       </el-form>
 
       <el-table v-loading="loading" :data="projectList">
-        <el-table-column label="工程编号" align="center" prop="serialNum" />
-        <el-table-column label="项目名称" align="center" prop="projectName" />
-        <el-table-column label="工作量" align="center" prop="workload" />
-        <el-table-column label="工作内容" align="center" prop="workcontent" />
-        <el-table-column label="委托单位" align="center" prop="entrustUnit" />
+        <el-table-column label="工程编号" align="center" prop="XMBH" />
+        <el-table-column label="项目名称" align="center" prop="XMMC" />
+        <el-table-column label="工作内容" align="center" prop="GCNR" />
+        <el-table-column label="委托单位" align="center" prop="WTDW" />
+        <el-table-column label="工期开始" align="center" prop="XMKSSJ" />
+        <el-table-column label="工期结束" align="center" prop="XMJSSJ" />
         <el-table-column
           label="操作"
           align="center"
           class-name="small-padding fixed-width"
         >
           <template slot-scope="scope">
-            <el-button
-              size="mini"
-              type="text"
-              icon="el-icon-upload"
-              @click="importProject(scope.row)"
-              >导入</el-button
-            >
+            <div>
+              <el-button
+                size="mini"
+                type="text"
+                icon="el-icon-document-checked"
+                @click="checkImportProject(scope.row)"
+                >检测是否已导入</el-button
+              >
+            </div>
+            <div>
+              <el-button
+                size="mini"
+                type="text"
+                icon="el-icon-upload"
+                @click="importProject(scope.row)"
+                >导入</el-button
+              >
+            </div>
           </template>
         </el-table-column>
       </el-table>
@@ -408,20 +433,32 @@
     <el-dialog
       :title="titleInfo"
       :visible.sync="openInfo"
-      width="500px"
+      width="600px"
       append-to-body
       :close-on-click-modal="false"
       :close-on-press-escape="false"
     >
       <el-form ref="formInfo" :model="formInfo" label-width="80px">
-        <el-form-item label="工程编号" prop="serialNum">
-          <el-input
-            v-model="formInfo.serialNum"
-            placeholder="请输入工程编号"
-            class="custom-input"
-            disabled
-          />
-        </el-form-item>
+        <div class="form-container">
+          <el-form-item label="工程编号" prop="serialNum">
+            <el-input
+              v-model="formInfo.serialNum"
+              placeholder="请输入工程编号"
+              class="custom-input"
+              disabled
+            />
+          </el-form-item>
+          <el-form-item label="负责人">
+            <el-input
+              v-if="formInfo.user"
+              v-model="formInfo.user.userName"
+              placeholder="请输入委托单位"
+              disabled
+              class="custom-input"
+            />
+          </el-form-item>
+        </div>
+
         <el-form-item label="项目名称" prop="projectName">
           <el-input
             v-model="formInfo.projectName"
@@ -446,11 +483,11 @@
             disabled
           />
         </el-form-item>
-        <el-form-item label="工作量" prop="workload">
+        <el-form-item label="分包工作量" prop="workload">
           <el-input
             v-model="formInfo.workload"
             type="textarea"
-            placeholder="请输入工作量"
+            placeholder="请输入分包工作量"
             class="textarea-input"
             disabled
           />
@@ -499,6 +536,7 @@
             </el-option>
           </el-select>
         </el-form-item>
+
         <el-form-item label="抽签时间" prop="lotTime">
           <el-date-picker
             clearable
@@ -511,30 +549,32 @@
           >
           </el-date-picker>
         </el-form-item>
-        <el-form-item label="工期开始" prop="startTime">
-          <el-date-picker
-            clearable
-            v-model="formInfo.startTime"
-            type="date"
-            value-format="yyyy-MM-dd"
-            placeholder="请选择工期开始时间"
-            disabled
-            class="custom-input"
-          >
-          </el-date-picker>
-        </el-form-item>
-        <el-form-item label="工期结束" prop="endTime">
-          <el-date-picker
-            clearable
-            v-model="formInfo.endTime"
-            type="date"
-            value-format="yyyy-MM-dd"
-            placeholder="请选择工期结束时间"
-            disabled
-            class="custom-input"
-          >
-          </el-date-picker>
-        </el-form-item>
+        <div class="form-container">
+          <el-form-item label="项目工期" prop="startTime">
+            <el-date-picker
+              clearable
+              v-model="formInfo.startTime"
+              type="date"
+              value-format="yyyy-MM-dd"
+              placeholder="请选择工期开始时间"
+              disabled
+              class="custom-input"
+            >
+            </el-date-picker>
+          </el-form-item>
+          <el-form-item label="" style="margin-left: -100px" prop="endTime">
+            <el-date-picker
+              clearable
+              v-model="formInfo.endTime"
+              type="date"
+              value-format="yyyy-MM-dd"
+              placeholder="请选择工期结束时间"
+              disabled
+              class="custom-input"
+            >
+            </el-date-picker>
+          </el-form-item>
+        </div>
       </el-form>
     </el-dialog>
 
@@ -563,6 +603,18 @@
 .textarea-input textarea {
   color: black !important;
 }
+
+.el-form-item__label {
+  width: 112px !important;
+}
+
+.el-form-item--medium .el-form-item__content {
+  margin-left: 112px !important;
+}
+
+.form-container {
+  display: flex;
+}
 </style>
 <script>
 import {
@@ -573,6 +625,7 @@ import {
   updateSubcontract,
   getSubcontractProcessList,
   setReviewStatus,
+  getSubcontractBySerialNum,
 } from "@/api/system/subcontract";
 import { listUnit } from "@/api/system/unit";
 
@@ -762,11 +815,28 @@ export default {
       this.open = true;
       this.title = "添加分包";
       this.projectOpen = false;
-      this.form.serialNum = row.serialNum;
-      this.form.projectName = row.projectName;
-      this.form.entrustUnit = row.entrustUnit;
-      this.form.workload = row.workload;
-      this.form.workcontent = row.workcontent;
+      this.form.serialNum = row.XMBH;
+      this.form.projectName = row.XMMC;
+      this.form.entrustUnit = row.WTDW;
+      this.form.workcontent = row.GCNR;
+      this.form.startTime = row.XMKSSJ;
+      this.form.endTime = row.XMJSSJ;
+    },
+    checkImportProject(row) {
+      getSubcontractBySerialNum(row.XMBH).then((response) => {
+        if (response.data != null) {
+          this.$message({
+            message:
+              "该项目编号已被<" + response.data.user.userName + ">导入过～",
+            type: "warning",
+          });
+        } else {
+          this.$message({
+            message: "该项目编号未被导入过～",
+            type: "success",
+          });
+        }
+      });
     },
     reviewProcessStatus(reviewProcess) {
       if (reviewProcess.status === 0) {
@@ -867,6 +937,8 @@ export default {
       ) {
         projectUrl =
           projectUrl + "&serialNum=" + this.queryProjectParams.serialNum;
+      } else {
+        projectUrl = projectUrl + "&serialNum=";
       }
 
       xhr.open("GET", projectUrl, true);
@@ -878,11 +950,40 @@ export default {
       };
       xhr.send();
 
-      listSubcontract(this.queryProjectParams).then((response) => {
-        this.projectList = response.rows;
-        this.projectTotal = response.total;
-        this.loading = false;
-      });
+      // listSubcontract(this.queryProjectParams).then((response) => {
+      //   this.projectList = response.rows;
+      //   this.projectTotal = response.total;
+      //   this.loading = false;
+      // });
+
+      let res = {
+        total: 1000, //总行数
+        rows: [
+          {
+            XMBH: "项目编号1",
+            XMMC: "项目名称1",
+            GCNR: "工作内容1",
+            WTDW: "委托单位1",
+            GZL: "工作量1",
+            YSJE: "预算金额1",
+            XMKSSJ: "2023-08-08",
+            XMJSSJ: "2023-08-14",
+          },
+          {
+            XMBH: "项目编号2",
+            XMMC: "项目名称2",
+            GCNR: "工作内容2",
+            WTDW: "委托单位2",
+            GZL: "工作量2",
+            YSJE: "预算金额2",
+            XMKSSJ: "2023-08-08",
+            XMJSSJ: "2023-08-14",
+          },
+        ],
+      };
+      this.projectList = res.rows;
+      this.projectTotal = res.total;
+      this.loading = false;
     },
 
     // 取消按钮

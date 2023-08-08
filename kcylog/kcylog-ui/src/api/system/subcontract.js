@@ -109,3 +109,10 @@ export function confirmIsPrint(subcontractId) {
     method: 'put'
   })
 }
+
+export function getSubcontractBySerialNum(serialNum) {
+  return request({
+    url: '/system/subcontract/get_subcontract_by_serialNum/' + serialNum,
+    method: 'get'
+  })
+}

@@ -130,4 +130,10 @@ public class SysSubcontractServiceImpl implements ISysSubcontractService
     {
         return sysSubcontractMapper.setSubcontractIsPrintBySubcontractId(subcontractId);
     }
+
+    @Override
+    public SysSubcontract getSubcontractBySerialNum(String serialNum)
+    {
+        return sysSubcontractMapper.getSubcontractBySerialNum(serialNum);
+    }
 }

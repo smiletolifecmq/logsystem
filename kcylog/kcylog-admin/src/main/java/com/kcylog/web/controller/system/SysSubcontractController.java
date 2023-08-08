@@ -614,4 +614,9 @@ public class SysSubcontractController extends BaseController
         RegionUtil.setBorderLeft(BorderStyle.THIN, new CellRangeAddress(firstRow, lastRow, firstCol, lastCol), sheet);
         RegionUtil.setLeftBorderColor(IndexedColors.BLACK.getIndex(), new CellRangeAddress(firstRow, lastRow, firstCol, lastCol), sheet);
     }
+
+    @GetMapping(value = "/get_subcontract_by_serialNum/{serialNum}")
+    public AjaxResult getSubcontractBySerialNum(@PathVariable("serialNum") String serialNum){
+        return success(sysSubcontractService.getSubcontractBySerialNum(serialNum));
+    }
 }
