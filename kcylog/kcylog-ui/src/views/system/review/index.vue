@@ -8,7 +8,7 @@
       v-show="showSearch"
       label-width="68px"
     >
-      <el-form-item label="编号" prop="serialNum">
+      <el-form-item label="工程编号" prop="serialNum">
         <el-input
           v-model="queryParams.serialNum"
           placeholder="请输入编号"
@@ -111,7 +111,7 @@
       @selection-change="handleSelectionChange"
     >
       <!-- <el-table-column type="selection" width="55" align="center" /> -->
-      <el-table-column label="编号" align="center" prop="serialNum">
+      <el-table-column label="工程编号" align="center" prop="serialNum">
         <template slot-scope="scope">
           <a @click="showReviewInfo(scope.row)" style="color: blue">
             {{ scope.row.serialNum }}
@@ -296,7 +296,7 @@
             clearable
           ></el-autocomplete>
         </el-form-item> -->
-        <el-form-item label="编号" prop="serialNum">
+        <el-form-item label="工程编号" prop="serialNum">
           <el-input v-model="form.serialNum" placeholder="请输入编号" />
         </el-form-item>
         <el-form-item label="项目名称" prop="projectName">
@@ -344,11 +344,11 @@
             @change="handleTimeChange"
           />
         </el-form-item>
-        <el-form-item label="雇工原因" prop="employmentReason">
+        <el-form-item label="雇工内容" prop="employmentReason">
           <el-input
             v-model="form.employmentReason"
             type="textarea"
-            placeholder="请输入雇工原因"
+            placeholder="未填写"
           />
         </el-form-item>
         <el-form-item label="开始时间" prop="startTime">
@@ -424,7 +424,7 @@
       :close-on-press-escape="false"
     >
       <el-form ref="formInfo" :model="formInfo" label-width="80px">
-        <el-form-item label="编号" prop="serialNum">
+        <el-form-item label="工程编号" prop="serialNum">
           <el-input
             v-model="formInfo.serialNum"
             placeholder="请输入编号"
@@ -497,7 +497,7 @@
             class="custom-input"
           />
         </el-form-item>
-        <el-form-item label="雇工原因" prop="employmentReason">
+        <el-form-item label="雇工内容" prop="employmentReason">
           <el-input
             v-model="formInfo.employmentReason"
             type="textarea"

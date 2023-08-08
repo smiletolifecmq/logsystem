@@ -149,7 +149,7 @@
         class-name="small-padding fixed-width"
       >
         <template slot-scope="scope">
-          <el-button
+          <!-- <el-button
             size="mini"
             type="text"
             icon="el-icon-success"
@@ -162,7 +162,7 @@
             icon="el-icon-error"
             @click="handleReview(scope.row, 3)"
             >不通过</el-button
-          >
+          > -->
           <el-button
             size="mini"
             type="text"
@@ -315,12 +315,27 @@
           >
           </el-date-picker>
         </el-form-item>
+        <el-form-item label="负责人">
+          <el-input
+            v-if="formInfo.user"
+            v-model="formInfo.user.userName"
+            disabled
+            class="custom-input"
+          />
+        </el-form-item>
+        <el-form-item label="审核意见">
+          <el-input
+            v-model="formInfo.auditOpinion"
+            placeholder="请输入审核意见"
+            class="custom-input"
+          />
+        </el-form-item>
         <el-form-item>
           <el-button type="success" @click="handleReview(formInfo, 2)"
             >通过</el-button
           >
           <el-button type="danger" @click="handleReview(formInfo, 3)"
-            >不通过</el-button
+            >回退</el-button
           >
         </el-form-item>
       </el-form>
@@ -483,16 +498,21 @@ export default {
         .catch(() => {});
     },
     handleReview(row, status) {
-      this.$prompt("请输入理由(非必填)", "提示", {
+      let reason = "";
+      if (status == 2) {
+        reason = "此操作将确认审核为通过,是否继续?";
+      } else {
+        reason = "此操作将确认审核为不通过,是否继续?";
+      }
+      this.$confirm(reason, "提示", {
         confirmButtonText: "确定",
         cancelButtonText: "取消",
-        closeOnClickModal: false,
-        closeOnPressEscape: false,
+        type: "warning",
       })
-        .then(({ value }) => {
+        .then(() => {
           this.form.subcontractId = row.subcontractId;
           this.form.status = status;
-          this.form.reason = value;
+          this.form.reason = this.formInfo.auditOpinion;
           setSubcontractProcessStatus(this.form).then((response) => {
             this.getUpcomingList();
             if (this.form.status == 2) {
@@ -501,6 +521,7 @@ export default {
               this.$modal.msgSuccess("已拒绝审核");
             }
             this.openInfo = false;
+            this.formInfo.auditOpinion = "";
           });
         })
         .catch(() => {});

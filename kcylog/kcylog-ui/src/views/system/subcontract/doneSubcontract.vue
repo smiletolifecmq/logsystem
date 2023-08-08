@@ -282,6 +282,14 @@
           >
           </el-date-picker>
         </el-form-item>
+        <el-form-item label="负责人">
+          <el-input
+            v-if="formInfo.user"
+            v-model="formInfo.user.userName"
+            disabled
+            class="custom-input"
+          />
+        </el-form-item>
       </el-form>
     </el-dialog>
 

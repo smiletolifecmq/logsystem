@@ -8,7 +8,7 @@
       v-show="showSearch"
       label-width="68px"
     >
-      <el-form-item label="编号" prop="serialNum">
+      <el-form-item label="工程编号" prop="serialNum">
         <el-input
           v-model="queryParams.serialNum"
           placeholder="请输入编号"
@@ -101,13 +101,7 @@
       :data="reviewList"
       @selection-change="handleSelectionChange"
     >
-      <el-table-column label="编号" align="center" prop="serialNum">
-        <template slot-scope="scope">
-          <a @click="showReviewInfo(scope.row)" style="color: blue">
-            {{ scope.row.serialNum }}
-          </a>
-        </template>
-      </el-table-column>
+      <el-table-column label="工程编号" align="center" prop="serialNum" />
       <el-table-column label="项目名称" align="center" prop="projectName" />
       <el-table-column label="委托单位" align="center" prop="requester" />
       <el-table-column label="项目金额" align="center" prop="porjectMoney" />
@@ -178,20 +172,24 @@
         fixed="right"
       >
         <template slot-scope="scope">
-          <el-button
-            size="mini"
-            type="text"
-            icon="el-icon-s-operation"
-            @click="handleReviewProcess(scope.row)"
-            >流程详情</el-button
-          >
-          <el-button
-            size="mini"
-            type="text"
-            icon="el-icon-user-solid"
-            @click="finalEmploymentInfo(scope.row)"
-            >雇工信息</el-button
-          >
+          <div>
+            <el-button
+              size="mini"
+              type="text"
+              icon="el-icon-user-solid"
+              @click="showReviewInfo(scope.row)"
+              >雇工信息</el-button
+            >
+          </div>
+          <div>
+            <el-button
+              size="mini"
+              type="text"
+              icon="el-icon-s-operation"
+              @click="handleReviewProcess(scope.row)"
+              >流程详情</el-button
+            >
+          </div>
         </template>
       </el-table-column>
     </el-table>
@@ -251,7 +249,7 @@
               ></el-button>
             </div>
             <el-form ref="formInfo" :model="formInfo" label-width="80px">
-              <el-form-item label="编号" prop="serialNum">
+              <el-form-item label="工程编号" prop="serialNum">
                 <el-input
                   v-model="formInfo.serialNum"
                   placeholder="请输入编号"
@@ -323,7 +321,7 @@
                   class="custom-input"
                 />
               </el-form-item>
-              <el-form-item label="雇工原因" prop="employmentReason">
+              <el-form-item label="雇工内容" prop="employmentReason">
                 <el-input
                   v-model="formInfo.employmentReason"
                   type="textarea"
