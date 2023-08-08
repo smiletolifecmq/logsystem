@@ -403,6 +403,15 @@
                   class="custom-input"
                 />
               </el-form-item>
+              <el-form-item label="负责人">
+                <el-input
+                  v-if="formInfo.user"
+                  v-model="formInfo.user.userName"
+                  placeholder="请输入委托单位"
+                  disabled
+                  class="custom-input"
+                />
+              </el-form-item>
             </el-form>
           </el-card>
         </el-col>
