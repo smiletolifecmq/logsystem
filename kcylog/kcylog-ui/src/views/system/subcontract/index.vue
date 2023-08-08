@@ -815,12 +815,29 @@ export default {
       this.open = true;
       this.title = "添加分包";
       this.projectOpen = false;
-      this.form.serialNum = row.XMBH;
-      this.form.projectName = row.XMMC;
-      this.form.entrustUnit = row.WTDW;
-      this.form.workcontent = row.GCNR;
-      this.form.startTime = row.XMKSSJ;
-      this.form.endTime = row.XMJSSJ;
+      if (row.XMBH != null && row.XMBH != "") {
+        this.form.serialNum = row.XMBH;
+      }
+
+      if (row.XMMC != null && row.XMMC != "") {
+        this.form.projectName = row.XMMC;
+      }
+
+      if (row.WTDW != null && row.WTDW != "") {
+        this.form.entrustUnit = row.WTDW;
+      }
+
+      if (row.GCNR != null && row.GCNR != "") {
+        this.form.workcontent = row.GCNR;
+      }
+
+      if (row.XMKSSJ != null && row.XMKSSJ != "") {
+        this.form.startTime = row.XMKSSJ;
+      }
+
+      if (row.XMJSSJ != null && row.XMJSSJ != "") {
+        this.form.endTime = row.XMJSSJ;
+      }
     },
     checkImportProject(row) {
       getSubcontractBySerialNum(row.XMBH).then((response) => {
@@ -954,11 +971,11 @@ export default {
         }
       };
       xhr.send();
-      // listSubcontract(this.queryProjectParams).then((response) => {
-      //   this.projectList = response.rows;
-      //   this.projectTotal = response.total;
-      //   this.loading = false;
-      // });
+      listSubcontract(this.queryProjectParams).then((response) => {
+        this.projectList = response.rows;
+        this.projectTotal = response.total;
+        this.loading = false;
+      });
 
       // let res = {
       //   total: 1000, //总行数
@@ -980,8 +997,6 @@ export default {
       //       WTDW: "委托单位2",
       //       GZL: "工作量2",
       //       YSJE: "预算金额2",
-      //       XMKSSJ: "2023-08-08",
-      //       XMJSSJ: "2023-08-14",
       //     },
       //   ],
       // };
