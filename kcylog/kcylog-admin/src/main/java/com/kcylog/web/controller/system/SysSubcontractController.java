@@ -104,9 +104,12 @@ public class SysSubcontractController extends BaseController
         cell3.setCellStyle(wrapCellStyle);
         Cell cell4 = row.createCell(5);
 
+        String formattedDate = "";
         Date lotTime = subcontract.getLotTime();
-        SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
-        String formattedDate = sdf.format(lotTime);
+        if (lotTime != null){
+            SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
+            formattedDate = sdf.format(lotTime);
+        }
         cell4.setCellValue(formattedDate);
         cell4.setCellStyle(wrapCellStyle);
 
