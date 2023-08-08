@@ -47,6 +47,15 @@
           </el-option>
         </el-select>
       </el-form-item>
+      <el-form-item label="部门" prop="deptId">
+        <el-cascader
+          v-model="queryParamsDeptId"
+          :options="deptOptions"
+          @change="handleChangeDept"
+          clearable
+        ></el-cascader>
+      </el-form-item>
+
       <el-form-item label="打印签收" prop="isPrint">
         <el-select
           v-model="queryParams.isPrint"
@@ -377,6 +386,7 @@ import {
 } from "@/api/system/subcontract";
 import { listUnit } from "@/api/system/unit";
 import elDragDialog from "@/api/components/el-drag";
+import { deptTreeSelect } from "@/api/system/log";
 
 export default {
   name: "Subcontract",
@@ -385,6 +395,8 @@ export default {
   },
   data() {
     return {
+      deptOptions: undefined,
+      queryParamsDeptId: [],
       queryParamsExport: {},
       reviewProcessOpen: false,
       reviewProcessActive: -1,
@@ -473,8 +485,17 @@ export default {
   created() {
     this.getUpcomingList();
     this.loadAllUnits();
+    this.getDeptTree();
   },
   methods: {
+    handleChangeDept(value) {
+      this.queryParams.deptId = value[1];
+    },
+    getDeptTree() {
+      deptTreeSelect().then((response) => {
+        this.deptOptions = transformIdToValue(response.data);
+      });
+    },
     confirmExport(row) {
       this.queryParamsExport.subcontractId = row.subcontractId;
       this.download(
@@ -603,6 +624,7 @@ export default {
     },
     /** 重置按钮操作 */
     resetQuery() {
+      this.queryParamsDeptId = [];
       this.statusVaule = "";
       this.resetForm("queryForm");
       this.handleQuery();
@@ -659,4 +681,21 @@ export default {
     },
   },
 };
+function transformIdToValue(obj) {
+  if (Array.isArray(obj)) {
+    return obj.map((item) => transformIdToValue(item));
+  } else if (typeof obj === "object" && obj !== null) {
+    const newObj = {};
+    for (let key in obj) {
+      if (key === "id") {
+        newObj.value = obj[key];
+      } else {
+        newObj[key] = transformIdToValue(obj[key]);
+      }
+    }
+    return newObj;
+  } else {
+    return obj;
+  }
+}
 </script>
