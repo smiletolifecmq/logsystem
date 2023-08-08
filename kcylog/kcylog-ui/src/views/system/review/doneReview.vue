@@ -304,7 +304,7 @@
                   class="textarea-input"
                 />
               </el-form-item>
-              <el-form-item label="开始时间" prop="startTime">
+              <el-form-item label="雇工开始时间" prop="startTime">
                 <el-date-picker
                   clearable
                   v-model="formInfo.startTime"
@@ -326,7 +326,7 @@
                   <el-option label="下午" value="23:59:59"></el-option>
                 </el-select>
               </el-form-item>
-              <el-form-item label="结束时间" prop="endTime">
+              <el-form-item label="雇工结束时间" prop="endTime">
                 <el-date-picker
                   clearable
                   v-model="formInfo.endTime"
@@ -413,6 +413,14 @@
 
 .textarea-input textarea {
   color: black !important;
+}
+
+.el-form-item__label {
+  width: 112px !important;
+}
+
+.el-form-item--medium .el-form-item__content {
+  margin-left: 112px !important;
 }
 </style>
 <script>

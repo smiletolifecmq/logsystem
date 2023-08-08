@@ -188,56 +188,65 @@
         fixed="right"
       >
         <template slot-scope="scope">
-          <el-button
-            size="mini"
-            type="text"
-            icon="el-icon-edit-outline"
-            @click="handleReview(scope.row)"
-            v-if="scope.row.status === 0 || scope.row.status === 3"
-            >发起审核</el-button
-          >
-          <el-button
-            size="mini"
-            type="text"
-            icon="el-icon-edit"
-            @click="handleUpdate(scope.row)"
-            v-if="
-              scope.row.status === 0 ||
-              scope.row.status === 3 ||
-              scope.row.startEdit === 1
-            "
-            >修改基本信息</el-button
-          >
-          <el-button
-            size="mini"
-            type="text"
-            icon="el-icon-delete"
-            @click="handleDelete(scope.row)"
-            v-if="scope.row.status === 0 || scope.row.status === 3"
-            >删除</el-button
-          >
-          <el-button
-            size="mini"
-            type="text"
-            icon="el-icon-s-operation"
-            @click="handleReviewProcess(scope.row)"
-            >流程详情</el-button
-          >
-
-          <el-button
-            size="mini"
-            type="text"
-            icon="el-icon-user-solid"
-            @click="finalEmploymentInfo(scope.row)"
-            v-if="
-              showEmployeeButton(
-                scope.row.finalTime,
-                scope.row.status,
-                scope.row.finalSecondStatus
-              )
-            "
-            >最终雇工信息</el-button
-          >
+          <div>
+            <el-button
+              size="mini"
+              type="text"
+              icon="el-icon-edit-outline"
+              @click="handleReview(scope.row)"
+              v-if="scope.row.status === 0 || scope.row.status === 3"
+              >发起审核</el-button
+            >
+          </div>
+          <div>
+            <el-button
+              size="mini"
+              type="text"
+              icon="el-icon-edit"
+              @click="handleUpdate(scope.row)"
+              v-if="
+                scope.row.status === 0 ||
+                scope.row.status === 3 ||
+                scope.row.startEdit === 1
+              "
+              >修改基本信息</el-button
+            >
+          </div>
+          <div>
+            <el-button
+              size="mini"
+              type="text"
+              icon="el-icon-delete"
+              @click="handleDelete(scope.row)"
+              v-if="scope.row.status === 0 || scope.row.status === 3"
+              >删除</el-button
+            >
+          </div>
+          <div>
+            <el-button
+              size="mini"
+              type="text"
+              icon="el-icon-s-operation"
+              @click="handleReviewProcess(scope.row)"
+              >流程详情</el-button
+            >
+          </div>
+          <div>
+            <el-button
+              size="mini"
+              type="text"
+              icon="el-icon-user-solid"
+              @click="finalEmploymentInfo(scope.row)"
+              v-if="
+                showEmployeeButton(
+                  scope.row.finalTime,
+                  scope.row.status,
+                  scope.row.finalSecondStatus
+                )
+              "
+              >最终雇工信息</el-button
+            >
+          </div>
         </template>
       </el-table-column>
     </el-table>
@@ -351,7 +360,7 @@
             placeholder="未填写"
           />
         </el-form-item>
-        <el-form-item label="开始时间" prop="startTime">
+        <el-form-item label="雇工开始时间" prop="startTime">
           <el-date-picker
             clearable
             v-model="form.startTime"
@@ -371,7 +380,7 @@
             <el-option label="下午" value="23:59:59"></el-option>
           </el-select>
         </el-form-item>
-        <el-form-item label="结束时间" prop="endTime">
+        <el-form-item label="雇工结束时间" prop="endTime">
           <el-date-picker
             clearable
             v-model="form.endTime"
@@ -594,6 +603,14 @@
 
 .textarea-input textarea {
   color: black !important;
+}
+
+.el-form-item__label {
+  width: 112px !important;
+}
+
+.el-form-item--medium .el-form-item__content {
+  margin-left: 112px !important;
 }
 </style>
 <script>
