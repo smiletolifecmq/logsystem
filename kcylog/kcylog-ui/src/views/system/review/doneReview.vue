@@ -206,7 +206,7 @@
     <el-dialog
       :title="titleInfo"
       :visible.sync="openInfo"
-      width="1200px"
+      width="1260px"
       append-to-body
       v-el-drag-dialog
       :close-on-click-modal="false"
@@ -354,6 +354,36 @@
                   <el-option label="下午" value="23:59:59"></el-option>
                 </el-select>
               </el-form-item>
+              <div class="form-container">
+                <el-form-item label="项目工期" prop="projectStart">
+                  <el-date-picker
+                    clearable
+                    v-model="formInfo.projectStart"
+                    type="date"
+                    value-format="yyyy-MM-dd"
+                    placeholder="请选择工期开始时间"
+                    disabled
+                    class="custom-input"
+                  >
+                  </el-date-picker>
+                </el-form-item>
+                <el-form-item
+                  label=""
+                  style="margin-left: -100px"
+                  prop="projectEnd"
+                >
+                  <el-date-picker
+                    clearable
+                    v-model="formInfo.projectEnd"
+                    type="date"
+                    value-format="yyyy-MM-dd"
+                    placeholder="请选择工期结束时间"
+                    disabled
+                    class="custom-input"
+                  >
+                  </el-date-picker>
+                </el-form-item>
+              </div>
               <div class="form-container">
                 <el-form-item label="雇工人数" prop="peopleNum">
                   <el-input

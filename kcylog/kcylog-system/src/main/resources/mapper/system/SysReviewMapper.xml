@@ -22,6 +22,8 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
         <result property="subcontract"    column="subcontract"    />
         <result property="startTime"    column="start_time"    />
         <result property="endTime"    column="end_time"    />
+        <result property="projectStart"    column="project_start"    />
+        <result property="projectEnd"    column="project_end"    />
         <result property="budgetDay"    column="budget_day"    />
         <result property="budgetMoney"    column="budget_money"    />
         <result property="createTime"    column="create_time"    />
@@ -97,6 +99,8 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
             <if test="peopleNum != null and peopleNum != ''">people_num,</if>
             <if test="startTime != null">start_time,</if>
             <if test="endTime != null">end_time,</if>
+            <if test="projectStart != null">project_start,</if>
+            <if test="projectEnd != null">project_end,</if>
             <if test="budgetDay != null">budget_day,</if>
             <if test="budgetMoney != null">budget_money,</if>
             <if test="createTime != null">create_time,</if>
@@ -117,6 +121,8 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
             <if test="peopleNum != null and peopleNum != ''">#{peopleNum},</if>
             <if test="startTime != null">#{startTime},</if>
             <if test="endTime != null">#{endTime},</if>
+            <if test="projectStart != null">#{projectStart},</if>
+            <if test="projectEnd != null">#{projectEnd},</if>
             <if test="budgetDay != null">#{budgetDay},</if>
             <if test="budgetMoney != null">#{budgetMoney},</if>
             <if test="createTime != null">#{createTime},</if>
@@ -142,6 +148,8 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
             <if test="startEdit != null">start_edit = #{startEdit},</if>
             <if test="startTime != null">start_time = #{startTime},</if>
             <if test="endTime != null">end_time = #{endTime},</if>
+            project_start = #{projectStart},
+            project_end = #{projectEnd},
             <if test="budgetDay != null">budget_day = #{budgetDay},</if>
             <if test="budgetMoney != null">budget_money = #{budgetMoney},</if>
             <if test="createTime != null">create_time = #{createTime},</if>
@@ -309,5 +317,6 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
     <select id="getReviewBySerialNum" parameterType="String" resultMap="SysReviewResult">
         <include refid="selectSysReviewVo"/>
         where serial_num = #{serialNum}
+        limit 1
     </select>
 </mapper>

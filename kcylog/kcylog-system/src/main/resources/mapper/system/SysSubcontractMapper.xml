@@ -227,5 +227,6 @@
     <select id="getSubcontractBySerialNum" parameterType="String" resultMap="SysSubcontractResult">
         <include refid="selectSysSubcontractVo"/>
         where serial_num = #{serialNum}
+        limit 1
     </select>
 </mapper>

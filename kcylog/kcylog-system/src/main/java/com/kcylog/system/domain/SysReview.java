@@ -109,6 +109,28 @@ public class SysReview extends BaseEntity
 
     private Long settlementId;
 
+    private Date projectStart;
+
+    private Date projectEnd;
+
+
+    public Date getProjectStart() {
+        return projectStart;
+    }
+
+    public void setProjectStart(Date projectStart) {
+        this.projectStart = projectStart;
+    }
+
+    public Date getProjectEnd() {
+        return projectEnd;
+    }
+
+    public void setProjectEnd(Date projectEnd) {
+        this.projectEnd = projectEnd;
+    }
+
+
     public String getEmploymentReason() {
         return employmentReason;
     }

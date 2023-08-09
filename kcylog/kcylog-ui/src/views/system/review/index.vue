@@ -419,6 +419,28 @@
             disabled
           />
         </el-form-item>
+        <div class="form-container">
+          <el-form-item label="项目工期" prop="projectStart">
+            <el-date-picker
+              clearable
+              v-model="form.projectStart"
+              type="date"
+              value-format="yyyy-MM-dd"
+              placeholder="请选择工期开始时间"
+            >
+            </el-date-picker>
+          </el-form-item>
+          <el-form-item label="" style="margin-left: -100px" prop="projectEnd">
+            <el-date-picker
+              clearable
+              v-model="form.projectEnd"
+              type="date"
+              value-format="yyyy-MM-dd"
+              placeholder="请选择工期结束时间"
+            >
+            </el-date-picker>
+          </el-form-item>
+        </div>
       </el-form>
       <div slot="footer" class="dialog-footer">
         <el-button type="primary" @click="submitForm">确 定</el-button>
@@ -565,6 +587,32 @@
             <el-option label="下午" value="23:59:59"></el-option>
           </el-select>
         </el-form-item>
+        <div class="form-container">
+          <el-form-item label="项目工期" prop="projectStart">
+            <el-date-picker
+              clearable
+              v-model="formInfo.projectStart"
+              type="date"
+              value-format="yyyy-MM-dd"
+              placeholder="请选择工期开始时间"
+              disabled
+              class="custom-input"
+            >
+            </el-date-picker>
+          </el-form-item>
+          <el-form-item label="" style="margin-left: -100px" prop="projectEnd">
+            <el-date-picker
+              clearable
+              v-model="formInfo.projectEnd"
+              type="date"
+              value-format="yyyy-MM-dd"
+              placeholder="请选择工期结束时间"
+              disabled
+              class="custom-input"
+            >
+            </el-date-picker>
+          </el-form-item>
+        </div>
         <div class="form-container">
           <el-form-item label="雇工人数" prop="peopleNum">
             <el-input
@@ -1139,6 +1187,14 @@ export default {
 
       if (row.YSJE != null && row.YSJE != 0) {
         this.form.porjectMoney = row.YSJE;
+      }
+
+      if (row.XMKSSJ != null && row.XMKSSJ != 0) {
+        this.form.projectStart = row.XMKSSJ;
+      }
+
+      if (row.XMJSSJ != null && row.XMJSSJ != 0) {
+        this.form.projectEnd = row.XMJSSJ;
       }
     },
     /** 修改按钮操作 */
