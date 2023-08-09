@@ -951,6 +951,33 @@ export default {
         .catch((error) => {
           this.$message.error("请求项目管理数据失败～");
         });
+
+      // let res = {
+      //   total: 1000, //总行数
+      //   rows: [
+      //     {
+      //       XMBH: "项目编号1",
+      //       XMMC: "项目名称1",
+      //       GCNR: "工作内容1",
+      //       WTDW: "委托单位1",
+      //       GZL: "工作量1",
+      //       YSJE: "预算金额1",
+      //       XMKSSJ: "2023-08-08",
+      //       XMJSSJ: "2023-08-14",
+      //     },
+      //     {
+      //       XMBH: "项目编号2",
+      //       XMMC: "项目名称2",
+      //       GCNR: "工作内容2",
+      //       WTDW: "委托单位2",
+      //       GZL: "工作量2",
+      //       YSJE: "预算金额2",
+      //     },
+      //   ],
+      // };
+      // this.projectList = res.rows;
+      // this.projectTotal = res.total;
+      // this.loading = false;
     },
 
     // 取消按钮
