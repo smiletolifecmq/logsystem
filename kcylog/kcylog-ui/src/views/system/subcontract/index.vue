@@ -628,6 +628,7 @@ import {
   getSubcontractBySerialNum,
 } from "@/api/system/subcontract";
 import { listUnit } from "@/api/system/unit";
+import { fetchProjectData } from "@/utils/otherItems";
 
 export default {
   name: "Subcontract",
@@ -940,69 +941,16 @@ export default {
 
     getProjectList() {
       this.loading = true;
-      const xhr = new XMLHttpRequest();
-      let projectUrl =
-        "http://192.168.110.100:8888/oa/basicinfo/basicinfoforhiring.do?" +
-        "pageNum=" +
-        this.queryProjectParams.pageNum +
-        "&pageSize=" +
-        this.queryProjectParams.pageSize;
 
-      if (
-        this.queryProjectParams.serialNum != null &&
-        this.queryProjectParams.serialNum != ""
-      ) {
-        projectUrl =
-          projectUrl + "&serialNum=" + this.queryProjectParams.serialNum;
-      } else {
-        projectUrl = projectUrl + "&serialNum=";
-      }
-
-      xhr.open("GET", projectUrl, true);
-      xhr.onreadystatechange = function () {
-        if (xhr.readyState === 4 && xhr.status === 200) {
-          var response = JSON.parse(xhr.responseText);
-          console.log(response);
-          this.projectList = res.rows;
-          this.projectTotal = res.total;
+      fetchProjectData(this.queryProjectParams)
+        .then((response) => {
+          this.projectList = response.rows;
+          this.projectTotal = response.total;
           this.loading = false;
-        } else {
+        })
+        .catch((error) => {
           this.$message.error("请求项目管理数据失败～");
-        }
-      };
-      xhr.send();
-      listSubcontract(this.queryProjectParams).then((response) => {
-        this.projectList = response.rows;
-        this.projectTotal = response.total;
-        this.loading = false;
-      });
-
-      // let res = {
-      //   total: 1000, //总行数
-      //   rows: [
-      //     {
-      //       XMBH: "项目编号1",
-      //       XMMC: "项目名称1",
-      //       GCNR: "工作内容1",
-      //       WTDW: "委托单位1",
-      //       GZL: "工作量1",
-      //       YSJE: "预算金额1",
-      //       XMKSSJ: "2023-08-08",
-      //       XMJSSJ: "2023-08-14",
-      //     },
-      //     {
-      //       XMBH: "项目编号2",
-      //       XMMC: "项目名称2",
-      //       GCNR: "工作内容2",
-      //       WTDW: "委托单位2",
-      //       GZL: "工作量2",
-      //       YSJE: "预算金额2",
-      //     },
-      //   ],
-      // };
-      // this.projectList = res.rows;
-      // this.projectTotal = res.total;
-      // this.loading = false;
+        });
     },
 
     // 取消按钮
