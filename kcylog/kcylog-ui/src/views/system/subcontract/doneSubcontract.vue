@@ -286,7 +286,7 @@
             >
             </el-date-picker>
           </el-form-item>
-          <el-form-item label="" prop="endTime">
+          <el-form-item style="margin-left: -100px" label="" prop="endTime">
             <el-date-picker
               clearable
               v-model="formInfo.endTime"

@@ -170,6 +170,7 @@
         </where>
         AND rp.user_id = #{userId}
         AND rp.status = 1
+        order by r.subcontract_id desc
     </select>
 
     <update id="setSysReviewStatusBySubcontractId" parameterType="SysSubcontract">

@@ -209,7 +209,7 @@
     <el-dialog
       :title="titleInfo"
       :visible.sync="openInfo"
-      width="1200px"
+      width="1260px"
       append-to-body
       v-el-drag-dialog
       :close-on-click-modal="false"
