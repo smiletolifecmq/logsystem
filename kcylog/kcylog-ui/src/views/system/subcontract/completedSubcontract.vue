@@ -93,7 +93,7 @@
       <el-table-column label="工程编号" align="center" prop="serialNum" />
       <el-table-column label="项目名称" align="center" prop="projectName" />
       <el-table-column label="业务名称" align="center" prop="businessName" />
-      <el-table-column label="工作量" align="center" prop="workload" />
+      <el-table-column label="分包工作量" align="center" prop="workload" />
       <el-table-column label="工作内容" align="center" prop="workcontent" />
       <el-table-column label="委托单位" align="center" prop="entrustUnit" />
       <el-table-column
@@ -210,21 +210,31 @@
     <el-dialog
       :title="titleInfo"
       :visible.sync="openInfo"
-      width="500px"
+      width="700px"
       append-to-body
       v-el-drag-dialog
       :close-on-click-modal="false"
       :close-on-press-escape="false"
     >
       <el-form ref="formInfo" :model="formInfo" label-width="80px">
-        <el-form-item label="工程编号" prop="serialNum">
-          <el-input
-            v-model="formInfo.serialNum"
-            placeholder="请输入工程编号"
-            class="custom-input"
-            disabled
-          />
-        </el-form-item>
+        <div class="form-container">
+          <el-form-item label="工程编号" prop="serialNum">
+            <el-input
+              v-model="formInfo.serialNum"
+              placeholder="请输入工程编号"
+              class="custom-input"
+              disabled
+            />
+          </el-form-item>
+          <el-form-item label="负责人">
+            <el-input
+              v-if="formInfo.user"
+              v-model="formInfo.user.userName"
+              disabled
+              class="custom-input"
+            />
+          </el-form-item>
+        </div>
         <el-form-item label="项目名称" prop="projectName">
           <el-input
             v-model="formInfo.projectName"
@@ -249,11 +259,11 @@
             disabled
           />
         </el-form-item>
-        <el-form-item label="工作量" prop="workload">
+        <el-form-item label="分包工作量" prop="workload">
           <el-input
             v-model="formInfo.workload"
             type="textarea"
-            placeholder="请输入工作量"
+            placeholder="请输入分包工作量"
             class="textarea-input"
             disabled
           />
@@ -314,38 +324,32 @@
           >
           </el-date-picker>
         </el-form-item>
-        <el-form-item label="工期开始" prop="startTime">
-          <el-date-picker
-            clearable
-            v-model="formInfo.startTime"
-            type="date"
-            value-format="yyyy-MM-dd"
-            placeholder="请选择工期开始时间"
-            disabled
-            class="custom-input"
-          >
-          </el-date-picker>
-        </el-form-item>
-        <el-form-item label="工期结束" prop="endTime">
-          <el-date-picker
-            clearable
-            v-model="formInfo.endTime"
-            type="date"
-            value-format="yyyy-MM-dd"
-            placeholder="请选择工期结束时间"
-            disabled
-            class="custom-input"
-          >
-          </el-date-picker>
-        </el-form-item>
-        <el-form-item label="负责人">
-          <el-input
-            v-if="formInfo.user"
-            v-model="formInfo.user.userName"
-            disabled
-            class="custom-input"
-          />
-        </el-form-item>
+        <div class="form-container">
+          <el-form-item label="工期开始" prop="startTime">
+            <el-date-picker
+              clearable
+              v-model="formInfo.startTime"
+              type="date"
+              value-format="yyyy-MM-dd"
+              placeholder="请选择工期开始时间"
+              disabled
+              class="custom-input"
+            >
+            </el-date-picker>
+          </el-form-item>
+          <el-form-item label="" prop="endTime">
+            <el-date-picker
+              clearable
+              v-model="formInfo.endTime"
+              type="date"
+              value-format="yyyy-MM-dd"
+              placeholder="请选择工期结束时间"
+              disabled
+              class="custom-input"
+            >
+            </el-date-picker>
+          </el-form-item>
+        </div>
       </el-form>
     </el-dialog>
 
@@ -373,6 +377,18 @@
 
 .textarea-input textarea {
   color: black !important;
+}
+
+.el-form-item__label {
+  width: 112px !important;
+}
+
+.el-form-item--medium .el-form-item__content {
+  margin-left: 112px !important;
+}
+
+.form-container {
+  display: flex;
 }
 </style>
 <script>
