@@ -608,6 +608,87 @@
         </el-form-item>
       </el-form>
     </el-dialog>
+
+    <!-- 项目编号选择 -->
+    <el-dialog
+      :title="projectInfo"
+      :visible.sync="projectOpen"
+      width="1000px"
+      append-to-body
+      :close-on-click-modal="false"
+      :close-on-press-escape="false"
+    >
+      <el-form
+        :model="queryProjectParams"
+        ref="queryProjectForm"
+        size="small"
+        :inline="true"
+        v-show="showProjectSearch"
+        label-width="68px"
+      >
+        <el-form-item label="工程编号" prop="serialNum">
+          <el-input
+            v-model="queryProjectParams.serialNum"
+            placeholder="请输入工程编号"
+            clearable
+            @keyup.enter.native="handleProjectQuery"
+          />
+        </el-form-item>
+        <el-form-item>
+          <el-button
+            type="primary"
+            icon="el-icon-search"
+            size="mini"
+            @click="handleProjectQuery"
+            >搜索</el-button
+          >
+        </el-form-item>
+      </el-form>
+
+      <el-table v-loading="loading" :data="projectList">
+        <el-table-column label="工程编号" align="center" prop="XMBH" />
+        <el-table-column label="项目名称" align="center" prop="XMMC" />
+        <el-table-column label="工作量" align="center" prop="GZL" />
+        <el-table-column label="项目金额" align="center" prop="YSJE" />
+        <el-table-column label="委托单位" align="center" prop="WTDW" />
+        <el-table-column label="工期开始" align="center" prop="XMKSSJ" />
+        <el-table-column label="工期结束" align="center" prop="XMJSSJ" />
+        <el-table-column
+          label="操作"
+          align="center"
+          class-name="small-padding fixed-width"
+        >
+          <template slot-scope="scope">
+            <div>
+              <el-button
+                size="mini"
+                type="text"
+                icon="el-icon-document-checked"
+                @click="checkImportProject(scope.row)"
+                >检测是否已导入</el-button
+              >
+            </div>
+            <div>
+              <el-button
+                size="mini"
+                type="text"
+                icon="el-icon-upload"
+                @click="importProject(scope.row)"
+                >导入</el-button
+              >
+            </div>
+          </template>
+        </el-table-column>
+      </el-table>
+
+      <pagination
+        v-show="projectTotal > 0"
+        :total="projectTotal"
+        :page.sync="queryProjectParams.pageNum"
+        :limit.sync="queryProjectParams.pageSize"
+        @pagination="getProjectList"
+      />
+    </el-dialog>
   </div>
 </template>
 <style>
@@ -640,13 +721,25 @@ import {
   updateReview,
   setReviewStatus,
   getReviewProcessList,
+  getReviewBySerialNum,
 } from "@/api/system/review";
 import { listUser } from "@/api/system/user";
+import { fetchProjectData } from "@/utils/otherItems";
 
 export default {
   name: "Review",
   data() {
     return {
+      projectList: [],
+      showProjectSearch: true,
+      projectInfo: "",
+      projectOpen: false,
+      queryProjectParams: {
+        pageNum: 1,
+        pageSize: 10,
+        serialNum: null,
+      },
+      projectTotal: 0,
       subcontract: "2",
       money: 100,
       reviewProcessActive: -1,
@@ -774,6 +867,66 @@ export default {
     // this.loadAllUsers();
   },
   methods: {
+    checkImportProject(row) {
+      getReviewBySerialNum(row.XMBH).then((response) => {
+        if (response.data != null) {
+          this.$message({
+            message:
+              "该项目编号已被<" + response.data.user.userName + ">导入过～",
+            type: "warning",
+          });
+        } else {
+          this.$message({
+            message: "该项目编号未被导入过～",
+            type: "success",
+          });
+        }
+      });
+    },
+    handleProjectQuery() {
+      this.queryProjectParams.pageNum = 1;
+      this.getProjectList();
+    },
+    getProjectList() {
+      this.loading = true;
+
+      // fetchProjectData(this.queryProjectParams)
+      //   .then((response) => {
+      //     this.projectList = response.rows;
+      //     this.projectTotal = response.total;
+      //     this.loading = false;
+      //   })
+      //   .catch((error) => {
+      //     this.$message.error("请求项目管理数据失败～");
+      //   });
+
+      let res = {
+        total: 1000, //总行数
+        rows: [
+          {
+            XMBH: "项目编号1",
+            XMMC: "项目名称1",
+            GCNR: "工作内容1",
+            WTDW: "委托单位1",
+            GZL: "工作量1",
+            YSJE: 0,
+            XMKSSJ: "2023-08-08",
+            XMJSSJ: "2023-08-14",
+          },
+          {
+            XMBH: "项目编号2",
+            XMMC: "项目名称2",
+            GCNR: "工作内容2",
+            WTDW: "委托单位2",
+            GZL: "工作量2",
+            YSJE: 260,
+          },
+        ],
+      };
+      this.projectList = res.rows;
+      this.projectTotal = res.total;
+      this.loading = false;
+    },
     showEmployeeButton(finalTime, status, finalSecondStatus) {
       if ((finalSecondStatus == 1 || status == 2) && status != 4) {
         return true;
@@ -958,8 +1111,35 @@ export default {
     /** 新增按钮操作 */
     handleAdd() {
       this.reset();
+      this.projectInfo = "工程项目列表";
+      this.projectOpen = true;
+      this.getProjectList();
+    },
+    importProject(row) {
+      this.reset();
+      this.resetForm("queryProjectForm");
       this.open = true;
       this.title = "添加审核单";
+      this.projectOpen = false;
+      if (row.XMBH != null && row.XMBH != "") {
+        this.form.serialNum = row.XMBH;
+      }
+
+      if (row.XMMC != null && row.XMMC != "") {
+        this.form.projectName = row.XMMC;
+      }
+
+      if (row.WTDW != null && row.WTDW != "") {
+        this.form.requester = row.WTDW;
+      }
+
+      if (row.GZL != null && row.GZL != "") {
+        this.form.workload = row.GZL;
+      }
+
+      if (row.YSJE != null && row.YSJE != 0) {
+        this.form.porjectMoney = row.YSJE;
+      }
     },
     /** 修改按钮操作 */
     handleUpdate(row) {

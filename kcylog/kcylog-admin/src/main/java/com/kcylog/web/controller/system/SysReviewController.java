@@ -477,4 +477,9 @@ public class SysReviewController extends BaseController
         List<SysReview> list = sysReviewService.settlementListReview(sysReview);
         return getDataTable(list);
     }
+
+    @GetMapping(value = "/get_review_by_serialNum/{serialNum}")
+    public AjaxResult getReviewBySerialNum(@PathVariable("serialNum") String serialNum){
+        return success(sysReviewService.getReviewBySerialNum(serialNum));
+    }
 }

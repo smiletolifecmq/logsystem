@@ -85,4 +85,6 @@ public interface ISysReviewService
     public List<SysReview> selectSysReviewListBySettlementId(SysReview sysReview);
 
     public int updateFinalHireByReviewId(Long reviewId);
+
+    public SysReview getReviewBySerialNum(String serialNum);
 }

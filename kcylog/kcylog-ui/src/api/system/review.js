@@ -129,3 +129,10 @@ export function settlementListReview(query) {
     params: query
   })
 }
+
+export function getReviewBySerialNum(serialNum) {
+  return request({
+    url: '/system/review/get_review_by_serialNum/' + serialNum,
+    method: 'get'
+  })
+}

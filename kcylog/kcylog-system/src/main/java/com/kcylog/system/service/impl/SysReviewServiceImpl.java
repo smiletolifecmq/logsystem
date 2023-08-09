@@ -166,4 +166,10 @@ public class SysReviewServiceImpl implements ISysReviewService
     {
         return sysReviewMapper.updateFinalHireByReviewId(reviewId);
     }
+
+    @Override
+    public SysReview getReviewBySerialNum(String serialNum)
+    {
+        return sysReviewMapper.getReviewBySerialNum(serialNum);
+    }
 }

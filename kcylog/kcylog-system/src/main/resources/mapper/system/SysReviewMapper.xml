@@ -305,4 +305,9 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
         set final_hire = 1
         where review_id = #{reviewId}
     </update>
+
+    <select id="getReviewBySerialNum" parameterType="String" resultMap="SysReviewResult">
+        <include refid="selectSysReviewVo"/>
+        where serial_num = #{serialNum}
+    </select>
 </mapper>
