@@ -1159,9 +1159,20 @@ export default {
     /** 新增按钮操作 */
     handleAdd() {
       this.reset();
-      this.projectInfo = "工程项目列表";
-      this.projectOpen = true;
-      this.getProjectList();
+      this.$confirm("是否需要获取项目管理系统数据?", "提示", {
+        confirmButtonText: "是",
+        cancelButtonText: "否",
+        type: "success",
+      })
+        .then(() => {
+          this.projectInfo = "工程项目列表";
+          this.projectOpen = true;
+          this.getProjectList();
+        })
+        .catch(() => {
+          this.open = true;
+          this.title = "添加审核单";
+        });
     },
     importProject(row) {
       this.reset();
