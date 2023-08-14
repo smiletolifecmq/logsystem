@@ -25,20 +25,12 @@
         />
       </el-form-item>
       <el-form-item label="业务名称" prop="businessName">
-        <el-select
+        <el-input
           v-model="queryParams.businessName"
-          placeholder="请选择抽检业务名称"
-          @change="handleQuery"
+          placeholder="请输入抽检业务名称"
           clearable
-        >
-          <el-option
-            v-for="item in businessNames"
-            :key="item.value"
-            :label="item.label"
-            :value="item.value"
-          >
-          </el-option>
-        </el-select>
+          @keyup.enter.native="handleQuery"
+        />
       </el-form-item>
       <el-form-item label="中签单位" prop="winUnit">
         <el-select
@@ -249,19 +241,10 @@
           <el-input v-model="form.projectName" placeholder="请输入项目名称" />
         </el-form-item>
         <el-form-item label="业务名称" prop="businessName">
-          <el-select
+          <el-input
             v-model="form.businessName"
-            placeholder="请选择抽检业务名称"
-            style="width: 260px"
-          >
-            <el-option
-              v-for="item in businessNames"
-              :key="item.value"
-              :label="item.label"
-              :value="item.value"
-            >
-            </el-option>
-          </el-select>
+            placeholder="请输入抽检业务名称"
+          />
         </el-form-item>
         <el-form-item label="委托单位" prop="entrustUnit">
           <el-input v-model="form.entrustUnit" placeholder="请输入内容" />
@@ -640,76 +623,6 @@ export default {
       reviewProcessList: [],
       titleInfo: "",
       openInfo: false,
-      businessNames: [
-        {
-          value: "1:500数字化修测",
-          label: "1:500数字化修测",
-        },
-        {
-          value: "1:500数字化新测",
-          label: "1:500数字化新测",
-        },
-        {
-          value: "1:500地籍测量",
-          label: "1:500地籍测量",
-        },
-        {
-          value: "1:500地籍图修测",
-          label: "1:500地籍图修测",
-        },
-        {
-          value: "1:2000地形图修测",
-          label: "1:2000地形图修测",
-        },
-        {
-          value: "竣工地形测量",
-          label: "竣工地形测量",
-        },
-        {
-          value: "工程控制测量",
-          label: "工程控制测量",
-        },
-        {
-          value: "道路测量",
-          label: "道路测量",
-        },
-        {
-          value: "河道测量",
-          label: "河道测量",
-        },
-        {
-          value: "新增管线探测",
-          label: "新增管线探测",
-        },
-        {
-          value: "已有管线外业核查",
-          label: "已有管线外业核查",
-        },
-        {
-          value: "cctv检测",
-          label: "cctv检测",
-        },
-        {
-          value: "管道QV概查",
-          label: "管道QV概查",
-        },
-        {
-          value: "面积测量",
-          label: "面积测量",
-        },
-        {
-          value: "其他零星工程",
-          label: "其他零星工程",
-        },
-        {
-          value: "立面测量",
-          label: "立面测量",
-        },
-        {
-          value: "园林竣工测量",
-          label: "园林竣工测量",
-        },
-      ],
       statusArr: [
         {
           value: 0,
@@ -843,6 +756,10 @@ export default {
 
       if (row.XMJSSJ != null && row.XMJSSJ != "") {
         this.form.endTime = row.XMJSSJ;
+      }
+
+      if (row.XMLX != null && row.XMLX != "") {
+        this.form.businessName = row.XMLX;
       }
     },
     checkImportProject(row) {
