@@ -92,11 +92,11 @@
     >
       <el-table-column label="工程编号" align="center" prop="serialNum" />
       <el-table-column label="项目名称" align="center" prop="projectName" />
+      <el-table-column label="委托单位" align="center" prop="entrustUnit" />
       <el-table-column label="业务名称" align="center" prop="businessName" />
       <el-table-column label="分包工作量" align="center" prop="workload" />
-      <el-table-column label="工作内容" align="center" prop="workcontent" />
-      <el-table-column label="委托单位" align="center" prop="entrustUnit" />
-      <el-table-column
+      <!-- <el-table-column label="工作内容" align="center" prop="workcontent" /> -->
+      <!-- <el-table-column
         label="协作单位"
         align="center"
         prop="cooperationUnitJson"
@@ -109,7 +109,7 @@
             《{{ unit }}》
           </div>
         </template>
-      </el-table-column>
+      </el-table-column> -->
       <el-table-column label="中签单位" align="center" prop="winUnit" />
       <el-table-column
         label="抽签时间"
@@ -121,8 +121,6 @@
           <span>{{ parseTime(scope.row.lotTime, "{y}-{m}-{d}") }}</span>
         </template>
       </el-table-column>
-      <el-table-column label="负责人" align="center" prop="user.userName" />
-      <el-table-column label="部门" align="center" prop="dept.deptName" />
       <el-table-column label="是否已打印签收" align="center" prop="isPrint">
         <template slot-scope="scope">
           <span v-if="scope.row.isPrint === 0" style="color: red">否</span>
@@ -132,7 +130,10 @@
           <span v-else>其他状态</span> </template
         >> </el-table-column
       >>
-      <el-table-column
+      <el-table-column label="负责人" align="center" prop="user.userName" />
+      <el-table-column label="部门" align="center" prop="dept.deptName" />
+
+      <!-- <el-table-column
         label="工期开始时间"
         align="center"
         prop="startTime"
@@ -151,7 +152,7 @@
         <template slot-scope="scope">
           <span>{{ parseTime(scope.row.endTime, "{y}-{m}-{d}") }}</span>
         </template>
-      </el-table-column>
+      </el-table-column> -->
       <el-table-column
         label="操作"
         align="center"
@@ -278,10 +279,10 @@
             disabled
           />
         </el-form-item>
-        <el-form-item label="协作单位" prop="cooperationUnitJson">
+        <el-form-item label="抽签单位" prop="cooperationUnitJson">
           <el-select
             v-model="formInfo.cooperationUnitJson"
-            placeholder="协作单位"
+            placeholder="抽签单位"
             multiple
             style="width: 260px"
             disabled

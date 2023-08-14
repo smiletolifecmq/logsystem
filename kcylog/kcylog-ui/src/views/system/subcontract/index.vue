@@ -113,7 +113,7 @@
       <el-table-column label="工作内容" align="center" prop="workcontent" />
       <el-table-column label="委托单位" align="center" prop="entrustUnit" />
       <el-table-column
-        label="协作单位"
+        label="抽签单位"
         align="center"
         prop="cooperationUnitJson"
       >
@@ -280,10 +280,10 @@
             placeholder="请输入工作内容"
           />
         </el-form-item>
-        <el-form-item label="协作单位" prop="cooperationUnitJson">
+        <el-form-item label="抽签单位" prop="cooperationUnitJson">
           <el-select
             v-model="form.cooperationUnitJson"
-            placeholder="协作单位"
+            placeholder="抽签单位"
             multiple
             style="width: 260px"
           >
@@ -502,10 +502,10 @@
             disabled
           />
         </el-form-item>
-        <el-form-item label="协作单位" prop="cooperationUnitJson">
+        <el-form-item label="抽签单位" prop="cooperationUnitJson">
           <el-select
             v-model="formInfo.cooperationUnitJson"
-            placeholder="协作单位"
+            placeholder="抽签单位"
             multiple
             style="width: 260px"
             disabled
