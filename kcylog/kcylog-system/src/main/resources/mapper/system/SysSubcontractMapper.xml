@@ -45,7 +45,7 @@
     <select id="selectSysSubcontractList" parameterType="SysSubcontract" resultMap="SysSubcontractResult">
         <include refid="selectSysSubcontractVo"/>
         <where>
-            <if test="serialNum != null  and serialNum != ''">and r.serial_num = #{serialNum}</if>
+            <if test="serialNum != null  and serialNum != ''">and r.serial_num like concat('%', #{serialNum},'%')</if>
             <if test="projectName != null  and projectName != ''">and r.project_name like concat('%', #{projectName},
                 '%')
             </if>
