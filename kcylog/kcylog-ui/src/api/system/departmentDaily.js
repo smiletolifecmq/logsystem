@@ -42,3 +42,12 @@ export function delDaily(dailyId) {
     method: 'delete'
   })
 }
+
+// 查询部门下拉树结构
+export function deptTreeSelect() {
+  return request({
+    url: '/system/departmentDaily/deptTree',
+    method: 'get'
+  })
+}
+

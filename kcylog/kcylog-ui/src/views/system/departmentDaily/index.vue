@@ -74,7 +74,7 @@
           icon="el-icon-plus"
           size="mini"
           @click="handleAdd"
-          v-hasPermi="['system:daily:add']"
+          v-hasPermi="['system:departmentDaily:add']"
           >新增</el-button
         >
       </el-col>
@@ -187,7 +187,7 @@
             type="text"
             icon="el-icon-edit"
             @click="handleUpdate(scope.row)"
-            v-hasPermi="['system:daily:edit']"
+            v-hasPermi="['system:departmentDaily:edit']"
             v-if="showButton(scope.row.userId)"
             >修改</el-button
           >
@@ -196,7 +196,7 @@
             type="text"
             icon="el-icon-delete"
             @click="handleDelete(scope.row)"
-            v-hasPermi="['system:daily:remove']"
+            v-hasPermi="['system:departmentDaily:remove']"
             v-if="showButton(scope.row.userId)"
             >删除</el-button
           >
@@ -302,9 +302,9 @@ import {
   delDaily,
   addDaily,
   updateDaily,
+  deptTreeSelect,
 } from "@/api/system/departmentDaily";
 import ImgUpload from "@/components/FileUpload";
-import { deptTreeSelect } from "@/api/system/user";
 import Treeselect from "@riophae/vue-treeselect";
 import "@riophae/vue-treeselect/dist/vue-treeselect.css";
 import userInfo from "@/store/modules/user";
