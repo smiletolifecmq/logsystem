@@ -32,6 +32,21 @@
           @keyup.enter.native="handleQuery"
         />
       </el-form-item>
+      <el-form-item label="雇工信息" prop="employmentReason">
+        <el-select
+          v-model="queryParams.employmentReason"
+          placeholder="请选择"
+          clearable
+        >
+          <el-option
+            v-for="item in employmentReasonOptions"
+            :key="item.value"
+            :label="item.label"
+            :value="item.value"
+          >
+          </el-option>
+        </el-select>
+      </el-form-item>
       <el-form-item>
         <el-button
           type="primary"
@@ -471,6 +486,16 @@ export default {
   },
   data() {
     return {
+      employmentReasonOptions: [
+        {
+          value: "1",
+          label: "审核通过且已填写雇工信息",
+        },
+        {
+          value: "2",
+          label: "审核通过且未填写雇工信息",
+        },
+      ],
       employeeList: [],
       showStartEdit: false,
       openInfo: false,

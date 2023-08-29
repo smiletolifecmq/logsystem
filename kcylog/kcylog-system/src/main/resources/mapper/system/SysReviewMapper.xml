@@ -233,9 +233,11 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
             <if test="params.endTime != null and params.endTime != ''"><!-- 结束时间检索 -->
                 AND date_format(r.create_time,'%y%m%d') &lt;= date_format(#{params.endTime},'%y%m%d')
             </if>
+            <if test="employmentReason != null  and employmentReason == 1"> and (r.final_hire = 1 and rp.status = 2)</if>
+            <if test="employmentReason != null  and employmentReason == 2"> and (r.final_hire = 0 and rp.status = 2)</if>
+            <if test="employmentReason == null  or employmentReason == 0"> AND (rp.status = 2 OR rp.status = 3)</if>
         </where>
         AND rp.user_id = #{userId}
-        AND (rp.status = 2 OR rp.status = 3)
         order by r.review_id desc
     </select>
 
