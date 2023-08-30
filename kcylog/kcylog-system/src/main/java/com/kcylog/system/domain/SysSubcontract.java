@@ -97,6 +97,16 @@ public class SysSubcontract extends BaseEntity
 
     private Long isPrint;
 
+    private Long subType;
+
+    public Long getSubType() {
+        return subType;
+    }
+
+    public void setSubType(Long subType) {
+        this.subType = subType;
+    }
+
     public Long getIsPrint() {
         return isPrint;
     }

@@ -591,7 +591,7 @@ public class SysSubcontractController extends BaseController
         headerStyle.setAlignment(HorizontalAlignment.LEFT);
         // 创建第一个合并后的单元格
         mergedCell = headerRowTemp.createCell(0);
-        mergedCell.setCellValue("        3、分院意见由分公司总监理签署；中签单位意见由中签单位代表签署。");
+        mergedCell.setCellValue("        3、分公司意见由分公司总经理签署；中签单位意见由中签单位代表签署。");
         mergedCell.setCellStyle(headerStyle); // 应用居中对齐的样式
         // 设置合并后的单元格边框颜色为白色
         RegionUtil.setBorderTop(BorderStyle.THIN, new CellRangeAddress(num, num, 0, 5), sheet);

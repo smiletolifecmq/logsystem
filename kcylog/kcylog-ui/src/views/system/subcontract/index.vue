@@ -24,10 +24,10 @@
           @keyup.enter.native="handleQuery"
         />
       </el-form-item>
-      <el-form-item label="业务名称" prop="businessName">
+      <el-form-item label="项目类型" prop="businessName">
         <el-input
           v-model="queryParams.businessName"
-          placeholder="请输入抽检业务名称"
+          placeholder="请输入抽检项目类型"
           clearable
           @keyup.enter.native="handleQuery"
         />
@@ -100,7 +100,7 @@
     >
       <el-table-column label="工程编号" align="center" prop="serialNum" />
       <el-table-column label="项目名称" align="center" prop="projectName" />
-      <el-table-column label="业务名称" align="center" prop="businessName" />
+      <el-table-column label="项目类型" align="center" prop="businessName" />
       <el-table-column label="分包工作量" align="center" prop="workload" />
       <el-table-column label="工作内容" align="center" prop="workcontent" />
       <el-table-column label="委托单位" align="center" prop="entrustUnit" />
@@ -240,10 +240,10 @@
         <el-form-item label="项目名称" prop="projectName">
           <el-input v-model="form.projectName" placeholder="请输入项目名称" />
         </el-form-item>
-        <el-form-item label="业务名称" prop="businessName">
+        <el-form-item label="项目类型" prop="businessName">
           <el-input
             v-model="form.businessName"
-            placeholder="请输入抽检业务名称"
+            placeholder="请输入抽检项目类型"
           />
         </el-form-item>
         <el-form-item label="委托单位" prop="entrustUnit">
@@ -255,6 +255,12 @@
             type="textarea"
             placeholder="请输入工作内容"
           />
+        </el-form-item>
+        <el-form-item label="分包类型" prop="subType">
+          <el-radio-group v-model="form.subType">
+            <el-radio :label="1">全部分包</el-radio>
+            <el-radio :label="2">局部分包</el-radio>
+          </el-radio-group>
         </el-form-item>
         <el-form-item label="分包工作量" prop="workload">
           <el-input
@@ -451,10 +457,10 @@
             disabled
           />
         </el-form-item>
-        <el-form-item label="业务名称" prop="businessName">
+        <el-form-item label="项目类型" prop="businessName">
           <el-input
             v-model="formInfo.businessName"
-            placeholder="请输入业务名称"
+            placeholder="请输入项目类型"
             class="custom-input"
             disabled
           />
@@ -475,6 +481,16 @@
             class="textarea-input"
             disabled
           />
+        </el-form-item>
+        <el-form-item label="分包类型" prop="subType">
+          <el-radio-group v-model="formInfo.subType">
+            <el-radio :label="1" :disabled="formInfo.subType != 1"
+              >全部分包</el-radio
+            >
+            <el-radio :label="2" :disabled="formInfo.subType != 2"
+              >局部分包</el-radio
+            >
+          </el-radio-group>
         </el-form-item>
         <el-form-item label="分包工作量" prop="workload">
           <el-input
@@ -702,13 +718,17 @@ export default {
           { required: true, message: "项目名称不能为空", trigger: "blur" },
         ],
         businessName: [
-          { required: true, message: "业务名称不能为空", trigger: "blur" },
+          { required: true, message: "项目类型不能为空", trigger: "blur" },
         ],
         winUnit: [
           { required: true, message: "中签单位不能为空", trigger: "blur" },
         ],
         cooperationUnitJson: [
           { required: true, message: "中签单位不能为空", trigger: "blur" },
+        ],
+        subType: [
+          { required: true, message: "请选择分包类型", trigger: "change" },
+          { validator: this.validateSubType, trigger: "change" },
         ],
         userId: [
           {
@@ -728,6 +748,13 @@ export default {
     this.loadAllUnits();
   },
   methods: {
+    validateSubType(rule, value, callback) {
+      if (value === 0) {
+        callback(new Error("请选择分包类型"));
+      } else {
+        callback();
+      }
+    },
     importProject(row) {
       this.reset();
       this.resetForm("queryProjectForm");

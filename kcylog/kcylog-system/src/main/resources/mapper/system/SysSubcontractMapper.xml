@@ -19,6 +19,7 @@
         <result property="deptId" column="dept_id"/>
         <result property="status" column="status"/>
         <result property="isPrint" column="is_print"/>
+        <result property="subType" column="sub_type"/>
         <result property="startTime" column="start_time"/>
         <result property="endTime" column="end_time"/>
         <result property="createTime" column="create_time"/>
@@ -83,6 +84,7 @@
             <if test="deptId != null">dept_id,</if>
             <if test="status != null">status,</if>
             <if test="isPrint != null">is_print,</if>
+            <if test="subType != null">sub_type,</if>
             <if test="startTime != null">start_time,</if>
             <if test="endTime != null">end_time,</if>
             <if test="createTime != null">create_time,</if>
@@ -101,6 +103,7 @@
             <if test="userId != null">#{userId},</if>
             <if test="deptId != null">#{deptId},</if>
             <if test="isPrint != null">#{isPrint},</if>
+            <if test="subType != null">#{subType},</if>
             <if test="status != null">#{status},</if>
             <if test="startTime != null">#{startTime},</if>
             <if test="endTime != null">#{endTime},</if>
@@ -124,6 +127,7 @@
             <if test="userId != null">user_id = #{userId},</if>
             <if test="deptId != null">dept_id = #{deptId},</if>
             <if test="isPrint != null">is_print = #{isPrint},</if>
+            <if test="subType != null">sub_type = #{subType},</if>
             <if test="status != null">status = #{status},</if>
             <if test="startTime != null">start_time = #{startTime},</if>
             <if test="endTime != null">end_time = #{endTime},</if>
