@@ -261,20 +261,20 @@
             disabled
           />
         </el-form-item>
-        <el-form-item label="分包工作量" prop="workload">
-          <el-input
-            v-model="formInfo.workload"
-            type="textarea"
-            placeholder="请输入分包工作量"
-            class="textarea-input"
-            disabled
-          />
-        </el-form-item>
         <el-form-item label="工作内容">
           <el-input
             v-model="formInfo.workcontent"
             type="textarea"
             placeholder="请输入工作内容"
+            class="textarea-input"
+            disabled
+          />
+        </el-form-item>
+        <el-form-item label="分包工作量" prop="workload">
+          <el-input
+            v-model="formInfo.workload"
+            type="textarea"
+            placeholder="请输入分包工作量"
             class="textarea-input"
             disabled
           />
