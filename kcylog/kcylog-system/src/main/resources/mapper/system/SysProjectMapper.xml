@@ -1,0 +1,137 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.kcylog.system.mapper.SysProjectMapper">
+    
+    <resultMap type="SysProject" id="SysProjectResult">
+        <result property="projectId"    column="project_id"    />
+        <result property="projectName"    column="project_name"    />
+        <result property="projectNum"    column="project_num"    />
+        <result property="projectType"    column="project_type"    />
+        <result property="registerTime"    column="register_time"    />
+        <result property="receptionist"    column="receptionist"    />
+        <result property="workload"    column="workload"    />
+        <result property="userName"    column="user_name"    />
+        <result property="requester"    column="requester"    />
+        <result property="projectStart"    column="project_start"    />
+        <result property="projectEnd"    column="project_end"    />
+        <result property="oneCheck"    column="one_check"    />
+        <result property="twoCheck"    column="two_check"    />
+        <result property="noticeTime"    column="notice_time"    />
+        <result property="projectTime"    column="project_time"    />
+        <result property="deliveryTime"    column="delivery_time"    />
+        <result property="porjectMoney"    column="porject_money"    />
+        <result property="operate"    column="operate"    />
+        <result property="operateUser"    column="operate_user"    />
+        <result property="operateTime"    column="operate_time"    />
+        <result property="createTime"    column="create_time"    />
+        <result property="updateTime"    column="update_time"    />
+    </resultMap>
+
+    <sql id="selectSysProjectVo">
+        select project_id, project_name, project_num, project_type, register_time, receptionist, workload, user_name, requester, project_start, project_end, one_check, two_check, notice_time, project_time, delivery_time, porject_money, operate, operate_user, operate_time, create_time, update_time from sys_project
+    </sql>
+
+    <select id="selectSysProjectList" parameterType="SysProject" resultMap="SysProjectResult">
+        <include refid="selectSysProjectVo"/>
+        <where>  
+            <if test="projectName != null  and projectName != ''"> and project_name like concat('%', #{projectName}, '%')</if>
+            <if test="projectNum != null  and projectNum != ''"> and project_num like concat('%', #{projectNum}, '%')</if>
+        </where>
+    </select>
+    
+    <select id="selectSysProjectByProjectId" parameterType="String" resultMap="SysProjectResult">
+        <include refid="selectSysProjectVo"/>
+        where project_id = #{projectId}
+    </select>
+        
+    <insert id="insertSysProject" parameterType="SysProject" useGeneratedKeys="true" keyProperty="projectId">
+        insert into sys_project
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="projectName != null and projectName != ''">project_name,</if>
+            <if test="projectNum != null and projectNum != ''">project_num,</if>
+            <if test="projectType != null and projectType != ''">project_type,</if>
+            <if test="registerTime != null and registerTime != ''">register_time,</if>
+            <if test="receptionist != null and receptionist != ''">receptionist,</if>
+            <if test="workload != null">workload,</if>
+            <if test="userName != null and userName != ''">user_name,</if>
+            <if test="requester != null and requester != ''">requester,</if>
+            <if test="projectStart != null and projectStart != ''">project_start,</if>
+            <if test="projectEnd != null and projectEnd != ''">project_end,</if>
+            <if test="oneCheck != null and oneCheck != ''">one_check,</if>
+            <if test="twoCheck != null and twoCheck != ''">two_check,</if>
+            <if test="noticeTime != null and noticeTime != ''">notice_time,</if>
+            <if test="projectTime != null and projectTime != ''">project_time,</if>
+            <if test="deliveryTime != null and deliveryTime != ''">delivery_time,</if>
+            <if test="porjectMoney != null">porject_money,</if>
+            <if test="operate != null">operate,</if>
+            <if test="operateUser != null and operateUser != ''">operate_user,</if>
+            <if test="operateTime != null">operate_time,</if>
+            <if test="createTime != null">create_time,</if>
+            <if test="updateTime != null">update_time,</if>
+         </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test="projectName != null and projectName != ''">#{projectName},</if>
+            <if test="projectNum != null and projectNum != ''">#{projectNum},</if>
+            <if test="projectType != null and projectType != ''">#{projectType},</if>
+            <if test="registerTime != null and registerTime != ''">#{registerTime},</if>
+            <if test="receptionist != null and receptionist != ''">#{receptionist},</if>
+            <if test="workload != null">#{workload},</if>
+            <if test="userName != null and userName != ''">#{userName},</if>
+            <if test="requester != null and requester != ''">#{requester},</if>
+            <if test="projectStart != null and projectStart != ''">#{projectStart},</if>
+            <if test="projectEnd != null and projectEnd != ''">#{projectEnd},</if>
+            <if test="oneCheck != null and oneCheck != ''">#{oneCheck},</if>
+            <if test="twoCheck != null and twoCheck != ''">#{twoCheck},</if>
+            <if test="noticeTime != null and noticeTime != ''">#{noticeTime},</if>
+            <if test="projectTime != null and projectTime != ''">#{projectTime},</if>
+            <if test="deliveryTime != null and deliveryTime != ''">#{deliveryTime},</if>
+            <if test="porjectMoney != null">#{porjectMoney},</if>
+            <if test="operate != null">#{operate},</if>
+            <if test="operateUser != null and operateUser != ''">#{operateUser},</if>
+            <if test="operateTime != null">#{operateTime},</if>
+            <if test="createTime != null">#{createTime},</if>
+            <if test="updateTime != null">#{updateTime},</if>
+         </trim>
+    </insert>
+
+    <update id="updateSysProject" parameterType="SysProject">
+        update sys_project
+        <trim prefix="SET" suffixOverrides=",">
+            <if test="projectName != null and projectName != ''">project_name = #{projectName},</if>
+            <if test="projectNum != null and projectNum != ''">project_num = #{projectNum},</if>
+            <if test="projectType != null and projectType != ''">project_type = #{projectType},</if>
+            <if test="registerTime != null and registerTime != ''">register_time = #{registerTime},</if>
+            <if test="receptionist != null and receptionist != ''">receptionist = #{receptionist},</if>
+            <if test="workload != null">workload = #{workload},</if>
+            <if test="userName != null and userName != ''">user_name = #{userName},</if>
+            <if test="requester != null and requester != ''">requester = #{requester},</if>
+            <if test="projectStart != null and projectStart != ''">project_start = #{projectStart},</if>
+            <if test="projectEnd != null and projectEnd != ''">project_end = #{projectEnd},</if>
+            <if test="oneCheck != null and oneCheck != ''">one_check = #{oneCheck},</if>
+            <if test="twoCheck != null and twoCheck != ''">two_check = #{twoCheck},</if>
+            <if test="noticeTime != null and noticeTime != ''">notice_time = #{noticeTime},</if>
+            <if test="projectTime != null and projectTime != ''">project_time = #{projectTime},</if>
+            <if test="deliveryTime != null and deliveryTime != ''">delivery_time = #{deliveryTime},</if>
+            <if test="porjectMoney != null">porject_money = #{porjectMoney},</if>
+            <if test="operate != null">operate = #{operate},</if>
+            <if test="operateUser != null and operateUser != ''">operate_user = #{operateUser},</if>
+            <if test="operateTime != null">operate_time = #{operateTime},</if>
+            <if test="createTime != null">create_time = #{createTime},</if>
+            <if test="updateTime != null">update_time = #{updateTime},</if>
+        </trim>
+        where project_id = #{projectId}
+    </update>
+
+    <delete id="deleteSysProjectByProjectId" parameterType="String">
+        delete from sys_project where project_id = #{projectId}
+    </delete>
+
+    <delete id="deleteSysProjectByProjectIds" parameterType="String">
+        delete from sys_project where project_id in 
+        <foreach item="projectId" collection="array" open="(" separator="," close=")">
+            #{projectId}
+        </foreach>
+    </delete>
+</mapper>
