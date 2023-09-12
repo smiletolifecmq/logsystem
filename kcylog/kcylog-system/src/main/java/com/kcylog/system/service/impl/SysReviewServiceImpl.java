@@ -172,4 +172,10 @@ public class SysReviewServiceImpl implements ISysReviewService
     {
         return sysReviewMapper.getReviewBySerialNum(serialNum);
     }
+
+    @Override
+    public SysReview getSubcontractReview(Long subcontractId)
+    {
+        return sysReviewMapper.getSubcontractReview(subcontractId);
+    }
 }

@@ -353,4 +353,11 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
         where serial_num = #{serialNum}
         limit 1
     </select>
+
+    <select id="getSubcontractReview" parameterType="Long" resultMap="SysReviewResult">
+        SELECT c.*, u.user_name FROM sys_project_relation a
+        INNER JOIN sys_project_relation b ON a.project_id = b.project_id AND a.review_id = #{subcontractId} AND a.review_type = 2
+        INNER JOIN sys_review c ON b.review_id = c.review_id
+        INNER JOIN sys_user u on u.user_id = c.user_id  LIMIT 1
+    </select>
 </mapper>

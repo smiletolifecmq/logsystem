@@ -10,14 +10,8 @@ import com.kcylog.common.core.page.TableDataInfo;
 import com.kcylog.common.enums.BusinessType;
 import com.kcylog.common.utils.DateUtils;
 import com.kcylog.common.utils.SecurityUtils;
-import com.kcylog.system.domain.SysProjectRelation;
-import com.kcylog.system.domain.SysSubcontract;
-import com.kcylog.system.domain.SysSubcontractProcess;
-import com.kcylog.system.domain.SysSubcontractProcessConfigInfo;
-import com.kcylog.system.service.ISysProjectRelationService;
-import com.kcylog.system.service.ISysSubcontractProcessConfigInfoService;
-import com.kcylog.system.service.ISysSubcontractProcessService;
-import com.kcylog.system.service.ISysSubcontractService;
+import com.kcylog.system.domain.*;
+import com.kcylog.system.service.*;
 import org.apache.poi.ss.usermodel.*;
 import org.apache.poi.ss.util.CellRangeAddress;
 import org.apache.poi.ss.util.RegionUtil;
@@ -61,6 +55,9 @@ public class SysSubcontractController extends BaseController
 
     @Autowired
     private ISysProjectRelationService sysProjectRelationService;
+
+    @Autowired
+    private ISysReviewService sysReviewService;
     /**
      * 查询分包列表
      */
@@ -644,5 +641,11 @@ public class SysSubcontractController extends BaseController
     @GetMapping(value = "/get_subcontract_by_serialNum/{serialNum}")
     public AjaxResult getSubcontractBySerialNum(@PathVariable("serialNum") String serialNum){
         return success(sysSubcontractService.getSubcontractBySerialNum(serialNum));
+    }
+
+    @GetMapping(value = "/getSubcontractReview/{subcontractId}")
+    public AjaxResult getSubcontractReview(@PathVariable("subcontractId") Long subcontractId) {
+        SysReview review = sysReviewService.getSubcontractReview(subcontractId);
+        return success(review);
     }
 }

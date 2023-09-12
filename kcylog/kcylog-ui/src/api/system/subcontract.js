@@ -116,3 +116,10 @@ export function getSubcontractBySerialNum(serialNum) {
     method: 'get'
   })
 }
+
+export function listSubcontractReview(subcontractId) {
+  return request({
+    url: '/system/subcontract/getSubcontractReview/' + subcontractId,
+    method: 'get'
+  })
+}

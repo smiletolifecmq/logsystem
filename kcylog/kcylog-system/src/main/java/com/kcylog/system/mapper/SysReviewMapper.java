@@ -87,4 +87,6 @@ public interface SysReviewMapper
     public int updateFinalHireByReviewId(Long reviewId);
 
     public SysReview getReviewBySerialNum(String serialNum);
+
+    public SysReview getSubcontractReview(Long subcontractId);
 }
