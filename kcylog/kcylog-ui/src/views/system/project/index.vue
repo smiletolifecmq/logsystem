@@ -8,9 +8,9 @@
       v-show="showSearch"
       label-width="68px"
     >
-      <el-form-item label="项目名称" prop="projectName">
+      <el-form-item label="项目名称" prop="projectNameAlias">
         <el-input
-          v-model="queryParams.projectName"
+          v-model="queryParams.projectNameAlias"
           placeholder="请输入项目名称"
           clearable
           @keyup.enter.native="handleQuery"
@@ -62,20 +62,28 @@
       :data="projectList"
       @selection-change="handleSelectionChange"
     >
-      <el-table-column label="项目名称" align="center" prop="projectName" />
+      <el-table-column
+        label="项目名称"
+        align="center"
+        prop="projectNameAlias"
+      />
       <el-table-column label="项目编号" align="center" prop="projectNum" />
       <el-table-column label="项目类型" align="center" prop="projectType" />
-      <el-table-column label="工程内容" align="center" prop="workload" />
-      <el-table-column label="工程负责人" align="center" prop="userName" />
+      <el-table-column label="工程内容" align="center" prop="workloadAlias" />
+      <el-table-column label="工程负责人" align="center" prop="userNameAlias" />
       <el-table-column label="登记时间" align="center" prop="registerTime" />
       <el-table-column label="接待人" align="center" prop="receptionist" />
-      <el-table-column label="委托单位" align="center" prop="requester" />
+      <el-table-column label="委托单位" align="center" prop="requesterAlias" />
       <el-table-column
         label="安排开始时间"
         align="center"
-        prop="projectStart"
+        prop="projectStartAlias"
       />
-      <el-table-column label="安排结束时间" align="center" prop="projectEnd" />
+      <el-table-column
+        label="安排结束时间"
+        align="center"
+        prop="projectEndAlias"
+      />
       <!-- <el-table-column label="一检时间" align="center" prop="oneCheck" />
       <el-table-column label="二检时间" align="center" prop="twoCheck" />
       <el-table-column label="通知出件时间" align="center" prop="noticeTime" />
@@ -135,8 +143,11 @@
     <!-- 添加或修改项目对话框 -->
     <el-dialog :title="title" :visible.sync="open" width="500px" append-to-body>
       <el-form ref="form" :model="form" :rules="rules" label-width="80px">
-        <el-form-item label="项目名称" prop="projectName">
-          <el-input v-model="form.projectName" placeholder="请输入项目名称" />
+        <el-form-item label="项目名称" prop="projectNameAlias">
+          <el-input
+            v-model="form.projectNameAlias"
+            placeholder="请输入项目名称"
+          />
         </el-form-item>
         <el-form-item label="项目编号" prop="projectNum">
           <el-input v-model="form.projectNum" placeholder="请输入项目编号" />
@@ -147,28 +158,34 @@
         <el-form-item label="接待人" prop="receptionist">
           <el-input v-model="form.receptionist" placeholder="请输入接待人" />
         </el-form-item>
-        <el-form-item label="工程内容" prop="workload">
+        <el-form-item label="工程内容" prop="workloadAlias">
           <el-input
-            v-model="form.workload"
+            v-model="form.workloadAlias"
             type="textarea"
             placeholder="请输入内容"
           />
         </el-form-item>
-        <el-form-item label="工程负责人" prop="userName">
-          <el-input v-model="form.userName" placeholder="请输入工程负责人" />
-        </el-form-item>
-        <el-form-item label="委托单位" prop="requester">
-          <el-input v-model="form.requester" placeholder="请输入委托单位" />
-        </el-form-item>
-        <el-form-item label="安排开始时间" prop="projectStart">
+        <el-form-item label="工程负责人" prop="userNameAlias">
           <el-input
-            v-model="form.projectStart"
+            v-model="form.userNameAlias"
+            placeholder="请输入工程负责人"
+          />
+        </el-form-item>
+        <el-form-item label="委托单位" prop="requesterAlias">
+          <el-input
+            v-model="form.requesterAlias"
+            placeholder="请输入委托单位"
+          />
+        </el-form-item>
+        <el-form-item label="安排开始时间" prop="projectStartAlias">
+          <el-input
+            v-model="form.projectStartAlias"
             placeholder="请输入安排开始时间"
           />
         </el-form-item>
-        <el-form-item label="安排结束时间" prop="projectEnd">
+        <el-form-item label="安排结束时间" prop="projectEndAlias">
           <el-input
-            v-model="form.projectEnd"
+            v-model="form.projectEndAlias"
             placeholder="请输入安排结束时间"
           />
         </el-form-item>
@@ -193,8 +210,11 @@
         <el-form-item label="送达时间" prop="deliveryTime">
           <el-input v-model="form.deliveryTime" placeholder="请输入送达时间" />
         </el-form-item>
-        <el-form-item label="项目金额" prop="porjectMoney">
-          <el-input v-model="form.porjectMoney" placeholder="请输入项目金额" />
+        <el-form-item label="项目金额" prop="projectMoneyAlias">
+          <el-input
+            v-model="form.projectMoneyAlias"
+            placeholder="请输入项目金额"
+          />
         </el-form-item>
         <el-form-item label="经营产值" prop="operate">
           <el-input v-model="form.operate" placeholder="请输入经营产值" />
@@ -259,22 +279,22 @@ export default {
       queryParams: {
         pageNum: 1,
         pageSize: 10,
-        projectName: null,
+        projectNameAlias: null,
         projectNum: null,
         projectType: null,
         registerTime: null,
         receptionist: null,
-        workload: null,
-        userName: null,
-        requester: null,
-        projectStart: null,
-        projectEnd: null,
+        workloadAlias: null,
+        userNameAlias: null,
+        requesterAlias: null,
+        projectStartAlias: null,
+        projectEndAlias: null,
         oneCheck: null,
         twoCheck: null,
         noticeTime: null,
         projectTime: null,
         deliveryTime: null,
-        porjectMoney: null,
+        projectMoneyAlias: null,
         operate: null,
         operateUser: null,
         operateTime: null,
@@ -283,7 +303,7 @@ export default {
       form: {},
       // 表单校验
       rules: {
-        projectName: [
+        projectNameAlias: [
           { required: true, message: "项目名称不能为空", trigger: "blur" },
         ],
         projectNum: [
@@ -298,16 +318,16 @@ export default {
         receptionist: [
           { required: true, message: "接待人不能为空", trigger: "blur" },
         ],
-        userName: [
+        userNameAlias: [
           { required: true, message: "工程负责人不能为空", trigger: "blur" },
         ],
-        requester: [
+        requesterAlias: [
           { required: true, message: "委托单位不能为空", trigger: "blur" },
         ],
-        projectStart: [
+        projectStartAlias: [
           { required: true, message: "安排开始时间不能为空", trigger: "blur" },
         ],
-        projectEnd: [
+        projectEndAlias: [
           { required: true, message: "安排结束时间不能为空", trigger: "blur" },
         ],
         oneCheck: [
@@ -325,7 +345,7 @@ export default {
         deliveryTime: [
           { required: true, message: "送达时间不能为空", trigger: "blur" },
         ],
-        porjectMoney: [
+        projectMoneyAlias: [
           { required: true, message: "项目金额不能为空", trigger: "blur" },
         ],
         operate: [
@@ -363,22 +383,22 @@ export default {
     reset() {
       this.form = {
         projectId: null,
-        projectName: null,
+        projectNameAlias: null,
         projectNum: null,
         projectType: null,
         registerTime: null,
         receptionist: null,
-        workload: null,
-        userName: null,
-        requester: null,
-        projectStart: null,
-        projectEnd: null,
+        workloadAlias: null,
+        userNameAlias: null,
+        requesterAlias: null,
+        projectStartAlias: null,
+        projectEndAlias: null,
         oneCheck: null,
         twoCheck: null,
         noticeTime: null,
         projectTime: null,
         deliveryTime: null,
-        porjectMoney: null,
+        projectMoneyAlias: null,
         operate: null,
         operateUser: null,
         operateTime: null,

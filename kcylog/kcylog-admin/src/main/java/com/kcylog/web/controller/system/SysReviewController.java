@@ -39,6 +39,9 @@ public class SysReviewController extends BaseController
     final int PassStatus = 2;
     final int NoPassStatus = 3;
 
+    final Integer HiredWorkerType = 1;
+    final Integer SubcontractType = 2;
+
     @Autowired
     private ISysReviewService sysReviewService;
     @Autowired
@@ -56,6 +59,8 @@ public class SysReviewController extends BaseController
     @Autowired
     private ISysSettlementAssociateService sysSettlementAssociateService;
 
+    @Autowired
+    private ISysProjectRelationService sysProjectRelationService;
     /**
      * 查询审核单列表
      */
@@ -164,7 +169,11 @@ public class SysReviewController extends BaseController
     @GetMapping(value = "/{reviewId}")
     public AjaxResult getInfo(@PathVariable("reviewId") String reviewId)
     {
-        return success(sysReviewService.selectSysReviewByReviewId(reviewId));
+        SysReview review = sysReviewService.selectSysReviewByReviewId(reviewId);
+        if (review.getProjectRelation() != null){
+            review.setProjectId(review.getProjectRelation().getProjectId());
+        }
+        return success(review);
     }
 
     /**
@@ -191,7 +200,11 @@ public class SysReviewController extends BaseController
             reviewProcess.add(review);
         }
         int result = sysReviewProcessService.insertSysReviewProcessBatch(reviewProcess);
-
+        SysProjectRelation projectRelation = new SysProjectRelation();
+        projectRelation.setProjectId(sysReview.getProjectId());
+        projectRelation.setReviewType(HiredWorkerType);
+        projectRelation.setReviewId(sysReview.getReviewId());
+        sysProjectRelationService.insertSysProjectRelation(projectRelation);
         return toAjax(result);
     }
 
@@ -203,6 +216,13 @@ public class SysReviewController extends BaseController
     @PutMapping
     public AjaxResult edit(@RequestBody SysReview sysReview)
     {
+        SysProjectRelation projectRelation = new SysProjectRelation();
+        projectRelation.setProjectId(sysReview.getProjectId());
+        projectRelation.setReviewType(HiredWorkerType);
+        projectRelation.setReviewId(sysReview.getReviewId());
+        sysProjectRelationService.deleteByReviewId(projectRelation);
+        sysProjectRelationService.insertSysProjectRelation(projectRelation);
+
         sysReview.setStartEdit(0);
         return toAjax(sysReviewService.updateSysReview(sysReview));
     }
@@ -215,6 +235,11 @@ public class SysReviewController extends BaseController
 	@DeleteMapping("/{reviewIds}")
     public AjaxResult remove(@PathVariable String[] reviewIds)
     {
+        SysProjectRelation projectRelation = new SysProjectRelation();
+        projectRelation.setReviewType(HiredWorkerType);
+        projectRelation.setReviewId(Long.parseLong(reviewIds[0]));
+        sysProjectRelationService.deleteByReviewId(projectRelation);
+
         sysReviewService.deleteSysReviewByReviewIds(reviewIds);
         int result = sysReviewProcessService.deleteSysReviewProcessByReviewIds(reviewIds);
         return toAjax(result);
@@ -323,7 +348,7 @@ public class SysReviewController extends BaseController
     }
 
     /**
-     * 批量修改审核单
+     * 批量修改审核单通过
      */
     @Log(title = "审核单", businessType = BusinessType.UPDATE)
     @Transactional

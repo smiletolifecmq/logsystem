@@ -95,6 +95,8 @@ public class SysReview extends BaseEntity
      */
     private SysUser user;
 
+    private SysProjectRelation projectRelation;
+
     private int finalSecondStatus;
 
     private Long finalHire;
@@ -113,6 +115,33 @@ public class SysReview extends BaseEntity
 
     private Date projectEnd;
 
+    private Long projectId;
+
+    private SysProject project;
+
+    public SysProject getProject() {
+        return project;
+    }
+
+    public void setProject(SysProject project) {
+        this.project = project;
+    }
+
+    public SysProjectRelation getProjectRelation() {
+        return projectRelation;
+    }
+
+    public void setProjectRelation(SysProjectRelation projectRelation) {
+        this.projectRelation = projectRelation;
+    }
+
+    public Long getProjectId() {
+        return projectId;
+    }
+
+    public void setProjectId(Long projectId) {
+        this.projectId = projectId;
+    }
 
     public Date getProjectStart() {
         return projectStart;

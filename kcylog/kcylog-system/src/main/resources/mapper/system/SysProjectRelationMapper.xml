@@ -1,0 +1,70 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.kcylog.system.mapper.SysProjectRelationMapper">
+    
+    <resultMap type="SysProjectRelation" id="SysProjectRelationResult">
+        <result property="relationId"    column="relation_id"    />
+        <result property="reviewType"    column="review_type"    />
+        <result property="reviewId"    column="review_id"    />
+        <result property="projectId"    column="project_id"    />
+    </resultMap>
+
+    <sql id="selectSysProjectRelationVo">
+        select relation_id, review_type, review_id, project_id from sys_project_relation
+    </sql>
+
+    <select id="selectSysProjectRelationList" parameterType="SysProjectRelation" resultMap="SysProjectRelationResult">
+        <include refid="selectSysProjectRelationVo"/>
+        <where>  
+            <if test="reviewType != null "> and review_type = #{reviewType}</if>
+            <if test="reviewId != null "> and review_id = #{reviewId}</if>
+            <if test="projectId != null "> and project_id = #{projectId}</if>
+        </where>
+    </select>
+    
+    <select id="selectSysProjectRelationByRelationId" parameterType="Long" resultMap="SysProjectRelationResult">
+        <include refid="selectSysProjectRelationVo"/>
+        where relation_id = #{relationId}
+    </select>
+        
+    <insert id="insertSysProjectRelation" parameterType="SysProjectRelation" useGeneratedKeys="true" keyProperty="relationId">
+        insert into sys_project_relation
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="reviewType != null">review_type,</if>
+            <if test="reviewId != null">review_id,</if>
+            <if test="projectId != null">project_id,</if>
+         </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test="reviewType != null">#{reviewType},</if>
+            <if test="reviewId != null">#{reviewId},</if>
+            <if test="projectId != null">#{projectId},</if>
+         </trim>
+    </insert>
+
+    <update id="updateSysProjectRelation" parameterType="SysProjectRelation">
+        update sys_project_relation
+        <trim prefix="SET" suffixOverrides=",">
+            <if test="reviewType != null">review_type = #{reviewType},</if>
+            <if test="reviewId != null">review_id = #{reviewId},</if>
+            <if test="projectId != null">project_id = #{projectId},</if>
+        </trim>
+        where relation_id = #{relationId}
+    </update>
+
+    <delete id="deleteSysProjectRelationByRelationId" parameterType="Long">
+        delete from sys_project_relation where relation_id = #{relationId}
+    </delete>
+
+    <delete id="deleteSysProjectRelationByRelationIds" parameterType="String">
+        delete from sys_project_relation where relation_id in 
+        <foreach item="relationId" collection="array" open="(" separator="," close=")">
+            #{relationId}
+        </foreach>
+    </delete>
+
+    <delete id="deleteByReviewId" parameterType="SysProjectRelation">
+        delete from sys_project_relation where review_id = #{reviewId} and review_type = #{reviewType}
+    </delete>
+</mapper>

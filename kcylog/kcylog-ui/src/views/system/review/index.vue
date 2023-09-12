@@ -308,6 +308,17 @@
             clearable
           ></el-autocomplete>
         </el-form-item> -->
+        <el-form-item label="关联项目" prop="projectId">
+          <el-select v-model="form.projectId" placeholder="请选择关联项目">
+            <el-option
+              v-for="item in listProjectLocal"
+              :key="item.projectId"
+              :label="item.projectNum"
+              :value="item.projectId"
+            >
+            </el-option>
+          </el-select>
+        </el-form-item>
         <el-form-item label="工程编号" prop="serialNum">
           <el-input v-model="form.serialNum" placeholder="请输入编号" />
         </el-form-item>
@@ -458,6 +469,22 @@
       :close-on-press-escape="false"
     >
       <el-form ref="formInfo" :model="formInfo" label-width="80px">
+        <el-form-item label="关联项目" prop="projectId">
+          <el-select
+            v-model="formInfo.projectId"
+            disabled
+            placeholder="请选择关联项目"
+            class="custom-input"
+          >
+            <el-option
+              v-for="item in listProjectLocal"
+              :key="item.projectId"
+              :label="item.projectNum"
+              :value="item.projectId"
+            >
+            </el-option>
+          </el-select>
+        </el-form-item>
         <div class="form-container">
           <el-form-item label="工程编号" prop="serialNum">
             <el-input
@@ -771,6 +798,7 @@ import {
   getReviewProcessList,
   getReviewBySerialNum,
 } from "@/api/system/review";
+import { listProject } from "@/api/system/project";
 import { listUser } from "@/api/system/user";
 import { fetchProjectData } from "@/utils/otherItems";
 
@@ -778,6 +806,7 @@ export default {
   name: "Review",
   data() {
     return {
+      listProjectLocal: [],
       projectList: [],
       showProjectSearch: true,
       projectInfo: "",
@@ -871,6 +900,10 @@ export default {
         budgetMoney: null,
         finalTime: null,
       },
+      queryProjectListParams: {
+        pageNum: 1,
+        pageSize: 9999,
+      },
       // 表单参数
       form: {},
       formInfo: {},
@@ -906,15 +939,23 @@ export default {
         endTime: [
           { required: true, message: "请选择结束时间", trigger: "change" },
         ],
+        projectId: [
+          { required: true, message: "请选择关联项目", trigger: "change" },
+        ],
       },
     };
   },
   computed: {},
   created() {
     this.getList();
-    // this.loadAllUsers();
+    this.getProjectListLocal();
   },
   methods: {
+    getProjectListLocal() {
+      listProject(this.queryProjectListParams).then((response) => {
+        this.listProjectLocal = response.rows;
+      });
+    },
     checkImportProject(row) {
       getReviewBySerialNum(row.XMBH).then((response) => {
         if (response.data != null) {
@@ -1318,6 +1359,7 @@ export default {
           '是否确认对审核单编号为"' + row.serialNum + '"的审核单发起审核申请?'
         )
         .then(() => {
+          this.form = {};
           this.form.reviewId = row.reviewId;
           this.form.status = 1;
           setReviewStatus(this.form).then((response) => {

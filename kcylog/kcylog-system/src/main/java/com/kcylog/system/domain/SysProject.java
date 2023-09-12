@@ -1,12 +1,13 @@
 package com.kcylog.system.domain;
 
-import java.math.BigDecimal;
-import java.util.Date;
 import com.fasterxml.jackson.annotation.JsonFormat;
-import org.apache.commons.lang3.builder.ToStringBuilder;
-import org.apache.commons.lang3.builder.ToStringStyle;
 import com.kcylog.common.annotation.Excel;
 import com.kcylog.common.core.domain.BaseEntity;
+import org.apache.commons.lang3.builder.ToStringBuilder;
+import org.apache.commons.lang3.builder.ToStringStyle;
+
+import java.math.BigDecimal;
+import java.util.Date;
 
 /**
  * 项目对象 sys_project
@@ -19,11 +20,11 @@ public class SysProject extends BaseEntity
     private static final long serialVersionUID = 1L;
 
     /** 项目ID */
-    private String projectId;
+    private Long projectId;
 
     /** 项目名称 */
     @Excel(name = "项目名称")
-    private String projectName;
+    private String projectNameAlias;
 
     /** 项目编号 */
     @Excel(name = "项目编号")
@@ -43,23 +44,23 @@ public class SysProject extends BaseEntity
 
     /** 工程内容 */
     @Excel(name = "工程内容")
-    private String workload;
+    private String workloadAlias;
 
     /** 工程负责人 */
     @Excel(name = "工程负责人")
-    private String userName;
+    private String userNameAlias;
 
     /** 委托单位 */
     @Excel(name = "委托单位")
-    private String requester;
+    private String requesterAlias;
 
     /** 安排开始时间 */
     @Excel(name = "安排开始时间")
-    private String projectStart;
+    private String projectStartAlias;
 
     /** 安排结束时间 */
     @Excel(name = "安排结束时间")
-    private String projectEnd;
+    private String projectEndAlias;
 
     /** 一检时间 */
     @Excel(name = "一检时间")
@@ -83,7 +84,7 @@ public class SysProject extends BaseEntity
 
     /** 项目金额 */
     @Excel(name = "项目金额")
-    private BigDecimal porjectMoney;
+    private BigDecimal projectMoneyAlias;
 
     /** 经营产值 */
     @Excel(name = "经营产值")
@@ -98,23 +99,23 @@ public class SysProject extends BaseEntity
     @Excel(name = "填写经营产值时间", width = 30, dateFormat = "yyyy-MM-dd")
     private Date operateTime;
 
-    public void setProjectId(String projectId) 
+    public void setProjectId(Long projectId)
     {
         this.projectId = projectId;
     }
 
-    public String getProjectId() 
+    public Long getProjectId()
     {
         return projectId;
     }
-    public void setProjectName(String projectName) 
+    public void setProjectNameAlias(String projectNameAlias)
     {
-        this.projectName = projectName;
+        this.projectNameAlias = projectNameAlias;
     }
 
-    public String getProjectName() 
+    public String getProjectNameAlias()
     {
-        return projectName;
+        return projectNameAlias;
     }
     public void setProjectNum(String projectNum) 
     {
@@ -152,50 +153,50 @@ public class SysProject extends BaseEntity
     {
         return receptionist;
     }
-    public void setWorkload(String workload) 
+    public void setWorkloadAlias(String workloadAlias)
     {
-        this.workload = workload;
+        this.workloadAlias = workloadAlias;
     }
 
-    public String getWorkload() 
+    public String getWorkloadAlias()
     {
-        return workload;
+        return workloadAlias;
     }
-    public void setUserName(String userName) 
+    public void setUserNameAlias(String userNameAlias)
     {
-        this.userName = userName;
-    }
-
-    public String getUserName() 
-    {
-        return userName;
-    }
-    public void setRequester(String requester) 
-    {
-        this.requester = requester;
+        this.userNameAlias = userNameAlias;
     }
 
-    public String getRequester() 
+    public String getUserNameAlias()
     {
-        return requester;
+        return userNameAlias;
     }
-    public void setProjectStart(String projectStart) 
+    public void setRequesterAlias(String requesterAlias)
     {
-        this.projectStart = projectStart;
-    }
-
-    public String getProjectStart() 
-    {
-        return projectStart;
-    }
-    public void setProjectEnd(String projectEnd) 
-    {
-        this.projectEnd = projectEnd;
+        this.requesterAlias = requesterAlias;
     }
 
-    public String getProjectEnd() 
+    public String getRequesterAlias()
     {
-        return projectEnd;
+        return requesterAlias;
+    }
+    public void setProjectStartAlias(String projectStartAlias)
+    {
+        this.projectStartAlias = projectStartAlias;
+    }
+
+    public String getProjectStartAlias()
+    {
+        return projectStartAlias;
+    }
+    public void setProjectEndAlias(String projectEndAlias)
+    {
+        this.projectEndAlias = projectEndAlias;
+    }
+
+    public String getProjectEndAlias()
+    {
+        return projectEndAlias;
     }
     public void setOneCheck(String oneCheck) 
     {
@@ -242,14 +243,14 @@ public class SysProject extends BaseEntity
     {
         return deliveryTime;
     }
-    public void setPorjectMoney(BigDecimal porjectMoney) 
+    public void setProjectMoneyAlias(BigDecimal projectMoneyAlias)
     {
-        this.porjectMoney = porjectMoney;
+        this.projectMoneyAlias = projectMoneyAlias;
     }
 
-    public BigDecimal getPorjectMoney() 
+    public BigDecimal getProjectMoneyAlias()
     {
-        return porjectMoney;
+        return projectMoneyAlias;
     }
     public void setOperate(BigDecimal operate) 
     {
@@ -283,22 +284,22 @@ public class SysProject extends BaseEntity
     public String toString() {
         return new ToStringBuilder(this,ToStringStyle.MULTI_LINE_STYLE)
             .append("projectId", getProjectId())
-            .append("projectName", getProjectName())
+            .append("projectName", getProjectNameAlias())
             .append("projectNum", getProjectNum())
             .append("projectType", getProjectType())
             .append("registerTime", getRegisterTime())
             .append("receptionist", getReceptionist())
-            .append("workload", getWorkload())
-            .append("userName", getUserName())
-            .append("requester", getRequester())
-            .append("projectStart", getProjectStart())
-            .append("projectEnd", getProjectEnd())
+            .append("workload", getWorkloadAlias())
+            .append("userName", getUserNameAlias())
+            .append("requester", getRequesterAlias())
+            .append("projectStart", getProjectStartAlias())
+            .append("projectEnd", getProjectEndAlias())
             .append("oneCheck", getOneCheck())
             .append("twoCheck", getTwoCheck())
             .append("noticeTime", getNoticeTime())
             .append("projectTime", getProjectTime())
             .append("deliveryTime", getDeliveryTime())
-            .append("porjectMoney", getPorjectMoney())
+            .append("projectMoney", getProjectMoneyAlias())
             .append("operate", getOperate())
             .append("operateUser", getOperateUser())
             .append("operateTime", getOperateTime())
