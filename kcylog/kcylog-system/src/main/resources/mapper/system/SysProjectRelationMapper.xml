@@ -67,4 +67,9 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
     <delete id="deleteByReviewId" parameterType="SysProjectRelation">
         delete from sys_project_relation where review_id = #{reviewId} and review_type = #{reviewType}
     </delete>
+
+    <select id="selectProjectRelationByReviewType" parameterType="Integer" resultMap="SysProjectRelationResult">
+        <include refid="selectSysProjectRelationVo"/>
+        where review_type = #{reviewType}
+    </select>
 </mapper>

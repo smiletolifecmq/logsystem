@@ -39,6 +39,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
             <if test="projectNameAlias != null  and projectNameAlias != ''"> and project_name like concat('%', #{projectNameAlias}, '%')</if>
             <if test="projectNum != null  and projectNum != ''"> and project_num like concat('%', #{projectNum}, '%')</if>
         </where>
+        order by project_id desc 
     </select>
     
     <select id="selectSysProjectByProjectId" parameterType="String" resultMap="SysProjectResult">

@@ -42,3 +42,10 @@ export function delProject(projectId) {
     method: 'delete'
   })
 }
+
+export function listProjectSelected(reviewType) {
+  return request({
+    url: '/system/project/getProjectRelation/' + reviewType,
+    method: 'get',
+  })
+}

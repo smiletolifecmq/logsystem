@@ -7,6 +7,8 @@ import com.kcylog.common.core.page.TableDataInfo;
 import com.kcylog.common.enums.BusinessType;
 import com.kcylog.common.utils.poi.ExcelUtil;
 import com.kcylog.system.domain.SysProject;
+import com.kcylog.system.domain.SysProjectRelation;
+import com.kcylog.system.service.ISysProjectRelationService;
 import com.kcylog.system.service.ISysProjectService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.access.prepost.PreAuthorize;
@@ -27,6 +29,9 @@ public class SysProjectController extends BaseController
 {
     @Autowired
     private ISysProjectService sysProjectService;
+
+    @Autowired
+    private ISysProjectRelationService sysProjectRelationService;
 
     /**
      * 查询项目列表
@@ -94,5 +99,12 @@ public class SysProjectController extends BaseController
     public AjaxResult remove(@PathVariable String[] projectIds)
     {
         return toAjax(sysProjectService.deleteSysProjectByProjectIds(projectIds));
+    }
+
+    @GetMapping("/getProjectRelation/{reviewType}")
+    public TableDataInfo getProjectRelation (@PathVariable("reviewType") Integer reviewType)
+    {
+        List<SysProjectRelation> list = sysProjectRelationService.selectProjectRelationByReviewType(reviewType);
+        return getDataTable(list);
     }
 }

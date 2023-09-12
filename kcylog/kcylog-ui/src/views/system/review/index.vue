@@ -309,12 +309,17 @@
           ></el-autocomplete>
         </el-form-item> -->
         <el-form-item label="关联项目" prop="projectId">
-          <el-select v-model="form.projectId" placeholder="请选择关联项目">
+          <el-select
+            v-model="form.projectId"
+            placeholder="请选择关联项目"
+            filterable
+          >
             <el-option
               v-for="item in listProjectLocal"
               :key="item.projectId"
               :label="item.projectNum"
               :value="item.projectId"
+              :disabled="item.disabled"
             >
             </el-option>
           </el-select>
@@ -798,7 +803,7 @@ import {
   getReviewProcessList,
   getReviewBySerialNum,
 } from "@/api/system/review";
-import { listProject } from "@/api/system/project";
+import { listProject, listProjectSelected } from "@/api/system/project";
 import { listUser } from "@/api/system/user";
 import { fetchProjectData } from "@/utils/otherItems";
 
@@ -806,6 +811,7 @@ export default {
   name: "Review",
   data() {
     return {
+      listProjectLocalSelected: [],
       listProjectLocal: [],
       projectList: [],
       showProjectSearch: true,
@@ -954,6 +960,19 @@ export default {
     getProjectListLocal() {
       listProject(this.queryProjectListParams).then((response) => {
         this.listProjectLocal = response.rows;
+        listProjectSelected(1).then((response) => {
+          this.listProjectLocalSelected = response.rows;
+          const projectIdMap = new Map();
+          for (var i = 0; i < this.listProjectLocalSelected.length; i++) {
+            projectIdMap.set(this.listProjectLocalSelected[i].projectId, true);
+          }
+
+          for (var j = 0; j < this.listProjectLocal.length; j++) {
+            if (projectIdMap.has(this.listProjectLocal[j].projectId)) {
+              this.listProjectLocal[j].disabled = true;
+            }
+          }
+        });
       });
     },
     checkImportProject(row) {
@@ -1209,6 +1228,7 @@ export default {
           this.projectInfo = "工程项目列表";
           this.projectOpen = true;
           this.getProjectList();
+          this.getProjectListLocal();
         })
         .catch(() => {
           this.open = true;

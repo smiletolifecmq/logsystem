@@ -97,4 +97,10 @@ public class SysProjectRelationServiceImpl implements ISysProjectRelationService
     {
         return sysProjectRelationMapper.deleteByReviewId(sysProjectRelation);
     }
+
+    @Override
+    public List<SysProjectRelation> selectProjectRelationByReviewType(Integer reviewType)
+    {
+        return sysProjectRelationMapper.selectProjectRelationByReviewType(reviewType);
+    }
 }

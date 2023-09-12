@@ -61,4 +61,6 @@ public interface ISysProjectRelationService
     public int deleteSysProjectRelationByRelationId(String relationId);
 
     public int deleteByReviewId(SysProjectRelation sysProjectRelation);
+
+    public List<SysProjectRelation> selectProjectRelationByReviewType(Integer reviewType);
 }
