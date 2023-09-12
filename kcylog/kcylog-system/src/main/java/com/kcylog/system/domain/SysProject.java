@@ -99,6 +99,7 @@ public class SysProject extends BaseEntity
     @Excel(name = "填写经营产值时间", width = 30, dateFormat = "yyyy-MM-dd")
     private Date operateTime;
 
+
     public void setProjectId(Long projectId)
     {
         this.projectId = projectId;

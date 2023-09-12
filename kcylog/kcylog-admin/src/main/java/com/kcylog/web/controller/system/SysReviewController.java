@@ -40,7 +40,6 @@ public class SysReviewController extends BaseController
     final int NoPassStatus = 3;
 
     final Integer HiredWorkerType = 1;
-    final Integer SubcontractType = 2;
 
     @Autowired
     private ISysReviewService sysReviewService;

@@ -99,6 +99,26 @@ public class SysSubcontract extends BaseEntity
 
     private Long subType;
 
+    private Long projectId;
+
+    private SysProjectRelation projectRelation;
+
+    public SysProjectRelation getProjectRelation() {
+        return projectRelation;
+    }
+
+    public void setProjectRelation(SysProjectRelation projectRelation) {
+        this.projectRelation = projectRelation;
+    }
+
+    public Long getProjectId() {
+        return projectId;
+    }
+
+    public void setProjectId(Long projectId) {
+        this.projectId = projectId;
+    }
+
     public Long getSubType() {
         return subType;
     }

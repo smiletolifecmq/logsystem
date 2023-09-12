@@ -234,6 +234,23 @@
     <!-- 添加或修改分包对话框 -->
     <el-dialog :title="title" :visible.sync="open" width="700px" append-to-body>
       <el-form ref="form" :model="form" :rules="rules" label-width="80px">
+        <el-form-item label="关联项目" prop="projectId">
+          <el-select
+            v-model="form.projectId"
+            placeholder="请选择关联项目"
+            filterable
+          >
+            <el-option
+              v-for="item in listProjectLocal"
+              :key="item.projectId"
+              :label="item.projectNum"
+              :value="item.projectId"
+              :disabled="item.disabled"
+            >
+            </el-option>
+          </el-select>
+        </el-form-item>
+
         <el-form-item label="工程编号" prop="serialNum">
           <el-input v-model="form.serialNum" placeholder="请输入工程编号" />
         </el-form-item>
@@ -429,6 +446,22 @@
       :close-on-press-escape="false"
     >
       <el-form ref="formInfo" :model="formInfo" label-width="80px">
+        <el-form-item label="关联项目" prop="projectId">
+          <el-select
+            v-model="formInfo.projectId"
+            disabled
+            placeholder="请选择关联项目"
+            class="custom-input"
+          >
+            <el-option
+              v-for="item in listProjectLocal"
+              :key="item.projectId"
+              :label="item.projectNum"
+              :value="item.projectId"
+            >
+            </el-option>
+          </el-select>
+        </el-form-item>
         <div class="form-container">
           <el-form-item label="工程编号" prop="serialNum">
             <el-input
@@ -628,12 +661,15 @@ import {
   getSubcontractBySerialNum,
 } from "@/api/system/subcontract";
 import { listUnit } from "@/api/system/unit";
+import { listProject, listProjectSelected } from "@/api/system/project";
 import { fetchProjectData } from "@/utils/otherItems";
 
 export default {
   name: "Subcontract",
   data() {
     return {
+      listProjectLocalSelected: [],
+      listProjectLocal: [],
       reviewProcessOpen: false,
       reviewProcessActive: -1,
       reviewProcessList: [],
@@ -682,6 +718,10 @@ export default {
       // 是否显示弹出层
       open: false,
       // 查询参数
+      queryProjectListParams: {
+        pageNum: 1,
+        pageSize: 9999,
+      },
       queryParams: {
         pageNum: 1,
         pageSize: 10,
@@ -730,6 +770,9 @@ export default {
           { required: true, message: "请选择分包类型", trigger: "change" },
           { validator: this.validateSubType, trigger: "change" },
         ],
+        projectId: [
+          { required: true, message: "请选择关联项目", trigger: "change" },
+        ],
         userId: [
           {
             required: true,
@@ -746,8 +789,27 @@ export default {
   created() {
     this.getList();
     this.loadAllUnits();
+    this.getProjectListLocal();
   },
   methods: {
+    getProjectListLocal() {
+      listProject(this.queryProjectListParams).then((response) => {
+        this.listProjectLocal = response.rows;
+        listProjectSelected(2).then((response) => {
+          this.listProjectLocalSelected = response.rows;
+          const projectIdMap = new Map();
+          for (var i = 0; i < this.listProjectLocalSelected.length; i++) {
+            projectIdMap.set(this.listProjectLocalSelected[i].projectId, true);
+          }
+
+          for (var j = 0; j < this.listProjectLocal.length; j++) {
+            if (projectIdMap.has(this.listProjectLocal[j].projectId)) {
+              this.listProjectLocal[j].disabled = true;
+            }
+          }
+        });
+      });
+    },
     validateSubType(rule, value, callback) {
       if (value === 0) {
         callback(new Error("请选择分包类型"));
@@ -993,6 +1055,7 @@ export default {
           this.projectInfo = "工程项目列表";
           this.projectOpen = true;
           this.getProjectList();
+          this.getProjectListLocal();
         })
         .catch(() => {
           this.open = true;

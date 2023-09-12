@@ -10,9 +10,11 @@ import com.kcylog.common.core.page.TableDataInfo;
 import com.kcylog.common.enums.BusinessType;
 import com.kcylog.common.utils.DateUtils;
 import com.kcylog.common.utils.SecurityUtils;
+import com.kcylog.system.domain.SysProjectRelation;
 import com.kcylog.system.domain.SysSubcontract;
 import com.kcylog.system.domain.SysSubcontractProcess;
 import com.kcylog.system.domain.SysSubcontractProcessConfigInfo;
+import com.kcylog.system.service.ISysProjectRelationService;
 import com.kcylog.system.service.ISysSubcontractProcessConfigInfoService;
 import com.kcylog.system.service.ISysSubcontractProcessService;
 import com.kcylog.system.service.ISysSubcontractService;
@@ -46,6 +48,8 @@ public class SysSubcontractController extends BaseController
     final int PassStatus = 2;
     final int NoPassStatus = 3;
 
+    final Integer SubcontractType = 2;
+
     @Autowired
     private ISysSubcontractService sysSubcontractService;
 
@@ -55,6 +59,8 @@ public class SysSubcontractController extends BaseController
     @Autowired
     private ISysSubcontractProcessService sysSubcontractProcessService;
 
+    @Autowired
+    private ISysProjectRelationService sysProjectRelationService;
     /**
      * 查询分包列表
      */
@@ -270,6 +276,9 @@ public class SysSubcontractController extends BaseController
         ObjectMapper objectMapper = new ObjectMapper();
         List<String> cooperationUnitJson = objectMapper.readValue(sysSubcontract.getCooperationUnit(), new TypeReference<List<String>>(){});
         sysSubcontract.setCooperationUnitJson(cooperationUnitJson);
+        if (sysSubcontract.getProjectRelation() != null){
+            sysSubcontract.setProjectId(sysSubcontract.getProjectRelation().getProjectId());
+        }
         return success(sysSubcontract);
     }
 
@@ -300,6 +309,11 @@ public class SysSubcontractController extends BaseController
             subcontractProcess.add(subcontract);
         }
         int result = sysSubcontractProcessService.insertSysSubcontractProcessBatch(subcontractProcess);
+        SysProjectRelation projectRelation = new SysProjectRelation();
+        projectRelation.setProjectId(sysSubcontract.getProjectId());
+        projectRelation.setReviewType(SubcontractType);
+        projectRelation.setReviewId(sysSubcontract.getSubcontractId());
+        sysProjectRelationService.insertSysProjectRelation(projectRelation);
         return toAjax(result);
     }
 
@@ -309,6 +323,13 @@ public class SysSubcontractController extends BaseController
     @Log(title = "分包", businessType = BusinessType.UPDATE)
     @PutMapping
     public AjaxResult edit(@RequestBody SysSubcontract sysSubcontract) throws JsonProcessingException {
+        SysProjectRelation projectRelation = new SysProjectRelation();
+        projectRelation.setProjectId(sysSubcontract.getProjectId());
+        projectRelation.setReviewType(SubcontractType);
+        projectRelation.setReviewId(sysSubcontract.getSubcontractId());
+        sysProjectRelationService.deleteByReviewId(projectRelation);
+        sysProjectRelationService.insertSysProjectRelation(projectRelation);
+
         ObjectMapper mapper = new ObjectMapper();
         String cooperationUnit = mapper.writeValueAsString(sysSubcontract.getCooperationUnitJson());
         sysSubcontract.setCooperationUnit(cooperationUnit);
@@ -323,6 +344,11 @@ public class SysSubcontractController extends BaseController
 	@DeleteMapping("/{subcontractIds}")
     public AjaxResult remove(@PathVariable Long[] subcontractIds)
     {
+        SysProjectRelation projectRelation = new SysProjectRelation();
+        projectRelation.setReviewType(SubcontractType);
+        projectRelation.setReviewId(subcontractIds[0]);
+        sysProjectRelationService.deleteByReviewId(projectRelation);
+
         sysSubcontractService.deleteSysSubcontractBySubcontractIds(subcontractIds);
         int result = sysSubcontractProcessService.deleteSysSubcontractProcessByReviewIds(subcontractIds);
         return toAjax(result);
