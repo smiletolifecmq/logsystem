@@ -73,4 +73,6 @@ public interface ISysSubcontractService
     public int setSubcontractIsPrintBySubcontractId(Long subcontractId);
 
     public SysSubcontract getSubcontractBySerialNum(String serialNum);
+
+    public SysSubcontract getReviewSubcontract(Long reviewId);
 }

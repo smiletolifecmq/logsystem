@@ -240,4 +240,11 @@
         where serial_num = #{serialNum}
         limit 1
     </select>
+
+    <select id="getReviewSubcontract" parameterType="Long" resultMap="SysSubcontractResult">
+        SELECT c.*, u.user_name FROM sys_project_relation a
+            INNER JOIN sys_project_relation b ON a.project_id = b.project_id AND a.review_id = #{reviewId} AND a.review_type = 1
+            INNER JOIN sys_subcontract c ON b.review_id = c.subcontract_id
+            INNER JOIN sys_user u on u.user_id = c.user_id  LIMIT 1
+    </select>
 </mapper>

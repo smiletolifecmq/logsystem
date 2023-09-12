@@ -136,3 +136,10 @@ export function getReviewBySerialNum(serialNum) {
     method: 'get'
   })
 }
+
+export function listReviewSubcontract(reviewId) {
+  return request({
+    url: '/system/review/getReviewSubcontract/' + reviewId,
+    method: 'get'
+  })
+}

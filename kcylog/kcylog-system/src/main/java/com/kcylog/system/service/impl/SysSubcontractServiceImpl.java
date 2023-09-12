@@ -136,4 +136,10 @@ public class SysSubcontractServiceImpl implements ISysSubcontractService
     {
         return sysSubcontractMapper.getSubcontractBySerialNum(serialNum);
     }
+
+    @Override
+    public SysSubcontract getReviewSubcontract(Long reviewId)
+    {
+        return sysSubcontractMapper.getReviewSubcontract(reviewId);
+    }
 }

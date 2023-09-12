@@ -1,5 +1,8 @@
 package com.kcylog.web.controller.system;
 
+import com.fasterxml.jackson.core.JsonProcessingException;
+import com.fasterxml.jackson.core.type.TypeReference;
+import com.fasterxml.jackson.databind.ObjectMapper;
 import com.kcylog.common.annotation.Log;
 import com.kcylog.common.core.controller.BaseController;
 import com.kcylog.common.core.domain.AjaxResult;
@@ -60,6 +63,9 @@ public class SysReviewController extends BaseController
 
     @Autowired
     private ISysProjectRelationService sysProjectRelationService;
+
+    @Autowired
+    private ISysSubcontractService sysSubcontractService;
     /**
      * 查询审核单列表
      */
@@ -505,5 +511,16 @@ public class SysReviewController extends BaseController
     @GetMapping(value = "/get_review_by_serialNum/{serialNum}")
     public AjaxResult getReviewBySerialNum(@PathVariable("serialNum") String serialNum){
         return success(sysReviewService.getReviewBySerialNum(serialNum));
+    }
+
+    @GetMapping(value = "/getReviewSubcontract/{reviewId}")
+    public AjaxResult getReviewSubcontract(@PathVariable("reviewId") Long reviewId) throws JsonProcessingException {
+        SysSubcontract subcontract = sysSubcontractService.getReviewSubcontract(reviewId);
+        if (subcontract != null){
+            ObjectMapper objectMapper = new ObjectMapper();
+            List<String> cooperationUnitJson = objectMapper.readValue(subcontract.getCooperationUnit(), new TypeReference<List<String>>(){});
+            subcontract.setCooperationUnitJson(cooperationUnitJson);
+        }
+        return success(subcontract);
     }
 }
