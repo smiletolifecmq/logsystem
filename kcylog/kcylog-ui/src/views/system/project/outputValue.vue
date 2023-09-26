@@ -62,7 +62,17 @@
       <el-table-column label="登记时间" align="center" prop="registerTime" />
       <el-table-column label="接待人" align="center" prop="receptionist" />
       <el-table-column label="委托单位" align="center" prop="requesterAlias" />
-      <el-table-column label="经营产值" align="center" prop="operate" />
+      <el-table-column label="产值占比" align="center" prop="projectValue">
+        <template v-slot:default="scope">
+          <div v-for="(project, index) in scope.row.projectValue" :key="index">
+            <span
+              >用户名称:{{ project.userName }} - 占比:{{
+                project.proportion
+              }}%</span
+            >
+          </div>
+        </template>
+      </el-table-column>
       <el-table-column
         label="操作"
         align="center"
@@ -235,7 +245,8 @@
                     ></el-input-number>
                   </el-form-item>
                 </el-col>
-                <el-col :span="8">
+                <el-col :span="1">% </el-col>
+                <el-col :span="7">
                   <el-button
                     v-if="index != 0 || form.projectValue.length == 1"
                     type="text"
