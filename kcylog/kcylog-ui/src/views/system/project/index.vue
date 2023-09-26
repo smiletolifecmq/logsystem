@@ -216,25 +216,6 @@
             placeholder="请输入项目金额"
           />
         </el-form-item>
-        <el-form-item label="经营产值" prop="operate">
-          <el-input v-model="form.operate" placeholder="请输入经营产值" />
-        </el-form-item>
-        <el-form-item label="填写经营产值人" prop="operateUser">
-          <el-input
-            v-model="form.operateUser"
-            placeholder="请输入填写经营产值人"
-          />
-        </el-form-item>
-        <el-form-item label="填写经营产值时间" prop="operateTime">
-          <el-date-picker
-            clearable
-            v-model="form.operateTime"
-            type="date"
-            value-format="yyyy-MM-dd"
-            placeholder="请选择填写经营产值时间"
-          >
-          </el-date-picker>
-        </el-form-item>
       </el-form>
       <div slot="footer" class="dialog-footer">
         <el-button type="primary" @click="submitForm">确 定</el-button>
