@@ -63,4 +63,6 @@ public interface SysProjectMapper
     public int updateSysProjectByProjectNum(SysProject sysProject);
 
     public SysProject checkProjectKeyUnique(String projectNum);
+
+    public List<SysProject> listProjectOperate(SysProject sysProject);
 }

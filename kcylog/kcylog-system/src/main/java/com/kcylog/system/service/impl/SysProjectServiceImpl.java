@@ -107,4 +107,10 @@ public class SysProjectServiceImpl implements ISysProjectService
     {
         return sysProjectMapper.checkProjectKeyUnique(projectNum);
     }
+
+    @Override
+    public List<SysProject> listProjectOperate(SysProject sysProject)
+    {
+        return sysProjectMapper.listProjectOperate(sysProject);
+    }
 }

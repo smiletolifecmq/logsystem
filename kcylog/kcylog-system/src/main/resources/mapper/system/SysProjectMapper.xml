@@ -173,4 +173,16 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
         <include refid="selectSysProjectVo"/>
         where project_num = #{projectNum}
     </select>
+
+    <select id="listProjectOperate" parameterType="SysProject" resultMap="SysProjectResult">
+        <include refid="selectSysProjectVo"/>
+        <where>
+            <if test="projectNameAlias != null  and projectNameAlias != ''"> and project_name like concat('%', #{projectNameAlias}, '%')</if>
+            <if test="projectNum != null  and projectNum != ''"> and project_num like concat('%', #{projectNum}, '%')</if>
+            <if test="operateUser == 1"> and operate != 0.00</if>
+            <if test="operateUser == 2"> and operate = 0.00</if>
+            and is_two_check = 1
+        </where>
+        order by project_id desc
+    </select>
 </mapper>

@@ -143,4 +143,12 @@ public class SysProjectController extends BaseController
         sysProject.setTwoCheckTime(twoCheckTime);
         return toAjax(sysProjectService.updateSysProjectByProjectNum(sysProject));
     }
+
+    @GetMapping("/listProjectOperate")
+    public TableDataInfo listProjectOperate(SysProject sysProject)
+    {
+        startPage();
+        List<SysProject> list = sysProjectService.listProjectOperate(sysProject);
+        return getDataTable(list);
+    }
 }

@@ -49,3 +49,11 @@ export function listProjectSelected(reviewType) {
     method: 'get',
   })
 }
+
+export function listProjectOperate(query) {
+  return request({
+    url: '/system/project/listProjectOperate',
+    method: 'get',
+    params: query
+  })
+}
