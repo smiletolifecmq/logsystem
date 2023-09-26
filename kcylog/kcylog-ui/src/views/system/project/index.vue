@@ -123,6 +123,14 @@
           <el-button
             size="mini"
             type="text"
+            icon="el-icon-tickets"
+            @click="handleDetail(scope.row)"
+            v-hasPermi="['system:project:detail']"
+            >详情</el-button
+          >
+          <el-button
+            size="mini"
+            type="text"
             icon="el-icon-delete"
             @click="handleDelete(scope.row)"
             v-hasPermi="['system:project:remove']"
@@ -151,6 +159,9 @@
         </el-form-item>
         <el-form-item label="项目编号" prop="projectNum">
           <el-input v-model="form.projectNum" placeholder="请输入项目编号" />
+        </el-form-item>
+        <el-form-item label="项目类型" prop="projectType">
+          <el-input v-model="form.projectType" placeholder="请输入项目类型" />
         </el-form-item>
         <el-form-item label="登记时间" prop="registerTime">
           <el-input v-model="form.registerTime" placeholder="请输入登记时间" />
@@ -222,6 +233,122 @@
         <el-button @click="cancel">取 消</el-button>
       </div>
     </el-dialog>
+
+    <el-dialog
+      :title="detailTitle"
+      :visible.sync="detailOpen"
+      width="1000px"
+      append-to-body
+      v-el-drag-dialog
+    >
+      <el-descriptions class="margin-top" :column="4" border>
+        <el-descriptions-item>
+          <template slot="label">
+            <i class="el-icon-office-building"></i>
+            项目名称
+          </template>
+          {{ form.projectNameAlias }}
+        </el-descriptions-item>
+        <el-descriptions-item>
+          <template slot="label">
+            <i class="el-icon-tickets"></i>
+            项目编号
+          </template>
+          {{ form.projectNum }}
+        </el-descriptions-item>
+        <el-descriptions-item>
+          <template slot="label">
+            <i class="el-icon-notebook-2"></i>
+            项目类型
+          </template>
+          {{ form.projectType }}
+        </el-descriptions-item>
+        <el-descriptions-item>
+          <template slot="label">
+            <i class="el-icon-money"></i>
+            项目金额
+          </template>
+          {{ form.projectMoneyAlias }}
+        </el-descriptions-item>
+        <el-descriptions-item>
+          <template slot="label">
+            <i class="el-icon-document"></i>
+            工程内容
+          </template>
+          {{ form.workloadAlias }}
+        </el-descriptions-item>
+        <el-descriptions-item>
+          <template slot="label">
+            <i class="el-icon-user"></i>
+            工程负责人
+          </template>
+          {{ form.userNameAlias }}
+        </el-descriptions-item>
+        <el-descriptions-item>
+          <template slot="label">
+            <i class="el-icon-s-home"></i>
+            委托单位
+          </template>
+          {{ form.requesterAlias }}
+        </el-descriptions-item>
+        <el-descriptions-item>
+          <template slot="label">
+            <i class="el-icon-time"></i>
+            登记时间
+          </template>
+          {{ form.registerTime }}
+        </el-descriptions-item>
+        <el-descriptions-item>
+          <template slot="label">
+            <i class="el-icon-time"></i>
+            安排开始时间
+          </template>
+          {{ form.projectStartAlias }}
+        </el-descriptions-item>
+        <el-descriptions-item>
+          <template slot="label">
+            <i class="el-icon-time"></i>
+            安排结束时间
+          </template>
+          {{ form.projectEndAlias }}
+        </el-descriptions-item>
+        <el-descriptions-item>
+          <template slot="label">
+            <i class="el-icon-time"></i>
+            一检时间
+          </template>
+          {{ form.oneCheck }}
+        </el-descriptions-item>
+        <el-descriptions-item>
+          <template slot="label">
+            <i class="el-icon-time"></i>
+            二检时间
+          </template>
+          {{ form.twoCheck }}
+        </el-descriptions-item>
+        <el-descriptions-item>
+          <template slot="label">
+            <i class="el-icon-time"></i>
+            通知出件时间
+          </template>
+          {{ form.noticeTime }}
+        </el-descriptions-item>
+        <el-descriptions-item>
+          <template slot="label">
+            <i class="el-icon-time"></i>
+            项目出件时间
+          </template>
+          {{ form.projectTime }}
+        </el-descriptions-item>
+        <el-descriptions-item>
+          <template slot="label">
+            <i class="el-icon-time"></i>
+            送达时间
+          </template>
+          {{ form.deliveryTime }}
+        </el-descriptions-item>
+      </el-descriptions>
+    </el-dialog>
   </div>
 </template>
 
@@ -233,11 +360,17 @@ import {
   addProject,
   updateProject,
 } from "@/api/system/project";
+import elDragDialog from "@/api/components/el-drag";
 
 export default {
   name: "Project",
+  directives: {
+    elDragDialog,
+  },
   data() {
     return {
+      detailOpen: false,
+      detailTitle: "项目详情",
       // 遮罩层
       loading: true,
       // 选中数组
@@ -358,6 +491,7 @@ export default {
     // 取消按钮
     cancel() {
       this.open = false;
+      this.detailOpen = false;
       this.reset();
     },
     // 表单重置
@@ -420,6 +554,16 @@ export default {
         this.title = "修改项目";
       });
     },
+
+    handleDetail(row) {
+      this.reset();
+      const projectId = row.projectId || this.ids;
+      getProject(projectId).then((response) => {
+        this.form = response.data;
+        this.detailOpen = true;
+      });
+    },
+
     /** 提交按钮 */
     submitForm() {
       this.$refs["form"].validate((valid) => {

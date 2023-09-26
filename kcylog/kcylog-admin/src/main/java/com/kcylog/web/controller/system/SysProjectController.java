@@ -107,4 +107,12 @@ public class SysProjectController extends BaseController
         List<SysProjectRelation> list = sysProjectRelationService.selectProjectRelationByReviewType(reviewType);
         return getDataTable(list);
     }
+
+
+    @PreAuthorize("@ss.hasPermi('system:project:detail')")
+    @GetMapping(value = "/detail/{projectId}")
+    public AjaxResult getProjectDetail(@PathVariable("projectId") String projectId)
+    {
+        return success(sysProjectService.selectSysProjectByProjectId(projectId));
+    }
 }
