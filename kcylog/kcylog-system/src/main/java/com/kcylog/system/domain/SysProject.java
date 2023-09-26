@@ -70,6 +70,10 @@ public class SysProject extends BaseEntity
     @Excel(name = "二检时间")
     private String twoCheck;
 
+    private Date twoCheckTime;
+
+    private Integer isTwoCheck;
+
     /** 通知出件时间 */
     @Excel(name = "通知出件时间")
     private String noticeTime;
@@ -99,6 +103,21 @@ public class SysProject extends BaseEntity
     @Excel(name = "填写经营产值时间", width = 30, dateFormat = "yyyy-MM-dd")
     private Date operateTime;
 
+    public Date getTwoCheckTime() {
+        return twoCheckTime;
+    }
+
+    public void setTwoCheckTime(Date twoCheckTime) {
+        this.twoCheckTime = twoCheckTime;
+    }
+
+    public Integer getIsTwoCheck() {
+        return isTwoCheck;
+    }
+
+    public void setIsTwoCheck(Integer isTwoCheck) {
+        this.isTwoCheck = isTwoCheck;
+    }
 
     public void setProjectId(Long projectId)
     {

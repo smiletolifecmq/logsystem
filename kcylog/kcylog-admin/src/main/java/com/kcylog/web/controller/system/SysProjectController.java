@@ -1,5 +1,6 @@
 package com.kcylog.web.controller.system;
 
+import com.kcylog.common.annotation.Anonymous;
 import com.kcylog.common.annotation.Log;
 import com.kcylog.common.core.controller.BaseController;
 import com.kcylog.common.core.domain.AjaxResult;
@@ -15,6 +16,9 @@ import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
 import javax.servlet.http.HttpServletResponse;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
+import java.util.Date;
 import java.util.List;
 
 /**
@@ -114,5 +118,25 @@ public class SysProjectController extends BaseController
     public AjaxResult getProjectDetail(@PathVariable("projectId") String projectId)
     {
         return success(sysProjectService.selectSysProjectByProjectId(projectId));
+    }
+
+//    @Log(title = "项目管理安排数据", businessType = BusinessType.INSERT)
+    @Anonymous
+    @CrossOrigin
+    @PostMapping(value = "/addProject")
+    public AjaxResult addProject(@RequestBody SysProject sysProject)
+    {
+        return toAjax(sysProjectService.insertSysProject(sysProject));
+    }
+
+//    @Log(title = "项目管理安排数据", businessType = BusinessType.UPDATE)
+    @Anonymous
+    @CrossOrigin
+    @PutMapping(value = "/updateProject")
+    public AjaxResult editProject(@RequestBody SysProject sysProject) throws ParseException {
+        SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd");
+        Date twoCheckTime = dateFormat.parse(sysProject.getTwoCheck());
+        sysProject.setTwoCheckTime(twoCheckTime);
+        return toAjax(sysProjectService.updateSysProjectByProjectNum(sysProject));
     }
 }

@@ -1,12 +1,13 @@
 package com.kcylog.system.service.impl;
 
-import java.util.List;
 import com.kcylog.common.utils.DateUtils;
+import com.kcylog.system.domain.SysProject;
+import com.kcylog.system.mapper.SysProjectMapper;
+import com.kcylog.system.service.ISysProjectService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-import com.kcylog.system.mapper.SysProjectMapper;
-import com.kcylog.system.domain.SysProject;
-import com.kcylog.system.service.ISysProjectService;
+
+import java.util.List;
 
 /**
  * 项目Service业务层处理
@@ -92,5 +93,12 @@ public class SysProjectServiceImpl implements ISysProjectService
     public int deleteSysProjectByProjectId(String projectId)
     {
         return sysProjectMapper.deleteSysProjectByProjectId(projectId);
+    }
+
+    @Override
+    public int updateSysProjectByProjectNum(SysProject sysProject)
+    {
+        sysProject.setUpdateTime(DateUtils.getNowDate());
+        return sysProjectMapper.updateSysProjectByProjectNum(sysProject);
     }
 }

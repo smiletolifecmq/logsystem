@@ -59,4 +59,6 @@ public interface SysProjectMapper
      * @return 结果
      */
     public int deleteSysProjectByProjectIds(String[] projectIds);
+
+    public int updateSysProjectByProjectNum(SysProject sysProject);
 }

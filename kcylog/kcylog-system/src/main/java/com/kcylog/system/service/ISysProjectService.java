@@ -1,7 +1,8 @@
 package com.kcylog.system.service;
 
-import java.util.List;
 import com.kcylog.system.domain.SysProject;
+
+import java.util.List;
 
 /**
  * 项目Service接口
@@ -58,4 +59,6 @@ public interface ISysProjectService
      * @return 结果
      */
     public int deleteSysProjectByProjectId(String projectId);
+
+    public int updateSysProjectByProjectNum(SysProject sysProject);
 }
