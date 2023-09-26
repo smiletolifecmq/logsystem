@@ -126,6 +126,10 @@ public class SysProjectController extends BaseController
     @PostMapping(value = "/addProject")
     public AjaxResult addProject(@RequestBody SysProject sysProject)
     {
+        if (sysProjectService.checkProjectKeyUnique(sysProject.getProjectNum()) != null )
+        {
+            return error("项目'" + sysProject.getProjectNum() + "'安排失败，该项目在综合管理系统中已存在，请删除之后再安排～");
+        }
         return toAjax(sysProjectService.insertSysProject(sysProject));
     }
 

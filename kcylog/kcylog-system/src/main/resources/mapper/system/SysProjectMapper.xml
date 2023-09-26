@@ -168,4 +168,9 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
         </trim>
         where project_num = #{projectNum}
     </update>
+
+    <select id="checkProjectKeyUnique" parameterType="String" resultMap="SysProjectResult">
+        <include refid="selectSysProjectVo"/>
+        where project_num = #{projectNum}
+    </select>
 </mapper>

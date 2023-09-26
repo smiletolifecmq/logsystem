@@ -61,4 +61,6 @@ public interface SysProjectMapper
     public int deleteSysProjectByProjectIds(String[] projectIds);
 
     public int updateSysProjectByProjectNum(SysProject sysProject);
+
+    public SysProject checkProjectKeyUnique(String projectNum);
 }

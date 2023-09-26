@@ -61,4 +61,6 @@ public interface ISysProjectService
     public int deleteSysProjectByProjectId(String projectId);
 
     public int updateSysProjectByProjectNum(SysProject sysProject);
+
+    public SysProject checkProjectKeyUnique(String projectNum);
 }

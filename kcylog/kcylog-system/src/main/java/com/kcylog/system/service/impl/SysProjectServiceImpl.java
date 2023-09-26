@@ -101,4 +101,10 @@ public class SysProjectServiceImpl implements ISysProjectService
         sysProject.setUpdateTime(DateUtils.getNowDate());
         return sysProjectMapper.updateSysProjectByProjectNum(sysProject);
     }
+
+    @Override
+    public SysProject checkProjectKeyUnique(String projectNum)
+    {
+        return sysProjectMapper.checkProjectKeyUnique(projectNum);
+    }
 }
