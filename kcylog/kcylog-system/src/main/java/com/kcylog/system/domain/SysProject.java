@@ -8,6 +8,7 @@ import org.apache.commons.lang3.builder.ToStringStyle;
 
 import java.math.BigDecimal;
 import java.util.Date;
+import java.util.List;
 
 /**
  * 项目对象 sys_project
@@ -102,6 +103,16 @@ public class SysProject extends BaseEntity
     @JsonFormat(pattern = "yyyy-MM-dd")
     @Excel(name = "填写经营产值时间", width = 30, dateFormat = "yyyy-MM-dd")
     private Date operateTime;
+
+    private List<SysProjectValue> projectValue;
+
+    public List<SysProjectValue> getProjectValue() {
+        return projectValue;
+    }
+
+    public void setProjectValue(List<SysProjectValue> projectValue) {
+        this.projectValue = projectValue;
+    }
 
     public Date getTwoCheckTime() {
         return twoCheckTime;

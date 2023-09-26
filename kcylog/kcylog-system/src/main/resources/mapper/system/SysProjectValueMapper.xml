@@ -1,0 +1,66 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.kcylog.system.mapper.SysProjectValueMapper">
+    
+    <resultMap type="SysProjectValue" id="SysProjectValueResult">
+        <result property="valueId"    column="value_id"    />
+        <result property="projectId"    column="project_id"    />
+        <result property="userName"    column="user_name"    />
+        <result property="proportion"    column="proportion"    />
+    </resultMap>
+
+    <sql id="selectSysProjectValueVo">
+        select value_id, project_id, user_name, proportion from sys_project_value
+    </sql>
+
+    <select id="selectSysProjectValueList" parameterType="SysProjectValue" resultMap="SysProjectValueResult">
+        <include refid="selectSysProjectValueVo"/>
+        <where>  
+            <if test="projectId != null "> and project_id = #{projectId}</if>
+            <if test="userName != null  and userName != ''"> and user_name like concat('%', #{userName}, '%')</if>
+            <if test="proportion != null "> and proportion = #{proportion}</if>
+        </where>
+    </select>
+    
+    <select id="selectSysProjectValueByValueId" parameterType="String" resultMap="SysProjectValueResult">
+        <include refid="selectSysProjectValueVo"/>
+        where value_id = #{valueId}
+    </select>
+        
+    <insert id="insertSysProjectValue" parameterType="SysProjectValue" useGeneratedKeys="true" keyProperty="valueId">
+        insert into sys_project_value
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="projectId != null">project_id,</if>
+            <if test="userName != null and userName != ''">user_name,</if>
+            <if test="proportion != null">proportion,</if>
+         </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test="projectId != null">#{projectId},</if>
+            <if test="userName != null and userName != ''">#{userName},</if>
+            <if test="proportion != null">#{proportion},</if>
+         </trim>
+    </insert>
+
+    <update id="updateSysProjectValue" parameterType="SysProjectValue">
+        update sys_project_value
+        <trim prefix="SET" suffixOverrides=",">
+            <if test="projectId != null">project_id = #{projectId},</if>
+            <if test="userName != null and userName != ''">user_name = #{userName},</if>
+            <if test="proportion != null">proportion = #{proportion},</if>
+        </trim>
+        where value_id = #{valueId}
+    </update>
+
+    <delete id="deleteSysProjectValueByValueId" parameterType="String">
+        delete from sys_project_value where value_id = #{valueId}
+    </delete>
+
+    <delete id="deleteSysProjectValueByValueIds" parameterType="String">
+        delete from sys_project_value where value_id in 
+        <foreach item="valueId" collection="array" open="(" separator="," close=")">
+            #{valueId}
+        </foreach>
+    </delete>
+</mapper>
