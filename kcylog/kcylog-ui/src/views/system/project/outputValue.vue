@@ -208,32 +208,52 @@
         </el-collapse-item>
         <el-collapse-item title="项目比例填写" name="2">
           <el-form ref="form" :model="form" :rules="rules" label-width="80px">
-            <div class="form-container">
-              <el-form-item label="用户名" prop="operate">
-                <el-input-number
-                  v-model="form.operate"
-                  :max="100"
-                ></el-input-number>
-              </el-form-item>
-              <el-form-item label="占比" prop="operate">
-                <el-input-number
-                  v-model="form.operate"
-                  :max="100"
-                ></el-input-number>
-              </el-form-item>
-              <el-button
-                type="text"
-                icon="el-icon-circle-plus"
-                size="medium"
-                style="margin-left: 20px; margin-bottom: 20px"
-              ></el-button>
-              <el-button
-                type="text"
-                icon="el-icon-remove"
-                size="medium"
-                style="margin-left: 20px; margin-bottom: 20px"
-              ></el-button>
-            </div>
+            <el-button
+              v-if="form.projectValue != null && form.projectValue.length == 0"
+              type="text"
+              icon="el-icon-circle-plus"
+              size="medium"
+              style="margin-left: 20px; margin-bottom: 20px"
+              @click="addProject()"
+            ></el-button>
+            <el-form-item
+              v-for="(project, index) in form.projectValue"
+              :key="index"
+              prop="projectValue"
+            >
+              <el-row>
+                <el-col :span="8">
+                  <el-form-item label="用户名" prop="userName">
+                    <el-input v-model="project.userName"></el-input>
+                  </el-form-item>
+                </el-col>
+                <el-col :span="8">
+                  <el-form-item label="占比" prop="proportion">
+                    <el-input-number
+                      v-model="project.proportion"
+                      :max="100"
+                    ></el-input-number>
+                  </el-form-item>
+                </el-col>
+                <el-col :span="8">
+                  <el-button
+                    v-if="index != 0 || form.projectValue.length == 1"
+                    type="text"
+                    icon="el-icon-circle-plus"
+                    size="medium"
+                    style="margin-left: 20px; margin-bottom: 20px"
+                    @click="addProject()"
+                  ></el-button>
+                  <el-button
+                    type="text"
+                    icon="el-icon-remove"
+                    size="medium"
+                    style="margin-left: 20px; margin-bottom: 20px"
+                    @click="removeProject(index)"
+                  ></el-button>
+                </el-col>
+              </el-row>
+            </el-form-item>
           </el-form>
           <div
             class="dialog-footer"
@@ -257,7 +277,7 @@
 import {
   listProjectOperate,
   getProject,
-  updateProject,
+  updateProjectValue,
 } from "@/api/system/project";
 import elDragDialog from "@/api/components/el-drag";
 
@@ -268,6 +288,7 @@ export default {
   },
   data() {
     return {
+      projectId: 0,
       activeNames: ["1", "2"],
       detailOpen: false,
       detailTitle: "项目",
@@ -316,8 +337,11 @@ export default {
       // 表单参数
       form: {},
       rules: {
-        operate: [
-          { required: true, message: "请填写经营产值", trigger: "blur" },
+        projectValue: [
+          {
+            validator: this.checkProjectValue,
+            trigger: "blur",
+          },
         ],
       },
       // 表单校验
@@ -327,6 +351,29 @@ export default {
     this.getList();
   },
   methods: {
+    checkProjectValue(rule, value, callback) {
+      for (let i = 0; i < value.length; i++) {
+        if (
+          !value[i].userName ||
+          !value[i].proportion ||
+          value[i].proportion === 0
+        ) {
+          callback(new Error("用户名和占比都是必填项，且占比不能为0"));
+          return;
+        }
+      }
+      callback();
+    },
+    addProject() {
+      this.form.projectValue.push({
+        project_id: this.projectId,
+        user_name: "",
+        proportion: 0,
+      });
+    },
+    removeProject(index) {
+      this.form.projectValue.splice(index, 1);
+    },
     handleChange(val) {
       console.log(val);
     },
@@ -403,6 +450,7 @@ export default {
     handleDetail(row) {
       this.reset();
       const projectId = row.projectId || this.ids;
+      this.projectId = projectId;
       getProject(projectId).then((response) => {
         this.form = response.data;
         this.detailOpen = true;
@@ -411,19 +459,20 @@ export default {
 
     submitForm() {
       this.$refs["form"].validate((valid) => {
-        const tempForm = this.form;
-        this.form = {
-          projectId: 0,
-          operate: 0,
-          operateUser: "",
-          operateTime: "",
-        };
-        this.form.projectId = tempForm.projectId;
-        this.form.operate = tempForm.operate;
-        this.form.operateUser = this.$store.getters.name;
-        this.form.operateTime = new Date();
         if (valid) {
-          updateProject(this.form).then((response) => {
+          let num = 0;
+          for (let i = 0; i < this.form.projectValue.length; i++) {
+            this.form.projectValue[i].projectId = this.projectId;
+            num = num + this.form.projectValue[i].proportion;
+          }
+          if (num > 100) {
+            this.$message({
+              message: "总占比不能大于100～",
+              type: "warning",
+            });
+            return;
+          }
+          updateProjectValue(this.form).then((response) => {
             this.$modal.msgSuccess("填写成功");
             this.detailOpen = false;
             this.getList();

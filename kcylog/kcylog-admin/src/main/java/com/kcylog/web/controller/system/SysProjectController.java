@@ -9,10 +9,13 @@ import com.kcylog.common.enums.BusinessType;
 import com.kcylog.common.utils.poi.ExcelUtil;
 import com.kcylog.system.domain.SysProject;
 import com.kcylog.system.domain.SysProjectRelation;
+import com.kcylog.system.domain.SysProjectValue;
 import com.kcylog.system.service.ISysProjectRelationService;
 import com.kcylog.system.service.ISysProjectService;
+import com.kcylog.system.service.ISysProjectValueService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.access.prepost.PreAuthorize;
+import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.bind.annotation.*;
 
 import javax.servlet.http.HttpServletResponse;
@@ -36,6 +39,9 @@ public class SysProjectController extends BaseController
 
     @Autowired
     private ISysProjectRelationService sysProjectRelationService;
+
+    @Autowired
+    private ISysProjectValueService sysProjectValueService;
 
     /**
      * 查询项目列表
@@ -150,5 +156,20 @@ public class SysProjectController extends BaseController
         startPage();
         List<SysProject> list = sysProjectService.listProjectOperate(sysProject);
         return getDataTable(list);
+    }
+
+    @Log(title = "产值结算", businessType = BusinessType.UPDATE)
+    @PutMapping("/projectValue")
+    @Transactional
+    public AjaxResult editProjectValue(@RequestBody SysProject sysProject)
+    {
+        sysProjectValueService.deleteSysProjectValueByProjectId(sysProject.getProjectId());
+        if (sysProject.getProjectValue().size() != 0){
+            for (int i = 0; i < sysProject.getProjectValue().size(); i++) {
+                SysProjectValue projectValue = sysProject.getProjectValue().get(i);
+                sysProjectValueService.insertSysProjectValue(projectValue);
+            }
+        }
+        return toAjax(1);
     }
 }

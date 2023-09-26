@@ -57,3 +57,11 @@ export function listProjectOperate(query) {
     params: query
   })
 }
+
+export function updateProjectValue(data) {
+  return request({
+    url: '/system/project/projectValue',
+    method: 'put',
+    data: data
+  })
+}

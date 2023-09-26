@@ -59,4 +59,7 @@ public interface ISysProjectValueService
      * @return 结果
      */
     public int deleteSysProjectValueByValueId(Long valueId);
+
+    public int deleteSysProjectValueByProjectId(Long projectId);
+
 }

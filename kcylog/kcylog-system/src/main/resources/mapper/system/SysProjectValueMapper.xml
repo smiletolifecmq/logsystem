@@ -63,4 +63,8 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
             #{valueId}
         </foreach>
     </delete>
+
+    <delete id="deleteSysProjectValueByProjectId" parameterType="Long">
+        delete from sys_project_value where project_id = #{projectId}
+    </delete>
 </mapper>

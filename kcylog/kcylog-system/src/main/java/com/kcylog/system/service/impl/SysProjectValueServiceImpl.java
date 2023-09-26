@@ -91,4 +91,10 @@ public class SysProjectValueServiceImpl implements ISysProjectValueService
     {
         return sysProjectValueMapper.deleteSysProjectValueByValueId(valueId);
     }
+
+    @Override
+    public int deleteSysProjectValueByProjectId(Long projectId)
+    {
+        return sysProjectValueMapper.deleteSysProjectValueByProjectId(projectId);
+    }
 }
