@@ -99,6 +99,8 @@ public class SysProject extends BaseEntity
     @Excel(name = "填写经营产值人")
     private String operateUser;
 
+    private Integer isCarRegister;
+
     /** 填写经营产值时间 */
     @JsonFormat(pattern = "yyyy-MM-dd")
     @Excel(name = "填写经营产值时间", width = 30, dateFormat = "yyyy-MM-dd")
@@ -112,6 +114,14 @@ public class SysProject extends BaseEntity
 
     public void setProjectValue(List<SysProjectValue> projectValue) {
         this.projectValue = projectValue;
+    }
+
+    public Integer getIsCarRegister() {
+        return isCarRegister;
+    }
+
+    public void setIsCarRegister(Integer isCarRegister) {
+        this.isCarRegister = isCarRegister;
     }
 
     public Date getTwoCheckTime() {

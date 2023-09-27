@@ -241,113 +241,158 @@
       append-to-body
       v-el-drag-dialog
     >
-      <el-descriptions class="margin-top" :column="4" border>
-        <el-descriptions-item>
-          <template slot="label">
-            <i class="el-icon-office-building"></i>
-            项目名称
-          </template>
-          {{ form.projectNameAlias }}
-        </el-descriptions-item>
-        <el-descriptions-item>
-          <template slot="label">
-            <i class="el-icon-tickets"></i>
-            项目编号
-          </template>
-          {{ form.projectNum }}
-        </el-descriptions-item>
-        <el-descriptions-item>
-          <template slot="label">
-            <i class="el-icon-notebook-2"></i>
-            项目类型
-          </template>
-          {{ form.projectType }}
-        </el-descriptions-item>
-        <el-descriptions-item>
-          <template slot="label">
-            <i class="el-icon-money"></i>
-            项目金额
-          </template>
-          {{ form.projectMoneyAlias }}
-        </el-descriptions-item>
-        <el-descriptions-item>
-          <template slot="label">
-            <i class="el-icon-document"></i>
-            工程内容
-          </template>
-          {{ form.workloadAlias }}
-        </el-descriptions-item>
-        <el-descriptions-item>
-          <template slot="label">
-            <i class="el-icon-user"></i>
-            工程负责人
-          </template>
-          {{ form.userNameAlias }}
-        </el-descriptions-item>
-        <el-descriptions-item>
-          <template slot="label">
-            <i class="el-icon-s-home"></i>
-            委托单位
-          </template>
-          {{ form.requesterAlias }}
-        </el-descriptions-item>
-        <el-descriptions-item>
-          <template slot="label">
-            <i class="el-icon-time"></i>
-            登记时间
-          </template>
-          {{ form.registerTime }}
-        </el-descriptions-item>
-        <el-descriptions-item>
-          <template slot="label">
-            <i class="el-icon-time"></i>
-            安排开始时间
-          </template>
-          {{ form.projectStartAlias }}
-        </el-descriptions-item>
-        <el-descriptions-item>
-          <template slot="label">
-            <i class="el-icon-time"></i>
-            安排结束时间
-          </template>
-          {{ form.projectEndAlias }}
-        </el-descriptions-item>
-        <el-descriptions-item>
-          <template slot="label">
-            <i class="el-icon-time"></i>
-            一检时间
-          </template>
-          {{ form.oneCheck }}
-        </el-descriptions-item>
-        <el-descriptions-item>
-          <template slot="label">
-            <i class="el-icon-time"></i>
-            二检时间
-          </template>
-          {{ form.twoCheck }}
-        </el-descriptions-item>
-        <el-descriptions-item>
-          <template slot="label">
-            <i class="el-icon-time"></i>
-            通知出件时间
-          </template>
-          {{ form.noticeTime }}
-        </el-descriptions-item>
-        <el-descriptions-item>
-          <template slot="label">
-            <i class="el-icon-time"></i>
-            项目出件时间
-          </template>
-          {{ form.projectTime }}
-        </el-descriptions-item>
-        <el-descriptions-item>
-          <template slot="label">
-            <i class="el-icon-time"></i>
-            送达时间
-          </template>
-          {{ form.deliveryTime }}
-        </el-descriptions-item>
-      </el-descriptions>
+      <el-collapse v-model="activeNames">
+        <el-collapse-item title="项目基本信息" name="1">
+          <el-descriptions class="margin-top" :column="4" border>
+            <el-descriptions-item>
+              <template slot="label">
+                <i class="el-icon-office-building"></i>
+                项目名称
+              </template>
+              {{ form.projectNameAlias }}
+            </el-descriptions-item>
+            <el-descriptions-item>
+              <template slot="label">
+                <i class="el-icon-tickets"></i>
+                项目编号
+              </template>
+              {{ form.projectNum }}
+            </el-descriptions-item>
+            <el-descriptions-item>
+              <template slot="label">
+                <i class="el-icon-notebook-2"></i>
+                项目类型
+              </template>
+              {{ form.projectType }}
+            </el-descriptions-item>
+            <el-descriptions-item>
+              <template slot="label">
+                <i class="el-icon-money"></i>
+                项目金额
+              </template>
+              {{ form.projectMoneyAlias }}
+            </el-descriptions-item>
+            <el-descriptions-item>
+              <template slot="label">
+                <i class="el-icon-document"></i>
+                工程内容
+              </template>
+              {{ form.workloadAlias }}
+            </el-descriptions-item>
+            <el-descriptions-item>
+              <template slot="label">
+                <i class="el-icon-user"></i>
+                工程负责人
+              </template>
+              {{ form.userNameAlias }}
+            </el-descriptions-item>
+            <el-descriptions-item>
+              <template slot="label">
+                <i class="el-icon-s-home"></i>
+                委托单位
+              </template>
+              {{ form.requesterAlias }}
+            </el-descriptions-item>
+            <el-descriptions-item>
+              <template slot="label">
+                <i class="el-icon-time"></i>
+                登记时间
+              </template>
+              {{ form.registerTime }}
+            </el-descriptions-item>
+            <el-descriptions-item>
+              <template slot="label">
+                <i class="el-icon-time"></i>
+                安排开始时间
+              </template>
+              {{ form.projectStartAlias }}
+            </el-descriptions-item>
+            <el-descriptions-item>
+              <template slot="label">
+                <i class="el-icon-time"></i>
+                安排结束时间
+              </template>
+              {{ form.projectEndAlias }}
+            </el-descriptions-item>
+            <el-descriptions-item>
+              <template slot="label">
+                <i class="el-icon-time"></i>
+                一检时间
+              </template>
+              {{ form.oneCheck }}
+            </el-descriptions-item>
+            <el-descriptions-item>
+              <template slot="label">
+                <i class="el-icon-time"></i>
+                二检时间
+              </template>
+              {{ form.twoCheck }}
+            </el-descriptions-item>
+            <el-descriptions-item>
+              <template slot="label">
+                <i class="el-icon-time"></i>
+                通知出件时间
+              </template>
+              {{ form.noticeTime }}
+            </el-descriptions-item>
+            <el-descriptions-item>
+              <template slot="label">
+                <i class="el-icon-time"></i>
+                项目出件时间
+              </template>
+              {{ form.projectTime }}
+            </el-descriptions-item>
+            <el-descriptions-item>
+              <template slot="label">
+                <i class="el-icon-time"></i>
+                送达时间
+              </template>
+              {{ form.deliveryTime }}
+            </el-descriptions-item>
+          </el-descriptions>
+        </el-collapse-item>
+        <el-collapse-item title="经营产值" name="2">
+          <el-descriptions class="margin-top" :column="2" border>
+            <el-descriptions-item>
+              <template slot="label">
+                <i class="el-icon-office-building"></i>
+                经营产值
+              </template>
+              <span v-if="form.operate != 0.0">{{ form.operate }}</span>
+              <span v-if="form.operate == 0.0" style="color: red"
+                >暂未填写经营产值</span
+              >
+            </el-descriptions-item>
+          </el-descriptions>
+        </el-collapse-item>
+        <el-collapse-item title="产值结算" name="3">
+          <el-table :data="form.projectValue" border style="width: 100%">
+            <el-table-column prop="userName" label="用户名" style="width: 100%">
+            </el-table-column>
+            <el-table-column
+              prop="proportion"
+              label="占比(%)"
+              style="width: 100%"
+            >
+            </el-table-column>
+          </el-table>
+        </el-collapse-item>
+        <el-collapse-item
+          :title="
+            form.isCarRegister == 0
+              ? '车辆使用登记（未完成）'
+              : '车辆使用登记（已完成）'
+          "
+          name="4"
+        >
+          <div>
+            用户决策：根据场景可给予用户操作建议或安全提示，但不能代替用户进行决策；
+          </div>
+          <div>
+            结果可控：用户可以自由的进行操作，包括撤销、回退和终止当前操作等。
+          </div>
+        </el-collapse-item>
+      </el-collapse>
     </el-dialog>
   </div>
 </template>
@@ -369,6 +414,7 @@ export default {
   },
   data() {
     return {
+      activeNames: ["1", "2", "3", "4"],
       detailOpen: false,
       detailTitle: "项目详情",
       // 遮罩层
