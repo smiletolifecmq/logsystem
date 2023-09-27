@@ -163,6 +163,7 @@
         </el-form-item>
         <el-form-item label="部门" prop="deptId">
           <el-cascader
+            style="width: 272px"
             v-model="queryParamsDeptIdEdit"
             :options="deptOptions"
             @change="handleChangeDeptEdit"
@@ -334,11 +335,12 @@ export default {
       this.reset();
       const carId = row.carId || this.ids;
       getCar(carId).then((response) => {
+        this.getDeptTree();
+        this.queryParamsDeptIdEdit.push(100);
+        this.queryParamsDeptIdEdit.push(response.data.deptId);
         this.form = response.data;
         this.open = true;
         this.title = "修改项目车辆使用信息";
-        this.queryParamsDeptIdEdit.push(response.data.deptId);
-        console.log(this.queryParamsDeptIdEdit);
       });
     },
     /** 提交按钮 */
