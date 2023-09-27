@@ -62,17 +62,6 @@
       <el-table-column label="登记时间" align="center" prop="registerTime" />
       <el-table-column label="接待人" align="center" prop="receptionist" />
       <el-table-column label="委托单位" align="center" prop="requesterAlias" />
-      <el-table-column label="产值占比" align="center" prop="projectValue">
-        <template v-slot:default="scope">
-          <div v-for="(project, index) in scope.row.projectValue" :key="index">
-            <span
-              >用户名称:{{ project.userName }} - 占比:{{
-                project.proportion
-              }}%</span
-            >
-          </div>
-        </template>
-      </el-table-column>
       <el-table-column
         label="操作"
         align="center"
@@ -85,7 +74,15 @@
             icon="el-icon-tickets"
             @click="handleDetail(scope.row)"
             v-hasPermi="['system:project:detail']"
-            >产值结算</el-button
+            >详情</el-button
+          >
+          <el-button
+            size="mini"
+            type="text"
+            icon="el-icon-edit-outline"
+            @click="carUseRegistration(scope.row)"
+            v-hasPermi="['system:project:carUseRegistration']"
+            >车辆使用登记</el-button
           >
         </template>
       </el-table-column>
@@ -106,175 +103,113 @@
       append-to-body
       v-el-drag-dialog
     >
-      <el-collapse v-model="activeNames" @change="handleChange">
-        <el-collapse-item title="详情" name="1">
-          <el-descriptions class="margin-top" :column="4" border>
-            <el-descriptions-item>
-              <template slot="label">
-                <i class="el-icon-office-building"></i>
-                项目名称
-              </template>
-              {{ form.projectNameAlias }}
-            </el-descriptions-item>
-            <el-descriptions-item>
-              <template slot="label">
-                <i class="el-icon-tickets"></i>
-                项目编号
-              </template>
-              {{ form.projectNum }}
-            </el-descriptions-item>
-            <el-descriptions-item>
-              <template slot="label">
-                <i class="el-icon-notebook-2"></i>
-                项目类型
-              </template>
-              {{ form.projectType }}
-            </el-descriptions-item>
-            <el-descriptions-item>
-              <template slot="label">
-                <i class="el-icon-money"></i>
-                项目金额
-              </template>
-              {{ form.projectMoneyAlias }}
-            </el-descriptions-item>
-            <el-descriptions-item>
-              <template slot="label">
-                <i class="el-icon-document"></i>
-                工程内容
-              </template>
-              {{ form.workloadAlias }}
-            </el-descriptions-item>
-            <el-descriptions-item>
-              <template slot="label">
-                <i class="el-icon-user"></i>
-                工程负责人
-              </template>
-              {{ form.userNameAlias }}
-            </el-descriptions-item>
-            <el-descriptions-item>
-              <template slot="label">
-                <i class="el-icon-s-home"></i>
-                委托单位
-              </template>
-              {{ form.requesterAlias }}
-            </el-descriptions-item>
-            <el-descriptions-item>
-              <template slot="label">
-                <i class="el-icon-time"></i>
-                登记时间
-              </template>
-              {{ form.registerTime }}
-            </el-descriptions-item>
-            <el-descriptions-item>
-              <template slot="label">
-                <i class="el-icon-time"></i>
-                安排开始时间
-              </template>
-              {{ form.projectStartAlias }}
-            </el-descriptions-item>
-            <el-descriptions-item>
-              <template slot="label">
-                <i class="el-icon-time"></i>
-                安排结束时间
-              </template>
-              {{ form.projectEndAlias }}
-            </el-descriptions-item>
-            <el-descriptions-item>
-              <template slot="label">
-                <i class="el-icon-time"></i>
-                一检时间
-              </template>
-              {{ form.oneCheck }}
-            </el-descriptions-item>
-            <el-descriptions-item>
-              <template slot="label">
-                <i class="el-icon-time"></i>
-                二检时间
-              </template>
-              {{ form.twoCheck }}
-            </el-descriptions-item>
-            <el-descriptions-item>
-              <template slot="label">
-                <i class="el-icon-time"></i>
-                通知出件时间
-              </template>
-              {{ form.noticeTime }}
-            </el-descriptions-item>
-            <el-descriptions-item>
-              <template slot="label">
-                <i class="el-icon-time"></i>
-                项目出件时间
-              </template>
-              {{ form.projectTime }}
-            </el-descriptions-item>
-            <el-descriptions-item>
-              <template slot="label">
-                <i class="el-icon-time"></i>
-                送达时间
-              </template>
-              {{ form.deliveryTime }}
-            </el-descriptions-item>
-          </el-descriptions>
-        </el-collapse-item>
-        <el-collapse-item title="项目比例填写" name="2">
-          <el-form ref="form" :model="form" :rules="rules" label-width="80px">
-            <el-button
-              v-if="form.projectValue != null && form.projectValue.length == 0"
-              type="text"
-              icon="el-icon-circle-plus"
-              size="medium"
-              style="margin-left: 20px; margin-bottom: 20px"
-              @click="addProject()"
-            ></el-button>
-            <el-form-item
-              v-for="(project, index) in form.projectValue"
-              :key="index"
-              prop="projectValue"
-            >
-              <el-row>
-                <el-col :span="8">
-                  <el-form-item label="用户名" prop="userName">
-                    <el-input v-model="project.userName"></el-input>
-                  </el-form-item>
-                </el-col>
-                <el-col :span="8">
-                  <el-form-item label="占比" prop="proportion">
-                    <el-input-number
-                      v-model="project.proportion"
-                      :max="100"
-                    ></el-input-number>
-                  </el-form-item>
-                </el-col>
-                <el-col :span="1">% </el-col>
-                <el-col :span="7">
-                  <el-button
-                    v-if="index != 0 || form.projectValue.length == 1"
-                    type="text"
-                    icon="el-icon-circle-plus"
-                    size="medium"
-                    style="margin-left: 20px; margin-bottom: 20px"
-                    @click="addProject()"
-                  ></el-button>
-                  <el-button
-                    type="text"
-                    icon="el-icon-remove"
-                    size="medium"
-                    style="margin-left: 20px; margin-bottom: 20px"
-                    @click="removeProject(index)"
-                  ></el-button>
-                </el-col>
-              </el-row>
-            </el-form-item>
-          </el-form>
-          <div
-            class="dialog-footer"
-            style="display: flex; justify-content: flex-end"
-          >
-            <el-button type="primary" @click="submitForm">确 定</el-button>
-            <el-button @click="cancel">取 消</el-button>
-          </div>
-        </el-collapse-item>
-      </el-collapse>
+      <el-descriptions class="margin-top" :column="4" border>
+        <el-descriptions-item>
+          <template slot="label">
+            <i class="el-icon-office-building"></i>
+            项目名称
+          </template>
+          {{ form.projectNameAlias }}
+        </el-descriptions-item>
+        <el-descriptions-item>
+          <template slot="label">
+            <i class="el-icon-tickets"></i>
+            项目编号
+          </template>
+          {{ form.projectNum }}
+        </el-descriptions-item>
+        <el-descriptions-item>
+          <template slot="label">
+            <i class="el-icon-notebook-2"></i>
+            项目类型
+          </template>
+          {{ form.projectType }}
+        </el-descriptions-item>
+        <el-descriptions-item>
+          <template slot="label">
+            <i class="el-icon-money"></i>
+            项目金额
+          </template>
+          {{ form.projectMoneyAlias }}
+        </el-descriptions-item>
+        <el-descriptions-item>
+          <template slot="label">
+            <i class="el-icon-document"></i>
+            工程内容
+          </template>
+          {{ form.workloadAlias }}
+        </el-descriptions-item>
+        <el-descriptions-item>
+          <template slot="label">
+            <i class="el-icon-user"></i>
+            工程负责人
+          </template>
+          {{ form.userNameAlias }}
+        </el-descriptions-item>
+        <el-descriptions-item>
+          <template slot="label">
+            <i class="el-icon-s-home"></i>
+            委托单位
+          </template>
+          {{ form.requesterAlias }}
+        </el-descriptions-item>
+        <el-descriptions-item>
+          <template slot="label">
+            <i class="el-icon-time"></i>
+            登记时间
+          </template>
+          {{ form.registerTime }}
+        </el-descriptions-item>
+        <el-descriptions-item>
+          <template slot="label">
+            <i class="el-icon-time"></i>
+            安排开始时间
+          </template>
+          {{ form.projectStartAlias }}
+        </el-descriptions-item>
+        <el-descriptions-item>
+          <template slot="label">
+            <i class="el-icon-time"></i>
+            安排结束时间
+          </template>
+          {{ form.projectEndAlias }}
+        </el-descriptions-item>
+        <el-descriptions-item>
+          <template slot="label">
+            <i class="el-icon-time"></i>
+            一检时间
+          </template>
+          {{ form.oneCheck }}
+        </el-descriptions-item>
+        <el-descriptions-item>
+          <template slot="label">
+            <i class="el-icon-time"></i>
+            二检时间
+          </template>
+          {{ form.twoCheck }}
+        </el-descriptions-item>
+        <el-descriptions-item>
+          <template slot="label">
+            <i class="el-icon-time"></i>
+            通知出件时间
+          </template>
+          {{ form.noticeTime }}
+        </el-descriptions-item>
+        <el-descriptions-item>
+          <template slot="label">
+            <i class="el-icon-time"></i>
+            项目出件时间
+          </template>
+          {{ form.projectTime }}
+        </el-descriptions-item>
+        <el-descriptions-item>
+          <template slot="label">
+            <i class="el-icon-time"></i>
+            送达时间
+          </template>
+          {{ form.deliveryTime }}
+        </el-descriptions-item>
+      </el-descriptions>
     </el-dialog>
   </div>
 </template>
@@ -300,9 +235,8 @@ export default {
   data() {
     return {
       projectId: 0,
-      activeNames: ["1", "2"],
       detailOpen: false,
-      detailTitle: "项目",
+      detailTitle: "详情",
       // 遮罩层
       loading: true,
       // 选中数组
@@ -347,14 +281,7 @@ export default {
       },
       // 表单参数
       form: {},
-      rules: {
-        projectValue: [
-          {
-            validator: this.checkProjectValue,
-            trigger: "blur",
-          },
-        ],
-      },
+      rules: {},
       // 表单校验
     };
   },
@@ -362,28 +289,9 @@ export default {
     this.getList();
   },
   methods: {
-    checkProjectValue(rule, value, callback) {
-      for (let i = 0; i < value.length; i++) {
-        if (
-          !value[i].userName ||
-          !value[i].proportion ||
-          value[i].proportion === 0
-        ) {
-          callback(new Error("用户名和占比都是必填项，且占比不能为0"));
-          return;
-        }
-      }
-      callback();
-    },
-    addProject() {
-      this.form.projectValue.push({
-        project_id: this.projectId,
-        user_name: "",
-        proportion: 0,
-      });
-    },
-    removeProject(index) {
-      this.form.projectValue.splice(index, 1);
+    carUseRegistration(row) {
+      const projectId = row.projectId;
+      this.$router.push("/system/project/carList/" + projectId);
     },
     handleChange(val) {
       console.log(val);
@@ -465,30 +373,6 @@ export default {
       getProject(projectId).then((response) => {
         this.form = response.data;
         this.detailOpen = true;
-      });
-    },
-
-    submitForm() {
-      this.$refs["form"].validate((valid) => {
-        if (valid) {
-          let num = 0;
-          for (let i = 0; i < this.form.projectValue.length; i++) {
-            this.form.projectValue[i].projectId = this.projectId;
-            num = num + this.form.projectValue[i].proportion;
-          }
-          if (num > 100) {
-            this.$message({
-              message: "总占比不能大于100～",
-              type: "warning",
-            });
-            return;
-          }
-          updateProjectValue(this.form).then((response) => {
-            this.$modal.msgSuccess("填写成功");
-            this.detailOpen = false;
-            this.getList();
-          });
-        }
       });
     },
   },

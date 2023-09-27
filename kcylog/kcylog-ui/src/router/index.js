@@ -278,6 +278,21 @@ export const dynamicRoutes = [
         meta: { title: '分配可查看用户', activeMenu: '/system/projectProgress' }
       }
     ]
+  },
+
+  {
+    path: '/system/project',
+    component: Layout,
+    hidden: true,
+    permissions: ['system:project:carRegister'],
+    children: [
+      {
+        path: 'carList/:projectId(\\d+)',
+        component: () => import('@/views/system/project/carInfo'),
+        name: 'CarInfo',
+        meta: { title: '项目用车登记', activeMenu: '/system/project' }
+      }
+    ]
   }
 ]
 
