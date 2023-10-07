@@ -380,11 +380,8 @@
                       type="text"
                     ></el-button>
                   </div>
-                  <div v-if="!subcontractForm" style="text-align: center">
-                    未找到关联分包数据～
-                  </div>
 
-                  <div v-if="subcontractForm" style="text-align: center">
+                  <div style="text-align: center">
                     <el-descriptions class="margin-top" :column="2" border>
                       <el-descriptions-item>
                         <template slot="label"> 工程编号 </template>
@@ -404,7 +401,7 @@
                       </el-descriptions-item>
                       <el-descriptions-item>
                         <template slot="label"> 委托单位 </template>
-                        {{ subcontractForm.entrustUnit }}
+                        {{ subcontractForm.requester }}
                       </el-descriptions-item>
                       <el-descriptions-item>
                         <template slot="label"> 工作内容 </template>
@@ -442,11 +439,11 @@
                       </el-descriptions-item>
                       <el-descriptions-item>
                         <template slot="label"> 工期开始 </template>
-                        {{ subcontractForm.startTime }}
+                        {{ subcontractForm.cpStartTime }}
                       </el-descriptions-item>
                       <el-descriptions-item>
                         <template slot="label"> 工期结束 </template>
-                        {{ subcontractForm.endTime }}
+                        {{ subcontractForm.cpEndTime }}
                       </el-descriptions-item>
                     </el-descriptions>
                   </div>
@@ -527,7 +524,6 @@ import {
   getReviewProcessList,
   getReview,
   setStartEdit,
-  listReviewSubcontract,
 } from "@/api/system/reviewSub";
 import userInfo from "@/store/modules/user";
 import elDragDialog from "@/api/components/el-drag";
@@ -772,15 +768,13 @@ export default {
         if (this.formInfo.subcontract == 0) {
           this.formInfo.subcontract = null;
         }
+        this.subcontractForm = response.data;
         this.openInfo = true;
         this.titleInfo = "项目编号:" + row.projectName + "详情";
       });
       this.queryParamsEmployee.reviewId = reviewId;
       listEmployee(this.queryParamsEmployee).then((response) => {
         this.employeeList = response.rows;
-      });
-      listReviewSubcontract(reviewId).then((response) => {
-        this.subcontractForm = response.data;
       });
     },
   },
