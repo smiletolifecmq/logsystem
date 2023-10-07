@@ -1043,7 +1043,7 @@ export default {
         description = description + "审核时间:" + reviewProcess.reviewTime;
         return description;
       } else if (reviewProcess.status === 3) {
-        let description = "审核状态:拒绝；";
+        let description = "审核状态:驳回；";
         if (reviewProcess.reason != "" && reviewProcess.reason != null) {
           description = description + "理由:" + reviewProcess.reason + "；";
         }

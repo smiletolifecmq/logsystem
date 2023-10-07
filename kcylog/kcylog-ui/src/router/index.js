@@ -293,7 +293,22 @@ export const dynamicRoutes = [
         meta: { title: '项目用车登记', activeMenu: '/system/project' }
       }
     ]
-  }
+  },
+
+  {
+    path: '/system/reviewSub-employee',
+    component: Layout,
+    hidden: true,
+    permissions: ['system:reviewSub:list'],
+    children: [
+      {
+        path: 'edit/:reviewId(\\d+)/:finalHire(\\d+)',
+        component: () => import('@/views/system/reviewSub/reviewEmployee'),
+        name: 'ReviewEmployee',
+        meta: { title: '填写最终雇佣信息', activeMenu: '/system/reviewEmployee' }
+      }
+    ]
+  },
 ]
 
 // 防止连续点击多次路由报错

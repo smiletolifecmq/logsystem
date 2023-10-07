@@ -1045,7 +1045,7 @@ export default {
       const reviewId = row.reviewId;
       this.openInfo = false;
       this.$router.push(
-        "/system/review-employee/edit/" + reviewId + "/" + row.finalHire
+        "/system/reviewSub-employee/edit/" + reviewId + "/" + row.finalHire
       );
     },
     filterTime(timeString) {
@@ -1097,7 +1097,7 @@ export default {
         description = description + "审核时间:" + reviewProcess.reviewTime;
         return description;
       } else if (reviewProcess.status === 3) {
-        let description = "审核状态:拒绝；";
+        let description = "审核状态:驳回；";
         if (reviewProcess.reason != "" && reviewProcess.reason != null) {
           description = description + "理由:" + reviewProcess.reason + "；";
         }

@@ -862,7 +862,7 @@ export default {
         description = description + "审核时间:" + reviewProcess.reviewTime;
         return description;
       } else if (reviewProcess.status === 3) {
-        let description = "审核状态:拒绝；";
+        let description = "审核状态:驳回；";
         if (reviewProcess.reason != "" && reviewProcess.reason != null) {
           description = description + "理由:" + reviewProcess.reason + "；";
         }
@@ -933,7 +933,7 @@ export default {
             if (this.form.status == 2) {
               this.$modal.msgSuccess("已通过审核");
             } else {
-              this.$modal.msgSuccess("已拒绝审核");
+              this.$modal.msgSuccess("已驳回审核");
             }
             this.openInfo = false;
             this.formInfo.auditOpinion = "";
