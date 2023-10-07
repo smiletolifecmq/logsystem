@@ -50,10 +50,10 @@ public class SysReviewSubController extends BaseController
     private ISysReviewSubProcessService sysReviewSubProcessService;
 
     @Autowired
-    private ISysReviewEmployeeService sysReviewEmployeeService;
+    private ISysReviewSubEmployeeService sysReviewEmployeeService;
 
     @Autowired
-    private ISysReviewSettlementService sysReviewSettlementService;
+    private ISysReviewSubSettlementService sysReviewSettlementService;
 
     @Autowired
     private ISysSettlementAssociateService sysSettlementAssociateService;
@@ -91,9 +91,9 @@ public class SysReviewSubController extends BaseController
             Map<String, Integer> map = new HashMap<>();
             String hiredWorkerName = "";
             String workload = "";
-            List<SysReviewEmployee> reviewEmployee = sysReviewEmployeeService.selectSysReviewEmployeeByReviewId(sysReviewTemp.getReviewId());
+            List<SysReviewSubEmployee> reviewEmployee = sysReviewEmployeeService.selectSysReviewSubEmployeeByReviewId(sysReviewTemp.getReviewId());
             sysReviewTemp.setExportSerialNumber(num);
-            for (SysReviewEmployee employee:reviewEmployee){
+            for (SysReviewSubEmployee employee:reviewEmployee){
                 hiredWorkerName = hiredWorkerName + (employee.getName() + "、");
                 day += employee.getWorkDay();
                 String workloadTemp = employee.getWorkTime();
@@ -480,11 +480,11 @@ public class SysReviewSubController extends BaseController
         //修改审核单状态
         sysReviewSubService.generateStatement(sysReviewSub);
         //生成结算单
-        SysReviewSettlement sysReviewSettlement = new SysReviewSettlement();
+        SysReviewSubSettlement sysReviewSettlement = new SysReviewSubSettlement();
         sysReviewSettlement.setSettlementName(sysReviewSub.getSettlementName());
         sysReviewSettlement.setUserName(SecurityUtils.getUsername());
         sysReviewSettlement.setUserId(SecurityUtils.getUserId());
-        sysReviewSettlementService.insertSysReviewSettlement(sysReviewSettlement);
+        sysReviewSettlementService.insertSysReviewSubSettlement(sysReviewSettlement);
         //新增关联关系
         SysSettlementAssociate sysSettlementAssociate = new SysSettlementAssociate();
         for (Long reviewId:sysReviewSub.getReviewIds()){

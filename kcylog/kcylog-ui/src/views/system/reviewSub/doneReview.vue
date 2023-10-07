@@ -294,7 +294,7 @@
               <el-col style="width: 50%">
                 <el-card>
                   <div slot="header">
-                    <span>雇工审核单详情</span>
+                    <span>雇工详情</span>
                     <el-button
                       style="float: right; padding: 3px 0"
                       type="text"

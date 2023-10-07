@@ -40,18 +40,6 @@
           clearable
         ></el-cascader>
       </el-form-item>
-      <!-- <el-form-item label="创建时间">
-        <el-date-picker
-          v-model="dateRange"
-          style="width: 240px"
-          value-format="yyyy-MM-dd"
-          type="daterange"
-          range-separator="-"
-          start-placeholder="开始日期"
-          end-placeholder="结束日期"
-          @change="handleQuery"
-        ></el-date-picker>
-      </el-form-item> -->
       <el-form-item>
         <el-button
           type="primary"
@@ -65,26 +53,12 @@
         >
       </el-form-item>
     </el-form>
-    <el-row :gutter="10" class="mb8">
-      <el-col :span="1.5">
-        <el-button
-          type="warning"
-          plain
-          icon="el-icon-download"
-          size="mini"
-          @click="generateStatement"
-          :disabled="multiple"
-          >生成结算办结单</el-button
-        >
-      </el-col>
-    </el-row>
 
     <el-table
       v-loading="loading"
       :data="reviewList"
       @selection-change="handleSelectionChange"
     >
-      <el-table-column type="selection" width="55" align="center" />
       <el-table-column label="工程编号" align="center" prop="serialNum" />
       <el-table-column label="项目名称" align="center" prop="projectName" />
       <el-table-column label="委托单位" align="center" prop="requester" />
@@ -99,7 +73,6 @@
       <el-table-column label="雇工金额" align="center" prop="budgetMoney" />
       <el-table-column label="负责人" align="center" prop="user.userName" />
       <el-table-column label="部门" align="center" prop="dept.deptName" />
-
       <el-table-column
         label="操作"
         align="center"
@@ -113,7 +86,16 @@
               type="text"
               icon="el-icon-user-solid"
               @click="showReviewInfo(scope.row)"
-              >详情</el-button
+              >雇工信息</el-button
+            >
+          </div>
+          <div>
+            <el-button
+              size="mini"
+              type="text"
+              icon="el-icon-s-operation"
+              @click="handleReviewProcess(scope.row)"
+              >流程详情</el-button
             >
           </div>
         </template>
@@ -135,7 +117,7 @@
         <el-steps direction="vertical" :active="reviewProcessActive">
           <el-step
             v-for="reviewProcess in reviewProcessList"
-            :key="reviewProcess.reviewProcessId"
+            :key="reviewProcess.id"
             :title="
               reviewProcess.userId === 1 &&
               (reviewProcess.status != 2 || reviewProcess.status != 4)
@@ -165,138 +147,7 @@
       :close-on-press-escape="false"
     >
       <el-collapse v-model="activeNames" @change="handleChange">
-        <el-collapse-item title="项目详情" name="1">
-          <div
-            v-if="!formInfo.project || !formInfo.project.projectNum"
-            style="text-align: center"
-          >
-            未找到关联项目数据～
-          </div>
-          <div v-if="formInfo.project && formInfo.project.projectNum">
-            <el-descriptions class="margin-top" :column="5" border>
-              <el-descriptions-item>
-                <template slot="label">
-                  <i class="el-icon-office-building"></i>
-                  项目名称
-                </template>
-                {{ formInfo.project.projectNameAlias }}
-              </el-descriptions-item>
-              <el-descriptions-item>
-                <template slot="label">
-                  <i class="el-icon-tickets"></i>
-                  项目编号
-                </template>
-                {{ formInfo.project.projectNum }}
-              </el-descriptions-item>
-              <el-descriptions-item>
-                <template slot="label">
-                  <i class="el-icon-notebook-2"></i>
-                  项目类型
-                </template>
-                {{ formInfo.project.projectType }}
-              </el-descriptions-item>
-              <el-descriptions-item>
-                <template slot="label">
-                  <i class="el-icon-money"></i>
-                  项目金额
-                </template>
-                {{ formInfo.project.projectMoneyAlias }}
-              </el-descriptions-item>
-              <el-descriptions-item>
-                <template slot="label">
-                  <i class="el-icon-time"></i>
-                  登记时间
-                </template>
-                {{ formInfo.project.registerTime }}
-              </el-descriptions-item>
-              <el-descriptions-item>
-                <template slot="label">
-                  <i class="el-icon-s-custom"></i>
-                  接待人
-                </template>
-                {{ formInfo.project.receptionist }}
-              </el-descriptions-item>
-              <el-descriptions-item>
-                <template slot="label">
-                  <i class="el-icon-document"></i>
-                  工程内容
-                </template>
-                {{ formInfo.project.workloadAlias }}
-              </el-descriptions-item>
-              <el-descriptions-item>
-                <template slot="label">
-                  <i class="el-icon-user"></i>
-                  工程负责人
-                </template>
-                {{ formInfo.project.userNameAlias }}
-              </el-descriptions-item>
-              <el-descriptions-item>
-                <template slot="label">
-                  <i class="el-icon-s-home"></i>
-                  委托单位
-                </template>
-                {{ formInfo.project.requesterAlias }}
-              </el-descriptions-item>
-              <el-descriptions-item>
-                <template slot="label">
-                  <i class="el-icon-time"></i>
-                  安排开始时间
-                </template>
-                {{ formInfo.project.projectStartAlias }}
-              </el-descriptions-item>
-              <el-descriptions-item>
-                <template slot="label">
-                  <i class="el-icon-time"></i>
-                  安排结束时间
-                </template>
-                {{ formInfo.project.projectEndAlias }}
-              </el-descriptions-item>
-              <el-descriptions-item>
-                <template slot="label">
-                  <i class="el-icon-time"></i>
-                  一检时间
-                </template>
-                {{ formInfo.project.oneCheck }}
-              </el-descriptions-item>
-              <el-descriptions-item>
-                <template slot="label">
-                  <i class="el-icon-time"></i>
-                  二检时间
-                </template>
-                {{ formInfo.project.twoCheck }}
-              </el-descriptions-item>
-              <el-descriptions-item>
-                <template slot="label">
-                  <i class="el-icon-time"></i>
-                  通知出件时间
-                </template>
-                {{ formInfo.project.noticeTime }}
-              </el-descriptions-item>
-              <el-descriptions-item>
-                <template slot="label">
-                  <i class="el-icon-time"></i>
-                  项目出件时间
-                </template>
-                {{ formInfo.project.projectTime }}
-              </el-descriptions-item>
-              <el-descriptions-item>
-                <template slot="label">
-                  <i class="el-icon-time"></i>
-                  送达时间
-                </template>
-                {{ formInfo.project.deliveryTime }}
-              </el-descriptions-item>
-              <el-descriptions-item>
-                <template slot="label">
-                  <i class="el-icon-time"></i>
-                  送达时间
-                </template>
-                {{ formInfo.project.deliveryTime }}
-              </el-descriptions-item>
-            </el-descriptions>
-          </div>
-        </el-collapse-item>
-        <el-collapse-item title="审核单详情" name="2">
+        <el-collapse-item title="审核单详情" name="1">
           <div>
             <el-row :gutter="10">
               <el-col style="width: 50%">
@@ -460,7 +311,7 @@
           </div>
         </el-collapse-item>
 
-        <el-collapse-item title="雇工信息详情" name="3">
+        <el-collapse-item title="雇工信息详情" name="2">
           <div>
             <el-row :gutter="10">
               <el-col style="width: 100%">
@@ -527,13 +378,13 @@
 </style>
 <script>
 import {
-  completedListReview,
+  settlementListReview,
   getReviewProcessList,
   getReview,
   setBatchEttlement,
 } from "@/api/system/reviewSub";
-import { deptTreeSelect } from "@/api/system/log";
 import elDragDialog from "@/api/components/el-drag";
+import { deptTreeSelect } from "@/api/system/log";
 import { listEmployee } from "@/api/system/reviewEmployeeSub";
 
 export default {
@@ -555,7 +406,7 @@ export default {
   },
   data() {
     return {
-      activeNames: ["1", "2", "3"],
+      activeNames: ["1", "2"],
       employeeList: [],
       queryParamsDeptId: [],
       // 部门树选项
@@ -619,6 +470,7 @@ export default {
         },
       },
       formEttlement: {},
+      settlementId: 0,
       // 查询参数
       queryParams: {
         pageNum: 1,
@@ -627,6 +479,7 @@ export default {
         projectName: null,
         requester: null,
         deptId: undefined,
+        settlementId: undefined,
       },
       queryParamsEmployee: {
         pageNum: 1,
@@ -636,6 +489,8 @@ export default {
     };
   },
   created() {
+    this.settlementId = this.$route.params && this.$route.params.settlementId;
+    this.queryParams.settlementId = this.settlementId;
     this.getUpcomingList();
     this.getDeptTree();
   },
@@ -722,7 +577,7 @@ export default {
         description = description + "审核时间:" + reviewProcess.reviewTime;
         return description;
       } else if (reviewProcess.status === 3) {
-        let description = "审核状态:驳回；";
+        let description = "审核状态:拒绝；";
         if (reviewProcess.reason != "" && reviewProcess.reason != null) {
           description = description + "理由:" + reviewProcess.reason + "；";
         }
@@ -744,8 +599,8 @@ export default {
     /** 查询审核单列表 */
     getUpcomingList() {
       this.loading = true;
-      this.queryParams.status = 2;
-      completedListReview(
+      this.queryParams.status = 4;
+      settlementListReview(
         this.addDateRange(this.queryParams, this.dateRange)
       ).then((response) => {
         this.reviewList = response.rows;
@@ -755,6 +610,7 @@ export default {
     },
     /** 搜索按钮操作 */
     handleQuery() {
+      this.queryParams.settlementId = this.settlementId;
       this.queryParams.pageNum = 1;
       this.getUpcomingList();
     },
@@ -764,6 +620,7 @@ export default {
       this.dateRange = [];
       this.queryParamsDeptId = [];
       this.resetForm("queryForm");
+      this.queryParams.settlementId = this.settlementId;
       this.handleQuery();
     },
     // 多选框选中数据
@@ -806,8 +663,8 @@ export default {
         if (this.formInfo.subcontract == 0) {
           this.formInfo.subcontract = null;
         }
-        this.subcontractForm = response.data;
         this.openInfo = true;
+        this.subcontractForm = response.data;
         this.titleInfo = "项目编号:" + row.projectName + "详情";
       });
       this.queryParamsEmployee.reviewId = reviewId;
