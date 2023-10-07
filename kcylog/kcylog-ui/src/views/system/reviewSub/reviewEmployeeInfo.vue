@@ -157,7 +157,7 @@ import {
   delEmployee,
   addEmployee,
   updateEmployee,
-} from "@/api/system/reviewEmployee";
+} from "@/api/system/reviewEmployeeSub";
 import { listReviewEmployee, addReviewEmployee } from "@/api/system/employee";
 
 export default {

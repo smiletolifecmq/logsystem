@@ -1,0 +1,115 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.kcylog.system.mapper.SysReviewSubEmployeeMapper">
+    
+    <resultMap type="SysReviewSubEmployee" id="SysReviewSubEmployeeResult">
+        <result property="reviewEmployeeId"    column="review_employee_id"    />
+        <result property="name"    column="name"    />
+        <result property="idCard"    column="id_card"    />
+        <result property="workTime"    column="work_time"    />
+        <result property="workDay"    column="work_day"    />
+        <result property="cost"    column="cost"    />
+        <result property="reviewId"    column="review_id"    />
+        <association property="review" column="create_time" javaType="SysReviewSub" resultMap="SysReviewSubEmployeeReviewResult"/>
+    </resultMap>
+
+    <resultMap id="SysReviewSubEmployeeReviewResult" type="SysReviewSub">
+        <result property="createTime" column="create_time"/>
+        <result property="serialNum" column="serial_num"/>
+        <result property="projectName" column="project_name"/>
+    </resultMap>
+
+    <sql id="selectSysReviewSubEmployeeVo">
+        select review_employee_id, name, id_card, work_time, work_day, cost, review_id from sys_review_sub_employee
+    </sql>
+
+    <select id="selectSysReviewSubEmployeeList" parameterType="SysReviewSubEmployee" resultMap="SysReviewSubEmployeeResult">
+        <include refid="selectSysReviewSubEmployeeVo"/>
+        <where>
+            <if test="reviewId != null "> and review_id = #{reviewId}</if>
+        </where>
+    </select>
+    
+    <select id="selectSysReviewSubEmployeeByReviewEmployeeId" parameterType="Long" resultMap="SysReviewSubEmployeeResult">
+        <include refid="selectSysReviewSubEmployeeVo"/>
+        where review_employee_id = #{reviewEmployeeId}
+    </select>
+        
+    <insert id="insertSysReviewSubEmployee" parameterType="SysReviewSubEmployee" useGeneratedKeys="true" keyProperty="reviewEmployeeId">
+        insert into sys_review_sub_employee
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="name != null and name != ''">name,</if>
+            <if test="idCard != null and idCard != ''">id_card,</if>
+            <if test="workTime != null and workTime != ''">work_time,</if>
+            <if test="workDay != null">work_day,</if>
+            <if test="cost != null">cost,</if>
+            <if test="reviewId != null">review_id,</if>
+         </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test="name != null and name != ''">#{name},</if>
+            <if test="idCard != null and idCard != ''">#{idCard},</if>
+            <if test="workTime != null and workTime != ''">#{workTime},</if>
+            <if test="workDay != null">#{workDay},</if>
+            <if test="cost != null">#{cost},</if>
+            <if test="reviewId != null">#{reviewId},</if>
+         </trim>
+    </insert>
+
+    <update id="updateSysReviewSubEmployee" parameterType="SysReviewSubEmployee">
+        update sys_review_sub_employee
+        <trim prefix="SET" suffixOverrides=",">
+            <if test="name != null and name != ''">name = #{name},</if>
+            <if test="idCard != null and idCard != ''">id_card = #{idCard},</if>
+            <if test="workTime != null and workTime != ''">work_time = #{workTime},</if>
+            <if test="workDay != null">work_day = #{workDay},</if>
+            <if test="cost != null">cost = #{cost},</if>
+            <if test="reviewId != null">review_id = #{reviewId},</if>
+        </trim>
+        where review_employee_id = #{reviewEmployeeId}
+    </update>
+
+    <delete id="deleteSysReviewSubEmployeeByReviewEmployeeId" parameterType="Long">
+        delete from sys_review_sub_employee where review_employee_id = #{reviewEmployeeId}
+    </delete>
+
+    <delete id="deleteSysReviewSubEmployeeByReviewEmployeeIds" parameterType="String">
+        delete from sys_review_sub_employee where review_employee_id in 
+        <foreach item="reviewEmployeeId" collection="array" open="(" separator="," close=")">
+            #{reviewEmployeeId}
+        </foreach>
+    </delete>
+
+    <select id="selectSysReviewSubEmployeeListNotItself" parameterType="SysReviewSubEmployee" resultMap="SysReviewSubEmployeeResult">
+        <include refid="selectSysReviewSubEmployeeVo"/>
+        <where>
+            <if test="reviewId != null "> and review_id = #{reviewId}</if>
+            <if test="reviewEmployeeId != null "> and review_employee_id != #{reviewEmployeeId}</if>
+        </where>
+    </select>
+
+    <select id="selectSysReviewSubEmployeeByReviewId" parameterType="Long" resultMap="SysReviewSubEmployeeResult">
+        <include refid="selectSysReviewSubEmployeeVo"/>
+        where review_id = #{reviewId}
+    </select>
+
+    <select id="selectSysReviewSubEmployeeListJoinReview" parameterType="SysReviewSub" resultMap="SysReviewSubEmployeeResult">
+        select e.*, r.create_time, r.serial_num, r.project_name from sys_review_sub_employee e
+        inner join sys_review_sub r on e.review_id = r.review_id and r.status = 4
+        inner join sys_settlement_associate a on r.review_id = a.review_id
+        <where>
+            <if test="serialNum != null  and serialNum != ''"> and r.serial_num = #{serialNum}</if>
+            <if test="projectName != null  and projectName != ''"> and r.project_name like concat('%', #{projectName}, '%')</if>
+            <if test="requester != null  and requester != ''"> and r.requester = #{requester}</if>
+            <if test="deptId != null  and deptId != ''"> and r.dept_id = #{deptId}</if>
+            <if test="params.beginTime != null and params.beginTime != ''"><!-- 开始时间检索 -->
+                AND date_format(r.create_time,'%y%m%d') &gt;= date_format(#{params.beginTime},'%y%m%d')
+            </if>
+            <if test="params.endTime != null and params.endTime != ''"><!-- 结束时间检索 -->
+                AND date_format(r.create_time,'%y%m%d') &lt;= date_format(#{params.endTime},'%y%m%d')
+            </if>
+            AND a.settlement_id = #{settlementId}
+        </where>
+    </select>
+</mapper>

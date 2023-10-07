@@ -103,7 +103,7 @@ public class SysReviewSub extends BaseEntity
 
     private int startEdit;
 
-    private List<SysReviewEmployee> reviewEmployee;
+    private List<SysReviewSubEmployee> reviewEmployee;
 
     private List<Long> reviewIds;
 
@@ -216,7 +216,7 @@ public class SysReviewSub extends BaseEntity
         this.hiredWorkerName = hiredWorkerName;
     }
 
-    public List<SysReviewEmployee> getReviewEmployee() {
+    public List<SysReviewSubEmployee> getReviewEmployee() {
         return reviewEmployee;
     }
 
@@ -244,7 +244,7 @@ public class SysReviewSub extends BaseEntity
         this.finalSecondStatus = finalSecondStatus;
     }
 
-    public void setReviewEmployee(List<SysReviewEmployee> reviewEmployee) {
+    public void setReviewEmployee(List<SysReviewSubEmployee> reviewEmployee) {
         this.reviewEmployee = reviewEmployee;
     }
 
