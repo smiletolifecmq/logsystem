@@ -53,13 +53,6 @@
         >
       </el-form-item>
     </el-form>
-    <!-- 
-    <el-row :gutter="10" class="mb8">
-      <right-toolbar
-        :showSearch.sync="showSearch"
-        @queryTable="getUpcomingList"
-      ></right-toolbar>
-    </el-row> -->
 
     <el-table
       v-loading="loading"
@@ -70,8 +63,6 @@
       <el-table-column label="工程编号" align="center" prop="serialNum" />
       <el-table-column label="项目名称" align="center" prop="projectName" />
       <el-table-column label="委托单位" align="center" prop="requester" />
-      <!-- <el-table-column label="项目金额" align="center" prop="porjectMoney" /> -->
-      <!-- <el-table-column label="工作量" align="center" prop="workload" /> -->
       <el-table-column label="分包情况" align="center" prop="subcontract">
         <template slot-scope="scope">
           <span v-if="scope.row.subcontract === 1">是</span>
@@ -83,54 +74,6 @@
       <el-table-column label="雇工金额" align="center" prop="budgetMoney" />
       <el-table-column label="负责人" align="center" prop="user.userName" />
       <el-table-column label="部门" align="center" prop="dept.deptName" />
-      <!-- <el-table-column label="审核状态" align="center" prop="status">
-        <template slot-scope="scope">
-          <span v-if="scope.row.status === 0">未开始</span>
-          <span v-else-if="scope.row.status === 1">进行中</span>
-          <span v-else-if="scope.row.status === 2">通过</span>
-          <span v-else-if="scope.row.status === 3">未通过</span>
-          <span v-else>其他状态</span>
-        </template>
-      </el-table-column> -->
-      <!-- <el-table-column
-        label="预估雇工工作开始时间"
-        align="center"
-        prop="startTime"
-        width="180"
-      >
-        <template slot-scope="scope">
-          <span
-            >{{ parseTime(scope.row.startTime, "{y}-{m}-{d}") }}:{{
-              filterTime(scope.row.startTime)
-            }}</span
-          >
-        </template>
-      </el-table-column>
-      <el-table-column
-        label="预估雇工工作结束时间"
-        align="center"
-        prop="endTime"
-        width="180"
-      >
-        <template slot-scope="scope">
-          <span
-            >{{ parseTime(scope.row.endTime, "{y}-{m}-{d}") }}:{{
-              filterTime(scope.row.endTime)
-            }}</span
-          >
-        </template>
-      </el-table-column>
-      <el-table-column label="预估天数" align="center" prop="budgetDay" />
-      <el-table-column
-        label="创建时间"
-        align="center"
-        prop="createTime"
-        width="160"
-      >
-        <template slot-scope="scope">
-          <span>{{ parseTime(scope.row.createTime) }}</span>
-        </template>
-      </el-table-column> -->
       <el-table-column
         label="操作"
         align="center"
@@ -341,7 +284,7 @@
               <el-col style="width: 50%">
                 <el-card>
                   <div slot="header">
-                    <span>雇工审核单详情</span>
+                    <span>雇工详情</span>
                     <el-button
                       style="float: right; padding: 3px 0"
                       type="text"
@@ -414,253 +357,7 @@
                       <template slot="label"> 预算 </template>
                       {{ formInfo.budgetMoney }}
                     </el-descriptions-item>
-                    <el-descriptions-item>
-                      <template slot="label"> 审核意见 </template>
-                      <el-select
-                        v-model="formInfo.auditOpinion"
-                        filterable
-                        clearable
-                        allow-create
-                        placeholder="请输入审核意见"
-                      >
-                        <el-option
-                          v-for="item in auditOpinions"
-                          :key="item.value"
-                          :label="item.label"
-                          :value="item.value"
-                        >
-                        </el-option>
-                      </el-select>
-                    </el-descriptions-item>
-                    <el-descriptions-item>
-                      <template slot="label"> 操作 </template>
-                      <div class="form-container">
-                        <el-button
-                          type="success"
-                          @click="handleReview(formInfo, 2)"
-                          >通过</el-button
-                        >
-                        <el-button
-                          type="danger"
-                          @click="handleReview(formInfo, 3)"
-                          >回退</el-button
-                        >
-                      </div>
-                    </el-descriptions-item>
                   </el-descriptions>
-
-                  <!-- 预留，防止样式回滚 -->
-                  <!-- <el-form ref="formInfo" :model="formInfo" label-width="80px">
-                    <div class="form-container">
-                      <el-form-item label="工程编号" prop="serialNum">
-                        <el-input
-                          v-model="formInfo.serialNum"
-                          placeholder="请输入编号"
-                          disabled
-                          class="custom-input"
-                        />
-                      </el-form-item>
-                      <el-form-item label="负责人">
-                        <el-input
-                          v-if="formInfo.user"
-                          v-model="formInfo.user.userName"
-                          placeholder="请输入委托单位"
-                          disabled
-                          class="custom-input"
-                        />
-                      </el-form-item>
-                    </div>
-
-                    <el-form-item label="项目名称" prop="projectName">
-                      <el-input
-                        v-model="formInfo.projectName"
-                        placeholder="请输入项目名称"
-                        disabled
-                        class="custom-input"
-                      />
-                    </el-form-item>
-                    <el-form-item label="委托单位" prop="requester">
-                      <el-input
-                        v-model="formInfo.requester"
-                        placeholder="请输入委托单位"
-                        disabled
-                        class="custom-input"
-                      />
-                    </el-form-item>
-                    <el-form-item label="工作量" prop="workload">
-                      <el-input
-                        v-model="formInfo.workload"
-                        type="textarea"
-                        placeholder="未填写"
-                        disabled
-                        class="textarea-input"
-                      />
-                    </el-form-item>
-                    <div class="form-container">
-                      <el-form-item label="项目金额" prop="porjectMoney">
-                        <el-input-number
-                          v-model="formInfo.porjectMoney"
-                          :precision="2"
-                          :step="0.1"
-                          :min="0.0"
-                          placeholder="请输入项目金额"
-                          disabled
-                          class="custom-input"
-                        />
-                      </el-form-item>
-                      <el-form-item label="分包情况" prop="subcontract">
-                        <el-select
-                          v-model="formInfo.subcontract"
-                          placeholder="请选择"
-                          class="custom-input"
-                          disabled
-                        >
-                          <el-option
-                            label="是"
-                            :value="1"
-                            :selected="formInfo.subcontract === 1"
-                          ></el-option>
-                          <el-option
-                            label="否"
-                            :value="2"
-                            :selected="formInfo.subcontract === 2"
-                          ></el-option>
-                        </el-select>
-                      </el-form-item>
-                    </div>
-
-                    <el-form-item label="雇工内容" prop="employmentReason">
-                      <el-input
-                        v-model="formInfo.employmentReason"
-                        type="textarea"
-                        placeholder="未填写"
-                        disabled
-                        class="textarea-input"
-                      />
-                    </el-form-item>
-                    <el-form-item label="雇工开始时间" prop="startTime">
-                      <el-date-picker
-                        clearable
-                        v-model="formInfo.startTime"
-                        type="date"
-                        value-format="yyyy-MM-dd"
-                        placeholder="请选择预估雇工工作开始时间"
-                        disabled
-                        class="custom-input"
-                      >
-                      </el-date-picker>
-
-                      <el-select
-                        v-model="startAmPm"
-                        placeholder="请选择"
-                        disabled
-                        class="custom-input"
-                      >
-                        <el-option label="上午" value="12:00:00"></el-option>
-                        <el-option label="下午" value="23:59:59"></el-option>
-                      </el-select>
-                    </el-form-item>
-                    <el-form-item label="雇工结束时间" prop="endTime">
-                      <el-date-picker
-                        clearable
-                        v-model="formInfo.endTime"
-                        type="date"
-                        value-format="yyyy-MM-dd"
-                        placeholder="请选择预估雇工工作结束时间"
-                        disabled
-                        class="custom-input"
-                      >
-                      </el-date-picker>
-                      <el-select
-                        v-model="endAmPm"
-                        placeholder="请选择"
-                        disabled
-                        class="custom-input"
-                      >
-                        <el-option label="上午" value="12:00:00"></el-option>
-                        <el-option label="下午" value="23:59:59"></el-option>
-                      </el-select>
-                    </el-form-item>
-                    <div class="form-container">
-                      <el-form-item label="项目工期" prop="projectStart">
-                        <el-date-picker
-                          clearable
-                          v-model="formInfo.projectStart"
-                          type="date"
-                          value-format="yyyy-MM-dd"
-                          placeholder="请选择工期开始时间"
-                          disabled
-                          class="custom-input"
-                        >
-                        </el-date-picker>
-                      </el-form-item>
-                      <el-form-item
-                        label=""
-                        style="margin-left: -100px"
-                        prop="projectEnd"
-                      >
-                        <el-date-picker
-                          clearable
-                          v-model="formInfo.projectEnd"
-                          type="date"
-                          value-format="yyyy-MM-dd"
-                          placeholder="请选择工期结束时间"
-                          disabled
-                          class="custom-input"
-                        >
-                        </el-date-picker>
-                      </el-form-item>
-                    </div>
-                    <div class="form-container">
-                      <el-form-item label="雇工人数" prop="peopleNum">
-                        <el-input
-                          v-model="formInfo.peopleNum"
-                          placeholder="请预估雇工人数"
-                          disabled
-                          class="custom-input"
-                        />
-                      </el-form-item>
-                      <el-form-item label="天数" prop="budgetDay">
-                        <el-input
-                          v-model="formInfo.budgetDay"
-                          placeholder="请输入预估天数"
-                          disabled
-                          class="custom-input"
-                        />
-                      </el-form-item>
-                      <el-form-item label="预算" prop="budgetMoney">
-                        <el-input
-                          v-model="formInfo.budgetMoney"
-                          placeholder="请输入预算金额"
-                          disabled
-                          class="custom-input"
-                        />
-                      </el-form-item>
-                    </div>
-                    <div class="form-container">
-                      <el-form-item label="审核意见">
-                        <el-input
-                          v-model="formInfo.auditOpinion"
-                          placeholder="请输入审核意见"
-                          class="custom-input"
-                        />
-                      </el-form-item>
-                      <el-form-item>
-                        <div class="form-container">
-                          <el-button
-                            type="success"
-                            @click="handleReview(formInfo, 2)"
-                            >通过</el-button
-                          >
-                          <el-button
-                            type="danger"
-                            @click="handleReview(formInfo, 3)"
-                            >回退</el-button
-                          >
-                        </div>
-                      </el-form-item>
-                    </div>
-                  </el-form> -->
                 </el-card>
               </el-col>
 
@@ -673,11 +370,7 @@
                       type="text"
                     ></el-button>
                   </div>
-                  <div v-if="!subcontractForm" style="text-align: center">
-                    未找到关联分包数据～
-                  </div>
-
-                  <div v-if="subcontractForm" style="text-align: center">
+                  <div style="text-align: center">
                     <el-descriptions class="margin-top" :column="2" border>
                       <el-descriptions-item>
                         <template slot="label"> 工程编号 </template>
@@ -697,7 +390,7 @@
                       </el-descriptions-item>
                       <el-descriptions-item>
                         <template slot="label"> 委托单位 </template>
-                        {{ subcontractForm.entrustUnit }}
+                        {{ subcontractForm.requester }}
                       </el-descriptions-item>
                       <el-descriptions-item>
                         <template slot="label"> 工作内容 </template>
@@ -735,11 +428,11 @@
                       </el-descriptions-item>
                       <el-descriptions-item>
                         <template slot="label"> 工期开始 </template>
-                        {{ subcontractForm.startTime }}
+                        {{ subcontractForm.cpStartTime }}
                       </el-descriptions-item>
                       <el-descriptions-item>
                         <template slot="label"> 工期结束 </template>
-                        {{ subcontractForm.endTime }}
+                        {{ subcontractForm.cpEndTime }}
                       </el-descriptions-item>
                     </el-descriptions>
                   </div>
@@ -749,7 +442,51 @@
           </div>
         </el-collapse-item>
 
-        <el-collapse-item title="雇工信息详情" name="3">
+        <el-collapse-item title="审核操作" name="3">
+          <div>
+            <el-row :gutter="10">
+              <el-col style="width: 100%">
+                <el-descriptions class="margin-top" :column="2" border>
+                  <el-descriptions-item>
+                    <template slot="label"> 审核意见 </template>
+                    <el-select
+                      v-model="formInfo.auditOpinion"
+                      filterable
+                      clearable
+                      allow-create
+                      placeholder="请输入审核意见"
+                    >
+                      <el-option
+                        v-for="item in auditOpinions"
+                        :key="item.value"
+                        :label="item.label"
+                        :value="item.value"
+                      >
+                      </el-option>
+                    </el-select>
+                  </el-descriptions-item>
+                  <el-descriptions-item>
+                    <template slot="label"> 操作 </template>
+                    <div class="form-container">
+                      <el-button
+                        type="success"
+                        @click="handleReview(formInfo, 2)"
+                        >通过</el-button
+                      >
+                      <el-button
+                        type="danger"
+                        @click="handleReview(formInfo, 3)"
+                        >回退</el-button
+                      >
+                    </div>
+                  </el-descriptions-item>
+                </el-descriptions>
+              </el-col>
+            </el-row>
+          </div>
+        </el-collapse-item>
+
+        <el-collapse-item title="雇工信息详情" name="4">
           <div>
             <el-row :gutter="10">
               <el-col style="width: 100%">
@@ -827,8 +564,7 @@ import {
   getReviewProcessList,
   getReview,
   setBatchReviewPass,
-  listReviewSubcontract,
-} from "@/api/system/review";
+} from "@/api/system/reviewSub";
 import elDragDialog from "@/api/components/el-drag";
 import { listEmployee } from "@/api/system/reviewEmployee";
 
@@ -855,7 +591,7 @@ export default {
         { value: "同意", label: "同意" },
         { value: "不同意", label: "不同意" },
       ],
-      activeNames: ["1", "2", "3"],
+      activeNames: ["1", "2", "3", "4"],
       employeeList: [],
       openInfo: false,
       formInfo: {
@@ -1088,15 +824,13 @@ export default {
         if (this.formInfo.subcontract == 0) {
           this.formInfo.subcontract = null;
         }
+        this.subcontractForm = response.data;
         this.openInfo = true;
         this.titleInfo = "项目编号:" + row.projectName + "详情";
       });
       this.queryParamsEmployee.reviewId = reviewId;
       listEmployee(this.queryParamsEmployee).then((response) => {
         this.employeeList = response.rows;
-      });
-      listReviewSubcontract(reviewId).then((response) => {
-        this.subcontractForm = response.data;
       });
     },
   },

@@ -1,8 +1,5 @@
 package com.kcylog.web.controller.system;
 
-import com.fasterxml.jackson.core.JsonProcessingException;
-import com.fasterxml.jackson.core.type.TypeReference;
-import com.fasterxml.jackson.databind.ObjectMapper;
 import com.kcylog.common.annotation.Log;
 import com.kcylog.common.core.controller.BaseController;
 import com.kcylog.common.core.domain.AjaxResult;
@@ -50,7 +47,7 @@ public class SysReviewSubController extends BaseController
     private ISysProcessConfigInfoService sysProcessConfigInfoService;
 
     @Autowired
-    private ISysReviewProcessService sysReviewProcessService;
+    private ISysReviewSubProcessService sysReviewSubProcessService;
 
     @Autowired
     private ISysReviewEmployeeService sysReviewEmployeeService;
@@ -64,8 +61,6 @@ public class SysReviewSubController extends BaseController
     @Autowired
     private ISysProjectRelationService sysProjectRelationService;
 
-    @Autowired
-    private ISysSubcontractService sysSubcontractService;
     /**
      * 查询审核单列表
      */
@@ -195,16 +190,16 @@ public class SysReviewSubController extends BaseController
         sysReviewSub.setDeptId(deptId);
         sysReviewSubService.insertSysReviewSub(sysReviewSub);
         List<SysProcessConfigInfo> list = sysProcessConfigInfoService.selectSysProcessConfigInfoListByDeptId(deptId);
-        List<SysReviewProcess> reviewProcess = new ArrayList<>();
+        List<SysReviewSubProcess> reviewProcess = new ArrayList<>();
         for (SysProcessConfigInfo configInfo : list) {
-            SysReviewProcess review = new SysReviewProcess();
+            SysReviewSubProcess review = new SysReviewSubProcess();
             review.setReviewId((sysReviewSub.getReviewId()));
             review.setUserId(configInfo.getUserId());
             review.setStatus((long)0);
             review.setNode(Long.parseLong(configInfo.getNode()));
             reviewProcess.add(review);
         }
-        int result = sysReviewProcessService.insertSysReviewProcessBatch(reviewProcess);
+        int result = sysReviewSubProcessService.insertSysReviewSubProcessBatch(reviewProcess);
         SysProjectRelation projectRelation = new SysProjectRelation();
         projectRelation.setProjectId(sysReviewSub.getProjectId());
         projectRelation.setReviewType(HiredWorkerType);
@@ -246,7 +241,7 @@ public class SysReviewSubController extends BaseController
         sysProjectRelationService.deleteByReviewId(projectRelation);
 
         sysReviewSubService.deleteSysReviewSubByReviewIds(reviewIds);
-        int result = sysReviewProcessService.deleteSysReviewProcessByReviewIds(reviewIds);
+        int result = sysReviewSubProcessService.deleteSysReviewSubProcessByReviewIds(reviewIds);
         return toAjax(result);
     }
 
@@ -262,9 +257,9 @@ public class SysReviewSubController extends BaseController
         //设置审核单为进行中
         sysReviewSubService.setSysReviewSubStatusByReviewId(sysReviewSub);
         //先将审核单流程状态全部设置成未开始
-        sysReviewProcessService.setStatusNotStartByReviewId(sysReviewSub.getReviewId());
+        sysReviewSubProcessService.setStatusNotStartByReviewId(sysReviewSub.getReviewId());
         //将审核单第一个流程设置成进行中
-        int result = sysReviewProcessService.setStatusByReviewIdFirst(sysReviewSub.getReviewId());
+        int result = sysReviewSubProcessService.setStatusByReviewIdFirst(sysReviewSub.getReviewId());
         return toAjax(result);
     }
 
@@ -288,22 +283,22 @@ public class SysReviewSubController extends BaseController
     @Log(title = "审核单", businessType = BusinessType.UPDATE)
     @Transactional
     @PutMapping("/set_review_process")
-    public AjaxResult setReviewProcessStatus(@RequestBody SysReviewProcess sysReviewProcess)
+    public AjaxResult setReviewProcessStatus(@RequestBody SysReviewSubProcess sysReviewSubProcess)
     {
         //修改审核流程中流程信息
         Long userId = SecurityUtils.getUserId();
-        sysReviewProcess.setUserId(userId);
-        sysReviewProcess.setReviewTime(DateUtils.getNowDate());
-        sysReviewProcessService.setStatusByUserIdAndReviewId(sysReviewProcess);
+        sysReviewSubProcess.setUserId(userId);
+        sysReviewSubProcess.setReviewTime(DateUtils.getNowDate());
+        sysReviewSubProcessService.setStatusByUserIdAndReviewId(sysReviewSubProcess);
 
         SysReviewSub review = new SysReviewSub();
-        review.setReviewId(sysReviewProcess.getReviewId());
-        if (sysReviewProcess.getStatus() == (long)this.PassStatus){
+        review.setReviewId(sysReviewSubProcess.getReviewId());
+        if (sysReviewSubProcess.getStatus() == (long)this.PassStatus){
             //审核通过
             //获取审核单审核流程
-            List<SysReviewProcess> list = sysReviewProcessService.selectSysReviewProcessList(sysReviewProcess);
+            List<SysReviewSubProcess> list = sysReviewSubProcessService.selectSysReviewSubProcessList(sysReviewSubProcess);
             int passNum = 0;
-            for (SysReviewProcess obj : list) {
+            for (SysReviewSubProcess obj : list) {
                 if (obj.getStatus() == (long)this.PassStatus){
                     passNum ++;
                 }
@@ -317,10 +312,10 @@ public class SysReviewSubController extends BaseController
                 //审核到终审的前一个
                 review.setFinalSecondStatus(1);
                 sysReviewSubService.setSysReviewSubFinalSecondStatusByReviewId(review);
-                sysReviewProcessService.setNextStatusByReviewId(sysReviewProcess.getReviewId());
+                sysReviewSubProcessService.setNextStatusByReviewId(sysReviewSubProcess.getReviewId());
             } else {
                 //审核单流程没有全部通过，进入下一个流程审核
-                sysReviewProcessService.setNextStatusByReviewId(sysReviewProcess.getReviewId());
+                sysReviewSubProcessService.setNextStatusByReviewId(sysReviewSubProcess.getReviewId());
             }
 
         }else {
@@ -362,21 +357,21 @@ public class SysReviewSubController extends BaseController
     {
         //修改审核流程中流程信息
         Long userId = SecurityUtils.getUserId();
-        SysReviewProcess sysReviewProcess = new SysReviewProcess();
-        sysReviewProcess.setUserId(userId);
-        sysReviewProcess.setReviewTime(DateUtils.getNowDate());
+        SysReviewSubProcess sysReviewSubProcess = new SysReviewSubProcess();
+        sysReviewSubProcess.setUserId(userId);
+        sysReviewSubProcess.setReviewTime(DateUtils.getNowDate());
 
         for (Long reviewId:reviewIds){
-            sysReviewProcess.setReviewId(reviewId);
-            sysReviewProcess.setStatus((long)this.PassStatus);
-            sysReviewProcessService.setStatusByUserIdAndReviewId(sysReviewProcess);
+            sysReviewSubProcess.setReviewId(reviewId);
+            sysReviewSubProcess.setStatus((long)this.PassStatus);
+            sysReviewSubProcessService.setStatusByUserIdAndReviewId(sysReviewSubProcess);
             SysReviewSub review = new SysReviewSub();
-            review.setReviewId(sysReviewProcess.getReviewId());
+            review.setReviewId(sysReviewSubProcess.getReviewId());
             //审核通过
             //获取审核单审核流程
-            List<SysReviewProcess> list = sysReviewProcessService.selectSysReviewProcessList(sysReviewProcess);
+            List<SysReviewSubProcess> list = sysReviewSubProcessService.selectSysReviewSubProcessList(sysReviewSubProcess);
             int passNum = 0;
-            for (SysReviewProcess obj : list) {
+            for (SysReviewSubProcess obj : list) {
                 if (obj.getStatus() == (long)this.PassStatus){
                     passNum ++;
                 }
@@ -390,10 +385,10 @@ public class SysReviewSubController extends BaseController
                 //审核到终审的前一个
                 review.setFinalSecondStatus(1);
                 sysReviewSubService.setSysReviewSubFinalSecondStatusByReviewId(review);
-                sysReviewProcessService.setNextStatusByReviewId(sysReviewProcess.getReviewId());
+                sysReviewSubProcessService.setNextStatusByReviewId(sysReviewSubProcess.getReviewId());
             } else {
                 //审核单流程没有全部通过，进入下一个流程审核
-                sysReviewProcessService.setNextStatusByReviewId(sysReviewProcess.getReviewId());
+                sysReviewSubProcessService.setNextStatusByReviewId(sysReviewSubProcess.getReviewId());
             }
         }
 

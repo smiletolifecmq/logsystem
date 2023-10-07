@@ -83,7 +83,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 
 
     <sql id="selectSysReviewSubVo">
-        select r.*, d.dept_name, u.user_name, p.project_id, pp.* from sys_review r
+        select r.*, d.dept_name, u.user_name, p.project_id, pp.* from sys_review_sub r
         inner join sys_dept d on r.dept_id = d.dept_id
         inner join sys_user u on r.user_id = u.user_id
         left join sys_project_relation p on r.review_id = p.review_id and p.review_type = 1
@@ -116,7 +116,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
     </select>
         
     <insert id="insertSysReviewSub" parameterType="SysReviewSub" useGeneratedKeys="true" keyProperty="reviewId">
-        insert into sys_review
+        insert into sys_review_sub
         <trim prefix="(" suffix=")" suffixOverrides=",">
             <if test="serialNum != null and serialNum != ''">serial_num,</if>
             <if test="projectName != null and projectName != ''">project_name,</if>
@@ -164,7 +164,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
     </insert>
 
     <update id="updateSysReviewSub" parameterType="SysReviewSub">
-        update sys_review
+        update sys_review_sub
         <trim prefix="SET" suffixOverrides=",">
             <if test="serialNum != null and serialNum != ''">serial_num = #{serialNum},</if>
             <if test="projectName != null and projectName != ''">project_name = #{projectName},</if>
@@ -192,18 +192,18 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
     </update>
 
     <delete id="deleteSysReviewSubByReviewId" parameterType="String">
-        delete from sys_review where review_id = #{reviewId}
+        delete from sys_review_sub where review_id = #{reviewId}
     </delete>
 
     <delete id="deleteSysReviewSubByReviewIds" parameterType="String">
-        delete from sys_review where review_id in 
+        delete from sys_review_sub where review_id in
         <foreach item="reviewId" collection="array" open="(" separator="," close=")">
             #{reviewId}
         </foreach>
     </delete>
 
     <update id="setSysReviewSubStatusByReviewId" parameterType="SysReviewSub">
-        update sys_review
+        update sys_review_sub
         <trim prefix="SET" suffixOverrides=",">
             <if test="status != null and status != ''">status = #{status},</if>
             <if test="status != null and status != '' and status == 3">final_second_status = 0, final_hire = 0</if>
@@ -213,7 +213,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 
     <select id="selectSysUpcomingReviewList" parameterType="SysReviewSub" resultMap="SysReviewSubResult">
         <include refid="selectSysReviewSubVo"/>
-        inner join sys_review_process rp on r.review_id = rp.review_id
+        inner join sys_review_sub_process rp on r.review_id = rp.review_id
         <where>
             <if test="serialNum != null  and serialNum != ''"> and r.serial_num = #{serialNum}</if>
             <if test="projectName != null  and projectName != ''"> and r.project_name like concat('%', #{projectName}, '%')</if>
@@ -253,7 +253,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 
     <select id="selectDoneReviewList" parameterType="SysReviewSub" resultMap="SysReviewSubResult">
         <include refid="selectSysReviewSubVo"/>
-        inner join sys_review_process rp on r.review_id = rp.review_id
+        inner join sys_review_sub_process rp on r.review_id = rp.review_id
         <where>
             <if test="serialNum != null  and serialNum != ''"> and r.serial_num = #{serialNum}</if>
             <if test="projectName != null  and projectName != ''"> and r.project_name like concat('%', #{projectName}, '%')</if>
@@ -273,19 +273,19 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
     </select>
 
     <update id="updateSysReviewSubFinalTime" parameterType="SysReviewSub">
-        update sys_review
+        update sys_review_sub
         set final_time = #{finalTime}
         where review_id = #{reviewId}
     </update>
 
     <update id="setSysReviewSubFinalSecondStatusByReviewId" parameterType="SysReviewSub">
-        update sys_review
+        update sys_review_sub
         set final_second_status = #{finalSecondStatus}
         where review_id = #{reviewId}
     </update>
 
     <update id="updateStartEditByReviewId" parameterType="SysReviewSub">
-        update sys_review
+        update sys_review_sub
         <trim prefix="SET" suffixOverrides=",">
             <if test="startEdit != null and startEdit != ''">start_edit = #{startEdit},</if>
         </trim>
@@ -293,7 +293,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
     </update>
 
     <update id="generateStatement" parameterType="SysReviewSub">
-        update sys_review
+        update sys_review_sub
         set status = 4,start_edit = 0
         where review_id in
         <foreach item="reviewId" collection="reviewIds" open="(" separator="," close=")">
@@ -302,7 +302,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
     </update>
 
     <sql id="selectSysReviewSubBySettlementVo">
-        select r.*, d.dept_name, u.user_name from sys_review r
+        select r.*, d.dept_name, u.user_name from sys_review_sub r
         inner join sys_dept d on r.dept_id = d.dept_id
         inner join sys_user u on r.user_id = u.user_id
         inner join sys_settlement_associate a on r.review_id = a.review_id
@@ -328,7 +328,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
     </select>
 
     <sql id="selectSysReviewSubSettlementVo">
-        select r.*, d.dept_name, u.user_name from sys_review r
+        select r.*, d.dept_name, u.user_name from sys_review_sub r
         inner join sys_dept d on r.dept_id = d.dept_id
         inner join sys_user u on r.user_id = u.user_id
         inner join sys_settlement_associate a on r.review_id = a.review_id
@@ -343,7 +343,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
     </select>
 
     <update id="updateFinalHireByReviewId" parameterType="Long">
-        update sys_review
+        update sys_review_sub
         set final_hire = 1
         where review_id = #{reviewId}
     </update>
@@ -354,10 +354,4 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
         limit 1
     </select>
 
-    <select id="getSubcontractReview" parameterType="Long" resultMap="SysReviewSubResult">
-        SELECT c.*, u.user_name FROM sys_project_relation a
-        INNER JOIN sys_project_relation b ON a.project_id = b.project_id AND a.review_id = #{subcontractId} AND a.review_type = 2
-        INNER JOIN sys_review c ON b.review_id = c.review_id
-        INNER JOIN sys_user u on u.user_id = c.user_id  LIMIT 1
-    </select>
 </mapper>

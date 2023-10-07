@@ -218,7 +218,7 @@ import {
   confirmEmployee,
 } from "@/api/system/reviewEmployee";
 import { listReviewEmployee, addReviewEmployee } from "@/api/system/employee";
-import { getReview } from "@/api/system/review";
+import { getReview } from "@/api/system/reviewSub";
 
 export default {
   name: "Employee",
