@@ -673,10 +673,6 @@ export default {
     handleChange(val) {
       // console.log(val);
     },
-    finalEmploymentInfo(row) {
-      const reviewId = row.reviewId;
-      this.$router.push("/system/review-employee/info/" + reviewId);
-    },
     batchReviewPass() {
       const reviewIds = this.ids;
 

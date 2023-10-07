@@ -680,10 +680,6 @@ export default {
         this.deptOptions = transformIdToValue(response.data);
       });
     },
-    finalEmploymentInfo(row) {
-      const reviewId = row.reviewId;
-      this.$router.push("/system/review-employee/info/" + reviewId);
-    },
     filterTime(timeString) {
       if (timeString != "" && timeString != null) {
         const timeSubstring = timeString.substring(11);

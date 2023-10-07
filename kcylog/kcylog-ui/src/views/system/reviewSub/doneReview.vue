@@ -646,10 +646,6 @@ export default {
     handleChange(val) {
       // console.log(val);
     },
-    finalEmploymentInfo(row) {
-      const reviewId = row.reviewId;
-      this.$router.push("/system/review-employee/info/" + reviewId);
-    },
     startEdit(row) {
       if (row.status === 4) {
         this.$message.error("无法开启编辑,该审核单已结单");
