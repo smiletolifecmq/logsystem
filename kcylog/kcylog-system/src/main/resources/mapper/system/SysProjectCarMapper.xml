@@ -34,6 +34,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
             <if test="deptId != null "> and dept_id = #{deptId}</if>
             <if test="fillUserId != null "> and fill_user_id = #{fillUserId}</if>
         </where>
+        order by car_time desc, car_id desc
     </select>
     
     <select id="selectSysProjectCarByCarId" parameterType="Long" resultMap="SysProjectCarResult">

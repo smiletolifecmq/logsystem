@@ -286,7 +286,7 @@
 
 <script>
 import {
-  listProjectOperate,
+  listProject,
   getProject,
   updateProjectValue,
 } from "@/api/system/project";
@@ -391,7 +391,7 @@ export default {
     /** 查询项目列表 */
     getList() {
       this.loading = true;
-      listProjectOperate(this.queryParams).then((response) => {
+      listProject(this.queryParams).then((response) => {
         this.projectList = response.rows;
         this.total = response.total;
         this.loading = false;

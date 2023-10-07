@@ -1,5 +1,6 @@
 <template>
   <div class="app-container">
+    <h2>项目编号《{{ projectInfo.projectNum }}》的用车情况登记</h2>
     <el-form
       :model="queryParams"
       ref="queryForm"
@@ -159,7 +160,15 @@
           </el-select>
         </el-form-item>
         <el-form-item label="负责人" prop="carUserId">
-          <el-input v-model="form.deptId" placeholder="请输入部门ID" />
+          <el-select v-model="form.carUserId" filterable placeholder="请选择">
+            <el-option
+              v-for="item in userLists"
+              :key="item.userId"
+              :label="item.userName"
+              :value="item.userId"
+            >
+            </el-option>
+          </el-select>
         </el-form-item>
         <el-form-item label="部门" prop="deptId">
           <el-cascader
@@ -182,11 +191,21 @@
 <script>
 import { listCar, getCar, delCar, addCar, updateCar } from "@/api/system/car";
 import { deptTreeSelect } from "@/api/system/log";
+import { getProject } from "@/api/system/project";
+import { listUser } from "@/api/system/user";
 
 export default {
   name: "Car",
   data() {
     return {
+      dateRange: [],
+      queryUserParams: {
+        pageNum: 1,
+        pageSize: 9999,
+        deptId: null,
+      },
+      userLists: [],
+      projectInfo: {},
       carTypes: [
         {
           value: 1,
@@ -254,7 +273,22 @@ export default {
       // 表单参数
       form: {},
       // 表单校验
-      rules: {},
+      rules: {
+        carTime: [
+          { required: true, message: "请选择用车日期", trigger: "blur" },
+        ],
+        carNum: [{ required: true, message: "请输入车牌号", trigger: "blur" }],
+        carType: [
+          { required: true, message: "请选择用车类型", trigger: "blur" },
+        ],
+        timeType: [
+          { required: true, message: "请选择时间段", trigger: "blur" },
+        ],
+        carUserId: [
+          { required: true, message: "请选择负责人", trigger: "blur" },
+        ],
+        deptId: [{ required: true, message: "请选择部门", trigger: "blur" }],
+      },
     };
   },
   created() {
@@ -263,6 +297,15 @@ export default {
       this.getList();
     }
     this.getDeptTree();
+    getProject(projectId).then((response) => {
+      this.projectInfo = response.data;
+    });
+
+    listUser(this.addDateRange(this.queryUserParams, this.dateRange)).then(
+      (response) => {
+        this.userLists = response.rows;
+      }
+    );
   },
   methods: {
     handleChangeDept(value) {

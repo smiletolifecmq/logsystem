@@ -10,6 +10,7 @@ import com.kcylog.system.domain.SysProjectCar;
 import com.kcylog.system.service.ISysProjectCarService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.access.prepost.PreAuthorize;
+import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.bind.annotation.*;
 
 import javax.servlet.http.HttpServletResponse;
@@ -68,9 +69,11 @@ public class SysProjectCarController extends BaseController
      */
     @PreAuthorize("@ss.hasPermi('system:car:add')")
     @Log(title = "项目车辆使用情况登记", businessType = BusinessType.INSERT)
+    @Transactional
     @PostMapping
     public AjaxResult add(@RequestBody SysProjectCar sysProjectCar)
     {
+
         return toAjax(sysProjectCarService.insertSysProjectCar(sysProjectCar));
     }
 

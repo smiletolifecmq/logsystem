@@ -220,11 +220,7 @@
 </style>
 
 <script>
-import {
-  listProjectOperate,
-  getProject,
-  updateProjectValue,
-} from "@/api/system/project";
+import { listProject, getProject } from "@/api/system/project";
 import elDragDialog from "@/api/components/el-drag";
 
 export default {
@@ -299,7 +295,7 @@ export default {
     /** 查询项目列表 */
     getList() {
       this.loading = true;
-      listProjectOperate(this.queryParams).then((response) => {
+      listProject(this.queryParams).then((response) => {
         this.projectList = response.rows;
         this.total = response.total;
         this.loading = false;
