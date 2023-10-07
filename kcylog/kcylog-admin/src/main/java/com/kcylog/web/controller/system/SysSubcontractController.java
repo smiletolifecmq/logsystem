@@ -42,8 +42,6 @@ public class SysSubcontractController extends BaseController
     final int PassStatus = 2;
     final int NoPassStatus = 3;
 
-    final Integer SubcontractType = 2;
-
     @Autowired
     private ISysSubcontractService sysSubcontractService;
 
@@ -52,9 +50,6 @@ public class SysSubcontractController extends BaseController
 
     @Autowired
     private ISysSubcontractProcessService sysSubcontractProcessService;
-
-    @Autowired
-    private ISysProjectRelationService sysProjectRelationService;
 
     @Autowired
     private ISysReviewService sysReviewService;
@@ -306,11 +301,6 @@ public class SysSubcontractController extends BaseController
             subcontractProcess.add(subcontract);
         }
         int result = sysSubcontractProcessService.insertSysSubcontractProcessBatch(subcontractProcess);
-        SysProjectRelation projectRelation = new SysProjectRelation();
-        projectRelation.setProjectId(sysSubcontract.getProjectId());
-        projectRelation.setReviewType(SubcontractType);
-        projectRelation.setReviewId(sysSubcontract.getSubcontractId());
-        sysProjectRelationService.insertSysProjectRelation(projectRelation);
         return toAjax(result);
     }
 
@@ -320,13 +310,6 @@ public class SysSubcontractController extends BaseController
     @Log(title = "分包", businessType = BusinessType.UPDATE)
     @PutMapping
     public AjaxResult edit(@RequestBody SysSubcontract sysSubcontract) throws JsonProcessingException {
-        SysProjectRelation projectRelation = new SysProjectRelation();
-        projectRelation.setProjectId(sysSubcontract.getProjectId());
-        projectRelation.setReviewType(SubcontractType);
-        projectRelation.setReviewId(sysSubcontract.getSubcontractId());
-        sysProjectRelationService.deleteByReviewId(projectRelation);
-        sysProjectRelationService.insertSysProjectRelation(projectRelation);
-
         ObjectMapper mapper = new ObjectMapper();
         String cooperationUnit = mapper.writeValueAsString(sysSubcontract.getCooperationUnitJson());
         sysSubcontract.setCooperationUnit(cooperationUnit);
@@ -341,11 +324,6 @@ public class SysSubcontractController extends BaseController
 	@DeleteMapping("/{subcontractIds}")
     public AjaxResult remove(@PathVariable Long[] subcontractIds)
     {
-        SysProjectRelation projectRelation = new SysProjectRelation();
-        projectRelation.setReviewType(SubcontractType);
-        projectRelation.setReviewId(subcontractIds[0]);
-        sysProjectRelationService.deleteByReviewId(projectRelation);
-
         sysSubcontractService.deleteSysSubcontractBySubcontractIds(subcontractIds);
         int result = sysSubcontractProcessService.deleteSysSubcontractProcessByReviewIds(subcontractIds);
         return toAjax(result);
@@ -645,7 +623,9 @@ public class SysSubcontractController extends BaseController
 
     @GetMapping(value = "/getSubcontractReview/{subcontractId}")
     public AjaxResult getSubcontractReview(@PathVariable("subcontractId") Long subcontractId) {
-        SysReview review = sysReviewService.getSubcontractReview(subcontractId);
+        SysSubcontract sysSubcontract =  sysSubcontractService.selectSysSubcontractBySubcontractId(subcontractId);
+        String serialNum = sysSubcontract.getSerialNum();
+        SysReview review = sysReviewService.getSubcontractReview(serialNum);
         return success(review);
     }
 }

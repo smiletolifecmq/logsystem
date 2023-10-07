@@ -32,35 +32,6 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
         <association property="dept" column="dept_name" javaType="SysDept" resultMap="sysReviewDeptResult"/>
         <association property="user" column="user_name" javaType="SysUser" resultMap="sysReviewUserResult"/>
         <association property="reviewEmployee" javaType="java.util.List" resultMap="sysReviewReviewEmployeeResult"/>
-        <association property="projectRelation" column="projectId" javaType="SysProjectRelation" resultMap="SysProjectRelationResult"/>
-        <association property="project" javaType="SysProject" resultMap="SysProjectResult"/>
-    </resultMap>
-
-    <resultMap type="SysProject" id="SysProjectResult">
-        <result property="projectId"    column="project_id"    />
-        <result property="projectNameAlias"    column="project_name_alias"    />
-        <result property="projectNum"    column="project_num"    />
-        <result property="projectType"    column="project_type"    />
-        <result property="registerTime"    column="register_time"    />
-        <result property="receptionist"    column="receptionist"    />
-        <result property="workloadAlias"    column="workload_alias"    />
-        <result property="userNameAlias"    column="user_name_alias"    />
-        <result property="requesterAlias"    column="requester_alias"    />
-        <result property="projectStartAlias"    column="project_start_alias"    />
-        <result property="projectEndAlias"    column="project_end_alias"    />
-        <result property="oneCheck"    column="one_check"    />
-        <result property="twoCheck"    column="two_check"    />
-        <result property="noticeTime"    column="notice_time"    />
-        <result property="projectTime"    column="project_time"    />
-        <result property="deliveryTime"    column="delivery_time"    />
-        <result property="projectMoneyAlias"    column="project_money_alias"    />
-        <result property="operate"    column="operate"    />
-        <result property="operateUser"    column="operate_user"    />
-        <result property="operateTime"    column="operate_time"    />
-    </resultMap>
-
-    <resultMap type="SysProjectRelation" id="SysProjectRelationResult">
-        <result property="projectId"    column="project_id"    />
     </resultMap>
 
     <resultMap type="SysReviewEmployee" id="sysReviewReviewEmployeeResult">
@@ -83,11 +54,9 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 
 
     <sql id="selectSysReviewVo">
-        select r.*, d.dept_name, u.user_name, p.project_id, pp.* from sys_review r
+        select r.*, d.dept_name, u.user_name from sys_review r
         inner join sys_dept d on r.dept_id = d.dept_id
         inner join sys_user u on r.user_id = u.user_id
-        left join sys_project_relation p on r.review_id = p.review_id and p.review_type = 1
-        left join sys_project pp on p.project_id = pp.project_id
     </sql>
 
     <select id="selectSysReviewList" parameterType="SysReview" resultMap="SysReviewResult">
@@ -354,10 +323,8 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
         limit 1
     </select>
 
-    <select id="getSubcontractReview" parameterType="Long" resultMap="SysReviewResult">
-        SELECT c.*, u.user_name FROM sys_project_relation a
-        INNER JOIN sys_project_relation b ON a.project_id = b.project_id AND a.review_id = #{subcontractId} AND a.review_type = 2
-        INNER JOIN sys_review c ON b.review_id = c.review_id
-        INNER JOIN sys_user u on u.user_id = c.user_id  LIMIT 1
+    <select id="getSubcontractReview" parameterType="String" resultMap="SysReviewResult">
+        SELECT a.*, u.user_name FROM sys_review a
+        INNER JOIN sys_user u on u.user_id = a.user_id  where a.serial_num = #{serialNum} LIMIT 1
     </select>
 </mapper>

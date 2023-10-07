@@ -88,5 +88,5 @@ public interface ISysReviewService
 
     public SysReview getReviewBySerialNum(String serialNum);
 
-    public SysReview getSubcontractReview(Long subcontractId);
+    public SysReview getSubcontractReview(String serialNum);
 }

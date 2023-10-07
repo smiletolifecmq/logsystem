@@ -138,8 +138,8 @@ public class SysSubcontractServiceImpl implements ISysSubcontractService
     }
 
     @Override
-    public SysSubcontract getReviewSubcontract(Long reviewId)
+    public SysSubcontract getReviewSubcontract(String serialNum)
     {
-        return sysSubcontractMapper.getReviewSubcontract(reviewId);
+        return sysSubcontractMapper.getReviewSubcontract(serialNum);
     }
 }

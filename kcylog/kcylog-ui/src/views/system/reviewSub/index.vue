@@ -308,6 +308,22 @@
             clearable
           ></el-autocomplete>
         </el-form-item> -->
+        <el-form-item label="关联项目" prop="projectId">
+          <el-select
+            v-model="form.projectId"
+            placeholder="请选择关联项目"
+            filterable
+          >
+            <el-option
+              v-for="item in listProjectLocal"
+              :key="item.projectId"
+              :label="item.projectNum"
+              :value="item.projectId"
+              :disabled="item.disabled"
+            >
+            </el-option>
+          </el-select>
+        </el-form-item>
         <el-form-item label="工程编号" prop="serialNum">
           <el-input v-model="form.serialNum" placeholder="请输入编号" />
         </el-form-item>
@@ -458,6 +474,22 @@
       :close-on-press-escape="false"
     >
       <el-form ref="formInfo" :model="formInfo" label-width="80px">
+        <el-form-item label="关联项目" prop="projectId">
+          <el-select
+            v-model="formInfo.projectId"
+            disabled
+            placeholder="请选择关联项目"
+            class="custom-input"
+          >
+            <el-option
+              v-for="item in listProjectLocal"
+              :key="item.projectId"
+              :label="item.projectNum"
+              :value="item.projectId"
+            >
+            </el-option>
+          </el-select>
+        </el-form-item>
         <div class="form-container">
           <el-form-item label="工程编号" prop="serialNum">
             <el-input
@@ -771,6 +803,7 @@ import {
   getReviewProcessList,
   getReviewBySerialNum,
 } from "@/api/system/review";
+import { listProject, listProjectSelected } from "@/api/system/project";
 import { listUser } from "@/api/system/user";
 import { fetchProjectData } from "@/utils/otherItems";
 
@@ -778,6 +811,8 @@ export default {
   name: "Review",
   data() {
     return {
+      listProjectLocalSelected: [],
+      listProjectLocal: [],
       projectList: [],
       showProjectSearch: true,
       projectInfo: "",
@@ -919,8 +954,27 @@ export default {
   computed: {},
   created() {
     this.getList();
+    this.getProjectListLocal();
   },
   methods: {
+    getProjectListLocal() {
+      listProject(this.queryProjectListParams).then((response) => {
+        this.listProjectLocal = response.rows;
+        listProjectSelected(1).then((response) => {
+          this.listProjectLocalSelected = response.rows;
+          const projectIdMap = new Map();
+          for (var i = 0; i < this.listProjectLocalSelected.length; i++) {
+            projectIdMap.set(this.listProjectLocalSelected[i].projectId, true);
+          }
+
+          for (var j = 0; j < this.listProjectLocal.length; j++) {
+            if (projectIdMap.has(this.listProjectLocal[j].projectId)) {
+              this.listProjectLocal[j].disabled = true;
+            }
+          }
+        });
+      });
+    },
     checkImportProject(row) {
       getReviewBySerialNum(row.XMBH).then((response) => {
         if (response.data != null) {

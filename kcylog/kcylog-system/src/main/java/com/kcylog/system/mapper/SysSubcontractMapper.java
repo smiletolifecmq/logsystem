@@ -74,5 +74,5 @@ public interface SysSubcontractMapper
 
     public SysSubcontract getSubcontractBySerialNum(String serialNum);
 
-    public SysSubcontract getReviewSubcontract(Long reviewId);
+    public SysSubcontract getReviewSubcontract(String serialNum);
 }

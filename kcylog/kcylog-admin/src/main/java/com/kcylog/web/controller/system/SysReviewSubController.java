@@ -513,14 +513,4 @@ public class SysReviewSubController extends BaseController
         return success(sysReviewSubService.getReviewBySerialNum(serialNum));
     }
 
-    @GetMapping(value = "/getReviewSubcontract/{reviewId}")
-    public AjaxResult getReviewSubcontract(@PathVariable("reviewId") Long reviewId) throws JsonProcessingException {
-        SysSubcontract subcontract = sysSubcontractService.getReviewSubcontract(reviewId);
-        if (subcontract != null){
-            ObjectMapper objectMapper = new ObjectMapper();
-            List<String> cooperationUnitJson = objectMapper.readValue(subcontract.getCooperationUnit(), new TypeReference<List<String>>(){});
-            subcontract.setCooperationUnitJson(cooperationUnitJson);
-        }
-        return success(subcontract);
-    }
 }
