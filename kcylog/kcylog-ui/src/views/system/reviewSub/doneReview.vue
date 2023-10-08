@@ -64,7 +64,7 @@
       <el-table-column label="工程编号" align="center" prop="serialNum" />
       <el-table-column label="项目名称" align="center" prop="projectName" />
       <el-table-column label="委托单位" align="center" prop="requester" />
-      <el-table-column label="分包情况" align="center" prop="subcontract">
+      <!-- <el-table-column label="分包情况" align="center" prop="subcontract">
         <template slot-scope="scope">
           <span v-if="scope.row.subcontract === 1">是</span>
           <span v-else-if="scope.row.subcontract === 2">否</span>
@@ -72,7 +72,7 @@
         </template>
       </el-table-column>
       <el-table-column label="雇工人数" align="center" prop="peopleNum" />
-      <el-table-column label="雇工金额" align="center" prop="budgetMoney" />
+      <el-table-column label="雇工金额" align="center" prop="budgetMoney" /> -->
       <el-table-column label="负责人" align="center" prop="user.userName" />
       <el-table-column label="部门" align="center" prop="dept.deptName" />
       <el-table-column

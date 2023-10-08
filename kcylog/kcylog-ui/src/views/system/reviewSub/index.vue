@@ -114,7 +114,7 @@
       <el-table-column label="工程编号" align="center" prop="serialNum" />
       <el-table-column label="项目名称" align="center" prop="projectName" />
       <el-table-column label="委托单位" align="center" prop="requester" />
-      <el-table-column label="项目金额" align="center" prop="porjectMoney" />
+      <!-- <el-table-column label="项目金额" align="center" prop="porjectMoney" />
       <el-table-column label="工作量" align="center" prop="workload" />
       <el-table-column label="分包情况" align="center" prop="subcontract">
         <template slot-scope="scope">
@@ -123,7 +123,7 @@
           <span v-else></span>
         </template>
       </el-table-column>
-      <el-table-column label="雇工金额" align="center" prop="budgetMoney" />
+      <el-table-column label="雇工金额" align="center" prop="budgetMoney" /> -->
       <el-table-column label="负责人" align="center" prop="user.userName" />
       <el-table-column label="部门" align="center" prop="dept.deptName" />
       <!-- <el-table-column label="审核状态" align="center" prop="status">
@@ -135,7 +135,7 @@
           <span v-else>其他状态</span>
         </template>
       </el-table-column> -->
-      <el-table-column label="人数" align="center" prop="peopleNum" />
+      <!-- <el-table-column label="人数" align="center" prop="peopleNum" />
       <el-table-column
         label="预估雇工工作开始时间"
         align="center"
@@ -174,7 +174,7 @@
         <template slot-scope="scope">
           <span>{{ parseTime(scope.row.createTime) }}</span>
         </template>
-      </el-table-column>
+      </el-table-column> -->
       <el-table-column
         label="操作"
         align="center"
@@ -292,171 +292,174 @@
     <el-dialog
       :title="title"
       :visible.sync="open"
-      width="600px"
+      width="1000px"
       append-to-body
       :close-on-click-modal="false"
       :close-on-press-escape="false"
     >
       <el-form ref="form" :model="form" :rules="rules" label-width="80px">
-        <!-- <el-form-item label="关联项目" prop="userId">
-          <el-autocomplete
-            v-model="form.userId"
-            :fetch-suggestions="querySearchReviewer"
-            placeholder="请选择项目"
-            @select="selectReviewer"
-            @clear="clearReviewer"
-            clearable
-          ></el-autocomplete>
-        </el-form-item> -->
-        <el-form-item label="关联项目" prop="projectId">
-          <el-select
-            v-model="form.projectId"
-            placeholder="请选择关联项目"
-            filterable
-          >
-            <el-option
-              v-for="item in listProjectLocal"
-              :key="item.projectId"
-              :label="item.projectNum"
-              :value="item.projectId"
-              :disabled="item.disabled"
-            >
-            </el-option>
-          </el-select>
-        </el-form-item>
-        <el-form-item label="工程编号" prop="serialNum">
-          <el-input v-model="form.serialNum" placeholder="请输入编号" />
-        </el-form-item>
-        <el-form-item label="项目名称" prop="projectName">
-          <el-input v-model="form.projectName" placeholder="请输入项目名称" />
-        </el-form-item>
-        <el-form-item label="委托单位" prop="requester">
-          <el-input v-model="form.requester" placeholder="请输入委托单位" />
-        </el-form-item>
-        <el-form-item label="项目金额" prop="porjectMoney">
-          <el-input-number
-            v-model="form.porjectMoney"
-            :precision="2"
-            :step="0.1"
-            :min="0.0"
-            placeholder="请输入项目金额"
-          />
-        </el-form-item>
-        <el-form-item label="工作量" prop="workload">
-          <el-input
-            v-model="form.workload"
-            type="textarea"
-            placeholder="请输入内容"
-          />
-        </el-form-item>
-        <el-form-item label="分包情况" prop="subcontract">
-          <el-select v-model="form.subcontract" placeholder="请选择">
-            <el-option
-              label="是"
-              :value="1"
-              :selected="form.subcontract === 1"
-            ></el-option>
-            <el-option
-              label="否"
-              :value="2"
-              :selected="form.subcontract === 2"
-            ></el-option>
-          </el-select>
-        </el-form-item>
+        <el-collapse v-model="activeNames">
+          <el-collapse-item title="项目详情" name="1">
+            <el-form-item label="关联项目" prop="projectId">
+              <el-select
+                v-model="form.projectId"
+                placeholder="请选择关联项目"
+                filterable
+              >
+                <el-option
+                  v-for="item in listProjectLocal"
+                  :key="item.projectId"
+                  :label="item.projectNum"
+                  :value="item.projectId"
+                  :disabled="item.disabled"
+                >
+                </el-option>
+              </el-select>
+            </el-form-item>
+          </el-collapse-item>
+          <el-collapse-item title="雇工详情" name="2">
+            <el-form-item label="工程编号" prop="serialNum">
+              <el-input v-model="form.serialNum" placeholder="请输入编号" />
+            </el-form-item>
+            <el-form-item label="项目名称" prop="projectName">
+              <el-input
+                v-model="form.projectName"
+                placeholder="请输入项目名称"
+              />
+            </el-form-item>
+            <el-form-item label="委托单位" prop="requester">
+              <el-input v-model="form.requester" placeholder="请输入委托单位" />
+            </el-form-item>
+            <el-form-item label="项目金额" prop="porjectMoney">
+              <el-input-number
+                v-model="form.porjectMoney"
+                :precision="2"
+                :step="0.1"
+                :min="0.0"
+                placeholder="请输入项目金额"
+              />
+            </el-form-item>
+            <el-form-item label="工作量" prop="workload">
+              <el-input
+                v-model="form.workload"
+                type="textarea"
+                placeholder="请输入内容"
+              />
+            </el-form-item>
+            <el-form-item label="分包情况" prop="subcontract">
+              <el-select v-model="form.subcontract" placeholder="请选择">
+                <el-option
+                  label="是"
+                  :value="1"
+                  :selected="form.subcontract === 1"
+                ></el-option>
+                <el-option
+                  label="否"
+                  :value="2"
+                  :selected="form.subcontract === 2"
+                ></el-option>
+              </el-select>
+            </el-form-item>
 
-        <el-form-item label="雇工人数" prop="peopleNum">
-          <el-input-number
-            v-model="form.peopleNum"
-            placeholder="请预估雇工人数"
-            :min="0"
-            @change="handleTimeChange"
-          />
-        </el-form-item>
-        <el-form-item label="雇工内容" prop="employmentReason">
-          <el-input
-            v-model="form.employmentReason"
-            type="textarea"
-            placeholder="未填写"
-          />
-        </el-form-item>
-        <el-form-item label="雇工开始时间" prop="startTime">
-          <el-date-picker
-            clearable
-            v-model="form.startTime"
-            type="date"
-            value-format="yyyy-MM-dd"
-            placeholder="请选择预估雇工工作开始时间"
-            @change="handleTimeChange"
-          >
-          </el-date-picker>
+            <el-form-item label="雇工人数" prop="peopleNum">
+              <el-input-number
+                v-model="form.peopleNum"
+                placeholder="请预估雇工人数"
+                :min="0"
+                @change="handleTimeChange"
+              />
+            </el-form-item>
+            <el-form-item label="雇工内容" prop="employmentReason">
+              <el-input
+                v-model="form.employmentReason"
+                type="textarea"
+                placeholder="未填写"
+              />
+            </el-form-item>
+            <el-form-item label="雇工开始时间" prop="startTime">
+              <el-date-picker
+                clearable
+                v-model="form.startTime"
+                type="date"
+                value-format="yyyy-MM-dd"
+                placeholder="请选择预估雇工工作开始时间"
+                @change="handleTimeChange"
+              >
+              </el-date-picker>
 
-          <el-select
-            v-model="startAmPm"
-            placeholder="请选择"
-            @change="handleTimeChange"
-          >
-            <el-option label="上午" value="12:00:00"></el-option>
-            <el-option label="下午" value="23:59:59"></el-option>
-          </el-select>
-        </el-form-item>
-        <el-form-item label="雇工结束时间" prop="endTime">
-          <el-date-picker
-            clearable
-            v-model="form.endTime"
-            type="date"
-            value-format="yyyy-MM-dd"
-            placeholder="请选择预估雇工工作结束时间"
-            @change="handleTimeChange"
-          >
-          </el-date-picker>
-          <el-select
-            v-model="endAmPm"
-            placeholder="请选择"
-            @change="handleTimeChange"
-          >
-            <el-option label="上午" value="12:00:00"></el-option>
-            <el-option label="下午" value="23:59:59"></el-option>
-          </el-select>
-        </el-form-item>
-        <el-form-item label="预估天数" prop="budgetDay">
-          <el-input-number
-            :precision="1"
-            :step="0.5"
-            :min="0.0"
-            v-model="form.budgetDay"
-            placeholder="请输入预估天数"
-            @change="handleTimeChange(1)"
-          />
-        </el-form-item>
-        <el-form-item label="预算金额" prop="budgetMoney">
-          <el-input
-            v-model="form.budgetMoney"
-            placeholder="请输入预算金额"
-            disabled
-          />
-        </el-form-item>
-        <div class="form-container">
-          <el-form-item label="项目工期" prop="projectStart">
-            <el-date-picker
-              clearable
-              v-model="form.projectStart"
-              type="date"
-              value-format="yyyy-MM-dd"
-              placeholder="请选择工期开始时间"
-            >
-            </el-date-picker>
-          </el-form-item>
-          <el-form-item label="" style="margin-left: -100px" prop="projectEnd">
-            <el-date-picker
-              clearable
-              v-model="form.projectEnd"
-              type="date"
-              value-format="yyyy-MM-dd"
-              placeholder="请选择工期结束时间"
-            >
-            </el-date-picker>
-          </el-form-item>
-        </div>
+              <el-select
+                v-model="startAmPm"
+                placeholder="请选择"
+                @change="handleTimeChange"
+              >
+                <el-option label="上午" value="12:00:00"></el-option>
+                <el-option label="下午" value="23:59:59"></el-option>
+              </el-select>
+            </el-form-item>
+            <el-form-item label="雇工结束时间" prop="endTime">
+              <el-date-picker
+                clearable
+                v-model="form.endTime"
+                type="date"
+                value-format="yyyy-MM-dd"
+                placeholder="请选择预估雇工工作结束时间"
+                @change="handleTimeChange"
+              >
+              </el-date-picker>
+              <el-select
+                v-model="endAmPm"
+                placeholder="请选择"
+                @change="handleTimeChange"
+              >
+                <el-option label="上午" value="12:00:00"></el-option>
+                <el-option label="下午" value="23:59:59"></el-option>
+              </el-select>
+            </el-form-item>
+            <el-form-item label="预估天数" prop="budgetDay">
+              <el-input-number
+                :precision="1"
+                :step="0.5"
+                :min="0.0"
+                v-model="form.budgetDay"
+                placeholder="请输入预估天数"
+                @change="handleTimeChange(1)"
+              />
+            </el-form-item>
+            <el-form-item label="预算金额" prop="budgetMoney">
+              <el-input
+                v-model="form.budgetMoney"
+                placeholder="请输入预算金额"
+                disabled
+              />
+            </el-form-item>
+            <div class="form-container">
+              <el-form-item label="项目工期" prop="projectStart">
+                <el-date-picker
+                  clearable
+                  v-model="form.projectStart"
+                  type="date"
+                  value-format="yyyy-MM-dd"
+                  placeholder="请选择工期开始时间"
+                >
+                </el-date-picker>
+              </el-form-item>
+              <el-form-item
+                label=""
+                style="margin-left: -100px"
+                prop="projectEnd"
+              >
+                <el-date-picker
+                  clearable
+                  v-model="form.projectEnd"
+                  type="date"
+                  value-format="yyyy-MM-dd"
+                  placeholder="请选择工期结束时间"
+                >
+                </el-date-picker>
+              </el-form-item>
+            </div>
+          </el-collapse-item>
+        </el-collapse>
       </el-form>
       <div slot="footer" class="dialog-footer">
         <el-button type="primary" @click="submitForm">确 定</el-button>
@@ -811,6 +814,7 @@ export default {
   name: "Review",
   data() {
     return {
+      activeNames: ["1", "2"],
       listProjectLocalSelected: [],
       listProjectLocal: [],
       projectList: [],
@@ -924,27 +928,6 @@ export default {
         requester: [
           { required: true, message: "委托单位不能为空", trigger: "blur" },
         ],
-        // porjectMoney: [
-        //   { required: true, message: "项目金额不能为空", trigger: "blur" },
-        // ],
-        peopleNum: [
-          { required: true, message: "人数不能为空", trigger: "blur" },
-        ],
-        title: [
-          { required: true, message: "配置标题不能为空", trigger: "blur" },
-        ],
-        budgetDay: [
-          { required: true, message: "请填写预估天数", trigger: "blur" },
-        ],
-        budgetMoney: [
-          { required: true, message: "请填写预估金额", trigger: "blur" },
-        ],
-        startTime: [
-          { required: true, message: "请选择开始时间", trigger: "change" },
-        ],
-        endTime: [
-          { required: true, message: "请选择结束时间", trigger: "change" },
-        ],
         projectId: [
           { required: true, message: "请选择关联项目", trigger: "change" },
         ],
@@ -1007,33 +990,6 @@ export default {
         .catch((error) => {
           this.$message.error("请求项目管理数据失败～");
         });
-
-      // let res = {
-      //   total: 1000, //总行数
-      //   rows: [
-      //     {
-      //       XMBH: "项目编号1",
-      //       XMMC: "项目名称1",
-      //       GCNR: "工作内容1",
-      //       WTDW: "委托单位1",
-      //       GZL: "工作量1",
-      //       YSJE: 0,
-      //       XMKSSJ: "2023-08-08",
-      //       XMJSSJ: "2023-08-14",
-      //     },
-      //     {
-      //       XMBH: "项目编号2",
-      //       XMMC: "项目名称2",
-      //       GCNR: "工作内容2",
-      //       WTDW: "委托单位2",
-      //       GZL: "工作量2",
-      //       YSJE: 260,
-      //     },
-      //   ],
-      // };
-      // this.projectList = res.rows;
-      // this.projectTotal = res.total;
-      // this.loading = false;
     },
     showEmployeeButton(finalTime, status, finalSecondStatus) {
       if ((finalSecondStatus == 1 || status == 2) && status != 4) {
@@ -1310,19 +1266,49 @@ export default {
       this.$refs["form"].validate((valid) => {
         if (valid) {
           if (this.form.reviewId != null) {
-            let oldStartTime = this.form.startTime;
-            let oldEndTime = this.form.endTime;
-            this.form.startTime = this.form.startTime + " " + this.startAmPm;
-            this.form.endTime = this.form.endTime + " " + this.endAmPm;
-
-            if (this.form.startTime > this.form.endTime) {
-              this.$message({
-                showClose: true,
-                message: "开始时间不能大于结束时间～",
-                type: "error",
+            if (this.form.startTime != null && this.form.endTime != null) {
+              let oldStartTime = this.form.startTime;
+              let oldEndTime = this.form.endTime;
+              this.form.startTime = this.form.startTime + " " + this.startAmPm;
+              this.form.endTime = this.form.endTime + " " + this.endAmPm;
+              if (this.form.startTime > this.form.endTime) {
+                this.$message({
+                  showClose: true,
+                  message: "开始时间不能大于结束时间～",
+                  type: "error",
+                });
+                this.form.startTime = oldStartTime;
+                this.form.endTime = oldEndTime;
+              } else {
+                updateReview(this.form).then((response) => {
+                  this.$modal.msgSuccess("修改成功");
+                  this.open = false;
+                  this.openInfo = false;
+                  this.getList();
+                });
+              }
+            } else if (
+              this.form.startTime != null &&
+              this.form.endTime == null
+            ) {
+              this.form.startTime = this.form.startTime + " " + this.startAmPm;
+              updateReview(this.form).then((response) => {
+                this.$modal.msgSuccess("修改成功");
+                this.open = false;
+                this.openInfo = false;
+                this.getList();
               });
-              this.form.startTime = oldStartTime;
-              this.form.endTime = oldEndTime;
+            } else if (
+              this.form.startTime == null &&
+              this.form.endTime != null
+            ) {
+              this.form.endTime = this.form.endTime + " " + this.endAmPm;
+              updateReview(this.form).then((response) => {
+                this.$modal.msgSuccess("修改成功");
+                this.open = false;
+                this.openInfo = false;
+                this.getList();
+              });
             } else {
               updateReview(this.form).then((response) => {
                 this.$modal.msgSuccess("修改成功");
@@ -1332,19 +1318,49 @@ export default {
               });
             }
           } else {
-            let oldStartTime = this.form.startTime;
-            let oldEndTime = this.form.endTime;
-            this.form.startTime = this.form.startTime + " " + this.startAmPm;
-            this.form.endTime = this.form.endTime + " " + this.endAmPm;
-
-            if (this.form.startTime > this.form.endTime) {
-              this.$message({
-                showClose: true,
-                message: "开始时间不能大于结束时间～",
-                type: "error",
+            if (this.form.startTime != null && this.form.endTime != null) {
+              let oldStartTime = this.form.startTime;
+              let oldEndTime = this.form.endTime;
+              this.form.startTime = this.form.startTime + " " + this.startAmPm;
+              this.form.endTime = this.form.endTime + " " + this.endAmPm;
+              if (this.form.startTime > this.form.endTime) {
+                this.$message({
+                  showClose: true,
+                  message: "开始时间不能大于结束时间～",
+                  type: "error",
+                });
+                this.form.startTime = oldStartTime;
+                this.form.endTime = oldEndTime;
+              } else {
+                addReview(this.form).then((response) => {
+                  this.$modal.msgSuccess("新增成功");
+                  this.open = false;
+                  this.openInfo = false;
+                  this.getList();
+                });
+              }
+            } else if (
+              this.form.startTime != null &&
+              this.form.endTime == null
+            ) {
+              this.form.startTime = this.form.startTime + " " + this.startAmPm;
+              addReview(this.form).then((response) => {
+                this.$modal.msgSuccess("新增成功");
+                this.open = false;
+                this.openInfo = false;
+                this.getList();
               });
-              this.form.startTime = oldStartTime;
-              this.form.endTime = oldEndTime;
+            } else if (
+              this.form.startTime == null &&
+              this.form.endTime != null
+            ) {
+              this.form.endTime = this.form.endTime + " " + this.endAmPm;
+              addReview(this.form).then((response) => {
+                this.$modal.msgSuccess("新增成功");
+                this.open = false;
+                this.openInfo = false;
+                this.getList();
+              });
             } else {
               addReview(this.form).then((response) => {
                 this.$modal.msgSuccess("新增成功");
