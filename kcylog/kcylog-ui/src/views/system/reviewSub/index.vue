@@ -1109,8 +1109,11 @@ export default {
         this.form.projectEnd = projectInfo.projectEndAlias;
       }
 
-      if (projectInfo.workcontent != null && projectInfo.workcontent != "") {
-        this.form.workcontent = projectInfo.workcontent;
+      if (
+        projectInfo.workloadAlias != null &&
+        projectInfo.workloadAlias != ""
+      ) {
+        this.form.workcontent = projectInfo.workloadAlias;
       }
 
       if (
@@ -1127,8 +1130,8 @@ export default {
         this.form.cpEndTime = projectInfo.projectEndAlias;
       }
 
-      if (projectInfo.businessName != null && projectInfo.businessName != "") {
-        this.form.businessName = projectInfo.businessName;
+      if (projectInfo.projectType != null && projectInfo.projectType != "") {
+        this.form.businessName = projectInfo.projectType;
       }
     },
     getProjectListLocal() {
@@ -1429,6 +1432,7 @@ export default {
     /** 修改按钮操作 */
     handleUpdate(row) {
       this.reset();
+      this.activeNames = ["1", "2", "3"];
       const reviewId = row.reviewId || this.ids;
       getReview(reviewId).then((response) => {
         if (response.data.startTime != null && response.data.startTime != "") {
@@ -1486,6 +1490,7 @@ export default {
                   this.open = false;
                   this.openInfo = false;
                   this.getList();
+                  location.reload();
                 });
               }
             } else if (
@@ -1498,6 +1503,7 @@ export default {
                 this.open = false;
                 this.openInfo = false;
                 this.getList();
+                location.reload();
               });
             } else if (
               this.form.startTime == null &&
@@ -1509,6 +1515,7 @@ export default {
                 this.open = false;
                 this.openInfo = false;
                 this.getList();
+                location.reload();
               });
             } else {
               updateReview(this.form).then((response) => {
@@ -1516,6 +1523,7 @@ export default {
                 this.open = false;
                 this.openInfo = false;
                 this.getList();
+                location.reload();
               });
             }
           } else {
@@ -1538,6 +1546,7 @@ export default {
                   this.open = false;
                   this.openInfo = false;
                   this.getList();
+                  location.reload();
                 });
               }
             } else if (
@@ -1550,6 +1559,7 @@ export default {
                 this.open = false;
                 this.openInfo = false;
                 this.getList();
+                location.reload();
               });
             } else if (
               this.form.startTime == null &&
@@ -1561,6 +1571,7 @@ export default {
                 this.open = false;
                 this.openInfo = false;
                 this.getList();
+                location.reload();
               });
             } else {
               addReview(this.form).then((response) => {
@@ -1568,11 +1579,11 @@ export default {
                 this.open = false;
                 this.openInfo = false;
                 this.getList();
+                location.reload();
               });
             }
           }
         }
-        location.reload();
       });
     },
     /** 删除按钮操作 */

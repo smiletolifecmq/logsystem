@@ -117,7 +117,129 @@ public class SysReviewSub extends BaseEntity
 
     private Long projectId;
 
+    private Date lotTime;
+
+    private String businessName;
+
+    private String cooperationUnit;
+
+    private List<String> cooperationUnitJson;
+
+    private String winUnit;
+
+    private String workcontent;
+
+    private Long isPrint;
+
+    private Date cpStartTime;
+
+    private Date cpEndTime;
+
+    private Long subType;
+
+    private String subWorkload;
+
+    private BigDecimal subCost;
+
+
     private SysProject project;
+
+    public Date getLotTime() {
+        return lotTime;
+    }
+
+    public void setLotTime(Date lotTime) {
+        this.lotTime = lotTime;
+    }
+
+    public String getBusinessName() {
+        return businessName;
+    }
+
+    public void setBusinessName(String businessName) {
+        this.businessName = businessName;
+    }
+
+    public String getCooperationUnit() {
+        return cooperationUnit;
+    }
+
+    public void setCooperationUnit(String cooperationUnit) {
+        this.cooperationUnit = cooperationUnit;
+    }
+
+    public List<String> getCooperationUnitJson() {
+        return cooperationUnitJson;
+    }
+
+    public void setCooperationUnitJson(List<String> cooperationUnitJson) {
+        this.cooperationUnitJson = cooperationUnitJson;
+    }
+
+    public String getWinUnit() {
+        return winUnit;
+    }
+
+    public void setWinUnit(String winUnit) {
+        this.winUnit = winUnit;
+    }
+
+    public String getWorkcontent() {
+        return workcontent;
+    }
+
+    public void setWorkcontent(String workcontent) {
+        this.workcontent = workcontent;
+    }
+
+    public Long getIsPrint() {
+        return isPrint;
+    }
+
+    public void setIsPrint(Long isPrint) {
+        this.isPrint = isPrint;
+    }
+
+    public Date getCpStartTime() {
+        return cpStartTime;
+    }
+
+    public void setCpStartTime(Date cpStartTime) {
+        this.cpStartTime = cpStartTime;
+    }
+
+    public Date getCpEndTime() {
+        return cpEndTime;
+    }
+
+    public void setCpEndTime(Date cpEndTime) {
+        this.cpEndTime = cpEndTime;
+    }
+
+    public Long getSubType() {
+        return subType;
+    }
+
+    public void setSubType(Long subType) {
+        this.subType = subType;
+    }
+
+    public String getSubWorkload() {
+        return subWorkload;
+    }
+
+    public void setSubWorkload(String subWorkload) {
+        this.subWorkload = subWorkload;
+    }
+
+    public BigDecimal getSubCost() {
+        return subCost;
+    }
+
+    public void setSubCost(BigDecimal subCost) {
+        this.subCost = subCost;
+    }
+
 
     public SysProject getProject() {
         return project;

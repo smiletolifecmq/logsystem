@@ -29,6 +29,19 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
         <result property="createTime"    column="create_time"    />
         <result property="updateTime"    column="update_time"    />
         <result property="finalTime"    column="final_time"    />
+
+        <result property="lotTime"    column="lot_time"    />
+        <result property="businessName"    column="business_name"    />
+        <result property="cooperationUnit"    column="cooperation_unit"    />
+        <result property="winUnit"    column="win_unit"    />
+        <result property="workcontent"    column="workcontent"    />
+        <result property="isPrint"    column="is_print"    />
+        <result property="cpStartTime"    column="cp_start_time"    />
+        <result property="cpEndTime"    column="cp_end_time"    />
+        <result property="subType"    column="sub_type"    />
+        <result property="subCost"    column="sub_cost"    />
+        <result property="subWorkload"    column="sub_workload"    />
+
         <association property="dept" column="dept_name" javaType="SysDept" resultMap="SysReviewSubDeptResult"/>
         <association property="user" column="user_name" javaType="SysUser" resultMap="SysReviewSubUserResult"/>
         <association property="reviewEmployee" javaType="java.util.List" resultMap="SysReviewSubReviewEmployeeResult"/>
@@ -114,7 +127,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
         <include refid="selectSysReviewSubVo"/>
         where r.review_id = #{reviewId}
     </select>
-        
+
     <insert id="insertSysReviewSub" parameterType="SysReviewSub" useGeneratedKeys="true" keyProperty="reviewId">
         insert into sys_review_sub
         <trim prefix="(" suffix=")" suffixOverrides=",">
@@ -138,6 +151,19 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
             <if test="updateTime != null">update_time,</if>
             <if test="finalTime != null">final_time,</if>
             <if test="subcontract != null">subcontract,</if>
+
+            <if test="lotTime != null">lot_time,</if>
+            <if test="businessName != null">business_name,</if>
+            <if test="cooperationUnit != null">cooperation_unit,</if>
+            <if test="winUnit != null">win_unit,</if>
+            <if test="workcontent != null">workcontent,</if>
+            <if test="isPrint != null">is_print,</if>
+            <if test="cpStartTime != null">cp_start_time,</if>
+            <if test="cpEndTime != null">cp_end_time,</if>
+            <if test="subType != null">sub_type,</if>
+            <if test="subCost != null">sub_cost,</if>
+            <if test="subWorkload != null">sub_workload,</if>
+
          </trim>
         <trim prefix="values (" suffix=")" suffixOverrides=",">
             <if test="serialNum != null and serialNum != ''">#{serialNum},</if>
@@ -160,6 +186,19 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
             <if test="updateTime != null">#{updateTime},</if>
             <if test="finalTime != null">#{finalTime},</if>
             <if test="subcontract != null">#{subcontract},</if>
+
+            <if test="lotTime != null">#{lotTime},</if>
+            <if test="businessName != null">#{businessName},</if>
+            <if test="cooperationUnit != null">#{cooperationUnit},</if>
+            <if test="winUnit != null">#{winUnit},</if>
+            <if test="workcontent != null">#{workcontent},</if>
+            <if test="isPrint != null">#{isPrint},</if>
+            <if test="cpStartTime != null">#{cpStartTime},</if>
+            <if test="cpEndTime != null">#{cpEndTime},</if>
+            <if test="subType != null">#{subType},</if>
+            <if test="subCost != null">#{subCost},</if>
+            <if test="subWorkload != null">#{subWorkload},</if>
+
          </trim>
     </insert>
 
@@ -187,6 +226,19 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
             <if test="updateTime != null">update_time = #{updateTime},</if>
             <if test="finalTime != null">final_time = #{finalTime},</if>
             <if test="subcontract != null">subcontract = #{subcontract},</if>
+
+            <if test="lotTime != null">lot_time = #{lotTime},</if>
+            <if test="businessName != null">business_name = #{businessName},</if>
+            <if test="cooperationUnit != null">cooperation_unit = #{cooperationUnit},</if>
+            <if test="winUnit != null">win_unit = #{winUnit},</if>
+            <if test="workcontent != null">workcontent = #{workcontent},</if>
+            <if test="isPrint != null">is_print = #{isPrint},</if>
+            <if test="cpStartTime != null">cp_start_time = #{cpStartTime},</if>
+            <if test="cpEndTime != null">cp_end_time = #{cpEndTime},</if>
+            <if test="subType != null">sub_type = #{subType},</if>
+            <if test="subCost != null">sub_cost = #{subCost},</if>
+            <if test="subWorkload != null">sub_workload = #{subWorkload},</if>
+
         </trim>
         where review_id = #{reviewId}
     </update>

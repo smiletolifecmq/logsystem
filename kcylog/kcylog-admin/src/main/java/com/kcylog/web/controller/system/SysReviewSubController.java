@@ -1,5 +1,8 @@
 package com.kcylog.web.controller.system;
 
+import com.fasterxml.jackson.core.JsonProcessingException;
+import com.fasterxml.jackson.core.type.TypeReference;
+import com.fasterxml.jackson.databind.ObjectMapper;
 import com.kcylog.common.annotation.Log;
 import com.kcylog.common.core.controller.BaseController;
 import com.kcylog.common.core.domain.AjaxResult;
@@ -66,12 +69,19 @@ public class SysReviewSubController extends BaseController
      */
     @PreAuthorize("@ss.hasPermi('system:reviewSub:list')")
     @GetMapping("/list")
-    public TableDataInfo list(SysReviewSub sysReviewSub)
-    {
+    public TableDataInfo list(SysReviewSub sysReviewSub) throws JsonProcessingException {
         startPage();
         Long userId = SecurityUtils.getUserId();
         sysReviewSub.setUserId(userId);
         List<SysReviewSub> list = sysReviewSubService.selectSysReviewSubList(sysReviewSub);
+
+        for(SysReviewSub subcontract:list){
+            if (subcontract.getCooperationUnit() != "" && subcontract.getCooperationUnit() != null){
+                ObjectMapper objectMapper = new ObjectMapper();
+                List<String> cooperationUnitJson = objectMapper.readValue(subcontract.getCooperationUnit(), new TypeReference<List<String>>(){});
+                subcontract.setCooperationUnitJson(cooperationUnitJson);
+            }
+        }
 
         return getDataTable(list);
     }
@@ -167,9 +177,15 @@ public class SysReviewSubController extends BaseController
      * 获取审核单详细信息
      */
     @GetMapping(value = "/{reviewId}")
-    public AjaxResult getInfo(@PathVariable("reviewId") String reviewId)
-    {
+    public AjaxResult getInfo(@PathVariable("reviewId") String reviewId) throws JsonProcessingException {
         SysReviewSub review = sysReviewSubService.selectSysReviewSubByReviewId(reviewId);
+
+        if (review.getCooperationUnit() != null && review.getCooperationUnit() != ""){
+            ObjectMapper objectMapper = new ObjectMapper();
+            List<String> cooperationUnitJson = objectMapper.readValue(review.getCooperationUnit(), new TypeReference<List<String>>(){});
+            review.setCooperationUnitJson(cooperationUnitJson);
+        }
+
         if (review.getProjectRelation() != null){
             review.setProjectId(review.getProjectRelation().getProjectId());
         }
@@ -182,12 +198,18 @@ public class SysReviewSubController extends BaseController
     @Log(title = "审核单", businessType = BusinessType.INSERT)
     @Transactional
     @PostMapping
-    public AjaxResult add(@RequestBody SysReviewSub sysReviewSub)
-    {
+    public AjaxResult add(@RequestBody SysReviewSub sysReviewSub) throws JsonProcessingException {
         Long userId = SecurityUtils.getUserId();
         Long deptId = SecurityUtils.getDeptId();
         sysReviewSub.setUserId(userId);
         sysReviewSub.setDeptId(deptId);
+
+
+        if (sysReviewSub.getCooperationUnit() != null && sysReviewSub.getCooperationUnit() != ""){
+            ObjectMapper mapper = new ObjectMapper();
+            String cooperationUnit = mapper.writeValueAsString(sysReviewSub.getCooperationUnitJson());
+            sysReviewSub.setCooperationUnit(cooperationUnit);
+        }
         sysReviewSubService.insertSysReviewSub(sysReviewSub);
         List<SysProcessConfigInfo> list = sysProcessConfigInfoService.selectSysProcessConfigInfoListByDeptId(deptId);
         List<SysReviewSubProcess> reviewProcess = new ArrayList<>();
@@ -214,14 +236,18 @@ public class SysReviewSubController extends BaseController
     @Log(title = "审核单", businessType = BusinessType.UPDATE)
     @Transactional
     @PutMapping
-    public AjaxResult edit(@RequestBody SysReviewSub sysReviewSub)
-    {
+    public AjaxResult edit(@RequestBody SysReviewSub sysReviewSub) throws JsonProcessingException {
         SysProjectRelation projectRelation = new SysProjectRelation();
         projectRelation.setProjectId(sysReviewSub.getProjectId());
         projectRelation.setReviewType(HiredWorkerType);
         projectRelation.setReviewId(sysReviewSub.getReviewId());
         sysProjectRelationService.deleteByReviewId(projectRelation);
         sysProjectRelationService.insertSysProjectRelation(projectRelation);
+
+        ObjectMapper mapper = new ObjectMapper();
+        String cooperationUnit = mapper.writeValueAsString(sysReviewSub.getCooperationUnitJson());
+        sysReviewSub.setCooperationUnit(cooperationUnit);
+
 
         sysReviewSub.setStartEdit(0);
         return toAjax(sysReviewSubService.updateSysReviewSub(sysReviewSub));
