@@ -47,6 +47,8 @@ public class SysProject extends BaseEntity
     @Excel(name = "工程内容")
     private String workloadAlias;
 
+    private String workcontentAlias;
+
     /** 工程负责人 */
     @Excel(name = "工程负责人")
     private String userNameAlias;
@@ -107,6 +109,14 @@ public class SysProject extends BaseEntity
     private Date operateTime;
 
     private List<SysProjectValue> projectValue;
+
+    public String getWorkcontentAlias() {
+        return workcontentAlias;
+    }
+
+    public void setWorkcontentAlias(String workcontentAlias) {
+        this.workcontentAlias = workcontentAlias;
+    }
 
     public List<SysProjectValue> getProjectValue() {
         return projectValue;

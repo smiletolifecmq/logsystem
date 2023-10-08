@@ -69,7 +69,12 @@
       />
       <el-table-column label="项目编号" align="center" prop="projectNum" />
       <el-table-column label="项目类型" align="center" prop="projectType" />
-      <el-table-column label="工程内容" align="center" prop="workloadAlias" />
+      <el-table-column label="工作量" align="center" prop="workloadAlias" />
+      <el-table-column
+        label="工程内容"
+        align="center"
+        prop="workcontentAlias"
+      />
       <el-table-column label="工程负责人" align="center" prop="userNameAlias" />
       <el-table-column label="登记时间" align="center" prop="registerTime" />
       <el-table-column label="接待人" align="center" prop="receptionist" />
@@ -169,9 +174,16 @@
         <el-form-item label="接待人" prop="receptionist">
           <el-input v-model="form.receptionist" placeholder="请输入接待人" />
         </el-form-item>
-        <el-form-item label="工程内容" prop="workloadAlias">
+        <el-form-item label="工作量" prop="workloadAlias">
           <el-input
             v-model="form.workloadAlias"
+            type="textarea"
+            placeholder="请输入内容"
+          />
+        </el-form-item>
+        <el-form-item label="工程内容" prop="workcontentAlias">
+          <el-input
+            v-model="form.workcontentAlias"
             type="textarea"
             placeholder="请输入内容"
           />
@@ -275,9 +287,16 @@
             <el-descriptions-item>
               <template slot="label">
                 <i class="el-icon-document"></i>
-                工程内容
+                工作量
               </template>
               {{ form.workloadAlias }}
+            </el-descriptions-item>
+            <el-descriptions-item>
+              <template slot="label">
+                <i class="el-icon-document"></i>
+                工程内容
+              </template>
+              {{ form.workcontentAlias }}
             </el-descriptions-item>
             <el-descriptions-item>
               <template slot="label">

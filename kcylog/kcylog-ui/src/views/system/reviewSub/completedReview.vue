@@ -219,9 +219,16 @@
               <el-descriptions-item>
                 <template slot="label">
                   <i class="el-icon-document"></i>
-                  工程内容
+                  工作量
                 </template>
                 {{ formInfo.project.workloadAlias }}
+              </el-descriptions-item>
+              <el-descriptions-item>
+                <template slot="label">
+                  <i class="el-icon-document"></i>
+                  工程内容
+                </template>
+                {{ formInfo.project.workcontentAlias }}
               </el-descriptions-item>
               <el-descriptions-item>
                 <template slot="label">
@@ -286,13 +293,6 @@
                 </template>
                 {{ formInfo.project.deliveryTime }}
               </el-descriptions-item>
-              <el-descriptions-item>
-                <template slot="label">
-                  <i class="el-icon-time"></i>
-                  送达时间
-                </template>
-                {{ formInfo.project.deliveryTime }}
-              </el-descriptions-item>
             </el-descriptions>
           </div>
         </el-collapse-item>
@@ -310,7 +310,7 @@
                   </div>
 
                   <el-descriptions class="margin-top" :column="2" border>
-                    <el-descriptions-item>
+                    <!-- <el-descriptions-item>
                       <template slot="label"> 工程编号 </template>
                       {{ formInfo.serialNum }}
                     </el-descriptions-item>
@@ -325,7 +325,7 @@
                     <el-descriptions-item>
                       <template slot="label"> 委托单位 </template>
                       {{ formInfo.requester }}
-                    </el-descriptions-item>
+                    </el-descriptions-item> -->
                     <el-descriptions-item>
                       <template slot="label"> 工作量 </template>
                       {{ formInfo.workload }}
@@ -390,7 +390,7 @@
                   </div>
                   <div style="text-align: center">
                     <el-descriptions class="margin-top" :column="2" border>
-                      <el-descriptions-item>
+                      <!-- <el-descriptions-item>
                         <template slot="label"> 工程编号 </template>
                         {{ subcontractForm.serialNum }}
                       </el-descriptions-item>
@@ -409,7 +409,7 @@
                       <el-descriptions-item>
                         <template slot="label"> 委托单位 </template>
                         {{ subcontractForm.requester }}
-                      </el-descriptions-item>
+                      </el-descriptions-item> -->
                       <el-descriptions-item>
                         <template slot="label"> 工作内容 </template>
                         {{ subcontractForm.workcontent }}
@@ -423,7 +423,7 @@
                       </el-descriptions-item>
                       <el-descriptions-item>
                         <template slot="label"> 分包工作量 </template>
-                        {{ subcontractForm.workload }}
+                        {{ subcontractForm.subWorkload }}
                       </el-descriptions-item>
                       <el-descriptions-item>
                         <template slot="label"> 抽签单位 </template>

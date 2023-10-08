@@ -12,6 +12,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
         <result property="registerTime"    column="register_time"    />
         <result property="receptionist"    column="receptionist"    />
         <result property="workloadAlias"    column="workload_alias"    />
+        <result property="workcontentAlias"    column="workcontent_alias"    />
         <result property="userNameAlias"    column="user_name_alias"    />
         <result property="requesterAlias"    column="requester_alias"    />
         <result property="projectStartAlias"    column="project_start_alias"    />
@@ -66,6 +67,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
             <if test="registerTime != null and registerTime != ''">register_time,</if>
             <if test="receptionist != null and receptionist != ''">receptionist,</if>
             <if test="workloadAlias != null">workload_alias,</if>
+            <if test="workcontentAlias != null">workcontent_alias,</if>
             <if test="userNameAlias != null and userNameAlias != ''">user_name_alias,</if>
             <if test="requesterAlias != null and requesterAlias != ''">requester_alias,</if>
             <if test="projectStartAlias != null and projectStartAlias != ''">project_start_alias,</if>
@@ -89,6 +91,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
             <if test="registerTime != null and registerTime != ''">#{registerTime},</if>
             <if test="receptionist != null and receptionist != ''">#{receptionist},</if>
             <if test="workloadAlias != null">#{workloadAlias},</if>
+            <if test="workcontentAlias != null">#{workcontentAlias},</if>
             <if test="userNameAlias != null and userNameAlias != ''">#{userNameAlias},</if>
             <if test="requesterAlias != null and requesterAlias != ''">#{requesterAlias},</if>
             <if test="projectStartAlias != null and projectStartAlias != ''">#{projectStartAlias},</if>
@@ -116,6 +119,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
             <if test="registerTime != null and registerTime != ''">register_time = #{registerTime},</if>
             <if test="receptionist != null and receptionist != ''">receptionist = #{receptionist},</if>
             <if test="workloadAlias != null">workload_alias = #{workloadAlias},</if>
+            <if test="workcontentAlias != null">workcontent_alias = #{workcontentAlias},</if>
             <if test="userNameAlias != null and userNameAlias != ''">user_name_alias = #{userNameAlias},</if>
             <if test="requesterAlias != null and requesterAlias != ''">requester_alias = #{requesterAlias},</if>
             <if test="projectStartAlias != null and projectStartAlias != ''">project_start_alias = #{projectStartAlias},</if>
@@ -156,6 +160,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
             <if test="registerTime != null and registerTime != ''">register_time = #{registerTime},</if>
             <if test="receptionist != null and receptionist != ''">receptionist = #{receptionist},</if>
             <if test="workloadAlias != null">workload_alias = #{workloadAlias},</if>
+            <if test="workcontentAlias != null">workcontent_alias = #{workcontentAlias},</if>
             <if test="userNameAlias != null and userNameAlias != ''">user_name_alias = #{userNameAlias},</if>
             <if test="requesterAlias != null and requesterAlias != ''">requester_alias = #{requesterAlias},</if>
             <if test="projectStartAlias != null and projectStartAlias != ''">project_start_alias = #{projectStartAlias},</if>

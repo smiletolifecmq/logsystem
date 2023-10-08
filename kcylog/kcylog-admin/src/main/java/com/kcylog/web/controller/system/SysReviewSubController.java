@@ -205,7 +205,7 @@ public class SysReviewSubController extends BaseController
         sysReviewSub.setDeptId(deptId);
 
 
-        if (sysReviewSub.getCooperationUnit() != null && sysReviewSub.getCooperationUnit() != ""){
+        if (sysReviewSub.getCooperationUnitJson() != null ){
             ObjectMapper mapper = new ObjectMapper();
             String cooperationUnit = mapper.writeValueAsString(sysReviewSub.getCooperationUnitJson());
             sysReviewSub.setCooperationUnit(cooperationUnit);
@@ -244,11 +244,11 @@ public class SysReviewSubController extends BaseController
         sysProjectRelationService.deleteByReviewId(projectRelation);
         sysProjectRelationService.insertSysProjectRelation(projectRelation);
 
-        ObjectMapper mapper = new ObjectMapper();
-        String cooperationUnit = mapper.writeValueAsString(sysReviewSub.getCooperationUnitJson());
-        sysReviewSub.setCooperationUnit(cooperationUnit);
-
-
+        if(sysReviewSub.getCooperationUnitJson() != null){
+            ObjectMapper mapper = new ObjectMapper();
+            String cooperationUnit = mapper.writeValueAsString(sysReviewSub.getCooperationUnitJson());
+            sysReviewSub.setCooperationUnit(cooperationUnit);
+        }
         sysReviewSub.setStartEdit(0);
         return toAjax(sysReviewSubService.updateSysReviewSub(sysReviewSub));
     }

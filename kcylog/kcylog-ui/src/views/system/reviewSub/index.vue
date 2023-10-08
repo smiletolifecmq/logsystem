@@ -320,16 +320,25 @@
           </el-collapse-item>
           <el-collapse-item title="雇工详情" name="2">
             <el-form-item label="工程编号" prop="serialNum">
-              <el-input v-model="form.serialNum" placeholder="请输入编号" />
+              <el-input
+                v-model="form.serialNum"
+                placeholder="请输入编号"
+                disabled
+              />
             </el-form-item>
             <el-form-item label="项目名称" prop="projectName">
               <el-input
                 v-model="form.projectName"
                 placeholder="请输入项目名称"
+                disabled
               />
             </el-form-item>
             <el-form-item label="委托单位" prop="requester">
-              <el-input v-model="form.requester" placeholder="请输入委托单位" />
+              <el-input
+                v-model="form.requester"
+                placeholder="请输入委托单位"
+                disabled
+              />
             </el-form-item>
             <el-form-item label="项目金额" prop="porjectMoney">
               <el-input-number
@@ -462,18 +471,31 @@
           </el-collapse-item>
           <el-collapse-item title="分包详情" name="3">
             <el-form-item label="工程编号" prop="serialNum">
-              <el-input v-model="form.serialNum" placeholder="请输入工程编号" />
+              <el-input
+                v-model="form.serialNum"
+                placeholder="请输入工程编号"
+                disabled
+              />
             </el-form-item>
             <el-form-item label="项目名称" prop="projectName">
               <el-input
                 v-model="form.projectName"
                 placeholder="请输入项目名称"
+                disabled
               />
             </el-form-item>
             <el-form-item label="项目类型" prop="businessName">
               <el-input
                 v-model="form.businessName"
                 placeholder="请输入抽检项目类型"
+                disabled
+              />
+            </el-form-item>
+            <el-form-item label="委托单位" prop="requester">
+              <el-input
+                v-model="form.requester"
+                placeholder="请输入委托单位"
+                disabled
               />
             </el-form-item>
             <el-form-item label="工作内容">
@@ -636,9 +658,16 @@
               <el-descriptions-item>
                 <template slot="label">
                   <i class="el-icon-document"></i>
-                  工程内容
+                  工作量
                 </template>
                 {{ formInfo.project.workloadAlias }}
+              </el-descriptions-item>
+              <el-descriptions-item>
+                <template slot="label">
+                  <i class="el-icon-document"></i>
+                  工程内容
+                </template>
+                {{ formInfo.project.workcontentAlias }}
               </el-descriptions-item>
               <el-descriptions-item>
                 <template slot="label">
@@ -657,14 +686,14 @@
               <el-descriptions-item>
                 <template slot="label">
                   <i class="el-icon-time"></i>
-                  安排开始时间
+                  工期开始
                 </template>
                 {{ formInfo.project.projectStartAlias }}
               </el-descriptions-item>
               <el-descriptions-item>
                 <template slot="label">
                   <i class="el-icon-time"></i>
-                  安排结束时间
+                  工期结束
                 </template>
                 {{ formInfo.project.projectEndAlias }}
               </el-descriptions-item>
@@ -703,13 +732,6 @@
                 </template>
                 {{ formInfo.project.deliveryTime }}
               </el-descriptions-item>
-              <el-descriptions-item>
-                <template slot="label">
-                  <i class="el-icon-time"></i>
-                  送达时间
-                </template>
-                {{ formInfo.project.deliveryTime }}
-              </el-descriptions-item>
             </el-descriptions>
           </div>
         </el-collapse-item>
@@ -728,7 +750,7 @@
                   </div>
 
                   <el-descriptions class="margin-top" :column="2" border>
-                    <el-descriptions-item>
+                    <!-- <el-descriptions-item>
                       <template slot="label"> 工程编号 </template>
                       {{ formInfo.serialNum }}
                     </el-descriptions-item>
@@ -739,11 +761,11 @@
                     <el-descriptions-item>
                       <template slot="label"> 项目名称 </template>
                       {{ formInfo.projectName }}
-                    </el-descriptions-item>
-                    <el-descriptions-item>
+                    </el-descriptions-item>-->
+                    <!-- <el-descriptions-item>
                       <template slot="label"> 委托单位 </template>
                       {{ formInfo.requester }}
-                    </el-descriptions-item>
+                    </el-descriptions-item> -->
                     <el-descriptions-item>
                       <template slot="label"> 工作量 </template>
                       {{ formInfo.workload }}
@@ -809,26 +831,26 @@
 
                   <div style="text-align: center">
                     <el-descriptions class="margin-top" :column="2" border>
-                      <el-descriptions-item>
+                      <!-- <el-descriptions-item>
                         <template slot="label"> 工程编号 </template>
                         {{ subcontractForm.serialNum }}
-                      </el-descriptions-item>
-                      <el-descriptions-item>
+                      </el-descriptions-item> -->
+                      <!-- <el-descriptions-item>
                         <template slot="label"> 负责人 </template>
                         {{ subcontractForm.user.userName }}
-                      </el-descriptions-item>
-                      <el-descriptions-item>
+                      </el-descriptions-item> -->
+                      <!-- <el-descriptions-item>
                         <template slot="label"> 项目名称 </template>
                         {{ subcontractForm.projectName }}
-                      </el-descriptions-item>
-                      <el-descriptions-item>
+                      </el-descriptions-item> -->
+                      <!-- <el-descriptions-item>
                         <template slot="label"> 项目类型 </template>
                         {{ subcontractForm.businessName }}
-                      </el-descriptions-item>
-                      <el-descriptions-item>
+                      </el-descriptions-item> -->
+                      <!-- <el-descriptions-item>
                         <template slot="label"> 委托单位 </template>
                         {{ subcontractForm.requester }}
-                      </el-descriptions-item>
+                      </el-descriptions-item> -->
                       <el-descriptions-item>
                         <template slot="label"> 工作内容 </template>
                         {{ subcontractForm.workcontent }}
@@ -842,7 +864,7 @@
                       </el-descriptions-item>
                       <el-descriptions-item>
                         <template slot="label"> 分包工作量 </template>
-                        {{ subcontractForm.workload }}
+                        {{ subcontractForm.subWorkload }}
                       </el-descriptions-item>
                       <el-descriptions-item>
                         <template slot="label"> 抽签单位 </template>
@@ -1236,10 +1258,10 @@ export default {
       }
 
       if (
-        projectInfo.requesterAlias != null &&
-        projectInfo.requesterAlias != ""
+        projectInfo.workloadAlias != null &&
+        projectInfo.workloadAlias != ""
       ) {
-        this.form.workload = projectInfo.requesterAlias;
+        this.form.workload = projectInfo.workloadAlias;
       }
 
       if (
@@ -1264,10 +1286,10 @@ export default {
       }
 
       if (
-        projectInfo.workloadAlias != null &&
-        projectInfo.workloadAlias != ""
+        projectInfo.workcontentAlias != null &&
+        projectInfo.workcontentAlias != ""
       ) {
-        this.form.workcontent = projectInfo.workloadAlias;
+        this.form.workcontent = projectInfo.workcontentAlias;
       }
 
       if (

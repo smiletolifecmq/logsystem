@@ -147,7 +147,138 @@
       :close-on-press-escape="false"
     >
       <el-collapse v-model="activeNames" @change="handleChange">
-        <el-collapse-item title="审核单详情" name="1">
+        <el-collapse-item title="项目详情" name="1">
+          <div
+            v-if="!formInfo.project || !formInfo.project.projectNum"
+            style="text-align: center"
+          >
+            未找到关联项目数据～
+          </div>
+          <div v-if="formInfo.project && formInfo.project.projectNum">
+            <el-descriptions class="margin-top" :column="5" border>
+              <el-descriptions-item>
+                <template slot="label">
+                  <i class="el-icon-office-building"></i>
+                  项目名称
+                </template>
+                {{ formInfo.project.projectNameAlias }}
+              </el-descriptions-item>
+              <el-descriptions-item>
+                <template slot="label">
+                  <i class="el-icon-tickets"></i>
+                  项目编号
+                </template>
+                {{ formInfo.project.projectNum }}
+              </el-descriptions-item>
+              <el-descriptions-item>
+                <template slot="label">
+                  <i class="el-icon-notebook-2"></i>
+                  项目类型
+                </template>
+                {{ formInfo.project.projectType }}
+              </el-descriptions-item>
+              <el-descriptions-item>
+                <template slot="label">
+                  <i class="el-icon-money"></i>
+                  项目金额
+                </template>
+                {{ formInfo.project.projectMoneyAlias }}
+              </el-descriptions-item>
+              <el-descriptions-item>
+                <template slot="label">
+                  <i class="el-icon-time"></i>
+                  登记时间
+                </template>
+                {{ formInfo.project.registerTime }}
+              </el-descriptions-item>
+              <el-descriptions-item>
+                <template slot="label">
+                  <i class="el-icon-s-custom"></i>
+                  接待人
+                </template>
+                {{ formInfo.project.receptionist }}
+              </el-descriptions-item>
+              <el-descriptions-item>
+                <template slot="label">
+                  <i class="el-icon-document"></i>
+                  工作量
+                </template>
+                {{ formInfo.project.workloadAlias }}
+              </el-descriptions-item>
+              <el-descriptions-item>
+                <template slot="label">
+                  <i class="el-icon-document"></i>
+                  工程内容
+                </template>
+                {{ formInfo.project.workcontentAlias }}
+              </el-descriptions-item>
+              <el-descriptions-item>
+                <template slot="label">
+                  <i class="el-icon-user"></i>
+                  工程负责人
+                </template>
+                {{ formInfo.project.userNameAlias }}
+              </el-descriptions-item>
+              <el-descriptions-item>
+                <template slot="label">
+                  <i class="el-icon-s-home"></i>
+                  委托单位
+                </template>
+                {{ formInfo.project.requesterAlias }}
+              </el-descriptions-item>
+              <el-descriptions-item>
+                <template slot="label">
+                  <i class="el-icon-time"></i>
+                  安排开始时间
+                </template>
+                {{ formInfo.project.projectStartAlias }}
+              </el-descriptions-item>
+              <el-descriptions-item>
+                <template slot="label">
+                  <i class="el-icon-time"></i>
+                  安排结束时间
+                </template>
+                {{ formInfo.project.projectEndAlias }}
+              </el-descriptions-item>
+              <el-descriptions-item>
+                <template slot="label">
+                  <i class="el-icon-time"></i>
+                  一检时间
+                </template>
+                {{ formInfo.project.oneCheck }}
+              </el-descriptions-item>
+              <el-descriptions-item>
+                <template slot="label">
+                  <i class="el-icon-time"></i>
+                  二检时间
+                </template>
+                {{ formInfo.project.twoCheck }}
+              </el-descriptions-item>
+              <el-descriptions-item>
+                <template slot="label">
+                  <i class="el-icon-time"></i>
+                  通知出件时间
+                </template>
+                {{ formInfo.project.noticeTime }}
+              </el-descriptions-item>
+              <el-descriptions-item>
+                <template slot="label">
+                  <i class="el-icon-time"></i>
+                  项目出件时间
+                </template>
+                {{ formInfo.project.projectTime }}
+              </el-descriptions-item>
+              <el-descriptions-item>
+                <template slot="label">
+                  <i class="el-icon-time"></i>
+                  送达时间
+                </template>
+                {{ formInfo.project.deliveryTime }}
+              </el-descriptions-item>
+            </el-descriptions>
+          </div>
+        </el-collapse-item>
+        <el-collapse-item title="审核单详情" name="2">
           <div>
             <el-row :gutter="10">
               <el-col style="width: 50%">
@@ -161,7 +292,7 @@
                   </div>
 
                   <el-descriptions class="margin-top" :column="2" border>
-                    <el-descriptions-item>
+                    <!-- <el-descriptions-item>
                       <template slot="label"> 工程编号 </template>
                       {{ formInfo.serialNum }}
                     </el-descriptions-item>
@@ -176,7 +307,7 @@
                     <el-descriptions-item>
                       <template slot="label"> 委托单位 </template>
                       {{ formInfo.requester }}
-                    </el-descriptions-item>
+                    </el-descriptions-item> -->
                     <el-descriptions-item>
                       <template slot="label"> 工作量 </template>
                       {{ formInfo.workload }}
@@ -241,7 +372,7 @@
                   </div>
                   <div style="text-align: center">
                     <el-descriptions class="margin-top" :column="2" border>
-                      <el-descriptions-item>
+                      <!-- <el-descriptions-item>
                         <template slot="label"> 工程编号 </template>
                         {{ subcontractForm.serialNum }}
                       </el-descriptions-item>
@@ -260,7 +391,7 @@
                       <el-descriptions-item>
                         <template slot="label"> 委托单位 </template>
                         {{ subcontractForm.requester }}
-                      </el-descriptions-item>
+                      </el-descriptions-item> -->
                       <el-descriptions-item>
                         <template slot="label"> 工作内容 </template>
                         {{ subcontractForm.workcontent }}
@@ -274,7 +405,7 @@
                       </el-descriptions-item>
                       <el-descriptions-item>
                         <template slot="label"> 分包工作量 </template>
-                        {{ subcontractForm.workload }}
+                        {{ subcontractForm.subWorkload }}
                       </el-descriptions-item>
                       <el-descriptions-item>
                         <template slot="label"> 抽签单位 </template>
@@ -315,7 +446,7 @@
           </div>
         </el-collapse-item>
 
-        <el-collapse-item title="雇工信息详情" name="2">
+        <el-collapse-item title="雇工信息详情" name="3">
           <div>
             <el-row :gutter="10">
               <el-col style="width: 100%">
@@ -410,7 +541,7 @@ export default {
   },
   data() {
     return {
-      activeNames: ["1", "2"],
+      activeNames: ["1", "2", "3"],
       employeeList: [],
       queryParamsDeptId: [],
       // 部门树选项

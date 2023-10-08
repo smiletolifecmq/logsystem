@@ -57,6 +57,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
         <result property="registerTime"    column="register_time"    />
         <result property="receptionist"    column="receptionist"    />
         <result property="workloadAlias"    column="workload_alias"    />
+        <result property="workcontentAlias"    column="workcontent_alias"    />
         <result property="userNameAlias"    column="user_name_alias"    />
         <result property="requesterAlias"    column="requester_alias"    />
         <result property="projectStartAlias"    column="project_start_alias"    />
