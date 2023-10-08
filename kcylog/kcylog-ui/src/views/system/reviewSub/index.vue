@@ -305,6 +305,7 @@
                 v-model="form.projectId"
                 placeholder="请选择关联项目"
                 filterable
+                @change="handleSelectChange"
               >
                 <el-option
                   v-for="item in listProjectLocal"
@@ -451,6 +452,110 @@
                 <el-date-picker
                   clearable
                   v-model="form.projectEnd"
+                  type="date"
+                  value-format="yyyy-MM-dd"
+                  placeholder="请选择工期结束时间"
+                >
+                </el-date-picker>
+              </el-form-item>
+            </div>
+          </el-collapse-item>
+          <el-collapse-item title="分包详情" name="3">
+            <el-form-item label="工程编号" prop="serialNum">
+              <el-input v-model="form.serialNum" placeholder="请输入工程编号" />
+            </el-form-item>
+            <el-form-item label="项目名称" prop="projectName">
+              <el-input
+                v-model="form.projectName"
+                placeholder="请输入项目名称"
+              />
+            </el-form-item>
+            <el-form-item label="项目类型" prop="businessName">
+              <el-input
+                v-model="form.businessName"
+                placeholder="请输入抽检项目类型"
+              />
+            </el-form-item>
+            <el-form-item label="工作内容">
+              <el-input
+                v-model="form.workcontent"
+                type="textarea"
+                placeholder="请输入工作内容"
+              />
+            </el-form-item>
+            <el-form-item label="分包类型" prop="subType">
+              <el-radio-group v-model="form.subType">
+                <el-radio :label="1">全部分包</el-radio>
+                <el-radio :label="2">局部分包</el-radio>
+              </el-radio-group>
+            </el-form-item>
+            <el-form-item label="分包工作量" prop="subWorkload">
+              <el-input
+                v-model="form.subWorkload"
+                type="textarea"
+                placeholder="请输入分包工作量"
+              />
+            </el-form-item>
+            <el-form-item label="抽签单位" prop="cooperationUnitJson">
+              <el-select
+                v-model="form.cooperationUnitJson"
+                placeholder="抽签单位"
+                multiple
+                style="width: 260px"
+              >
+                <el-option
+                  v-for="item in winUnits"
+                  :key="item.value"
+                  :label="item.label"
+                  :value="item.value"
+                >
+                </el-option>
+              </el-select>
+            </el-form-item>
+            <el-form-item label="中签单位" prop="winUnit">
+              <el-select
+                v-model="form.winUnit"
+                placeholder="请选择中签单位"
+                style="width: 260px"
+              >
+                <el-option
+                  v-for="item in winUnits"
+                  :key="item.value"
+                  :label="item.label"
+                  :value="item.value"
+                >
+                </el-option>
+              </el-select>
+            </el-form-item>
+            <el-form-item label="抽签时间" prop="lotTime">
+              <el-date-picker
+                clearable
+                v-model="form.lotTime"
+                type="date"
+                value-format="yyyy-MM-dd"
+                placeholder="请选择抽签时间"
+              >
+              </el-date-picker>
+            </el-form-item>
+            <div class="form-container">
+              <el-form-item label="项目工期" prop="cpStartTime">
+                <el-date-picker
+                  clearable
+                  v-model="form.cpStartTime"
+                  type="date"
+                  value-format="yyyy-MM-dd"
+                  placeholder="请选择工期开始时间"
+                >
+                </el-date-picker>
+              </el-form-item>
+              <el-form-item
+                label=""
+                style="margin-left: -100px"
+                prop="cpEndTime"
+              >
+                <el-date-picker
+                  clearable
+                  v-model="form.cpEndTime"
                   type="date"
                   value-format="yyyy-MM-dd"
                   placeholder="请选择工期结束时间"
@@ -809,14 +914,17 @@ import {
 import { listProject, listProjectSelected } from "@/api/system/project";
 import { listUser } from "@/api/system/user";
 import { fetchProjectData } from "@/utils/otherItems";
+import { listUnit } from "@/api/system/unit";
 
 export default {
   name: "Review",
   data() {
     return {
-      activeNames: ["1", "2"],
+      winUnits: [],
+      activeNames: ["1"],
       listProjectLocalSelected: [],
       listProjectLocal: [],
+      listProjectLocalMap: {},
       projectList: [],
       showProjectSearch: true,
       projectInfo: "",
@@ -938,10 +1046,100 @@ export default {
   created() {
     this.getList();
     this.getProjectListLocal();
+    this.loadAllUnits();
   },
   methods: {
+    loadAllUnits() {
+      listUnit().then((response) => {
+        for (let i = 0; i < response.rows.length; i++) {
+          const unit = {};
+          unit.value = response.rows[i].unitName;
+          unit.label = response.rows[i].unitName;
+          this.winUnits.push(unit);
+        }
+      });
+    },
+    handleSelectChange(value) {
+      this.activeNames.push("2");
+      this.activeNames.push("3");
+      const projectInfo = this.listProjectLocalMap.get(value);
+      if (projectInfo.projectNum != null && projectInfo.projectNum != "") {
+        this.form.serialNum = projectInfo.projectNum;
+      }
+
+      if (
+        projectInfo.projectNameAlias != null &&
+        projectInfo.projectNameAlias != ""
+      ) {
+        this.form.projectName = projectInfo.projectNameAlias;
+      }
+
+      if (
+        projectInfo.requesterAlias != null &&
+        projectInfo.requesterAlias != ""
+      ) {
+        this.form.requester = projectInfo.requesterAlias;
+      }
+
+      if (
+        projectInfo.requesterAlias != null &&
+        projectInfo.requesterAlias != ""
+      ) {
+        this.form.workload = projectInfo.requesterAlias;
+      }
+
+      if (
+        projectInfo.projectMoneyAlias != null &&
+        projectInfo.projectMoneyAlias != 0
+      ) {
+        this.form.porjectMoney = projectInfo.projectMoneyAlias;
+      }
+
+      if (
+        projectInfo.projectStartAlias != null &&
+        projectInfo.projectStartAlias != 0
+      ) {
+        this.form.projectStart = projectInfo.projectStartAlias;
+      }
+
+      if (
+        projectInfo.projectEndAlias != null &&
+        projectInfo.projectEndAlias != 0
+      ) {
+        this.form.projectEnd = projectInfo.projectEndAlias;
+      }
+
+      if (projectInfo.workcontent != null && projectInfo.workcontent != "") {
+        this.form.workcontent = projectInfo.workcontent;
+      }
+
+      if (
+        projectInfo.projectStartAlias != null &&
+        projectInfo.projectStartAlias != 0
+      ) {
+        this.form.cpStartTime = projectInfo.projectStartAlias;
+      }
+
+      if (
+        projectInfo.projectEndAlias != null &&
+        projectInfo.projectEndAlias != 0
+      ) {
+        this.form.cpEndTime = projectInfo.projectEndAlias;
+      }
+
+      if (projectInfo.businessName != null && projectInfo.businessName != "") {
+        this.form.businessName = projectInfo.businessName;
+      }
+    },
     getProjectListLocal() {
       listProject(this.queryProjectListParams).then((response) => {
+        this.listProjectLocalMap = new Map();
+        for (var i = 0; i < response.rows.length; i++) {
+          this.listProjectLocalMap.set(
+            response.rows[i].projectId,
+            response.rows[i]
+          );
+        }
         this.listProjectLocal = response.rows;
         listProjectSelected(1).then((response) => {
           this.listProjectLocalSelected = response.rows;
@@ -1175,21 +1373,24 @@ export default {
     /** 新增按钮操作 */
     handleAdd() {
       this.reset();
-      this.$confirm("是否需要获取项目管理系统数据?", "提示", {
-        confirmButtonText: "是",
-        cancelButtonText: "否",
-        type: "success",
-      })
-        .then(() => {
-          this.projectInfo = "工程项目列表";
-          this.projectOpen = true;
-          this.getProjectList();
-          this.getProjectListLocal();
-        })
-        .catch(() => {
-          this.open = true;
-          this.title = "添加审核单";
-        });
+      this.activeNames = ["1"];
+      this.open = true;
+      this.title = "添加审核单";
+      // this.$confirm("是否需要获取项目管理系统数据?", "提示", {
+      //   confirmButtonText: "是",
+      //   cancelButtonText: "否",
+      //   type: "success",
+      // })
+      //   .then(() => {
+      //     this.projectInfo = "工程项目列表";
+      //     this.projectOpen = true;
+      //     this.getProjectList();
+      //     this.getProjectListLocal();
+      //   })
+      //   .catch(() => {
+      //     this.open = true;
+      //     this.title = "添加审核单";
+      //   });
     },
     importProject(row) {
       this.reset();
@@ -1371,6 +1572,7 @@ export default {
             }
           }
         }
+        location.reload();
       });
     },
     /** 删除按钮操作 */
@@ -1384,6 +1586,7 @@ export default {
         .then(() => {
           this.getList();
           this.$modal.msgSuccess("删除成功");
+          location.reload();
         })
         .catch(() => {});
     },
