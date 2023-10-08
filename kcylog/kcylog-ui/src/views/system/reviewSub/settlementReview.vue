@@ -293,15 +293,19 @@
                       </el-descriptions-item>
                       <el-descriptions-item>
                         <template slot="label"> 抽签时间 </template>
-                        {{ subcontractForm.lotTime }}
+                        {{ parseTime(subcontractForm.lotTime, "{y}-{m}-{d}") }}
                       </el-descriptions-item>
                       <el-descriptions-item>
                         <template slot="label"> 工期开始 </template>
-                        {{ subcontractForm.cpStartTime }}
+                        {{
+                          parseTime(subcontractForm.cpStartTime, "{y}-{m}-{d}")
+                        }}
                       </el-descriptions-item>
                       <el-descriptions-item>
                         <template slot="label"> 工期结束 </template>
-                        {{ subcontractForm.cpEndTime }}
+                        {{
+                          parseTime(subcontractForm.cpEndTime, "{y}-{m}-{d}")
+                        }}
                       </el-descriptions-item>
                     </el-descriptions>
                   </div>
