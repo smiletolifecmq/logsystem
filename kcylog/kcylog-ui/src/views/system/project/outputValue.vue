@@ -246,7 +246,13 @@
               <el-row>
                 <el-col :span="8">
                   <el-form-item label="用户名" prop="userName">
-                    <el-input v-model="project.userName"></el-input>
+                    <el-autocomplete
+                      class="inline-input"
+                      v-model="project.userName"
+                      :fetch-suggestions="querySearch"
+                      placeholder="请输入用户名"
+                      clearable
+                    ></el-autocomplete>
                   </el-form-item>
                 </el-col>
                 <el-col :span="8">
@@ -303,6 +309,7 @@ import {
   updateProjectValue,
 } from "@/api/system/project";
 import elDragDialog from "@/api/components/el-drag";
+import { listUser } from "@/api/system/user";
 
 export default {
   name: "Project",
@@ -311,6 +318,13 @@ export default {
   },
   data() {
     return {
+      dateRange: [],
+      queryUserParams: {
+        pageNum: 1,
+        pageSize: 9999,
+        deptId: null,
+      },
+      restaurants: [],
       projectId: 0,
       activeNames: ["1", "2"],
       detailOpen: false,
@@ -371,9 +385,36 @@ export default {
     };
   },
   created() {
+    listUser(this.addDateRange(this.queryUserParams, this.dateRange)).then(
+      (response) => {
+        for (let i = 0; i < response.rows.length; i++) {
+          let restaurant = {
+            value: response.rows[i].userName,
+          };
+          this.restaurants.push(restaurant);
+        }
+      }
+    );
     this.getList();
   },
   methods: {
+    querySearch(queryString, cb) {
+      var restaurants = this.restaurants;
+      var results = queryString
+        ? restaurants.filter(this.createFilter(queryString))
+        : restaurants;
+      // 调用 callback 返回建议列表的数据
+      cb(results);
+    },
+    createFilter(queryString) {
+      return (restaurant) => {
+        return (
+          restaurant.value.toLowerCase().indexOf(queryString.toLowerCase()) ===
+          0
+        );
+      };
+    },
+
     checkProjectValue(rule, value, callback) {
       for (let i = 0; i < value.length; i++) {
         if (
