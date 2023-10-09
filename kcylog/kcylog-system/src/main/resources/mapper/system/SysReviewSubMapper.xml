@@ -412,4 +412,10 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
         limit 1
     </select>
 
+    <update id="updateRealWorkloadByReviewId" parameterType="SysReviewSub">
+        update sys_review_sub
+        set real_workload = #{realWorkload}
+        where review_id = #{reviewId}
+    </update>
+
 </mapper>

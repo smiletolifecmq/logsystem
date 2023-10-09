@@ -771,16 +771,17 @@ public class SysReviewSubEmployeeController extends BaseController
 
     @Log(title = "审核单", businessType = BusinessType.UPDATE)
     @Transactional
-    @PutMapping("/confirm_employee_info/{reviewId}")
-    public AjaxResult confirmEmployeeInfo(@PathVariable Long reviewId)
+    @PutMapping("/confirm_employee_info")
+    public AjaxResult confirmEmployeeInfo(@RequestBody SysReviewSub sysReviewSub)
     {
         //修改是否填写雇工信息
-        sysReviewService.updateFinalHireByReviewId(reviewId);
+        sysReviewService.updateFinalHireByReviewId(sysReviewSub.getReviewId());
+        sysReviewService.updateRealWorkloadByReviewId(sysReviewSub);
         //修改填写雇工审核状态
-        sysReviewProcessService.updateStatusByUserIdReviewId(reviewId);
+        sysReviewProcessService.updateStatusByUserIdReviewId(sysReviewSub.getReviewId());
         //重新开启审核
         SysReviewSubProcess sysReviewProcess = new SysReviewSubProcess();
-        sysReviewProcess.setReviewId(reviewId);
+        sysReviewProcess.setReviewId(sysReviewSub.getReviewId());
         List<SysReviewSubProcess> list = sysReviewProcessService.selectSysReviewSubProcessList(sysReviewProcess);
         Long reviewProcessId = list.get(list.size()-3).getReviewProcessId();
         sysReviewProcessService.reSetStatusByReviewProcessId(reviewProcessId);

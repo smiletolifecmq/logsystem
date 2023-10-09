@@ -173,4 +173,10 @@ public class SysReviewSubServiceImpl implements ISysReviewSubService
         return sysReviewSubMapper.getReviewBySerialNum(serialNum);
     }
 
+    @Override
+    public int updateRealWorkloadByReviewId(SysReviewSub sysReviewSub)
+    {
+        return sysReviewSubMapper.updateRealWorkloadByReviewId(sysReviewSub);
+    }
+
 }

@@ -44,6 +44,14 @@
 
     <el-collapse v-model="activeNamesTemp">
       <el-collapse-item title="实际分包工作量（没有分包可不填写）" name="1">
+        <el-form ref="subform" :model="subform" label-width="80px">
+          <el-input
+            v-model="subform.realWorkload"
+            type="textarea"
+            placeholder="请输入实际分包工作量"
+            :disabled="subform.finalHire === 1"
+          />
+        </el-form>
       </el-collapse-item>
       <el-collapse-item title="雇工信息（没有雇工可不填写）" name="2">
         <el-table
@@ -230,6 +238,7 @@ export default {
   name: "Employee",
   data() {
     return {
+      subform: {},
       activeNamesTemp: ["1", "2"],
       money: 100,
       startAmPm: "12:00:00",
@@ -309,6 +318,7 @@ export default {
         this.addShow = true;
         this.editShow = true;
       }
+      this.subform = response.data;
     });
     this.getList();
     this.getEmployeeList();
@@ -543,22 +553,30 @@ export default {
       });
     },
     confirmEmployeeInfo() {
-      if (this.employeeList.length == 0) {
-        this.$modal.msgError("提交失败,请填写实际的雇工信息～");
-        return;
-      }
+      // if (this.employeeList.length == 0) {
+      //   this.$modal.msgError("提交失败,请填写实际的雇工信息～");
+      //   return;
+      // }
       const reviewId = this.reviewId;
-      this.$modal
-        .confirm("是否确认发起审核，一旦确认将不可修改该审核单的雇工信息～")
-        .then(function () {
-          return confirmEmployee(reviewId);
-        })
+      this.subform.reviewId = reviewId;
+
+      this.$confirm(
+        "是否确认发起审核，一旦确认将不可修改该审核单的雇工和实际分包信息～",
+        "提示",
+        {
+          confirmButtonText: "确定",
+          cancelButtonText: "取消",
+          type: "warning",
+        }
+      )
         .then(() => {
-          this.finalHireShow = false;
-          this.addShow = false;
-          this.editShow = false;
-          this.getList();
-          this.$modal.msgSuccess("提交成功～");
+          confirmEmployee(this.subform).then((response) => {
+            this.finalHireShow = false;
+            this.addShow = false;
+            this.editShow = false;
+            this.getList();
+            this.$modal.msgSuccess("提交成功～");
+          });
         })
         .catch(() => {});
     },
