@@ -251,7 +251,6 @@
                       v-model="project.userName"
                       :fetch-suggestions="querySearch"
                       placeholder="请输入用户名"
-                      clearable
                     ></el-autocomplete>
                   </el-form-item>
                 </el-col>
