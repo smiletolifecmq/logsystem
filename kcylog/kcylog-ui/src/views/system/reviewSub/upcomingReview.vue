@@ -87,7 +87,7 @@
               type="text"
               icon="el-icon-user-solid"
               @click="showReviewInfo(scope.row)"
-              >雇工审核</el-button
+              >审核单审核</el-button
             >
           </div>
           <div>

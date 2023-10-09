@@ -116,8 +116,17 @@
               size="mini"
               type="text"
               icon="el-icon-download"
-              @click="confirmExport(scope.row)"
-              >导出</el-button
+              @click="confirmExportExcel(scope.row)"
+              >excel导出</el-button
+            >
+          </div>
+          <div>
+            <el-button
+              size="mini"
+              type="text"
+              icon="el-icon-download"
+              @click="confirmExportWord(scope.row)"
+              >word导出</el-button
             >
           </div>
         </template>
@@ -542,6 +551,7 @@ import {
 import { deptTreeSelect } from "@/api/system/log";
 import elDragDialog from "@/api/components/el-drag";
 import { listEmployee } from "@/api/system/reviewEmployeeSub";
+import { exportDocx } from "@/utils/doc.js";
 
 export default {
   filters: {
@@ -685,7 +695,7 @@ export default {
         this.reviewProcessOpen = true;
       });
     },
-    confirmExport(row) {
+    confirmExportExcel(row) {
       this.queryParamsExport.reviewId = row.reviewId;
       this.download(
         "system/reviewSub/subcontractExport",
@@ -799,6 +809,31 @@ export default {
         this.employeeList = response.rows;
       });
     },
+    confirmExportWord(row) {
+      const data = {
+        project_name: "",
+        lot_time: "",
+        serial_num: "",
+        business_name: "",
+        first_unit: "",
+        second_unit: "",
+        third_unit: "",
+        fourth_unit: "",
+        win_unit: "",
+      };
+      data.project_name = row.projectName;
+      data.lot_time = formatDate(row.lotTime);
+      data.serial_num = row.serialNum;
+      data.business_name = row.businessName;
+      data.win_unit = row.winUnit;
+      var jsonObj = JSON.parse(row.cooperationUnit);
+      data.first_unit = jsonObj && jsonObj[0] ? jsonObj[0] : "";
+      data.second_unit = jsonObj && jsonObj[1] ? jsonObj[1] : "";
+      data.third_unit = jsonObj && jsonObj[2] ? jsonObj[2] : "";
+      data.fourth_unit = jsonObj && jsonObj[3] ? jsonObj[3] : "";
+
+      exportDocx("/sub_template.docx", data, `${data.project_name}.docx`);
+    },
   },
 };
 function transformIdToValue(obj) {
@@ -817,5 +852,15 @@ function transformIdToValue(obj) {
   } else {
     return obj;
   }
+}
+function formatDate(value) {
+  if (value) {
+    const date = new Date(value);
+    const year = date.getFullYear();
+    const month = String(date.getMonth() + 1).padStart(2, "0");
+    const day = String(date.getDate()).padStart(2, "0");
+    return `${year}-${month}-${day}`;
+  }
+  return "";
 }
 </script>

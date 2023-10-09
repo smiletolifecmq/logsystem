@@ -113,7 +113,7 @@
               type="text"
               icon="el-icon-user-solid"
               @click="showReviewInfo(scope.row)"
-              >详情</el-button
+              >审核单详情</el-button
             >
           </div>
         </template>
