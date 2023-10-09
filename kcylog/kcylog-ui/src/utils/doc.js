@@ -6,8 +6,6 @@ import { saveAs } from 'file-saver'
 export const exportDocx = (tempDocxPath, data, fileName) => {
     // 读取并获得模板文件的二进制内容
     JSZipUtils.getBinaryContent(tempDocxPath, (error, content) => {
-        // input.docx是模板。我们在导出的时候，会根据此模板来导出对应的数据
-        // 抛出异常
         if (error) {
             throw error
         }
