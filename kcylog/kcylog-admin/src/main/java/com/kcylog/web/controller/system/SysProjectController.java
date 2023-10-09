@@ -163,6 +163,9 @@ public class SysProjectController extends BaseController
     @Transactional
     public AjaxResult editProjectValue(@RequestBody SysProject sysProject)
     {
+        if (sysProject.getOutputStatus() == 1){
+            sysProjectService.updateOutputStatusByProjectId(sysProject);
+        }
         sysProjectValueService.deleteSysProjectValueByProjectId(sysProject.getProjectId());
         if (sysProject.getProjectValue().size() != 0){
             for (int i = 0; i < sysProject.getProjectValue().size(); i++) {

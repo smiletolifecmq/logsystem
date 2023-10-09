@@ -19,6 +19,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
         <result property="projectEndAlias"    column="project_end_alias"    />
         <result property="oneCheck"    column="one_check"    />
         <result property="twoCheck"    column="two_check"    />
+        <result property="outputStatus"    column="output_status"    />
         <result property="twoCheckTime"    column="two_check_time"    />
         <result property="isTwoCheck"    column="is_two_check"    />
         <result property="noticeTime"    column="notice_time"    />
@@ -198,4 +199,8 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
         </where>
         order by p.project_id desc
     </select>
+
+    <update id="updateOutputStatusByProjectId" parameterType="SysProject">
+        update sys_project set  output_status = 1 where project_id = #{projectId}
+    </update>
 </mapper>

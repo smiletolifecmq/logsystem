@@ -113,4 +113,10 @@ public class SysProjectServiceImpl implements ISysProjectService
     {
         return sysProjectMapper.listProjectOperate(sysProject);
     }
+
+    @Override
+    public int updateOutputStatusByProjectId(SysProject sysProject)
+    {
+        return sysProjectMapper.updateOutputStatusByProjectId(sysProject);
+    }
 }

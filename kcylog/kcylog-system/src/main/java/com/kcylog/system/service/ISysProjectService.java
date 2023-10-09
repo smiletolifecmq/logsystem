@@ -65,4 +65,7 @@ public interface ISysProjectService
     public SysProject checkProjectKeyUnique(String projectNum);
 
     public List<SysProject> listProjectOperate(SysProject sysProject);
+
+    public int updateOutputStatusByProjectId(SysProject sysProject);
+
 }

@@ -90,6 +90,7 @@
             icon="el-icon-tickets"
             @click="handleDetail(scope.row)"
             v-hasPermi="['system:project:detail']"
+            v-if="scope.row.outputStatus === 0"
             >产值结算</el-button
           >
         </template>
@@ -287,7 +288,8 @@
             class="dialog-footer"
             style="display: flex; justify-content: flex-end"
           >
-            <el-button type="primary" @click="submitForm">确 定</el-button>
+            <el-button type="success" @click="submitForm(1)">办 结</el-button>
+            <el-button type="primary" @click="submitForm(0)">保 存</el-button>
             <el-button @click="cancel">取 消</el-button>
           </div>
         </el-collapse-item>
@@ -520,28 +522,62 @@ export default {
       });
     },
 
-    submitForm() {
-      this.$refs["form"].validate((valid) => {
-        if (valid) {
-          let num = 0;
-          for (let i = 0; i < this.form.projectValue.length; i++) {
-            this.form.projectValue[i].projectId = this.projectId;
-            num = num + this.form.projectValue[i].proportion;
-          }
-          if (num > 100) {
-            this.$message({
-              message: "总占比不能大于100～",
-              type: "warning",
+    submitForm(item) {
+      if (item === 1) {
+        this.$confirm("办结之后将无法新增或修改产值比例～", "提示", {
+          confirmButtonText: "确定",
+          cancelButtonText: "取消",
+          type: "warning",
+        })
+          .then(() => {
+            this.$refs["form"].validate((valid) => {
+              if (valid) {
+                let num = 0;
+                for (let i = 0; i < this.form.projectValue.length; i++) {
+                  this.form.projectValue[i].projectId = this.projectId;
+                  num = num + this.form.projectValue[i].proportion;
+                }
+                if (num > 100) {
+                  this.$message({
+                    message: "总占比不能大于100～",
+                    type: "warning",
+                  });
+                  return;
+                }
+                this.form.outputStatus = 1;
+                updateProjectValue(this.form).then((response) => {
+                  this.$modal.msgSuccess("办结成功");
+                  this.detailOpen = false;
+                  this.getList();
+                  this.form.outputStatus = 0;
+                });
+              }
             });
-            return;
+          })
+          .catch(() => {});
+      } else {
+        this.$refs["form"].validate((valid) => {
+          if (valid) {
+            let num = 0;
+            for (let i = 0; i < this.form.projectValue.length; i++) {
+              this.form.projectValue[i].projectId = this.projectId;
+              num = num + this.form.projectValue[i].proportion;
+            }
+            if (num > 100) {
+              this.$message({
+                message: "总占比不能大于100～",
+                type: "warning",
+              });
+              return;
+            }
+            updateProjectValue(this.form).then((response) => {
+              this.$modal.msgSuccess("保存成功");
+              this.detailOpen = false;
+              this.getList();
+            });
           }
-          updateProjectValue(this.form).then((response) => {
-            this.$modal.msgSuccess("填写成功");
-            this.detailOpen = false;
-            this.getList();
-          });
-        }
-      });
+        });
+      }
     },
   },
 };

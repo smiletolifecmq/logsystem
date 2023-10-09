@@ -77,6 +77,8 @@ public class SysProject extends BaseEntity
 
     private Integer isTwoCheck;
 
+    private Integer outputStatus;
+
     /** 通知出件时间 */
     @Excel(name = "通知出件时间")
     private String noticeTime;
@@ -109,6 +111,14 @@ public class SysProject extends BaseEntity
     private Date operateTime;
 
     private List<SysProjectValue> projectValue;
+
+    public Integer getOutputStatus() {
+        return outputStatus;
+    }
+
+    public void setOutputStatus(Integer outputStatus) {
+        this.outputStatus = outputStatus;
+    }
 
     public String getWorkcontentAlias() {
         return workcontentAlias;
