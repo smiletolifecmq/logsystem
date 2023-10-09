@@ -199,7 +199,7 @@ export const dynamicRoutes = [
       {
         path: 'edit/:reviewId(\\d+)/:finalHire(\\d+)',
         component: () => import('@/views/system/review/reviewEmployee'),
-        name: 'ReviewEmployee',
+        name: 'ReviewEmployeeR',
         meta: { title: '填写最终雇佣信息', activeMenu: '/system/reviewEmployee' }
       }
     ]
@@ -274,7 +274,7 @@ export const dynamicRoutes = [
       {
         path: 'user/:progressId(\\d+)',
         component: () => import('@/views/system/projectProgress/authUser'),
-        name: 'AuthUser',
+        name: 'AuthUserProject',
         meta: { title: '分配可查看用户', activeMenu: '/system/projectProgress' }
       }
     ]
@@ -304,7 +304,7 @@ export const dynamicRoutes = [
       {
         path: 'edit/:reviewId(\\d+)/:finalHire(\\d+)',
         component: () => import('@/views/system/reviewSub/reviewEmployee'),
-        name: 'ReviewEmployee',
+        name: 'ReviewEmployeeSub',
         meta: { title: '填写最终雇佣信息', activeMenu: '/system/reviewEmployee' }
       }
     ]
@@ -319,7 +319,7 @@ export const dynamicRoutes = [
       {
         path: 'list/:settlementId(\\d+)',
         component: () => import('@/views/system/reviewSub/settlementReview'),
-        name: 'SettlementReview',
+        name: 'SettlementReviewSub',
         meta: { title: '结算单包含的审核单列表', activeMenu: '/system/settlementReview' }
       }
     ]
