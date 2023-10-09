@@ -141,8 +141,17 @@ public class SysReviewSub extends BaseEntity
 
     private BigDecimal subCost;
 
+    private String realWorkload;
 
     private SysProject project;
+
+    public String getRealWorkload() {
+        return realWorkload;
+    }
+
+    public void setRealWorkload(String realWorkload) {
+        this.realWorkload = realWorkload;
+    }
 
     public Date getLotTime() {
         return lotTime;

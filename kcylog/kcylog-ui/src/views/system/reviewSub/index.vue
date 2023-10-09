@@ -511,11 +511,11 @@
                 <el-radio :label="2">局部分包</el-radio>
               </el-radio-group>
             </el-form-item>
-            <el-form-item label="分包工作量" prop="subWorkload">
+            <el-form-item label="预估分包工作量" prop="subWorkload">
               <el-input
                 v-model="form.subWorkload"
                 type="textarea"
-                placeholder="请输入分包工作量"
+                placeholder="请输入预估分包工作量"
               />
             </el-form-item>
             <el-form-item label="抽签单位" prop="cooperationUnitJson">
@@ -863,8 +863,12 @@
                         >
                       </el-descriptions-item>
                       <el-descriptions-item>
-                        <template slot="label"> 分包工作量 </template>
+                        <template slot="label"> 预估分包工作量 </template>
                         {{ subcontractForm.subWorkload }}
+                      </el-descriptions-item>
+                      <el-descriptions-item>
+                        <template slot="label"> 实际分包工作量 </template>
+                        {{ subcontractForm.realWorkload }}
                       </el-descriptions-item>
                       <el-descriptions-item>
                         <template slot="label"> 抽签单位 </template>

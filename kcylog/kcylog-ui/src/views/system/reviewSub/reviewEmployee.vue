@@ -32,7 +32,7 @@
           size="mini"
           v-if="finalHireShow"
           @click="confirmEmployeeInfo"
-          >确认最终雇工信息并发起审核</el-button
+          >确认最终雇工信息和实际分包工作量并发起审核</el-button
         >
       </el-col>
 

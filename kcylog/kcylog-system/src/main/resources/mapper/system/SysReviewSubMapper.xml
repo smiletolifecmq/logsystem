@@ -41,6 +41,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
         <result property="subType"    column="sub_type"    />
         <result property="subCost"    column="sub_cost"    />
         <result property="subWorkload"    column="sub_workload"    />
+        <result property="realWorkload"    column="real_workload"    />
 
         <association property="dept" column="dept_name" javaType="SysDept" resultMap="SysReviewSubDeptResult"/>
         <association property="user" column="user_name" javaType="SysUser" resultMap="SysReviewSubUserResult"/>
@@ -164,6 +165,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
             <if test="subType != null">sub_type,</if>
             <if test="subCost != null">sub_cost,</if>
             <if test="subWorkload != null">sub_workload,</if>
+            <if test="realWorkload != null">real_workload,</if>
 
          </trim>
         <trim prefix="values (" suffix=")" suffixOverrides=",">
@@ -199,6 +201,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
             <if test="subType != null">#{subType},</if>
             <if test="subCost != null">#{subCost},</if>
             <if test="subWorkload != null">#{subWorkload},</if>
+            <if test="realWorkload != null">#{realWorkload},</if>
 
          </trim>
     </insert>
@@ -239,6 +242,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
             <if test="subType != null">sub_type = #{subType},</if>
             <if test="subCost != null">sub_cost = #{subCost},</if>
             <if test="subWorkload != null">sub_workload = #{subWorkload},</if>
+            <if test="realWorkload != null">real_workload = #{realWorkload},</if>
 
         </trim>
         where review_id = #{reviewId}
