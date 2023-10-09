@@ -189,7 +189,7 @@
         <el-collapse-item title="审核单详情" name="1">
           <div>
             <el-row :gutter="10">
-              <el-col style="width: 50%">
+              <el-col style="width: 100%">
                 <el-card>
                   <div slot="header">
                     <span>分包审核单详情</span>
@@ -199,7 +199,7 @@
                     ></el-button>
                   </div>
 
-                  <el-descriptions class="margin-top" :column="2" border>
+                  <el-descriptions class="margin-top" :column="3" border>
                     <el-descriptions-item>
                       <template slot="label"> 工程编号 </template>
                       {{ formInfo.serialNum }}
@@ -293,91 +293,6 @@
                       </div>
                     </el-descriptions-item>
                   </el-descriptions>
-                </el-card>
-              </el-col>
-
-              <el-col style="width: 50%">
-                <el-card>
-                  <div slot="header">
-                    <span>雇工审核单详情</span>
-                    <el-button
-                      style="float: right; padding: 3px 0"
-                      type="text"
-                    ></el-button>
-                  </div>
-
-                  <div v-if="!reviewForm" style="text-align: center">
-                    未找到关联雇工审核单数据～
-                  </div>
-                  <div v-if="reviewForm" style="text-align: center">
-                    <el-descriptions class="margin-top" :column="2" border>
-                      <el-descriptions-item>
-                        <template slot="label"> 工程编号 </template>
-                        {{ reviewForm.serialNum }}
-                      </el-descriptions-item>
-                      <el-descriptions-item>
-                        <template slot="label"> 负责人 </template>
-                        {{ reviewForm.user.userName }}
-                      </el-descriptions-item>
-                      <el-descriptions-item>
-                        <template slot="label"> 项目名称 </template>
-                        {{ reviewForm.projectName }}
-                      </el-descriptions-item>
-                      <el-descriptions-item>
-                        <template slot="label"> 委托单位 </template>
-                        {{ reviewForm.requester }}
-                      </el-descriptions-item>
-                      <el-descriptions-item>
-                        <template slot="label"> 工作量 </template>
-                        {{ reviewForm.workload }}
-                      </el-descriptions-item>
-                      <el-descriptions-item>
-                        <template slot="label"> 项目金额 </template>
-                        {{ reviewForm.porjectMoney }}
-                      </el-descriptions-item>
-                      <el-descriptions-item>
-                        <template slot="label"> 分包情况 </template>
-                        <div v-if="reviewForm.subcontract == 1">是</div>
-                        <div v-if="reviewForm.subcontract == 2">否</div>
-                      </el-descriptions-item>
-                      <el-descriptions-item>
-                        <template slot="label"> 雇工内容 </template>
-                        {{ reviewForm.employmentReason }}
-                      </el-descriptions-item>
-                      <el-descriptions-item>
-                        <template slot="label"> 雇工开始时间 </template>
-                        {{ reviewForm.startTime
-                        }}<span v-if="startAmPm == '12:00:00'">上午</span
-                        ><span v-if="startAmPm == '23:59:59'">下午</span>
-                      </el-descriptions-item>
-                      <el-descriptions-item>
-                        <template slot="label"> 雇工结束时间 </template>
-                        {{ reviewForm.endTime
-                        }}<span v-if="endAmPm == '12:00:00'">上午</span
-                        ><span v-if="endAmPm == '23:59:59'">下午</span>
-                      </el-descriptions-item>
-                      <el-descriptions-item>
-                        <template slot="label"> 项目工期开始时间 </template>
-                        {{ reviewForm.projectStart | formatDate }}
-                      </el-descriptions-item>
-                      <el-descriptions-item>
-                        <template slot="label"> 项目工期结束时间 </template>
-                        {{ reviewForm.projectEnd | formatDate }}
-                      </el-descriptions-item>
-                      <el-descriptions-item>
-                        <template slot="label"> 雇工人数 </template>
-                        {{ reviewForm.peopleNum }}
-                      </el-descriptions-item>
-                      <el-descriptions-item>
-                        <template slot="label"> 天数 </template>
-                        {{ reviewForm.budgetDay }}
-                      </el-descriptions-item>
-                      <el-descriptions-item>
-                        <template slot="label"> 预算 </template>
-                        {{ reviewForm.budgetMoney }}
-                      </el-descriptions-item>
-                    </el-descriptions>
-                  </div>
                 </el-card>
               </el-col>
             </el-row>

@@ -329,94 +329,6 @@
               <el-col style="width: 50%">
                 <el-card>
                   <div slot="header">
-                    <span>分包详情</span>
-                    <el-button
-                      style="float: right; padding: 3px 0"
-                      type="text"
-                    ></el-button>
-                  </div>
-                  <div v-if="!subcontractForm" style="text-align: center">
-                    未找到关联分包数据～
-                  </div>
-
-                  <div v-if="subcontractForm" style="text-align: center">
-                    <el-descriptions class="margin-top" :column="2" border>
-                      <el-descriptions-item>
-                        <template slot="label"> 工程编号 </template>
-                        {{ subcontractForm.serialNum }}
-                      </el-descriptions-item>
-                      <el-descriptions-item>
-                        <template slot="label"> 负责人 </template>
-                        {{ subcontractForm.user.userName }}
-                      </el-descriptions-item>
-                      <el-descriptions-item>
-                        <template slot="label"> 项目名称 </template>
-                        {{ subcontractForm.projectName }}
-                      </el-descriptions-item>
-                      <el-descriptions-item>
-                        <template slot="label"> 项目类型 </template>
-                        {{ subcontractForm.businessName }}
-                      </el-descriptions-item>
-                      <el-descriptions-item>
-                        <template slot="label"> 委托单位 </template>
-                        {{ subcontractForm.entrustUnit }}
-                      </el-descriptions-item>
-                      <el-descriptions-item>
-                        <template slot="label"> 工作内容 </template>
-                        {{ subcontractForm.workcontent }}
-                      </el-descriptions-item>
-                      <el-descriptions-item>
-                        <template slot="label"> 分包类型 </template>
-                        <span v-if="subcontractForm.subType == 1">全部分包</span
-                        ><span v-if="subcontractForm.subType == 2"
-                          >局部分包</span
-                        >
-                      </el-descriptions-item>
-                      <el-descriptions-item>
-                        <template slot="label"> 分包工作量 </template>
-                        {{ subcontractForm.workload }}
-                      </el-descriptions-item>
-                      <el-descriptions-item>
-                        <template slot="label"> 抽签单位 </template>
-                        <div
-                          v-for="(
-                            unit, index
-                          ) in subcontractForm.cooperationUnitJson"
-                          :key="index"
-                        >
-                          {{ unit }}
-                        </div>
-                      </el-descriptions-item>
-                      <el-descriptions-item>
-                        <template slot="label"> 中签单位 </template>
-                        {{ subcontractForm.winUnit }}
-                      </el-descriptions-item>
-                      <el-descriptions-item>
-                        <template slot="label"> 抽签时间 </template>
-                        {{ subcontractForm.lotTime }}
-                      </el-descriptions-item>
-                      <el-descriptions-item>
-                        <template slot="label"> 工期开始 </template>
-                        {{ subcontractForm.startTime }}
-                      </el-descriptions-item>
-                      <el-descriptions-item>
-                        <template slot="label"> 工期结束 </template>
-                        {{ subcontractForm.endTime }}
-                      </el-descriptions-item>
-                    </el-descriptions>
-                  </div>
-                </el-card>
-              </el-col>
-            </el-row>
-          </div>
-        </el-collapse-item>
-
-        <el-collapse-item title="雇工信息详情" name="2">
-          <div>
-            <el-row :gutter="10">
-              <el-col style="width: 100%">
-                <el-card>
-                  <div slot="header">
                     <span>雇工信息详情</span>
                     <el-button
                       style="float: right; padding: 3px 0"
@@ -507,7 +419,7 @@ export default {
   },
   data() {
     return {
-      activeNames: ["1", "2"],
+      activeNames: ["1"],
       employeeList: [],
       queryParamsDeptId: [],
       // 部门树选项
