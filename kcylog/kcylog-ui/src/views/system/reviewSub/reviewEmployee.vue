@@ -42,48 +42,54 @@
       ></right-toolbar>
     </el-row>
 
-    <el-table
-      v-loading="loading"
-      :data="employeeList"
-      @selection-change="handleSelectionChange"
-    >
-      <el-table-column label="姓名" align="center" prop="name" />
-      <el-table-column label="身份证" align="center" prop="idCard" />
-      <el-table-column label="作业时间" align="center" prop="workTime" />
-      <el-table-column label="天数" align="center" prop="workDay" />
-      <el-table-column label="费用" align="center" prop="cost" />
-      <el-table-column
-        label="操作"
-        align="center"
-        class-name="small-padding fixed-width"
-        v-if="editShow"
-      >
-        <template slot-scope="scope">
-          <el-button
-            size="mini"
-            type="text"
-            icon="el-icon-edit"
-            @click="handleUpdate(scope.row)"
-            >修改</el-button
+    <el-collapse v-model="activeNamesTemp">
+      <el-collapse-item title="实际分包工作量（没有分包可不填写）" name="1">
+      </el-collapse-item>
+      <el-collapse-item title="雇工信息（没有雇工可不填写）" name="2">
+        <el-table
+          v-loading="loading"
+          :data="employeeList"
+          @selection-change="handleSelectionChange"
+        >
+          <el-table-column label="姓名" align="center" prop="name" />
+          <el-table-column label="身份证" align="center" prop="idCard" />
+          <el-table-column label="作业时间" align="center" prop="workTime" />
+          <el-table-column label="天数" align="center" prop="workDay" />
+          <el-table-column label="费用" align="center" prop="cost" />
+          <el-table-column
+            label="操作"
+            align="center"
+            class-name="small-padding fixed-width"
+            v-if="editShow"
           >
-          <el-button
-            size="mini"
-            type="text"
-            icon="el-icon-delete"
-            @click="handleDelete(scope.row)"
-            >删除</el-button
-          >
-        </template>
-      </el-table-column>
-    </el-table>
+            <template slot-scope="scope">
+              <el-button
+                size="mini"
+                type="text"
+                icon="el-icon-edit"
+                @click="handleUpdate(scope.row)"
+                >修改</el-button
+              >
+              <el-button
+                size="mini"
+                type="text"
+                icon="el-icon-delete"
+                @click="handleDelete(scope.row)"
+                >删除</el-button
+              >
+            </template>
+          </el-table-column>
+        </el-table>
 
-    <pagination
-      v-show="total > 0"
-      :total="total"
-      :page.sync="queryParams.pageNum"
-      :limit.sync="queryParams.pageSize"
-      @pagination="getList"
-    />
+        <pagination
+          v-show="total > 0"
+          :total="total"
+          :page.sync="queryParams.pageNum"
+          :limit.sync="queryParams.pageSize"
+          @pagination="getList"
+        />
+      </el-collapse-item>
+    </el-collapse>
 
     <!-- 添加或修改雇工实际工作内容记录对话框 -->
     <el-dialog
@@ -224,6 +230,7 @@ export default {
   name: "Employee",
   data() {
     return {
+      activeNamesTemp: ["1", "2"],
       money: 100,
       startAmPm: "12:00:00",
       endAmPm: "23:59:59",

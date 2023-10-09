@@ -422,7 +422,7 @@ public class SysReviewSubEmployeeController extends BaseController
             money = money.add(employee.getCost());
         }
         money = money.add(sysReviewEmployee.getCost());
-        int result = sysReview.getBudgetMoney().compareTo(money);
+        int result = sysReview.getBudgetMoney() != null ? sysReview.getBudgetMoney().compareTo(money) : 1;
         if (result < 0) {
             throw new ServiceException("审核单雇工实际总费用大于预估费用～");
         }
