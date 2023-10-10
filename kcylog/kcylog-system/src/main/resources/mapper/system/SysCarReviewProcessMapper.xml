@@ -12,27 +12,28 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
         <result property="node"    column="node"    />
         <result property="reason"    column="reason"    />
         <result property="reviewTime"    column="review_time"    />
+        <association property="user" column="user_name" javaType="SysUser" resultMap="sysReviewUserResult"/>
+    </resultMap>
+
+    <resultMap id="sysReviewUserResult" type="SysUser">
+        <result property="userName" column="user_name"/>
     </resultMap>
 
     <sql id="selectSysCarReviewProcessVo">
-        select car_process_id, car_review_id, user_id, status, node, reason, review_time from sys_car_review_process
+        select rp.*, u.user_name from sys_car_review_process rp
+        inner join sys_user u on rp.user_id = u.user_id
     </sql>
 
     <select id="selectSysCarReviewProcessList" parameterType="SysCarReviewProcess" resultMap="SysCarReviewProcessResult">
         <include refid="selectSysCarReviewProcessVo"/>
         <where>  
-            <if test="carReviewId != null "> and car_review_id = #{carReviewId}</if>
-            <if test="userId != null "> and user_id = #{userId}</if>
-            <if test="status != null "> and status = #{status}</if>
-            <if test="node != null "> and node = #{node}</if>
-            <if test="reason != null  and reason != ''"> and reason = #{reason}</if>
-            <if test="reviewTime != null "> and review_time = #{reviewTime}</if>
+            <if test="carReviewId != null "> and rp.car_review_id = #{carReviewId}</if>
         </where>
     </select>
     
     <select id="selectSysCarReviewProcessByCarProcessId" parameterType="Long" resultMap="SysCarReviewProcessResult">
         <include refid="selectSysCarReviewProcessVo"/>
-        where car_process_id = #{carProcessId}
+        where rp.car_process_id = #{carProcessId}
     </select>
         
     <insert id="insertSysCarReviewProcess" parameterType="SysCarReviewProcess" useGeneratedKeys="true" keyProperty="carProcessId">

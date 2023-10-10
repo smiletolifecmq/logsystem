@@ -1,11 +1,13 @@
 package com.kcylog.system.domain;
 
-import java.util.Date;
 import com.fasterxml.jackson.annotation.JsonFormat;
-import org.apache.commons.lang3.builder.ToStringBuilder;
-import org.apache.commons.lang3.builder.ToStringStyle;
 import com.kcylog.common.annotation.Excel;
 import com.kcylog.common.core.domain.BaseEntity;
+import com.kcylog.common.core.domain.entity.SysUser;
+import org.apache.commons.lang3.builder.ToStringBuilder;
+import org.apache.commons.lang3.builder.ToStringStyle;
+
+import java.util.Date;
 
 /**
  * 车辆使用审核单流程对象 sys_car_review_process
@@ -44,6 +46,19 @@ public class SysCarReviewProcess extends BaseEntity
     @JsonFormat(pattern = "yyyy-MM-dd")
     @Excel(name = "审核时间", width = 30, dateFormat = "yyyy-MM-dd")
     private Date reviewTime;
+
+    /**
+     * 用户对象
+     */
+    private SysUser user;
+
+    public SysUser getUser() {
+        return user;
+    }
+
+    public void setUser(SysUser user) {
+        this.user = user;
+    }
 
     public void setCarProcessId(Long carProcessId) 
     {

@@ -42,3 +42,12 @@ export function delReview(carReviewId) {
     method: 'delete'
   })
 }
+
+
+export function getCarReviewProcessList(query) {
+  return request({
+    url: '/system/carReviewProcess/list',
+    method: 'get',
+    params: query
+  })
+}

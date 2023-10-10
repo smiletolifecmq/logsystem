@@ -82,6 +82,7 @@
       >
         <template slot-scope="scope">
           <el-button
+            v-if="scope.row.reviewStatus === 0"
             size="mini"
             type="text"
             icon="el-icon-edit"
@@ -89,11 +90,19 @@
             >修改</el-button
           >
           <el-button
+            v-if="scope.row.reviewStatus === 0"
             size="mini"
             type="text"
             icon="el-icon-delete"
             @click="handleDelete(scope.row)"
             >删除</el-button
+          >
+          <el-button
+            size="mini"
+            type="text"
+            icon="el-icon-s-operation"
+            @click="handleReviewProcess(scope.row)"
+            >流程详情</el-button
           >
         </template>
       </el-table-column>
@@ -145,6 +154,22 @@
         <el-button @click="cancel">取 消</el-button>
       </div>
     </el-dialog>
+
+    <!-- 具体流程 -->
+
+    <el-dialog :visible.sync="reviewProcessOpen" width="300px" append-to-body>
+      <div style="height: 300px">
+        <el-steps direction="vertical" :active="reviewProcessActive">
+          <el-step
+            v-for="reviewProcess in reviewProcessList"
+            :key="reviewProcess.reviewProcessId"
+            :title="reviewProcess.user.userName"
+            :status="reviewProcessStatus(reviewProcess)"
+            :description="reviewProcessDescription(reviewProcess)"
+          ></el-step>
+        </el-steps>
+      </div>
+    </el-dialog>
   </div>
 </template>
 
@@ -155,6 +180,7 @@ import {
   delReview,
   addReview,
   updateReview,
+  getCarReviewProcessList,
 } from "@/api/system/carReviewIndex";
 import { deptTreeSelectUnlimited } from "@/api/system/user";
 import Treeselect from "@riophae/vue-treeselect";
@@ -165,8 +191,10 @@ export default {
   name: "Review",
   data() {
     return {
+      reviewProcessList: [],
       queryParamsDeptId: [],
-
+      reviewProcessActive: -1,
+      reviewProcessOpen: false,
       activeNames: ["1", "2"],
       deptOptions: undefined,
       // 遮罩层
@@ -212,6 +240,52 @@ export default {
     this.getDeptTree();
   },
   methods: {
+    reviewProcessStatus(reviewProcess) {
+      if (reviewProcess.status === 0) {
+        return "";
+      } else if (reviewProcess.status === 1) {
+        return "finish";
+      } else if (reviewProcess.status === 2) {
+        return "success";
+      } else if (reviewProcess.status === 3) {
+        return "error";
+      }
+    },
+    reviewProcessDescription(reviewProcess) {
+      if (reviewProcess.status === 0) {
+        return "审核状态:未开始";
+      } else if (reviewProcess.status === 1) {
+        return "审核状态:进行中";
+      } else if (reviewProcess.status === 2) {
+        let description = "审核状态:通过；";
+        if (reviewProcess.reason != "" && reviewProcess.reason != null) {
+          description = description + "理由:" + reviewProcess.reason + "；";
+        }
+        description = description + "审核时间:" + reviewProcess.reviewTime;
+        return description;
+      } else if (reviewProcess.status === 3) {
+        let description = "审核状态:拒绝；";
+        if (reviewProcess.reason != "" && reviewProcess.reason != null) {
+          description = description + "理由:" + reviewProcess.reason + "；";
+        }
+        description = description + "审核时间:" + reviewProcess.reviewTime;
+        return description;
+      }
+    },
+    handleReviewProcess(row) {
+      let formObj = {};
+      formObj.carReviewId = row.carReviewId;
+      getCarReviewProcessList(formObj).then((response) => {
+        this.reviewProcessList = response.rows;
+        this.reviewProcessActive = -1;
+        for (let i = 0; i < response.rows.length; i++) {
+          if (response.rows[i].status != 0) {
+            this.reviewProcessActive = this.reviewProcessActive + 1;
+          }
+        }
+        this.reviewProcessOpen = true;
+      });
+    },
     handleChangeDept(value) {
       this.form.deptId = value[1];
     },
@@ -284,23 +358,35 @@ export default {
     },
     /** 提交按钮 */
     submitForm() {
-      this.$refs["form"].validate((valid) => {
-        if (valid) {
-          if (this.form.carReviewId != null) {
-            updateReview(this.form).then((response) => {
-              this.$modal.msgSuccess("修改成功");
-              this.open = false;
-              this.getList();
-            });
-          } else {
-            addReview(this.form).then((response) => {
-              this.$modal.msgSuccess("新增成功");
-              this.open = false;
-              this.getList();
-            });
-          }
+      this.$confirm(
+        "确定操作将直接发起审核，不可进行修改操作，请仔细确认填写信息～",
+        "提示",
+        {
+          confirmButtonText: "确定",
+          cancelButtonText: "取消",
+          type: "warning",
         }
-      });
+      )
+        .then(() => {
+          this.$refs["form"].validate((valid) => {
+            if (valid) {
+              if (this.form.carReviewId != null) {
+                updateReview(this.form).then((response) => {
+                  this.$modal.msgSuccess("修改成功");
+                  this.open = false;
+                  this.getList();
+                });
+              } else {
+                addReview(this.form).then((response) => {
+                  this.$modal.msgSuccess("新增成功");
+                  this.open = false;
+                  this.getList();
+                });
+              }
+            }
+          });
+        })
+        .catch(() => {});
     },
     /** 删除按钮操作 */
     handleDelete(row) {

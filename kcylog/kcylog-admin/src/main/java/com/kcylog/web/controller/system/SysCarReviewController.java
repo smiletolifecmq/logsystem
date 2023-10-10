@@ -20,6 +20,7 @@ import org.springframework.web.bind.annotation.*;
 import javax.servlet.http.HttpServletResponse;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Objects;
 
 /**
  * 车辆使用审核Controller
@@ -87,6 +88,7 @@ public class SysCarReviewController extends BaseController
         }
         Long userId = SecurityUtils.getUserId();
         sysCarReview.setUserId(userId);
+        sysCarReview.setReviewStatus((long)1);
         sysCarReviewService.insertSysCarReview(sysCarReview);
         List<SysCarReviewConfigInfo> carReviewConfigInfoList = sysCarReviewConfigInfoService.selectCarReviewConfigInfoListByDeptId(sysCarReview.getDeptId());
 
@@ -95,7 +97,11 @@ public class SysCarReviewController extends BaseController
             SysCarReviewProcess  carReview = new SysCarReviewProcess();
             carReview.setCarReviewId((sysCarReview.getCarReviewId()));
             carReview.setUserId(configInfo.getUserId());
-            carReview.setStatus((long)0);
+            if (Objects.equals(configInfo.getNode(), "1")){
+                carReview.setStatus((long)1);
+            }else {
+                carReview.setStatus((long)0);
+            }
             carReview.setNode(Long.parseLong(configInfo.getNode()));
             carReviewProcess.add(carReview);
         }
