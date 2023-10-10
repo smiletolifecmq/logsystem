@@ -1,0 +1,71 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.kcylog.system.mapper.SysCarReviewMapper">
+    
+    <resultMap type="SysCarReview" id="SysCarReviewResult">
+        <result property="carReviewId"    column="car_review_id"    />
+        <result property="recordTime"    column="record_time"    />
+        <result property="userId"    column="user_id"    />
+        <result property="deptId"    column="dept_id"    />
+        <result property="reviewStatus"    column="review_status"    />
+    </resultMap>
+
+    <sql id="selectSysCarReviewVo">
+        select car_review_id, record_time, user_id, dept_id, review_status from sys_car_review
+    </sql>
+
+    <select id="selectSysCarReviewList" parameterType="SysCarReview" resultMap="SysCarReviewResult">
+        <include refid="selectSysCarReviewVo"/>
+        <where>  
+            <if test="recordTime != null "> and record_time = #{recordTime}</if>
+            <if test="userId != null "> and user_id = #{userId}</if>
+            <if test="deptId != null "> and dept_id = #{deptId}</if>
+            <if test="reviewStatus != null "> and review_status = #{reviewStatus}</if>
+        </where>
+    </select>
+    
+    <select id="selectSysCarReviewByCarReviewId" parameterType="Long" resultMap="SysCarReviewResult">
+        <include refid="selectSysCarReviewVo"/>
+        where car_review_id = #{carReviewId}
+    </select>
+        
+    <insert id="insertSysCarReview" parameterType="SysCarReview" useGeneratedKeys="true" keyProperty="carReviewId">
+        insert into sys_car_review
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="recordTime != null">record_time,</if>
+            <if test="userId != null">user_id,</if>
+            <if test="deptId != null">dept_id,</if>
+            <if test="reviewStatus != null">review_status,</if>
+         </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test="recordTime != null">#{recordTime},</if>
+            <if test="userId != null">#{userId},</if>
+            <if test="deptId != null">#{deptId},</if>
+            <if test="reviewStatus != null">#{reviewStatus},</if>
+         </trim>
+    </insert>
+
+    <update id="updateSysCarReview" parameterType="SysCarReview">
+        update sys_car_review
+        <trim prefix="SET" suffixOverrides=",">
+            <if test="recordTime != null">record_time = #{recordTime},</if>
+            <if test="userId != null">user_id = #{userId},</if>
+            <if test="deptId != null">dept_id = #{deptId},</if>
+            <if test="reviewStatus != null">review_status = #{reviewStatus},</if>
+        </trim>
+        where car_review_id = #{carReviewId}
+    </update>
+
+    <delete id="deleteSysCarReviewByCarReviewId" parameterType="Long">
+        delete from sys_car_review where car_review_id = #{carReviewId}
+    </delete>
+
+    <delete id="deleteSysCarReviewByCarReviewIds" parameterType="String">
+        delete from sys_car_review where car_review_id in 
+        <foreach item="carReviewId" collection="array" open="(" separator="," close=")">
+            #{carReviewId}
+        </foreach>
+    </delete>
+</mapper>

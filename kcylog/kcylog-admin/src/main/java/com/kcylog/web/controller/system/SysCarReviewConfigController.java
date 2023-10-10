@@ -31,7 +31,7 @@ public class SysCarReviewConfigController extends BaseController
     /**
      * 查询车辆审核流程配置列表
      */
-    @PreAuthorize("@ss.hasPermi('system:config:list')")
+    @PreAuthorize("@ss.hasPermi('system:carReviewConfig:list')")
     @GetMapping("/list")
     public TableDataInfo list(SysCarReviewConfig sysCarReviewConfig)
     {
@@ -43,7 +43,7 @@ public class SysCarReviewConfigController extends BaseController
     /**
      * 导出车辆审核流程配置列表
      */
-    @PreAuthorize("@ss.hasPermi('system:config:export')")
+    @PreAuthorize("@ss.hasPermi('system:carReviewConfig:export')")
     @Log(title = "车辆审核流程配置", businessType = BusinessType.EXPORT)
     @PostMapping("/export")
     public void export(HttpServletResponse response, SysCarReviewConfig sysCarReviewConfig)
@@ -56,7 +56,7 @@ public class SysCarReviewConfigController extends BaseController
     /**
      * 获取车辆审核流程配置详细信息
      */
-    @PreAuthorize("@ss.hasPermi('system:config:query')")
+    @PreAuthorize("@ss.hasPermi('system:carReviewConfig:query')")
     @GetMapping(value = "/{reviewConfigId}")
     public AjaxResult getInfo(@PathVariable("reviewConfigId") Long reviewConfigId)
     {
@@ -66,7 +66,7 @@ public class SysCarReviewConfigController extends BaseController
     /**
      * 新增车辆审核流程配置
      */
-    @PreAuthorize("@ss.hasPermi('system:config:add')")
+    @PreAuthorize("@ss.hasPermi('system:carReviewConfig:add')")
     @Log(title = "车辆审核流程配置", businessType = BusinessType.INSERT)
     @PostMapping
     public AjaxResult add(@RequestBody SysCarReviewConfig sysCarReviewConfig)
@@ -77,7 +77,7 @@ public class SysCarReviewConfigController extends BaseController
     /**
      * 修改车辆审核流程配置
      */
-    @PreAuthorize("@ss.hasPermi('system:config:edit')")
+    @PreAuthorize("@ss.hasPermi('system:carReviewConfig:edit')")
     @Log(title = "车辆审核流程配置", businessType = BusinessType.UPDATE)
     @PutMapping
     public AjaxResult edit(@RequestBody SysCarReviewConfig sysCarReviewConfig)
@@ -88,7 +88,7 @@ public class SysCarReviewConfigController extends BaseController
     /**
      * 删除车辆审核流程配置
      */
-    @PreAuthorize("@ss.hasPermi('system:config:remove')")
+    @PreAuthorize("@ss.hasPermi('system:carReviewConfig:remove')")
     @Log(title = "车辆审核流程配置", businessType = BusinessType.DELETE)
 	@DeleteMapping("/{reviewConfigIds}")
     public AjaxResult remove(@PathVariable Long[] reviewConfigIds)
