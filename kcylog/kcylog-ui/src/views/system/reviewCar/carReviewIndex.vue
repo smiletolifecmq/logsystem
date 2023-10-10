@@ -8,13 +8,13 @@
       v-show="showSearch"
       label-width="68px"
     >
-      <el-form-item label="记录时间" prop="recordTime">
+      <el-form-item label="用车时间" prop="recordTime">
         <el-date-picker
           clearable
           v-model="queryParams.recordTime"
           type="date"
           value-format="yyyy-MM-dd"
-          placeholder="请选择记录时间"
+          placeholder="请选择用车时间"
         >
         </el-date-picker>
       </el-form-item>
@@ -40,7 +40,6 @@
           icon="el-icon-plus"
           size="mini"
           @click="handleAdd"
-          v-hasPermi="['system:review:add']"
           >新增</el-button
         >
       </el-col>
@@ -56,7 +55,7 @@
       @selection-change="handleSelectionChange"
     >
       <el-table-column
-        label="记录时间"
+        label="用车时间"
         align="center"
         prop="recordTime"
         width="180"
@@ -87,7 +86,6 @@
             type="text"
             icon="el-icon-edit"
             @click="handleUpdate(scope.row)"
-            v-hasPermi="['system:review:edit']"
             >修改</el-button
           >
           <el-button
@@ -95,7 +93,6 @@
             type="text"
             icon="el-icon-delete"
             @click="handleDelete(scope.row)"
-            v-hasPermi="['system:review:remove']"
             >删除</el-button
           >
         </template>
@@ -111,24 +108,37 @@
     />
 
     <!-- 添加或修改车辆使用审核对话框 -->
-    <el-dialog :title="title" :visible.sync="open" width="500px" append-to-body>
+    <el-dialog
+      :title="title"
+      :visible.sync="open"
+      width="1000px"
+      append-to-body
+    >
       <el-form ref="form" :model="form" :rules="rules" label-width="80px">
-        <el-form-item label="记录时间" prop="recordTime">
-          <el-date-picker
-            clearable
-            v-model="form.recordTime"
-            type="date"
-            value-format="yyyy-MM-dd"
-            placeholder="请选择记录时间"
-          >
-          </el-date-picker>
-        </el-form-item>
-        <el-form-item label="负责人ID" prop="userId">
-          <el-input v-model="form.userId" placeholder="请输入负责人ID" />
-        </el-form-item>
-        <el-form-item label="部门ID" prop="deptId">
-          <el-input v-model="form.deptId" placeholder="请输入部门ID" />
-        </el-form-item>
+        <el-collapse v-model="activeNames">
+          <el-collapse-item title="日期与部门信息" name="1">
+            <el-form-item label="日期" prop="recordTime">
+              <el-date-picker
+                clearable
+                v-model="form.recordTime"
+                type="date"
+                value-format="yyyy-MM-dd"
+                placeholder="请选择日期"
+              >
+              </el-date-picker>
+            </el-form-item>
+            <el-form-item label="部门" prop="deptId">
+              <treeselect
+                v-model="form.deptId"
+                :options="deptOptions"
+                :show-count="true"
+                placeholder="请选择部门"
+              />
+            </el-form-item>
+          </el-collapse-item>
+          <el-collapse-item title="车辆使用信息登记" name="2">
+          </el-collapse-item>
+        </el-collapse>
       </el-form>
       <div slot="footer" class="dialog-footer">
         <el-button type="primary" @click="submitForm">确 定</el-button>
@@ -146,11 +156,17 @@ import {
   addReview,
   updateReview,
 } from "@/api/system/carReviewIndex";
+import { deptTreeSelectUnlimited } from "@/api/system/user";
+import Treeselect from "@riophae/vue-treeselect";
+import "@riophae/vue-treeselect/dist/vue-treeselect.css";
 
 export default {
+  components: { Treeselect },
   name: "Review",
   data() {
     return {
+      activeNames: ["1", "2"],
+      deptOptions: undefined,
       // 遮罩层
       loading: true,
       // 选中数组
@@ -182,26 +198,23 @@ export default {
       form: {},
       // 表单校验
       rules: {
-        userId: [
-          { required: true, message: "负责人ID不能为空", trigger: "blur" },
+        recordTime: [
+          { required: true, message: "请选择用车时间", trigger: "blur" },
         ],
-        deptId: [
-          { required: true, message: "部门ID不能为空", trigger: "blur" },
-        ],
-        reviewStatus: [
-          {
-            required: true,
-            message: "审核状态(0:未开始;1进行中;2通过;3:未通过)不能为空",
-            trigger: "change",
-          },
-        ],
+        deptId: [{ required: true, message: "请选择部门", trigger: "blur" }],
       },
     };
   },
   created() {
     this.getList();
+    this.getDeptTree();
   },
   methods: {
+    getDeptTree() {
+      deptTreeSelectUnlimited().then((response) => {
+        this.deptOptions = response.data;
+      });
+    },
     /** 查询车辆使用审核列表 */
     getList() {
       this.loading = true;
@@ -247,7 +260,7 @@ export default {
     handleAdd() {
       this.reset();
       this.open = true;
-      this.title = "添加车辆使用审核";
+      this.title = "车辆使用登记";
     },
     /** 修改按钮操作 */
     handleUpdate(row) {
@@ -256,7 +269,7 @@ export default {
       getReview(carReviewId).then((response) => {
         this.form = response.data;
         this.open = true;
-        this.title = "修改车辆使用审核";
+        this.title = "车辆使用修改";
       });
     },
     /** 提交按钮 */

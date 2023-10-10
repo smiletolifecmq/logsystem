@@ -9,7 +9,6 @@ import com.kcylog.common.utils.poi.ExcelUtil;
 import com.kcylog.system.domain.SysCarReview;
 import com.kcylog.system.service.ISysCarReviewService;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
 import javax.servlet.http.HttpServletResponse;
@@ -31,7 +30,6 @@ public class SysCarReviewController extends BaseController
     /**
      * 查询车辆使用审核列表
      */
-    @PreAuthorize("@ss.hasPermi('system:carReview:list')")
     @GetMapping("/list")
     public TableDataInfo list(SysCarReview sysCarReview)
     {
@@ -43,7 +41,6 @@ public class SysCarReviewController extends BaseController
     /**
      * 导出车辆使用审核列表
      */
-    @PreAuthorize("@ss.hasPermi('system:carReview:export')")
     @Log(title = "车辆使用审核", businessType = BusinessType.EXPORT)
     @PostMapping("/export")
     public void export(HttpServletResponse response, SysCarReview sysCarReview)
@@ -56,7 +53,6 @@ public class SysCarReviewController extends BaseController
     /**
      * 获取车辆使用审核详细信息
      */
-    @PreAuthorize("@ss.hasPermi('system:carReview:query')")
     @GetMapping(value = "/{carReviewId}")
     public AjaxResult getInfo(@PathVariable("carReviewId") Long carReviewId)
     {
@@ -66,7 +62,6 @@ public class SysCarReviewController extends BaseController
     /**
      * 新增车辆使用审核
      */
-    @PreAuthorize("@ss.hasPermi('system:carReview:add')")
     @Log(title = "车辆使用审核", businessType = BusinessType.INSERT)
     @PostMapping
     public AjaxResult add(@RequestBody SysCarReview sysCarReview)
@@ -77,7 +72,6 @@ public class SysCarReviewController extends BaseController
     /**
      * 修改车辆使用审核
      */
-    @PreAuthorize("@ss.hasPermi('system:carReview:edit')")
     @Log(title = "车辆使用审核", businessType = BusinessType.UPDATE)
     @PutMapping
     public AjaxResult edit(@RequestBody SysCarReview sysCarReview)
@@ -88,7 +82,6 @@ public class SysCarReviewController extends BaseController
     /**
      * 删除车辆使用审核
      */
-    @PreAuthorize("@ss.hasPermi('system:carReview:remove')")
     @Log(title = "车辆使用审核", businessType = BusinessType.DELETE)
 	@DeleteMapping("/{carReviewIds}")
     public AjaxResult remove(@PathVariable Long[] carReviewIds)
