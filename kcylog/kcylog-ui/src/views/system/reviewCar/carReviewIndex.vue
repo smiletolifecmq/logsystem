@@ -18,22 +18,6 @@
         >
         </el-date-picker>
       </el-form-item>
-      <el-form-item label="负责人ID" prop="userId">
-        <el-input
-          v-model="queryParams.userId"
-          placeholder="请输入负责人ID"
-          clearable
-          @keyup.enter.native="handleQuery"
-        />
-      </el-form-item>
-      <el-form-item label="部门ID" prop="deptId">
-        <el-input
-          v-model="queryParams.deptId"
-          placeholder="请输入部门ID"
-          clearable
-          @keyup.enter.native="handleQuery"
-        />
-      </el-form-item>
       <el-form-item>
         <el-button
           type="primary"
@@ -60,41 +44,6 @@
           >新增</el-button
         >
       </el-col>
-      <el-col :span="1.5">
-        <el-button
-          type="success"
-          plain
-          icon="el-icon-edit"
-          size="mini"
-          :disabled="single"
-          @click="handleUpdate"
-          v-hasPermi="['system:review:edit']"
-          >修改</el-button
-        >
-      </el-col>
-      <el-col :span="1.5">
-        <el-button
-          type="danger"
-          plain
-          icon="el-icon-delete"
-          size="mini"
-          :disabled="multiple"
-          @click="handleDelete"
-          v-hasPermi="['system:review:remove']"
-          >删除</el-button
-        >
-      </el-col>
-      <el-col :span="1.5">
-        <el-button
-          type="warning"
-          plain
-          icon="el-icon-download"
-          size="mini"
-          @click="handleExport"
-          v-hasPermi="['system:review:export']"
-          >导出</el-button
-        >
-      </el-col>
       <right-toolbar
         :showSearch.sync="showSearch"
         @queryTable="getList"
@@ -106,12 +55,6 @@
       :data="reviewList"
       @selection-change="handleSelectionChange"
     >
-      <el-table-column type="selection" width="55" align="center" />
-      <el-table-column
-        label="车辆审核单自增ID"
-        align="center"
-        prop="carReviewId"
-      />
       <el-table-column
         label="记录时间"
         align="center"
@@ -122,13 +65,17 @@
           <span>{{ parseTime(scope.row.recordTime, "{y}-{m}-{d}") }}</span>
         </template>
       </el-table-column>
-      <el-table-column label="负责人ID" align="center" prop="userId" />
-      <el-table-column label="部门ID" align="center" prop="deptId" />
-      <el-table-column
-        label="审核状态(0:未开始;1进行中;2通过;3:未通过)"
-        align="center"
-        prop="reviewStatus"
-      />
+      <el-table-column label="创建人" align="center" prop="userId" />
+      <el-table-column label="部门" align="center" prop="deptId" />
+      <el-table-column label="审核状态" align="center" prop="reviewStatus">
+        <template slot-scope="scope">
+          <span v-if="scope.row.reviewStatus === 0">未开始</span>
+          <span v-else-if="scope.row.reviewStatus === 1">进行中</span>
+          <span v-else-if="scope.row.reviewStatus === 2">通过</span>
+          <span v-else-if="scope.row.reviewStatus === 3">未通过</span>
+          <span v-else>未知状态</span>
+        </template>
+      </el-table-column>
       <el-table-column
         label="操作"
         align="center"

@@ -126,15 +126,24 @@
       <el-table-column label="雇工金额" align="center" prop="budgetMoney" /> -->
       <el-table-column label="负责人" align="center" prop="user.userName" />
       <el-table-column label="部门" align="center" prop="dept.deptName" />
-      <!-- <el-table-column label="审核状态" align="center" prop="status">
+      <el-table-column label="审核状态" align="center" prop="status">
         <template slot-scope="scope">
           <span v-if="scope.row.status === 0">未开始</span>
-          <span v-else-if="scope.row.status === 1">进行中</span>
-          <span v-else-if="scope.row.status === 2">通过</span>
-          <span v-else-if="scope.row.status === 3">未通过</span>
+          <span v-else-if="scope.row.status === 1" style="color: blue"
+            >进行中</span
+          >
+          <span v-else-if="scope.row.status === 2" style="color: green"
+            >通过</span
+          >
+          <span v-else-if="scope.row.status === 3" style="color: red"
+            >未通过</span
+          >
+          <span v-else-if="scope.row.status === 4" style="color: burlywood"
+            >已结算</span
+          >
           <span v-else>其他状态</span>
         </template>
-      </el-table-column> -->
+      </el-table-column>
       <!-- <el-table-column label="人数" align="center" prop="peopleNum" />
       <el-table-column
         label="预估雇工工作开始时间"
