@@ -1,0 +1,66 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.kcylog.system.mapper.SysCarReviewConfigInfoMapper">
+    
+    <resultMap type="SysCarReviewConfigInfo" id="SysCarReviewConfigInfoResult">
+        <result property="infoId"    column="info_id"    />
+        <result property="reviewConfigId"    column="review_config_id"    />
+        <result property="node"    column="node"    />
+        <result property="userId"    column="user_id"    />
+    </resultMap>
+
+    <sql id="selectSysCarReviewConfigInfoVo">
+        select info_id, review_config_id, node, user_id from sys_car_review_config_info
+    </sql>
+
+    <select id="selectSysCarReviewConfigInfoList" parameterType="SysCarReviewConfigInfo" resultMap="SysCarReviewConfigInfoResult">
+        <include refid="selectSysCarReviewConfigInfoVo"/>
+        <where>  
+            <if test="reviewConfigId != null "> and review_config_id = #{reviewConfigId}</if>
+            <if test="node != null  and node != ''"> and node = #{node}</if>
+            <if test="userId != null "> and user_id = #{userId}</if>
+        </where>
+    </select>
+    
+    <select id="selectSysCarReviewConfigInfoByInfoId" parameterType="Long" resultMap="SysCarReviewConfigInfoResult">
+        <include refid="selectSysCarReviewConfigInfoVo"/>
+        where info_id = #{infoId}
+    </select>
+        
+    <insert id="insertSysCarReviewConfigInfo" parameterType="SysCarReviewConfigInfo" useGeneratedKeys="true" keyProperty="infoId">
+        insert into sys_car_review_config_info
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="reviewConfigId != null">review_config_id,</if>
+            <if test="node != null and node != ''">node,</if>
+            <if test="userId != null">user_id,</if>
+         </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test="reviewConfigId != null">#{reviewConfigId},</if>
+            <if test="node != null and node != ''">#{node},</if>
+            <if test="userId != null">#{userId},</if>
+         </trim>
+    </insert>
+
+    <update id="updateSysCarReviewConfigInfo" parameterType="SysCarReviewConfigInfo">
+        update sys_car_review_config_info
+        <trim prefix="SET" suffixOverrides=",">
+            <if test="reviewConfigId != null">review_config_id = #{reviewConfigId},</if>
+            <if test="node != null and node != ''">node = #{node},</if>
+            <if test="userId != null">user_id = #{userId},</if>
+        </trim>
+        where info_id = #{infoId}
+    </update>
+
+    <delete id="deleteSysCarReviewConfigInfoByInfoId" parameterType="Long">
+        delete from sys_car_review_config_info where info_id = #{infoId}
+    </delete>
+
+    <delete id="deleteSysCarReviewConfigInfoByInfoIds" parameterType="String">
+        delete from sys_car_review_config_info where info_id in 
+        <foreach item="infoId" collection="array" open="(" separator="," close=")">
+            #{infoId}
+        </foreach>
+    </delete>
+</mapper>
