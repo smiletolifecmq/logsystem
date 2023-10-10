@@ -10,25 +10,37 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
         <result property="userId"    column="user_id"    />
         <result property="deptId"    column="dept_id"    />
         <result property="reviewStatus"    column="review_status"    />
+        <association property="dept" column="dept_name" javaType="SysDept" resultMap="sysReviewDeptResult"/>
+        <association property="user" column="user_name" javaType="SysUser" resultMap="sysReviewUserResult"/>
+    </resultMap>
+
+    <resultMap id="sysReviewDeptResult" type="SysDept">
+        <result property="deptName" column="dept_name"/>
+    </resultMap>
+
+    <resultMap id="sysReviewUserResult" type="SysUser">
+        <result property="userName" column="user_name"/>
     </resultMap>
 
     <sql id="selectSysCarReviewVo">
-        select car_review_id, record_time, user_id, dept_id, review_status from sys_car_review
+        select r.car_review_id, r.record_time, r.dept_id, r.review_status, d.dept_name, u.user_name from sys_car_review r
+        inner join sys_dept d on r.dept_id = d.dept_id
+        inner join sys_user u on r.user_id = u.user_id
     </sql>
 
     <select id="selectSysCarReviewList" parameterType="SysCarReview" resultMap="SysCarReviewResult">
         <include refid="selectSysCarReviewVo"/>
         <where>  
-            <if test="recordTime != null "> and record_time = #{recordTime}</if>
-            <if test="userId != null "> and user_id = #{userId}</if>
-            <if test="deptId != null "> and dept_id = #{deptId}</if>
-            <if test="reviewStatus != null "> and review_status = #{reviewStatus}</if>
+            <if test="recordTime != null "> and r.record_time = #{recordTime}</if>
+            <if test="userId != null "> and r.user_id = #{userId}</if>
+            <if test="deptId != null "> and r.dept_id = #{deptId}</if>
+            <if test="reviewStatus != null "> and r.review_status = #{reviewStatus}</if>
         </where>
     </select>
     
     <select id="selectSysCarReviewByCarReviewId" parameterType="Long" resultMap="SysCarReviewResult">
         <include refid="selectSysCarReviewVo"/>
-        where car_review_id = #{carReviewId}
+        where r.car_review_id = #{carReviewId}
     </select>
         
     <insert id="insertSysCarReview" parameterType="SysCarReview" useGeneratedKeys="true" keyProperty="carReviewId">
@@ -68,4 +80,9 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
             #{carReviewId}
         </foreach>
     </delete>
+
+    <select id="checkProjectKeyUnique" parameterType="SysCarReview" resultMap="SysCarReviewResult">
+        <include refid="selectSysCarReviewVo"/>
+        where r.dept_id = #{deptId} and r.record_time = #{recordTime}
+    </select>
 </mapper>

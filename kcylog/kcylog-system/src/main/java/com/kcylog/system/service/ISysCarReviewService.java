@@ -1,7 +1,8 @@
 package com.kcylog.system.service;
 
-import java.util.List;
 import com.kcylog.system.domain.SysCarReview;
+
+import java.util.List;
 
 /**
  * 车辆使用审核Service接口
@@ -58,4 +59,6 @@ public interface ISysCarReviewService
      * @return 结果
      */
     public int deleteSysCarReviewByCarReviewId(Long carReviewId);
+
+    public SysCarReview checkProjectKeyUnique(SysCarReview sysCarReview);
 }

@@ -1,7 +1,8 @@
 package com.kcylog.system.mapper;
 
-import java.util.List;
 import com.kcylog.system.domain.SysCarReview;
+
+import java.util.List;
 
 /**
  * 车辆使用审核Mapper接口
@@ -58,4 +59,6 @@ public interface SysCarReviewMapper
      * @return 结果
      */
     public int deleteSysCarReviewByCarReviewIds(Long[] carReviewIds);
+
+    public SysCarReview checkProjectKeyUnique(SysCarReview sysCarReview);
 }

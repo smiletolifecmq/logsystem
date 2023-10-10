@@ -3,6 +3,8 @@ package com.kcylog.system.domain;
 import com.fasterxml.jackson.annotation.JsonFormat;
 import com.kcylog.common.annotation.Excel;
 import com.kcylog.common.core.domain.BaseEntity;
+import com.kcylog.common.core.domain.entity.SysDept;
+import com.kcylog.common.core.domain.entity.SysUser;
 import org.apache.commons.lang3.builder.ToStringBuilder;
 import org.apache.commons.lang3.builder.ToStringStyle;
 
@@ -37,6 +39,32 @@ public class SysCarReview extends BaseEntity
     /** 审核状态(0:未开始;1进行中;2通过;3:未通过) */
     @Excel(name = "审核状态(0:未开始;1进行中;2通过;3:未通过)")
     private Long reviewStatus;
+
+    /**
+     * 部门对象
+     */
+    private SysDept dept;
+
+    /**
+     * 用户对象
+     */
+    private SysUser user;
+
+    public SysDept getDept() {
+        return dept;
+    }
+
+    public void setDept(SysDept dept) {
+        this.dept = dept;
+    }
+
+    public SysUser getUser() {
+        return user;
+    }
+
+    public void setUser(SysUser user) {
+        this.user = user;
+    }
 
     public void setCarReviewId(Long carReviewId) 
     {

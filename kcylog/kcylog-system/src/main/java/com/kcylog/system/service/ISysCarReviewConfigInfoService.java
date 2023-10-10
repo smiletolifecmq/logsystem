@@ -1,7 +1,8 @@
 package com.kcylog.system.service;
 
-import java.util.List;
 import com.kcylog.system.domain.SysCarReviewConfigInfo;
+
+import java.util.List;
 
 /**
  * 车辆使用流程配置过程Service接口
@@ -58,4 +59,6 @@ public interface ISysCarReviewConfigInfoService
      * @return 结果
      */
     public int deleteSysCarReviewConfigInfoByInfoId(Long infoId);
+
+    public List<SysCarReviewConfigInfo> selectCarReviewConfigInfoListByDeptId(Long deptId);
 }

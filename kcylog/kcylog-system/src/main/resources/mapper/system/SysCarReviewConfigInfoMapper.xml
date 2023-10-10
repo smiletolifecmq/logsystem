@@ -69,4 +69,13 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
             #{infoId}
         </foreach>
     </delete>
+
+    <select id="selectCarReviewConfigInfoListByDeptId" parameterType="Long" resultMap="SysCarReviewConfigInfoResult">
+        select p.* from sys_car_review_config_info p
+        inner join sys_car_review_config e on p.review_config_id = e.review_config_id
+        <where>
+            e.dept_id = #{deptId}
+        </where>
+        order by p.node asc
+    </select>
 </mapper>

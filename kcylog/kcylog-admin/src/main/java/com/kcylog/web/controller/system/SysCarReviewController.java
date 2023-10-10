@@ -5,13 +5,20 @@ import com.kcylog.common.core.controller.BaseController;
 import com.kcylog.common.core.domain.AjaxResult;
 import com.kcylog.common.core.page.TableDataInfo;
 import com.kcylog.common.enums.BusinessType;
+import com.kcylog.common.utils.SecurityUtils;
 import com.kcylog.common.utils.poi.ExcelUtil;
 import com.kcylog.system.domain.SysCarReview;
+import com.kcylog.system.domain.SysCarReviewConfigInfo;
+import com.kcylog.system.domain.SysCarReviewProcess;
+import com.kcylog.system.service.ISysCarReviewConfigInfoService;
+import com.kcylog.system.service.ISysCarReviewProcessService;
 import com.kcylog.system.service.ISysCarReviewService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.bind.annotation.*;
 
 import javax.servlet.http.HttpServletResponse;
+import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -26,6 +33,13 @@ public class SysCarReviewController extends BaseController
 {
     @Autowired
     private ISysCarReviewService sysCarReviewService;
+
+    @Autowired
+    private ISysCarReviewConfigInfoService sysCarReviewConfigInfoService;
+
+    @Autowired
+    private ISysCarReviewProcessService sysCarReviewProcessService;
+
 
     /**
      * 查询车辆使用审核列表
@@ -63,10 +77,30 @@ public class SysCarReviewController extends BaseController
      * 新增车辆使用审核
      */
     @Log(title = "车辆使用审核", businessType = BusinessType.INSERT)
+    @Transactional
     @PostMapping
     public AjaxResult add(@RequestBody SysCarReview sysCarReview)
     {
-        return toAjax(sysCarReviewService.insertSysCarReview(sysCarReview));
+        if (sysCarReviewService.checkProjectKeyUnique(sysCarReview) != null )
+        {
+            return error("登记失败，该部门该日期项目使用车辆情况已登记过了～");
+        }
+        Long userId = SecurityUtils.getUserId();
+        sysCarReview.setUserId(userId);
+        sysCarReviewService.insertSysCarReview(sysCarReview);
+        List<SysCarReviewConfigInfo> carReviewConfigInfoList = sysCarReviewConfigInfoService.selectCarReviewConfigInfoListByDeptId(sysCarReview.getDeptId());
+
+        List<SysCarReviewProcess> carReviewProcess = new ArrayList<>();
+        for (SysCarReviewConfigInfo configInfo : carReviewConfigInfoList) {
+            SysCarReviewProcess  carReview = new SysCarReviewProcess();
+            carReview.setCarReviewId((sysCarReview.getCarReviewId()));
+            carReview.setUserId(configInfo.getUserId());
+            carReview.setStatus((long)0);
+            carReview.setNode(Long.parseLong(configInfo.getNode()));
+            carReviewProcess.add(carReview);
+        }
+        int result = sysCarReviewProcessService.insertSysCarReviewBatch(carReviewProcess);
+        return toAjax(result);
     }
 
     /**

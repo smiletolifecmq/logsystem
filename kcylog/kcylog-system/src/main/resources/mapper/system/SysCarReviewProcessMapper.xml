@@ -1,0 +1,89 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.kcylog.system.mapper.SysCarReviewProcessMapper">
+    
+    <resultMap type="SysCarReviewProcess" id="SysCarReviewProcessResult">
+        <result property="carProcessId"    column="car_process_id"    />
+        <result property="carReviewId"    column="car_review_id"    />
+        <result property="userId"    column="user_id"    />
+        <result property="status"    column="status"    />
+        <result property="node"    column="node"    />
+        <result property="reason"    column="reason"    />
+        <result property="reviewTime"    column="review_time"    />
+    </resultMap>
+
+    <sql id="selectSysCarReviewProcessVo">
+        select car_process_id, car_review_id, user_id, status, node, reason, review_time from sys_car_review_process
+    </sql>
+
+    <select id="selectSysCarReviewProcessList" parameterType="SysCarReviewProcess" resultMap="SysCarReviewProcessResult">
+        <include refid="selectSysCarReviewProcessVo"/>
+        <where>  
+            <if test="carReviewId != null "> and car_review_id = #{carReviewId}</if>
+            <if test="userId != null "> and user_id = #{userId}</if>
+            <if test="status != null "> and status = #{status}</if>
+            <if test="node != null "> and node = #{node}</if>
+            <if test="reason != null  and reason != ''"> and reason = #{reason}</if>
+            <if test="reviewTime != null "> and review_time = #{reviewTime}</if>
+        </where>
+    </select>
+    
+    <select id="selectSysCarReviewProcessByCarProcessId" parameterType="Long" resultMap="SysCarReviewProcessResult">
+        <include refid="selectSysCarReviewProcessVo"/>
+        where car_process_id = #{carProcessId}
+    </select>
+        
+    <insert id="insertSysCarReviewProcess" parameterType="SysCarReviewProcess" useGeneratedKeys="true" keyProperty="carProcessId">
+        insert into sys_car_review_process
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="carReviewId != null">car_review_id,</if>
+            <if test="userId != null">user_id,</if>
+            <if test="status != null">status,</if>
+            <if test="node != null">node,</if>
+            <if test="reason != null">reason,</if>
+            <if test="reviewTime != null">review_time,</if>
+         </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test="carReviewId != null">#{carReviewId},</if>
+            <if test="userId != null">#{userId},</if>
+            <if test="status != null">#{status},</if>
+            <if test="node != null">#{node},</if>
+            <if test="reason != null">#{reason},</if>
+            <if test="reviewTime != null">#{reviewTime},</if>
+         </trim>
+    </insert>
+
+    <update id="updateSysCarReviewProcess" parameterType="SysCarReviewProcess">
+        update sys_car_review_process
+        <trim prefix="SET" suffixOverrides=",">
+            <if test="carReviewId != null">car_review_id = #{carReviewId},</if>
+            <if test="userId != null">user_id = #{userId},</if>
+            <if test="status != null">status = #{status},</if>
+            <if test="node != null">node = #{node},</if>
+            <if test="reason != null">reason = #{reason},</if>
+            <if test="reviewTime != null">review_time = #{reviewTime},</if>
+        </trim>
+        where car_process_id = #{carProcessId}
+    </update>
+
+    <delete id="deleteSysCarReviewProcessByCarProcessId" parameterType="Long">
+        delete from sys_car_review_process where car_process_id = #{carProcessId}
+    </delete>
+
+    <delete id="deleteSysCarReviewProcessByCarProcessIds" parameterType="String">
+        delete from sys_car_review_process where car_process_id in 
+        <foreach item="carProcessId" collection="array" open="(" separator="," close=")">
+            #{carProcessId}
+        </foreach>
+    </delete>
+
+    <insert id="insertSysCarReviewBatch" parameterType="java.util.List">
+        insert into sys_car_review_process (car_review_id, user_id, status, node, reason, review_time)
+        values
+        <foreach collection="list" item="item" separator=",">
+            (#{item.carReviewId}, #{item.userId}, #{item.status}, #{item.node}, #{item.reason}, #{item.reviewTime})
+        </foreach>
+    </insert>
+</mapper>

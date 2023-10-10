@@ -1,11 +1,12 @@
 package com.kcylog.system.service.impl;
 
-import java.util.List;
+import com.kcylog.system.domain.SysCarReviewConfigInfo;
+import com.kcylog.system.mapper.SysCarReviewConfigInfoMapper;
+import com.kcylog.system.service.ISysCarReviewConfigInfoService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-import com.kcylog.system.mapper.SysCarReviewConfigInfoMapper;
-import com.kcylog.system.domain.SysCarReviewConfigInfo;
-import com.kcylog.system.service.ISysCarReviewConfigInfoService;
+
+import java.util.List;
 
 /**
  * 车辆使用流程配置过程Service业务层处理
@@ -89,5 +90,11 @@ public class SysCarReviewConfigInfoServiceImpl implements ISysCarReviewConfigInf
     public int deleteSysCarReviewConfigInfoByInfoId(Long infoId)
     {
         return sysCarReviewConfigInfoMapper.deleteSysCarReviewConfigInfoByInfoId(infoId);
+    }
+
+    @Override
+    public List<SysCarReviewConfigInfo> selectCarReviewConfigInfoListByDeptId(Long deptId)
+    {
+        return sysCarReviewConfigInfoMapper.selectCarReviewConfigInfoListByDeptId(deptId);
     }
 }

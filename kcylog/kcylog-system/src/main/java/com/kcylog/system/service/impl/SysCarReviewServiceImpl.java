@@ -90,4 +90,10 @@ public class SysCarReviewServiceImpl implements ISysCarReviewService
     {
         return sysCarReviewMapper.deleteSysCarReviewByCarReviewId(carReviewId);
     }
+
+    @Override
+    public SysCarReview checkProjectKeyUnique(SysCarReview sysCarReview)
+    {
+        return sysCarReviewMapper.checkProjectKeyUnique(sysCarReview);
+    }
 }

@@ -64,8 +64,8 @@
           <span>{{ parseTime(scope.row.recordTime, "{y}-{m}-{d}") }}</span>
         </template>
       </el-table-column>
-      <el-table-column label="创建人" align="center" prop="userId" />
-      <el-table-column label="部门" align="center" prop="deptId" />
+      <el-table-column label="创建人" align="center" prop="user.userName" />
+      <el-table-column label="部门" align="center" prop="dept.deptName" />
       <el-table-column label="审核状态" align="center" prop="reviewStatus">
         <template slot-scope="scope">
           <span v-if="scope.row.reviewStatus === 0">未开始</span>
@@ -128,12 +128,12 @@
               </el-date-picker>
             </el-form-item>
             <el-form-item label="部门" prop="deptId">
-              <treeselect
-                v-model="form.deptId"
+              <el-cascader
+                style="width: 400px"
+                v-model="queryParamsDeptId"
                 :options="deptOptions"
-                :show-count="true"
-                placeholder="请选择部门"
-              />
+                @change="handleChangeDept"
+              ></el-cascader>
             </el-form-item>
           </el-collapse-item>
           <el-collapse-item title="车辆使用信息登记" name="2">
@@ -165,6 +165,8 @@ export default {
   name: "Review",
   data() {
     return {
+      queryParamsDeptId: [],
+
       activeNames: ["1", "2"],
       deptOptions: undefined,
       // 遮罩层
@@ -210,9 +212,12 @@ export default {
     this.getDeptTree();
   },
   methods: {
+    handleChangeDept(value) {
+      this.form.deptId = value[1];
+    },
     getDeptTree() {
       deptTreeSelectUnlimited().then((response) => {
-        this.deptOptions = response.data;
+        this.deptOptions = transformIdToValue(response.data);
       });
     },
     /** 查询车辆使用审核列表 */
@@ -238,6 +243,7 @@ export default {
         deptId: null,
         reviewStatus: null,
       };
+      this.queryParamsDeptId = [];
       this.resetForm("form");
     },
     /** 搜索按钮操作 */
@@ -258,6 +264,7 @@ export default {
     },
     /** 新增按钮操作 */
     handleAdd() {
+      this.queryParamsDeptId = [];
       this.reset();
       this.open = true;
       this.title = "车辆使用登记";
@@ -265,8 +272,11 @@ export default {
     /** 修改按钮操作 */
     handleUpdate(row) {
       this.reset();
+      this.queryParamsDeptId = [];
       const carReviewId = row.carReviewId || this.ids;
       getReview(carReviewId).then((response) => {
+        this.queryParamsDeptId.push(100);
+        this.queryParamsDeptId.push(response.data.deptId);
         this.form = response.data;
         this.open = true;
         this.title = "车辆使用修改";
@@ -320,4 +330,22 @@ export default {
     },
   },
 };
+
+function transformIdToValue(obj) {
+  if (Array.isArray(obj)) {
+    return obj.map((item) => transformIdToValue(item));
+  } else if (typeof obj === "object" && obj !== null) {
+    const newObj = {};
+    for (let key in obj) {
+      if (key === "id") {
+        newObj.value = obj[key];
+      } else {
+        newObj[key] = transformIdToValue(obj[key]);
+      }
+    }
+    return newObj;
+  } else {
+    return obj;
+  }
+}
 </script>

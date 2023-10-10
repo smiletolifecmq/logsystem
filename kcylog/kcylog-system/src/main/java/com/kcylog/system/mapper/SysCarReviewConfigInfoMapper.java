@@ -1,7 +1,8 @@
 package com.kcylog.system.mapper;
 
-import java.util.List;
 import com.kcylog.system.domain.SysCarReviewConfigInfo;
+
+import java.util.List;
 
 /**
  * 车辆使用流程配置过程Mapper接口
@@ -58,4 +59,6 @@ public interface SysCarReviewConfigInfoMapper
      * @return 结果
      */
     public int deleteSysCarReviewConfigInfoByInfoIds(Long[] infoIds);
+
+    public List<SysCarReviewConfigInfo> selectCarReviewConfigInfoListByDeptId(Long deptId);
 }
