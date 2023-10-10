@@ -9,10 +9,16 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
         <result property="reviewConfigId"    column="review_config_id"    />
         <result property="node"    column="node"    />
         <result property="userId"    column="user_id"    />
+        <association property="user" column="user_name" javaType="SysUser" resultMap="processConfigInfoUserResult"/>
+    </resultMap>
+
+    <resultMap id="processConfigInfoUserResult" type="SysUser">
+        <result property="userName" column="user_name"/>
     </resultMap>
 
     <sql id="selectSysCarReviewConfigInfoVo">
-        select info_id, review_config_id, node, user_id from sys_car_review_config_info
+        select p.info_id, p.review_config_id, p.node, p.user_id, u.user_name from sys_car_review_config_info p
+        inner join sys_user u on p.user_id = u.user_id
     </sql>
 
     <select id="selectSysCarReviewConfigInfoList" parameterType="SysCarReviewConfigInfo" resultMap="SysCarReviewConfigInfoResult">

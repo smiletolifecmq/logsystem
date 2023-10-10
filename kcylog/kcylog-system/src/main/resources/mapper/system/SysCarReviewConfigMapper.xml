@@ -10,10 +10,16 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
         <result property="deptId"    column="dept_id"    />
         <result property="createTime"    column="create_time"    />
         <result property="updateTime"    column="update_time"    />
+        <association property="dept" column="dept_name" javaType="SysDept" resultMap="processConfigLogDeptResult"/>
+    </resultMap>
+
+    <resultMap id="processConfigLogDeptResult" type="SysDept">
+        <result property="deptName" column="dept_name"/>
     </resultMap>
 
     <sql id="selectSysCarReviewConfigVo">
-        select review_config_id, title, dept_id, create_time, update_time from sys_car_review_config
+        select u.review_config_id, u.title, u.dept_id, u.create_time, u.update_time, d.dept_name from sys_car_review_config u
+        inner join sys_dept d on u.dept_id = d.dept_id
     </sql>
 
     <select id="selectSysCarReviewConfigList" parameterType="SysCarReviewConfig" resultMap="SysCarReviewConfigResult">

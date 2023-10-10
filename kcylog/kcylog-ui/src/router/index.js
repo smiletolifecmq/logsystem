@@ -308,6 +308,21 @@ export const dynamicRoutes = [
       }
     ]
   },
+
+  {
+    path: '/system/car-process-config',
+    component: Layout,
+    hidden: true,
+    permissions: ['system:carReviewConfig:list'],
+    children: [
+      {
+        path: 'info/:reviewConfigId(\\d+)/:deptId(\\d+)',
+        component: () => import('@/views/system/reviewCar/carReviewConfigInfo'),
+        name: 'carReviewConfigInfo',
+        meta: { title: '配置流程', activeMenu: '/system/carReviewConfigInfo' }
+      }
+    ]
+  },
 ]
 
 // 防止连续点击多次路由报错

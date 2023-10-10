@@ -1,5 +1,6 @@
 package com.kcylog.system.domain;
 
+import com.kcylog.common.core.domain.entity.SysUser;
 import org.apache.commons.lang3.builder.ToStringBuilder;
 import org.apache.commons.lang3.builder.ToStringStyle;
 import com.kcylog.common.annotation.Excel;
@@ -29,6 +30,16 @@ public class SysCarReviewConfigInfo extends BaseEntity
     /** 审核人id */
     @Excel(name = "审核人id")
     private Long userId;
+
+    private SysUser user;
+
+    public SysUser getUser() {
+        return user;
+    }
+
+    public void setUser(SysUser user) {
+        this.user = user;
+    }
 
     public void setInfoId(Long infoId) 
     {

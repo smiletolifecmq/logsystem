@@ -8,10 +8,10 @@
       v-show="showSearch"
       label-width="68px"
     >
-      <el-form-item label="配置标题" prop="title">
+      <el-form-item label="配置名称" prop="title">
         <el-input
           v-model="queryParams.title"
-          placeholder="请输入配置标题"
+          placeholder="请输入配置名称"
           clearable
           @keyup.enter.native="handleQuery"
         />
@@ -89,13 +89,8 @@
       @selection-change="handleSelectionChange"
     >
       <el-table-column type="selection" width="55" align="center" />
-      <el-table-column
-        label="流程配置表ID"
-        align="center"
-        prop="reviewConfigId"
-      />
-      <el-table-column label="配置标题" align="center" prop="title" />
-      <el-table-column label="部门ID" align="center" prop="deptId" />
+      <el-table-column label="配置名称" align="center" prop="title" />
+      <el-table-column label="部门名称" align="center" prop="dept.deptName" />
       <el-table-column
         label="操作"
         align="center"
@@ -118,6 +113,21 @@
             v-hasPermi="['system:config:remove']"
             >删除</el-button
           >
+          <el-dropdown
+            size="mini"
+            @command="(command) => handleCommand(command, scope.row)"
+          >
+            <el-button size="mini" type="text" icon="el-icon-d-arrow-right"
+              >更多</el-button
+            >
+            <el-dropdown-menu slot="dropdown">
+              <el-dropdown-item
+                command="configReviewProcess"
+                icon="el-icon-circle-check"
+                >配置审核流程</el-dropdown-item
+              >
+            </el-dropdown-menu>
+          </el-dropdown>
         </template>
       </el-table-column>
     </el-table>
@@ -130,11 +140,19 @@
       @pagination="getList"
     />
 
-    <!-- 添加或修改车辆审核流程配置对话框 -->
+    <!-- 添加或修改流程配置对话框 -->
     <el-dialog :title="title" :visible.sync="open" width="500px" append-to-body>
       <el-form ref="form" :model="form" :rules="rules" label-width="80px">
-        <el-form-item label="配置标题" prop="title">
-          <el-input v-model="form.title" placeholder="请输入配置标题" />
+        <el-form-item label="配置名称" prop="title">
+          <el-input v-model="form.title" placeholder="请输入配置名称" />
+        </el-form-item>
+        <el-form-item label="归属部门" prop="deptId">
+          <treeselect
+            v-model="form.deptId"
+            :options="deptOptions"
+            :show-count="true"
+            placeholder="请选择归属部门"
+          />
         </el-form-item>
       </el-form>
       <div slot="footer" class="dialog-footer">
@@ -153,11 +171,17 @@ import {
   addConfig,
   updateConfig,
 } from "@/api/system/carReviewConfig";
+import { deptTreeSelect } from "@/api/system/user";
+import Treeselect from "@riophae/vue-treeselect";
+import "@riophae/vue-treeselect/dist/vue-treeselect.css";
 
 export default {
   name: "Config",
+  components: { Treeselect },
   data() {
     return {
+      // 部门树选项
+      deptOptions: undefined,
       // 遮罩层
       loading: true,
       // 选中数组
@@ -170,7 +194,7 @@ export default {
       showSearch: true,
       // 总条数
       total: 0,
-      // 车辆审核流程配置表格数据
+      // 流程配置表格数据
       configList: [],
       // 弹出层标题
       title: "",
@@ -191,16 +215,41 @@ export default {
           { required: true, message: "配置标题不能为空", trigger: "blur" },
         ],
         deptId: [
-          { required: true, message: "部门ID不能为空", trigger: "blur" },
+          { required: true, message: "请选择归属部门", trigger: "change" },
         ],
       },
     };
   },
   created() {
     this.getList();
+    this.getDeptTree();
   },
   methods: {
-    /** 查询车辆审核流程配置列表 */
+    // 更多操作触发
+    handleCommand(command, row) {
+      switch (command) {
+        case "configReviewProcess":
+          this.configReviewProcess(row);
+          break;
+        default:
+          break;
+      }
+    },
+    /** 进入配置流程页面 */
+    configReviewProcess: function (row) {
+      const reviewConfigId = row.reviewConfigId;
+      const deptId = row.deptId;
+      this.$router.push(
+        "/system/car-process-config/info/" + reviewConfigId + "/" + deptId
+      );
+    },
+    /** 查询部门下拉树结构 */
+    getDeptTree() {
+      deptTreeSelect().then((response) => {
+        this.deptOptions = response.data;
+      });
+    },
+    /** 查询流程配置列表 */
     getList() {
       this.loading = true;
       listConfig(this.queryParams).then((response) => {
@@ -245,7 +294,7 @@ export default {
     handleAdd() {
       this.reset();
       this.open = true;
-      this.title = "添加车辆审核流程配置";
+      this.title = "添加流程配置";
     },
     /** 修改按钮操作 */
     handleUpdate(row) {
@@ -254,7 +303,7 @@ export default {
       getConfig(reviewConfigId).then((response) => {
         this.form = response.data;
         this.open = true;
-        this.title = "修改车辆审核流程配置";
+        this.title = "修改流程配置";
       });
     },
     /** 提交按钮 */
@@ -282,9 +331,7 @@ export default {
       const reviewConfigIds = row.reviewConfigId || this.ids;
       this.$modal
         .confirm(
-          '是否确认删除车辆审核流程配置编号为"' +
-            reviewConfigIds +
-            '"的数据项？'
+          '是否确认删除流程配置编号为"' + reviewConfigIds + '"的数据项？'
         )
         .then(function () {
           return delConfig(reviewConfigIds);

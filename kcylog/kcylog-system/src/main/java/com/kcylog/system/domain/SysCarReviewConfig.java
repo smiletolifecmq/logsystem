@@ -1,5 +1,6 @@
 package com.kcylog.system.domain;
 
+import com.kcylog.common.core.domain.entity.SysDept;
 import org.apache.commons.lang3.builder.ToStringBuilder;
 import org.apache.commons.lang3.builder.ToStringStyle;
 import com.kcylog.common.annotation.Excel;
@@ -25,6 +26,19 @@ public class SysCarReviewConfig extends BaseEntity
     /** 部门ID */
     @Excel(name = "部门ID")
     private Long deptId;
+
+    /**
+     * 部门对象
+     */
+    private SysDept dept;
+
+    public SysDept getDept() {
+        return dept;
+    }
+
+    public void setDept(SysDept dept) {
+        this.dept = dept;
+    }
 
     public void setReviewConfigId(Long reviewConfigId) 
     {
