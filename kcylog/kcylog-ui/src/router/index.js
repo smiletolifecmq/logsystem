@@ -279,22 +279,6 @@ export const dynamicRoutes = [
       }
     ]
   },
-
-  {
-    path: '/system/project',
-    component: Layout,
-    hidden: true,
-    permissions: ['system:project:carRegister'],
-    children: [
-      {
-        path: 'carList/:projectId(\\d+)',
-        component: () => import('@/views/system/project/carInfo'),
-        name: 'CarInfo',
-        meta: { title: '项目用车登记', activeMenu: '/system/project' }
-      }
-    ]
-  },
-
   {
     path: '/system/reviewSub-employee',
     component: Layout,
