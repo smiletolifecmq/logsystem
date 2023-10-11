@@ -22,9 +22,6 @@ import java.util.List;
 
 /**
  * 结算单Controller
- * 
- * @author ruoyi
- * @date 2023-07-12
  */
 @RestController
 @RequestMapping("/system/settlement")

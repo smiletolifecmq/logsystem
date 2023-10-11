@@ -28,9 +28,6 @@ import java.util.Map;
 
 /**
  * 雇工实际工作内容记录Controller
- * 
- * @author ruoyi
- * @date 2023-06-15
  */
 @RestController
 @RequestMapping("/system/reviewEmployee")

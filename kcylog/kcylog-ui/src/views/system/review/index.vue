@@ -110,7 +110,6 @@
       :data="reviewList"
       @selection-change="handleSelectionChange"
     >
-      <!-- <el-table-column type="selection" width="55" align="center" /> -->
       <el-table-column label="工程编号" align="center" prop="serialNum" />
       <el-table-column label="项目名称" align="center" prop="projectName" />
       <el-table-column label="委托单位" align="center" prop="requester" />
@@ -126,15 +125,6 @@
       <el-table-column label="雇工金额" align="center" prop="budgetMoney" />
       <el-table-column label="负责人" align="center" prop="user.userName" />
       <el-table-column label="部门" align="center" prop="dept.deptName" />
-      <!-- <el-table-column label="审核状态" align="center" prop="status">
-        <template slot-scope="scope">
-          <span v-if="scope.row.status === 0">未开始</span>
-          <span v-else-if="scope.row.status === 1">进行中</span>
-          <span v-else-if="scope.row.status === 2">通过</span>
-          <span v-else-if="scope.row.status === 3">未通过</span>
-          <span v-else>其他状态</span>
-        </template>
-      </el-table-column> -->
       <el-table-column label="人数" align="center" prop="peopleNum" />
       <el-table-column
         label="预估雇工工作开始时间"
@@ -261,9 +251,6 @@
       :limit.sync="queryParams.pageSize"
       @pagination="getList"
     />
-
-    <!-- 具体流程 -->
-
     <el-dialog :visible.sync="reviewProcessOpen" width="300px" append-to-body>
       <div style="height: 300px">
         <el-steps direction="vertical" :active="reviewProcessActive">
@@ -288,7 +275,6 @@
       </div>
     </el-dialog>
 
-    <!-- 添加或修改审核单对话框 -->
     <el-dialog
       :title="title"
       :visible.sync="open"
@@ -298,16 +284,6 @@
       :close-on-press-escape="false"
     >
       <el-form ref="form" :model="form" :rules="rules" label-width="80px">
-        <!-- <el-form-item label="关联项目" prop="userId">
-          <el-autocomplete
-            v-model="form.userId"
-            :fetch-suggestions="querySearchReviewer"
-            placeholder="请选择项目"
-            @select="selectReviewer"
-            @clear="clearReviewer"
-            clearable
-          ></el-autocomplete>
-        </el-form-item> -->
         <el-form-item label="工程编号" prop="serialNum">
           <el-input v-model="form.serialNum" placeholder="请输入编号" />
         </el-form-item>
@@ -447,8 +423,6 @@
         <el-button @click="cancel">取 消</el-button>
       </div>
     </el-dialog>
-
-    <!-- 详情对话框 -->
     <el-dialog
       :title="titleInfo"
       :visible.sync="openInfo"
@@ -828,7 +802,6 @@ export default {
       ],
       statusVaule: "",
       finalHireValue: "",
-      // 日期范围
       dateRange: [],
       // 遮罩层
       loading: true,
@@ -875,10 +848,8 @@ export default {
         pageNum: 1,
         pageSize: 9999,
       },
-      // 表单参数
       form: {},
       formInfo: {},
-      // 表单校验
       rules: {
         serialNum: [
           { required: true, message: "编号不能为空", trigger: "blur" },
@@ -889,9 +860,6 @@ export default {
         requester: [
           { required: true, message: "委托单位不能为空", trigger: "blur" },
         ],
-        // porjectMoney: [
-        //   { required: true, message: "项目金额不能为空", trigger: "blur" },
-        // ],
         peopleNum: [
           { required: true, message: "人数不能为空", trigger: "blur" },
         ],
@@ -953,33 +921,6 @@ export default {
         .catch((error) => {
           this.$message.error("请求项目管理数据失败～");
         });
-
-      // let res = {
-      //   total: 1000, //总行数
-      //   rows: [
-      //     {
-      //       XMBH: "项目编号1",
-      //       XMMC: "项目名称1",
-      //       GCNR: "工作内容1",
-      //       WTDW: "委托单位1",
-      //       GZL: "工作量1",
-      //       YSJE: 0,
-      //       XMKSSJ: "2023-08-08",
-      //       XMJSSJ: "2023-08-14",
-      //     },
-      //     {
-      //       XMBH: "项目编号2",
-      //       XMMC: "项目名称2",
-      //       GCNR: "工作内容2",
-      //       WTDW: "委托单位2",
-      //       GZL: "工作量2",
-      //       YSJE: 260,
-      //     },
-      //   ],
-      // };
-      // this.projectList = res.rows;
-      // this.projectTotal = res.total;
-      // this.loading = false;
     },
     showEmployeeButton(finalTime, status, finalSecondStatus) {
       if ((finalSecondStatus == 1 || status == 2) && status != 4) {
@@ -1107,13 +1048,11 @@ export default {
         }
       );
     },
-    // 取消按钮
     cancel() {
       this.open = false;
       this.openInfo = false;
       this.reset();
     },
-    // 表单重置
     reset() {
       this.openInfo = false;
       this.form = {
@@ -1137,7 +1076,6 @@ export default {
       };
       this.resetForm("form");
     },
-    /** 搜索按钮操作 */
     handleQuery() {
       this.queryParams.pageNum = 1;
       if (this.statusVaule !== "") {
@@ -1148,7 +1086,6 @@ export default {
       }
       this.getList();
     },
-    /** 重置按钮操作 */
     resetQuery() {
       this.statusVaule = "";
       this.finalHireValue = "";
@@ -1156,13 +1093,11 @@ export default {
       this.resetForm("queryForm");
       this.handleQuery();
     },
-    // 多选框选中数据
     handleSelectionChange(selection) {
       this.ids = selection.map((item) => item.reviewId);
       this.single = selection.length !== 1;
       this.multiple = !selection.length;
     },
-    /** 新增按钮操作 */
     handleAdd() {
       this.reset();
       this.$confirm("是否需要获取项目管理系统数据?", "提示", {
@@ -1215,7 +1150,6 @@ export default {
         this.form.projectEnd = row.XMJSSJ;
       }
     },
-    /** 修改按钮操作 */
     handleUpdate(row) {
       this.reset();
       const reviewId = row.reviewId || this.ids;
@@ -1236,7 +1170,6 @@ export default {
         this.title = "修改审核单";
       });
     },
-    /** 显示具体流程按钮操作 */
     handleReviewProcess(row) {
       let formObj = {};
       formObj.reviewId = row.reviewId;
@@ -1251,7 +1184,6 @@ export default {
         this.reviewProcessOpen = true;
       });
     },
-    /** 提交按钮 */
     submitForm() {
       this.$refs["form"].validate((valid) => {
         if (valid) {
@@ -1303,7 +1235,6 @@ export default {
         }
       });
     },
-    /** 删除按钮操作 */
     handleDelete(row) {
       const reviewIds = row.reviewId || this.ids;
       this.$modal
@@ -1317,7 +1248,6 @@ export default {
         })
         .catch(() => {});
     },
-    /** 发起审核 */
     handleReview(row) {
       const reviewIds = row.reviewId || this.ids;
       this.$modal
@@ -1335,7 +1265,6 @@ export default {
         })
         .catch(() => {});
     },
-
     showReviewInfo(row) {
       const reviewId = row.reviewId || this.ids;
       getReview(reviewId).then((response) => {

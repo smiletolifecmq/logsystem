@@ -1,5 +1,4 @@
 package com.kcylog.web.controller.system;
-
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.ObjectMapper;
@@ -20,7 +19,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.bind.annotation.*;
-
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 import java.io.OutputStream;
@@ -31,9 +29,6 @@ import java.util.Map;
 
 /**
  * 审核单Controller
- * 
- * @author ruoyi
- * @date 2023-06-09
  */
 @RestController
 @RequestMapping("/system/review")
