@@ -63,4 +63,6 @@ public interface ISysCarReviewService
     public SysCarReview checkProjectKeyUnique(SysCarReview sysCarReview);
 
     public int setSysReviewStatusByCarReviewId(SysCarReview sysCarReview);
+
+    public List<SysCarReview> selectSysUpcomingReviewList(SysCarReview sysCarReview);
 }

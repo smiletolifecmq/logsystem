@@ -67,4 +67,8 @@ public interface SysCarReviewProcessMapper
     public int setStatusNotStartByCarReviewId(Long carReviewId);
 
     public int setStatusByReviewIdFirst(Long carReviewId);
+
+    public int setStatusByUserIdAndCarReviewId(SysCarReviewProcess sysCarReviewProcess);
+
+    public int setNextStatusByReviewId(Long carReviewId);
 }

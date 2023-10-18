@@ -103,4 +103,10 @@ public class SysCarReviewServiceImpl implements ISysCarReviewService
     {
         return sysCarReviewMapper.setSysReviewStatusByCarReviewId(sysCarReview);
     }
+
+    @Override
+    public List<SysCarReview> selectSysUpcomingReviewList(SysCarReview sysCarReview)
+    {
+        return sysCarReviewMapper.selectSysUpcomingReviewList(sysCarReview);
+    }
 }

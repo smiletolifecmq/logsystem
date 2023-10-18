@@ -59,3 +59,21 @@ export function setReviewStatus(data) {
     data:data
   })
 }
+
+export function upcomingCarReview(query) {
+  return request({
+    url: '/system/carReview/upcomingCarReview',
+    method: 'get',
+    params: query
+  })
+}
+
+export function setReviewProcessStatus(data) {
+  return request({
+    url: '/system/carReview/setCarProcessStatus',
+    method: 'put',
+    data:data
+  })
+}
+
+

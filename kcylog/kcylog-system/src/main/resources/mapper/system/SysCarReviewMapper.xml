@@ -105,4 +105,13 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
         set review_status = #{reviewStatus}
         where car_review_id = #{carReviewId}
     </update>
+
+    <select id="selectSysUpcomingReviewList" parameterType="SysCarReview" resultMap="SysCarReviewResult">
+        <include refid="selectSysCarReviewVo"/>
+        inner join sys_car_review_process rp on r.car_review_id = rp.car_review_id
+        <if test="recordTime != null "> and r.record_time = #{recordTime}</if>
+        AND rp.user_id = #{userId}
+        AND rp.status = 1
+        order by r.car_review_id desc
+    </select>
 </mapper>

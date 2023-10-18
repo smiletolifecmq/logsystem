@@ -110,4 +110,28 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
             ) AS r2 ON r1.car_process_id = r2.car_process_id
             SET r1.status = 1;
     </update>
+
+    <update id="setStatusByUserIdAndCarReviewId" parameterType="SysCarReviewProcess">
+        UPDATE sys_car_review_process
+        set status      = #{status},
+            reason      = #{reason},
+            review_time = #{reviewTime}
+        where car_review_id = #{carReviewId}
+          AND user_id = #{userId}
+    </update>
+
+    <update id="setNextStatusByReviewId" parameterType="Long">
+        UPDATE sys_car_review_process
+        SET status = 1
+        WHERE car_process_id IN (
+            SELECT t.car_process_id
+            FROM (
+                     SELECT car_process_id
+                     FROM sys_car_review_process
+                     WHERE car_review_id = #{carReviewId}
+                       AND status = 0
+                     ORDER BY node ASC LIMIT 1
+                 ) AS t
+        );
+    </update>
 </mapper>

@@ -115,4 +115,16 @@ public class SysCarReviewProcessServiceImpl implements ISysCarReviewProcessServi
     {
         return sysCarReviewProcessMapper.setStatusByReviewIdFirst(carReviewId);
     }
+
+    @Override
+    public int setStatusByUserIdAndCarReviewId(SysCarReviewProcess sysCarReviewProcess)
+    {
+        return sysCarReviewProcessMapper.setStatusByUserIdAndCarReviewId(sysCarReviewProcess);
+    }
+
+    @Override
+    public int setNextStatusByReviewId(Long carReviewId)
+    {
+        return sysCarReviewProcessMapper.setNextStatusByReviewId(carReviewId);
+    }
 }
