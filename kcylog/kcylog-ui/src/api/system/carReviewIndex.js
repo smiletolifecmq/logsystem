@@ -84,4 +84,11 @@ export function doneCarReview(query) {
   })
 }
 
+export function completedCarReview(query) {
+  return request({
+    url: '/system/carReview/completedCarReview',
+    method: 'get',
+    params: query
+  })
+}
 

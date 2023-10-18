@@ -252,4 +252,15 @@ public class SysCarReviewController extends BaseController
         List<SysCarReview> list = sysCarReviewService.selectSysDoneReviewList(sysCarReview);
         return getDataTable(list);
     }
+
+    /**
+     * 已通过列表
+     */
+    @GetMapping("/completedCarReview")
+    public TableDataInfo completedCarReview(SysCarReview sysCarReview)
+    {
+        startPage();
+        List<SysCarReview> list = sysCarReviewService.selectSysCarReviewList(sysCarReview);
+        return getDataTable(list);
+    }
 }

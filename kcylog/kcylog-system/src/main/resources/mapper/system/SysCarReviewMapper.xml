@@ -41,8 +41,14 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
         left join sys_project_car c on r.car_review_id = c.car_review_id
     </sql>
 
+    <sql id="selectSysCarReviewList">
+        select r.car_review_id, r.record_time, r.dept_id, r.review_status, d.dept_name, u.user_name from sys_car_review r
+        inner join sys_dept d on r.dept_id = d.dept_id
+        inner join sys_user u on r.user_id = u.user_id
+    </sql>
+
     <select id="selectSysCarReviewList" parameterType="SysCarReview" resultMap="SysCarReviewResult">
-        <include refid="selectSysCarReviewVo"/>
+        <include refid="selectSysCarReviewList"/>
         <where>  
             <if test="recordTime != null "> and r.record_time = #{recordTime}</if>
             <if test="userId != null "> and r.user_id = #{userId}</if>
@@ -107,7 +113,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
     </update>
 
     <select id="selectSysUpcomingReviewList" parameterType="SysCarReview" resultMap="SysCarReviewResult">
-        <include refid="selectSysCarReviewVo"/>
+        <include refid="selectSysCarReviewList"/>
         inner join sys_car_review_process rp on r.car_review_id = rp.car_review_id
         <if test="recordTime != null "> and r.record_time = #{recordTime}</if>
         AND rp.user_id = #{userId}
@@ -116,7 +122,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
     </select>
 
     <select id="selectSysDoneReviewList" parameterType="SysCarReview" resultMap="SysCarReviewResult">
-        <include refid="selectSysCarReviewVo"/>
+        <include refid="selectSysCarReviewList"/>
         inner join sys_car_review_process rp on r.car_review_id = rp.car_review_id
         <if test="recordTime != null "> and r.record_time = #{recordTime}</if>
         AND rp.user_id = #{userId}
