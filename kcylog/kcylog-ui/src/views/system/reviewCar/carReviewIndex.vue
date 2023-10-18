@@ -285,6 +285,7 @@
       </div>
     </el-dialog>
 
+    <!-- 用车详情 -->
     <el-dialog
       :title="title"
       :visible.sync="detailOpen"
