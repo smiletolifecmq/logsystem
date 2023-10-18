@@ -232,7 +232,7 @@
         </where>
         AND rp.user_id = #{userId}
         AND (rp.status = 2 OR rp.status = 3)
-        order by r.subcontract_id desc
+        order by rp.review_time desc
     </select>
 
     <select id="selectCompletedReviewList" parameterType="SysSubcontract" resultMap="SysSubcontractResult">

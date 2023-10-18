@@ -24,6 +24,18 @@
           @keyup.enter.native="handleQuery"
         />
       </el-form-item>
+      <el-form-item label="二检时间">
+        <el-date-picker
+          v-model="dateRange"
+          style="width: 240px"
+          value-format="yyyy-MM-dd"
+          type="daterange"
+          range-separator="-"
+          start-placeholder="开始日期"
+          end-placeholder="结束日期"
+          @change="handleQuery"
+        ></el-date-picker>
+      </el-form-item>
       <el-form-item>
         <el-button
           type="primary"
@@ -89,29 +101,18 @@
         align="center"
         prop="projectEndAlias"
       />
-      <!-- <el-table-column label="一检时间" align="center" prop="oneCheck" />
-      <el-table-column label="二检时间" align="center" prop="twoCheck" />
-      <el-table-column label="通知出件时间" align="center" prop="noticeTime" />
-      <el-table-column label="项目出件时间" align="center" prop="projectTime" />
-      <el-table-column label="送达时间" align="center" prop="deliveryTime" />
-      <el-table-column label="项目金额" align="center" prop="porjectMoney" /> -->
-      <!-- <el-table-column label="经营产值" align="center" prop="operate" /> -->
-      <!-- <el-table-column
-        label="填写经营产值人"
+      <el-table-column
+        label="安排结束时间"
         align="center"
-        prop="operateUser"
+        prop="projectEndAlias"
       />
-      <el-table-column
-        label="填写经营产值时间"
-        align="center"
-        prop="operateTime"
-        width="180"
-      >
+      <el-table-column label="二检时间" align="center" prop="twoCheckTime">
         <template slot-scope="scope">
-          <span>{{ parseTime(scope.row.operateTime, "{y}-{m}-{d}") }}</span>
+          <span>{{ parseTime(scope.row.twoCheckTime, "{y}-{m}-{d}") }}</span>
         </template>
-      </el-table-column> -->
+      </el-table-column>
       <el-table-column
+        fixed="right"
         label="操作"
         align="center"
         class-name="small-padding fixed-width"
@@ -249,7 +250,7 @@
     <el-dialog
       :title="detailTitle"
       :visible.sync="detailOpen"
-      width="1000px"
+      width="1260px"
       append-to-body
       v-el-drag-dialog
     >
@@ -397,12 +398,21 @@
           </el-table>
         </el-collapse-item>
         <el-collapse-item title="车辆使用登记" name="4">
-          <div>
-            用户决策：根据场景可给予用户操作建议或安全提示，但不能代替用户进行决策；
-          </div>
-          <div>
-            结果可控：用户可以自由的进行操作，包括撤销、回退和终止当前操作等。
-          </div>
+          <el-table :data="form.projectCar" stripe style="width: 100%">
+            <el-table-column prop="recordTime" label="日期">
+              <template slot-scope="scope">
+                <span>{{
+                  parseTime(scope.row.recordTime, "{y}-{m}-{d}")
+                }}</span>
+              </template>
+            </el-table-column>
+            <el-table-column prop="projectName" label="项目编号">
+            </el-table-column>
+            <el-table-column prop="carNum" label="车牌号"> </el-table-column>
+            <el-table-column prop="carType" label="用车类型"> </el-table-column>
+            <el-table-column prop="number" label="次数"> </el-table-column>
+            <el-table-column prop="carExpenses" label="费用"> </el-table-column>
+          </el-table>
         </el-collapse-item>
       </el-collapse>
     </el-dialog>
@@ -426,6 +436,7 @@ export default {
   },
   data() {
     return {
+      dateRange: [],
       activeNames: ["1", "2", "3", "4"],
       detailOpen: false,
       detailTitle: "项目详情",
@@ -540,11 +551,13 @@ export default {
     /** 查询项目列表 */
     getList() {
       this.loading = true;
-      listProject(this.queryParams).then((response) => {
-        this.projectList = response.rows;
-        this.total = response.total;
-        this.loading = false;
-      });
+      listProject(this.addDateRange(this.queryParams, this.dateRange)).then(
+        (response) => {
+          this.projectList = response.rows;
+          this.total = response.total;
+          this.loading = false;
+        }
+      );
     },
     // 取消按钮
     cancel() {

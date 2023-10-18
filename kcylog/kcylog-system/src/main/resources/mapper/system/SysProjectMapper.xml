@@ -33,6 +33,16 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
         <result property="createTime"    column="create_time"    />
         <result property="updateTime"    column="update_time"    />
         <association property="projectValue" javaType="java.util.List" resultMap="SysProjectValueResult"/>
+        <association property="projectCar" javaType="java.util.List" resultMap="SysProjectCarResult"/>
+    </resultMap>
+
+    <resultMap type="SysProjectCar" id="SysProjectCarResult">
+        <result property="projectName"    column="project_name"    />
+        <result property="carNum"    column="car_num"    />
+        <result property="carType"    column="car_type"    />
+        <result property="number"    column="number"    />
+        <result property="carExpenses"    column="car_expenses"    />
+        <result property="recordTime"    column="record_time"    />
     </resultMap>
 
     <resultMap type="SysProjectValue" id="SysProjectValueResult">
@@ -41,21 +51,32 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
     </resultMap>
 
     <sql id="selectSysProjectVo">
-        select p.*, v.user_name, v.proportion
+        select p.* from sys_project p
+    </sql>
+
+    <sql id="selectSysProjectDetail">
+        select p.*, v.user_name, v.proportion, c.project_name, c.car_num, c.car_type, c.number, c.car_expenses, c.record_time
         from sys_project p left join sys_project_value v on p.project_id = v.project_id
+                           left join sys_project_car c on p.project_id = c.project_id
     </sql>
 
     <select id="selectSysProjectList" parameterType="SysProject" resultMap="SysProjectResult">
         <include refid="selectSysProjectVo"/>
         <where>  
-            <if test="projectNameAlias != null  and projectNameAlias != ''"> and project_name like concat('%', #{projectNameAlias}, '%')</if>
+            <if test="projectNameAlias != null  and projectNameAlias != ''"> and project_name_alias like concat('%', #{projectNameAlias}, '%')</if>
             <if test="projectNum != null  and projectNum != ''"> and project_num like concat('%', #{projectNum}, '%')</if>
+            <if test="params.beginTime != null and params.beginTime != ''"><!-- 开始时间检索 -->
+                and (date_format(two_check_time,'%y%m%d') &gt;= date_format(#{params.beginTime},'%y%m%d'))
+            </if>
+            <if test="params.endTime != null and params.endTime != ''"><!-- 结束时间检索 -->
+                and (date_format(two_check_time,'%y%m%d') &lt;= date_format(#{params.endTime},'%y%m%d'))
+            </if>
         </where>
         order by p.project_id desc
     </select>
     
     <select id="selectSysProjectByProjectId" parameterType="String" resultMap="SysProjectResult">
-        <include refid="selectSysProjectVo"/>
+        <include refid="selectSysProjectDetail"/>
         where p.project_id = #{projectId}
     </select>
         

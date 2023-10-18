@@ -105,12 +105,23 @@ public class SysProject extends BaseEntity
 
     private Integer isCarRegister;
 
+    private List<SysProjectCar> projectCar;
+
     /** 填写经营产值时间 */
     @JsonFormat(pattern = "yyyy-MM-dd")
     @Excel(name = "填写经营产值时间", width = 30, dateFormat = "yyyy-MM-dd")
     private Date operateTime;
 
     private List<SysProjectValue> projectValue;
+
+
+    public List<SysProjectCar> getProjectCar() {
+        return projectCar;
+    }
+
+    public void setProjectCar(List<SysProjectCar> projectCar) {
+        this.projectCar = projectCar;
+    }
 
     public Integer getOutputStatus() {
         return outputStatus;
