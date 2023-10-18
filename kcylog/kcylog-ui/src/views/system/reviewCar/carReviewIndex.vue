@@ -309,6 +309,7 @@
                 type="date"
                 value-format="yyyy-MM-dd"
                 placeholder="请选择日期"
+                class="custom-input"
               >
               </el-date-picker>
             </el-form-item>
@@ -319,6 +320,7 @@
                 v-model="queryParamsDeptId"
                 :options="deptOptions"
                 @change="handleChangeDept"
+                class="custom-input"
               ></el-cascader>
             </el-form-item>
           </el-collapse-item>
@@ -336,6 +338,7 @@
                       v-model="project.projectId"
                       placeholder="请选择关联项目"
                       filterable
+                      class="custom-input"
                     >
                       <el-option
                         v-for="item in listProjectLocal"
@@ -354,6 +357,7 @@
                       disabled
                       v-model="project.carNum"
                       placeholder="请输入车牌号"
+                      class="custom-input"
                     /> </el-form-item
                 ></el-col>
                 <el-col :span="4">
@@ -362,6 +366,7 @@
                       disabled
                       v-model="project.carType"
                       placeholder="请选择用车类型"
+                      class="custom-input"
                     >
                       <el-option
                         v-for="item in carTypes"
@@ -382,6 +387,7 @@
                       disabled
                       v-model="project.number"
                       placeholder="请选择次数"
+                      class="custom-input"
                     >
                       <el-option
                         v-if="project.carType == 1"
@@ -411,6 +417,7 @@
                       :step="0.1"
                       :min="0.0"
                       placeholder="请输入用车费用"
+                      class="custom-input"
                     />
                   </el-form-item>
                 </el-col>
@@ -843,3 +850,8 @@ function transformIdToValue(obj) {
   }
 }
 </script>
+<style>
+.custom-input input {
+  color: black !important;
+}
+</style>
