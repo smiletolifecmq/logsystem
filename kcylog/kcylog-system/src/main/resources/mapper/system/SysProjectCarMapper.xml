@@ -13,10 +13,11 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
         <result property="carType"    column="car_type"    />
         <result property="number"    column="number"    />
         <result property="carExpenses"    column="car_expenses"    />
+        <result property="recordTime"    column="record_time"    />
     </resultMap>
 
     <sql id="selectSysProjectCarVo">
-        select car_id, project_id, car_review_id, project_name, car_num, car_type, number, car_expenses from sys_project_car
+        select car_id, project_id, car_review_id, project_name, car_num, car_type, number, car_expenses, record_time from sys_project_car
     </sql>
 
     <select id="selectSysProjectCarList" parameterType="SysProjectCar" resultMap="SysProjectCarResult">
@@ -47,6 +48,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
             <if test="carType != null">car_type,</if>
             <if test="number != null">number,</if>
             <if test="carExpenses != null">car_expenses,</if>
+            <if test="recordTime != null">record_time,</if>
          </trim>
         <trim prefix="values (" suffix=")" suffixOverrides=",">
             <if test="projectId != null">#{projectId},</if>
@@ -56,6 +58,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
             <if test="carType != null">#{carType},</if>
             <if test="number != null">#{number},</if>
             <if test="carExpenses != null">#{carExpenses},</if>
+            <if test="recordTime != null">#{recordTime},</if>
          </trim>
     </insert>
 
@@ -69,6 +72,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
             <if test="carType != null">car_type = #{carType},</if>
             <if test="number != null">number = #{number},</if>
             <if test="carExpenses != null">car_expenses = #{carExpenses},</if>
+            <if test="recordTime != null">record_time = #{recordTime},</if>
         </trim>
         where car_id = #{carId}
     </update>
@@ -85,10 +89,10 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
     </delete>
 
     <insert id="insertProjectCarBatch" parameterType="java.util.List">
-        insert into sys_project_car (project_id, project_name, car_review_id, car_num, car_type, number, car_expenses)
+        insert into sys_project_car (project_id, project_name, car_review_id, car_num, car_type, number, car_expenses, record_time)
         values
         <foreach collection="list" item="item" separator=",">
-            (#{item.projectId}, #{item.projectName}, #{item.carReviewId}, #{item.carNum}, #{item.carType}, #{item.number}, #{item.carExpenses})
+            (#{item.projectId}, #{item.projectName}, #{item.carReviewId}, #{item.carNum}, #{item.carType}, #{item.number}, #{item.carExpenses}, #{item.recordTime})
         </foreach>
     </insert>
 

@@ -396,14 +396,7 @@
             </el-table-column>
           </el-table>
         </el-collapse-item>
-        <el-collapse-item
-          :title="
-            form.isCarRegister == 0
-              ? '车辆使用登记（未完成）'
-              : '车辆使用登记（已完成）'
-          "
-          name="4"
-        >
+        <el-collapse-item title="车辆使用登记" name="4">
           <div>
             用户决策：根据场景可给予用户操作建议或安全提示，但不能代替用户进行决策；
           </div>

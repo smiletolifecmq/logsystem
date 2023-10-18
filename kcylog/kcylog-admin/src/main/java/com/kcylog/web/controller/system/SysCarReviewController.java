@@ -125,6 +125,7 @@ public class SysCarReviewController extends BaseController
             sysProjectCar.setCarNum(projectCar.getCarNum());
             sysProjectCar.setCarType(projectCar.getCarType());
             sysProjectCar.setNumber(projectCar.getNumber());
+            sysProjectCar.setRecordTime(sysCarReview.getRecordTime());
             sysProjectCar.setCarExpenses(projectCar.getCarExpenses());
             projectCars.add(sysProjectCar);
         }
@@ -152,6 +153,7 @@ public class SysCarReviewController extends BaseController
             sysProjectCar.setCarType(projectCar.getCarType());
             sysProjectCar.setNumber(projectCar.getNumber());
             sysProjectCar.setCarExpenses(projectCar.getCarExpenses());
+            sysProjectCar.setRecordTime(sysCarReview.getRecordTime());
             projectCars.add(sysProjectCar);
         }
         sysProjectCarService.insertProjectCarBatch(projectCars);

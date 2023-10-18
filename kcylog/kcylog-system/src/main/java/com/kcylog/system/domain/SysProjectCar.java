@@ -6,6 +6,7 @@ import org.apache.commons.lang3.builder.ToStringBuilder;
 import org.apache.commons.lang3.builder.ToStringStyle;
 
 import java.math.BigDecimal;
+import java.util.Date;
 
 /**
  * 项目车辆使用情况登记对象 sys_project_car
@@ -49,9 +50,19 @@ public class SysProjectCar extends BaseEntity
     @Excel(name = "用车费用")
     private BigDecimal carExpenses;
 
-    public void setCarId(Long carId) 
+    private Date recordTime;
+
+    public void setCarId(Long carId)
     {
         this.carId = carId;
+    }
+
+    public Date getRecordTime() {
+        return recordTime;
+    }
+
+    public void setRecordTime(Date recordTime) {
+        this.recordTime = recordTime;
     }
 
     public Long getCarId() 

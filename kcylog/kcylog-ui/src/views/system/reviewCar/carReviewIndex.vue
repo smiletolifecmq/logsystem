@@ -82,7 +82,7 @@
       >
         <template slot-scope="scope">
           <el-button
-            v-if="scope.row.status === 0 || scope.row.status === 3"
+            v-if="scope.row.reviewStatus === 0 || scope.row.reviewStatus === 3"
             size="mini"
             type="text"
             icon="el-icon-s-operation"
@@ -90,7 +90,7 @@
             >发起审核</el-button
           >
           <el-button
-            v-if="scope.row.status === 0 || scope.row.status === 3"
+            v-if="scope.row.reviewStatus === 0 || scope.row.reviewStatus === 3"
             size="mini"
             type="text"
             icon="el-icon-edit"
@@ -98,7 +98,7 @@
             >修改</el-button
           >
           <el-button
-            v-if="scope.row.status === 0 || scope.row.status === 3"
+            v-if="scope.row.reviewStatus === 0 || scope.row.reviewStatus === 3"
             size="mini"
             type="text"
             icon="el-icon-delete"
