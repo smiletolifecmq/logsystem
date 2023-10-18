@@ -65,4 +65,6 @@ public interface SysCarReviewMapper
     public int setSysReviewStatusByCarReviewId(SysCarReview sysCarReview);
 
     public List<SysCarReview> selectSysUpcomingReviewList(SysCarReview sysCarReview);
+
+    public List<SysCarReview> selectSysDoneReviewList(SysCarReview sysCarReview);
 }

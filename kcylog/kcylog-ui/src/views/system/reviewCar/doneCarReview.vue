@@ -69,7 +69,7 @@
             type="text"
             icon="el-icon-s-operation"
             @click="showCarReviewDetail(scope.row)"
-            >用车审核</el-button
+            >用车详情</el-button
           >
           <el-button
             size="mini"
@@ -229,43 +229,6 @@
               </el-row>
             </el-form-item>
           </el-collapse-item>
-          <el-collapse-item title="审核操作" name="3">
-            <el-descriptions class="margin-top" :column="2" border>
-              <el-descriptions-item>
-                <template slot="label"> 审核意见 </template>
-                <el-select
-                  v-model="carDetailform.reason"
-                  filterable
-                  clearable
-                  allow-create
-                  placeholder="请输入审核意见"
-                >
-                  <el-option
-                    v-for="item in auditOpinions"
-                    :key="item.value"
-                    :label="item.label"
-                    :value="item.value"
-                  >
-                  </el-option>
-                </el-select>
-              </el-descriptions-item>
-              <el-descriptions-item>
-                <template slot="label"> 操作 </template>
-                <div class="form-container">
-                  <el-button
-                    type="success"
-                    @click="handleReview(carDetailform, 2)"
-                    >通过</el-button
-                  >
-                  <el-button
-                    type="danger"
-                    @click="handleReview(carDetailform, 3)"
-                    >回退</el-button
-                  >
-                </div>
-              </el-descriptions-item>
-            </el-descriptions>
-          </el-collapse-item>
         </el-collapse>
       </el-form>
       <div slot="footer" class="dialog-footer">
@@ -293,13 +256,9 @@
 
 <script>
 import {
-  upcomingCarReview,
+  doneCarReview,
   getReview,
-  delReview,
-  addReview,
-  updateReview,
   getCarReviewProcessList,
-  setReviewProcessStatus,
 } from "@/api/system/carReviewIndex";
 import { deptTreeSelectUnlimited } from "@/api/system/user";
 import Treeselect from "@riophae/vue-treeselect";
@@ -429,34 +388,6 @@ export default {
     this.getProjectListLocal();
   },
   methods: {
-    handleReview(row, status) {
-      let reason = "";
-      if (status == 2) {
-        reason = "此操作将确认审核为通过,是否继续?";
-      } else {
-        reason = "此操作将确认审核为不通过,是否继续?";
-      }
-      this.$confirm(reason, "提示", {
-        confirmButtonText: "确定",
-        cancelButtonText: "取消",
-        type: "warning",
-      })
-        .then(() => {
-          this.form.carReviewId = row.carReviewId;
-          this.form.status = status;
-          this.form.reason = row.reason;
-          setReviewProcessStatus(this.form).then((response) => {
-            this.getList();
-            if (this.form.status == 2) {
-              this.$modal.msgSuccess("已通过审核");
-            } else {
-              this.$modal.msgSuccess("已驳回审核");
-            }
-            this.detailOpen = false;
-          });
-        })
-        .catch(() => {});
-    },
     getProjectListLocal() {
       listProject(this.queryProjectListParams).then((response) => {
         this.listProjectLocalMap = new Map();
@@ -545,7 +476,7 @@ export default {
     /** 查询车辆使用审核列表 */
     getList() {
       this.loading = true;
-      upcomingCarReview(this.queryParams).then((response) => {
+      doneCarReview(this.queryParams).then((response) => {
         this.reviewList = response.rows;
         this.total = response.total;
         this.loading = false;
@@ -599,71 +530,6 @@ export default {
         this.detailOpen = true;
         this.title = "车辆使用详情";
       });
-    },
-    /** 提交按钮 */
-    submitForm() {
-      for (let i = 0; i < this.form.projectCar.length; i++) {
-        this.form.projectCar[i].projectName = this.listProjectLocalMap.get(
-          this.form.projectCar[i].projectId
-        );
-      }
-      this.$confirm(
-        "确定操作将直接发起审核，不可进行修改操作，请仔细确认填写信息～",
-        "提示",
-        {
-          confirmButtonText: "确定",
-          cancelButtonText: "取消",
-          type: "warning",
-        }
-      )
-        .then(() => {
-          this.$refs["form"].validate((valid) => {
-            if (valid) {
-              if (this.form.carReviewId != null) {
-                updateReview(this.form).then((response) => {
-                  this.$modal.msgSuccess("修改成功");
-                  this.open = false;
-                  this.detailOpen = false;
-                  this.getList();
-                });
-              } else {
-                addReview(this.form).then((response) => {
-                  this.$modal.msgSuccess("新增成功");
-                  this.open = false;
-                  this.detailOpen = false;
-                  this.getList();
-                });
-              }
-            }
-          });
-        })
-        .catch(() => {});
-    },
-    /** 删除按钮操作 */
-    handleDelete(row) {
-      const carReviewIds = row.carReviewId || this.ids;
-      this.$modal
-        .confirm(
-          '是否确认删除车辆使用审核编号为"' + carReviewIds + '"的数据项？'
-        )
-        .then(function () {
-          return delReview(carReviewIds);
-        })
-        .then(() => {
-          this.getList();
-          this.$modal.msgSuccess("删除成功");
-        })
-        .catch(() => {});
-    },
-    /** 导出按钮操作 */
-    handleExport() {
-      this.download(
-        "system/review/export",
-        {
-          ...this.queryParams,
-        },
-        `review_${new Date().getTime()}.xlsx`
-      );
     },
   },
 };

@@ -114,4 +114,13 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
         AND rp.status = 1
         order by r.car_review_id desc
     </select>
+
+    <select id="selectSysDoneReviewList" parameterType="SysCarReview" resultMap="SysCarReviewResult">
+        <include refid="selectSysCarReviewVo"/>
+        inner join sys_car_review_process rp on r.car_review_id = rp.car_review_id
+        <if test="recordTime != null "> and r.record_time = #{recordTime}</if>
+        AND rp.user_id = #{userId}
+        AND (rp.status = 2 OR rp.status = 3)
+        order by rp.review_time desc
+    </select>
 </mapper>

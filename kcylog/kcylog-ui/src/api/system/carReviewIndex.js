@@ -76,4 +76,12 @@ export function setReviewProcessStatus(data) {
   })
 }
 
+export function doneCarReview(query) {
+  return request({
+    url: '/system/carReview/doneCarReview',
+    method: 'get',
+    params: query
+  })
+}
+
 

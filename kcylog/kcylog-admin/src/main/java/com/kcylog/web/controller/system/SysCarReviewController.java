@@ -239,4 +239,17 @@ public class SysCarReviewController extends BaseController
         }
         return toAjax(1);
     }
+
+    /**
+     * 已审核列表
+     */
+    @GetMapping("/doneCarReview")
+    public TableDataInfo doneCarReview(SysCarReview sysCarReview)
+    {
+        startPage();
+        Long userId = SecurityUtils.getUserId();
+        sysCarReview.setUserId(userId);
+        List<SysCarReview> list = sysCarReviewService.selectSysDoneReviewList(sysCarReview);
+        return getDataTable(list);
+    }
 }
