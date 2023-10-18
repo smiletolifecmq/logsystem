@@ -85,10 +85,10 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
     </delete>
 
     <insert id="insertProjectCarBatch" parameterType="java.util.List">
-        insert into sys_project_car (project_id, car_review_id, car_num, car_type, number, car_expenses)
+        insert into sys_project_car (project_id, project_name, car_review_id, car_num, car_type, number, car_expenses)
         values
         <foreach collection="list" item="item" separator=",">
-            (#{item.projectId}, #{item.carReviewId}, #{item.carNum}, #{item.carType}, #{item.number}, #{item.carExpenses})
+            (#{item.projectId}, #{item.projectName}, #{item.carReviewId}, #{item.carNum}, #{item.carType}, #{item.number}, #{item.carExpenses})
         </foreach>
     </insert>
 
