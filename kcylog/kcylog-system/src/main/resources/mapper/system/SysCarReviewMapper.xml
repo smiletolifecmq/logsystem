@@ -12,6 +12,18 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
         <result property="reviewStatus"    column="review_status"    />
         <association property="dept" column="dept_name" javaType="SysDept" resultMap="sysReviewDeptResult"/>
         <association property="user" column="user_name" javaType="SysUser" resultMap="sysReviewUserResult"/>
+        <association property="projectCar" javaType="java.util.List" resultMap="SysProjectCarResult"/>
+    </resultMap>
+
+    <resultMap type="SysProjectCar" id="SysProjectCarResult">
+        <result property="carId"    column="car_id"    />
+        <result property="projectId"    column="project_id"    />
+        <result property="carReviewId"    column="car_review_id"    />
+        <result property="projectName"    column="project_name"    />
+        <result property="carNum"    column="car_num"    />
+        <result property="carType"    column="car_type"    />
+        <result property="number"    column="number"    />
+        <result property="carExpenses"    column="car_expenses"    />
     </resultMap>
 
     <resultMap id="sysReviewDeptResult" type="SysDept">
@@ -23,9 +35,10 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
     </resultMap>
 
     <sql id="selectSysCarReviewVo">
-        select r.car_review_id, r.record_time, r.dept_id, r.review_status, d.dept_name, u.user_name from sys_car_review r
+        select r.car_review_id, r.record_time, r.dept_id, r.review_status, d.dept_name, u.user_name, c.* from sys_car_review r
         inner join sys_dept d on r.dept_id = d.dept_id
         inner join sys_user u on r.user_id = u.user_id
+        left join sys_project_car c on r.car_review_id = c.car_review_id
     </sql>
 
     <select id="selectSysCarReviewList" parameterType="SysCarReview" resultMap="SysCarReviewResult">
@@ -36,6 +49,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
             <if test="deptId != null "> and r.dept_id = #{deptId}</if>
             <if test="reviewStatus != null "> and r.review_status = #{reviewStatus}</if>
         </where>
+        order by r.car_review_id desc
     </select>
     
     <select id="selectSysCarReviewByCarReviewId" parameterType="Long" resultMap="SysCarReviewResult">
@@ -85,4 +99,10 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
         <include refid="selectSysCarReviewVo"/>
         where r.dept_id = #{deptId} and r.record_time = #{recordTime}
     </select>
+
+    <update id="setSysReviewStatusByCarReviewId" parameterType="SysCarReview">
+        update sys_car_review
+        set review_status = #{reviewStatus}
+        where car_review_id = #{carReviewId}
+    </update>
 </mapper>

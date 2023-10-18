@@ -97,4 +97,22 @@ public class SysCarReviewProcessServiceImpl implements ISysCarReviewProcessServi
     {
         return sysCarReviewProcessMapper.insertSysCarReviewBatch(carReviewProcess);
     }
+
+    @Override
+    public int deleteSysCarReviewProcessByCarReviewIds(Long[] carReviewIds)
+    {
+        return sysCarReviewProcessMapper.deleteSysCarReviewProcessByCarReviewIds(carReviewIds);
+    }
+
+    @Override
+    public int setStatusNotStartByCarReviewId(Long carReviewId)
+    {
+        return sysCarReviewProcessMapper.setStatusNotStartByCarReviewId(carReviewId);
+    }
+
+    @Override
+    public int setStatusByReviewIdFirst(Long carReviewId)
+    {
+        return sysCarReviewProcessMapper.setStatusByReviewIdFirst(carReviewId);
+    }
 }

@@ -1,11 +1,12 @@
 package com.kcylog.system.service.impl;
 
-import java.util.List;
+import com.kcylog.system.domain.SysCarReview;
+import com.kcylog.system.mapper.SysCarReviewMapper;
+import com.kcylog.system.service.ISysCarReviewService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-import com.kcylog.system.mapper.SysCarReviewMapper;
-import com.kcylog.system.domain.SysCarReview;
-import com.kcylog.system.service.ISysCarReviewService;
+
+import java.util.List;
 
 /**
  * 车辆使用审核Service业务层处理
@@ -95,5 +96,11 @@ public class SysCarReviewServiceImpl implements ISysCarReviewService
     public SysCarReview checkProjectKeyUnique(SysCarReview sysCarReview)
     {
         return sysCarReviewMapper.checkProjectKeyUnique(sysCarReview);
+    }
+
+    @Override
+    public int setSysReviewStatusByCarReviewId(SysCarReview sysCarReview)
+    {
+        return sysCarReviewMapper.setSysReviewStatusByCarReviewId(sysCarReview);
     }
 }

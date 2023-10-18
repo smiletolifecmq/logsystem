@@ -51,3 +51,11 @@ export function getCarReviewProcessList(query) {
     params: query
   })
 }
+
+export function setReviewStatus(data) {
+  return request({
+    url: '/system/carReview/setReviewStatus',
+    method: 'put',
+    data:data
+  })
+}

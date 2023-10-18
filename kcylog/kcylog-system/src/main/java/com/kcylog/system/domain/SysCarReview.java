@@ -9,6 +9,7 @@ import org.apache.commons.lang3.builder.ToStringBuilder;
 import org.apache.commons.lang3.builder.ToStringStyle;
 
 import java.util.Date;
+import java.util.List;
 
 /**
  * 车辆使用审核对象 sys_car_review
@@ -45,10 +46,20 @@ public class SysCarReview extends BaseEntity
      */
     private SysDept dept;
 
+    private List<SysProjectCar> projectCar;
+
     /**
      * 用户对象
      */
     private SysUser user;
+
+    public List<SysProjectCar> getProjectCar() {
+        return projectCar;
+    }
+
+    public void setProjectCar(List<SysProjectCar> projectCar) {
+        this.projectCar = projectCar;
+    }
 
     public SysDept getDept() {
         return dept;

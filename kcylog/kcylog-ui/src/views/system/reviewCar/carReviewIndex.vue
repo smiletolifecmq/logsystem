@@ -82,7 +82,15 @@
       >
         <template slot-scope="scope">
           <el-button
-            v-if="scope.row.reviewStatus === 0"
+            v-if="scope.row.status === 0 || scope.row.status === 3"
+            size="mini"
+            type="text"
+            icon="el-icon-s-operation"
+            @click="openReview(scope.row)"
+            >发起审核</el-button
+          >
+          <el-button
+            v-if="scope.row.status === 0 || scope.row.status === 3"
             size="mini"
             type="text"
             icon="el-icon-edit"
@@ -90,7 +98,7 @@
             >修改</el-button
           >
           <el-button
-            v-if="scope.row.reviewStatus === 0"
+            v-if="scope.row.status === 0 || scope.row.status === 3"
             size="mini"
             type="text"
             icon="el-icon-delete"
@@ -103,6 +111,14 @@
             icon="el-icon-s-operation"
             @click="handleReviewProcess(scope.row)"
             >流程详情</el-button
+          >
+
+          <el-button
+            size="mini"
+            type="text"
+            icon="el-icon-s-operation"
+            @click="showCarReviewDetail(scope.row)"
+            >用车详情</el-button
           >
         </template>
       </el-table-column>
@@ -120,8 +136,9 @@
     <el-dialog
       :title="title"
       :visible.sync="open"
-      width="1000px"
+      width="1400px"
       append-to-body
+      :show-close="false"
     >
       <el-form ref="form" :model="form" :rules="rules" label-width="80px">
         <el-collapse v-model="activeNames">
@@ -146,12 +163,263 @@
             </el-form-item>
           </el-collapse-item>
           <el-collapse-item title="车辆使用信息登记" name="2">
+            <el-button
+              v-if="form.projectCar != null && form.projectCar.length == 0"
+              type="text"
+              icon="el-icon-circle-plus"
+              size="medium"
+              style="margin-left: 20px; margin-bottom: 20px"
+              @click="addProject()"
+            ></el-button>
+            <el-form-item
+              v-for="(project, index) in form.projectCar"
+              :key="index"
+              prop="projectCar"
+            >
+              <el-row style="margin-left: -80px">
+                <el-col :span="4">
+                  <el-form-item label="项目编号" prop="projectId">
+                    <el-select
+                      v-model="project.projectId"
+                      placeholder="请选择关联项目"
+                      filterable
+                    >
+                      <el-option
+                        v-for="item in listProjectLocal"
+                        :key="item.projectId"
+                        :label="item.projectNum"
+                        :value="item.projectId"
+                        :disabled="item.disabled"
+                      >
+                      </el-option>
+                    </el-select>
+                  </el-form-item>
+                </el-col>
+                <el-col :span="4">
+                  <el-form-item label="车牌号" prop="carNum">
+                    <el-input
+                      v-model="project.carNum"
+                      placeholder="请输入车牌号"
+                    /> </el-form-item
+                ></el-col>
+                <el-col :span="4">
+                  <el-form-item label="用车类型" prop="carType">
+                    <el-select
+                      v-model="project.carType"
+                      placeholder="请选择用车类型"
+                    >
+                      <el-option
+                        v-for="item in carTypes"
+                        :key="item.value"
+                        :label="item.label"
+                        :value="item.value"
+                      >
+                      </el-option>
+                    </el-select>
+                  </el-form-item>
+                </el-col>
+                <el-col
+                  :span="4"
+                  v-if="project.carType === 1 || project.carType === 2"
+                >
+                  <el-form-item label="次数" prop="number">
+                    <el-select
+                      v-model="project.number"
+                      placeholder="请选择次数"
+                    >
+                      <el-option
+                        v-if="project.carType == 1"
+                        v-for="item in pcNumbers"
+                        :key="item.value"
+                        :label="item.label"
+                        :value="item.value"
+                      >
+                      </el-option>
+                      <el-option
+                        v-if="project.carType == 2"
+                        v-for="item in dxNumbers"
+                        :key="item.value"
+                        :label="item.label"
+                        :value="item.value"
+                      >
+                      </el-option>
+                    </el-select>
+                  </el-form-item>
+                </el-col>
+                <el-col :span="4">
+                  <el-form-item label="费用" prop="carExpenses">
+                    <el-input-number
+                      v-model="project.carExpenses"
+                      :precision="2"
+                      :step="0.1"
+                      :min="0.0"
+                      placeholder="请输入用车费用"
+                    />
+                  </el-form-item>
+                </el-col>
+                <el-col :span="4">
+                  <el-button
+                    v-if="index != 0 || form.projectCar.length == 1"
+                    type="text"
+                    icon="el-icon-circle-plus"
+                    size="medium"
+                    style="margin-left: 100px; margin-bottom: 20px"
+                    @click="addProject()"
+                  ></el-button>
+                  <el-button
+                    type="text"
+                    icon="el-icon-remove"
+                    size="medium"
+                    style="margin-left: 10px; margin-bottom: 20px"
+                    @click="removeProject(index)"
+                  ></el-button>
+                </el-col>
+              </el-row>
+            </el-form-item>
           </el-collapse-item>
         </el-collapse>
       </el-form>
       <div slot="footer" class="dialog-footer">
         <el-button type="primary" @click="submitForm">确 定</el-button>
         <el-button @click="cancel">取 消</el-button>
+      </div>
+    </el-dialog>
+
+    <el-dialog
+      :title="title"
+      :visible.sync="detailOpen"
+      width="1400px"
+      append-to-body
+      :show-close="false"
+    >
+      <el-form
+        ref="carDetailform"
+        :model="carDetailform"
+        :rules="rules"
+        label-width="80px"
+      >
+        <el-collapse v-model="activeNames">
+          <el-collapse-item title="日期与部门信息" name="1">
+            <el-form-item label="日期" prop="recordTime">
+              <el-date-picker
+                disabled
+                clearable
+                v-model="carDetailform.recordTime"
+                type="date"
+                value-format="yyyy-MM-dd"
+                placeholder="请选择日期"
+              >
+              </el-date-picker>
+            </el-form-item>
+            <el-form-item label="部门" prop="deptId">
+              <el-cascader
+                disabled
+                style="width: 400px"
+                v-model="queryParamsDeptId"
+                :options="deptOptions"
+                @change="handleChangeDept"
+              ></el-cascader>
+            </el-form-item>
+          </el-collapse-item>
+          <el-collapse-item title="车辆使用信息登记" name="2">
+            <el-form-item
+              v-for="(project, index) in carDetailform.projectCar"
+              :key="index"
+              prop="projectCar"
+            >
+              <el-row style="margin-left: -80px">
+                <el-col :span="4">
+                  <el-form-item label="项目编号" prop="projectId">
+                    <el-select
+                      disabled
+                      v-model="project.projectId"
+                      placeholder="请选择关联项目"
+                      filterable
+                    >
+                      <el-option
+                        v-for="item in listProjectLocal"
+                        :key="item.projectId"
+                        :label="item.projectNum"
+                        :value="item.projectId"
+                        :disabled="item.disabled"
+                      >
+                      </el-option>
+                    </el-select>
+                  </el-form-item>
+                </el-col>
+                <el-col :span="4">
+                  <el-form-item label="车牌号" prop="carNum">
+                    <el-input
+                      disabled
+                      v-model="project.carNum"
+                      placeholder="请输入车牌号"
+                    /> </el-form-item
+                ></el-col>
+                <el-col :span="4">
+                  <el-form-item label="用车类型" prop="carType">
+                    <el-select
+                      disabled
+                      v-model="project.carType"
+                      placeholder="请选择用车类型"
+                    >
+                      <el-option
+                        v-for="item in carTypes"
+                        :key="item.value"
+                        :label="item.label"
+                        :value="item.value"
+                      >
+                      </el-option>
+                    </el-select>
+                  </el-form-item>
+                </el-col>
+                <el-col
+                  :span="4"
+                  v-if="project.carType === 1 || project.carType === 2"
+                >
+                  <el-form-item label="次数" prop="number">
+                    <el-select
+                      disabled
+                      v-model="project.number"
+                      placeholder="请选择次数"
+                    >
+                      <el-option
+                        v-if="project.carType == 1"
+                        v-for="item in pcNumbers"
+                        :key="item.value"
+                        :label="item.label"
+                        :value="item.value"
+                      >
+                      </el-option>
+                      <el-option
+                        v-if="project.carType == 2"
+                        v-for="item in dxNumbers"
+                        :key="item.value"
+                        :label="item.label"
+                        :value="item.value"
+                      >
+                      </el-option>
+                    </el-select>
+                  </el-form-item>
+                </el-col>
+                <el-col :span="4">
+                  <el-form-item label="费用" prop="carExpenses">
+                    <el-input-number
+                      disabled
+                      v-model="project.carExpenses"
+                      :precision="2"
+                      :step="0.1"
+                      :min="0.0"
+                      placeholder="请输入用车费用"
+                    />
+                  </el-form-item>
+                </el-col>
+              </el-row>
+            </el-form-item>
+          </el-collapse-item>
+        </el-collapse>
+      </el-form>
+      <div slot="footer" class="dialog-footer">
+        <el-button @click="cancelCar">取 消</el-button>
       </div>
     </el-dialog>
 
@@ -181,16 +449,75 @@ import {
   addReview,
   updateReview,
   getCarReviewProcessList,
+  setReviewStatus,
 } from "@/api/system/carReviewIndex";
 import { deptTreeSelectUnlimited } from "@/api/system/user";
 import Treeselect from "@riophae/vue-treeselect";
 import "@riophae/vue-treeselect/dist/vue-treeselect.css";
+import { listProject } from "@/api/system/project";
 
 export default {
   components: { Treeselect },
   name: "Review",
   data() {
     return {
+      detailOpen: false,
+      carTypes: [
+        {
+          value: 1,
+          label: "单位派车（拼车）",
+        },
+        {
+          value: 2,
+          label: "单位派车（独享）",
+        },
+        {
+          value: 3,
+          label: "滴滴",
+        },
+      ],
+      pcNumbers: [
+        {
+          value: 1,
+          label: "拼车一趟",
+        },
+        {
+          value: 2,
+          label: "拼车二趟",
+        },
+        {
+          value: 3,
+          label: "拼车三趟",
+        },
+        {
+          value: 4,
+          label: "拼车四趟",
+        },
+      ],
+      dxNumbers: [
+        {
+          value: 1,
+          label: "独享一趟",
+        },
+        {
+          value: 2,
+          label: "独享二趟",
+        },
+        {
+          value: 3,
+          label: "独享三趟",
+        },
+        {
+          value: 4,
+          label: "独享四趟",
+        },
+      ],
+      queryProjectListParams: {
+        pageNum: 1,
+        pageSize: 9999,
+      },
+      listProjectLocal: [],
+      listProjectLocalMap: {},
       reviewProcessList: [],
       queryParamsDeptId: [],
       reviewProcessActive: -1,
@@ -224,6 +551,7 @@ export default {
         deptId: null,
         reviewStatus: null,
       },
+      carDetailform: {},
       // 表单参数
       form: {},
       // 表单校验
@@ -232,14 +560,52 @@ export default {
           { required: true, message: "请选择用车时间", trigger: "blur" },
         ],
         deptId: [{ required: true, message: "请选择部门", trigger: "blur" }],
+        projectCar: [
+          {
+            validator: this.checkProjectCar,
+            trigger: "blur",
+          },
+        ],
       },
     };
   },
   created() {
     this.getList();
     this.getDeptTree();
+    this.getProjectListLocal();
   },
   methods: {
+    getProjectListLocal() {
+      listProject(this.queryProjectListParams).then((response) => {
+        this.listProjectLocalMap = new Map();
+        for (var i = 0; i < response.rows.length; i++) {
+          this.listProjectLocalMap.set(
+            response.rows[i].projectId,
+            response.rows[i].projectNum
+          );
+        }
+        this.listProjectLocal = response.rows;
+      });
+    },
+    checkProjectCar(rule, value, callback) {
+      if (value.length == 0) {
+        callback(new Error("请添加用车信息～"));
+        return;
+      }
+      callback();
+    },
+    removeProject(index) {
+      this.form.projectCar.splice(index, 1);
+    },
+    addProject() {
+      if (this.form.projectCar == null) {
+        this.form.projectCar = [];
+      }
+      this.form.projectCar.push({
+        projectId: null,
+        projectName: "",
+      });
+    },
     reviewProcessStatus(reviewProcess) {
       if (reviewProcess.status === 0) {
         return "";
@@ -308,6 +674,10 @@ export default {
       this.open = false;
       this.reset();
     },
+    cancelCar() {
+      this.detailOpen = false;
+      this.reset();
+    },
     // 表单重置
     reset() {
       this.form = {
@@ -316,6 +686,7 @@ export default {
         userId: null,
         deptId: null,
         reviewStatus: null,
+        projectCar: [],
       };
       this.queryParamsDeptId = [];
       this.resetForm("form");
@@ -338,7 +709,6 @@ export default {
     },
     /** 新增按钮操作 */
     handleAdd() {
-      this.queryParamsDeptId = [];
       this.reset();
       this.open = true;
       this.title = "车辆使用登记";
@@ -346,7 +716,6 @@ export default {
     /** 修改按钮操作 */
     handleUpdate(row) {
       this.reset();
-      this.queryParamsDeptId = [];
       const carReviewId = row.carReviewId || this.ids;
       getReview(carReviewId).then((response) => {
         this.queryParamsDeptId.push(100);
@@ -356,8 +725,41 @@ export default {
         this.title = "车辆使用修改";
       });
     },
+    openReview(row) {
+      const carReviewId = row.carReviewId || this.ids;
+      this.$modal
+        .confirm("是否确认发起审核申请?")
+        .then(() => {
+          let setReviewStatusForm = {
+            carReviewId: carReviewId,
+            reviewStatus: 1,
+          };
+          setReviewStatus(setReviewStatusForm).then((response) => {
+            this.getList();
+            this.$modal.msgSuccess("已发起审核");
+          });
+        })
+        .catch(() => {});
+    },
+    showCarReviewDetail(row) {
+      this.reset();
+      const carReviewId = row.carReviewId || this.ids;
+      getReview(carReviewId).then((response) => {
+        this.queryParamsDeptId.push(100);
+        this.queryParamsDeptId.push(response.data.deptId);
+        this.carDetailform = response.data;
+        console.log(this.queryParamsDeptId);
+        this.detailOpen = true;
+        this.title = "车辆使用详情";
+      });
+    },
     /** 提交按钮 */
     submitForm() {
+      for (let i = 0; i < this.form.projectCar.length; i++) {
+        this.form.projectCar[i].projectName = this.listProjectLocalMap.get(
+          this.form.projectCar[i].projectId
+        );
+      }
       this.$confirm(
         "确定操作将直接发起审核，不可进行修改操作，请仔细确认填写信息～",
         "提示",
@@ -374,12 +776,14 @@ export default {
                 updateReview(this.form).then((response) => {
                   this.$modal.msgSuccess("修改成功");
                   this.open = false;
+                  this.detailOpen = false;
                   this.getList();
                 });
               } else {
                 addReview(this.form).then((response) => {
                   this.$modal.msgSuccess("新增成功");
                   this.open = false;
+                  this.detailOpen = false;
                   this.getList();
                 });
               }
@@ -424,6 +828,9 @@ function transformIdToValue(obj) {
     const newObj = {};
     for (let key in obj) {
       if (key === "id") {
+        if (obj[key] == 201) {
+          newObj.disabled = true;
+        }
         newObj.value = obj[key];
       } else {
         newObj[key] = transformIdToValue(obj[key]);

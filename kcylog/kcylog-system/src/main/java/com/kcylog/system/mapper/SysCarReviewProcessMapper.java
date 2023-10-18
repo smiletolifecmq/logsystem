@@ -61,4 +61,10 @@ public interface SysCarReviewProcessMapper
     public int deleteSysCarReviewProcessByCarProcessIds(Long[] carProcessIds);
 
     public int insertSysCarReviewBatch(List<SysCarReviewProcess> carReviewProcess);
+
+    public int deleteSysCarReviewProcessByCarReviewIds(Long[] carReviewIds);
+
+    public int setStatusNotStartByCarReviewId(Long carReviewId);
+
+    public int setStatusByReviewIdFirst(Long carReviewId);
 }

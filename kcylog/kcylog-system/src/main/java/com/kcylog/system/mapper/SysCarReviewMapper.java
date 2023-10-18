@@ -61,4 +61,6 @@ public interface SysCarReviewMapper
     public int deleteSysCarReviewByCarReviewIds(Long[] carReviewIds);
 
     public SysCarReview checkProjectKeyUnique(SysCarReview sysCarReview);
+
+    public int setSysReviewStatusByCarReviewId(SysCarReview sysCarReview);
 }

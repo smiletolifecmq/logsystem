@@ -61,4 +61,6 @@ public interface ISysCarReviewService
     public int deleteSysCarReviewByCarReviewId(Long carReviewId);
 
     public SysCarReview checkProjectKeyUnique(SysCarReview sysCarReview);
+
+    public int setSysReviewStatusByCarReviewId(SysCarReview sysCarReview);
 }

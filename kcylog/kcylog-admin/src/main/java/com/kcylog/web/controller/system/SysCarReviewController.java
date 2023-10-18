@@ -10,9 +10,11 @@ import com.kcylog.common.utils.poi.ExcelUtil;
 import com.kcylog.system.domain.SysCarReview;
 import com.kcylog.system.domain.SysCarReviewConfigInfo;
 import com.kcylog.system.domain.SysCarReviewProcess;
+import com.kcylog.system.domain.SysProjectCar;
 import com.kcylog.system.service.ISysCarReviewConfigInfoService;
 import com.kcylog.system.service.ISysCarReviewProcessService;
 import com.kcylog.system.service.ISysCarReviewService;
+import com.kcylog.system.service.ISysProjectCarService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.bind.annotation.*;
@@ -40,6 +42,9 @@ public class SysCarReviewController extends BaseController
 
     @Autowired
     private ISysCarReviewProcessService sysCarReviewProcessService;
+
+    @Autowired
+    private ISysProjectCarService sysProjectCarService;
 
 
     /**
@@ -105,7 +110,23 @@ public class SysCarReviewController extends BaseController
             carReview.setNode(Long.parseLong(configInfo.getNode()));
             carReviewProcess.add(carReview);
         }
-        int result = sysCarReviewProcessService.insertSysCarReviewBatch(carReviewProcess);
+        sysCarReviewProcessService.insertSysCarReviewBatch(carReviewProcess);
+
+
+        List<SysProjectCar> projectCars = new ArrayList<>();
+        for (SysProjectCar projectCar : sysCarReview.getProjectCar()) {
+            SysProjectCar  sysProjectCar = new SysProjectCar();
+            sysProjectCar.setProjectId(projectCar.getProjectId());
+            sysProjectCar.setCarReviewId(sysCarReview.getCarReviewId());
+            sysProjectCar.setProjectName(projectCar.getProjectName());
+            sysProjectCar.setCarNum(projectCar.getCarNum());
+            sysProjectCar.setCarType(projectCar.getCarType());
+            sysProjectCar.setNumber(projectCar.getNumber());
+            sysProjectCar.setCarExpenses(projectCar.getCarExpenses());
+            projectCars.add(sysProjectCar);
+        }
+        int result = sysProjectCarService.insertProjectCarBatch(projectCars);
+
         return toAjax(result);
     }
 
@@ -113,9 +134,24 @@ public class SysCarReviewController extends BaseController
      * 修改车辆使用审核
      */
     @Log(title = "车辆使用审核", businessType = BusinessType.UPDATE)
+    @Transactional
     @PutMapping
     public AjaxResult edit(@RequestBody SysCarReview sysCarReview)
     {
+        sysProjectCarService.deleteProjectCarByCarReviewId(sysCarReview.getCarReviewId());
+        List<SysProjectCar> projectCars = new ArrayList<>();
+        for (SysProjectCar projectCar : sysCarReview.getProjectCar()) {
+            SysProjectCar  sysProjectCar = new SysProjectCar();
+            sysProjectCar.setProjectId(projectCar.getProjectId());
+            sysProjectCar.setCarReviewId(sysCarReview.getCarReviewId());
+            sysProjectCar.setProjectName(projectCar.getProjectName());
+            sysProjectCar.setCarNum(projectCar.getCarNum());
+            sysProjectCar.setCarType(projectCar.getCarType());
+            sysProjectCar.setNumber(projectCar.getNumber());
+            sysProjectCar.setCarExpenses(projectCar.getCarExpenses());
+            projectCars.add(sysProjectCar);
+        }
+        sysProjectCarService.insertProjectCarBatch(projectCars);
         return toAjax(sysCarReviewService.updateSysCarReview(sysCarReview));
     }
 
@@ -126,6 +162,21 @@ public class SysCarReviewController extends BaseController
 	@DeleteMapping("/{carReviewIds}")
     public AjaxResult remove(@PathVariable Long[] carReviewIds)
     {
+        sysCarReviewProcessService.deleteSysCarReviewProcessByCarReviewIds(carReviewIds);
+        sysProjectCarService.deleteProjectCarByCarReviewIds(carReviewIds);
         return toAjax(sysCarReviewService.deleteSysCarReviewByCarReviewIds(carReviewIds));
+    }
+
+
+    /**
+     * 发起审核
+     */
+    @PutMapping(value = "/setReviewStatus")
+    public AjaxResult setReviewStatus(@RequestBody SysCarReview sysCarReview)
+    {
+        sysCarReviewService.setSysReviewStatusByCarReviewId(sysCarReview);
+        sysCarReviewProcessService.setStatusNotStartByCarReviewId(sysCarReview.getCarReviewId());
+        int result = sysCarReviewProcessService.setStatusByReviewIdFirst(sysCarReview.getCarReviewId());
+        return success(result);
     }
 }

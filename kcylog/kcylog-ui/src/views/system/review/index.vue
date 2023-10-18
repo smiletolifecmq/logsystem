@@ -789,6 +789,10 @@ export default {
           value: 3,
           label: "未通过",
         },
+        {
+          value: 4,
+          label: "已结算",
+        },
       ],
       finalHireArr: [
         {
@@ -923,7 +927,7 @@ export default {
         });
     },
     showEmployeeButton(finalTime, status, finalSecondStatus) {
-      if ((finalSecondStatus == 1 || status == 2) && status != 4) {
+      if (finalSecondStatus == 1 || status == 2 || status == 4) {
         return true;
       }
       return false;

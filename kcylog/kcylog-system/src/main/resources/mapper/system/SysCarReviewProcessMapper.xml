@@ -87,4 +87,27 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
             (#{item.carReviewId}, #{item.userId}, #{item.status}, #{item.node}, #{item.reason}, #{item.reviewTime})
         </foreach>
     </insert>
+
+    <delete id="deleteSysCarReviewProcessByCarReviewIds" parameterType="String">
+        delete from sys_car_review_process where car_review_id in
+        <foreach item="carReviewId" collection="array" open="(" separator="," close=")">
+            #{carReviewId}
+        </foreach>
+    </delete>
+
+    <update id="setStatusNotStartByCarReviewId" parameterType="Long">
+        UPDATE sys_car_review_process set status = 0, review_time = NULL where car_review_id = #{carReviewId}
+    </update>
+
+    <update id="setStatusByReviewIdFirst" parameterType="Long">
+        UPDATE sys_car_review_process AS r1
+            INNER JOIN (
+            SELECT car_process_id
+            FROM sys_car_review_process
+            WHERE car_review_id = #{carReviewId}
+            ORDER BY node ASC
+            LIMIT 1
+            ) AS r2 ON r1.car_process_id = r2.car_process_id
+            SET r1.status = 1;
+    </update>
 </mapper>
