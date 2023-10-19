@@ -194,6 +194,8 @@
         inner join sys_subcontract_process rp on r.subcontract_id = rp.subcontract_id
         <where>
             <if test="serialNum != null  and serialNum != ''">and r.serial_num = #{serialNum}</if>
+            <if test="deptId != null  and deptId != ''">and r.dept_id = #{deptId}</if>
+            <if test="fzrUserId != null  and fzrUserId != ''">and r.user_id = #{fzrUserId}</if>
             <if test="projectName != null  and projectName != ''">and r.project_name like concat('%', #{projectName},
                 '%')
             </if>
