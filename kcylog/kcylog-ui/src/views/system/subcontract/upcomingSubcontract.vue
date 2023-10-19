@@ -56,7 +56,7 @@
         ></el-cascader>
       </el-form-item>
 
-      <el-form-item label="负责人" prop="userId">
+      <el-form-item label="负责人" prop="fzrUserId">
         <el-select
           v-model="queryParams.fzrUserId"
           filterable
@@ -478,6 +478,7 @@ export default {
         status: null,
         startTime: null,
         endTime: null,
+        fzrUserId: null,
       },
       winUnits: [],
       // 表单参数
@@ -714,7 +715,6 @@ export default {
     resetQuery() {
       this.statusVaule = "";
       this.queryParamsDeptId = [];
-      this.queryParams.fzrUserId = null;
       this.resetForm("queryForm");
       this.handleQuery();
     },

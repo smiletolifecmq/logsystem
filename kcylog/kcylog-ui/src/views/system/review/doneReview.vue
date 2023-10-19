@@ -57,7 +57,7 @@
         ></el-cascader>
       </el-form-item>
 
-      <el-form-item label="负责人" prop="userId">
+      <el-form-item label="负责人" prop="fzrUserId">
         <el-select
           v-model="queryParams.fzrUserId"
           filterable
@@ -718,6 +718,8 @@ export default {
         serialNum: null,
         projectName: null,
         requester: null,
+        deptId: null,
+        fzrUserId: null,
       },
       queryParamsEmployee: {
         pageNum: 1,
@@ -859,7 +861,6 @@ export default {
       this.statusVaule = "";
       this.dateRange = [];
       this.queryParamsDeptId = [];
-      this.queryParams.fzrUserId = null;
       this.resetForm("queryForm");
       this.handleQuery();
     },

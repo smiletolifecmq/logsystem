@@ -490,7 +490,8 @@ export default {
         serialNum: null,
         projectName: null,
         requester: null,
-        deptId: undefined,
+        deptId: null,
+        fzrUserId: null,
       },
       queryParamsEmployee: {
         pageNum: 1,
