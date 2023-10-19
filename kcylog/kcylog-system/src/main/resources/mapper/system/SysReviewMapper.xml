@@ -187,6 +187,8 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
             <if test="serialNum != null  and serialNum != ''"> and r.serial_num = #{serialNum}</if>
             <if test="projectName != null  and projectName != ''"> and r.project_name like concat('%', #{projectName}, '%')</if>
             <if test="requester != null  and requester != ''"> and r.requester = #{requester}</if>
+            <if test="deptId != null  and deptId != ''"> and r.dept_id = #{deptId}</if>
+            <if test="fzrUserId != null  and fzrUserId != ''"> and r.user_id = #{fzrUserId}</if>
             <if test="params.beginTime != null and params.beginTime != ''"><!-- 开始时间检索 -->
                 AND date_format(r.create_time,'%y%m%d') &gt;= date_format(#{params.beginTime},'%y%m%d')
             </if>

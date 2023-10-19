@@ -117,7 +117,17 @@ public class SysReview extends BaseEntity
 
     private Long projectId;
 
+    private Long fzrUserId;
+
     private SysProject project;
+
+    public Long getFzrUserId() {
+        return fzrUserId;
+    }
+
+    public void setFzrUserId(Long fzrUserId) {
+        this.fzrUserId = fzrUserId;
+    }
 
     public SysProject getProject() {
         return project;
