@@ -32,6 +32,30 @@
           @keyup.enter.native="handleQuery"
         />
       </el-form-item>
+      <el-form-item label="部门" prop="deptId">
+        <el-cascader
+          v-model="queryParamsDeptId"
+          :options="deptOptions"
+          @change="handleChangeDept"
+          clearable
+        ></el-cascader>
+      </el-form-item>
+
+      <el-form-item label="负责人" prop="userId">
+        <el-select
+          v-model="queryParams.fzrUserId"
+          filterable
+          placeholder="请选择"
+        >
+          <el-option
+            v-for="item in restaurants"
+            :key="item.value"
+            :label="item.label"
+            :value="item.value"
+          >
+          </el-option>
+        </el-select>
+      </el-form-item>
       <el-form-item>
         <el-button
           type="primary"
@@ -575,6 +599,8 @@ import {
 } from "@/api/system/reviewSub";
 import elDragDialog from "@/api/components/el-drag";
 import { listEmployee } from "@/api/system/reviewEmployeeSub";
+import { deptTreeSelect } from "@/api/system/log";
+import { listUser } from "@/api/system/user";
 
 export default {
   filters: {
@@ -595,6 +621,14 @@ export default {
   },
   data() {
     return {
+      queryUserParams: {
+        pageNum: 1,
+        pageSize: 9999,
+        deptId: null,
+      },
+      restaurants: [],
+      deptOptions: undefined,
+      queryParamsDeptId: [],
       auditOpinions: [
         { value: "同意", label: "同意" },
         { value: "不同意", label: "不同意" },
@@ -676,8 +710,31 @@ export default {
   },
   created() {
     this.getUpcomingList();
+    this.getDeptTree();
+    this.loadAllUsers();
   },
   methods: {
+    loadAllUsers() {
+      listUser(this.queryUserParams).then((response) => {
+        for (let i = 0; i < response.rows.length; i++) {
+          let userObject = {
+            value: "",
+            userId: 0,
+          };
+          userObject.label = response.rows[i].userName;
+          userObject.value = response.rows[i].userId;
+          this.restaurants.push(userObject);
+        }
+      });
+    },
+    handleChangeDept(value) {
+      this.queryParams.deptId = value[1];
+    },
+    getDeptTree() {
+      deptTreeSelect().then((response) => {
+        this.deptOptions = transformIdToValue(response.data);
+      });
+    },
     handleChange(val) {
       // console.log(val);
     },
@@ -772,6 +829,8 @@ export default {
     resetQuery() {
       this.statusVaule = "";
       this.dateRange = [];
+      this.queryParamsDeptId = [];
+      this.queryParams.fzrUserId = null;
       this.resetForm("queryForm");
       this.handleQuery();
     },
@@ -839,4 +898,21 @@ export default {
     },
   },
 };
+function transformIdToValue(obj) {
+  if (Array.isArray(obj)) {
+    return obj.map((item) => transformIdToValue(item));
+  } else if (typeof obj === "object" && obj !== null) {
+    const newObj = {};
+    for (let key in obj) {
+      if (key === "id") {
+        newObj.value = obj[key];
+      } else {
+        newObj[key] = transformIdToValue(obj[key]);
+      }
+    }
+    return newObj;
+  } else {
+    return obj;
+  }
+}
 </script>

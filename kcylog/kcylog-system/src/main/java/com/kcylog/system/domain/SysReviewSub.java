@@ -117,6 +117,8 @@ public class SysReviewSub extends BaseEntity
 
     private Long projectId;
 
+    private Long fzrUserId;
+
     private Date lotTime;
 
     private String businessName;
@@ -144,6 +146,14 @@ public class SysReviewSub extends BaseEntity
     private String realWorkload;
 
     private SysProject project;
+
+    public Long getFzrUserId() {
+        return fzrUserId;
+    }
+
+    public void setFzrUserId(Long fzrUserId) {
+        this.fzrUserId = fzrUserId;
+    }
 
     public String getRealWorkload() {
         return realWorkload;
