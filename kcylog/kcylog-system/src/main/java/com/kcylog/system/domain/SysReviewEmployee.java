@@ -78,11 +78,18 @@ public class SysReviewEmployee extends BaseEntity {
      */
     private Long reviewId;
 
+    private Long isJs;
+
     private List<WorkTimeStamp> workTimeStamp;
 
-    //    @Excels({
-//            @Excel(name = "审核单创建时间", targetAttr = "createTime", dateFormat = "yyyy-MM-dd HH:mm:ss", type = Excel.Type.EXPORT),
-//    })
+    public Long getIsJs() {
+        return isJs;
+    }
+
+    public void setIsJs(Long isJs) {
+        this.isJs = isJs;
+    }
+    
     private SysReview review;
 
     public int getExportSerialNumber() {

@@ -52,6 +52,13 @@
       <el-table-column label="作业时间" align="center" prop="workTime" />
       <el-table-column label="天数" align="center" prop="workDay" />
       <el-table-column label="费用" align="center" prop="cost" />
+      <el-table-column label="状态" align="center" prop="isJs">
+        <template slot-scope="scope">
+          <span v-if="scope.row.isJs === 0" style="color: red">待结算</span>
+          <span v-if="scope.row.isJs === 1" style="color: green">已结算</span>
+        </template>
+      </el-table-column>
+
       <el-table-column
         label="操作"
         align="center"
@@ -63,6 +70,7 @@
             size="mini"
             type="text"
             icon="el-icon-edit"
+            v-if="scope.row.isJs === 0"
             @click="handleUpdate(scope.row)"
             >修改</el-button
           >
@@ -70,6 +78,7 @@
             size="mini"
             type="text"
             icon="el-icon-delete"
+            v-if="scope.row.isJs === 0"
             @click="handleDelete(scope.row)"
             >删除</el-button
           >
@@ -517,6 +526,46 @@ export default {
     /** 提交按钮 */
     submitForm() {
       this.$refs["form"].validate((valid) => {
+        if (this.form.workTimeStamp.length === 1) {
+          // 将时间戳转换成日期对象，并获取它们的年份和月份
+          const dates = this.form.workTimeStamp.map((item) => ({
+            startDate: new Date(item.startTime * 1000),
+            endDate: new Date((item.endTime - 1) * 1000),
+          }));
+          // 获取第一个日期的年份和月份
+          const firstYear = dates[0].startDate.getFullYear();
+          const firstMonth = dates[0].startDate.getMonth();
+          const endYear = dates[0].endDate.getFullYear();
+          const endMonth = dates[0].endDate.getMonth();
+          if (!(firstYear == endYear && firstMonth == endMonth)) {
+            this.$modal.msgError("所选时间必须在同一月份～");
+            return;
+          }
+        } else if (this.form.workTimeStamp.length > 1) {
+          // 将时间戳转换成日期对象，并获取它们的年份和月份
+          const dates = this.form.workTimeStamp.map((item) => ({
+            startDate: new Date(item.startTime * 1000),
+            endDate: new Date((item.endTime - 1) * 1000),
+          }));
+
+          // 获取第一个日期的年份和月份
+          const firstYear = dates[0].startDate.getFullYear();
+          const firstMonth = dates[0].startDate.getMonth();
+
+          // 检查其他日期是否与第一个日期在同一个月份
+          const isAllInSameMonth = dates.every(
+            (item) =>
+              item.startDate.getFullYear() === firstYear &&
+              item.startDate.getMonth() === firstMonth &&
+              item.endDate.getFullYear() === firstYear &&
+              item.endDate.getMonth() === firstMonth
+          );
+
+          if (!isAllInSameMonth) {
+            this.$modal.msgError("所选时间必须在同一月份～");
+            return;
+          }
+        }
         if (valid) {
           if (this.form.reviewEmployeeId != null) {
             updateEmployee(this.form).then((response) => {

@@ -534,6 +534,46 @@ export default {
     /** 提交按钮 */
     submitForm() {
       this.$refs["form"].validate((valid) => {
+        if (this.form.workTimeStamp.length === 1) {
+          // 将时间戳转换成日期对象，并获取它们的年份和月份
+          const dates = this.form.workTimeStamp.map((item) => ({
+            startDate: new Date(item.startTime * 1000),
+            endDate: new Date((item.endTime - 1) * 1000),
+          }));
+          // 获取第一个日期的年份和月份
+          const firstYear = dates[0].startDate.getFullYear();
+          const firstMonth = dates[0].startDate.getMonth();
+          const endYear = dates[0].endDate.getFullYear();
+          const endMonth = dates[0].endDate.getMonth();
+          if (!(firstYear == endYear && firstMonth == endMonth)) {
+            this.$modal.msgError("所选时间必须在同一月份～");
+            return;
+          }
+        } else if (this.form.workTimeStamp.length > 1) {
+          // 将时间戳转换成日期对象，并获取它们的年份和月份
+          const dates = this.form.workTimeStamp.map((item) => ({
+            startDate: new Date(item.startTime * 1000),
+            endDate: new Date((item.endTime - 1) * 1000),
+          }));
+
+          // 获取第一个日期的年份和月份
+          const firstYear = dates[0].startDate.getFullYear();
+          const firstMonth = dates[0].startDate.getMonth();
+
+          // 检查其他日期是否与第一个日期在同一个月份
+          const isAllInSameMonth = dates.every(
+            (item) =>
+              item.startDate.getFullYear() === firstYear &&
+              item.startDate.getMonth() === firstMonth &&
+              item.endDate.getFullYear() === firstYear &&
+              item.endDate.getMonth() === firstMonth
+          );
+
+          if (!isAllInSameMonth) {
+            this.$modal.msgError("所选时间必须在同一月份～");
+            return;
+          }
+        }
         if (valid) {
           if (this.form.reviewEmployeeId != null) {
             updateEmployee(this.form).then((response) => {

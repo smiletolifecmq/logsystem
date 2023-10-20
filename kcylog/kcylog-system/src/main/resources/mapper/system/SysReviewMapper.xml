@@ -42,6 +42,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
         <result property="workDay"    column="work_day"    />
         <result property="cost"    column="cost"    />
         <result property="reviewId"    column="review_id"    />
+        <result property="isJs"    column="is_js"    />
     </resultMap>
 
     <resultMap id="sysReviewDeptResult" type="SysDept">

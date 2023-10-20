@@ -12,6 +12,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
         <result property="workDay"    column="work_day"    />
         <result property="cost"    column="cost"    />
         <result property="reviewId"    column="review_id"    />
+        <result property="isJs"    column="is_js"    />
         <association property="review" column="create_time" javaType="SysReview" resultMap="SysReviewEmployeeReviewResult"/>
     </resultMap>
 
@@ -22,7 +23,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
     </resultMap>
 
     <sql id="selectSysReviewEmployeeVo">
-        select review_employee_id, name, id_card, work_time, work_day, cost, review_id from sys_review_employee
+        select review_employee_id, name, id_card, work_time, work_day, cost, review_id, is_js from sys_review_employee
     </sql>
 
     <select id="selectSysReviewEmployeeList" parameterType="SysReviewEmployee" resultMap="SysReviewEmployeeResult">
