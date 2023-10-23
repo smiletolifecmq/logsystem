@@ -142,14 +142,14 @@ export default {
               break;
             case 2:
               this.download(
-                "system/reviewEmployee/export",
+                "system/reviewEmployee/outsourcingExportMonth",
                 { ...this.queryParams },
                 `外包申请表_${new Date().getTime()}.xlsx`
               );
               break;
             case 3:
               this.download(
-                "system/reviewEmployee/export",
+                "system/review/exportMonth",
                 { ...this.queryParams },
                 `部门外包_${new Date().getTime()}.xlsx`
               );

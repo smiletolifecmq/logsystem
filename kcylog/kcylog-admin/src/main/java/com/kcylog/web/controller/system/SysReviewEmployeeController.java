@@ -784,7 +784,7 @@ public class SysReviewEmployeeController extends BaseController
     /**
      * 导出雇工实际工作内容记录列表(按月)
      */
-    @Log(title = "签领表导出", businessType = BusinessType.UPDATE)
+    @Log(title = "签领表导出-旧模块", businessType = BusinessType.UPDATE)
     @Transactional
     @PostMapping("/exportMonth")
     public void exportMonth(HttpServletResponse response, SysEmployeeWorktime sysEmployeeWorktime)
@@ -1130,6 +1130,289 @@ public class SysReviewEmployeeController extends BaseController
         mergedCell.setCellValue("项目负责人:");
         mergedCell = row.createCell(9);
         mergedCell.setCellValue("制表人:");
+
+        try (OutputStream outputStream = response.getOutputStream()) {
+            workbook.write(outputStream);
+            workbook.close();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
+
+    //按月
+    @Log(title = "外包申请表导出-旧模块", businessType = BusinessType.UPDATE)
+    @Transactional
+    @PostMapping("/outsourcingExportMonth")
+    public void outsourcingExportMonth(HttpServletResponse response, SysEmployeeWorktime sysEmployeeWorktime)
+    {
+        //获取符合月份的数据并整合
+        List<SysEmployeeWorktime> listExport = sysEmployeeWorktimeService.selectSysEmployeeWorktimeListByTime(sysEmployeeWorktime);
+        List<Long> reviewExportIdsList = new ArrayList<>();
+        List<Long> reviewExportEmployeeIdsList = new ArrayList<>();
+        for (SysEmployeeWorktime employeeWorktime:listExport){
+            reviewExportIdsList.add(employeeWorktime.getReviewId());
+            reviewExportEmployeeIdsList.add(employeeWorktime.getReviewEmployeeId());
+        }
+        reviewExportIdsList.add((long)0);
+        reviewExportEmployeeIdsList.add((long)0);
+
+        Long[] reviewExportIds = reviewExportIdsList.toArray(new Long[reviewExportIdsList.size()]);
+        Long[] reviewExportEmployeeIds = reviewExportEmployeeIdsList.toArray(new Long[reviewExportEmployeeIdsList.size()]);
+
+        sysReviewEmployeeService.updateIsJsByReviewEmployeeIds(reviewExportEmployeeIds);
+        //.....................
+
+        Map<String, Integer> keyValueMap = new HashMap<>();
+        Map<String, Integer> serialNumMap = new HashMap<>();
+        SysReview sysReview = new SysReview();
+        sysReview.setReviewExportIds(reviewExportIds);
+        sysReview.setReviewExportEmployeeIds(reviewExportEmployeeIds);
+        sysReview.setDeptId(sysEmployeeWorktime.getDeptId());
+        List<SysReviewEmployee> listTemp = sysReviewEmployeeService.selectSysReviewEmployeeListJoinReviewMonth(sysReview);
+        List<SysReviewEmployee> list = new ArrayList<>();
+
+        int keyIndex = 0;
+        String serialNum = "";
+        String projectName = "";
+        for (SysReviewEmployee reviewEmployee:listTemp){
+            boolean serialNumValue = serialNumMap.containsKey(reviewEmployee.getReview().getSerialNum());
+            if (!serialNumValue) {
+                serialNum = serialNum + reviewEmployee.getReview().getSerialNum() + "、";
+                projectName = projectName + reviewEmployee.getReview().getProjectName() + "、";
+                serialNumMap.put(reviewEmployee.getReview().getSerialNum(),1);
+            }
+            boolean containsValue = keyValueMap.containsKey(reviewEmployee.getIdCard());
+            if (containsValue) {
+                int index =  keyValueMap.get(reviewEmployee.getIdCard());
+                list.get(index).setWorkDay(list.get(index).getWorkDay() + reviewEmployee.getWorkDay());
+                list.get(index).setCost(list.get(index).getCost().add(reviewEmployee.getCost()));
+            } else {
+                keyValueMap.put(reviewEmployee.getIdCard(), keyIndex);
+                list.add(reviewEmployee);
+                keyIndex ++;
+            }
+        }
+        if (serialNum != ""){
+            serialNum = serialNum.substring(0, serialNum.lastIndexOf("、"));
+            projectName = projectName.substring(0, projectName.lastIndexOf("、"));
+        }
+
+        int num = 0;
+        for (SysReviewEmployee reviewEmployee:list){
+            num ++;
+            reviewEmployee.setExportSerialNumber(num);
+        }
+
+        //样式定义
+        Workbook workbook = new XSSFWorkbook();
+        Font font = workbook.createFont(); // 创建字体对象
+        font.setFontName("Arial"); // 设置字体名称
+        font.setFontHeightInPoints((short) 16); // 设置字体大小
+        CellStyle wrapCellStyle = workbook.createCellStyle();
+        CellStyle headerStyle = workbook.createCellStyle();
+        CellStyle lowStyle = workbook.createCellStyle();
+        wrapCellStyle.setWrapText(true);
+        wrapCellStyle.setVerticalAlignment(VerticalAlignment.CENTER); // 设置垂直居中对齐
+        wrapCellStyle.setAlignment(HorizontalAlignment.JUSTIFY); // 设置水平居中对齐
+        wrapCellStyle.setBorderTop(BorderStyle.THIN);
+        wrapCellStyle.setBorderRight(BorderStyle.THIN);
+        wrapCellStyle.setBorderBottom(BorderStyle.THIN);
+        wrapCellStyle.setBorderLeft(BorderStyle.THIN);
+        wrapCellStyle.setTopBorderColor(IndexedColors.BLACK.getIndex());
+        wrapCellStyle.setRightBorderColor(IndexedColors.BLACK.getIndex());
+        wrapCellStyle.setBottomBorderColor(IndexedColors.BLACK.getIndex());
+        wrapCellStyle.setLeftBorderColor(IndexedColors.BLACK.getIndex());
+        wrapCellStyle.setFont(font);
+        headerStyle.cloneStyleFrom(wrapCellStyle); // 将wrapCellStyle的样式克隆给headerStyle
+        lowStyle.cloneStyleFrom(wrapCellStyle); // 将wrapCellStyle的样式克隆给headerStyle
+        font = workbook.createFont(); // 创建字体对象
+        font.setFontName("Arial"); // 设置字体名称
+        font.setFontHeightInPoints((short) 24); // 设置字体大小
+        font.setBold(true); // 设置字体加粗
+        headerStyle.setFont(font); // 应用字体样式到单元格样式中
+        headerStyle.setAlignment(HorizontalAlignment.CENTER);
+        //************************************************************
+
+        //设置第一行数据
+        Sheet sheet = workbook.createSheet("Sheet1");
+        sheet.setColumnWidth(1, 4000);
+        sheet.setColumnWidth(2, 2000);
+        sheet.setColumnWidth(3, 3000);
+        sheet.setColumnWidth(4, 3000);
+        sheet.setColumnWidth(5, 3000);
+        sheet.setColumnWidth(6, 3000);
+        sheet.setColumnWidth(7, 3000);
+        sheet.setColumnWidth(8, 6000);
+        sheet.setColumnWidth(9, 7000);
+        sheet.setColumnWidth(10, 4000);
+        sheet.addMergedRegion(new CellRangeAddress(0, 0, 0, 10));
+        Row headerRowTemp = sheet.createRow(0);
+        headerRowTemp.setHeight((short) 700); // 设置行高，这里设置为500个点
+        Cell mergedCell = headerRowTemp.createCell(0);
+        mergedCell.setCellValue("福州市勘测院有限公司临时劳务外包申请表");
+        mergedCell.setCellStyle(headerStyle); // 应用居中对齐的样式
+        RegionUtil.setBorderTop(BorderStyle.THIN, new CellRangeAddress(0, 0, 0, 10), sheet);
+        RegionUtil.setTopBorderColor(IndexedColors.WHITE.getIndex(), new CellRangeAddress(0, 0, 0, 10), sheet);
+        RegionUtil.setBorderRight(BorderStyle.THIN, new CellRangeAddress(0, 0, 0, 10), sheet);
+        RegionUtil.setRightBorderColor(IndexedColors.WHITE.getIndex(), new CellRangeAddress(0, 0, 0, 10), sheet);
+        RegionUtil.setBorderBottom(BorderStyle.THIN, new CellRangeAddress(0, 0, 0, 10), sheet);
+        RegionUtil.setBottomBorderColor(IndexedColors.WHITE.getIndex(), new CellRangeAddress(0, 0, 0, 10), sheet);
+        RegionUtil.setBorderLeft(BorderStyle.THIN, new CellRangeAddress(0, 0, 0, 10), sheet);
+        RegionUtil.setLeftBorderColor(IndexedColors.WHITE.getIndex(), new CellRangeAddress(0, 0, 0, 10), sheet);
+        //************************************************************
+
+        //设置第二行数据
+        sheet.addMergedRegion(new CellRangeAddress(1, 1, 0, 10));
+        headerRowTemp = sheet.createRow(1);
+        headerRowTemp.setHeight((short) 500); // 设置行高，这里设置为500个点
+        mergedCell = headerRowTemp.createCell(0);
+        mergedCell.setCellValue("  申请部门：                  申请日期：");
+        mergedCell.setCellStyle(wrapCellStyle); // 应用居中对齐的样式
+        RegionUtil.setBorderTop(BorderStyle.THIN, new CellRangeAddress(1, 1, 0, 10), sheet);
+        RegionUtil.setTopBorderColor(IndexedColors.WHITE.getIndex(), new CellRangeAddress(1, 1, 0, 10), sheet);
+        RegionUtil.setBorderRight(BorderStyle.THIN, new CellRangeAddress(1, 1, 0, 10), sheet);
+        RegionUtil.setRightBorderColor(IndexedColors.WHITE.getIndex(), new CellRangeAddress(1, 1, 0, 10), sheet);
+        RegionUtil.setBorderBottom(BorderStyle.THIN, new CellRangeAddress(1, 1, 0, 10), sheet);
+        RegionUtil.setBottomBorderColor(IndexedColors.WHITE.getIndex(), new CellRangeAddress(1, 1, 0, 10), sheet);
+        RegionUtil.setBorderLeft(BorderStyle.THIN, new CellRangeAddress(1, 1, 0, 10), sheet);
+        RegionUtil.setLeftBorderColor(IndexedColors.WHITE.getIndex(), new CellRangeAddress(1, 1, 0, 10), sheet);
+        //************************************************************
+
+        //设置第三行数据
+        sheet.addMergedRegion(new CellRangeAddress(2, 2, 0, 5));
+        sheet.addMergedRegion(new CellRangeAddress(2, 2, 6, 10));
+        headerRowTemp = sheet.createRow(2);
+        headerRowTemp.setHeight((short) 5000); // 设置行高，这里设置为500个点
+        mergedCell = headerRowTemp.createCell(0);
+        mergedCell.setCellValue("项目名称：" + projectName);
+        mergedCell.setCellStyle(wrapCellStyle); // 应用居中对齐的样式
+        mergedCell = headerRowTemp.createCell(6);
+        mergedCell.setCellValue("项目编号：" + serialNum);
+        mergedCell.setCellStyle(wrapCellStyle); // 应用居中对齐的样式
+        RegionUtil.setBorderTop(BorderStyle.THIN, new CellRangeAddress(2, 2, 0, 10), sheet);
+        RegionUtil.setTopBorderColor(IndexedColors.BLACK.getIndex(), new CellRangeAddress(2, 2, 0, 10), sheet);
+        RegionUtil.setBorderRight(BorderStyle.THIN, new CellRangeAddress(2, 2, 0, 10), sheet);
+        RegionUtil.setRightBorderColor(IndexedColors.BLACK.getIndex(), new CellRangeAddress(2, 2, 0, 10), sheet);
+        RegionUtil.setBorderBottom(BorderStyle.THIN, new CellRangeAddress(2, 2, 0, 10), sheet);
+        RegionUtil.setBottomBorderColor(IndexedColors.BLACK.getIndex(), new CellRangeAddress(2, 2, 0, 10), sheet);
+        RegionUtil.setBorderLeft(BorderStyle.THIN, new CellRangeAddress(2, 2, 0, 10), sheet);
+        RegionUtil.setLeftBorderColor(IndexedColors.BLACK.getIndex(), new CellRangeAddress(2, 2, 0, 10), sheet);
+        //************************************************************
+        sheet.addMergedRegion(new CellRangeAddress(3, 3, 0, 10));
+        headerRowTemp = sheet.createRow(3);
+        headerRowTemp.setHeight((short) 700); // 设置行高，这里设置为500个点
+        mergedCell = headerRowTemp.createCell(0);
+        mergedCell.setCellValue("申请原因：");
+        mergedCell.setCellStyle(wrapCellStyle); // 应用居中对齐的样式
+        RegionUtil.setBorderTop(BorderStyle.THIN, new CellRangeAddress(3, 3, 0, 10), sheet);
+        RegionUtil.setTopBorderColor(IndexedColors.BLACK.getIndex(), new CellRangeAddress(3, 3, 0, 10), sheet);
+        RegionUtil.setBorderRight(BorderStyle.THIN, new CellRangeAddress(3, 3, 0, 10), sheet);
+        RegionUtil.setRightBorderColor(IndexedColors.BLACK.getIndex(), new CellRangeAddress(3, 3, 0, 10), sheet);
+        RegionUtil.setBorderBottom(BorderStyle.THIN, new CellRangeAddress(3, 3, 0, 10), sheet);
+        RegionUtil.setBottomBorderColor(IndexedColors.BLACK.getIndex(), new CellRangeAddress(3, 3, 0, 10), sheet);
+        RegionUtil.setBorderLeft(BorderStyle.THIN, new CellRangeAddress(3, 3, 0, 10), sheet);
+        RegionUtil.setLeftBorderColor(IndexedColors.BLACK.getIndex(), new CellRangeAddress(3, 3, 0, 10), sheet);
+        //************************************************************
+        sheet.addMergedRegion(new CellRangeAddress(4, 4, 0, 5));
+        sheet.addMergedRegion(new CellRangeAddress(4, 4, 6, 10));
+        headerRowTemp = sheet.createRow(4);
+        headerRowTemp.setHeight((short) 700); // 设置行高，这里设置为500个点
+        mergedCell = headerRowTemp.createCell(0);
+        mergedCell.setCellValue("工种：");
+        mergedCell.setCellStyle(wrapCellStyle); // 应用居中对齐的样式
+        mergedCell = headerRowTemp.createCell(6);
+        mergedCell.setCellValue("不含税工天价格（或每次等价格）：200元");
+        mergedCell.setCellStyle(wrapCellStyle); // 应用居中对齐的样式
+        RegionUtil.setBorderTop(BorderStyle.THIN, new CellRangeAddress(4, 4, 0, 10), sheet);
+        RegionUtil.setTopBorderColor(IndexedColors.BLACK.getIndex(), new CellRangeAddress(4, 4, 0, 10), sheet);
+        RegionUtil.setBorderRight(BorderStyle.THIN, new CellRangeAddress(4, 4, 0, 10), sheet);
+        RegionUtil.setRightBorderColor(IndexedColors.BLACK.getIndex(), new CellRangeAddress(4, 4, 0, 10), sheet);
+        RegionUtil.setBorderBottom(BorderStyle.THIN, new CellRangeAddress(4, 4, 0, 10), sheet);
+        RegionUtil.setBottomBorderColor(IndexedColors.BLACK.getIndex(), new CellRangeAddress(4, 4, 0, 10), sheet);
+        RegionUtil.setBorderLeft(BorderStyle.THIN, new CellRangeAddress(4, 4, 0, 10), sheet);
+        RegionUtil.setLeftBorderColor(IndexedColors.BLACK.getIndex(), new CellRangeAddress(4, 4, 0, 10), sheet);
+
+        String workInfo = "姓名、总天数：";
+        for (SysReviewEmployee sysReviewEmployee : list) {
+            workInfo = workInfo + sysReviewEmployee.getName() + "，总共" + sysReviewEmployee.getWorkDay() + "天、";
+        }
+        workInfo = workInfo.substring(0, workInfo.lastIndexOf("、"));
+
+        //************************************************************
+        sheet.addMergedRegion(new CellRangeAddress(5, 5, 0, 5));
+        sheet.addMergedRegion(new CellRangeAddress(5, 5, 6, 10));
+        headerRowTemp = sheet.createRow(5);
+        headerRowTemp.setHeight((short) 2000); // 设置行高，这里设置为500个点
+        mergedCell = headerRowTemp.createCell(0);
+        mergedCell.setCellValue(workInfo);
+        mergedCell.setCellStyle(wrapCellStyle); // 应用居中对齐的样式
+        mergedCell = headerRowTemp.createCell(6);
+        mergedCell.setCellValue("确认工天价格方式：按劳务协议书\n确认人员签名：");
+        mergedCell.setCellStyle(wrapCellStyle); // 应用居中对齐的样式
+        RegionUtil.setBorderTop(BorderStyle.THIN, new CellRangeAddress(5, 5, 0, 10), sheet);
+        RegionUtil.setTopBorderColor(IndexedColors.BLACK.getIndex(), new CellRangeAddress(5, 5, 0, 10), sheet);
+        RegionUtil.setBorderRight(BorderStyle.THIN, new CellRangeAddress(5, 5, 0, 10), sheet);
+        RegionUtil.setRightBorderColor(IndexedColors.BLACK.getIndex(), new CellRangeAddress(5, 5, 0, 10), sheet);
+        RegionUtil.setBorderBottom(BorderStyle.THIN, new CellRangeAddress(5, 5, 0, 10), sheet);
+        RegionUtil.setBottomBorderColor(IndexedColors.BLACK.getIndex(), new CellRangeAddress(5, 5, 0, 10), sheet);
+        RegionUtil.setBorderLeft(BorderStyle.THIN, new CellRangeAddress(5, 5, 0, 10), sheet);
+        RegionUtil.setLeftBorderColor(IndexedColors.BLACK.getIndex(), new CellRangeAddress(5, 5, 0, 10), sheet);
+        //************************************************************
+        sheet.addMergedRegion(new CellRangeAddress(6, 6, 0, 5));
+        sheet.addMergedRegion(new CellRangeAddress(6, 6, 6, 10));
+        headerRowTemp = sheet.createRow(6);
+        headerRowTemp.setHeight((short) 2000); // 设置行高，这里设置为500个点
+        mergedCell = headerRowTemp.createCell(0);
+        mergedCell.setCellValue("项目负责人：");
+        mergedCell.setCellStyle(wrapCellStyle); // 应用居中对齐的样式
+        mergedCell = headerRowTemp.createCell(6);
+        mergedCell.setCellValue("分院分管生产副院长：");
+        mergedCell.setCellStyle(wrapCellStyle); // 应用居中对齐的样式
+        RegionUtil.setBorderTop(BorderStyle.THIN, new CellRangeAddress(6, 6, 0, 10), sheet);
+        RegionUtil.setTopBorderColor(IndexedColors.BLACK.getIndex(), new CellRangeAddress(6, 6, 0, 10), sheet);
+        RegionUtil.setBorderRight(BorderStyle.THIN, new CellRangeAddress(6, 6, 0, 10), sheet);
+        RegionUtil.setRightBorderColor(IndexedColors.BLACK.getIndex(), new CellRangeAddress(6, 6, 0, 10), sheet);
+        RegionUtil.setBorderBottom(BorderStyle.THIN, new CellRangeAddress(6, 6, 0, 10), sheet);
+        RegionUtil.setBottomBorderColor(IndexedColors.BLACK.getIndex(), new CellRangeAddress(6, 6, 0, 10), sheet);
+        RegionUtil.setBorderLeft(BorderStyle.THIN, new CellRangeAddress(6, 6, 0, 10), sheet);
+        RegionUtil.setLeftBorderColor(IndexedColors.BLACK.getIndex(), new CellRangeAddress(6, 6, 0, 10), sheet);
+        //************************************************************
+        sheet.addMergedRegion(new CellRangeAddress(7, 7, 0, 5));
+        sheet.addMergedRegion(new CellRangeAddress(7, 7, 6, 10));
+        headerRowTemp = sheet.createRow(7);
+        headerRowTemp.setHeight((short) 1000); // 设置行高，这里设置为500个点
+        mergedCell = headerRowTemp.createCell(0);
+        mergedCell.setCellValue("分院长：");
+        mergedCell.setCellStyle(wrapCellStyle); // 应用居中对齐的样式
+        mergedCell = headerRowTemp.createCell(6);
+        mergedCell.setCellValue("院分管领导：");
+        mergedCell.setCellStyle(wrapCellStyle); // 应用居中对齐的样式
+        RegionUtil.setBorderTop(BorderStyle.THIN, new CellRangeAddress(7, 7, 0, 10), sheet);
+        RegionUtil.setTopBorderColor(IndexedColors.BLACK.getIndex(), new CellRangeAddress(7, 7, 0, 10), sheet);
+        RegionUtil.setBorderRight(BorderStyle.THIN, new CellRangeAddress(7, 7, 0, 10), sheet);
+        RegionUtil.setRightBorderColor(IndexedColors.BLACK.getIndex(), new CellRangeAddress(7, 7, 0, 10), sheet);
+        RegionUtil.setBorderBottom(BorderStyle.THIN, new CellRangeAddress(7, 7, 0, 10), sheet);
+        RegionUtil.setBottomBorderColor(IndexedColors.BLACK.getIndex(), new CellRangeAddress(7, 7, 0, 10), sheet);
+        RegionUtil.setBorderLeft(BorderStyle.THIN, new CellRangeAddress(7, 7, 0, 10), sheet);
+        RegionUtil.setLeftBorderColor(IndexedColors.BLACK.getIndex(), new CellRangeAddress(7, 7, 0, 10), sheet);
+        //************************************************************
+
+        //************************************************************
+        lowStyle.setAlignment(HorizontalAlignment.CENTER); // 设置水平居中对齐
+        sheet.addMergedRegion(new CellRangeAddress(8, 8, 0, 10));
+        headerRowTemp = sheet.createRow(8);
+        headerRowTemp.setHeight((short) 1000); // 设置行高，这里设置为500个点
+        mergedCell = headerRowTemp.createCell(0);
+        mergedCell.setCellValue("注：劳务作业不得超过三个月，申请表由项目负责人提出申请，经审批后执行。");
+        mergedCell.setCellStyle(lowStyle); // 应用居中对齐的样式
+        RegionUtil.setBorderTop(BorderStyle.THIN, new CellRangeAddress(8, 8, 0, 10), sheet);
+        RegionUtil.setTopBorderColor(IndexedColors.BLACK.getIndex(), new CellRangeAddress(8, 8, 0, 10), sheet);
+        RegionUtil.setBorderRight(BorderStyle.THIN, new CellRangeAddress(8, 8, 0, 10), sheet);
+        RegionUtil.setRightBorderColor(IndexedColors.WHITE.getIndex(), new CellRangeAddress(8, 8, 0, 10), sheet);
+        RegionUtil.setBorderBottom(BorderStyle.THIN, new CellRangeAddress(8, 8, 0, 10), sheet);
+        RegionUtil.setBottomBorderColor(IndexedColors.WHITE.getIndex(), new CellRangeAddress(8, 8, 0, 10), sheet);
+        RegionUtil.setBorderLeft(BorderStyle.THIN, new CellRangeAddress(8, 8, 0, 10), sheet);
+        RegionUtil.setLeftBorderColor(IndexedColors.WHITE.getIndex(), new CellRangeAddress(8, 8, 0, 10), sheet);
 
         try (OutputStream outputStream = response.getOutputStream()) {
             workbook.write(outputStream);
