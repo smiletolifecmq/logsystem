@@ -36,6 +36,56 @@ public class SysEmployeeWorktime extends BaseEntity
 
     private Long reviewEmployeeId;
 
+    public Long getDeptId() {
+        return deptId;
+    }
+
+    public void setDeptId(Long deptId) {
+        this.deptId = deptId;
+    }
+
+    private String startTimeYear;
+
+    private String startTimeMonth;
+
+    private String endTimeYear;
+
+    private String endTimeMonth;
+
+    private Long deptId;
+
+    public String getStartTimeYear() {
+        return startTimeYear;
+    }
+
+    public void setStartTimeYear(String startTimeYear) {
+        this.startTimeYear = startTimeYear;
+    }
+
+    public String getStartTimeMonth() {
+        return startTimeMonth;
+    }
+
+    public void setStartTimeMonth(String startTimeMonth) {
+        this.startTimeMonth = startTimeMonth;
+    }
+
+    public String getEndTimeYear() {
+        return endTimeYear;
+    }
+
+    public void setEndTimeYear(String endTimeYear) {
+        this.endTimeYear = endTimeYear;
+    }
+
+    public String getEndTimeMonth() {
+        return endTimeMonth;
+    }
+
+    public void setEndTimeMonth(String endTimeMonth) {
+        this.endTimeMonth = endTimeMonth;
+    }
+
     public Long getReviewEmployeeId() {
         return reviewEmployeeId;
     }

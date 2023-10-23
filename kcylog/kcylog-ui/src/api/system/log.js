@@ -50,3 +50,10 @@ export function deptTreeSelect() {
     method: 'get'
   })
 }
+
+export function deptTreeNotPer() {
+  return request({
+    url: '/system/log/deptTreeNotPer',
+    method: 'get'
+  })
+}

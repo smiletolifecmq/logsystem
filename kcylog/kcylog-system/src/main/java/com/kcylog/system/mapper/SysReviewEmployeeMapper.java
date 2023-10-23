@@ -66,4 +66,8 @@ public interface SysReviewEmployeeMapper
     public List<SysReviewEmployee> selectSysReviewEmployeeByReviewId(Long reviewId);
 
     public List<SysReviewEmployee> selectSysReviewEmployeeListJoinReview(SysReview sysReview);
+
+    public List<SysReviewEmployee> selectSysReviewEmployeeListJoinReviewMonth(SysReview sysReview);
+
+    public int updateIsJsByReviewEmployeeIds(Long[] reviewExportEmployeeIds);
 }

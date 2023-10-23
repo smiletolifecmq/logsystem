@@ -103,4 +103,12 @@ public class SysUserLogController extends BaseController {
     public AjaxResult deptTree(SysDept dept) {
         return success(deptService.selectDeptTreeList(dept));
     }
+
+    /**
+     * 获取部门树列表
+     */
+    @GetMapping("/deptTreeNotPer")
+    public AjaxResult deptTreeNotPer(SysDept dept) {
+        return success(deptService.selectDeptTreeList(dept));
+    }
 }

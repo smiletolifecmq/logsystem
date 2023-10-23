@@ -63,4 +63,6 @@ public interface ISysEmployeeWorktimeService
     public List<SysEmployeeWorktime> selectSysEmployeeWorktimeExists(SysEmployeeWorktime sysEmployeeWorktime);
 
     public int deleteSysEmployeeWorktimeByReviewEmployeeIds(Long[] reviewEmployeeIds);
+
+    public List<SysEmployeeWorktime> selectSysEmployeeWorktimeListByTime(SysEmployeeWorktime sysEmployeeWorktime);
 }

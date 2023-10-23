@@ -104,5 +104,10 @@ public class SysEmployeeWorktimeServiceImpl implements ISysEmployeeWorktimeServi
         return sysEmployeeWorktimeMapper.deleteSysEmployeeWorktimeByReviewEmployeeIds(reviewEmployeeIds);
     }
 
+    @Override
+    public List<SysEmployeeWorktime> selectSysEmployeeWorktimeListByTime(SysEmployeeWorktime sysEmployeeWorktime)
+    {
+        return sysEmployeeWorktimeMapper.selectSysEmployeeWorktimeListByTime(sysEmployeeWorktime);
+    }
 
 }
