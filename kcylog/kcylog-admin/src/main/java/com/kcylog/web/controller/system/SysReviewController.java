@@ -56,6 +56,9 @@ public class SysReviewController extends BaseController
 
     @Autowired
     private ISysSubcontractService sysSubcontractService;
+
+    @Autowired
+    private ISysEmployeeWorktimeService sysEmployeeWorktimeService;
     /**
      * 查询审核单列表
      */
@@ -497,5 +500,110 @@ public class SysReviewController extends BaseController
             subcontract.setCooperationUnitJson(cooperationUnitJson);
         }
         return success(subcontract);
+    }
+
+    /**
+     * 导出审核单列表
+     */
+    @Log(title = "按部门导出-旧模块", businessType = BusinessType.EXPORT)
+    @PostMapping("/exportMonth")
+    public void exportMonth(HttpServletResponse response, SysEmployeeWorktime sysEmployeeWorktime)
+    {
+        //获取符合月份的数据并整合
+        List<SysEmployeeWorktime> listExport = sysEmployeeWorktimeService.selectSysEmployeeWorktimeListByTime(sysEmployeeWorktime);
+        List<Long> reviewExportIdsList = new ArrayList<>();
+        List<Long> reviewExportEmployeeIdsList = new ArrayList<>();
+        for (SysEmployeeWorktime employeeWorktime:listExport){
+            reviewExportIdsList.add(employeeWorktime.getReviewId());
+            reviewExportEmployeeIdsList.add(employeeWorktime.getReviewEmployeeId());
+        }
+        reviewExportIdsList.add((long)0);
+        reviewExportEmployeeIdsList.add((long)0);
+
+        Long[] reviewExportIds = reviewExportIdsList.toArray(new Long[reviewExportIdsList.size()]);
+        Long[] reviewExportEmployeeIds = reviewExportEmployeeIdsList.toArray(new Long[reviewExportEmployeeIdsList.size()]);
+
+        sysReviewEmployeeService.updateIsJsByReviewEmployeeIds(reviewExportEmployeeIds);
+
+
+        List<SysReview> list = sysReviewService.selectSysReviewListByReviewIds(reviewExportIds);
+        int num = 0;
+        for (SysReview sysReviewTemp:list){
+            num ++;
+            float day = 0;
+            Map<String, Integer> map = new HashMap<>();
+            String hiredWorkerName = "";
+            String workload = "";
+            sysReviewTemp.setReviewExportEmployeeIds(reviewExportEmployeeIds);
+            List<SysReviewEmployee> reviewEmployee = sysReviewEmployeeService.selectSysReviewEmployeeByReviewIdMonth(sysReviewTemp);
+            sysReviewTemp.setExportSerialNumber(num);
+            for (SysReviewEmployee employee:reviewEmployee){
+                hiredWorkerName = hiredWorkerName + (employee.getName() + "、");
+                day += employee.getWorkDay();
+                String workloadTemp = employee.getWorkTime();
+                String[] strArray = workloadTemp.split(";");
+                for (String dayTime:strArray){
+                    if (dayTime != ""){
+                        map.put(dayTime, 1);
+                    }
+                }
+            }
+            if (hiredWorkerName != ""){
+                hiredWorkerName = hiredWorkerName.substring(0, hiredWorkerName.length() - 1);
+            }
+            if (reviewEmployee.size() > 0){
+                workload += (reviewEmployee.size() + "人" + day + "天");
+            }
+            if (map.size() > 0){
+                workload += "(";
+            }
+            for (String key : map.keySet()) {
+                workload += (key + "、");
+            }
+            if (map.size() > 0){
+                workload = workload.substring(0, workload.length() - 1);
+                workload += ")";
+            }
+            sysReviewTemp.setHiredWorkerName(hiredWorkerName);
+            sysReviewTemp.setWorkload(workload);
+        }
+
+        Workbook workbook = new XSSFWorkbook();
+        CellStyle wrapCellStyle = workbook.createCellStyle();
+        Sheet sheet = this.integrateExcel(workbook, wrapCellStyle);
+
+        int rowIndex = 2; // 从第二行开始，留给行头
+        for (SysReview sysReviewTemp : list) {
+            Row row = sheet.createRow(rowIndex);
+
+            Cell cell1 = row.createCell(0);
+            cell1.setCellValue(sysReviewTemp.getExportSerialNumber());
+            cell1.setCellStyle(wrapCellStyle);
+
+            Cell cell2 = row.createCell(1);
+            cell2.setCellValue(sysReviewTemp.getSerialNum());
+            cell2.setCellStyle(wrapCellStyle);
+
+            Cell cell3 = row.createCell(2);
+            cell3.setCellValue(sysReviewTemp.getProjectName());
+            cell3.setCellStyle(wrapCellStyle);
+
+            Cell cell4 = row.createCell(3);
+            cell4.setCellValue(sysReviewTemp.getWorkload());
+            cell4.setCellStyle(wrapCellStyle);
+
+            Cell cell5 = row.createCell(4);
+            cell5.setCellValue(sysReviewTemp.getHiredWorkerName());
+            cell5.setCellStyle(wrapCellStyle);
+
+            rowIndex++;
+        }
+
+        try (OutputStream outputStream = response.getOutputStream()) {
+            workbook.write(outputStream);
+            workbook.close();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
     }
 }

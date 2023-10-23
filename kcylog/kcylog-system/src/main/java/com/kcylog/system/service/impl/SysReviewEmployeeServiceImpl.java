@@ -123,4 +123,9 @@ public class SysReviewEmployeeServiceImpl implements ISysReviewEmployeeService
         return sysReviewEmployeeMapper.updateIsJsByReviewEmployeeIds(reviewExportEmployeeIds);
     }
 
+    @Override
+    public  List<SysReviewEmployee> selectSysReviewEmployeeByReviewIdMonth(SysReview sysReview)
+    {
+        return sysReviewEmployeeMapper.selectSysReviewEmployeeByReviewIdMonth(sysReview);
+    }
 }

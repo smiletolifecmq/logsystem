@@ -332,4 +332,12 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
         SELECT a.*, u.user_name FROM sys_review a
         INNER JOIN sys_user u on u.user_id = a.user_id  where a.serial_num = #{serialNum} LIMIT 1
     </select>
+
+
+    <select id="selectSysReviewListByReviewIds" parameterType="String" resultMap="SysReviewResult">
+        select * from sys_review where review_id in
+        <foreach item="reviewId" collection="array" open="(" separator="," close=")">
+            #{reviewId}
+        </foreach>
+    </select>
 </mapper>

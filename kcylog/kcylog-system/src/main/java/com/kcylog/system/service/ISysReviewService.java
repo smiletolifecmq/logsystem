@@ -89,4 +89,6 @@ public interface ISysReviewService
     public SysReview getReviewBySerialNum(String serialNum);
 
     public SysReview getSubcontractReview(String serialNum);
+
+    public List<SysReview> selectSysReviewListByReviewIds(Long[] reviewExportIds);
 }

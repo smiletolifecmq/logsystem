@@ -70,4 +70,6 @@ public interface SysReviewEmployeeMapper
     public List<SysReviewEmployee> selectSysReviewEmployeeListJoinReviewMonth(SysReview sysReview);
 
     public int updateIsJsByReviewEmployeeIds(Long[] reviewExportEmployeeIds);
+
+    public List<SysReviewEmployee> selectSysReviewEmployeeByReviewIdMonth(SysReview sysReview);
 }

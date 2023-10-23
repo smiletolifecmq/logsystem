@@ -141,4 +141,13 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
             #{reviewEmployeeId}
         </foreach>
     </update>
+
+    <select id="selectSysReviewEmployeeByReviewIdMonth" parameterType="SysReview" resultMap="SysReviewEmployeeResult">
+        <include refid="selectSysReviewEmployeeVo"/>
+        where review_id = #{reviewId}
+        and review_employee_id in
+        <foreach item="reviewExportEmployeeId" collection="reviewExportEmployeeIds" open="(" separator="," close=")">
+            #{reviewExportEmployeeId}
+        </foreach>
+    </select>
 </mapper>
