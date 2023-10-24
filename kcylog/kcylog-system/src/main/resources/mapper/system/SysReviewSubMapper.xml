@@ -422,4 +422,11 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
         where review_id = #{reviewId}
     </update>
 
+    <select id="selectSysReviewSubListByReviewIds" parameterType="String" resultMap="SysReviewSubResult">
+        select * from sys_review_sub where review_id in
+        <foreach item="reviewId" collection="array" open="(" separator="," close=")">
+            #{reviewId}
+        </foreach>
+    </select>
+
 </mapper>

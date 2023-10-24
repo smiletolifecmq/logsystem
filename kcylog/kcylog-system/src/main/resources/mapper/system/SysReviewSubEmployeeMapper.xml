@@ -138,4 +138,13 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
             and r.review_id = 0 and e.review_employee_id = 0
         </if>
     </select>
+
+    <select id="selectSysReviewEmployeeByReviewIdMonth" parameterType="SysReviewSub" resultMap="SysReviewSubEmployeeResult">
+        <include refid="selectSysReviewSubEmployeeVo"/>
+        where review_id = #{reviewId}
+        and review_employee_id in
+        <foreach item="reviewExportEmployeeId" collection="reviewExportEmployeeIds" open="(" separator="," close=")">
+            #{reviewExportEmployeeId}
+        </foreach>
+    </select>
 </mapper>

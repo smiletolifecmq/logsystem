@@ -70,4 +70,6 @@ public interface ISysReviewSubEmployeeService
     public int updateIsJsByReviewEmployeeIds(Long[] reviewExportEmployeeIds);
 
     public List<SysReviewSubEmployee> selectSysReviewSubEmployeeListJoinReviewMonth(SysReviewSub sysReviewSub);
+
+    public List<SysReviewSubEmployee> selectSysReviewEmployeeByReviewIdMonth(SysReviewSub sysReviewSub);
 }

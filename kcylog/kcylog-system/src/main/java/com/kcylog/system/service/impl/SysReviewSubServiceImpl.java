@@ -179,4 +179,9 @@ public class SysReviewSubServiceImpl implements ISysReviewSubService
         return sysReviewSubMapper.updateRealWorkloadByReviewId(sysReviewSub);
     }
 
+    @Override
+    public List<SysReviewSub> selectSysReviewSubListByReviewIds(Long[] reviewExportIds)
+    {
+        return sysReviewSubMapper.selectSysReviewSubListByReviewIds(reviewExportIds);
+    }
 }
