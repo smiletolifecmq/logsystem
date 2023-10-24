@@ -64,6 +64,14 @@
           <el-table-column label="作业时间" align="center" prop="workTime" />
           <el-table-column label="天数" align="center" prop="workDay" />
           <el-table-column label="费用" align="center" prop="cost" />
+          <el-table-column label="状态" align="center" prop="isJs">
+            <template slot-scope="scope">
+              <span v-if="scope.row.isJs === 0" style="color: red">待结算</span>
+              <span v-if="scope.row.isJs === 1" style="color: green"
+                >已结算</span
+              >
+            </template>
+          </el-table-column>
           <el-table-column
             label="操作"
             align="center"
@@ -75,6 +83,7 @@
                 size="mini"
                 type="text"
                 icon="el-icon-edit"
+                v-if="scope.row.isJs === 0"
                 @click="handleUpdate(scope.row)"
                 >修改</el-button
               >
@@ -82,6 +91,7 @@
                 size="mini"
                 type="text"
                 icon="el-icon-delete"
+                v-if="scope.row.isJs === 0"
                 @click="handleDelete(scope.row)"
                 >删除</el-button
               >
