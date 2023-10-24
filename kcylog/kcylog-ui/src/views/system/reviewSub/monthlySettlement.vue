@@ -142,7 +142,7 @@ export default {
               break;
             case 2:
               this.download(
-                "system/reviewEmployee/outsourcingExportMonth",
+                "system/reviewSubEmployee/outsourcingExportMonth",
                 { ...this.queryParams },
                 `外包申请表_${new Date().getTime()}.xlsx`
               );
