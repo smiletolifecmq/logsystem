@@ -110,4 +110,10 @@ public class SysEmployeeWorktimeServiceImpl implements ISysEmployeeWorktimeServi
         return sysEmployeeWorktimeMapper.selectSysEmployeeWorktimeListByTime(sysEmployeeWorktime);
     }
 
+    @Override
+    public List<SysEmployeeWorktime> selectSysEmployeeSubWorktimeListByTime(SysEmployeeWorktime sysEmployeeWorktime)
+    {
+        return sysEmployeeWorktimeMapper.selectSysEmployeeSubWorktimeListByTime(sysEmployeeWorktime);
+    }
+
 }

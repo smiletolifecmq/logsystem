@@ -147,6 +147,26 @@ public class SysReviewSub extends BaseEntity
 
     private SysProject project;
 
+    private Long[] reviewExportIds;
+
+    private Long[] reviewExportEmployeeIds;
+
+    public Long[] getReviewExportIds() {
+        return reviewExportIds;
+    }
+
+    public void setReviewExportIds(Long[] reviewExportIds) {
+        this.reviewExportIds = reviewExportIds;
+    }
+
+    public Long[] getReviewExportEmployeeIds() {
+        return reviewExportEmployeeIds;
+    }
+
+    public void setReviewExportEmployeeIds(Long[] reviewExportEmployeeIds) {
+        this.reviewExportEmployeeIds = reviewExportEmployeeIds;
+    }
+
     public Long getFzrUserId() {
         return fzrUserId;
     }

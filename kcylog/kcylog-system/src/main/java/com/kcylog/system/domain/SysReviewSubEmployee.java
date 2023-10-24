@@ -85,6 +85,16 @@ public class SysReviewSubEmployee extends BaseEntity {
 //    })
     private SysReviewSub review;
 
+    private Long isJs;
+
+    public Long getIsJs() {
+        return isJs;
+    }
+
+    public void setIsJs(Long isJs) {
+        this.isJs = isJs;
+    }
+
     public int getExportSerialNumber() {
         return exportSerialNumber;
     }

@@ -12,6 +12,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
         <result property="workDay"    column="work_day"    />
         <result property="cost"    column="cost"    />
         <result property="reviewId"    column="review_id"    />
+        <result property="isJs"    column="is_js"    />
         <association property="review" column="create_time" javaType="SysReviewSub" resultMap="SysReviewSubEmployeeReviewResult"/>
     </resultMap>
 
@@ -22,7 +23,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
     </resultMap>
 
     <sql id="selectSysReviewSubEmployeeVo">
-        select review_employee_id, name, id_card, work_time, work_day, cost, review_id from sys_review_sub_employee
+        select review_employee_id, name, id_card, work_time, work_day, cost, review_id, is_js from sys_review_sub_employee
     </sql>
 
     <select id="selectSysReviewSubEmployeeList" parameterType="SysReviewSubEmployee" resultMap="SysReviewSubEmployeeResult">
@@ -111,5 +112,30 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
             </if>
             AND a.settlement_id = #{settlementId}
         </where>
+    </select>
+
+    <update id="updateIsJsByReviewEmployeeIds" parameterType="String">
+        update sys_review_sub_employee set  is_js = 1 where review_employee_id in
+        <foreach item="reviewEmployeeId" collection="array" open="(" separator="," close=")">
+            #{reviewEmployeeId}
+        </foreach>
+    </update>
+
+    <select id="selectSysReviewSubEmployeeListJoinReviewMonth" parameterType="SysReviewSub" resultMap="SysReviewSubEmployeeResult">
+        select e.*, r.create_time, r.serial_num, r.project_name from sys_review_sub_employee e
+        inner join sys_review_sub r on e.review_id = r.review_id where r.dept_id = #{deptId}
+        <if test="reviewExportIds != null and reviewExportEmployeeIds != null">
+            and r.review_id in
+            <foreach item="reviewExportId" collection="reviewExportIds" open="(" separator="," close=")">
+                #{reviewExportId}
+            </foreach>
+            and e.review_employee_id in
+            <foreach item="reviewExportEmployeeId" collection="reviewExportEmployeeIds" open="(" separator="," close=")">
+                #{reviewExportEmployeeId}
+            </foreach>
+        </if>
+        <if test="reviewExportIds == null or reviewExportEmployeeIds == null">
+            and r.review_id = 0 and e.review_employee_id = 0
+        </if>
     </select>
 </mapper>

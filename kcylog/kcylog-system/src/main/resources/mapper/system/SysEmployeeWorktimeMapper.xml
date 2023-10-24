@@ -98,4 +98,14 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
                 and (MONTH(FROM_UNIXTIME(a.end_time-1)) >= #{startTimeMonth} and MONTH(FROM_UNIXTIME(a.end_time-1)) &lt;= #{endTimeMonth})
             )
     </select>
+
+    <select id="selectSysEmployeeSubWorktimeListByTime" parameterType="SysEmployeeWorktime" resultMap="SysEmployeeWorktimeResult">
+        select a.* from sys_employee_worktime a
+            inner join sys_review_sub b on a.review_id = b.review_id
+            and b.dept_id = #{deptId}
+            and (
+                   (YEAR(FROM_UNIXTIME(a.start_time-1)) >= #{startTimeYear} and YEAR(FROM_UNIXTIME(a.start_time-1)) &lt;= #{endTimeYear})
+                   and (MONTH(FROM_UNIXTIME(a.end_time-1)) >= #{startTimeMonth} and MONTH(FROM_UNIXTIME(a.end_time-1)) &lt;= #{endTimeMonth})
+               )
+    </select>
 </mapper>

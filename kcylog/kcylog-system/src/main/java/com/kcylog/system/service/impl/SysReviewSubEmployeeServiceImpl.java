@@ -111,4 +111,16 @@ public class SysReviewSubEmployeeServiceImpl implements ISysReviewSubEmployeeSer
         return sysReviewSubEmployeeMapper.selectSysReviewSubEmployeeListJoinReview(sysReviewSub);
     }
 
+    @Override
+    public int updateIsJsByReviewEmployeeIds(Long[] reviewExportEmployeeIds)
+    {
+        return sysReviewSubEmployeeMapper.updateIsJsByReviewEmployeeIds(reviewExportEmployeeIds);
+    }
+
+    @Override
+    public List<SysReviewSubEmployee> selectSysReviewSubEmployeeListJoinReviewMonth(SysReviewSub sysReviewSub)
+    {
+        return sysReviewSubEmployeeMapper.selectSysReviewSubEmployeeListJoinReviewMonth(sysReviewSub);
+    }
+
 }

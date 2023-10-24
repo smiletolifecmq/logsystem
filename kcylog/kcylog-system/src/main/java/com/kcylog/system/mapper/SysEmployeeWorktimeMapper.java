@@ -65,4 +65,6 @@ public interface SysEmployeeWorktimeMapper
     public int deleteSysEmployeeWorktimeByReviewEmployeeIds(Long[] reviewEmployeeIds);
 
     public List<SysEmployeeWorktime> selectSysEmployeeWorktimeListByTime(SysEmployeeWorktime sysEmployeeWorktime);
+
+    public List<SysEmployeeWorktime> selectSysEmployeeSubWorktimeListByTime(SysEmployeeWorktime sysEmployeeWorktime);
 }
