@@ -22,15 +22,12 @@ public class SysProjectCar extends BaseEntity
     private Long carId;
 
     /** 项目ID */
-    @Excel(name = "项目ID")
     private Long projectId;
 
     /** 车辆审核单ID */
-    @Excel(name = "车辆审核单ID")
     private Long carReviewId;
 
     /** 项目名称 */
-    @Excel(name = "项目名称")
     private String projectName;
 
     /** 车牌号 */
@@ -38,18 +35,19 @@ public class SysProjectCar extends BaseEntity
     private String carNum;
 
     /** 用车类型：1单位派车（拼车），2单位派车（独享），3滴滴 */
-    @Excel(name = "用车类型：1单位派车", readConverterExp = "拼=车")
+    @Excel(name = "用车类型")
     private Long carType;
 
     /** 次数：1拼车一趟（独享一趟）、拼车二趟（独享二趟）、拼车三趟（独享三趟）、拼车四趟（独享四趟）
  */
-    @Excel(name = "次数：1拼车一趟", readConverterExp = "独=享一趟")
+    @Excel(name = "次数")
     private Long number;
 
     /** 用车费用 */
     @Excel(name = "用车费用")
     private BigDecimal carExpenses;
 
+    @Excel(name = "日期", width = 30, dateFormat = "yyyy-MM-dd")
     private Date recordTime;
 
     public void setCarId(Long carId)

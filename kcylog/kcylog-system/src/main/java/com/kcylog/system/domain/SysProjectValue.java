@@ -19,7 +19,6 @@ public class SysProjectValue extends BaseEntity
     private Long valueId;
 
     /** 项目ID */
-    @Excel(name = "项目ID")
     private Long projectId;
 
     /** 人员名称 */

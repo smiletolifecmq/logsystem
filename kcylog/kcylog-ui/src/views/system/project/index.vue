@@ -62,6 +62,17 @@
           >新增</el-button
         >
       </el-col>
+      <el-col :span="1.5">
+        <el-button
+          type="warning"
+          plain
+          icon="el-icon-download"
+          size="mini"
+          @click="handleExport"
+          v-hasPermi="['system:project:export']"
+          >导出</el-button
+        >
+      </el-col>
 
       <right-toolbar
         :showSearch.sync="showSearch"
@@ -101,11 +112,7 @@
         align="center"
         prop="projectEndAlias"
       />
-      <el-table-column
-        label="安排结束时间"
-        align="center"
-        prop="projectEndAlias"
-      />
+      <el-table-column label="一检时间" align="center" prop="oneCheck" />
       <el-table-column label="二检时间" align="center" prop="twoCheckTime">
         <template slot-scope="scope">
           <span>{{ parseTime(scope.row.twoCheckTime, "{y}-{m}-{d}") }}</span>

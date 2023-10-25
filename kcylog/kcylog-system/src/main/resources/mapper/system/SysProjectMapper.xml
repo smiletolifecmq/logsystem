@@ -224,4 +224,26 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
     <update id="updateOutputStatusByProjectId" parameterType="SysProject">
         update sys_project set  output_status = 1 where project_id = #{projectId}
     </update>
+
+
+    <sql id="selectSysProjectExport">
+        select p.*, v.user_name, v.proportion, c.car_num, c.car_type, c.number, c.car_expenses, c.record_time
+        from sys_project p
+        left join sys_project_value v on p.project_id = v.project_id
+        left join sys_project_car c on p.project_id = c.project_id
+    </sql>
+    <select id="selectSysProjectExportList" parameterType="SysProject" resultMap="SysProjectResult">
+        <include refid="selectSysProjectExport"/>
+        <where>
+            <if test="projectNameAlias != null  and projectNameAlias != ''"> and project_name_alias like concat('%', #{projectNameAlias}, '%')</if>
+            <if test="projectNum != null  and projectNum != ''"> and project_num like concat('%', #{projectNum}, '%')</if>
+            <if test="params.beginTime != null and params.beginTime != ''"><!-- 开始时间检索 -->
+                and (date_format(two_check_time,'%y%m%d') &gt;= date_format(#{params.beginTime},'%y%m%d'))
+            </if>
+            <if test="params.endTime != null and params.endTime != ''"><!-- 结束时间检索 -->
+                and (date_format(two_check_time,'%y%m%d') &lt;= date_format(#{params.endTime},'%y%m%d'))
+            </if>
+        </where>
+        order by p.project_id desc
+    </select>
 </mapper>

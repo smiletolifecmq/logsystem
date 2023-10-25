@@ -24,53 +24,61 @@ public class SysProject extends BaseEntity
     private Long projectId;
 
     /** 项目名称 */
-    @Excel(name = "项目名称")
+    @Excel(name = "项目名称", needMerge = true)
     private String projectNameAlias;
 
     /** 项目编号 */
-    @Excel(name = "项目编号")
+    @Excel(name = "项目编号", needMerge = true)
     private String projectNum;
 
     /** 项目类型 */
-    @Excel(name = "项目类型")
+    @Excel(name = "项目类型", needMerge = true)
     private String projectType;
 
+    /** 项目金额 */
+    @Excel(name = "项目金额", needMerge = true)
+    private BigDecimal projectMoneyAlias;
+
+    @Excel(name = "工作量", needMerge = true)
+    private String workcontentAlias;
+
+    /** 工程内容 */
+    @Excel(name = "工程内容", needMerge = true)
+    private String workloadAlias;
+
+    @Excel(name = "工程负责人", needMerge = true)
+    private String userNameAlias;
+
     /** 登记时间 */
-    @Excel(name = "登记时间")
+    @Excel(name = "登记时间", needMerge = true)
     private String registerTime;
 
     /** 接待人 */
-    @Excel(name = "接待人")
+    @Excel(name = "接待人", needMerge = true)
     private String receptionist;
 
-    /** 工程内容 */
-    @Excel(name = "工程内容")
-    private String workloadAlias;
-
-    private String workcontentAlias;
 
     /** 工程负责人 */
-    @Excel(name = "工程负责人")
-    private String userNameAlias;
+
 
     /** 委托单位 */
-    @Excel(name = "委托单位")
+    @Excel(name = "委托单位", needMerge = true)
     private String requesterAlias;
 
     /** 安排开始时间 */
-    @Excel(name = "安排开始时间")
+    @Excel(name = "安排开始时间", needMerge = true)
     private String projectStartAlias;
 
     /** 安排结束时间 */
-    @Excel(name = "安排结束时间")
+    @Excel(name = "安排结束时间", needMerge = true)
     private String projectEndAlias;
 
     /** 一检时间 */
-    @Excel(name = "一检时间")
+    @Excel(name = "一检时间", needMerge = true)
     private String oneCheck;
 
     /** 二检时间 */
-    @Excel(name = "二检时间")
+    @Excel(name = "二检时间", needMerge = true)
     private String twoCheck;
 
     private Date twoCheckTime;
@@ -80,39 +88,35 @@ public class SysProject extends BaseEntity
     private Integer outputStatus;
 
     /** 通知出件时间 */
-    @Excel(name = "通知出件时间")
+    @Excel(name = "通知出件时间", needMerge = true)
     private String noticeTime;
 
     /** 项目出件时间 */
-    @Excel(name = "项目出件时间")
+    @Excel(name = "项目出件时间", needMerge = true)
     private String projectTime;
 
     /** 送达时间 */
-    @Excel(name = "送达时间")
+    @Excel(name = "送达时间", needMerge = true)
     private String deliveryTime;
 
-    /** 项目金额 */
-    @Excel(name = "项目金额")
-    private BigDecimal projectMoneyAlias;
-
     /** 经营产值 */
-    @Excel(name = "经营产值")
+    @Excel(name = "经营产值", needMerge = true)
     private BigDecimal operate;
 
     /** 填写经营产值人 */
-    @Excel(name = "填写经营产值人")
     private String operateUser;
 
     private Integer isCarRegister;
 
-    private List<SysProjectCar> projectCar;
-
     /** 填写经营产值时间 */
     @JsonFormat(pattern = "yyyy-MM-dd")
-    @Excel(name = "填写经营产值时间", width = 30, dateFormat = "yyyy-MM-dd")
     private Date operateTime;
 
+    @Excel(name = "产值结算")
     private List<SysProjectValue> projectValue;
+
+//    @Excel(name = "车辆使用情况")
+    private List<SysProjectCar> projectCar;
 
 
     public List<SysProjectCar> getProjectCar() {

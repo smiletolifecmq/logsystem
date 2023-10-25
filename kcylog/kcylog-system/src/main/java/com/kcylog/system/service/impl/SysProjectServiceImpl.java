@@ -119,4 +119,10 @@ public class SysProjectServiceImpl implements ISysProjectService
     {
         return sysProjectMapper.updateOutputStatusByProjectId(sysProject);
     }
+
+    @Override
+    public List<SysProject> selectSysProjectExportList(SysProject sysProject)
+    {
+        return sysProjectMapper.selectSysProjectExportList(sysProject);
+    }
 }

@@ -67,4 +67,6 @@ public interface SysProjectMapper
     public List<SysProject> listProjectOperate(SysProject sysProject);
 
     public int updateOutputStatusByProjectId(SysProject sysProject);
+
+    public List<SysProject> selectSysProjectExportList(SysProject sysProject);
 }
