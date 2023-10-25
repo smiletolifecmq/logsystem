@@ -24,7 +24,7 @@ public class SysProject extends BaseEntity
     private Long projectId;
 
     /** 项目名称 */
-    @Excel(name = "项目名称", needMerge = true)
+    @Excel(name = "项目名称", needMerge = true,subIndexMax = 4)
     private String projectNameAlias;
 
     /** 项目编号 */
@@ -112,10 +112,10 @@ public class SysProject extends BaseEntity
     @JsonFormat(pattern = "yyyy-MM-dd")
     private Date operateTime;
 
-    @Excel(name = "产值结算")
+    @Excel(name = "产值结算", isIngoreSubList = true, subIndex = 0)
     private List<SysProjectValue> projectValue;
 
-//    @Excel(name = "车辆使用情况")
+    @Excel(name = "车辆使用情况", isIngoreSubList = true, subIndex = 1)
     private List<SysProjectCar> projectCar;
 
 

@@ -6,7 +6,7 @@ import com.kcylog.common.core.controller.BaseController;
 import com.kcylog.common.core.domain.AjaxResult;
 import com.kcylog.common.core.page.TableDataInfo;
 import com.kcylog.common.enums.BusinessType;
-import com.kcylog.common.utils.poi.ExcelUtil;
+import com.kcylog.common.utils.poi.ExcelMultUtil;
 import com.kcylog.system.domain.SysProject;
 import com.kcylog.system.domain.SysProjectRelation;
 import com.kcylog.system.domain.SysProjectValue;
@@ -65,7 +65,7 @@ public class SysProjectController extends BaseController
     {
         List<SysProject> list = sysProjectService.selectSysProjectExportList(sysProject);
 
-        ExcelUtil<SysProject> util = new ExcelUtil<SysProject>(SysProject.class);
+        ExcelMultUtil<SysProject> util = new ExcelMultUtil<SysProject>(SysProject.class,4);
         util.exportExcel(response, list, "项目数据");
     }
 

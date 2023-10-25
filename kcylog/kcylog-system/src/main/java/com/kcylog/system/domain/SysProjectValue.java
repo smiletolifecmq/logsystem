@@ -26,7 +26,7 @@ public class SysProjectValue extends BaseEntity
     private String userName;
 
     /** 占比 */
-    @Excel(name = "占比")
+    @Excel(name = "占比(%)")
     private Long proportion;
 
     public void setValueId(Long valueId) 

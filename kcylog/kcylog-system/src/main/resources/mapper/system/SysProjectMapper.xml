@@ -34,6 +34,27 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
         <result property="updateTime"    column="update_time"    />
         <association property="projectValue" javaType="java.util.List" resultMap="SysProjectValueResult"/>
         <association property="projectCar" javaType="java.util.List" resultMap="SysProjectCarResult"/>
+        <association property="reviewSub" javaType="java.util.List" resultMap="SysReviewSubResult"/>
+    </resultMap>
+
+    <resultMap type="SysReviewSub" id="SysReviewSubResult">
+        <!--雇工信息-->
+        <result property="workload"    column="workload"    />
+        <result property="porjectMoney"    column="porject_money"    />
+        <result property="subcontract"    column="subcontract"    />
+        <result property="employmentReason"    column="employment_reason"    />
+        <result property="startTime"    column="start_time"    />
+        <result property="endTime"    column="end_time"    />
+        <result property="peopleNum"    column="people_num"    />
+        <result property="budgetDay"    column="budget_day"    />
+        <result property="budgetMoney"    column="budget_money"    />
+        <!--分包信息-->
+        <result property="workcontent"    column="workcontent"    />
+        <result property="subType"    column="sub_type"    />
+        <result property="subWorkload"    column="sub_workload"    />
+        <result property="realWorkload"    column="real_workload"    />
+        <result property="winUnit"    column="win_unit"    />
+        <result property="lotTime"    column="lot_time"    />
     </resultMap>
 
     <resultMap type="SysProjectCar" id="SysProjectCarResult">
@@ -231,6 +252,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
         from sys_project p
         left join sys_project_value v on p.project_id = v.project_id
         left join sys_project_car c on p.project_id = c.project_id
+
     </sql>
     <select id="selectSysProjectExportList" parameterType="SysProject" resultMap="SysProjectResult">
         <include refid="selectSysProjectExport"/>

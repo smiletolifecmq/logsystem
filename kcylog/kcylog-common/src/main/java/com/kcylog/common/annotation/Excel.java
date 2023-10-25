@@ -149,6 +149,9 @@ public @interface Excel
      */
     public String[] args() default {};
 
+    public int subIndex() default -1;
+    public int subIndexMax() default -1;
+    public boolean isIngoreSubList() default false;
     /**
      * 字段类型（0：导出导入；1：仅导出；2：仅导入）
      */
