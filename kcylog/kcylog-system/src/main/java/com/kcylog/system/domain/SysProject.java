@@ -3,8 +3,11 @@ package com.kcylog.system.domain;
 import com.fasterxml.jackson.annotation.JsonFormat;
 import com.kcylog.common.annotation.Excel;
 import com.kcylog.common.core.domain.BaseEntity;
+import com.kcylog.system.common.ProjectEmployee;
+import com.kcylog.system.common.ProjectSubcontract;
 import org.apache.commons.lang3.builder.ToStringBuilder;
 import org.apache.commons.lang3.builder.ToStringStyle;
+import org.apache.poi.ss.usermodel.IndexedColors;
 
 import java.math.BigDecimal;
 import java.util.Date;
@@ -112,12 +115,43 @@ public class SysProject extends BaseEntity
     @JsonFormat(pattern = "yyyy-MM-dd")
     private Date operateTime;
 
-    @Excel(name = "产值结算", isIngoreSubList = true, subIndex = 0)
+    @Excel(name = "产值结算", isIngoreSubList = true, subIndex = 0, headerBackgroundColor = IndexedColors.GREEN)
     private List<SysProjectValue> projectValue;
 
-    @Excel(name = "车辆使用情况", isIngoreSubList = true, subIndex = 1)
+    @Excel(name = "车辆使用情况", isIngoreSubList = true, subIndex = 1, headerBackgroundColor = IndexedColors.BLUE)
     private List<SysProjectCar> projectCar;
 
+    @Excel(name = "雇工详情", isIngoreSubList = true, subIndex = 2, headerBackgroundColor = IndexedColors.BROWN)
+    private List<ProjectEmployee> projectEmployee;
+
+    @Excel(name = "分包详情", isIngoreSubList = true, subIndex = 3, headerBackgroundColor = IndexedColors.INDIGO)
+    private List<ProjectSubcontract> projectSubcontract;
+
+    private List<SysReviewSub> reviewSub;
+
+    public List<ProjectEmployee> getProjectEmployee() {
+        return projectEmployee;
+    }
+
+    public void setProjectEmployee(List<ProjectEmployee> projectEmployee) {
+        this.projectEmployee = projectEmployee;
+    }
+
+    public List<ProjectSubcontract> getProjectSubcontract() {
+        return projectSubcontract;
+    }
+
+    public void setProjectSubcontract(List<ProjectSubcontract> projectSubcontract) {
+        this.projectSubcontract = projectSubcontract;
+    }
+
+    public List<SysReviewSub> getReviewSub() {
+        return reviewSub;
+    }
+
+    public void setReviewSub(List<SysReviewSub> reviewSub) {
+        this.reviewSub = reviewSub;
+    }
 
     public List<SysProjectCar> getProjectCar() {
         return projectCar;

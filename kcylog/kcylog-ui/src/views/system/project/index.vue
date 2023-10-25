@@ -416,8 +416,23 @@
             <el-table-column prop="projectName" label="项目编号">
             </el-table-column>
             <el-table-column prop="carNum" label="车牌号"> </el-table-column>
-            <el-table-column prop="carType" label="用车类型"> </el-table-column>
-            <el-table-column prop="number" label="次数"> </el-table-column>
+            <el-table-column prop="carType" label="用车类型">
+              <template slot-scope="scope">
+                <span v-if="scope.row.carType === 1">单位派车（拼车）</span>
+                <span v-else-if="scope.row.carType === 2"
+                  >单位派车（独享）</span
+                >
+                <span v-else-if="scope.row.carType === 3">滴滴</span>
+              </template>
+            </el-table-column>
+            <el-table-column prop="number" label="次数">
+              <template slot-scope="scope">
+                <span v-if="scope.row.number === 1">一趟</span>
+                <span v-else-if="scope.row.number === 2">两趟</span>
+                <span v-else-if="scope.row.number === 3">三趟</span>
+                <span v-else-if="scope.row.number === 4">四趟</span>
+              </template>
+            </el-table-column>
             <el-table-column prop="carExpenses" label="费用"> </el-table-column>
           </el-table>
         </el-collapse-item>
@@ -607,6 +622,7 @@ export default {
     },
     /** 重置按钮操作 */
     resetQuery() {
+      this.dateRange = [];
       this.resetForm("queryForm");
       this.handleQuery();
     },

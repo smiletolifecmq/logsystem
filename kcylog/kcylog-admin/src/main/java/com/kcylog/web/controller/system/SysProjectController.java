@@ -7,9 +7,9 @@ import com.kcylog.common.core.domain.AjaxResult;
 import com.kcylog.common.core.page.TableDataInfo;
 import com.kcylog.common.enums.BusinessType;
 import com.kcylog.common.utils.poi.ExcelMultUtil;
-import com.kcylog.system.domain.SysProject;
-import com.kcylog.system.domain.SysProjectRelation;
-import com.kcylog.system.domain.SysProjectValue;
+import com.kcylog.system.common.ProjectEmployee;
+import com.kcylog.system.common.ProjectSubcontract;
+import com.kcylog.system.domain.*;
 import com.kcylog.system.service.ISysProjectRelationService;
 import com.kcylog.system.service.ISysProjectService;
 import com.kcylog.system.service.ISysProjectValueService;
@@ -21,19 +21,19 @@ import org.springframework.web.bind.annotation.*;
 import javax.servlet.http.HttpServletResponse;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
 /**
  * 项目Controller
- * 
+ *
  * @author ruoyi
  * @date 2023-09-07
  */
 @RestController
 @RequestMapping("/system/project")
-public class SysProjectController extends BaseController
-{
+public class SysProjectController extends BaseController {
     @Autowired
     private ISysProjectService sysProjectService;
 
@@ -48,8 +48,7 @@ public class SysProjectController extends BaseController
      */
     @PreAuthorize("@ss.hasPermi('system:project:list')")
     @GetMapping("/list")
-    public TableDataInfo list(SysProject sysProject)
-    {
+    public TableDataInfo list(SysProject sysProject) {
         startPage();
         List<SysProject> list = sysProjectService.selectSysProjectList(sysProject);
         return getDataTable(list);
@@ -61,11 +60,56 @@ public class SysProjectController extends BaseController
     @PreAuthorize("@ss.hasPermi('system:project:export')")
     @Log(title = "项目", businessType = BusinessType.EXPORT)
     @PostMapping("/export")
-    public void export(HttpServletResponse response, SysProject sysProject)
-    {
+    public void export(HttpServletResponse response, SysProject sysProject) {
         List<SysProject> list = sysProjectService.selectSysProjectExportList(sysProject);
+        for (SysProject project : list) {
+            //占位
+            if (project.getProjectValue() == null || project.getProjectValue().size() == 0){
+                List<SysProjectValue> projectValueObj = new ArrayList<>();
+                SysProjectValue projectValue = new SysProjectValue();
+                projectValueObj.add(projectValue);
+                project.setProjectValue(projectValueObj);
+            }
+            if (project.getProjectCar() == null || project.getProjectCar().size() == 0){
+                List<SysProjectCar> projectCarObj = new ArrayList<>();
+                SysProjectCar projectCar = new SysProjectCar();
+                projectCarObj.add(projectCar);
+                project.setProjectCar(projectCarObj);
+            }
 
-        ExcelMultUtil<SysProject> util = new ExcelMultUtil<SysProject>(SysProject.class,4);
+            List<ProjectEmployee> employeeObj = new ArrayList<>();
+            List<ProjectSubcontract> subcontractObj = new ArrayList<>();
+            project.setProjectEmployee(employeeObj);
+            project.setProjectSubcontract(subcontractObj);
+            for (SysReviewSub reviewSub:project.getReviewSub()){
+                ProjectEmployee  employee = new ProjectEmployee();
+                employee.setWorkload(reviewSub.getWorkload());
+                employee.setPorjectMoney(reviewSub.getPorjectMoney());
+                employee.setSubcontract(reviewSub.getSubcontract());
+                employee.setEmploymentReason(reviewSub.getEmploymentReason());
+                employee.setStartTime(reviewSub.getStartTime());
+                employee.setEndTime(reviewSub.getEndTime());
+                employee.setPeopleNum(reviewSub.getPeopleNum());
+                employee.setBudgetDay(reviewSub.getBudgetDay());
+                employee.setBudgetMoney(reviewSub.getBudgetMoney());
+                project.getProjectEmployee().add(employee);
+
+                ProjectSubcontract subcontract = new ProjectSubcontract();
+                subcontract.setWorkcontent(reviewSub.getWorkcontent());
+                subcontract.setSubType(reviewSub.getSubType());
+                subcontract.setSubWorkload(reviewSub.getSubWorkload());
+                subcontract.setRealWorkload(reviewSub.getRealWorkload());
+                subcontract.setWinUnit(reviewSub.getWinUnit());
+                subcontract.setLotTime(reviewSub.getLotTime());
+                project.getProjectSubcontract().add(subcontract);
+            }
+
+            if (project.getProjectEmployee().size() == 0){
+                ProjectEmployee  employee = new ProjectEmployee();
+                project.getProjectEmployee().add(employee);
+            }
+        }
+        ExcelMultUtil<SysProject> util = new ExcelMultUtil<SysProject>(SysProject.class, 4);
         util.exportExcel(response, list, "项目数据");
     }
 
@@ -74,8 +118,7 @@ public class SysProjectController extends BaseController
      */
     @PreAuthorize("@ss.hasPermi('system:project:query')")
     @GetMapping(value = "/{projectId}")
-    public AjaxResult getInfo(@PathVariable("projectId") String projectId)
-    {
+    public AjaxResult getInfo(@PathVariable("projectId") String projectId) {
         return success(sysProjectService.selectSysProjectByProjectId(projectId));
     }
 
@@ -85,8 +128,7 @@ public class SysProjectController extends BaseController
     @PreAuthorize("@ss.hasPermi('system:project:add')")
     @Log(title = "项目", businessType = BusinessType.INSERT)
     @PostMapping
-    public AjaxResult add(@RequestBody SysProject sysProject)
-    {
+    public AjaxResult add(@RequestBody SysProject sysProject) {
         return toAjax(sysProjectService.insertSysProject(sysProject));
     }
 
@@ -96,8 +138,7 @@ public class SysProjectController extends BaseController
     @PreAuthorize("@ss.hasPermi('system:project:edit')")
     @Log(title = "项目", businessType = BusinessType.UPDATE)
     @PutMapping
-    public AjaxResult edit(@RequestBody SysProject sysProject)
-    {
+    public AjaxResult edit(@RequestBody SysProject sysProject) {
         return toAjax(sysProjectService.updateSysProject(sysProject));
     }
 
@@ -106,15 +147,13 @@ public class SysProjectController extends BaseController
      */
     @PreAuthorize("@ss.hasPermi('system:project:remove')")
     @Log(title = "项目", businessType = BusinessType.DELETE)
-	@DeleteMapping("/{projectIds}")
-    public AjaxResult remove(@PathVariable String[] projectIds)
-    {
+    @DeleteMapping("/{projectIds}")
+    public AjaxResult remove(@PathVariable String[] projectIds) {
         return toAjax(sysProjectService.deleteSysProjectByProjectIds(projectIds));
     }
 
     @GetMapping("/getProjectRelation/{reviewType}")
-    public TableDataInfo getProjectRelation (@PathVariable("reviewType") Integer reviewType)
-    {
+    public TableDataInfo getProjectRelation(@PathVariable("reviewType") Integer reviewType) {
         List<SysProjectRelation> list = sysProjectRelationService.selectProjectRelationByReviewType(reviewType);
         return getDataTable(list);
     }
@@ -122,25 +161,22 @@ public class SysProjectController extends BaseController
 
     @PreAuthorize("@ss.hasPermi('system:project:detail')")
     @GetMapping(value = "/detail/{projectId}")
-    public AjaxResult getProjectDetail(@PathVariable("projectId") String projectId)
-    {
+    public AjaxResult getProjectDetail(@PathVariable("projectId") String projectId) {
         return success(sysProjectService.selectSysProjectByProjectId(projectId));
     }
 
-//    @Log(title = "项目管理安排数据", businessType = BusinessType.INSERT)
+    //    @Log(title = "项目管理安排数据", businessType = BusinessType.INSERT)
     @Anonymous
     @CrossOrigin
     @PostMapping(value = "/addProject")
-    public AjaxResult addProject(@RequestBody SysProject sysProject)
-    {
-        if (sysProjectService.checkProjectKeyUnique(sysProject.getProjectNum()) != null )
-        {
+    public AjaxResult addProject(@RequestBody SysProject sysProject) {
+        if (sysProjectService.checkProjectKeyUnique(sysProject.getProjectNum()) != null) {
             return error("项目'" + sysProject.getProjectNum() + "'安排失败，该项目在综合管理系统中已存在，请删除之后再安排～");
         }
         return toAjax(sysProjectService.insertSysProject(sysProject));
     }
 
-//    @Log(title = "项目管理安排数据", businessType = BusinessType.UPDATE)
+    //    @Log(title = "项目管理安排数据", businessType = BusinessType.UPDATE)
     @Anonymous
     @CrossOrigin
     @PutMapping(value = "/updateProject")
@@ -152,8 +188,7 @@ public class SysProjectController extends BaseController
     }
 
     @GetMapping("/listProjectOperate")
-    public TableDataInfo listProjectOperate(SysProject sysProject)
-    {
+    public TableDataInfo listProjectOperate(SysProject sysProject) {
         startPage();
         List<SysProject> list = sysProjectService.listProjectOperate(sysProject);
         return getDataTable(list);
@@ -162,13 +197,12 @@ public class SysProjectController extends BaseController
     @Log(title = "产值结算", businessType = BusinessType.UPDATE)
     @PutMapping("/projectValue")
     @Transactional
-    public AjaxResult editProjectValue(@RequestBody SysProject sysProject)
-    {
-        if (sysProject.getOutputStatus() == 1){
+    public AjaxResult editProjectValue(@RequestBody SysProject sysProject) {
+        if (sysProject.getOutputStatus() == 1) {
             sysProjectService.updateOutputStatusByProjectId(sysProject);
         }
         sysProjectValueService.deleteSysProjectValueByProjectId(sysProject.getProjectId());
-        if (sysProject.getProjectValue().size() != 0){
+        if (sysProject.getProjectValue().size() != 0) {
             for (int i = 0; i < sysProject.getProjectValue().size(); i++) {
                 SysProjectValue projectValue = sysProject.getProjectValue().get(i);
                 sysProjectValueService.insertSysProjectValue(projectValue);

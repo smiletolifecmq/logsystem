@@ -4,6 +4,7 @@ import org.apache.commons.lang3.builder.ToStringBuilder;
 import org.apache.commons.lang3.builder.ToStringStyle;
 import com.kcylog.common.annotation.Excel;
 import com.kcylog.common.core.domain.BaseEntity;
+import org.apache.poi.ss.usermodel.IndexedColors;
 
 /**
  * 项目产值对象 sys_project_value
@@ -22,11 +23,11 @@ public class SysProjectValue extends BaseEntity
     private Long projectId;
 
     /** 人员名称 */
-    @Excel(name = "人员名称")
+    @Excel(name = "人员名称", headerBackgroundColor = IndexedColors.GREEN)
     private String userName;
 
     /** 占比 */
-    @Excel(name = "占比(%)")
+    @Excel(name = "占比(%)", headerBackgroundColor = IndexedColors.GREEN)
     private Long proportion;
 
     public void setValueId(Long valueId) 

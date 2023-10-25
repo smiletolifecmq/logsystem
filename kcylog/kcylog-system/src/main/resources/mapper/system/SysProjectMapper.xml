@@ -246,13 +246,15 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
         update sys_project set  output_status = 1 where project_id = #{projectId}
     </update>
 
-
     <sql id="selectSysProjectExport">
-        select p.*, v.user_name, v.proportion, c.car_num, c.car_type, c.number, c.car_expenses, c.record_time
+        select p.*, v.user_name, v.proportion, c.car_num, c.car_type, c.number, c.car_expenses, c.record_time,
+        r.workload, r.porject_money, r.subcontract, r.employment_reason, r.start_time, r.end_time, r.people_num,
+        r.budget_day, r.budget_money, r.workcontent, r.sub_type, r.sub_workload, r.real_workload, r.win_unit, r.lot_time
         from sys_project p
         left join sys_project_value v on p.project_id = v.project_id
         left join sys_project_car c on p.project_id = c.project_id
-
+        left join sys_project_relation n on n.project_id = p.project_id
+        left join sys_review_sub r on r.review_id = n.review_id
     </sql>
     <select id="selectSysProjectExportList" parameterType="SysProject" resultMap="SysProjectResult">
         <include refid="selectSysProjectExport"/>
