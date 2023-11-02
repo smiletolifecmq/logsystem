@@ -13,6 +13,7 @@ import com.kcylog.system.domain.*;
 import com.kcylog.system.service.ISysProjectRelationService;
 import com.kcylog.system.service.ISysProjectService;
 import com.kcylog.system.service.ISysProjectValueService;
+import com.kcylog.system.service.ISysReviewSubService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.transaction.annotation.Transactional;
@@ -42,6 +43,9 @@ public class SysProjectController extends BaseController {
 
     @Autowired
     private ISysProjectValueService sysProjectValueService;
+
+    @Autowired
+    private ISysReviewSubService sysReviewSubService;
 
     /**
      * 查询项目列表
@@ -171,9 +175,11 @@ public class SysProjectController extends BaseController {
     @PostMapping(value = "/addProject")
     public AjaxResult addProject(@RequestBody SysProject sysProject) {
         if (sysProjectService.checkProjectKeyUnique(sysProject.getProjectNum()) != null) {
-            return error("项目'" + sysProject.getProjectNum() + "'安排失败，该项目在综合管理系统中已存在，请删除之后再安排～");
+            sysProjectService.updateSysProjectByProjectNum(sysProject);
+        }else {
+            sysProjectService.insertSysProject(sysProject);
         }
-        return toAjax(sysProjectService.insertSysProject(sysProject));
+        return toAjax(1);
     }
 
     //    @Log(title = "项目管理安排数据", businessType = BusinessType.UPDATE)
@@ -182,9 +188,21 @@ public class SysProjectController extends BaseController {
     @PutMapping(value = "/updateProject")
     public AjaxResult editProject(@RequestBody SysProject sysProject) throws ParseException {
         SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd");
-        Date twoCheckTime = dateFormat.parse(sysProject.getTwoCheck());
-        sysProject.setTwoCheckTime(twoCheckTime);
+        if (sysProject.getTwoCheck() != null && !sysProject.getTwoCheck().equals("")){
+            Date twoCheckTime = dateFormat.parse(sysProject.getTwoCheck());
+            sysProject.setTwoCheckTime(twoCheckTime);
+        }
         return toAjax(sysProjectService.updateSysProjectByProjectNum(sysProject));
+    }
+
+    /**
+     * 获取项目详细信息
+     */
+    @Anonymous
+    @CrossOrigin
+    @GetMapping(value = "/projectReview/{serialNum}")
+    public TableDataInfo getProjectReviewInfo(@PathVariable("serialNum") String serialNum) {
+        return getDataTable(sysReviewSubService.selectSysReviewBySerialNum(serialNum));
     }
 
     @GetMapping("/listProjectOperate")

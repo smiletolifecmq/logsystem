@@ -90,7 +90,6 @@
             icon="el-icon-tickets"
             @click="handleDetail(scope.row)"
             v-hasPermi="['system:project:detail']"
-            v-if="scope.row.outputStatus === 0"
             >产值结算</el-button
           >
         </template>
@@ -248,6 +247,7 @@
                 <el-col :span="8">
                   <el-form-item label="用户名" prop="userName">
                     <el-autocomplete
+                      :disabled="form.outputStatus === 1"
                       class="inline-input"
                       v-model="project.userName"
                       :fetch-suggestions="querySearch"
@@ -258,6 +258,7 @@
                 <el-col :span="8">
                   <el-form-item label="占比" prop="proportion">
                     <el-input-number
+                      :disabled="form.outputStatus === 1"
                       v-model="project.proportion"
                       :max="100"
                     ></el-input-number>
@@ -266,6 +267,7 @@
                 <el-col :span="1">% </el-col>
                 <el-col :span="7">
                   <el-button
+                    :disabled="form.outputStatus === 1"
                     v-if="index != 0 || form.projectValue.length == 1"
                     type="text"
                     icon="el-icon-circle-plus"
@@ -274,6 +276,7 @@
                     @click="addProject()"
                   ></el-button>
                   <el-button
+                    :disabled="form.outputStatus === 1"
                     type="text"
                     icon="el-icon-remove"
                     size="medium"
@@ -288,8 +291,18 @@
             class="dialog-footer"
             style="display: flex; justify-content: flex-end"
           >
-            <el-button type="success" @click="submitForm(1)">办 结</el-button>
-            <el-button type="primary" @click="submitForm(0)">保 存</el-button>
+            <el-button
+              v-if="form.outputStatus === 0"
+              type="success"
+              @click="submitForm(1)"
+              >办 结</el-button
+            >
+            <el-button
+              v-if="form.outputStatus === 0"
+              type="primary"
+              @click="submitForm(0)"
+              >保 存</el-button
+            >
             <el-button @click="cancel">取 消</el-button>
           </div>
         </el-collapse-item>

@@ -429,4 +429,8 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
         </foreach>
     </select>
 
+    <select id="selectSysReviewBySerialNum" parameterType="String" resultMap="SysReviewSubResult">
+        select * from sys_review_sub where serial_num = #{serialNum}
+    </select>
+
 </mapper>

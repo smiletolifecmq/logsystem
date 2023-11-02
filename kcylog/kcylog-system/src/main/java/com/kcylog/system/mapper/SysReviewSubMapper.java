@@ -91,4 +91,6 @@ public interface SysReviewSubMapper
     public int updateRealWorkloadByReviewId(SysReviewSub sysReviewSub);
 
     public List<SysReviewSub> selectSysReviewSubListByReviewIds(Long[] reviewExportIds);
+
+    public List<SysReviewSub> selectSysReviewBySerialNum(String serialNum);
 }
