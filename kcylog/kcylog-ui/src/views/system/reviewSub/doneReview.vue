@@ -189,20 +189,13 @@
             未找到关联项目数据～
           </div>
           <div v-if="formInfo.project && formInfo.project.projectNum">
-            <el-descriptions class="margin-top" :column="5" border>
+            <el-descriptions class="margin-top" :column="4" border>
               <el-descriptions-item>
                 <template slot="label">
                   <i class="el-icon-office-building"></i>
                   项目名称
                 </template>
                 {{ formInfo.project.projectNameAlias }}
-              </el-descriptions-item>
-              <el-descriptions-item>
-                <template slot="label">
-                  <i class="el-icon-tickets"></i>
-                  项目编号
-                </template>
-                {{ formInfo.project.projectNum }}
               </el-descriptions-item>
               <el-descriptions-item>
                 <template slot="label">
@@ -213,52 +206,10 @@
               </el-descriptions-item>
               <el-descriptions-item>
                 <template slot="label">
-                  <i class="el-icon-money"></i>
-                  项目金额
-                </template>
-                {{ formInfo.project.projectMoneyAlias }}
-              </el-descriptions-item>
-              <el-descriptions-item>
-                <template slot="label">
                   <i class="el-icon-time"></i>
                   登记时间
                 </template>
                 {{ formInfo.project.registerTime }}
-              </el-descriptions-item>
-              <el-descriptions-item>
-                <template slot="label">
-                  <i class="el-icon-s-custom"></i>
-                  接待人
-                </template>
-                {{ formInfo.project.receptionist }}
-              </el-descriptions-item>
-              <el-descriptions-item>
-                <template slot="label">
-                  <i class="el-icon-document"></i>
-                  工作量
-                </template>
-                {{ formInfo.project.workloadAlias }}
-              </el-descriptions-item>
-              <el-descriptions-item>
-                <template slot="label">
-                  <i class="el-icon-document"></i>
-                  工程内容
-                </template>
-                {{ formInfo.project.workcontentAlias }}
-              </el-descriptions-item>
-              <el-descriptions-item>
-                <template slot="label">
-                  <i class="el-icon-user"></i>
-                  工程负责人
-                </template>
-                {{ formInfo.project.userNameAlias }}
-              </el-descriptions-item>
-              <el-descriptions-item>
-                <template slot="label">
-                  <i class="el-icon-s-home"></i>
-                  委托单位
-                </template>
-                {{ formInfo.project.requesterAlias }}
               </el-descriptions-item>
               <el-descriptions-item>
                 <template slot="label">
@@ -269,10 +220,17 @@
               </el-descriptions-item>
               <el-descriptions-item>
                 <template slot="label">
-                  <i class="el-icon-time"></i>
-                  安排结束时间
+                  <i class="el-icon-tickets"></i>
+                  项目编号
                 </template>
-                {{ formInfo.project.projectEndAlias }}
+                {{ formInfo.project.projectNum }}
+              </el-descriptions-item>
+              <el-descriptions-item>
+                <template slot="label">
+                  <i class="el-icon-user"></i>
+                  接待人
+                </template>
+                {{ formInfo.project.receptionist }}
               </el-descriptions-item>
               <el-descriptions-item>
                 <template slot="label">
@@ -280,6 +238,27 @@
                   一检时间
                 </template>
                 {{ formInfo.project.oneCheck }}
+              </el-descriptions-item>
+              <el-descriptions-item>
+                <template slot="label">
+                  <i class="el-icon-time"></i>
+                  安排结束时间
+                </template>
+                {{ formInfo.project.projectEndAlias }}
+              </el-descriptions-item>
+              <el-descriptions-item>
+                <template slot="label">
+                  <i class="el-icon-s-home"></i>
+                  委托单位
+                </template>
+                {{ formInfo.project.requesterAlias }}
+              </el-descriptions-item>
+              <el-descriptions-item>
+                <template slot="label">
+                  <i class="el-icon-user"></i>
+                  工程负责人
+                </template>
+                {{ formInfo.project.userNameAlias }}
               </el-descriptions-item>
               <el-descriptions-item>
                 <template slot="label">
@@ -297,10 +276,17 @@
               </el-descriptions-item>
               <el-descriptions-item>
                 <template slot="label">
-                  <i class="el-icon-time"></i>
-                  项目出件时间
+                  <i class="el-icon-document"></i>
+                  工作量
                 </template>
-                {{ formInfo.project.projectTime }}
+                {{ formInfo.project.workloadAlias }}
+              </el-descriptions-item>
+              <el-descriptions-item>
+                <template slot="label">
+                  <i class="el-icon-money"></i>
+                  项目金额
+                </template>
+                {{ formInfo.project.projectMoneyAlias }}
               </el-descriptions-item>
               <el-descriptions-item>
                 <template slot="label">
@@ -308,6 +294,20 @@
                   送达时间
                 </template>
                 {{ formInfo.project.deliveryTime }}
+              </el-descriptions-item>
+              <el-descriptions-item>
+                <template slot="label">
+                  <i class="el-icon-time"></i>
+                  项目出件时间
+                </template>
+                {{ formInfo.project.projectTime }}
+              </el-descriptions-item>
+              <el-descriptions-item>
+                <template slot="label">
+                  <i class="el-icon-document"></i>
+                  工程内容
+                </template>
+                {{ formInfo.project.workcontentAlias }}
               </el-descriptions-item>
             </el-descriptions>
           </div>
@@ -834,7 +834,7 @@ export default {
         }
         this.subcontractForm = response.data;
         this.openInfo = true;
-        this.titleInfo = "项目编号:" + row.projectName + "详情";
+        this.titleInfo = "详情";
       });
       this.queryParamsEmployee.reviewId = reviewId;
       listEmployee(this.queryParamsEmployee).then((response) => {

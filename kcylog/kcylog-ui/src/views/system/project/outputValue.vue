@@ -123,6 +123,20 @@
             </el-descriptions-item>
             <el-descriptions-item>
               <template slot="label">
+                <i class="el-icon-notebook-2"></i>
+                项目类型
+              </template>
+              {{ form.projectType }}
+            </el-descriptions-item>
+            <el-descriptions-item>
+              <template slot="label">
+                <i class="el-icon-user"></i>
+                接待人
+              </template>
+              {{ form.receptionist }}
+            </el-descriptions-item>
+            <el-descriptions-item>
+              <template slot="label">
                 <i class="el-icon-tickets"></i>
                 项目编号
               </template>
@@ -130,10 +144,24 @@
             </el-descriptions-item>
             <el-descriptions-item>
               <template slot="label">
-                <i class="el-icon-notebook-2"></i>
-                项目类型
+                <i class="el-icon-document"></i>
+                工作量
               </template>
-              {{ form.projectType }}
+              {{ form.workloadAlias }}
+            </el-descriptions-item>
+            <el-descriptions-item>
+              <template slot="label">
+                <i class="el-icon-s-home"></i>
+                委托单位
+              </template>
+              {{ form.requesterAlias }}
+            </el-descriptions-item>
+            <el-descriptions-item>
+              <template slot="label">
+                <i class="el-icon-user"></i>
+                工程负责人
+              </template>
+              {{ form.userNameAlias }}
             </el-descriptions-item>
             <el-descriptions-item>
               <template slot="label">
@@ -145,86 +173,9 @@
             <el-descriptions-item>
               <template slot="label">
                 <i class="el-icon-document"></i>
-                工作量
-              </template>
-              {{ form.workloadAlias }}
-            </el-descriptions-item>
-            <el-descriptions-item>
-              <template slot="label">
-                <i class="el-icon-document"></i>
                 工程内容
               </template>
               {{ form.workcontentAlias }}
-            </el-descriptions-item>
-            <el-descriptions-item>
-              <template slot="label">
-                <i class="el-icon-user"></i>
-                工程负责人
-              </template>
-              {{ form.userNameAlias }}
-            </el-descriptions-item>
-            <el-descriptions-item>
-              <template slot="label">
-                <i class="el-icon-s-home"></i>
-                委托单位
-              </template>
-              {{ form.requesterAlias }}
-            </el-descriptions-item>
-            <el-descriptions-item>
-              <template slot="label">
-                <i class="el-icon-time"></i>
-                登记时间
-              </template>
-              {{ form.registerTime }}
-            </el-descriptions-item>
-            <el-descriptions-item>
-              <template slot="label">
-                <i class="el-icon-time"></i>
-                安排开始时间
-              </template>
-              {{ form.projectStartAlias }}
-            </el-descriptions-item>
-            <el-descriptions-item>
-              <template slot="label">
-                <i class="el-icon-time"></i>
-                安排结束时间
-              </template>
-              {{ form.projectEndAlias }}
-            </el-descriptions-item>
-            <el-descriptions-item>
-              <template slot="label">
-                <i class="el-icon-time"></i>
-                一检时间
-              </template>
-              {{ form.oneCheck }}
-            </el-descriptions-item>
-            <el-descriptions-item>
-              <template slot="label">
-                <i class="el-icon-time"></i>
-                二检时间
-              </template>
-              {{ form.twoCheck }}
-            </el-descriptions-item>
-            <el-descriptions-item>
-              <template slot="label">
-                <i class="el-icon-time"></i>
-                通知出件时间
-              </template>
-              {{ form.noticeTime }}
-            </el-descriptions-item>
-            <el-descriptions-item>
-              <template slot="label">
-                <i class="el-icon-time"></i>
-                项目出件时间
-              </template>
-              {{ form.projectTime }}
-            </el-descriptions-item>
-            <el-descriptions-item>
-              <template slot="label">
-                <i class="el-icon-time"></i>
-                送达时间
-              </template>
-              {{ form.deliveryTime }}
             </el-descriptions-item>
           </el-descriptions>
         </el-collapse-item>
