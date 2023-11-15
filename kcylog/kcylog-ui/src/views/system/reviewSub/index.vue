@@ -365,7 +365,7 @@
                 placeholder="请输入内容"
               />
             </el-form-item>
-            <el-form-item label="分包情况" prop="subcontract">
+            <!-- <el-form-item label="分包情况" prop="subcontract">
               <el-select v-model="form.subcontract" placeholder="请选择">
                 <el-option
                   label="是"
@@ -378,7 +378,7 @@
                   :selected="form.subcontract === 2"
                 ></el-option>
               </el-select>
-            </el-form-item>
+            </el-form-item> -->
 
             <el-form-item label="雇工人数" prop="peopleNum">
               <el-input-number
@@ -783,11 +783,11 @@
                       <template slot="label"> 项目金额 </template>
                       {{ formInfo.porjectMoney }}
                     </el-descriptions-item>
-                    <el-descriptions-item>
+                    <!-- <el-descriptions-item>
                       <template slot="label"> 分包情况 </template>
                       <div v-if="formInfo.subcontract == 1">是</div>
                       <div v-if="formInfo.subcontract == 2">否</div>
-                    </el-descriptions-item>
+                    </el-descriptions-item> -->
                     <el-descriptions-item>
                       <template slot="label"> 雇工内容 </template>
                       {{ formInfo.employmentReason }}

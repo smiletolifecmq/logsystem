@@ -350,11 +350,11 @@
                       <template slot="label"> 项目金额 </template>
                       {{ formInfo.porjectMoney }}
                     </el-descriptions-item>
-                    <el-descriptions-item>
+                    <!-- <el-descriptions-item>
                       <template slot="label"> 分包情况 </template>
                       <div v-if="formInfo.subcontract == 1">是</div>
                       <div v-if="formInfo.subcontract == 2">否</div>
-                    </el-descriptions-item>
+                    </el-descriptions-item> -->
                     <el-descriptions-item>
                       <template slot="label"> 雇工内容 </template>
                       {{ formInfo.employmentReason }}
