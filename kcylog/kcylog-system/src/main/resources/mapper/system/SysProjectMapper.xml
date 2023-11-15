@@ -237,6 +237,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
             <if test="projectNum != null  and projectNum != ''"> and project_num like concat('%', #{projectNum}, '%')</if>
             <if test="operateUser == 1"> and operate != 0.00</if>
             <if test="operateUser == 2"> and operate = 0.00</if>
+            <if test="receptionist != null  and receptionist != ''"> and receptionist = #{receptionist}</if>
             and is_two_check = 1
         </where>
         order by p.project_id desc

@@ -24,6 +24,14 @@
           @keyup.enter.native="handleQuery"
         />
       </el-form-item>
+      <el-form-item label="接待人" prop="receptionist">
+        <el-input
+          v-model="queryParams.receptionist"
+          placeholder="请输入接待人"
+          clearable
+          @keyup.enter.native="handleQuery"
+        />
+      </el-form-item>
       <el-form-item label="经营产值" prop="operateUser">
         <el-select
           v-model="queryParams.operateUser"
@@ -65,6 +73,7 @@
       :data="projectList"
       @selection-change="handleSelectionChange"
     >
+      <el-table-column label="委托单位" align="center" prop="requesterAlias" />
       <el-table-column
         label="项目名称"
         align="center"
@@ -72,16 +81,9 @@
       />
       <el-table-column label="项目编号" align="center" prop="projectNum" />
       <el-table-column label="项目类型" align="center" prop="projectType" />
-      <el-table-column label="工作量" align="center" prop="workloadAlias" />
-      <el-table-column
-        label="工程内容"
-        align="center"
-        prop="workcontentAlias"
-      />
       <el-table-column label="工程负责人" align="center" prop="userNameAlias" />
       <el-table-column label="登记时间" align="center" prop="registerTime" />
       <el-table-column label="接待人" align="center" prop="receptionist" />
-      <el-table-column label="委托单位" align="center" prop="requesterAlias" />
       <el-table-column label="经营产值" align="center" prop="operate" />
       <el-table-column
         label="操作"
