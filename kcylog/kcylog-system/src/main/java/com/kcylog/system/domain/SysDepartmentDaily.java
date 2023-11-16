@@ -8,6 +8,7 @@ import com.kcylog.system.common.FileJson;
 import org.apache.commons.lang3.builder.ToStringBuilder;
 import org.apache.commons.lang3.builder.ToStringStyle;
 
+import java.util.Date;
 import java.util.List;
 
 /**
@@ -53,15 +54,24 @@ public class SysDepartmentDaily extends BaseEntity
     /** 签到 */
     private String checkIn;
 
+    private Date dailyTime;
+
     /**
      * 用户对象
      */
     private SysUser user;
-
     /**
      * 部门对象
      */
     private SysDept dept;
+
+    public Date getDailyTime() {
+        return dailyTime;
+    }
+
+    public void setDailyTime(Date dailyTime) {
+        this.dailyTime = dailyTime;
+    }
 
     public SysUser getUser() {
         return user;

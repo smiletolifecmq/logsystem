@@ -40,7 +40,7 @@
           </el-option>
         </el-select>
       </el-form-item>
-      <el-form-item label="上传时间">
+      <el-form-item label="会议时间">
         <el-date-picker
           v-model="dateRange"
           style="width: 240px"
@@ -102,6 +102,19 @@
           <span v-else-if="scope.row.meetingType === 5">奖励信息</span>
 
           <span v-else>其他</span>
+        </template>
+      </el-table-column>
+      <el-table-column
+        label="会议时间"
+        align="center"
+        prop="dailyTime"
+        width="160"
+      >
+        <template slot-scope="scope">
+          <span v-if="scope.row.dailyTime"
+            >{{ parseTime(scope.row.dailyTime).slice(0, 10) }}
+          </span>
+          <span v-if="!scope.row.dailyTime"></span>
         </template>
       </el-table-column>
       <el-table-column label="内容" align="center" prop="content" />
@@ -166,16 +179,6 @@
         </template>
       </el-table-column>
       <el-table-column label="上传用户" align="center" prop="user.userName" />
-      <el-table-column
-        label="上传时间"
-        align="center"
-        prop="createTime"
-        width="160"
-      >
-        <template slot-scope="scope">
-          <span>{{ parseTime(scope.row.createTime) }}</span>
-        </template>
-      </el-table-column>
       <el-table-column
         label="操作"
         align="center"
@@ -260,6 +263,14 @@
         </el-form-item>
         <el-form-item label="主题" prop="theme">
           <el-input v-model="form.theme" placeholder="请输入主题" />
+        </el-form-item>
+        <el-form-item label="会议时间">
+          <el-date-picker
+            v-model="form.dailyTime"
+            type="date"
+            placeholder="选择会议时间"
+          >
+          </el-date-picker>
         </el-form-item>
         <el-form-item label="内容">
           <el-input

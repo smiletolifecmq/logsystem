@@ -13,6 +13,7 @@
         <result property="content" column="content"/>
         <result property="img" column="img"/>
         <result property="checkIn" column="check_in"/>
+        <result property="dailyTime" column="daily_time"/>
         <result property="createTime" column="create_time"/>
         <result property="updateTime" column="update_time"/>
         <association property="dept" column="dept_name" javaType="SysDept" resultMap="sysDepartmentDailyDeptResult"/>
@@ -42,10 +43,10 @@
             <if test="meetingType != null ">and d.meeting_type = #{meetingType}</if>
             <if test="theme != null  and theme != ''">and d.theme = #{theme}</if>
             <if test="params.beginTime != null and params.beginTime != ''"><!-- 开始时间检索 -->
-                AND date_format(d.create_time,'%y%m%d') &gt;= date_format(#{params.beginTime},'%y%m%d')
+                AND date_format(d.daily_time,'%y%m%d') &gt;= date_format(#{params.beginTime},'%y%m%d')
             </if>
             <if test="params.endTime != null and params.endTime != ''"><!-- 结束时间检索 -->
-                AND date_format(d.create_time,'%y%m%d') &lt;= date_format(#{params.endTime},'%y%m%d')
+                AND date_format(d.daily_time,'%y%m%d') &lt;= date_format(#{params.endTime},'%y%m%d')
             </if>
         </where>
         order by d.dept_id desc
@@ -67,6 +68,7 @@
             <if test="content != null">content,</if>
             <if test="img != null">img,</if>
             <if test="checkIn != null">check_in,</if>
+            <if test="dailyTime != null">daily_time,</if>
             <if test="createTime != null">create_time,</if>
             <if test="updateTime != null">update_time,</if>
         </trim>
@@ -78,6 +80,7 @@
             <if test="content != null">#{content},</if>
             <if test="img != null">#{img},</if>
             <if test="checkIn != null">#{checkIn},</if>
+            <if test="dailyTime != null">#{dailyTime},</if>
             <if test="createTime != null">#{createTime},</if>
             <if test="updateTime != null">#{updateTime},</if>
         </trim>
@@ -93,6 +96,7 @@
             <if test="content != null">content = #{content},</if>
             <if test="img != null">img = #{img},</if>
             <if test="checkIn != null">check_in = #{checkIn},</if>
+            <if test="dailyTime != null">daily_time = #{dailyTime},</if>
             <if test="createTime != null">create_time = #{createTime},</if>
             <if test="updateTime != null">update_time = #{updateTime},</if>
         </trim>
