@@ -125,4 +125,10 @@ public class SysProjectServiceImpl implements ISysProjectService
     {
         return sysProjectMapper.selectSysProjectExportList(sysProject);
     }
+
+    @Override
+    public int updateLatterTime(SysProject sysProject)
+    {
+        return sysProjectMapper.updateLatterTime(sysProject);
+    }
 }

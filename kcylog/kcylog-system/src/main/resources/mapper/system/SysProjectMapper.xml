@@ -271,4 +271,15 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
         </where>
         order by p.project_id desc
     </select>
+
+
+    <update id="updateLatterTime" parameterType="SysProject">
+        update sys_project
+        <trim prefix="SET" suffixOverrides=",">
+            <if test="noticeTime != null and noticeTime != ''">notice_time = #{noticeTime},</if>
+            <if test="projectTime != null and projectTime != ''">project_time = #{projectTime},</if>
+            <if test="deliveryTime != null and deliveryTime != ''">delivery_time = #{deliveryTime},</if>
+        </trim>
+        where project_num = #{projectNum}
+    </update>
 </mapper>

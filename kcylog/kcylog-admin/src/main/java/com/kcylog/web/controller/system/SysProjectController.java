@@ -228,4 +228,11 @@ public class SysProjectController extends BaseController {
         }
         return toAjax(1);
     }
+
+    @Anonymous
+    @CrossOrigin
+    @PutMapping(value = "/updateLatterTime")
+    public AjaxResult updateLatterTime(@RequestBody SysProject sysProject) {
+        return toAjax(sysProjectService.updateLatterTime(sysProject));
+    }
 }

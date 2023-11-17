@@ -69,4 +69,6 @@ public interface SysProjectMapper
     public int updateOutputStatusByProjectId(SysProject sysProject);
 
     public List<SysProject> selectSysProjectExportList(SysProject sysProject);
+
+    public int updateLatterTime(SysProject sysProject);
 }
