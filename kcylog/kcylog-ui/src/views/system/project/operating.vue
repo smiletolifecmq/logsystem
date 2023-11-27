@@ -123,17 +123,10 @@
           <el-descriptions class="margin-top" :column="4" border>
             <el-descriptions-item>
               <template slot="label">
-                <i class="el-icon-office-building"></i>
-                项目名称
+                <i class="el-icon-s-home"></i>
+                委托单位
               </template>
-              {{ form.projectNameAlias }}
-            </el-descriptions-item>
-            <el-descriptions-item>
-              <template slot="label">
-                <i class="el-icon-notebook-2"></i>
-                项目类型
-              </template>
-              {{ form.projectType }}
+              {{ form.requesterAlias }}
             </el-descriptions-item>
             <el-descriptions-item>
               <template slot="label">
@@ -141,20 +134,6 @@
                 项目编号
               </template>
               {{ form.projectNum }}
-            </el-descriptions-item>
-            <el-descriptions-item>
-              <template slot="label">
-                <i class="el-icon-time"></i>
-                安排开始时间
-              </template>
-              {{ form.projectStartAlias }}
-            </el-descriptions-item>
-            <el-descriptions-item>
-              <template slot="label">
-                <i class="el-icon-s-home"></i>
-                委托单位
-              </template>
-              {{ form.requesterAlias }}
             </el-descriptions-item>
             <el-descriptions-item>
               <template slot="label">
@@ -166,25 +145,17 @@
             <el-descriptions-item>
               <template slot="label">
                 <i class="el-icon-time"></i>
-                一检时间
+                登记时间
               </template>
-              {{ form.oneCheck }}
+              {{ form.registerTime }}
             </el-descriptions-item>
             <el-descriptions-item>
               <template slot="label">
-                <i class="el-icon-time"></i>
-                安排结束时间
+                <i class="el-icon-office-building"></i>
+                项目名称
               </template>
-              {{ form.projectEndAlias }}
+              {{ form.projectNameAlias }}
             </el-descriptions-item>
-            <el-descriptions-item>
-              <template slot="label">
-                <i class="el-icon-document"></i>
-                工作量
-              </template>
-              {{ form.workloadAlias }}
-            </el-descriptions-item>
-
             <el-descriptions-item>
               <template slot="label">
                 <i class="el-icon-user"></i>
@@ -195,23 +166,44 @@
             <el-descriptions-item>
               <template slot="label">
                 <i class="el-icon-time"></i>
-                二检时间
+                安排开始时间
               </template>
-              {{ form.twoCheck }}
+              {{ form.projectStartAlias }}
             </el-descriptions-item>
             <el-descriptions-item>
               <template slot="label">
                 <i class="el-icon-time"></i>
-                通知出件时间
+                安排结束时间
               </template>
-              {{ form.noticeTime }}
+              {{ form.projectEndAlias }}
             </el-descriptions-item>
             <el-descriptions-item>
               <template slot="label">
-                <i class="el-icon-document"></i>
-                工程内容
+                <i class="el-icon-notebook-2"></i>
+                项目类型
               </template>
-              {{ form.workcontentAlias }}
+              {{ form.projectType }}
+            </el-descriptions-item>
+            <el-descriptions-item>
+              <template slot="label">
+                <i class="el-icon-notebook-2"></i>
+                作业部门
+              </template>
+              {{ form.department }}
+            </el-descriptions-item>
+            <el-descriptions-item>
+              <template slot="label">
+                <i class="el-icon-time"></i>
+                一检时间
+              </template>
+              {{ form.oneCheck }}
+            </el-descriptions-item>
+            <el-descriptions-item>
+              <template slot="label">
+                <i class="el-icon-time"></i>
+                二检时间
+              </template>
+              {{ form.twoCheck }}
             </el-descriptions-item>
             <el-descriptions-item>
               <template slot="label">
@@ -223,9 +215,9 @@
             <el-descriptions-item>
               <template slot="label">
                 <i class="el-icon-time"></i>
-                送达时间
+                通知出件时间
               </template>
-              {{ form.deliveryTime }}
+              {{ form.noticeTime }}
             </el-descriptions-item>
             <el-descriptions-item>
               <template slot="label">
@@ -233,6 +225,29 @@
                 项目出件时间
               </template>
               {{ form.projectTime }}
+            </el-descriptions-item>
+            <el-descriptions-item>
+              <template slot="label">
+                <i class="el-icon-time"></i>
+                送达时间
+              </template>
+              {{ form.deliveryTime }}
+            </el-descriptions-item>
+          </el-descriptions>
+          <el-descriptions class="margin-top" :column="1" border>
+            <el-descriptions-item>
+              <template slot="label">
+                <i class="el-icon-document"></i>
+                工程内容
+              </template>
+              {{ form.workcontentAlias }}
+            </el-descriptions-item>
+            <el-descriptions-item>
+              <template slot="label">
+                <i class="el-icon-document"></i>
+                工作量
+              </template>
+              {{ form.workloadAlias }}
             </el-descriptions-item>
           </el-descriptions>
         </el-collapse-item>

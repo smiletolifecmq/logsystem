@@ -84,6 +84,8 @@ public class SysProject extends BaseEntity
     @Excel(name = "二检时间", needMerge = true)
     private String twoCheck;
 
+    private String department;
+
     private Date twoCheckTime;
 
     private Integer isTwoCheck;
@@ -128,6 +130,14 @@ public class SysProject extends BaseEntity
     private List<ProjectSubcontract> projectSubcontract;
 
     private List<SysReviewSub> reviewSub;
+
+    public String getDepartment() {
+        return department;
+    }
+
+    public void setDepartment(String department) {
+        this.department = department;
+    }
 
     public List<ProjectEmployee> getProjectEmployee() {
         return projectEmployee;

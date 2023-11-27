@@ -32,6 +32,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
         <result property="isCarRegister"    column="is_car_register"    />
         <result property="createTime"    column="create_time"    />
         <result property="updateTime"    column="update_time"    />
+        <result property="department"    column="department"    />
         <association property="projectValue" javaType="java.util.List" resultMap="SysProjectValueResult"/>
         <association property="projectCar" javaType="java.util.List" resultMap="SysProjectCarResult"/>
         <association property="reviewSub" javaType="java.util.List" resultMap="SysReviewSubResult"/>
@@ -85,6 +86,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
         <include refid="selectSysProjectVo"/>
         <where>  
             <if test="projectNameAlias != null  and projectNameAlias != ''"> and project_name_alias like concat('%', #{projectNameAlias}, '%')</if>
+            <if test="department != null  and department != ''"> and department like concat('%', #{department}, '%')</if>
             <if test="projectNum != null  and projectNum != ''"> and project_num like concat('%', #{projectNum}, '%')</if>
             <if test="params.beginTime != null and params.beginTime != ''"><!-- 开始时间检索 -->
                 and (date_format(two_check_time,'%y%m%d') &gt;= date_format(#{params.beginTime},'%y%m%d'))
@@ -105,6 +107,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
         insert into sys_project
         <trim prefix="(" suffix=")" suffixOverrides=",">
             <if test="projectNameAlias != null and projectNameAlias != ''">project_name_alias,</if>
+            <if test="department != null and department != ''">department,</if>
             <if test="projectNum != null and projectNum != ''">project_num,</if>
             <if test="projectType != null and projectType != ''">project_type,</if>
             <if test="registerTime != null and registerTime != ''">register_time,</if>
@@ -129,6 +132,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
          </trim>
         <trim prefix="values (" suffix=")" suffixOverrides=",">
             <if test="projectNameAlias != null and projectNameAlias != ''">#{projectNameAlias},</if>
+            <if test="department != null and department != ''">#{department},</if>
             <if test="projectNum != null and projectNum != ''">#{projectNum},</if>
             <if test="projectType != null and projectType != ''">#{projectType},</if>
             <if test="registerTime != null and registerTime != ''">#{registerTime},</if>
@@ -157,6 +161,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
         update sys_project
         <trim prefix="SET" suffixOverrides=",">
             <if test="projectNameAlias != null and projectNameAlias != ''">project_name_alias = #{projectNameAlias},</if>
+            <if test="department != null and department != ''">department = #{department},</if>
             <if test="projectNum != null and projectNum != ''">project_num = #{projectNum},</if>
             <if test="projectType != null and projectType != ''">project_type = #{projectType},</if>
             <if test="registerTime != null and registerTime != ''">register_time = #{registerTime},</if>
@@ -199,6 +204,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
         update sys_project
         <trim prefix="SET" suffixOverrides=",">
             <if test="projectNameAlias != null and projectNameAlias != ''">project_name_alias = #{projectNameAlias},</if>
+            <if test="department != null and department != ''">project_name_alias = #{department},</if>
             <if test="projectType != null and projectType != ''">project_type = #{projectType},</if>
             <if test="registerTime != null and registerTime != ''">register_time = #{registerTime},</if>
             <if test="receptionist != null and receptionist != ''">receptionist = #{receptionist},</if>
