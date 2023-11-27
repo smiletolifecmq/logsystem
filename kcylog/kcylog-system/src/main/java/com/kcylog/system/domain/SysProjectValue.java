@@ -6,6 +6,8 @@ import com.kcylog.common.annotation.Excel;
 import com.kcylog.common.core.domain.BaseEntity;
 import org.apache.poi.ss.usermodel.IndexedColors;
 
+import java.math.BigDecimal;
+
 /**
  * 项目产值对象 sys_project_value
  * 
@@ -30,7 +32,17 @@ public class SysProjectValue extends BaseEntity
     @Excel(name = "占比(%)", headerBackgroundColor = IndexedColors.GREEN)
     private Long proportion;
 
-    public void setValueId(Long valueId) 
+    private BigDecimal money;
+
+    public BigDecimal getMoney() {
+        return money;
+    }
+
+    public void setMoney(BigDecimal money) {
+        this.money = money;
+    }
+
+    public void setValueId(Long valueId)
     {
         this.valueId = valueId;
     }

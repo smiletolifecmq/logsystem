@@ -58,6 +58,7 @@
       :data="projectList"
       @selection-change="handleSelectionChange"
     >
+      <el-table-column type="selection" width="50" align="center" />
       <el-table-column
         label="项目名称"
         align="center"
@@ -397,8 +398,9 @@ export default {
     },
     /** 查询项目列表 */
     getList() {
-      this.queryParams.outputStatus = 0;
+      console.log(this.ids);
       this.loading = true;
+      this.queryParams.outputStatus = 1;
       listProject(this.queryParams).then((response) => {
         this.projectList = response.rows;
         this.total = response.total;
