@@ -129,6 +129,16 @@ public class SysProject extends BaseEntity
 
     private List<SysReviewSub> reviewSub;
 
+    private Long isJqr;
+
+    public Long getIsJqr() {
+        return isJqr;
+    }
+
+    public void setIsJqr(Long isJqr) {
+        this.isJqr = isJqr;
+    }
+
     public String getDepartment() {
         return department;
     }

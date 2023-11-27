@@ -40,7 +40,17 @@
           </el-option>
         </el-select>
       </el-form-item>
-
+      <el-form-item label="结算状态">
+        <el-select v-model="queryParams.outputStatus" placeholder="请选择">
+          <el-option
+            v-for="item in outputStatusList"
+            :key="item.value"
+            :label="item.label"
+            :value="item.value"
+          >
+          </el-option>
+        </el-select>
+      </el-form-item>
       <el-form-item label="结算时间">
         <el-date-picker
           v-model="dateRange"
@@ -502,6 +512,20 @@ export default {
   },
   data() {
     return {
+      outputStatusList: [
+        {
+          value: 0,
+          label: "待填写",
+        },
+        {
+          value: 1,
+          label: "待结算",
+        },
+        {
+          value: 2,
+          label: "已结算",
+        },
+      ],
       deptList: [
         {
           value: "地理信息部",
@@ -594,6 +618,7 @@ export default {
         operateUser: null,
         operateTime: null,
         department: "",
+        outputStatus: null,
       },
       // 表单参数
       form: {},

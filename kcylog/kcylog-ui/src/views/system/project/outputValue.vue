@@ -324,6 +324,7 @@ export default {
         operateUser: null,
         operateTime: null,
         outputStatus: null,
+        isJqr: null,
       },
       // 表单参数
       form: {},
@@ -398,6 +399,7 @@ export default {
     /** 查询项目列表 */
     getList() {
       this.queryParams.outputStatus = 0;
+      this.queryParams.isJqr = 1;
       this.loading = true;
       listProject(this.queryParams).then((response) => {
         this.projectList = response.rows;

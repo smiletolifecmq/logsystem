@@ -92,6 +92,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
             <if test="outputStatus != null">and output_status = #{outputStatus}</if>
             <if test="department != null  and department != ''"> and department like concat('%', #{department}, '%')</if>
             <if test="projectNum != null  and projectNum != ''"> and project_num like concat('%', #{projectNum}, '%')</if>
+            <if test="isJqr != null">and user_name_alias != '机器人'</if>
             <if test="params.beginTime != null and params.beginTime != ''"><!-- 开始时间检索 -->
                 and (date_format(settlement_time,'%y%m%d') &gt;= date_format(#{params.beginTime},'%y%m%d'))
             </if>

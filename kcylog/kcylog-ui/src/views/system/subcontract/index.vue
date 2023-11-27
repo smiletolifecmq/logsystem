@@ -753,7 +753,6 @@ export default {
   created() {
     this.getList();
     this.loadAllUnits();
-    this.getProjectListLocal();
   },
   methods: {
     validateSubType(rule, value, callback) {
@@ -1001,7 +1000,6 @@ export default {
           this.projectInfo = "工程项目列表";
           this.projectOpen = true;
           this.getProjectList();
-          this.getProjectListLocal();
         })
         .catch(() => {
           this.open = true;
