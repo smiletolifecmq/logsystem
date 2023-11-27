@@ -69,6 +69,16 @@
       />
       <el-table-column label="工程负责人" align="center" prop="userNameAlias" />
       <el-table-column label="登记时间" align="center" prop="registerTime" />
+      <el-table-column
+        label="结算时间"
+        align="center"
+        prop="settlementTime"
+        width="160"
+      >
+        <template slot-scope="scope">
+          <span>{{ parseTime(scope.row.settlementTime, "{y}-{m}-{d}") }}</span>
+        </template>
+      </el-table-column>
       <el-table-column label="接待人" align="center" prop="receptionist" />
       <el-table-column label="委托单位" align="center" prop="requesterAlias" />
       <!-- <el-table-column label="产值占比" align="center" prop="projectValue">

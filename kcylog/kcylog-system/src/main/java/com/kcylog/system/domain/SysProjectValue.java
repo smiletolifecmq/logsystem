@@ -32,6 +32,7 @@ public class SysProjectValue extends BaseEntity
     @Excel(name = "占比(%)", headerBackgroundColor = IndexedColors.GREEN)
     private Long proportion;
 
+    @Excel(name = "产值", headerBackgroundColor = IndexedColors.GREEN)
     private BigDecimal money;
 
     public BigDecimal getMoney() {

@@ -41,7 +41,7 @@
         </el-select>
       </el-form-item>
 
-      <el-form-item label="二检时间">
+      <el-form-item label="结算时间">
         <el-date-picker
           v-model="dateRange"
           style="width: 240px"
@@ -134,6 +134,16 @@
       <el-table-column label="二检时间" align="center" prop="twoCheckTime">
         <template slot-scope="scope">
           <span>{{ parseTime(scope.row.twoCheckTime, "{y}-{m}-{d}") }}</span>
+        </template>
+      </el-table-column>
+      <el-table-column
+        label="结算时间"
+        align="center"
+        prop="settlementTime"
+        width="160"
+      >
+        <template slot-scope="scope">
+          <span>{{ parseTime(scope.row.settlementTime, "{y}-{m}-{d}") }}</span>
         </template>
       </el-table-column>
       <el-table-column

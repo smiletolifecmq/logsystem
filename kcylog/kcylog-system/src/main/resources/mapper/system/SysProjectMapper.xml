@@ -93,10 +93,10 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
             <if test="department != null  and department != ''"> and department like concat('%', #{department}, '%')</if>
             <if test="projectNum != null  and projectNum != ''"> and project_num like concat('%', #{projectNum}, '%')</if>
             <if test="params.beginTime != null and params.beginTime != ''"><!-- 开始时间检索 -->
-                and (date_format(two_check_time,'%y%m%d') &gt;= date_format(#{params.beginTime},'%y%m%d'))
+                and (date_format(settlement_time,'%y%m%d') &gt;= date_format(#{params.beginTime},'%y%m%d'))
             </if>
             <if test="params.endTime != null and params.endTime != ''"><!-- 结束时间检索 -->
-                and (date_format(two_check_time,'%y%m%d') &lt;= date_format(#{params.endTime},'%y%m%d'))
+                and (date_format(settlement_time,'%y%m%d') &lt;= date_format(#{params.endTime},'%y%m%d'))
             </if>
         </where>
         order by p.project_id desc
@@ -262,7 +262,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
     </update>
 
     <sql id="selectSysProjectExport">
-        select p.*, v.user_name, v.proportion, c.car_num, c.car_type, c.number, c.car_expenses, c.record_time,
+        select p.*, v.user_name, v.proportion, v.money, c.car_num, c.car_type, c.number, c.car_expenses, c.record_time,
         r.workload, r.porject_money, r.subcontract, r.employment_reason, r.start_time, r.end_time, r.people_num,
         r.budget_day, r.budget_money, r.workcontent, r.sub_type, r.sub_workload, r.real_workload, r.win_unit, r.lot_time
         from sys_project p
@@ -274,13 +274,14 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
     <select id="selectSysProjectExportList" parameterType="SysProject" resultMap="SysProjectResult">
         <include refid="selectSysProjectExport"/>
         <where>
+            <if test="department != null  and department != ''"> and department like concat('%', #{department}, '%')</if>
             <if test="projectNameAlias != null  and projectNameAlias != ''"> and project_name_alias like concat('%', #{projectNameAlias}, '%')</if>
             <if test="projectNum != null  and projectNum != ''"> and project_num like concat('%', #{projectNum}, '%')</if>
             <if test="params.beginTime != null and params.beginTime != ''"><!-- 开始时间检索 -->
-                and (date_format(two_check_time,'%y%m%d') &gt;= date_format(#{params.beginTime},'%y%m%d'))
+                and (date_format(settlement_time,'%y%m%d') &gt;= date_format(#{params.beginTime},'%y%m%d'))
             </if>
             <if test="params.endTime != null and params.endTime != ''"><!-- 结束时间检索 -->
-                and (date_format(two_check_time,'%y%m%d') &lt;= date_format(#{params.endTime},'%y%m%d'))
+                and (date_format(settlement_time,'%y%m%d') &lt;= date_format(#{params.endTime},'%y%m%d'))
             </if>
         </where>
         order by p.project_id desc
@@ -300,7 +301,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
     <update id="jsProjectCz" parameterType="String">
         UPDATE sys_project_value AS spv
         JOIN sys_project AS sp ON spv.project_id = sp.project_id
-        SET spv.money = sp.operate * (spv.proportion / 100),sp.output_status = 2
+        SET spv.money = sp.operate * (spv.proportion / 100),sp.output_status = 2,sp.settlement_time = CURRENT_TIMESTAMP()
         WHERE spv.project_id IN
         <foreach item="projectId" collection="array" open="(" separator="," close=")">
             #{projectId}
