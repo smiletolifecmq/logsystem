@@ -40,7 +40,8 @@
           </el-option>
         </el-select>
       </el-form-item>
-      <el-form-item label="结算状态">
+
+      <el-form-item label="结算状态" prop="outputStatus">
         <el-select v-model="queryParams.outputStatus" placeholder="请选择">
           <el-option
             v-for="item in outputStatusList"
