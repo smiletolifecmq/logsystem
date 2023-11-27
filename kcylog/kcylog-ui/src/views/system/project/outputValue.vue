@@ -113,7 +113,28 @@
     >
       <el-collapse v-model="activeNames" @change="handleChange">
         <el-collapse-item title="详情" name="1">
-          <el-descriptions class="margin-top" :column="4" border>
+          <el-descriptions class="margin-top" :column="3" border>
+            <el-descriptions-item>
+              <template slot="label">
+                <i class="el-icon-s-home"></i>
+                委托单位
+              </template>
+              {{ form.requesterAlias }}
+            </el-descriptions-item>
+            <el-descriptions-item>
+              <template slot="label">
+                <i class="el-icon-tickets"></i>
+                项目编号
+              </template>
+              {{ form.projectNum }}
+            </el-descriptions-item>
+            <el-descriptions-item>
+              <template slot="label">
+                <i class="el-icon-user"></i>
+                工程负责人
+              </template>
+              {{ form.userNameAlias }}
+            </el-descriptions-item>
             <el-descriptions-item>
               <template slot="label">
                 <i class="el-icon-office-building"></i>
@@ -128,54 +149,13 @@
               </template>
               {{ form.projectType }}
             </el-descriptions-item>
-            <el-descriptions-item>
-              <template slot="label">
-                <i class="el-icon-user"></i>
-                接待人
-              </template>
-              {{ form.receptionist }}
-            </el-descriptions-item>
-            <el-descriptions-item>
-              <template slot="label">
-                <i class="el-icon-tickets"></i>
-                项目编号
-              </template>
-              {{ form.projectNum }}
-            </el-descriptions-item>
+            <el-descriptions-item> </el-descriptions-item>
             <el-descriptions-item>
               <template slot="label">
                 <i class="el-icon-document"></i>
                 工作量
               </template>
               {{ form.workloadAlias }}
-            </el-descriptions-item>
-            <el-descriptions-item>
-              <template slot="label">
-                <i class="el-icon-s-home"></i>
-                委托单位
-              </template>
-              {{ form.requesterAlias }}
-            </el-descriptions-item>
-            <el-descriptions-item>
-              <template slot="label">
-                <i class="el-icon-user"></i>
-                工程负责人
-              </template>
-              {{ form.userNameAlias }}
-            </el-descriptions-item>
-            <el-descriptions-item>
-              <template slot="label">
-                <i class="el-icon-money"></i>
-                项目金额
-              </template>
-              {{ form.projectMoneyAlias }}
-            </el-descriptions-item>
-            <el-descriptions-item>
-              <template slot="label">
-                <i class="el-icon-document"></i>
-                工程内容
-              </template>
-              {{ form.workcontentAlias }}
             </el-descriptions-item>
           </el-descriptions>
         </el-collapse-item>
