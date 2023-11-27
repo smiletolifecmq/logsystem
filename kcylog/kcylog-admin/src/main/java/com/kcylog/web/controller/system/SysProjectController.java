@@ -235,4 +235,11 @@ public class SysProjectController extends BaseController {
     public AjaxResult updateLatterTime(@RequestBody SysProject sysProject) {
         return toAjax(sysProjectService.updateLatterTime(sysProject));
     }
+
+    @Log(title = "计算项目产值", businessType = BusinessType.UPDATE)
+    @PostMapping("/jsProjectCz/{projectIds}")
+    @Transactional
+    public AjaxResult jsProjectCz(@PathVariable String[] projectIds) {
+        return toAjax(sysProjectService.jsProjectCz(projectIds));
+    }
 }

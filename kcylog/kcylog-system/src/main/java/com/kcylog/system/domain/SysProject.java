@@ -60,9 +60,7 @@ public class SysProject extends BaseEntity
     @Excel(name = "接待人", needMerge = true)
     private String receptionist;
 
-
-    /** 工程负责人 */
-
+    private Date settlementTime;
 
     /** 委托单位 */
     @Excel(name = "委托单位", needMerge = true)
@@ -137,6 +135,14 @@ public class SysProject extends BaseEntity
 
     public void setDepartment(String department) {
         this.department = department;
+    }
+
+    public Date getSettlementTime() {
+        return settlementTime;
+    }
+
+    public void setSettlementTime(Date settlementTime) {
+        this.settlementTime = settlementTime;
     }
 
     public List<ProjectEmployee> getProjectEmployee() {

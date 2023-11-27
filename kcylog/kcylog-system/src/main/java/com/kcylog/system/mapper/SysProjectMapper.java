@@ -71,4 +71,6 @@ public interface SysProjectMapper
     public List<SysProject> selectSysProjectExportList(SysProject sysProject);
 
     public int updateLatterTime(SysProject sysProject);
+
+    public int jsProjectCz(String[] projectIds);
 }

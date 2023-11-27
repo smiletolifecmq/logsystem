@@ -33,6 +33,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
         <result property="createTime"    column="create_time"    />
         <result property="updateTime"    column="update_time"    />
         <result property="department"    column="department"    />
+        <result property="settlementTime"    column="settlement_time"    />
         <association property="projectValue" javaType="java.util.List" resultMap="SysProjectValueResult"/>
         <association property="projectCar" javaType="java.util.List" resultMap="SysProjectCarResult"/>
         <association property="reviewSub" javaType="java.util.List" resultMap="SysReviewSubResult"/>
@@ -70,6 +71,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
     <resultMap type="SysProjectValue" id="SysProjectValueResult">
         <result property="userName"    column="user_name"    />
         <result property="proportion"    column="proportion"    />
+        <result property="money"    column="money"    />
     </resultMap>
 
     <sql id="selectSysProjectVo">
@@ -77,7 +79,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
     </sql>
 
     <sql id="selectSysProjectDetail">
-        select p.*, v.user_name, v.proportion, c.project_name, c.car_num, c.car_type, c.number, c.car_expenses, c.record_time
+        select p.*, v.user_name, v.proportion, v.money, c.project_name, c.car_num, c.car_type, c.number, c.car_expenses, c.record_time
         from sys_project p left join sys_project_value v on p.project_id = v.project_id
                            left join sys_project_car c on p.project_id = c.project_id
     </sql>
@@ -116,6 +118,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
             <if test="receptionist != null and receptionist != ''">receptionist,</if>
             <if test="workloadAlias != null">workload_alias,</if>
             <if test="workcontentAlias != null">workcontent_alias,</if>
+            <if test="settlementTime != null and settlementTime != ''" >settlement_time,</if>
             <if test="userNameAlias != null and userNameAlias != ''">user_name_alias,</if>
             <if test="requesterAlias != null and requesterAlias != ''">requester_alias,</if>
             <if test="projectStartAlias != null and projectStartAlias != ''">project_start_alias,</if>
@@ -139,6 +142,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
             <if test="projectType != null and projectType != ''">#{projectType},</if>
             <if test="registerTime != null and registerTime != ''">#{registerTime},</if>
             <if test="receptionist != null and receptionist != ''">#{receptionist},</if>
+            <if test="settlementTime != null and settlementTime != ''">#{settlementTime},</if>
             <if test="workloadAlias != null">#{workloadAlias},</if>
             <if test="workcontentAlias != null">#{workcontentAlias},</if>
             <if test="userNameAlias != null and userNameAlias != ''">#{userNameAlias},</if>
@@ -164,6 +168,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
         <trim prefix="SET" suffixOverrides=",">
             <if test="projectNameAlias != null and projectNameAlias != ''">project_name_alias = #{projectNameAlias},</if>
             <if test="department != null and department != ''">department = #{department},</if>
+            <if test="settlementTime != null and settlementTime != ''">settlement_time = #{settlementTime},</if>
             <if test="projectNum != null and projectNum != ''">project_num = #{projectNum},</if>
             <if test="projectType != null and projectType != ''">project_type = #{projectType},</if>
             <if test="registerTime != null and registerTime != ''">register_time = #{registerTime},</if>
@@ -206,7 +211,8 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
         update sys_project
         <trim prefix="SET" suffixOverrides=",">
             <if test="projectNameAlias != null and projectNameAlias != ''">project_name_alias = #{projectNameAlias},</if>
-            <if test="department != null and department != ''">project_name_alias = #{department},</if>
+            <if test="department != null and department != ''">department = #{department},</if>
+            <if test="settlementTime != null and settlementTime != ''">settlement_time = #{settlementTime},</if>
             <if test="projectType != null and projectType != ''">project_type = #{projectType},</if>
             <if test="registerTime != null and registerTime != ''">register_time = #{registerTime},</if>
             <if test="receptionist != null and receptionist != ''">receptionist = #{receptionist},</if>
@@ -289,5 +295,15 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
             <if test="deliveryTime != null and deliveryTime != ''">delivery_time = #{deliveryTime},</if>
         </trim>
         where project_num = #{projectNum}
+    </update>
+
+    <update id="jsProjectCz" parameterType="String">
+        UPDATE sys_project_value AS spv
+        JOIN sys_project AS sp ON spv.project_id = sp.project_id
+        SET spv.money = sp.operate * (spv.proportion / 100),sp.output_status = 2
+        WHERE spv.project_id IN
+        <foreach item="projectId" collection="array" open="(" separator="," close=")">
+            #{projectId}
+        </foreach>
     </update>
 </mapper>

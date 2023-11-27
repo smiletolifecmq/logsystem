@@ -45,19 +45,6 @@
         >
       </el-form-item>
     </el-form>
-    <el-row :gutter="10" class="mb8">
-      <el-col :span="1.5">
-        <el-button
-          type="success"
-          plain
-          icon="el-icon-edit"
-          size="mini"
-          :disabled="multiple"
-          @click="batchCzjs"
-          >产值计算</el-button
-        >
-      </el-col></el-row
-    >
 
     <el-row :gutter="10" class="mb8">
       <right-toolbar
@@ -66,12 +53,7 @@
       ></right-toolbar>
     </el-row>
 
-    <el-table
-      v-loading="loading"
-      :data="projectList"
-      @selection-change="handleSelectionChange"
-    >
-      <el-table-column type="selection" width="50" align="center" />
+    <el-table v-loading="loading" :data="projectList">
       <el-table-column
         label="项目名称"
         align="center"
@@ -90,29 +72,22 @@
       <el-table-column label="接待人" align="center" prop="receptionist" />
       <el-table-column label="委托单位" align="center" prop="requesterAlias" />
       <!-- <el-table-column label="产值占比" align="center" prop="projectValue">
-        <template v-slot:default="scope">
-          <div v-for="(project, index) in scope.row.projectValue" :key="index">
-            <span
-              >用户名称:{{ project.userName }} - 占比:{{
-                project.proportion
-              }}%</span
-            >
-          </div>
-        </template>
-      </el-table-column> -->
+          <template v-slot:default="scope">
+            <div v-for="(project, index) in scope.row.projectValue" :key="index">
+              <span
+                >用户名称:{{ project.userName }} - 占比:{{
+                  project.proportion
+                }}%</span
+              >
+            </div>
+          </template>
+        </el-table-column> -->
       <el-table-column
         label="操作"
         align="center"
         class-name="small-padding fixed-width"
       >
         <template slot-scope="scope">
-          <el-button
-            size="mini"
-            type="text"
-            icon="el-icon-edit"
-            @click="czjs(scope.row.projectId)"
-            >产值计算</el-button
-          >
           <el-button
             size="mini"
             type="text"
@@ -222,7 +197,7 @@
                 <el-col :span="6">
                   <el-form-item label="用户名" prop="userName">
                     <el-autocomplete
-                      :disabled="form.outputStatus === 1"
+                      :disabled="form.outputStatus === 2"
                       class="inline-input"
                       v-model="project.userName"
                       :fetch-suggestions="querySearch"
@@ -233,7 +208,7 @@
                 <el-col :span="8">
                   <el-form-item label="占比" prop="proportion">
                     <el-input-number
-                      :disabled="form.outputStatus === 1"
+                      :disabled="form.outputStatus === 2"
                       v-model="project.proportion"
                       :max="100"
                     ></el-input-number>
@@ -243,7 +218,7 @@
                 <el-col :span="8">
                   <el-form-item label="产值金额" prop="moeny">
                     <el-input-number
-                      :disabled="form.outputStatus === 1"
+                      :disabled="form.outputStatus === 2"
                       v-model="project.money"
                       :max="100"
                     ></el-input-number>
@@ -408,7 +383,7 @@ export default {
     /** 查询项目列表 */
     getList() {
       this.loading = true;
-      this.queryParams.outputStatus = 1;
+      this.queryParams.outputStatus = 2;
       listProject(this.queryParams).then((response) => {
         this.projectList = response.rows;
         this.total = response.total;

@@ -131,4 +131,11 @@ public class SysProjectServiceImpl implements ISysProjectService
     {
         return sysProjectMapper.updateLatterTime(sysProject);
     }
+
+    @Override
+    public int jsProjectCz(String[] projectIds)
+    {
+        return sysProjectMapper.jsProjectCz(projectIds);
+    }
+
 }
