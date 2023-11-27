@@ -24,6 +24,23 @@
           @keyup.enter.native="handleQuery"
         />
       </el-form-item>
+
+      <el-form-item label="作业部门" prop="department">
+        <el-select
+          v-model="queryParams.department"
+          placeholder="请选择部门"
+          clearable
+        >
+          <el-option
+            v-for="item in deptList"
+            :key="item.value"
+            :label="item.label"
+            :value="item.value"
+          >
+          </el-option>
+        </el-select>
+      </el-form-item>
+
       <el-form-item label="二检时间">
         <el-date-picker
           v-model="dateRange"
@@ -475,6 +492,52 @@ export default {
   },
   data() {
     return {
+      deptList: [
+        {
+          value: "地理信息部",
+          label: "地理信息部",
+        },
+        {
+          value: "工程测绘部",
+          label: "工程测绘部",
+        },
+        {
+          value: "管线工程部",
+          label: "管线工程部",
+        },
+        {
+          value: "不动产测绘部",
+          label: "不动产测绘部",
+        },
+        {
+          value: "测绘工程一部",
+          label: "测绘工程一部",
+        },
+        {
+          value: "测绘工程二部",
+          label: "测绘工程二部",
+        },
+        {
+          value: "测绘工程三部",
+          label: "测绘工程三部",
+        },
+        {
+          value: "测绘工程一部1组",
+          label: "测绘工程一部1组",
+        },
+        {
+          value: "测绘工程一部2组",
+          label: "测绘工程一部2组",
+        },
+        {
+          value: "测绘工程二部1组",
+          label: "测绘工程二部1组",
+        },
+        {
+          value: "测绘工程二部2组",
+          label: "测绘工程二部2组",
+        },
+      ],
       dateRange: [],
       activeNames: ["1", "2", "3", "4"],
       detailOpen: false,
@@ -520,6 +583,7 @@ export default {
         operate: null,
         operateUser: null,
         operateTime: null,
+        department: "",
       },
       // 表单参数
       form: {},
