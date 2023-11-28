@@ -76,4 +76,6 @@ public interface SysProjectMapper
     public int jsProjectCz(String[] projectIds);
 
     public int updateFbMoney(Map<String, Object> params);
+
+    public List<SysProject> selectSysProjectListUpcoming(SysProject sysProject);
 }

@@ -257,7 +257,7 @@
 
 <script>
 import {
-  listProject,
+  listUpcomingProject,
   getProject,
   updateProjectValue,
 } from "@/api/system/project";
@@ -401,7 +401,7 @@ export default {
       this.queryParams.outputStatus = 0;
       this.queryParams.isJqr = 1;
       this.loading = true;
-      listProject(this.queryParams).then((response) => {
+      listUpcomingProject(this.queryParams).then((response) => {
         this.projectList = response.rows;
         this.total = response.total;
         this.loading = false;

@@ -244,4 +244,11 @@ public class SysProjectController extends BaseController {
         sysProjectService.updateFbMoney(params);
         return toAjax(sysProjectService.jsProjectCz(projectIds));
     }
+
+    @GetMapping("/listUpcoming")
+    public TableDataInfo listUpcoming(SysProject sysProject) {
+        startPage();
+        List<SysProject> list = sysProjectService.selectSysProjectListUpcoming(sysProject);
+        return getDataTable(list);
+    }
 }

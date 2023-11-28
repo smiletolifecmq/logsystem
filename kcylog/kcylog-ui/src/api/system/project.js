@@ -73,3 +73,11 @@ export function jsProjectCz(projectId, data) {
     data: data
   })
 }
+
+export function listUpcomingProject(query) {
+  return request({
+    url: '/system/project/listUpcoming',
+    method: 'get',
+    params: query
+  })
+}
