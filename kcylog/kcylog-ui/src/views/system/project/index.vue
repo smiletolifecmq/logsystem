@@ -823,6 +823,13 @@ export default {
     },
     /** 导出按钮操作 */
     handleExport() {
+      if (this.dateRange.length == 0) {
+        this.$message({
+          message: "请先选择导出的结算时间范围～",
+          type: "warning",
+        });
+        return;
+      }
       this.download(
         "system/project/export",
         {
