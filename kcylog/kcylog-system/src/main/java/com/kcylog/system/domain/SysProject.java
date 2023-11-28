@@ -111,6 +111,8 @@ public class SysProject extends BaseEntity
 
     private Integer isCarRegister;
 
+    private Integer isShow;
+
     /** 填写经营产值时间 */
     @JsonFormat(pattern = "yyyy-MM-dd")
     private Date operateTime;
@@ -136,6 +138,14 @@ public class SysProject extends BaseEntity
     }
 
     private BigDecimal fbMoney;
+
+    public Integer getIsShow() {
+        return isShow;
+    }
+
+    public void setIsShow(Integer isShow) {
+        this.isShow = isShow;
+    }
 
     public void setIsJqr(Long isJqr) {
         this.isJqr = isJqr;

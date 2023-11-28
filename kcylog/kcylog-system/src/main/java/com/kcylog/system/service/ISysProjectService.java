@@ -78,4 +78,8 @@ public interface ISysProjectService
     public int updateFbMoney(Map<String, Object> params);
 
     public List<SysProject> selectSysProjectListUpcoming(SysProject sysProject);
+
+    public int updateIsShowByProjectId(SysProject sysProject);
+
+    public int updateIsShowByReviewId(SysProject sysProject);
 }

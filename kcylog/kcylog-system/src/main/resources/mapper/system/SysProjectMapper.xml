@@ -342,4 +342,17 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
         </where>
         order by p.project_id desc
     </select>
+
+    <update id="updateIsShowByProjectId" parameterType="SysProject">
+        update sys_project
+        set is_show = #{isShow}
+        where project_id = #{projectId}
+    </update>
+
+    <update id="updateIsShowByReviewId" parameterType="SysProject">
+        UPDATE sys_project AS spv
+        JOIN sys_project_relation AS sp ON spv.project_id = sp.project_id
+        SET spv.is_show = #{isShow}
+        WHERE sp.review_id = #{projectId}
+    </update>
 </mapper>

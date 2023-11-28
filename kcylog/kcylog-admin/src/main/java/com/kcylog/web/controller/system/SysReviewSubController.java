@@ -65,6 +65,10 @@ public class SysReviewSubController extends BaseController
     @Autowired
     private ISysEmployeeWorktimeService sysEmployeeWorktimeService;
 
+    @Autowired
+    private ISysProjectService sysProjectService;
+
+
     /**
      * 查询审核单列表
      */
@@ -222,6 +226,12 @@ public class SysReviewSubController extends BaseController
             review.setNode(Long.parseLong(configInfo.getNode()));
             reviewProcess.add(review);
         }
+
+        SysProject sysProject = new SysProject();
+        sysProject.setProjectId(sysReviewSub.getProjectId());
+        sysProject.setIsShow(1);
+        sysProjectService.updateIsShowByProjectId(sysProject);
+
         int result = sysReviewSubProcessService.insertSysReviewSubProcessBatch(reviewProcess);
         SysProjectRelation projectRelation = new SysProjectRelation();
         projectRelation.setProjectId(sysReviewSub.getProjectId());
@@ -333,6 +343,11 @@ public class SysReviewSubController extends BaseController
             //判断流程是否都已经通过了
             if (passNum == list.size()){
                 //审核单通过
+                SysProject sysProject = new SysProject();
+                sysProject.setProjectId(review.getReviewId());
+                sysProject.setIsShow(0);
+                sysProjectService.updateIsShowByReviewId(sysProject);
+
                 review.setStatus((long)this.PassStatus);
                 sysReviewSubService.setSysReviewSubStatusByReviewId(review);
             } else if (passNum == list.size() - 2) {
@@ -406,6 +421,11 @@ public class SysReviewSubController extends BaseController
             //判断流程是否都已经通过了
             if (passNum == list.size()){
                 //审核单通过
+                SysProject sysProject = new SysProject();
+                sysProject.setProjectId(review.getReviewId());
+                sysProject.setIsShow(0);
+                sysProjectService.updateIsShowByReviewId(sysProject);
+
                 review.setStatus((long)this.PassStatus);
                 sysReviewSubService.setSysReviewSubStatusByReviewId(review);
             } else if (passNum == list.size() - 2) {

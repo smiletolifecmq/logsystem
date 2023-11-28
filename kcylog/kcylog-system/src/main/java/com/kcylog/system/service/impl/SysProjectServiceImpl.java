@@ -151,4 +151,15 @@ public class SysProjectServiceImpl implements ISysProjectService
         return sysProjectMapper.selectSysProjectListUpcoming(sysProject);
     }
 
+    @Override
+    public int updateIsShowByProjectId(SysProject sysProject)
+    {
+        return sysProjectMapper.updateIsShowByProjectId(sysProject);
+    }
+
+    @Override
+    public int updateIsShowByReviewId(SysProject sysProject)
+    {
+        return sysProjectMapper.updateIsShowByReviewId(sysProject);
+    }
 }
