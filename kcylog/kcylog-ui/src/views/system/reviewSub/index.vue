@@ -128,20 +128,18 @@
       <el-table-column label="部门" align="center" prop="dept.deptName" />
       <el-table-column label="审核状态" align="center" prop="status">
         <template slot-scope="scope">
-          <span v-if="scope.row.status === 0">未开始</span>
-          <span v-else-if="scope.row.status === 1" style="color: blue"
-            >进行中</span
+          <el-tag v-if="scope.row.status === 0" type="info">未开始</el-tag>
+          <el-tag v-else-if="scope.row.status === 1">进行中</el-tag>
+          <el-tag v-else-if="scope.row.status === 2" type="success"
+            >通过</el-tag
           >
-          <span v-else-if="scope.row.status === 2" style="color: green"
-            >通过</span
+          <el-tag v-else-if="scope.row.status === 3" type="danger"
+            >未通过</el-tag
           >
-          <span v-else-if="scope.row.status === 3" style="color: red"
-            >未通过</span
+          <el-tag v-else-if="scope.row.status === 4" type="warning"
+            >已结算</el-tag
           >
-          <span v-else-if="scope.row.status === 4" style="color: burlywood"
-            >已结算</span
-          >
-          <span v-else>其他状态</span>
+          <el-tag v-else type="warning">未知状态</el-tag>
         </template>
       </el-table-column>
       <!-- <el-table-column label="人数" align="center" prop="peopleNum" />
