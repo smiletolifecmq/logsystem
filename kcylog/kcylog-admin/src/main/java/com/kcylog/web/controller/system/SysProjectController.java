@@ -22,9 +22,7 @@ import org.springframework.web.bind.annotation.*;
 import javax.servlet.http.HttpServletResponse;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
-import java.util.ArrayList;
-import java.util.Date;
-import java.util.List;
+import java.util.*;
 
 /**
  * 项目Controller
@@ -239,7 +237,11 @@ public class SysProjectController extends BaseController {
     @Log(title = "计算项目产值", businessType = BusinessType.UPDATE)
     @PostMapping("/jsProjectCz/{projectIds}")
     @Transactional
-    public AjaxResult jsProjectCz(@PathVariable String[] projectIds) {
+    public AjaxResult jsProjectCz(@PathVariable String[] projectIds, @RequestBody SysProject sysProject) {
+        Map<String, Object> params = new HashMap<>();
+        params.put("projectIds", projectIds);
+        params.put("fbMoney", sysProject.getFbMoney());
+        sysProjectService.updateFbMoney(params);
         return toAjax(sysProjectService.jsProjectCz(projectIds));
     }
 }

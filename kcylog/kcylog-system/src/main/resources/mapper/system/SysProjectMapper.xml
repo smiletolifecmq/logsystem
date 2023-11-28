@@ -34,6 +34,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
         <result property="updateTime"    column="update_time"    />
         <result property="department"    column="department"    />
         <result property="settlementTime"    column="settlement_time"    />
+        <result property="fbMoney"    column="fb_money"    />
         <association property="projectValue" javaType="java.util.List" resultMap="SysProjectValueResult"/>
         <association property="projectCar" javaType="java.util.List" resultMap="SysProjectCarResult"/>
         <association property="reviewSub" javaType="java.util.List" resultMap="SysReviewSubResult"/>
@@ -120,6 +121,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
             <if test="workloadAlias != null">workload_alias,</if>
             <if test="workcontentAlias != null">workcontent_alias,</if>
             <if test="settlementTime != null and settlementTime != ''" >settlement_time,</if>
+            <if test="fbMoney != null and fbMoney != ''" >fb_money,</if>
             <if test="userNameAlias != null and userNameAlias != ''">user_name_alias,</if>
             <if test="requesterAlias != null and requesterAlias != ''">requester_alias,</if>
             <if test="projectStartAlias != null and projectStartAlias != ''">project_start_alias,</if>
@@ -144,6 +146,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
             <if test="registerTime != null and registerTime != ''">#{registerTime},</if>
             <if test="receptionist != null and receptionist != ''">#{receptionist},</if>
             <if test="settlementTime != null and settlementTime != ''">#{settlementTime},</if>
+            <if test="fbMoney != null and fbMoney != ''">#{fbMoney},</if>
             <if test="workloadAlias != null">#{workloadAlias},</if>
             <if test="workcontentAlias != null">#{workcontentAlias},</if>
             <if test="userNameAlias != null and userNameAlias != ''">#{userNameAlias},</if>
@@ -170,6 +173,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
             <if test="projectNameAlias != null and projectNameAlias != ''">project_name_alias = #{projectNameAlias},</if>
             <if test="department != null and department != ''">department = #{department},</if>
             <if test="settlementTime != null and settlementTime != ''">settlement_time = #{settlementTime},</if>
+            <if test="fbMoney != null and fbMoney != ''">fb_money = #{fbMoney},</if>
             <if test="projectNum != null and projectNum != ''">project_num = #{projectNum},</if>
             <if test="projectType != null and projectType != ''">project_type = #{projectType},</if>
             <if test="registerTime != null and registerTime != ''">register_time = #{registerTime},</if>
@@ -214,6 +218,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
             <if test="projectNameAlias != null and projectNameAlias != ''">project_name_alias = #{projectNameAlias},</if>
             <if test="department != null and department != ''">department = #{department},</if>
             <if test="settlementTime != null and settlementTime != ''">settlement_time = #{settlementTime},</if>
+            <if test="fbMoney != null and fbMoney != ''">fb_money = #{fbMoney},</if>
             <if test="projectType != null and projectType != ''">project_type = #{projectType},</if>
             <if test="registerTime != null and registerTime != ''">register_time = #{registerTime},</if>
             <if test="receptionist != null and receptionist != ''">receptionist = #{receptionist},</if>
@@ -302,9 +307,18 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
     <update id="jsProjectCz" parameterType="String">
         UPDATE sys_project_value AS spv
         JOIN sys_project AS sp ON spv.project_id = sp.project_id
-        SET spv.money = sp.operate * (spv.proportion / 100),sp.output_status = 2,sp.settlement_time = CURRENT_TIMESTAMP()
+        SET spv.money = (sp.operate - sp.fb_money) * (spv.proportion / 100),sp.output_status = 2,sp.settlement_time = CURRENT_TIMESTAMP()
         WHERE spv.project_id IN
         <foreach item="projectId" collection="array" open="(" separator="," close=")">
+            #{projectId}
+        </foreach>
+    </update>
+
+    <update id="updateFbMoney" parameterType="map">
+        UPDATE sys_project
+        SET fb_money = #{fbMoney}
+        WHERE project_id IN
+        <foreach item="projectId" collection="projectIds" open="(" separator="," close=")">
             #{projectId}
         </foreach>
     </update>

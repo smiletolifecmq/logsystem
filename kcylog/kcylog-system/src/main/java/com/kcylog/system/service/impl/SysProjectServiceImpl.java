@@ -8,6 +8,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
+import java.util.Map;
 
 /**
  * 项目Service业务层处理
@@ -136,6 +137,12 @@ public class SysProjectServiceImpl implements ISysProjectService
     public int jsProjectCz(String[] projectIds)
     {
         return sysProjectMapper.jsProjectCz(projectIds);
+    }
+
+    @Override
+    public int updateFbMoney(Map<String, Object> params)
+    {
+        return sysProjectMapper.updateFbMoney(params);
     }
 
 }

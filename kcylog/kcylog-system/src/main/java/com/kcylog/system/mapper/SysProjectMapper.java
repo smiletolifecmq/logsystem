@@ -3,6 +3,7 @@ package com.kcylog.system.mapper;
 import com.kcylog.system.domain.SysProject;
 
 import java.util.List;
+import java.util.Map;
 
 /**
  * 项目Mapper接口
@@ -73,4 +74,6 @@ public interface SysProjectMapper
     public int updateLatterTime(SysProject sysProject);
 
     public int jsProjectCz(String[] projectIds);
+
+    public int updateFbMoney(Map<String, Object> params);
 }

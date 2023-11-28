@@ -451,12 +451,16 @@ export default {
     },
     //产值计算
     czjs(projectId) {
-      this.$confirm("是否确认该项目产值?", "提示", {
+      this.$prompt("请输入分包金额，确认后将自动计算产值", "提示", {
         confirmButtonText: "确定",
         cancelButtonText: "取消",
-        type: "warning",
-      }).then(() => {
-        jsProjectCz(projectId).then((response) => {
+        inputPattern: /^(?!0+(\.0+)?$)(\d+(\.\d{1,2})?)$/,
+        inputErrorMessage: "请输入有效金额(最多两位小数)",
+      }).then(({ value }) => {
+        let params = {
+          fbMoney: value,
+        };
+        jsProjectCz(projectId, params).then((response) => {
           this.$message({
             type: "success",
             message: "计算成功～",
@@ -466,12 +470,16 @@ export default {
       });
     },
     batchCzjs() {
-      this.$confirm("是否确认选中项目产值?", "提示", {
+      this.$prompt("请输入分包金额，确认后将自动计算选中项目产值", "提示", {
         confirmButtonText: "确定",
         cancelButtonText: "取消",
-        type: "warning",
-      }).then(() => {
-        jsProjectCz(this.ids).then((response) => {
+        inputPattern: /^(?!0+(\.0+)?$)(\d+(\.\d{1,2})?)$/,
+        inputErrorMessage: "请输入有效金额(最多两位小数)",
+      }).then(({ value }) => {
+        let params = {
+          fbMoney: value,
+        };
+        jsProjectCz(this.ids, params).then((response) => {
           this.$message({
             type: "success",
             message: "计算成功～",

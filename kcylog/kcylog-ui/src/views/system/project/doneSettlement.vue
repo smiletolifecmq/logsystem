@@ -163,7 +163,13 @@
               </template>
               {{ form.projectType }}
             </el-descriptions-item>
-            <el-descriptions-item> </el-descriptions-item>
+            <el-descriptions-item>
+              <template slot="label">
+                <i class="el-icon-notebook-2"></i>
+                分包金额
+              </template>
+              {{ form.fbMoney }}</el-descriptions-item
+            >
             <el-descriptions-item>
               <template slot="label">
                 <i class="el-icon-document"></i>

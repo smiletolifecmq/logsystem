@@ -66,9 +66,10 @@ export function updateProjectValue(data) {
   })
 }
 
-export function jsProjectCz(projectId) {
+export function jsProjectCz(projectId, data) {
   return request({
     url: '/system/project/jsProjectCz/' + projectId,
-    method: 'post'
+    method: 'post',
+    data: data
   })
 }

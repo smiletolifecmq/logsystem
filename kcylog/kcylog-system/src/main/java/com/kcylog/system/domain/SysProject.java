@@ -135,8 +135,18 @@ public class SysProject extends BaseEntity
         return isJqr;
     }
 
+    private BigDecimal fbMoney;
+
     public void setIsJqr(Long isJqr) {
         this.isJqr = isJqr;
+    }
+
+    public BigDecimal getFbMoney() {
+        return fbMoney;
+    }
+
+    public void setFbMoney(BigDecimal fbMoney) {
+        this.fbMoney = fbMoney;
     }
 
     public String getDepartment() {
