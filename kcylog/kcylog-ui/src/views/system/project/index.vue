@@ -157,6 +157,18 @@
           <span>{{ parseTime(scope.row.settlementTime, "{y}-{m}-{d}") }}</span>
         </template>
       </el-table-column>
+      <el-table-column label="结算状态" align="center" prop="status">
+        <template slot-scope="scope">
+          <el-tag v-if="scope.row.outputStatus === 0" type="warning"
+            >未填写</el-tag
+          >
+          <el-tag v-else-if="scope.row.outputStatus === 1">待结算</el-tag>
+          <el-tag v-else-if="scope.row.outputStatus === 2" type="success"
+            >已结算</el-tag
+          >
+          <el-tag v-else type="danger">其他状态</el-tag>
+        </template>
+      </el-table-column>
       <el-table-column
         fixed="right"
         label="操作"

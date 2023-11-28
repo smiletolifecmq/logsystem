@@ -18,6 +18,17 @@
         >
         </el-date-picker>
       </el-form-item>
+      <el-form-item label="审核状态" prop="reviewStatus">
+        <el-select v-model="queryParams.reviewStatus" placeholder="请选择">
+          <el-option
+            v-for="item in reviewStatusList"
+            :key="item.value"
+            :label="item.label"
+            :value="item.value"
+          >
+          </el-option>
+        </el-select>
+      </el-form-item>
       <el-form-item>
         <el-button
           type="primary"
@@ -68,11 +79,17 @@
       <el-table-column label="部门" align="center" prop="dept.deptName" />
       <el-table-column label="审核状态" align="center" prop="reviewStatus">
         <template slot-scope="scope">
-          <span v-if="scope.row.reviewStatus === 0">未开始</span>
-          <span v-else-if="scope.row.reviewStatus === 1">进行中</span>
-          <span v-else-if="scope.row.reviewStatus === 2">通过</span>
-          <span v-else-if="scope.row.reviewStatus === 3">未通过</span>
-          <span v-else>未知状态</span>
+          <el-tag v-if="scope.row.reviewStatus === 0" type="info"
+            >未开始</el-tag
+          >
+          <el-tag v-else-if="scope.row.reviewStatus === 1">进行中</el-tag>
+          <el-tag v-else-if="scope.row.reviewStatus === 2" type="success"
+            >通过</el-tag
+          >
+          <el-tag v-else-if="scope.row.reviewStatus === 3" type="danger"
+            >未通过</el-tag
+          >
+          <el-tag v-else type="warning">未知状态</el-tag>
         </template>
       </el-table-column>
       <el-table-column
@@ -469,6 +486,24 @@ export default {
   name: "Review",
   data() {
     return {
+      reviewStatusList: [
+        {
+          value: 0,
+          label: "未开始",
+        },
+        {
+          value: 1,
+          label: "进行中",
+        },
+        {
+          value: 2,
+          label: "通过",
+        },
+        {
+          value: 3,
+          label: "未通过",
+        },
+      ],
       detailOpen: false,
       carTypes: [
         {
