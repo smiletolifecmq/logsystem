@@ -45,7 +45,7 @@
         >
       </el-form-item>
     </el-form>
-    <el-row :gutter="10" class="mb8">
+    <!-- <el-row :gutter="10" class="mb8">
       <el-col :span="1.5">
         <el-button
           type="success"
@@ -57,7 +57,7 @@
           >产值计算</el-button
         >
       </el-col></el-row
-    >
+    > -->
 
     <el-row :gutter="10" class="mb8">
       <right-toolbar
@@ -110,7 +110,7 @@
             size="mini"
             type="text"
             icon="el-icon-edit"
-            @click="czjs(scope.row.projectId)"
+            @click="czjs(scope.row.projectId, scope.row.operate)"
             >产值计算</el-button
           >
           <el-button
@@ -450,13 +450,20 @@ export default {
       this.resetForm("form");
     },
     //产值计算
-    czjs(projectId) {
+    czjs(projectId, operate) {
       this.$prompt("请输入分包金额，确认后将自动计算产值", "提示", {
         confirmButtonText: "确定",
         cancelButtonText: "取消",
         inputPattern: /^(?!0+(\.0+)?$)(\d+(\.\d{1,2})?)$/,
         inputErrorMessage: "请输入有效金额(最多两位小数)",
       }).then(({ value }) => {
+        if (value > operate) {
+          this.$message({
+            type: "error",
+            message: "分包金额大于经营产值～",
+          });
+          return;
+        }
         let params = {
           fbMoney: value,
         };

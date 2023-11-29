@@ -236,7 +236,6 @@
                     <el-input-number
                       :disabled="form.outputStatus === 2"
                       v-model="project.money"
-                      :max="100"
                     ></el-input-number>
                   </el-form-item>
                 </el-col>
