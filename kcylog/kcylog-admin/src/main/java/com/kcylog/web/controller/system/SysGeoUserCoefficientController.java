@@ -83,6 +83,8 @@ public class SysGeoUserCoefficientController extends BaseController
     @PutMapping
     public AjaxResult edit(@RequestBody SysGeoUserCoefficient sysGeoUserCoefficient)
     {
+        SysUser sysUser = userService.selectUserById(sysGeoUserCoefficient.getUserId());
+        sysGeoUserCoefficient.setName(sysUser.getUserName());
         return toAjax(sysGeoUserCoefficientService.updateSysGeoUserCoefficient(sysGeoUserCoefficient));
     }
 

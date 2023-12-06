@@ -1,0 +1,71 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.kcylog.system.mapper.SysGeoProjectMapper">
+    
+    <resultMap type="SysGeoProject" id="SysGeoProjectResult">
+        <result property="projectId"    column="project_id"    />
+        <result property="projectNum"    column="project_num"    />
+        <result property="projectName"    column="project_name"    />
+        <result property="userId"    column="user_id"    />
+        <result property="userName"    column="user_name"    />
+    </resultMap>
+
+    <sql id="selectSysGeoProjectVo">
+        select project_id, project_num, project_name, user_id, user_name from sys_geo_project
+    </sql>
+
+    <select id="selectSysGeoProjectList" parameterType="SysGeoProject" resultMap="SysGeoProjectResult">
+        <include refid="selectSysGeoProjectVo"/>
+        <where>  
+            <if test="projectNum != null  and projectNum != ''"> and project_num = #{projectNum}</if>
+            <if test="projectName != null  and projectName != ''"> and project_name like concat('%', #{projectName}, '%')</if>
+            <if test="userId != null "> and user_id = #{userId}</if>
+            <if test="userName != null  and userName != ''"> and user_name like concat('%', #{userName}, '%')</if>
+        </where>
+    </select>
+    
+    <select id="selectSysGeoProjectByProjectId" parameterType="Long" resultMap="SysGeoProjectResult">
+        <include refid="selectSysGeoProjectVo"/>
+        where project_id = #{projectId}
+    </select>
+        
+    <insert id="insertSysGeoProject" parameterType="SysGeoProject" useGeneratedKeys="true" keyProperty="projectId">
+        insert into sys_geo_project
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="projectNum != null and projectNum != ''">project_num,</if>
+            <if test="projectName != null and projectName != ''">project_name,</if>
+            <if test="userId != null">user_id,</if>
+            <if test="userName != null and userName != ''">user_name,</if>
+         </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test="projectNum != null and projectNum != ''">#{projectNum},</if>
+            <if test="projectName != null and projectName != ''">#{projectName},</if>
+            <if test="userId != null">#{userId},</if>
+            <if test="userName != null and userName != ''">#{userName},</if>
+         </trim>
+    </insert>
+
+    <update id="updateSysGeoProject" parameterType="SysGeoProject">
+        update sys_geo_project
+        <trim prefix="SET" suffixOverrides=",">
+            <if test="projectNum != null and projectNum != ''">project_num = #{projectNum},</if>
+            <if test="projectName != null and projectName != ''">project_name = #{projectName},</if>
+            <if test="userId != null">user_id = #{userId},</if>
+            <if test="userName != null and userName != ''">user_name = #{userName},</if>
+        </trim>
+        where project_id = #{projectId}
+    </update>
+
+    <delete id="deleteSysGeoProjectByProjectId" parameterType="Long">
+        delete from sys_geo_project where project_id = #{projectId}
+    </delete>
+
+    <delete id="deleteSysGeoProjectByProjectIds" parameterType="String">
+        delete from sys_geo_project where project_id in 
+        <foreach item="projectId" collection="array" open="(" separator="," close=")">
+            #{projectId}
+        </foreach>
+    </delete>
+</mapper>
