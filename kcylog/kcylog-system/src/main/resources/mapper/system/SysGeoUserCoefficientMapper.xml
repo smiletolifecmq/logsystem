@@ -1,0 +1,66 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.kcylog.system.mapper.SysGeoUserCoefficientMapper">
+    
+    <resultMap type="SysGeoUserCoefficient" id="SysGeoUserCoefficientResult">
+        <result property="coefficientId"    column="coefficient_id"    />
+        <result property="name"    column="name"    />
+        <result property="userId"    column="user_id"    />
+        <result property="coefficient"    column="coefficient"    />
+    </resultMap>
+
+    <sql id="selectSysGeoUserCoefficientVo">
+        select coefficient_id, name, user_id, coefficient from sys_geo_user_coefficient
+    </sql>
+
+    <select id="selectSysGeoUserCoefficientList" parameterType="SysGeoUserCoefficient" resultMap="SysGeoUserCoefficientResult">
+        <include refid="selectSysGeoUserCoefficientVo"/>
+        <where>  
+            <if test="name != null  and name != ''"> and name like concat('%', #{name}, '%')</if>
+            <if test="userId != null  and userId != ''"> and user_id = #{userId}</if>
+            <if test="coefficient != null  and coefficient != ''"> and coefficient = #{coefficient}</if>
+        </where>
+    </select>
+    
+    <select id="selectSysGeoUserCoefficientByCoefficientId" parameterType="String" resultMap="SysGeoUserCoefficientResult">
+        <include refid="selectSysGeoUserCoefficientVo"/>
+        where coefficient_id = #{coefficientId}
+    </select>
+        
+    <insert id="insertSysGeoUserCoefficient" parameterType="SysGeoUserCoefficient" useGeneratedKeys="true" keyProperty="coefficientId">
+        insert into sys_geo_user_coefficient
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="name != null and name != ''">name,</if>
+            <if test="userId != null and userId != ''">user_id,</if>
+            <if test="coefficient != null and coefficient != ''">coefficient,</if>
+         </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test="name != null and name != ''">#{name},</if>
+            <if test="userId != null and userId != ''">#{userId},</if>
+            <if test="coefficient != null and coefficient != ''">#{coefficient},</if>
+         </trim>
+    </insert>
+
+    <update id="updateSysGeoUserCoefficient" parameterType="SysGeoUserCoefficient">
+        update sys_geo_user_coefficient
+        <trim prefix="SET" suffixOverrides=",">
+            <if test="name != null and name != ''">name = #{name},</if>
+            <if test="userId != null and userId != ''">user_id = #{userId},</if>
+            <if test="coefficient != null and coefficient != ''">coefficient = #{coefficient},</if>
+        </trim>
+        where coefficient_id = #{coefficientId}
+    </update>
+
+    <delete id="deleteSysGeoUserCoefficientByCoefficientId" parameterType="String">
+        delete from sys_geo_user_coefficient where coefficient_id = #{coefficientId}
+    </delete>
+
+    <delete id="deleteSysGeoUserCoefficientByCoefficientIds" parameterType="String">
+        delete from sys_geo_user_coefficient where coefficient_id in 
+        <foreach item="coefficientId" collection="array" open="(" separator="," close=")">
+            #{coefficientId}
+        </foreach>
+    </delete>
+</mapper>
