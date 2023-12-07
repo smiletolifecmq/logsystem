@@ -1,0 +1,81 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.kcylog.system.mapper.SysGeoUserMapper">
+    
+    <resultMap type="SysGeoUser" id="SysGeoUserResult">
+        <result property="geoUserId"    column="geo_user_id"    />
+        <result property="parentId"    column="parent_id"    />
+        <result property="userId"    column="user_id"    />
+        <result property="ancestors"    column="ancestors"    />
+        <result property="userName"    column="user_name"    />
+        <result property="isCheck"    column="is_check"    />
+    </resultMap>
+
+    <sql id="selectSysGeoUserVo">
+        select geo_user_id, parent_id, user_id, ancestors, user_name, is_check from sys_geo_user
+    </sql>
+
+    <select id="selectSysGeoUserList" parameterType="SysGeoUser" resultMap="SysGeoUserResult">
+        <include refid="selectSysGeoUserVo"/>
+        <where>  
+            <if test="parentId != null "> and parent_id = #{parentId}</if>
+            <if test="userId != null "> and user_id = #{userId}</if>
+            <if test="ancestors != null  and ancestors != ''"> and ancestors = #{ancestors}</if>
+            <if test="userName != null  and userName != ''"> and user_name like concat('%', #{userName}, '%')</if>
+            <if test="isCheck != null "> and is_check = #{isCheck}</if>
+        </where>
+    </select>
+    
+    <select id="selectSysGeoUserByGeoUserId" parameterType="Long" resultMap="SysGeoUserResult">
+        <include refid="selectSysGeoUserVo"/>
+        where geo_user_id = #{geoUserId}
+    </select>
+        
+    <insert id="insertSysGeoUser" parameterType="SysGeoUser" useGeneratedKeys="true" keyProperty="geoUserId">
+        insert into sys_geo_user
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="parentId != null">parent_id,</if>
+            <if test="userId != null">user_id,</if>
+            <if test="ancestors != null">ancestors,</if>
+            <if test="userName != null">user_name,</if>
+            <if test="isCheck != null">is_check,</if>
+         </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test="parentId != null">#{parentId},</if>
+            <if test="userId != null">#{userId},</if>
+            <if test="ancestors != null">#{ancestors},</if>
+            <if test="userName != null">#{userName},</if>
+            <if test="isCheck != null">#{isCheck},</if>
+         </trim>
+    </insert>
+
+    <update id="updateSysGeoUser" parameterType="SysGeoUser">
+        update sys_geo_user
+        <trim prefix="SET" suffixOverrides=",">
+            <if test="parentId != null">parent_id = #{parentId},</if>
+            <if test="userId != null">user_id = #{userId},</if>
+            <if test="ancestors != null">ancestors = #{ancestors},</if>
+            <if test="userName != null">user_name = #{userName},</if>
+            <if test="isCheck != null">is_check = #{isCheck},</if>
+        </trim>
+        where geo_user_id = #{geoUserId}
+    </update>
+
+    <delete id="deleteSysGeoUserByGeoUserId" parameterType="Long">
+        delete from sys_geo_user where geo_user_id = #{geoUserId}
+    </delete>
+
+    <delete id="deleteSysGeoUserByGeoUserIds" parameterType="String">
+        delete from sys_geo_user where geo_user_id in 
+        <foreach item="geoUserId" collection="array" open="(" separator="," close=")">
+            #{geoUserId}
+        </foreach>
+    </delete>
+
+    <select id="selectSysGeoUserByUserId" parameterType="Long" resultMap="SysGeoUserResult">
+        <include refid="selectSysGeoUserVo"/>
+        where user_id = #{userId}
+    </select>
+</mapper>
