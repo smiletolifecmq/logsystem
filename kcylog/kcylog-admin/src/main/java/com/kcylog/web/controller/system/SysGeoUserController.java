@@ -13,6 +13,7 @@ import com.kcylog.system.service.ISysGeoUserService;
 import com.kcylog.system.service.ISysUserService;
 import org.apache.commons.lang3.ArrayUtils;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.bind.annotation.*;
 
 import javax.servlet.http.HttpServletResponse;
@@ -95,9 +96,15 @@ public class SysGeoUserController extends BaseController
      * 修改地理用户
      */
     @Log(title = "地理用户", businessType = BusinessType.UPDATE)
+    @Transactional
     @PutMapping
     public AjaxResult edit(@RequestBody SysGeoUser sysGeoUser)
     {
+        SysGeoUser oldUser = sysGeoUserService.selectSysGeoUserByUserId(sysGeoUser.getUserId());
+        SysGeoUser parentUser = sysGeoUserService.selectSysGeoUserByUserId(sysGeoUser.getParentId());
+        sysGeoUser.setAncestors(parentUser.getAncestors() + "," + Long.toString(sysGeoUser.getUserId()));
+        sysGeoUser.setOldAncestors(oldUser.getAncestors());
+        sysGeoUserService.updateSysChildGeoUser(sysGeoUser);
         return toAjax(sysGeoUserService.updateSysGeoUser(sysGeoUser));
     }
 

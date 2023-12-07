@@ -119,7 +119,11 @@
         <el-row>
           <el-col :span="24">
             <el-form-item label="用户名称" prop="userId">
-              <el-select v-model="form.userId" placeholder="请选择">
+              <el-select
+                v-model="form.userId"
+                placeholder="请选择"
+                :disabled="editDisabled"
+              >
                 <el-option
                   v-for="item in userListAll"
                   :key="item.userId"
@@ -166,6 +170,7 @@ export default {
   components: { Treeselect },
   data() {
     return {
+      editDisabled: false,
       dateRange: [],
       userListAll: [],
       deptOptions: [],
@@ -254,6 +259,7 @@ export default {
     // 取消按钮
     cancel() {
       this.open = false;
+      this.editDisabled = false;
       this.reset();
     },
     // 表单重置
@@ -298,6 +304,7 @@ export default {
     },
     /** 修改按钮操作 */
     handleUpdate(row) {
+      this.editDisabled = true;
       this.reset();
       const geoUserId = row.geoUserId || this.ids;
       getGeoUser(geoUserId).then((response) => {

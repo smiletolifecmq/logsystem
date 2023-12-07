@@ -61,4 +61,8 @@ public interface ISysGeoUserService
     public int deleteSysGeoUserByGeoUserId(Long geoUserId);
 
     public SysGeoUser selectSysGeoUserByUserId(Long userId);
+
+    public SysGeoUser selectSysGeoUserByGeoUser(SysGeoUser sysGeoUser);
+
+    public int updateSysChildGeoUser(SysGeoUser sysGeoUser);
 }

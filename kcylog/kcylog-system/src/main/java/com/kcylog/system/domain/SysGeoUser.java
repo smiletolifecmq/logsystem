@@ -33,6 +33,8 @@ public class SysGeoUser extends BaseEntity
     @Excel(name = "祖级列表")
     private String ancestors;
 
+    private String oldAncestors;
+
     /** 用户名 */
     @Excel(name = "用户名")
     private String userName;
@@ -40,6 +42,14 @@ public class SysGeoUser extends BaseEntity
     /** 是否为检查人员，0否1是 */
     @Excel(name = "是否为检查人员，0否1是")
     private Long isCheck;
+
+    public String getOldAncestors() {
+        return oldAncestors;
+    }
+
+    public void setOldAncestors(String oldAncestors) {
+        this.oldAncestors = oldAncestors;
+    }
 
     private List<SysGeoUser> children = new ArrayList<SysGeoUser>();
 

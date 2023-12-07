@@ -97,4 +97,16 @@ public class SysGeoUserServiceImpl implements ISysGeoUserService
     {
         return sysGeoUserMapper.selectSysGeoUserByUserId(userId);
     }
+
+    @Override
+    public SysGeoUser selectSysGeoUserByGeoUser(SysGeoUser sysGeoUser)
+    {
+        return sysGeoUserMapper.selectSysGeoUserByGeoUser(sysGeoUser);
+    }
+
+    @Override
+    public int updateSysChildGeoUser(SysGeoUser sysGeoUser)
+    {
+        return sysGeoUserMapper.updateSysChildGeoUser(sysGeoUser);
+    }
 }
