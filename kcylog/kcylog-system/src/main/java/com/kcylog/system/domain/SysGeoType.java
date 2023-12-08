@@ -6,6 +6,8 @@ import org.apache.commons.lang3.builder.ToStringBuilder;
 import org.apache.commons.lang3.builder.ToStringStyle;
 
 import java.math.BigDecimal;
+import java.util.ArrayList;
+import java.util.List;
 
 /**
  * 类型配置表对象 sys_geo_type
@@ -39,6 +41,16 @@ public class SysGeoType extends BaseEntity
     /** 是否有难易程度，0否1是 */
     @Excel(name = "是否有难易程度，0否1是")
     private Long degree;
+
+    private List<SysGeoType> children = new ArrayList<SysGeoType>();
+
+    public List<SysGeoType> getChildren() {
+        return children;
+    }
+
+    public void setChildren(List<SysGeoType> children) {
+        this.children = children;
+    }
 
     public void setTypeId(Long typeId) 
     {

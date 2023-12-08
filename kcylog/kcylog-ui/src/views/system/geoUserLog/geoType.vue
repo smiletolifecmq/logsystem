@@ -1,67 +1,5 @@
 <template>
   <div class="app-container">
-    <el-form
-      :model="queryParams"
-      ref="queryForm"
-      size="small"
-      :inline="true"
-      v-show="showSearch"
-      label-width="68px"
-    >
-      <el-form-item label="类型名称" prop="typeName">
-        <el-input
-          v-model="queryParams.typeName"
-          placeholder="请输入类型名称"
-          clearable
-          @keyup.enter.native="handleQuery"
-        />
-      </el-form-item>
-      <el-form-item label="单价" prop="typeMoney">
-        <el-input
-          v-model="queryParams.typeMoney"
-          placeholder="请输入单价"
-          clearable
-          @keyup.enter.native="handleQuery"
-        />
-      </el-form-item>
-      <el-form-item label="父ID" prop="parentId">
-        <el-input
-          v-model="queryParams.parentId"
-          placeholder="请输入父ID"
-          clearable
-          @keyup.enter.native="handleQuery"
-        />
-      </el-form-item>
-      <el-form-item label="单位" prop="unit">
-        <el-input
-          v-model="queryParams.unit"
-          placeholder="请输入单位"
-          clearable
-          @keyup.enter.native="handleQuery"
-        />
-      </el-form-item>
-      <el-form-item label="是否有难易程度，0否1是" prop="degree">
-        <el-input
-          v-model="queryParams.degree"
-          placeholder="请输入是否有难易程度，0否1是"
-          clearable
-          @keyup.enter.native="handleQuery"
-        />
-      </el-form-item>
-      <el-form-item>
-        <el-button
-          type="primary"
-          icon="el-icon-search"
-          size="mini"
-          @click="handleQuery"
-          >搜索</el-button
-        >
-        <el-button icon="el-icon-refresh" size="mini" @click="resetQuery"
-          >重置</el-button
-        >
-      </el-form-item>
-    </el-form>
-
     <el-row :gutter="10" class="mb8">
       <el-col :span="1.5">
         <el-button
@@ -74,41 +12,6 @@
           >新增</el-button
         >
       </el-col>
-      <el-col :span="1.5">
-        <el-button
-          type="success"
-          plain
-          icon="el-icon-edit"
-          size="mini"
-          :disabled="single"
-          @click="handleUpdate"
-          v-hasPermi="['system:type:edit']"
-          >修改</el-button
-        >
-      </el-col>
-      <el-col :span="1.5">
-        <el-button
-          type="danger"
-          plain
-          icon="el-icon-delete"
-          size="mini"
-          :disabled="multiple"
-          @click="handleDelete"
-          v-hasPermi="['system:type:remove']"
-          >删除</el-button
-        >
-      </el-col>
-      <el-col :span="1.5">
-        <el-button
-          type="warning"
-          plain
-          icon="el-icon-download"
-          size="mini"
-          @click="handleExport"
-          v-hasPermi="['system:type:export']"
-          >导出</el-button
-        >
-      </el-col>
       <right-toolbar
         :showSearch.sync="showSearch"
         @queryTable="getList"
@@ -118,20 +21,20 @@
     <el-table
       v-loading="loading"
       :data="typeList"
-      @selection-change="handleSelectionChange"
+      row-key="typeId"
+      :tree-props="{ children: 'children', hasChildren: 'hasChildren' }"
     >
-      <el-table-column type="selection" width="55" align="center" />
-      <el-table-column label="类型自增ID" align="center" prop="typeId" />
       <el-table-column label="类型名称" align="center" prop="typeName" />
       <el-table-column label="单价" align="center" prop="typeMoney" />
-      <el-table-column label="父ID" align="center" prop="parentId" />
-      <el-table-column label="备注" align="center" prop="remark" />
       <el-table-column label="单位" align="center" prop="unit" />
-      <el-table-column
-        label="是否有难易程度，0否1是"
-        align="center"
-        prop="degree"
-      />
+      <el-table-column label="备注" align="center" prop="remark" />
+      <el-table-column label="是否有难易程度" align="center" prop="degree">
+        <template slot-scope="scope">
+          <el-tag v-if="scope.row.degree === 0" type="info">否</el-tag>
+          <el-tag v-else-if="scope.row.degree === 1">是</el-tag>
+          <el-tag v-else type="warning">未知</el-tag>
+        </template>
+      </el-table-column>
       <el-table-column
         label="操作"
         align="center"
@@ -158,25 +61,23 @@
       </el-table-column>
     </el-table>
 
-    <pagination
-      v-show="total > 0"
-      :total="total"
-      :page.sync="queryParams.pageNum"
-      :limit.sync="queryParams.pageSize"
-      @pagination="getList"
-    />
-
     <!-- 添加或修改类型配置表对话框 -->
     <el-dialog :title="title" :visible.sync="open" width="500px" append-to-body>
       <el-form ref="form" :model="form" :rules="rules" label-width="80px">
+        <el-form-item label="上级类型" prop="parentId">
+          <treeselect
+            v-model="form.parentId"
+            :options="menuOptions"
+            :normalizer="normalizer"
+            :show-count="true"
+            placeholder="选择上级菜单"
+          />
+        </el-form-item>
         <el-form-item label="类型名称" prop="typeName">
           <el-input v-model="form.typeName" placeholder="请输入类型名称" />
         </el-form-item>
         <el-form-item label="单价" prop="typeMoney">
           <el-input v-model="form.typeMoney" placeholder="请输入单价" />
-        </el-form-item>
-        <el-form-item label="父ID" prop="parentId">
-          <el-input v-model="form.parentId" placeholder="请输入父ID" />
         </el-form-item>
         <el-form-item label="备注" prop="remark">
           <el-input
@@ -188,11 +89,9 @@
         <el-form-item label="单位" prop="unit">
           <el-input v-model="form.unit" placeholder="请输入单位" />
         </el-form-item>
-        <el-form-item label="是否有难易程度，0否1是" prop="degree">
-          <el-input
-            v-model="form.degree"
-            placeholder="请输入是否有难易程度，0否1是"
-          />
+        <el-form-item label="难易程度">
+          <el-radio v-model="form.degree" :label="0">否</el-radio>
+          <el-radio v-model="form.degree" :label="1">是</el-radio>
         </el-form-item>
       </el-form>
       <div slot="footer" class="dialog-footer">
@@ -211,11 +110,15 @@ import {
   addType,
   updateType,
 } from "@/api/system/geoType";
+import Treeselect from "@riophae/vue-treeselect";
+import "@riophae/vue-treeselect/dist/vue-treeselect.css";
 
 export default {
   name: "Type",
+  components: { Treeselect },
   data() {
     return {
+      menuOptions: [],
       // 遮罩层
       loading: true,
       // 选中数组
@@ -237,7 +140,7 @@ export default {
       // 查询参数
       queryParams: {
         pageNum: 1,
-        pageSize: 10,
+        pageSize: 9999,
         typeName: null,
         typeMoney: null,
         parentId: null,
@@ -268,12 +171,29 @@ export default {
     this.getList();
   },
   methods: {
+    normalizer(node) {
+      if (node.children && !node.children.length) {
+        delete node.children;
+      }
+      return {
+        id: node.typeId,
+        label: node.typeName,
+        children: node.children,
+      };
+    },
+    getTreeselect() {
+      listType(this.queryParams).then((response) => {
+        this.menuOptions = [];
+        const menu = { typeId: 0, menuName: "主类型", children: [] };
+        this.menuOptions = this.handleTree(response.rows, "typeId");
+        this.menuOptions.push(menu);
+      });
+    },
     /** 查询类型配置表列表 */
     getList() {
       this.loading = true;
       listType(this.queryParams).then((response) => {
-        this.typeList = response.rows;
-        this.total = response.total;
+        this.typeList = this.handleTree(response.rows, "typeId");
         this.loading = false;
       });
     },
@@ -312,14 +232,21 @@ export default {
       this.multiple = !selection.length;
     },
     /** 新增按钮操作 */
-    handleAdd() {
+    handleAdd(row) {
       this.reset();
+      this.getTreeselect();
+      if (row != null && row.typeId) {
+        this.form.parentId = row.typeId;
+      } else {
+        this.form.parentId = 0;
+      }
       this.open = true;
       this.title = "添加类型配置表";
     },
     /** 修改按钮操作 */
     handleUpdate(row) {
       this.reset();
+      this.getTreeselect();
       const typeId = row.typeId || this.ids;
       getType(typeId).then((response) => {
         this.form = response.data;
