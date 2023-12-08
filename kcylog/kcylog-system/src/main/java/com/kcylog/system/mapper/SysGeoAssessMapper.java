@@ -1,7 +1,8 @@
 package com.kcylog.system.mapper;
 
-import java.util.List;
 import com.kcylog.system.domain.SysGeoAssess;
+
+import java.util.List;
 
 /**
  * 评定表Mapper接口
@@ -58,4 +59,6 @@ public interface SysGeoAssessMapper
      * @return 结果
      */
     public int deleteSysGeoAssessByAssessIds(Long[] assessIds);
+
+    public SysGeoAssess selectSysGeoAssessByUserIdAndDate(SysGeoAssess sysGeoAssess);
 }

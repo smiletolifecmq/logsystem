@@ -12,27 +12,11 @@
         <el-date-picker
           clearable
           v-model="queryParams.assessDate"
-          type="date"
-          value-format="yyyy-MM-dd"
+          type="month"
+          value-format="yyyy-MM"
           placeholder="请选择评定日期"
         >
         </el-date-picker>
-      </el-form-item>
-      <el-form-item label="评定人ID" prop="assessUserId">
-        <el-input
-          v-model="queryParams.assessUserId"
-          placeholder="请输入评定人ID"
-          clearable
-          @keyup.enter.native="handleQuery"
-        />
-      </el-form-item>
-      <el-form-item label="评定人名称" prop="assessUserName">
-        <el-input
-          v-model="queryParams.assessUserName"
-          placeholder="请输入评定人名称"
-          clearable
-          @keyup.enter.native="handleQuery"
-        />
       </el-form-item>
       <el-form-item>
         <el-button
@@ -60,41 +44,6 @@
           >新增</el-button
         >
       </el-col>
-      <el-col :span="1.5">
-        <el-button
-          type="success"
-          plain
-          icon="el-icon-edit"
-          size="mini"
-          :disabled="single"
-          @click="handleUpdate"
-          v-hasPermi="['system:assess:edit']"
-          >修改</el-button
-        >
-      </el-col>
-      <el-col :span="1.5">
-        <el-button
-          type="danger"
-          plain
-          icon="el-icon-delete"
-          size="mini"
-          :disabled="multiple"
-          @click="handleDelete"
-          v-hasPermi="['system:assess:remove']"
-          >删除</el-button
-        >
-      </el-col>
-      <el-col :span="1.5">
-        <el-button
-          type="warning"
-          plain
-          icon="el-icon-download"
-          size="mini"
-          @click="handleExport"
-          v-hasPermi="['system:assess:export']"
-          >导出</el-button
-        >
-      </el-col>
       <right-toolbar
         :showSearch.sync="showSearch"
         @queryTable="getList"
@@ -106,8 +55,6 @@
       :data="assessList"
       @selection-change="handleSelectionChange"
     >
-      <el-table-column type="selection" width="55" align="center" />
-      <el-table-column label="评定ID" align="center" prop="assessId" />
       <el-table-column
         label="评定日期"
         align="center"
@@ -118,7 +65,6 @@
           <span>{{ parseTime(scope.row.assessDate, "{y}-{m}-{d}") }}</span>
         </template>
       </el-table-column>
-      <el-table-column label="评定人ID" align="center" prop="assessUserId" />
       <el-table-column
         label="评定人名称"
         align="center"
@@ -159,27 +105,79 @@
     />
 
     <!-- 添加或修改评定表对话框 -->
-    <el-dialog :title="title" :visible.sync="open" width="500px" append-to-body>
+    <el-dialog
+      :title="title"
+      :visible.sync="open"
+      width="1200px"
+      append-to-body
+    >
       <el-form ref="form" :model="form" :rules="rules" label-width="80px">
         <el-form-item label="评定日期" prop="assessDate">
           <el-date-picker
             clearable
             v-model="form.assessDate"
-            type="date"
-            value-format="yyyy-MM-dd"
+            type="month"
+            value-format="yyyy-MM"
             placeholder="请选择评定日期"
           >
           </el-date-picker>
         </el-form-item>
-        <el-form-item label="评定人ID" prop="assessUserId">
-          <el-input v-model="form.assessUserId" placeholder="请输入评定人ID" />
-        </el-form-item>
-        <el-form-item label="评定人名称" prop="assessUserName">
-          <el-input
-            v-model="form.assessUserName"
-            placeholder="请输入评定人名称"
-          />
-        </el-form-item>
+        <el-collapse v-model="activeNames">
+          <el-collapse-item title="用户列表" name="1">
+            <el-form-item
+              v-for="(geoAssess, index) in form.geoAssessInfo"
+              :key="index"
+              prop="geoAssessInfo"
+            >
+              <el-row>
+                <el-col :span="5" style="margin-left: -80px">
+                  <el-form-item label="用户名" prop="userName">
+                    <el-input
+                      v-model="geoAssess.userName"
+                      placeholder="请输入用户名"
+                      disabled
+                    />
+                  </el-form-item>
+                </el-col>
+                <el-col :span="5">
+                  <el-form-item label="配合系数" prop="fitCoefficient">
+                    <el-input-number
+                      v-model="geoAssess.fitCoefficient"
+                      :precision="2"
+                      :step="0.1"
+                      :min="0"
+                      :controls="false"
+                      size="small"
+                    ></el-input-number>
+                  </el-form-item>
+                </el-col>
+                <el-col :span="7">
+                  <el-form-item
+                    label="质量系数"
+                    prop="workCoefficient"
+                    size="small"
+                  >
+                    <el-input-number
+                      v-model="geoAssess.workCoefficient"
+                      :precision="2"
+                      :step="0.1"
+                      :min="0"
+                      :controls="false"
+                    ></el-input-number>
+                  </el-form-item>
+                </el-col>
+                <el-col :span="10" style="margin-left: -100px">
+                  <el-form-item label="备注" prop="remark">
+                    <el-input
+                      v-model="geoAssess.remark"
+                      placeholder="请输入备注"
+                    />
+                  </el-form-item>
+                </el-col>
+              </el-row>
+            </el-form-item>
+          </el-collapse-item>
+        </el-collapse>
       </el-form>
       <div slot="footer" class="dialog-footer">
         <el-button type="primary" @click="submitForm">确 定</el-button>
@@ -196,12 +194,14 @@ import {
   delAssess,
   addAssess,
   updateAssess,
+  listAssessUser,
 } from "@/api/system/geoAssess";
 
 export default {
   name: "Assess",
   data() {
     return {
+      activeNames: ["1"],
       // 遮罩层
       loading: true,
       // 选中数组
@@ -229,9 +229,19 @@ export default {
         assessUserName: null,
       },
       // 表单参数
-      form: {},
+      form: {
+        geoAssessInfo: [
+          {
+            remork: "",
+          },
+        ],
+      },
       // 表单校验
-      rules: {},
+      rules: {
+        assessDate: [
+          { required: true, message: "日期不能为空", trigger: "blur" },
+        ],
+      },
     };
   },
   created() {
@@ -280,9 +290,12 @@ export default {
     },
     /** 新增按钮操作 */
     handleAdd() {
-      this.reset();
-      this.open = true;
-      this.title = "添加评定表";
+      //   this.reset();
+      listAssessUser().then((response) => {
+        this.form.geoAssessInfo = response.rows;
+        this.open = true;
+        this.title = "添加评定表";
+      });
     },
     /** 修改按钮操作 */
     handleUpdate(row) {

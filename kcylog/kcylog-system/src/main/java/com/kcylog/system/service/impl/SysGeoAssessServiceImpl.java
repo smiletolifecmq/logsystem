@@ -1,11 +1,12 @@
 package com.kcylog.system.service.impl;
 
-import java.util.List;
+import com.kcylog.system.domain.SysGeoAssess;
+import com.kcylog.system.mapper.SysGeoAssessMapper;
+import com.kcylog.system.service.ISysGeoAssessService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-import com.kcylog.system.mapper.SysGeoAssessMapper;
-import com.kcylog.system.domain.SysGeoAssess;
-import com.kcylog.system.service.ISysGeoAssessService;
+
+import java.util.List;
 
 /**
  * 评定表Service业务层处理
@@ -89,5 +90,11 @@ public class SysGeoAssessServiceImpl implements ISysGeoAssessService
     public int deleteSysGeoAssessByAssessId(Long assessId)
     {
         return sysGeoAssessMapper.deleteSysGeoAssessByAssessId(assessId);
+    }
+
+    @Override
+    public SysGeoAssess selectSysGeoAssessByUserIdAndDate(SysGeoAssess sysGeoAssess)
+    {
+        return sysGeoAssessMapper.selectSysGeoAssessByUserIdAndDate(sysGeoAssess);
     }
 }

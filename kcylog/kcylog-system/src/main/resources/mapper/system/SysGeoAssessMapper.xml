@@ -9,24 +9,43 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
         <result property="assessDate"    column="assess_date"    />
         <result property="assessUserId"    column="assess_user_id"    />
         <result property="assessUserName"    column="assess_user_name"    />
+        <association property="geoAssessInfo" javaType="java.util.List" resultMap="SysGeoAssessInfoResult"/>
+    </resultMap>
+
+
+    <resultMap type="SysGeoAssessInfo" id="SysGeoAssessInfoResult">
+        <result property="assessInfoId"    column="assess_info_id"    />
+        <result property="assessId"    column="assess_id"    />
+        <result property="userId"    column="user_id"    />
+        <result property="userName"    column="user_name"    />
+        <result property="fitCoefficient"    column="fit_coefficient"    />
+        <result property="workCoefficient"    column="work_coefficient"    />
+        <result property="remark"    column="remark"    />
+        <result property="assessDate"    column="assess_date"    />
     </resultMap>
 
     <sql id="selectSysGeoAssessVo">
         select assess_id, assess_date, assess_user_id, assess_user_name from sys_geo_assess
     </sql>
 
+    <sql id="selectSysGeoAssessDetail">
+        select a.*, b.*
+        from sys_geo_assess a inner join sys_geo_assess_info as b on a.assess_id = b.assess_id
+    </sql>
+
     <select id="selectSysGeoAssessList" parameterType="SysGeoAssess" resultMap="SysGeoAssessResult">
         <include refid="selectSysGeoAssessVo"/>
-        <where>  
+        <where>
             <if test="assessDate != null "> and assess_date = #{assessDate}</if>
             <if test="assessUserId != null "> and assess_user_id = #{assessUserId}</if>
             <if test="assessUserName != null  and assessUserName != ''"> and assess_user_name like concat('%', #{assessUserName}, '%')</if>
         </where>
+        order by assess_id desc
     </select>
     
     <select id="selectSysGeoAssessByAssessId" parameterType="Long" resultMap="SysGeoAssessResult">
-        <include refid="selectSysGeoAssessVo"/>
-        where assess_id = #{assessId}
+        <include refid="selectSysGeoAssessDetail"/>
+        where a.assess_id = #{assessId}
     </select>
         
     <insert id="insertSysGeoAssess" parameterType="SysGeoAssess" useGeneratedKeys="true" keyProperty="assessId">
@@ -63,4 +82,9 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
             #{assessId}
         </foreach>
     </delete>
+
+    <select id="selectSysGeoAssessByUserIdAndDate" parameterType="SysGeoAssess" resultMap="SysGeoAssessResult">
+        <include refid="selectSysGeoAssessVo"/>
+        where assess_date = #{assessDate} and assess_user_id = #{assessUserId}
+    </select>
 </mapper>

@@ -7,6 +7,7 @@ import org.apache.commons.lang3.builder.ToStringBuilder;
 import org.apache.commons.lang3.builder.ToStringStyle;
 
 import java.util.Date;
+import java.util.List;
 
 /**
  * 评定表对象 sys_geo_assess
@@ -22,8 +23,8 @@ public class SysGeoAssess extends BaseEntity
     private Long assessId;
 
     /** 评定日期 */
-    @JsonFormat(pattern = "yyyy-MM-dd")
-    @Excel(name = "评定日期", width = 30, dateFormat = "yyyy-MM-dd")
+    @JsonFormat(pattern = "yyyy-MM")
+    @Excel(name = "评定日期", width = 30, dateFormat = "yyyy-MM")
     private Date assessDate;
 
     /** 评定人ID */
@@ -33,6 +34,16 @@ public class SysGeoAssess extends BaseEntity
     /** 评定人名称 */
     @Excel(name = "评定人名称")
     private String assessUserName;
+
+    private List<SysGeoAssessInfo> geoAssessInfo;
+
+    public List<SysGeoAssessInfo> getGeoAssessInfo() {
+        return geoAssessInfo;
+    }
+
+    public void setGeoAssessInfo(List<SysGeoAssessInfo> geoAssessInfo) {
+        this.geoAssessInfo = geoAssessInfo;
+    }
 
     public void setAssessId(Long assessId) 
     {

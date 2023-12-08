@@ -109,4 +109,10 @@ public class SysGeoUserServiceImpl implements ISysGeoUserService
     {
         return sysGeoUserMapper.updateSysChildGeoUser(sysGeoUser);
     }
+
+    @Override
+    public List<SysGeoUser> selectSysAssessUserByGeoUser(Long userId)
+    {
+        return sysGeoUserMapper.selectSysAssessUserByGeoUser(userId);
+    }
 }

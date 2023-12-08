@@ -42,3 +42,10 @@ export function delAssess(assessId) {
     method: 'delete'
   })
 }
+
+export function listAssessUser() {
+    return request({
+      url: '/system/geoAssess/listAssessUser',
+      method: 'get',
+    })
+  }
