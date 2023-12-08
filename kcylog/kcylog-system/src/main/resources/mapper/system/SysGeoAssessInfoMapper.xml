@@ -1,0 +1,85 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.kcylog.system.mapper.SysGeoAssessInfoMapper">
+    
+    <resultMap type="SysGeoAssessInfo" id="SysGeoAssessInfoResult">
+        <result property="assessInfoId"    column="assess_info_id"    />
+        <result property="assessId"    column="assess_id"    />
+        <result property="userId"    column="user_id"    />
+        <result property="userName"    column="user_name"    />
+        <result property="fitCoefficient"    column="fit_coefficient"    />
+        <result property="workCoefficient"    column="work_coefficient"    />
+        <result property="remark"    column="remark"    />
+        <result property="assessDate"    column="assess_date"    />
+    </resultMap>
+
+    <sql id="selectSysGeoAssessInfoVo">
+        select assess_info_id, assess_id, user_id, user_name, fit_coefficient, work_coefficient, remark, assess_date from sys_geo_assess_info
+    </sql>
+
+    <select id="selectSysGeoAssessInfoList" parameterType="SysGeoAssessInfo" resultMap="SysGeoAssessInfoResult">
+        <include refid="selectSysGeoAssessInfoVo"/>
+        <where>  
+            <if test="assessId != null "> and assess_id = #{assessId}</if>
+            <if test="userId != null "> and user_id = #{userId}</if>
+            <if test="userName != null  and userName != ''"> and user_name like concat('%', #{userName}, '%')</if>
+            <if test="fitCoefficient != null "> and fit_coefficient = #{fitCoefficient}</if>
+            <if test="workCoefficient != null "> and work_coefficient = #{workCoefficient}</if>
+            <if test="assessDate != null "> and assess_date = #{assessDate}</if>
+        </where>
+    </select>
+    
+    <select id="selectSysGeoAssessInfoByAssessInfoId" parameterType="Long" resultMap="SysGeoAssessInfoResult">
+        <include refid="selectSysGeoAssessInfoVo"/>
+        where assess_info_id = #{assessInfoId}
+    </select>
+        
+    <insert id="insertSysGeoAssessInfo" parameterType="SysGeoAssessInfo" useGeneratedKeys="true" keyProperty="assessInfoId">
+        insert into sys_geo_assess_info
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="assessId != null">assess_id,</if>
+            <if test="userId != null">user_id,</if>
+            <if test="userName != null and userName != ''">user_name,</if>
+            <if test="fitCoefficient != null">fit_coefficient,</if>
+            <if test="workCoefficient != null">work_coefficient,</if>
+            <if test="remark != null">remark,</if>
+            <if test="assessDate != null">assess_date,</if>
+         </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test="assessId != null">#{assessId},</if>
+            <if test="userId != null">#{userId},</if>
+            <if test="userName != null and userName != ''">#{userName},</if>
+            <if test="fitCoefficient != null">#{fitCoefficient},</if>
+            <if test="workCoefficient != null">#{workCoefficient},</if>
+            <if test="remark != null">#{remark},</if>
+            <if test="assessDate != null">#{assessDate},</if>
+         </trim>
+    </insert>
+
+    <update id="updateSysGeoAssessInfo" parameterType="SysGeoAssessInfo">
+        update sys_geo_assess_info
+        <trim prefix="SET" suffixOverrides=",">
+            <if test="assessId != null">assess_id = #{assessId},</if>
+            <if test="userId != null">user_id = #{userId},</if>
+            <if test="userName != null and userName != ''">user_name = #{userName},</if>
+            <if test="fitCoefficient != null">fit_coefficient = #{fitCoefficient},</if>
+            <if test="workCoefficient != null">work_coefficient = #{workCoefficient},</if>
+            <if test="remark != null">remark = #{remark},</if>
+            <if test="assessDate != null">assess_date = #{assessDate},</if>
+        </trim>
+        where assess_info_id = #{assessInfoId}
+    </update>
+
+    <delete id="deleteSysGeoAssessInfoByAssessInfoId" parameterType="Long">
+        delete from sys_geo_assess_info where assess_info_id = #{assessInfoId}
+    </delete>
+
+    <delete id="deleteSysGeoAssessInfoByAssessInfoIds" parameterType="String">
+        delete from sys_geo_assess_info where assess_info_id in 
+        <foreach item="assessInfoId" collection="array" open="(" separator="," close=")">
+            #{assessInfoId}
+        </foreach>
+    </delete>
+</mapper>
