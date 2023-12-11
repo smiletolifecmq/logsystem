@@ -18,6 +18,13 @@
         >
         </el-date-picker>
       </el-form-item>
+      <el-form-item label="评定人" prop="assessUserName">
+        <el-input
+          v-model="queryParams.assessUserName"
+          placeholder="请输入评定人名称"
+        >
+        </el-input>
+      </el-form-item>
       <el-form-item>
         <el-button
           type="primary"
