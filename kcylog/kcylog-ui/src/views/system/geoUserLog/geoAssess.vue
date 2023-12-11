@@ -209,11 +209,11 @@
       width="1200px"
       append-to-body
     >
-      <el-form ref="form" :model="form" label-width="80px">
+      <el-form ref="detailForm" :model="detailForm" label-width="80px">
         <el-form-item label="评定日期" prop="assessDate">
           <el-date-picker
             clearable
-            v-model="form.assessDate"
+            v-model="detailForm.assessDate"
             type="month"
             value-format="yyyy-MM"
             placeholder="请选择评定日期"
@@ -224,7 +224,7 @@
         <el-collapse v-model="activeNames">
           <el-collapse-item title="用户列表" name="1">
             <el-form-item
-              v-for="(geoAssess, index) in form.geoAssessInfo"
+              v-for="(geoAssess, index) in detailForm.geoAssessInfo"
               :key="index"
               prop="geoAssessInfo"
             >
@@ -336,6 +336,13 @@ export default {
           },
         ],
       },
+      detailForm: {
+        geoAssessInfo: [
+          {
+            remork: "",
+          },
+        ],
+      },
       // 表单校验
       rules: {
         assessDate: [
@@ -420,10 +427,9 @@ export default {
 
     /** 详情 */
     handleDetail(row) {
-      this.reset();
       const assessId = row.assessId || this.ids;
       getAssess(assessId).then((response) => {
-        this.form = response.data;
+        this.detailForm = response.data;
         this.detailOpen = true;
       });
     },
