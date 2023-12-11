@@ -1,0 +1,70 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.kcylog.system.mapper.SysGeoLogMapper">
+    
+    <resultMap type="SysGeoLog" id="SysGeoLogResult">
+        <result property="logId"    column="log_id"    />
+        <result property="logDate"    column="log_date"    />
+        <result property="userId"    column="user_id"    />
+        <result property="userName"    column="user_name"    />
+        <result property="createTime"    column="create_time"    />
+    </resultMap>
+
+    <sql id="selectSysGeoLogVo">
+        select log_id, log_date, user_id, user_name, create_time from sys_geo_log
+    </sql>
+
+    <select id="selectSysGeoLogList" parameterType="SysGeoLog" resultMap="SysGeoLogResult">
+        <include refid="selectSysGeoLogVo"/>
+        <where>  
+            <if test="logDate != null "> and log_date = #{logDate}</if>
+            <if test="userId != null "> and user_id = #{userId}</if>
+            <if test="userName != null  and userName != ''"> and user_name like concat('%', #{userName}, '%')</if>
+        </where>
+    </select>
+    
+    <select id="selectSysGeoLogByLogId" parameterType="Long" resultMap="SysGeoLogResult">
+        <include refid="selectSysGeoLogVo"/>
+        where log_id = #{logId}
+    </select>
+        
+    <insert id="insertSysGeoLog" parameterType="SysGeoLog" useGeneratedKeys="true" keyProperty="logId">
+        insert into sys_geo_log
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="logDate != null">log_date,</if>
+            <if test="userId != null">user_id,</if>
+            <if test="userName != null and userName != ''">user_name,</if>
+            <if test="createTime != null">create_time,</if>
+         </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test="logDate != null">#{logDate},</if>
+            <if test="userId != null">#{userId},</if>
+            <if test="userName != null and userName != ''">#{userName},</if>
+            <if test="createTime != null">#{createTime},</if>
+         </trim>
+    </insert>
+
+    <update id="updateSysGeoLog" parameterType="SysGeoLog">
+        update sys_geo_log
+        <trim prefix="SET" suffixOverrides=",">
+            <if test="logDate != null">log_date = #{logDate},</if>
+            <if test="userId != null">user_id = #{userId},</if>
+            <if test="userName != null and userName != ''">user_name = #{userName},</if>
+            <if test="createTime != null">create_time = #{createTime},</if>
+        </trim>
+        where log_id = #{logId}
+    </update>
+
+    <delete id="deleteSysGeoLogByLogId" parameterType="Long">
+        delete from sys_geo_log where log_id = #{logId}
+    </delete>
+
+    <delete id="deleteSysGeoLogByLogIds" parameterType="String">
+        delete from sys_geo_log where log_id in 
+        <foreach item="logId" collection="array" open="(" separator="," close=")">
+            #{logId}
+        </foreach>
+    </delete>
+</mapper>
