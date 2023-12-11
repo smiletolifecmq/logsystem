@@ -37,7 +37,6 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
         <include refid="selectSysGeoAssessVo"/>
         <where>
             <if test="assessDate != null "> and assess_date = #{assessDate}</if>
-            <if test="assessUserId != null "> and assess_user_id = #{assessUserId}</if>
             <if test="assessUserName != null  and assessUserName != ''"> and assess_user_name like concat('%', #{assessUserName}, '%')</if>
         </where>
         order by assess_id desc
@@ -86,5 +85,10 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
     <select id="selectSysGeoAssessByUserIdAndDate" parameterType="SysGeoAssess" resultMap="SysGeoAssessResult">
         <include refid="selectSysGeoAssessVo"/>
         where assess_date = #{assessDate} and assess_user_id = #{assessUserId}
+    </select>
+
+    <select id="selectSysGeoAssessByUserIdAndDateNotSelf" parameterType="SysGeoAssess" resultMap="SysGeoAssessResult">
+        <include refid="selectSysGeoAssessVo"/>
+        where assess_date = #{assessDate} and assess_user_id = #{assessUserId} and assess_id != #{assessId}
     </select>
 </mapper>

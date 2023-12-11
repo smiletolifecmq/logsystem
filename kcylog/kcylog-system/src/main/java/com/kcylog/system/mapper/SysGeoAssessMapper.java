@@ -61,4 +61,6 @@ public interface SysGeoAssessMapper
     public int deleteSysGeoAssessByAssessIds(Long[] assessIds);
 
     public SysGeoAssess selectSysGeoAssessByUserIdAndDate(SysGeoAssess sysGeoAssess);
+
+    public SysGeoAssess selectSysGeoAssessByUserIdAndDateNotSelf(SysGeoAssess sysGeoAssess);
 }

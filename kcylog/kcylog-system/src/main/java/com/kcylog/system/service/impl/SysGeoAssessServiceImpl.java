@@ -97,4 +97,10 @@ public class SysGeoAssessServiceImpl implements ISysGeoAssessService
     {
         return sysGeoAssessMapper.selectSysGeoAssessByUserIdAndDate(sysGeoAssess);
     }
+
+    @Override
+    public SysGeoAssess selectSysGeoAssessByUserIdAndDateNotSelf(SysGeoAssess sysGeoAssess)
+    {
+        return sysGeoAssessMapper.selectSysGeoAssessByUserIdAndDateNotSelf(sysGeoAssess);
+    }
 }

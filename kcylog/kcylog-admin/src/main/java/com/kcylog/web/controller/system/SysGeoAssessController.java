@@ -97,6 +97,19 @@ public class SysGeoAssessController extends BaseController {
     @Log(title = "评定表", businessType = BusinessType.UPDATE)
     @PutMapping
     public AjaxResult edit(@RequestBody SysGeoAssess sysGeoAssess) {
+        sysGeoAssess.setAssessUserId(SecurityUtils.getUserId());
+        sysGeoAssess.setAssessUserName(SecurityUtils.getUsername());
+        SysGeoAssess geoAssess = sysGeoAssessService.selectSysGeoAssessByUserIdAndDateNotSelf(sysGeoAssess);
+        if (geoAssess != null) {
+            return error("该日期已经完成评定了～");
+        }
+        Long[] assessIds = new Long[]{sysGeoAssess.getAssessId()};
+        sysGeoAssessInfoService.deleteSysGeoAssessInfoByAssessIds(assessIds);
+        for (SysGeoAssessInfo geoAssessInfo : sysGeoAssess.getGeoAssessInfo()) {
+            geoAssessInfo.setAssessId(sysGeoAssess.getAssessId());
+            geoAssessInfo.setAssessDate(sysGeoAssess.getAssessDate());
+            sysGeoAssessInfoService.insertSysGeoAssessInfo(geoAssessInfo);
+        }
         return toAjax(sysGeoAssessService.updateSysGeoAssess(sysGeoAssess));
     }
 
@@ -104,8 +117,10 @@ public class SysGeoAssessController extends BaseController {
      * 删除评定表
      */
     @Log(title = "评定表", businessType = BusinessType.DELETE)
+    @Transactional
     @DeleteMapping("/{assessIds}")
     public AjaxResult remove(@PathVariable Long[] assessIds) {
+        sysGeoAssessInfoService.deleteSysGeoAssessInfoByAssessIds(assessIds);
         return toAjax(sysGeoAssessService.deleteSysGeoAssessByAssessIds(assessIds));
     }
 

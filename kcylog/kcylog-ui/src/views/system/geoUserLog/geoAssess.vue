@@ -82,6 +82,7 @@
             icon="el-icon-edit"
             @click="handleUpdate(scope.row)"
             v-hasPermi="['system:assess:edit']"
+            v-if="showButton(scope.row)"
             >修改</el-button
           >
           <el-button
@@ -89,8 +90,17 @@
             type="text"
             icon="el-icon-delete"
             @click="handleDelete(scope.row)"
+            v-if="showButton(scope.row)"
             v-hasPermi="['system:assess:remove']"
             >删除</el-button
+          >
+
+          <el-button
+            size="mini"
+            type="text"
+            icon="el-icon-tickets"
+            @click="handleDetail(scope.row)"
+            >详情</el-button
           >
         </template>
       </el-table-column>
@@ -184,6 +194,87 @@
         <el-button @click="cancel">取 消</el-button>
       </div>
     </el-dialog>
+
+    <!-- 详情对话框 -->
+    <el-dialog
+      title="详情"
+      :visible.sync="detailOpen"
+      width="1200px"
+      append-to-body
+    >
+      <el-form ref="form" :model="form" label-width="80px">
+        <el-form-item label="评定日期" prop="assessDate">
+          <el-date-picker
+            clearable
+            v-model="form.assessDate"
+            type="month"
+            value-format="yyyy-MM"
+            placeholder="请选择评定日期"
+            disabled
+          >
+          </el-date-picker>
+        </el-form-item>
+        <el-collapse v-model="activeNames">
+          <el-collapse-item title="用户列表" name="1">
+            <el-form-item
+              v-for="(geoAssess, index) in form.geoAssessInfo"
+              :key="index"
+              prop="geoAssessInfo"
+            >
+              <el-row>
+                <el-col :span="5" style="margin-left: -80px">
+                  <el-form-item label="用户名" prop="userName">
+                    <el-input
+                      v-model="geoAssess.userName"
+                      placeholder="请输入用户名"
+                      disabled
+                    />
+                  </el-form-item>
+                </el-col>
+                <el-col :span="5">
+                  <el-form-item label="配合系数" prop="fitCoefficient">
+                    <el-input-number
+                      v-model="geoAssess.fitCoefficient"
+                      :precision="2"
+                      :step="0.1"
+                      :min="0"
+                      :controls="false"
+                      size="small"
+                      disabled
+                    ></el-input-number>
+                  </el-form-item>
+                </el-col>
+                <el-col :span="7">
+                  <el-form-item
+                    label="质量系数"
+                    prop="workCoefficient"
+                    size="small"
+                  >
+                    <el-input-number
+                      v-model="geoAssess.workCoefficient"
+                      :precision="2"
+                      :step="0.1"
+                      :min="0"
+                      :controls="false"
+                      disabled
+                    ></el-input-number>
+                  </el-form-item>
+                </el-col>
+                <el-col :span="10" style="margin-left: -100px">
+                  <el-form-item label="备注" prop="remark">
+                    <el-input
+                      v-model="geoAssess.remark"
+                      placeholder="请输入备注"
+                      disabled
+                    />
+                  </el-form-item>
+                </el-col>
+              </el-row>
+            </el-form-item>
+          </el-collapse-item>
+        </el-collapse>
+      </el-form>
+    </el-dialog>
   </div>
 </template>
 
@@ -196,11 +287,13 @@ import {
   updateAssess,
   listAssessUser,
 } from "@/api/system/geoAssess";
+import userInfo from "@/store/modules/user";
 
 export default {
   name: "Assess",
   data() {
     return {
+      detailOpen: false,
       activeNames: ["1"],
       // 遮罩层
       loading: true,
@@ -248,6 +341,9 @@ export default {
     this.getList();
   },
   methods: {
+    showButton(assess) {
+      return assess.assessUserId == userInfo.state.userId;
+    },
     /** 查询评定表列表 */
     getList() {
       this.loading = true;
@@ -261,6 +357,13 @@ export default {
     cancel() {
       this.open = false;
       this.reset();
+      this.form = {
+        geoAssessInfo: [
+          {
+            remork: "",
+          },
+        ],
+      };
     },
     // 表单重置
     reset() {
@@ -307,6 +410,17 @@ export default {
         this.title = "修改评定表";
       });
     },
+
+    /** 详情 */
+    handleDetail(row) {
+      this.reset();
+      const assessId = row.assessId || this.ids;
+      getAssess(assessId).then((response) => {
+        this.form = response.data;
+        this.detailOpen = true;
+      });
+    },
+
     /** 提交按钮 */
     submitForm() {
       this.$refs["form"].validate((valid) => {

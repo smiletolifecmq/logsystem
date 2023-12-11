@@ -1,7 +1,8 @@
 package com.kcylog.system.service;
 
-import java.util.List;
 import com.kcylog.system.domain.SysGeoAssessInfo;
+
+import java.util.List;
 
 /**
  * 评定详情表Service接口
@@ -58,4 +59,6 @@ public interface ISysGeoAssessInfoService
      * @return 结果
      */
     public int deleteSysGeoAssessInfoByAssessInfoId(Long assessInfoId);
+
+    public int deleteSysGeoAssessInfoByAssessIds(Long[] assessIds);
 }

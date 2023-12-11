@@ -82,4 +82,11 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
             #{assessInfoId}
         </foreach>
     </delete>
+
+    <delete id="deleteSysGeoAssessInfoByAssessIds" parameterType="String">
+        delete from sys_geo_assess_info where assess_id in
+        <foreach item="assessId" collection="array" open="(" separator="," close=")">
+            #{assessId}
+        </foreach>
+    </delete>
 </mapper>
