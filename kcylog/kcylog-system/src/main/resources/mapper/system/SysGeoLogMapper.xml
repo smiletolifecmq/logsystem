@@ -10,10 +10,29 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
         <result property="userId"    column="user_id"    />
         <result property="userName"    column="user_name"    />
         <result property="createTime"    column="create_time"    />
+        <association property="geoLogInfo" javaType="java.util.List" resultMap="SysGeoLogInfoResult"/>
+    </resultMap>
+
+
+    <resultMap type="SysGeoLogInfo" id="SysGeoLogInfoResult">
+        <result property="logId"    column="log_id"    />
+        <result property="typeArr"    column="type_arr"    />
+        <result property="typeId"    column="type_id"    />
+        <result property="difficulty"    column="difficulty"    />
+        <result property="difficultyDegree"    column="difficulty_degree"    />
+        <result property="logDate"    column="log_date"    />
+        <result property="workload"    column="workload"    />
+        <result property="typeMoney"    column="type_money"    />
+        <result property="projectId"    column="project_id"    />
+        <result property="degree"    column="degree"    />
     </resultMap>
 
     <sql id="selectSysGeoLogVo">
         select log_id, log_date, user_id, user_name, create_time from sys_geo_log
+    </sql>
+
+    <sql id="selectSysGeoLogDetailVo">
+        select a.*,b.* from sys_geo_log as a inner join sys_geo_log_info as b on a.log_id = b.log_id
     </sql>
 
     <select id="selectSysGeoLogList" parameterType="SysGeoLog" resultMap="SysGeoLogResult">
@@ -31,11 +50,12 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
                 #{userId}
             </foreach>
         </where>
+        order by log_id desc
     </select>
     
     <select id="selectSysGeoLogByLogId" parameterType="Long" resultMap="SysGeoLogResult">
-        <include refid="selectSysGeoLogVo"/>
-        where log_id = #{logId}
+        <include refid="selectSysGeoLogDetailVo"/>
+        where a.log_id = #{logId}
     </select>
         
     <insert id="insertSysGeoLog" parameterType="SysGeoLog" useGeneratedKeys="true" keyProperty="logId">
@@ -79,5 +99,10 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
     <select id="selectSysGeoLogByUserIdAndDate" parameterType="SysGeoLog" resultMap="SysGeoLogResult">
         <include refid="selectSysGeoLogVo"/>
         where log_date = #{logDate} and user_id = #{userId}
+    </select>
+
+    <select id="selectSysGeoLogByUserIdAndDateNotSelf" parameterType="SysGeoLog" resultMap="SysGeoLogResult">
+        <include refid="selectSysGeoLogVo"/>
+        where log_date = #{logDate} and user_id = #{userId} and log_id != #{logId}
     </select>
 </mapper>

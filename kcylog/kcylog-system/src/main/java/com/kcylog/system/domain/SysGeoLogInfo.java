@@ -59,7 +59,27 @@ public class SysGeoLogInfo extends BaseEntity
     @Excel(name = "关联项目ID")
     private Long projectId;
 
-    protected Long[] typeArrJson;
+    private Long[] typeArrJson;
+
+    private Long degree;
+
+    private boolean disabled;
+
+    public boolean getDisabled() {
+        return disabled;
+    }
+
+    public void setDisabled(boolean disabled) {
+        this.disabled = disabled;
+    }
+
+    public Long getDegree() {
+        return degree;
+    }
+
+    public void setDegree(Long degree) {
+        this.degree = degree;
+    }
 
     public Long[] getTypeArrJson() {
         return typeArrJson;

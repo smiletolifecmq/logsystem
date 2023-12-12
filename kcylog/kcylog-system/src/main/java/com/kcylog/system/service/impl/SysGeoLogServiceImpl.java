@@ -1,12 +1,13 @@
 package com.kcylog.system.service.impl;
 
-import java.util.List;
 import com.kcylog.common.utils.DateUtils;
+import com.kcylog.system.domain.SysGeoLog;
+import com.kcylog.system.mapper.SysGeoLogMapper;
+import com.kcylog.system.service.ISysGeoLogService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-import com.kcylog.system.mapper.SysGeoLogMapper;
-import com.kcylog.system.domain.SysGeoLog;
-import com.kcylog.system.service.ISysGeoLogService;
+
+import java.util.List;
 
 /**
  * 地理部门日志Service业务层处理
@@ -97,5 +98,11 @@ public class SysGeoLogServiceImpl implements ISysGeoLogService
     public SysGeoLog selectSysGeoLogByUserIdAndDate(SysGeoLog sysGeoLog)
     {
         return sysGeoLogMapper.selectSysGeoLogByUserIdAndDate(sysGeoLog);
+    }
+
+    @Override
+    public SysGeoLog selectSysGeoLogByUserIdAndDateNotSelf(SysGeoLog sysGeoLog)
+    {
+        return sysGeoLogMapper.selectSysGeoLogByUserIdAndDateNotSelf(sysGeoLog);
     }
 }

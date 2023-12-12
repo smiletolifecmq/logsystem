@@ -15,10 +15,11 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
         <result property="workload"    column="workload"    />
         <result property="typeMoney"    column="type_money"    />
         <result property="projectId"    column="project_id"    />
+        <result property="degree"    column="degree"    />
     </resultMap>
 
     <sql id="selectSysGeoLogInfoVo">
-        select log_info_id, log_id, type_arr, type_id, difficulty, difficulty_degree, log_date, workload, type_money, project_id from sys_geo_log_info
+        select log_info_id, log_id, type_arr, type_id, difficulty, difficulty_degree, log_date, workload, type_money, project_id, degree from sys_geo_log_info
     </sql>
 
     <select id="selectSysGeoLogInfoList" parameterType="SysGeoLogInfo" resultMap="SysGeoLogInfoResult">
@@ -53,6 +54,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
             <if test="workload != null">workload,</if>
             <if test="typeMoney != null">type_money,</if>
             <if test="projectId != null">project_id,</if>
+            <if test="degree != null">degree,</if>
          </trim>
         <trim prefix="values (" suffix=")" suffixOverrides=",">
             <if test="logId != null">#{logId},</if>
@@ -64,6 +66,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
             <if test="workload != null">#{workload},</if>
             <if test="typeMoney != null">#{typeMoney},</if>
             <if test="projectId != null">#{projectId},</if>
+            <if test="degree != null">#{degree},</if>
          </trim>
     </insert>
 
@@ -79,6 +82,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
             <if test="workload != null">workload = #{workload},</if>
             <if test="typeMoney != null">type_money = #{typeMoney},</if>
             <if test="projectId != null">project_id = #{projectId},</if>
+            <if test="degree != null">degree = #{degree},</if>
         </trim>
         where log_info_id = #{logInfoId}
     </update>
@@ -91,6 +95,13 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
         delete from sys_geo_log_info where log_info_id in 
         <foreach item="logInfoId" collection="array" open="(" separator="," close=")">
             #{logInfoId}
+        </foreach>
+    </delete>
+
+    <delete id="deleteSysGeoLogInfoByLogIds" parameterType="String">
+        delete from sys_geo_log_info where log_id in
+        <foreach item="logId" collection="array" open="(" separator="," close=")">
+            #{logId}
         </foreach>
     </delete>
 </mapper>

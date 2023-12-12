@@ -61,4 +61,6 @@ public interface ISysGeoLogService
     public int deleteSysGeoLogByLogId(Long logId);
 
     public SysGeoLog selectSysGeoLogByUserIdAndDate(SysGeoLog sysGeoLog);
+
+    public SysGeoLog selectSysGeoLogByUserIdAndDateNotSelf(SysGeoLog sysGeoLog);
 }

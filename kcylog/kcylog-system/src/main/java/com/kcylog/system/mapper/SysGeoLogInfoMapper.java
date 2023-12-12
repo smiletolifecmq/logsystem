@@ -1,7 +1,8 @@
 package com.kcylog.system.mapper;
 
-import java.util.List;
 import com.kcylog.system.domain.SysGeoLogInfo;
+
+import java.util.List;
 
 /**
  * 地理部门日志详情Mapper接口
@@ -58,4 +59,6 @@ public interface SysGeoLogInfoMapper
      * @return 结果
      */
     public int deleteSysGeoLogInfoByLogInfoIds(Long[] logInfoIds);
+
+    public int deleteSysGeoLogInfoByLogIds(Long[] logIds);
 }

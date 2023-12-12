@@ -51,7 +51,7 @@
           icon="el-icon-plus"
           size="mini"
           @click="handleAdd"
-          v-hasPermi="['system:log:add']"
+          v-hasPermi="['system:geoLog:add']"
           >新增</el-button
         >
       </el-col>
@@ -62,7 +62,7 @@
           icon="el-icon-download"
           size="mini"
           @click="handleExport"
-          v-hasPermi="['system:log:export']"
+          v-hasPermi="['system:geoLog:export']"
           >导出</el-button
         >
       </el-col>
@@ -73,7 +73,7 @@
           icon="el-icon-download"
           size="mini"
           @click="handleExport"
-          v-hasPermi="['system:log:exportWord']"
+          v-hasPermi="['system:geoLog:exportWord']"
           >word导出</el-button
         >
       </el-col>
@@ -84,7 +84,7 @@
           icon="el-icon-download"
           size="mini"
           @click="handleExport"
-          v-hasPermi="['system:log:exportExcel']"
+          v-hasPermi="['system:geoLog:exportExcel']"
           >excle导出</el-button
         >
       </el-col>
@@ -121,15 +121,15 @@
             type="text"
             icon="el-icon-edit"
             @click="handleUpdate(scope.row)"
-            v-hasPermi="['system:log:edit']"
+            v-if="showButton(scope.row)"
             >修改</el-button
           >
           <el-button
             size="mini"
             type="text"
             icon="el-icon-delete"
+            v-if="showButton(scope.row)"
             @click="handleDelete(scope.row)"
-            v-hasPermi="['system:log:remove']"
             >删除</el-button
           >
         </template>
@@ -308,6 +308,7 @@ import {
 } from "@/api/system/geoLog";
 import { listType } from "@/api/system/geoType";
 import { listProject } from "@/api/system/geoProject";
+import userInfo from "@/store/modules/user";
 
 export default {
   name: "Log",
@@ -394,6 +395,18 @@ export default {
     });
   },
   methods: {
+    showButton(user) {
+      const now = new Date();
+      const createTimeDate = new Date(user.createTime);
+      const todayStart = new Date(
+        now.getFullYear(),
+        now.getMonth(),
+        now.getDate()
+      );
+      return (
+        createTimeDate > todayStart && user.userId == userInfo.state.userId
+      );
+    },
     handleProjectIdChange() {
       this.$forceUpdate();
     },
@@ -408,6 +421,7 @@ export default {
       this.form.geoLogInfo[index].unit = "单位:" + typeObj.unit;
       this.form.geoLogInfo[index].difficulty = 2;
       this.form.geoLogInfo[index].typeId = typeId;
+      this.form.geoLogInfo[index].degree = typeObj.degree;
       if (typeObj.degree === 0) {
         this.form.geoLogInfo[index].disabled = true;
       } else {

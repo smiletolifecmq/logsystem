@@ -24,14 +24,13 @@ import java.util.List;
 
 /**
  * 地理部门日志Controller
- * 
+ *
  * @author ruoyi
  * @date 2023-12-11
  */
 @RestController
 @RequestMapping("/system/geoLog")
-public class SysGeoLogController extends BaseController
-{
+public class SysGeoLogController extends BaseController {
     @Autowired
     private ISysGeoLogService sysGeoLogService;
 
@@ -51,8 +50,7 @@ public class SysGeoLogController extends BaseController
      * 查询地理部门日志列表
      */
     @GetMapping("/list")
-    public TableDataInfo list(SysGeoLog sysGeoLog)
-    {
+    public TableDataInfo list(SysGeoLog sysGeoLog) {
         startPage();
         //查找登录用户可以查看的用户日志权限
         Long userId = SecurityUtils.getUserId();
@@ -60,7 +58,7 @@ public class SysGeoLogController extends BaseController
         List<Long> longIdsList = new ArrayList<>();
         sysGeoLog.setLookUserIds(longIdsList);
         sysGeoLog.getLookUserIds().add(userId);
-        for (SysGeoUser sysGeoUser:geoUsers){
+        for (SysGeoUser sysGeoUser : geoUsers) {
             sysGeoLog.getLookUserIds().add(sysGeoUser.getUserId());
         }
         //查找拥有查看日志的记录
@@ -73,8 +71,7 @@ public class SysGeoLogController extends BaseController
      */
     @Log(title = "地理部门日志", businessType = BusinessType.EXPORT)
     @PostMapping("/export")
-    public void export(HttpServletResponse response, SysGeoLog sysGeoLog)
-    {
+    public void export(HttpServletResponse response, SysGeoLog sysGeoLog) {
         List<SysGeoLog> list = sysGeoLogService.selectSysGeoLogList(sysGeoLog);
         ExcelUtil<SysGeoLog> util = new ExcelUtil<SysGeoLog>(SysGeoLog.class);
         util.exportExcel(response, list, "地理部门日志数据");
@@ -84,9 +81,19 @@ public class SysGeoLogController extends BaseController
      * 获取地理部门日志详细信息
      */
     @GetMapping(value = "/{logId}")
-    public AjaxResult getInfo(@PathVariable("logId") Long logId)
-    {
-        return success(sysGeoLogService.selectSysGeoLogByLogId(logId));
+    public AjaxResult getInfo(@PathVariable("logId") Long logId) {
+        SysGeoLog geoLog = sysGeoLogService.selectSysGeoLogByLogId(logId);
+        for (SysGeoLogInfo geoLogInfo : geoLog.getGeoLogInfo()) {
+            Gson gson = new Gson();
+            Long[] parsedArray = gson.fromJson(geoLogInfo.getTypeArr(), Long[].class);
+            geoLogInfo.setTypeArrJson(parsedArray);
+            if (geoLogInfo.getDegree() == 0){
+                geoLogInfo.setDisabled(true);
+            }else if (geoLogInfo.getDegree() == 1){
+                geoLogInfo.setDisabled(false);
+            }
+        }
+        return success(geoLog);
     }
 
     /**
@@ -95,8 +102,7 @@ public class SysGeoLogController extends BaseController
     @Log(title = "地理部门日志", businessType = BusinessType.INSERT)
     @Transactional
     @PostMapping
-    public AjaxResult add(@RequestBody SysGeoLog sysGeoLog)
-    {
+    public AjaxResult add(@RequestBody SysGeoLog sysGeoLog) {
         sysGeoLog.setUserId(SecurityUtils.getUserId());
         sysGeoLog.setUserName(SecurityUtils.getUsername());
         SysGeoLog geoLog = sysGeoLogService.selectSysGeoLogByUserIdAndDate(sysGeoLog);
@@ -109,11 +115,11 @@ public class SysGeoLogController extends BaseController
             Gson gson = new Gson();
             String json = gson.toJson(geoLogInfo.getTypeArrJson());
             geoLogInfo.setTypeArr(json);
-            if (geoLogInfo.getDifficulty() == 1){
+            if (geoLogInfo.getDifficulty() == 1) {
                 geoLogInfo.setDifficultyDegree(simple);
-            }else if(geoLogInfo.getDifficulty() == 3){
+            } else if (geoLogInfo.getDifficulty() == 3) {
                 geoLogInfo.setDifficultyDegree(difficulty);
-            }else{
+            } else {
                 geoLogInfo.setDifficultyDegree(generally);
             }
             geoLogInfo.setLogDate(sysGeoLog.getLogDate());
@@ -126,9 +132,33 @@ public class SysGeoLogController extends BaseController
      * 修改地理部门日志
      */
     @Log(title = "地理部门日志", businessType = BusinessType.UPDATE)
+    @Transactional
     @PutMapping
-    public AjaxResult edit(@RequestBody SysGeoLog sysGeoLog)
-    {
+    public AjaxResult edit(@RequestBody SysGeoLog sysGeoLog) {
+        sysGeoLog.setUserId(SecurityUtils.getUserId());
+        sysGeoLog.setUserName(SecurityUtils.getUsername());
+        SysGeoLog geoLog = sysGeoLogService.selectSysGeoLogByUserIdAndDateNotSelf(sysGeoLog);
+        if (geoLog != null) {
+            return error("该日期已经完成日志填写～");
+        }
+        Long[] logIds = {sysGeoLog.getLogId()};
+        sysGeoLogInfoService.deleteSysGeoLogInfoByLogIds(logIds);
+        for (SysGeoLogInfo geoLogInfo : sysGeoLog.getGeoLogInfo()) {
+            geoLogInfo.setLogId(sysGeoLog.getLogId());
+            Gson gson = new Gson();
+            String json = gson.toJson(geoLogInfo.getTypeArrJson());
+            geoLogInfo.setTypeArr(json);
+            if (geoLogInfo.getDifficulty() == 1) {
+                geoLogInfo.setDifficultyDegree(simple);
+            } else if (geoLogInfo.getDifficulty() == 3) {
+                geoLogInfo.setDifficultyDegree(difficulty);
+            } else {
+                geoLogInfo.setDifficultyDegree(generally);
+            }
+            geoLogInfo.setLogDate(sysGeoLog.getLogDate());
+            sysGeoLogInfoService.insertSysGeoLogInfo(geoLogInfo);
+        }
+
         return toAjax(sysGeoLogService.updateSysGeoLog(sysGeoLog));
     }
 
@@ -136,9 +166,10 @@ public class SysGeoLogController extends BaseController
      * 删除地理部门日志
      */
     @Log(title = "地理部门日志", businessType = BusinessType.DELETE)
-	@DeleteMapping("/{logIds}")
-    public AjaxResult remove(@PathVariable Long[] logIds)
-    {
+    @Transactional
+    @DeleteMapping("/{logIds}")
+    public AjaxResult remove(@PathVariable Long[] logIds) {
+        sysGeoLogInfoService.deleteSysGeoLogInfoByLogIds(logIds);
         return toAjax(sysGeoLogService.deleteSysGeoLogByLogIds(logIds));
     }
 }

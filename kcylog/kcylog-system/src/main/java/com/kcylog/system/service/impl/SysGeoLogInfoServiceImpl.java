@@ -1,11 +1,12 @@
 package com.kcylog.system.service.impl;
 
-import java.util.List;
+import com.kcylog.system.domain.SysGeoLogInfo;
+import com.kcylog.system.mapper.SysGeoLogInfoMapper;
+import com.kcylog.system.service.ISysGeoLogInfoService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-import com.kcylog.system.mapper.SysGeoLogInfoMapper;
-import com.kcylog.system.domain.SysGeoLogInfo;
-import com.kcylog.system.service.ISysGeoLogInfoService;
+
+import java.util.List;
 
 /**
  * 地理部门日志详情Service业务层处理
@@ -89,5 +90,11 @@ public class SysGeoLogInfoServiceImpl implements ISysGeoLogInfoService
     public int deleteSysGeoLogInfoByLogInfoId(Long logInfoId)
     {
         return sysGeoLogInfoMapper.deleteSysGeoLogInfoByLogInfoId(logInfoId);
+    }
+
+    @Override
+    public int deleteSysGeoLogInfoByLogIds(Long[] logIds)
+    {
+        return sysGeoLogInfoMapper.deleteSysGeoLogInfoByLogIds(logIds);
     }
 }
