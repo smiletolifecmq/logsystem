@@ -119,6 +119,13 @@
           <el-button
             size="mini"
             type="text"
+            icon="el-icon-tickets"
+            @click="handleDetail(scope.row)"
+            >详情</el-button
+          >
+          <el-button
+            size="mini"
+            type="text"
             icon="el-icon-edit"
             @click="handleUpdate(scope.row)"
             v-if="showButton(scope.row)"
@@ -295,6 +302,120 @@
         <el-button @click="cancel">取 消</el-button>
       </div>
     </el-dialog>
+
+    <el-dialog
+      title="详情"
+      :visible.sync="detailOpen"
+      width="1200px"
+      append-to-body
+    >
+      <el-form
+        ref="detailForm"
+        :model="detailForm"
+        :rules="rules"
+        label-width="80px"
+      >
+        <el-form-item label="日志日期" prop="logDate">
+          <el-date-picker
+            clearable
+            v-model="detailForm.logDate"
+            type="date"
+            value-format="yyyy-MM-dd"
+            placeholder="请选择日志日期"
+            disabled
+          >
+          </el-date-picker>
+        </el-form-item>
+        <el-collapse v-model="activeNames">
+          <el-collapse-item title="日志内容" name="1">
+            <el-form-item
+              v-for="(logInfo, index) in detailForm.geoLogInfo"
+              :key="index"
+              prop="geoLogInfo"
+            >
+              <el-row>
+                <el-col :span="5">
+                  <el-form-item
+                    label="类型"
+                    prop="typeArrJson"
+                    style="margin-left: -100px"
+                  >
+                    <el-cascader
+                      disabled
+                      filterable
+                      :options="typeList"
+                      v-model="logInfo.typeArrJson"
+                      :show-all-levels="false"
+                      @change="handleCascaderChange(index, $event)"
+                    ></el-cascader>
+                  </el-form-item>
+                </el-col>
+                <el-col :span="5">
+                  <el-form-item
+                    label="难度"
+                    style="margin-left: -70px"
+                    prop="difficulty"
+                  >
+                    <el-select
+                      disabled
+                      @change="handleDifficultyChange()"
+                      v-model="logInfo.difficulty"
+                      placeholder="请选择"
+                    >
+                      <el-option
+                        v-for="item in difficultys"
+                        :key="item.value"
+                        :label="item.label"
+                        :value="item.value"
+                      >
+                      </el-option>
+                    </el-select>
+                  </el-form-item>
+                </el-col>
+                <el-col :span="5">
+                  <el-form-item
+                    label="工作量"
+                    prop="workload"
+                    style="margin-left: -10px"
+                  >
+                    <el-input-number
+                      v-model="logInfo.workload"
+                      :precision="2"
+                      :step="0.1"
+                      :min="0"
+                      :controls="false"
+                      size="small"
+                      :placeholder="logInfo.unit"
+                      disabled
+                    ></el-input-number>
+                  </el-form-item>
+                </el-col>
+                <el-col :span="5">
+                  <el-form-item label="关联项目">
+                    <el-select
+                      v-model="logInfo.projectId"
+                      placeholder="请选择"
+                      filterable
+                      clearable
+                      @change="handleProjectIdChange()"
+                      disabled
+                    >
+                      <el-option
+                        v-for="item in projectList"
+                        :key="item.projectId"
+                        :label="item.projectNum"
+                        :value="item.projectId"
+                      >
+                      </el-option>
+                    </el-select>
+                  </el-form-item>
+                </el-col>
+              </el-row>
+            </el-form-item>
+          </el-collapse-item>
+        </el-collapse>
+      </el-form>
+    </el-dialog>
   </div>
 </template>
 
@@ -361,6 +482,7 @@ export default {
       title: "",
       // 是否显示弹出层
       open: false,
+      detailOpen: false,
       // 查询参数
       queryParams: {
         pageNum: 1,
@@ -371,6 +493,7 @@ export default {
       },
       // 表单参数
       form: {},
+      detailForm: {},
       // 表单校验
       rules: {
         logDate: [
@@ -500,6 +623,15 @@ export default {
         this.title = "修改日志";
       });
     },
+
+    handleDetail(row) {
+      const logId = row.logId || this.ids;
+      getLog(logId).then((response) => {
+        this.detailForm = response.data;
+        this.detailOpen = true;
+      });
+    },
+
     /** 提交按钮 */
     submitForm() {
       this.$refs["form"].validate((valid) => {
