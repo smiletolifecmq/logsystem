@@ -72,6 +72,14 @@ public class SysGeoLogController extends BaseController {
     @Log(title = "地理部门日志", businessType = BusinessType.EXPORT)
     @PostMapping("/export")
     public void export(HttpServletResponse response, SysGeoLog sysGeoLog) {
+        Long userId = SecurityUtils.getUserId();
+        List<SysGeoUser> geoUsers = sysGeoUserService.selectSysAssessUserByGeoUser(userId);
+        List<Long> longIdsList = new ArrayList<>();
+        sysGeoLog.setLookUserIds(longIdsList);
+        sysGeoLog.getLookUserIds().add(userId);
+        for (SysGeoUser sysGeoUser : geoUsers) {
+            sysGeoLog.getLookUserIds().add(sysGeoUser.getUserId());
+        }
         List<SysGeoLog> list = sysGeoLogService.selectSysGeoLogList(sysGeoLog);
         ExcelUtil<SysGeoLog> util = new ExcelUtil<SysGeoLog>(SysGeoLog.class);
         util.exportExcel(response, list, "地理部门日志数据");
