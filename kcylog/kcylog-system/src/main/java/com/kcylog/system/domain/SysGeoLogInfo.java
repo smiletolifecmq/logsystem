@@ -59,6 +59,16 @@ public class SysGeoLogInfo extends BaseEntity
     @Excel(name = "关联项目ID")
     private Long projectId;
 
+    protected Long[] typeArrJson;
+
+    public Long[] getTypeArrJson() {
+        return typeArrJson;
+    }
+
+    public void setTypeArrJson(Long[] typeArrJson) {
+        this.typeArrJson = typeArrJson;
+    }
+
     public void setLogInfoId(Long logInfoId) 
     {
         this.logInfoId = logInfoId;

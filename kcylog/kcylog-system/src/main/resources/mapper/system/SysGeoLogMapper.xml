@@ -75,4 +75,9 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
             #{logId}
         </foreach>
     </delete>
+
+    <select id="selectSysGeoLogByUserIdAndDate" parameterType="SysGeoLog" resultMap="SysGeoLogResult">
+        <include refid="selectSysGeoLogVo"/>
+        where log_date = #{logDate} and user_id = #{userId}
+    </select>
 </mapper>

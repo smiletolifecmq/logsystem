@@ -92,4 +92,10 @@ public class SysGeoLogServiceImpl implements ISysGeoLogService
     {
         return sysGeoLogMapper.deleteSysGeoLogByLogId(logId);
     }
+
+    @Override
+    public SysGeoLog selectSysGeoLogByUserIdAndDate(SysGeoLog sysGeoLog)
+    {
+        return sysGeoLogMapper.selectSysGeoLogByUserIdAndDate(sysGeoLog);
+    }
 }

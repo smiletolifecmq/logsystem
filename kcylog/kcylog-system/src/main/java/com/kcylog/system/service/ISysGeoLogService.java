@@ -1,7 +1,8 @@
 package com.kcylog.system.service;
 
-import java.util.List;
 import com.kcylog.system.domain.SysGeoLog;
+
+import java.util.List;
 
 /**
  * 地理部门日志Service接口
@@ -58,4 +59,6 @@ public interface ISysGeoLogService
      * @return 结果
      */
     public int deleteSysGeoLogByLogId(Long logId);
+
+    public SysGeoLog selectSysGeoLogByUserIdAndDate(SysGeoLog sysGeoLog);
 }

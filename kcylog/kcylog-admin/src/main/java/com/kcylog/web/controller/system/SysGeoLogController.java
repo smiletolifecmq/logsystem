@@ -1,5 +1,6 @@
 package com.kcylog.web.controller.system;
 
+import com.google.gson.Gson;
 import com.kcylog.common.annotation.Log;
 import com.kcylog.common.core.controller.BaseController;
 import com.kcylog.common.core.domain.AjaxResult;
@@ -8,10 +9,13 @@ import com.kcylog.common.enums.BusinessType;
 import com.kcylog.common.utils.SecurityUtils;
 import com.kcylog.common.utils.poi.ExcelUtil;
 import com.kcylog.system.domain.SysGeoLog;
+import com.kcylog.system.domain.SysGeoLogInfo;
 import com.kcylog.system.domain.SysGeoUser;
+import com.kcylog.system.service.ISysGeoLogInfoService;
 import com.kcylog.system.service.ISysGeoLogService;
 import com.kcylog.system.service.ISysGeoUserService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.bind.annotation.*;
 
 import javax.servlet.http.HttpServletResponse;
@@ -33,6 +37,15 @@ public class SysGeoLogController extends BaseController
 
     @Autowired
     private ISysGeoUserService sysGeoUserService;
+
+    @Autowired
+    private ISysGeoLogInfoService sysGeoLogInfoService;
+
+    private static double simple = 0.8;
+
+    private static double generally = 1;
+
+    private static double difficulty = 1.2;
 
     /**
      * 查询地理部门日志列表
@@ -80,10 +93,33 @@ public class SysGeoLogController extends BaseController
      * 新增地理部门日志
      */
     @Log(title = "地理部门日志", businessType = BusinessType.INSERT)
+    @Transactional
     @PostMapping
     public AjaxResult add(@RequestBody SysGeoLog sysGeoLog)
     {
-        return toAjax(sysGeoLogService.insertSysGeoLog(sysGeoLog));
+        sysGeoLog.setUserId(SecurityUtils.getUserId());
+        sysGeoLog.setUserName(SecurityUtils.getUsername());
+        SysGeoLog geoLog = sysGeoLogService.selectSysGeoLogByUserIdAndDate(sysGeoLog);
+        if (geoLog != null) {
+            return error("该日期已经完成日志填写～");
+        }
+        sysGeoLogService.insertSysGeoLog(sysGeoLog);
+        for (SysGeoLogInfo geoLogInfo : sysGeoLog.getGeoLogInfo()) {
+            geoLogInfo.setLogId(sysGeoLog.getLogId());
+            Gson gson = new Gson();
+            String json = gson.toJson(geoLogInfo.getTypeArrJson());
+            geoLogInfo.setTypeArr(json);
+            if (geoLogInfo.getDifficulty() == 1){
+                geoLogInfo.setDifficultyDegree(simple);
+            }else if(geoLogInfo.getDifficulty() == 3){
+                geoLogInfo.setDifficultyDegree(difficulty);
+            }else{
+                geoLogInfo.setDifficultyDegree(generally);
+            }
+            geoLogInfo.setLogDate(sysGeoLog.getLogDate());
+            sysGeoLogInfoService.insertSysGeoLogInfo(geoLogInfo);
+        }
+        return toAjax(1);
     }
 
     /**

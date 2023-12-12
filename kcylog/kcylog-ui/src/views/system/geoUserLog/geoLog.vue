@@ -407,6 +407,7 @@ export default {
       this.form.geoLogInfo[index].typeMoney = typeObj.typeMoney;
       this.form.geoLogInfo[index].unit = "单位:" + typeObj.unit;
       this.form.geoLogInfo[index].difficulty = 2;
+      this.form.geoLogInfo[index].typeId = typeId;
       if (typeObj.degree === 0) {
         this.form.geoLogInfo[index].disabled = true;
       } else {
@@ -496,6 +497,23 @@ export default {
               this.getList();
             });
           } else {
+            if (this.form.geoLogInfo.length == 0) {
+              this.$modal.msgError("请填写日志内容");
+              return;
+            } else {
+              for (var j = 0; j < this.form.geoLogInfo.length; j++) {
+                if (
+                  this.form.geoLogInfo[j].typeId == undefined ||
+                  this.form.geoLogInfo[j].typeId == null ||
+                  this.form.geoLogInfo[j].typeId == 0 ||
+                  this.form.geoLogInfo[j].workload == undefined ||
+                  this.form.geoLogInfo[j].workload == null
+                ) {
+                  this.$modal.msgError("请填写完整的日志内容");
+                  return;
+                }
+              }
+            }
             addLog(this.form).then((response) => {
               this.$modal.msgSuccess("新增成功");
               this.open = false;
