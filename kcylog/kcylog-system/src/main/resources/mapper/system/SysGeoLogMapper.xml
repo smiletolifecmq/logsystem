@@ -18,10 +18,18 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 
     <select id="selectSysGeoLogList" parameterType="SysGeoLog" resultMap="SysGeoLogResult">
         <include refid="selectSysGeoLogVo"/>
-        <where>  
-            <if test="logDate != null "> and log_date = #{logDate}</if>
-            <if test="userId != null "> and user_id = #{userId}</if>
+        <where>
+            <if test="params.beginTime != null and params.beginTime != ''"><!-- 开始时间检索 -->
+                AND date_format(log_date,'%y%m%d') &gt;= date_format(#{params.beginTime},'%y%m%d')
+            </if>
+            <if test="params.endTime != null and params.endTime != ''"><!-- 结束时间检索 -->
+                AND date_format(log_date,'%y%m%d') &lt;= date_format(#{params.endTime},'%y%m%d')
+            </if>
             <if test="userName != null  and userName != ''"> and user_name like concat('%', #{userName}, '%')</if>
+            AND user_id IN
+            <foreach item="userId" collection="lookUserIds" open="(" separator="," close=")">
+                #{userId}
+            </foreach>
         </where>
     </select>
     

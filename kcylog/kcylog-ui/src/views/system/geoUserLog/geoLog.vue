@@ -11,10 +11,13 @@
       <el-form-item label="日志日期" prop="logDate">
         <el-date-picker
           clearable
-          v-model="queryParams.logDate"
-          type="date"
+          v-model="dateRange"
+          style="width: 240px"
           value-format="yyyy-MM-dd"
-          placeholder="请选择日志日期"
+          type="daterange"
+          range-separator="-"
+          start-placeholder="开始日期"
+          end-placeholder="结束日期"
         >
         </el-date-picker>
       </el-form-item>
@@ -61,6 +64,28 @@
           @click="handleExport"
           v-hasPermi="['system:log:export']"
           >导出</el-button
+        >
+      </el-col>
+      <el-col :span="1.5">
+        <el-button
+          type="primary"
+          plain
+          icon="el-icon-download"
+          size="mini"
+          @click="handleExport"
+          v-hasPermi="['system:log:exportWord']"
+          >word导出</el-button
+        >
+      </el-col>
+      <el-col :span="1.5">
+        <el-button
+          type="success"
+          plain
+          icon="el-icon-download"
+          size="mini"
+          @click="handleExport"
+          v-hasPermi="['system:log:exportExcel']"
+          >excle导出</el-button
         >
       </el-col>
       <right-toolbar
@@ -120,7 +145,12 @@
     />
 
     <!-- 添加或修改地理部门日志对话框 -->
-    <el-dialog :title="title" :visible.sync="open" width="500px" append-to-body>
+    <el-dialog
+      :title="title"
+      :visible.sync="open"
+      width="1200px"
+      append-to-body
+    >
       <el-form ref="form" :model="form" :rules="rules" label-width="80px">
         <el-form-item label="日志日期" prop="logDate">
           <el-date-picker
@@ -132,12 +162,133 @@
           >
           </el-date-picker>
         </el-form-item>
-        <el-form-item label="用户ID" prop="userId">
-          <el-input v-model="form.userId" placeholder="请输入用户ID" />
-        </el-form-item>
-        <el-form-item label="用户名称" prop="userName">
-          <el-input v-model="form.userName" placeholder="请输入用户名称" />
-        </el-form-item>
+        <el-collapse v-model="activeNames">
+          <el-collapse-item title="日志内容" name="1">
+            <el-button
+              v-if="form.geoLogInfo != null && form.geoLogInfo.length == 0"
+              type="text"
+              icon="el-icon-circle-plus"
+              size="medium"
+              style="margin-left: 20px; margin-bottom: 20px"
+              @click="addGeoLogInfo()"
+            ></el-button>
+            <el-form-item
+              v-for="(logInfo, index) in form.geoLogInfo"
+              :key="index"
+              prop="geoLogInfo"
+            >
+              <el-row>
+                <el-col :span="5">
+                  <el-form-item
+                    label="类型"
+                    prop="typeArrJson"
+                    style="margin-left: -100px"
+                  >
+                    <el-cascader
+                      filterable
+                      :options="typeList"
+                      v-model="logInfo.typeArrJson"
+                      :show-all-levels="false"
+                      @change="handleCascaderChange(index, $event)"
+                    ></el-cascader>
+                  </el-form-item>
+                </el-col>
+                <el-col :span="3">
+                  <el-form-item
+                    label="难度"
+                    style="margin-left: -70px"
+                    prop="difficulty"
+                  >
+                    <el-select
+                      @change="handleDifficultyChange()"
+                      v-model="logInfo.difficulty"
+                      placeholder="请选择"
+                      :disabled="logInfo.disabled"
+                    >
+                      <el-option
+                        v-for="item in difficultys"
+                        :key="item.value"
+                        :label="item.label"
+                        :value="item.value"
+                      >
+                      </el-option>
+                    </el-select>
+                  </el-form-item>
+                </el-col>
+                <el-col :span="3">
+                  <el-form-item
+                    label="工作量"
+                    prop="workload"
+                    style="margin-left: -10px"
+                  >
+                    <el-input-number
+                      v-model="logInfo.workload"
+                      :precision="2"
+                      :step="0.1"
+                      :min="0"
+                      :controls="false"
+                      size="small"
+                      :placeholder="logInfo.unit"
+                    ></el-input-number>
+                  </el-form-item>
+                </el-col>
+                <el-col :span="5">
+                  <el-form-item label="备注" style="margin-left: 40px">
+                    <el-input
+                      type="textarea"
+                      autosize
+                      v-model="logInfo.remark"
+                      placeholder="暂无备注"
+                      disabled
+                    >
+                    </el-input>
+                  </el-form-item>
+                </el-col>
+                <el-col :span="5">
+                  <el-form-item label="关联项目">
+                    <el-select
+                      v-model="logInfo.projectId"
+                      placeholder="请选择"
+                      filterable
+                      clearable
+                      @change="handleProjectIdChange()"
+                    >
+                      <el-option
+                        v-for="item in projectList"
+                        :key="item.projectId"
+                        :label="item.projectNum"
+                        :value="item.projectId"
+                      >
+                      </el-option>
+                    </el-select>
+                  </el-form-item>
+                </el-col>
+                <el-col :span="2" style="display: none">
+                  <el-form-item label="单价">
+                    <el-input v-model="logInfo.typeMoney" disabled> </el-input>
+                  </el-form-item>
+                </el-col>
+                <el-col :span="2">
+                  <el-button
+                    v-if="index != 0 || form.geoLogInfo.length == 1"
+                    type="text"
+                    icon="el-icon-circle-plus"
+                    size="medium"
+                    style="margin-left: 20px; margin-bottom: 20px"
+                    @click="addGeoLogInfo()"
+                  ></el-button>
+                  <el-button
+                    type="text"
+                    icon="el-icon-remove"
+                    size="medium"
+                    style="margin-left: 20px; margin-bottom: 20px"
+                    @click="removeGeoLogInfo(index)"
+                  ></el-button>
+                </el-col>
+              </el-row>
+            </el-form-item>
+          </el-collapse-item>
+        </el-collapse>
       </el-form>
       <div slot="footer" class="dialog-footer">
         <el-button type="primary" @click="submitForm">确 定</el-button>
@@ -155,11 +306,42 @@ import {
   addLog,
   updateLog,
 } from "@/api/system/geoLog";
+import { listType } from "@/api/system/geoType";
+import { listProject } from "@/api/system/geoProject";
 
 export default {
   name: "Log",
   data() {
     return {
+      projectList: [],
+      queryProjectParams: {
+        pageNum: 1,
+        pageSize: 9999,
+      },
+      difficultys: [
+        {
+          value: 1,
+          label: "简单",
+        },
+        {
+          value: 2,
+          label: "一般",
+        },
+        {
+          value: 3,
+          label: "困难",
+        },
+      ],
+      typeListMap: {},
+      queryTypeParams: {
+        pageNum: 1,
+        pageSize: 9999,
+      },
+      typeList: [],
+      logId: 0,
+      activeNames: ["1"],
+      // 日期范围
+      dateRange: [],
       // 遮罩层
       loading: true,
       // 选中数组
@@ -190,27 +372,68 @@ export default {
       form: {},
       // 表单校验
       rules: {
-        userId: [
-          { required: true, message: "用户ID不能为空", trigger: "blur" },
-        ],
-        userName: [
-          { required: true, message: "用户名称不能为空", trigger: "blur" },
+        logDate: [
+          { required: true, message: "日志日期不能为空", trigger: "blur" },
         ],
       },
     };
   },
   created() {
     this.getList();
+    listType(this.queryTypeParams).then((response) => {
+      this.typeList = response.rows;
+      this.typeList = convertToTree(this.typeList);
+      this.typeListMap = new Map();
+
+      for (var i = 0; i < response.rows.length; i++) {
+        this.typeListMap.set(response.rows[i].typeId, response.rows[i]);
+      }
+    });
+    listProject(this.queryProjectParams).then((response) => {
+      this.projectList = response.rows;
+    });
   },
   methods: {
+    handleProjectIdChange() {
+      this.$forceUpdate();
+    },
+    handleDifficultyChange() {
+      this.$forceUpdate();
+    },
+    handleCascaderChange(index, value) {
+      const typeId = value[value.length - 1];
+      const typeObj = this.typeListMap.get(typeId);
+      this.form.geoLogInfo[index].remark = typeObj.remark;
+      this.form.geoLogInfo[index].typeMoney = typeObj.typeMoney;
+      this.form.geoLogInfo[index].unit = "单位:" + typeObj.unit;
+      this.form.geoLogInfo[index].difficulty = 2;
+      if (typeObj.degree === 0) {
+        this.form.geoLogInfo[index].disabled = true;
+      } else {
+        this.form.geoLogInfo[index].disabled = false;
+      }
+      this.$forceUpdate();
+    },
+    removeGeoLogInfo(index) {
+      this.form.geoLogInfo.splice(index, 1);
+      this.$forceUpdate();
+    },
+    addGeoLogInfo() {
+      this.form.geoLogInfo.push({
+        difficulty: 2,
+      });
+      this.$forceUpdate();
+    },
     /** 查询地理部门日志列表 */
     getList() {
       this.loading = true;
-      listLog(this.queryParams).then((response) => {
-        this.logList = response.rows;
-        this.total = response.total;
-        this.loading = false;
-      });
+      listLog(this.addDateRange(this.queryParams, this.dateRange)).then(
+        (response) => {
+          this.logList = response.rows;
+          this.total = response.total;
+          this.loading = false;
+        }
+      );
     },
     // 取消按钮
     cancel() {
@@ -235,6 +458,7 @@ export default {
     },
     /** 重置按钮操作 */
     resetQuery() {
+      this.dateRange = [];
       this.resetForm("queryForm");
       this.handleQuery();
     },
@@ -247,8 +471,9 @@ export default {
     /** 新增按钮操作 */
     handleAdd() {
       this.reset();
+      this.form.geoLogInfo = [];
       this.open = true;
-      this.title = "添加地理部门日志";
+      this.title = "添加日志";
     },
     /** 修改按钮操作 */
     handleUpdate(row) {
@@ -257,7 +482,7 @@ export default {
       getLog(logId).then((response) => {
         this.form = response.data;
         this.open = true;
-        this.title = "修改地理部门日志";
+        this.title = "修改日志";
       });
     },
     /** 提交按钮 */
@@ -284,7 +509,7 @@ export default {
     handleDelete(row) {
       const logIds = row.logId || this.ids;
       this.$modal
-        .confirm('是否确认删除地理部门日志编号为"' + logIds + '"的数据项？')
+        .confirm('是否确认删除日志编号为"' + logIds + '"的数据项？')
         .then(function () {
           return delLog(logIds);
         })
@@ -306,4 +531,52 @@ export default {
     },
   },
 };
+
+function convertToTree(data) {
+  const map = {};
+  const tree = [];
+
+  data.forEach((item) => {
+    map[item.typeId] = item;
+    item.children = [];
+  });
+
+  data.forEach((item) => {
+    if (item.parentId !== 0) {
+      if (map[item.parentId]) {
+        map[item.parentId].children.push(item);
+      }
+    } else {
+      tree.push(item);
+    }
+  });
+
+  function renameKeys(obj) {
+    const renamed = {};
+    for (let prop in obj) {
+      if (prop === "typeId") {
+        renamed["value"] = obj[prop];
+      } else if (prop === "typeName") {
+        renamed["label"] = obj[prop];
+      } else {
+        renamed[prop] = obj[prop];
+      }
+    }
+    return renamed;
+  }
+
+  function traverseAndRename(node) {
+    node = renameKeys(node);
+    if (node.children.length > 0) {
+      node.children = node.children.map((child) => {
+        const modifiedChild = traverseAndRename(child);
+        delete modifiedChild.children; // 移除最后一级的 children 键
+        return modifiedChild;
+      });
+    }
+    return node;
+  }
+
+  return tree.map(traverseAndRename);
+}
 </script>

@@ -7,6 +7,7 @@ import org.apache.commons.lang3.builder.ToStringBuilder;
 import org.apache.commons.lang3.builder.ToStringStyle;
 
 import java.util.Date;
+import java.util.List;
 
 /**
  * 地理部门日志对象 sys_geo_log
@@ -33,6 +34,26 @@ public class SysGeoLog extends BaseEntity
     /** 用户名称 */
     @Excel(name = "用户名称")
     private String userName;
+
+    private List<Long> lookUserIds;
+
+    private List<SysGeoLogInfo> geoLogInfo;
+
+    public List<SysGeoLogInfo> getGeoLogInfo() {
+        return geoLogInfo;
+    }
+
+    public void setGeoLogInfo(List<SysGeoLogInfo> geoLogInfo) {
+        this.geoLogInfo = geoLogInfo;
+    }
+
+    public List<Long> getLookUserIds() {
+        return lookUserIds;
+    }
+
+    public void setLookUserIds(List<Long> lookUserIds) {
+        this.lookUserIds = lookUserIds;
+    }
 
     public void setLogId(Long logId) 
     {

@@ -5,13 +5,17 @@ import com.kcylog.common.core.controller.BaseController;
 import com.kcylog.common.core.domain.AjaxResult;
 import com.kcylog.common.core.page.TableDataInfo;
 import com.kcylog.common.enums.BusinessType;
+import com.kcylog.common.utils.SecurityUtils;
 import com.kcylog.common.utils.poi.ExcelUtil;
 import com.kcylog.system.domain.SysGeoLog;
+import com.kcylog.system.domain.SysGeoUser;
 import com.kcylog.system.service.ISysGeoLogService;
+import com.kcylog.system.service.ISysGeoUserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
 import javax.servlet.http.HttpServletResponse;
+import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -27,6 +31,9 @@ public class SysGeoLogController extends BaseController
     @Autowired
     private ISysGeoLogService sysGeoLogService;
 
+    @Autowired
+    private ISysGeoUserService sysGeoUserService;
+
     /**
      * 查询地理部门日志列表
      */
@@ -34,6 +41,16 @@ public class SysGeoLogController extends BaseController
     public TableDataInfo list(SysGeoLog sysGeoLog)
     {
         startPage();
+        //查找登录用户可以查看的用户日志权限
+        Long userId = SecurityUtils.getUserId();
+        List<SysGeoUser> geoUsers = sysGeoUserService.selectSysAssessUserByGeoUser(userId);
+        List<Long> longIdsList = new ArrayList<>();
+        sysGeoLog.setLookUserIds(longIdsList);
+        sysGeoLog.getLookUserIds().add(userId);
+        for (SysGeoUser sysGeoUser:geoUsers){
+            sysGeoLog.getLookUserIds().add(sysGeoUser.getUserId());
+        }
+        //查找拥有查看日志的记录
         List<SysGeoLog> list = sysGeoLogService.selectSysGeoLogList(sysGeoLog);
         return getDataTable(list);
     }
