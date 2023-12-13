@@ -63,4 +63,6 @@ public interface ISysGeoLogService
     public SysGeoLog selectSysGeoLogByUserIdAndDate(SysGeoLog sysGeoLog);
 
     public SysGeoLog selectSysGeoLogByUserIdAndDateNotSelf(SysGeoLog sysGeoLog);
+
+    public List<SysGeoLog> selectSysGeoLogListExport(SysGeoLog sysGeoLog);
 }

@@ -78,7 +78,7 @@ public class SysGeoLogController extends BaseController {
         for (SysGeoUser sysGeoUser : geoUsers) {
             sysGeoLog.getLookUserIds().add(sysGeoUser.getUserId());
         }
-        List<SysGeoLog> list = sysGeoLogService.selectSysGeoLogList(sysGeoLog);
+        List<SysGeoLog> list = sysGeoLogService.selectSysGeoLogListExport(sysGeoLog);
         return getDataTable(list);
     }
 

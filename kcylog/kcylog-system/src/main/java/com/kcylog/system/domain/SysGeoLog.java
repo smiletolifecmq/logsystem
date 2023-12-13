@@ -39,6 +39,16 @@ public class SysGeoLog extends BaseEntity
 
     private List<SysGeoLogInfo> geoLogInfo;
 
+    private SysGeoUser geoUser;
+
+    public SysGeoUser getGeoUser() {
+        return geoUser;
+    }
+
+    public void setGeoUser(SysGeoUser geoUser) {
+        this.geoUser = geoUser;
+    }
+
     public List<SysGeoLogInfo> getGeoLogInfo() {
         return geoLogInfo;
     }

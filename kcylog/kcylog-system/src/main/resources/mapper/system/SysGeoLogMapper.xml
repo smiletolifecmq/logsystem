@@ -11,8 +11,12 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
         <result property="userName"    column="user_name"    />
         <result property="createTime"    column="create_time"    />
         <association property="geoLogInfo" javaType="java.util.List" resultMap="SysGeoLogInfoResult"/>
+        <association property="geoUser" javaType="SysGeoUser" resultMap="SysGeoUserResult"/>
     </resultMap>
 
+    <resultMap type="SysGeoUser" id="SysGeoUserResult">
+        <result property="isCheck"    column="is_check"    />
+    </resultMap>
 
     <resultMap type="SysGeoLogInfo" id="SysGeoLogInfoResult">
         <result property="logId"    column="log_id"    />
@@ -34,6 +38,30 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
     <sql id="selectSysGeoLogDetailVo">
         select a.*,b.* from sys_geo_log as a inner join sys_geo_log_info as b on a.log_id = b.log_id
     </sql>
+
+    <sql id="selectSysGeoLogExportVo">
+        select a.*,b.*,c.is_check from sys_geo_log as a
+        inner join sys_geo_log_info as b on a.log_id = b.log_id
+        inner join sys_geo_user as c on a.user_id = c.user_id
+    </sql>
+
+    <select id="selectSysGeoLogListExport" parameterType="SysGeoLog" resultMap="SysGeoLogResult">
+        <include refid="selectSysGeoLogExportVo"/>
+        <where>
+            <if test="params.beginTime != null and params.beginTime != ''"><!-- 开始时间检索 -->
+                AND date_format(a.log_date,'%y%m%d') &gt;= date_format(#{params.beginTime},'%y%m%d')
+            </if>
+            <if test="params.endTime != null and params.endTime != ''"><!-- 结束时间检索 -->
+                AND date_format(a.log_date,'%y%m%d') &lt;= date_format(#{params.endTime},'%y%m%d')
+            </if>
+            <if test="userName != null  and userName != ''"> and a.user_name like concat('%', #{userName}, '%')</if>
+            AND a.user_id IN
+            <foreach item="userId" collection="lookUserIds" open="(" separator="," close=")">
+                #{userId}
+            </foreach>
+        </where>
+        order by a.log_id desc
+    </select>
 
     <select id="selectSysGeoLogList" parameterType="SysGeoLog" resultMap="SysGeoLogResult">
         <include refid="selectSysGeoLogVo"/>

@@ -693,14 +693,14 @@ export default {
         return;
       }
       listLogExport(this.queryParams).then((response) => {
-        const data1 = logMap(); // 数据1
-        data1.user_name = "chen";
-        const data2 = logMap(); // 数据2
-        data2.user_name = "ming";
-        const dataArray = [data1, data2]; // 数据数组
-        const zipFileName =
-          this.dateRange[0] + "~" + this.dateRange[1] + "地理信息部产值.zip";
-        exportMultipleDocx("/log_personal.docx", dataArray, zipFileName);
+        // const data1 = logMap(); // 数据1
+        // data1.user_name = "chen";
+        // const data2 = logMap(); // 数据2
+        // data2.user_name = "ming";
+        // const dataArray = [data1, data2]; // 数据数组
+        // const zipFileName =
+        //   this.dateRange[0] + "~" + this.dateRange[1] + "地理信息部产值.zip";
+        // exportMultipleDocx("/log_personal.docx", dataArray, zipFileName);
       });
     },
   },

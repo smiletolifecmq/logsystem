@@ -105,4 +105,10 @@ public class SysGeoLogServiceImpl implements ISysGeoLogService
     {
         return sysGeoLogMapper.selectSysGeoLogByUserIdAndDateNotSelf(sysGeoLog);
     }
+
+    @Override
+    public List<SysGeoLog> selectSysGeoLogListExport(SysGeoLog sysGeoLog)
+    {
+        return sysGeoLogMapper.selectSysGeoLogListExport(sysGeoLog);
+    }
 }
