@@ -42,3 +42,11 @@ export function delLog(logId) {
     method: 'delete'
   })
 }
+
+export function listLogExport(query) {
+  return request({
+    url: '/system/geoLog/listLogExport',
+    method: 'get',
+    params: query
+  })
+}

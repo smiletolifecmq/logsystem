@@ -7,7 +7,6 @@ import com.kcylog.common.core.domain.AjaxResult;
 import com.kcylog.common.core.page.TableDataInfo;
 import com.kcylog.common.enums.BusinessType;
 import com.kcylog.common.utils.SecurityUtils;
-import com.kcylog.common.utils.poi.ExcelUtil;
 import com.kcylog.system.domain.SysGeoLog;
 import com.kcylog.system.domain.SysGeoLogInfo;
 import com.kcylog.system.domain.SysGeoUser;
@@ -18,7 +17,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.bind.annotation.*;
 
-import javax.servlet.http.HttpServletResponse;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -70,8 +68,8 @@ public class SysGeoLogController extends BaseController {
      * 导出地理部门日志列表
      */
     @Log(title = "地理部门日志", businessType = BusinessType.EXPORT)
-    @PostMapping("/export")
-    public void export(HttpServletResponse response, SysGeoLog sysGeoLog) {
+    @GetMapping("/listLogExport")
+    public TableDataInfo export(SysGeoLog sysGeoLog) {
         Long userId = SecurityUtils.getUserId();
         List<SysGeoUser> geoUsers = sysGeoUserService.selectSysAssessUserByGeoUser(userId);
         List<Long> longIdsList = new ArrayList<>();
@@ -81,8 +79,7 @@ public class SysGeoLogController extends BaseController {
             sysGeoLog.getLookUserIds().add(sysGeoUser.getUserId());
         }
         List<SysGeoLog> list = sysGeoLogService.selectSysGeoLogList(sysGeoLog);
-        ExcelUtil<SysGeoLog> util = new ExcelUtil<SysGeoLog>(SysGeoLog.class);
-        util.exportExcel(response, list, "地理部门日志数据");
+        return getDataTable(list);
     }
 
     /**

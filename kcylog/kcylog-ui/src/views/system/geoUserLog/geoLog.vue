@@ -18,6 +18,7 @@
           range-separator="-"
           start-placeholder="开始日期"
           end-placeholder="结束日期"
+          @change="handleQuery"
         >
         </el-date-picker>
       </el-form-item>
@@ -426,10 +427,12 @@ import {
   delLog,
   addLog,
   updateLog,
+  listLogExport,
 } from "@/api/system/geoLog";
 import { listType } from "@/api/system/geoType";
 import { listProject } from "@/api/system/geoProject";
 import userInfo from "@/store/modules/user";
+import { exportMultipleDocx } from "@/utils/zip.js";
 
 export default {
   name: "Log",
@@ -685,16 +688,138 @@ export default {
     },
     /** 导出按钮操作 */
     handleExport() {
-      this.download(
-        "system/geoLog/export",
-        {
-          ...this.queryParams,
-        },
-        `log_${new Date().getTime()}.xlsx`
-      );
+      if (this.dateRange.length == 0) {
+        this.$modal.msgError("请填写选择日期范围");
+        return;
+      }
+      listLogExport(this.queryParams).then((response) => {
+        const data1 = logMap(); // 数据1
+        data1.user_name = "chen";
+        const data2 = logMap(); // 数据2
+        data2.user_name = "ming";
+        const dataArray = [data1, data2]; // 数据数组
+        const zipFileName =
+          this.dateRange[0] + "~" + this.dateRange[1] + "地理信息部产值.zip";
+        exportMultipleDocx("/log_personal.docx", dataArray, zipFileName);
+      });
     },
   },
 };
+
+function logMap() {
+  return {
+    //用户
+    user_name: "",
+    //工作量
+    type1_gzl: "",
+    type2_gzl: "",
+    type3_gzl: "",
+    type4_gzl: "",
+    type5_gzl: "",
+    type6_gzl: "",
+    type7_gzl: "",
+    type8_gzl: "",
+    type9_gzl: "",
+    type10_gzl: "",
+    type11_gzl: "",
+    type12_gzl: "",
+    type13_gzl: "",
+    type14_gzl: "",
+    type15_gzl: "",
+    type16_gzl: "",
+    type17_gzl: "",
+    type18_gzl: "",
+    type19_gzl: "",
+    type20_gzl: "",
+    type21_gzl: "",
+    type22_gzl: "",
+    type23_gzl: "",
+    type24_gzl: "",
+    type25_gzl: "",
+    type26_gzl: "",
+    type27_gzl: "",
+    type28_gzl: "",
+    type29_gzl: "",
+    type30_gzl: "",
+    type31_gzl: "",
+    type32_gzl: "",
+    type33_gzl: "",
+    type34_gzl: "",
+    type35_gzl: "",
+    type36_gzl: "",
+    type37_gzl: "",
+    type38_gzl: "",
+    type39_gzl: "",
+    type40_gzl: "",
+    type41_gzl: "",
+    type42_gzl: "",
+    type43_gzl: "",
+    type44_gzl: "",
+    type45_gzl: "",
+    type46_gzl: "",
+    type47_gzl: "",
+    type48_gzl: "",
+    type49_gzl: "",
+    type50_gzl: "",
+
+    //产值金额
+    type1_jr: "",
+    type2_jr: "",
+    type3_jr: "",
+    type4_jr: "",
+    type5_jr: "",
+    type6_jr: "",
+    type7_jr: "",
+    type8_jr: "",
+    type9_jr: "",
+    type10_jr: "",
+    type11_jr: "",
+    type12_jr: "",
+    type13_jr: "",
+    type14_jr: "",
+    type15_jr: "",
+    type16_jr: "",
+    type17_jr: "",
+    type18_jr: "",
+    type19_jr: "",
+    type20_jr: "",
+    type21_jr: "",
+    type22_jr: "",
+    type23_jr: "",
+    type24_jr: "",
+    type25_jr: "",
+    type26_jr: "",
+    type27_jr: "",
+    type28_jr: "",
+    type29_jr: "",
+    type30_jr: "",
+    type31_jr: "",
+    type32_jr: "",
+    type33_jr: "",
+    type34_jr: "",
+    type35_jr: "",
+    type36_jr: "",
+    type37_jr: "",
+    type38_jr: "",
+    type39_jr: "",
+    type40_jr: "",
+    type41_jr: "",
+    type42_jr: "",
+    type43_jr: "",
+    type44_jr: "",
+    type45_jr: "",
+    type46_jr: "",
+    type47_jr: "",
+    type48_jr: "",
+    type49_jr: "",
+    type50_jr: "",
+    type51_jr: "",
+    type52_jr: "",
+
+    //总产值
+    total_money: 0,
+  };
+}
 
 function convertToTree(data) {
   const map = {};
