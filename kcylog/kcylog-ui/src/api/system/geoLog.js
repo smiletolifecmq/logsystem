@@ -50,3 +50,11 @@ export function listLogExport(query) {
     params: query
   })
 }
+
+export function listLogExportWord(query) {
+  return request({
+    url: '/system/geoLog/listLogExportWord',
+    method: 'get',
+    params: query
+  })
+}

@@ -89,4 +89,9 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
             #{assessId}
         </foreach>
     </delete>
+
+    <select id="selectSysGeoAssessInfoListByDate" parameterType="SysGeoLog" resultMap="SysGeoAssessInfoResult">
+        <include refid="selectSysGeoAssessInfoVo"/>
+        where  date_format(assess_date,'%y%m') = date_format(#{logDate},'%y%m')
+    </select>
 </mapper>

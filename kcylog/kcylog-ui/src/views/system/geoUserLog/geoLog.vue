@@ -73,7 +73,7 @@
           plain
           icon="el-icon-download"
           size="mini"
-          @click="handleExport"
+          @click="handleExportWord"
           v-hasPermi="['system:geoLog:exportWord']"
           >word导出</el-button
         >
@@ -428,6 +428,7 @@ import {
   addLog,
   updateLog,
   listLogExport,
+  listLogExportWord,
 } from "@/api/system/geoLog";
 import { listType } from "@/api/system/geoType";
 import { listProject } from "@/api/system/geoProject";
@@ -595,6 +596,9 @@ export default {
     /** 搜索按钮操作 */
     handleQuery() {
       this.queryParams.pageNum = 1;
+      if (this.dateRange.length != 0) {
+        this.queryParams.logDate = this.dateRange[1];
+      }
       this.getList();
     },
     /** 重置按钮操作 */
@@ -697,6 +701,19 @@ export default {
         const zipFileName =
           this.dateRange[0] + "~" + this.dateRange[1] + "地理信息部产值.zip";
         exportMultipleDocx("/log_personal.docx", dataArray, zipFileName);
+      });
+    },
+    /** word导出按钮操作 */
+    handleExportWord() {
+      if (this.dateRange.length == 0) {
+        this.$modal.msgError("请填写选择日期范围");
+        return;
+      }
+      listLogExportWord(this.queryParams).then((response) => {
+        const dataArray = response.rows;
+        const zipFileName =
+          this.dateRange[0] + "~" + this.dateRange[1] + "地理信息部产值.zip";
+        exportMultipleDocx("/log_word.docx", dataArray, zipFileName);
       });
     },
   },

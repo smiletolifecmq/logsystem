@@ -1,6 +1,7 @@
 package com.kcylog.system.mapper;
 
 import com.kcylog.system.domain.SysGeoAssessInfo;
+import com.kcylog.system.domain.SysGeoLog;
 
 import java.util.List;
 
@@ -61,4 +62,6 @@ public interface SysGeoAssessInfoMapper
     public int deleteSysGeoAssessInfoByAssessInfoIds(Long[] assessInfoIds);
 
     public int deleteSysGeoAssessInfoByAssessIds(Long[] assessIds);
+
+    public List<SysGeoAssessInfo> selectSysGeoAssessInfoListByDate(SysGeoLog sysGeoLog);
 }

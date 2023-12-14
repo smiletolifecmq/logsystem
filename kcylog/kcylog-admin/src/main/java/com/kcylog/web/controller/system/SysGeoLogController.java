@@ -8,14 +8,8 @@ import com.kcylog.common.core.page.TableDataInfo;
 import com.kcylog.common.enums.BusinessType;
 import com.kcylog.common.utils.SecurityUtils;
 import com.kcylog.system.common.LogExport;
-import com.kcylog.system.domain.SysGeoLog;
-import com.kcylog.system.domain.SysGeoLogInfo;
-import com.kcylog.system.domain.SysGeoProject;
-import com.kcylog.system.domain.SysGeoUser;
-import com.kcylog.system.service.ISysGeoLogInfoService;
-import com.kcylog.system.service.ISysGeoLogService;
-import com.kcylog.system.service.ISysGeoProjectService;
-import com.kcylog.system.service.ISysGeoUserService;
+import com.kcylog.system.domain.*;
+import com.kcylog.system.service.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.bind.annotation.*;
@@ -46,6 +40,9 @@ public class SysGeoLogController extends BaseController {
 
     @Autowired
     private ISysGeoProjectService sysGeoProjectService;
+
+    @Autowired
+    private ISysGeoAssessInfoService sysGeoAssessInfoService;
 
     private static double simple = 0.8;
 
@@ -328,6 +325,8 @@ public class SysGeoLogController extends BaseController {
         logExport.setType48_gzl((double) 0);
         logExport.setType49_gzl((double) 0);
         logExport.setType50_gzl((double) 0);
+        logExport.setType51_gzl((double) 0);
+        logExport.setType52_gzl((double) 0);
         //产值金额
         logExport.setType1_jr(BigDecimal.valueOf(0));
         logExport.setType2_jr(BigDecimal.valueOf(0));
@@ -597,5 +596,131 @@ public class SysGeoLogController extends BaseController {
             }
         }
         return logExport;
+    }
+
+    @Log(title = "地理部门日志", businessType = BusinessType.EXPORT)
+    @GetMapping("/listLogExportWord")
+    public TableDataInfo exportWord(SysGeoLog sysGeoLog) {
+        Long userId = SecurityUtils.getUserId();
+        List<SysGeoUser> geoUsers = sysGeoUserService.selectSysAssessUserByGeoUser(userId);
+        List<Long> longIdsList = new ArrayList<>();
+        sysGeoLog.setLookUserIds(longIdsList);
+        sysGeoLog.getLookUserIds().add(userId);
+        for (SysGeoUser sysGeoUser : geoUsers) {
+            sysGeoLog.getLookUserIds().add(sysGeoUser.getUserId());
+        }
+        //获取符合日期以及权限的用户数据
+        List<SysGeoLog> list = sysGeoLogService.selectSysGeoLogListExport(sysGeoLog);
+        //获取符合日期的所有用户数据
+        List<SysGeoLog> listForDate = sysGeoLogService.selectSysGeoLogListExportByDate(sysGeoLog);
+        //获取所有项目
+        List<SysGeoProject> projects = sysGeoProjectService.selectSysGeoProjectAll();
+        //获取评定表
+        List<SysGeoAssessInfo> geoAssessInfo = sysGeoAssessInfoService.selectSysGeoAssessInfoListByDate(sysGeoLog);
+
+        Map<String, List<SysGeoLog>> geoLogMap = new HashMap<>();
+        Map<String, Boolean> userCheckMap = new HashMap<>();
+        Map<Long, BigDecimal> projectMoneyMap = new HashMap<>();
+        Map<String, List<Long>> projectsMap = new HashMap<>();
+        Map<String, Double> fitCoefficientMap = new HashMap<>();
+        Map<String, Double> workCoefficientMap = new HashMap<>();
+
+        BigDecimal allUserMoney = BigDecimal.ZERO;
+        for (SysGeoAssessInfo geoAssessInfoValue : geoAssessInfo){
+            fitCoefficientMap.put(geoAssessInfoValue.getUserName(),geoAssessInfoValue.getFitCoefficient());
+            workCoefficientMap.put(geoAssessInfoValue.getUserName(),geoAssessInfoValue.getWorkCoefficient());
+        }
+
+        for (SysGeoProject geoProject : projects) {
+            if (projectsMap.containsKey(geoProject.getUserName())) {
+                List<Long> projectIdArr = projectsMap.get(geoProject.getUserName());
+                projectIdArr.add(geoProject.getProjectId());
+                projectsMap.put(geoProject.getUserName(),projectIdArr);
+            } else {
+                List<Long> projectIdArr = new ArrayList<>();
+                projectIdArr.add(geoProject.getProjectId());
+                projectsMap.put(geoProject.getUserName(), projectIdArr);
+            }
+        }
+
+        for (SysGeoLog geoLog : list) {
+            if (geoLogMap.containsKey(geoLog.getUserName())) {
+                List<SysGeoLog> gl = geoLogMap.get(geoLog.getUserName());
+                gl.add(geoLog);
+                geoLogMap.put(geoLog.getUserName(), gl);
+            } else {
+                List<SysGeoLog> gl = new ArrayList<>();
+                gl.add(geoLog);
+                geoLogMap.put(geoLog.getUserName(), gl);
+            }
+            if (geoLog.getGeoUser().getIsCheck() == 1) {
+                userCheckMap.put(geoLog.getUserName(), true);
+            }
+        }
+
+        for (SysGeoLog geoLog : listForDate) {
+            for (SysGeoLogInfo geoLogInfo : geoLog.getGeoLogInfo()) {
+                BigDecimal difficultyDegree = BigDecimal.valueOf(geoLogInfo.getDifficultyDegree());
+                BigDecimal workload = BigDecimal.valueOf(geoLogInfo.getWorkload());
+                BigDecimal jinEr = difficultyDegree.multiply(workload).multiply(geoLogInfo.getTypeMoney());
+                if (geoLog.getGeoUser().getIsCheck() != 1 && geoLogInfo.getProjectId() != null && geoLogInfo.getProjectId() != 0) {
+                    allUserMoney = allUserMoney.add(jinEr);
+                }
+                if (geoLogInfo.getProjectId() != null && geoLogInfo.getProjectId() != 0) {
+                    if (projectMoneyMap.containsKey(geoLogInfo.getProjectId())) {
+                        projectMoneyMap.put(geoLogInfo.getProjectId(), projectMoneyMap.get(geoLogInfo.getProjectId()).add(jinEr));
+                    } else {
+                        BigDecimal projectMoney = BigDecimal.ZERO;
+                        projectMoneyMap.put(geoLogInfo.getProjectId(), projectMoney.add(jinEr));
+                    }
+                }
+            }
+        }
+        // 遍历值
+        List<LogExport> exportList = new ArrayList<>();
+        for (Map.Entry<String, List<SysGeoLog>> entry : geoLogMap.entrySet()) {
+            String userName = entry.getKey();
+            List<SysGeoLog> value = entry.getValue();
+            LogExport logExport = this.integratedOutputValueSelf(value, userName);
+            //检查人
+            if (userCheckMap.containsKey(userName)) {
+                BigDecimal multiplier = new BigDecimal("0.05");
+                allUserMoney = allUserMoney.multiply(multiplier);
+                logExport.setType52_jr(allUserMoney);
+                logExport.setTotal_money(logExport.getTotal_money().add(allUserMoney));
+            }
+            //负责人
+            if (projectsMap.containsKey(userName)) {
+                BigDecimal allProjectMoney = BigDecimal.ZERO;
+                List<Long> projectIdArr = projectsMap.get(userName);
+                for (Long pId : projectIdArr){
+                    if (projectMoneyMap.containsKey(pId)) {
+                        allProjectMoney = allProjectMoney.add(projectMoneyMap.get(pId));
+                    }
+                }
+                BigDecimal multiplier = new BigDecimal("0.08");
+                allProjectMoney = allProjectMoney.multiply(multiplier);
+                logExport.setType51_jr(allProjectMoney);
+                logExport.setTotal_money(logExport.getTotal_money().add(allProjectMoney));
+            }
+
+            Double fitCoefficient = (double)1;
+            Double workCoefficient = (double)1;
+            if (fitCoefficientMap.containsKey(userName)){
+                fitCoefficient = fitCoefficientMap.get(userName);
+            }
+            if (workCoefficientMap.containsKey(userName)){
+                workCoefficient = workCoefficientMap.get(userName);
+            }
+            logExport.setType51_gzl(fitCoefficient);
+            logExport.setType52_gzl(workCoefficient);
+
+            BigDecimal bigDecimalFitCoefficient = new BigDecimal(fitCoefficient);
+            BigDecimal bigDecimalWorkCoefficient = new BigDecimal(workCoefficient);
+            logExport.setTotal_money(logExport.getTotal_money().multiply(bigDecimalFitCoefficient).multiply(bigDecimalWorkCoefficient));
+
+            exportList.add(logExport);
+        }
+        return getDataTable(exportList);
     }
 }

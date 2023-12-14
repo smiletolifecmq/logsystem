@@ -1,6 +1,7 @@
 package com.kcylog.system.service.impl;
 
 import com.kcylog.system.domain.SysGeoAssessInfo;
+import com.kcylog.system.domain.SysGeoLog;
 import com.kcylog.system.mapper.SysGeoAssessInfoMapper;
 import com.kcylog.system.service.ISysGeoAssessInfoService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -96,5 +97,11 @@ public class SysGeoAssessInfoServiceImpl implements ISysGeoAssessInfoService
     public int deleteSysGeoAssessInfoByAssessIds(Long[] assessIds)
     {
         return sysGeoAssessInfoMapper.deleteSysGeoAssessInfoByAssessIds(assessIds);
+    }
+
+    @Override
+    public List<SysGeoAssessInfo> selectSysGeoAssessInfoListByDate(SysGeoLog sysGeoLog)
+    {
+        return sysGeoAssessInfoMapper.selectSysGeoAssessInfoListByDate(sysGeoLog);
     }
 }
