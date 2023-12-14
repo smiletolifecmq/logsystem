@@ -44,6 +44,9 @@ public class SysGeoLogController extends BaseController {
     @Autowired
     private ISysGeoAssessInfoService sysGeoAssessInfoService;
 
+    @Autowired
+    private ISysGeoUserCoefficientService sysGeoUserCoefficientService;
+
     private static double simple = 0.8;
 
     private static double generally = 1;
@@ -327,6 +330,7 @@ public class SysGeoLogController extends BaseController {
         logExport.setType50_gzl((double) 0);
         logExport.setType51_gzl((double) 0);
         logExport.setType52_gzl((double) 0);
+        logExport.setType53_gzl((double) 0);
         //产值金额
         logExport.setType1_jr(BigDecimal.valueOf(0));
         logExport.setType2_jr(BigDecimal.valueOf(0));
@@ -617,6 +621,9 @@ public class SysGeoLogController extends BaseController {
         List<SysGeoProject> projects = sysGeoProjectService.selectSysGeoProjectAll();
         //获取评定表
         List<SysGeoAssessInfo> geoAssessInfo = sysGeoAssessInfoService.selectSysGeoAssessInfoListByDate(sysGeoLog);
+        //获取个人系数
+        SysGeoUserCoefficient geoUserCoefficientObj = new SysGeoUserCoefficient();
+        List<SysGeoUserCoefficient> geoUserCoefficient = sysGeoUserCoefficientService.selectSysGeoUserCoefficientList(geoUserCoefficientObj);
 
         Map<String, List<SysGeoLog>> geoLogMap = new HashMap<>();
         Map<String, Boolean> userCheckMap = new HashMap<>();
@@ -624,11 +631,16 @@ public class SysGeoLogController extends BaseController {
         Map<String, List<Long>> projectsMap = new HashMap<>();
         Map<String, Double> fitCoefficientMap = new HashMap<>();
         Map<String, Double> workCoefficientMap = new HashMap<>();
+        Map<String, Double> geoUserCoefficientMap = new HashMap<>();
 
         BigDecimal allUserMoney = BigDecimal.ZERO;
         for (SysGeoAssessInfo geoAssessInfoValue : geoAssessInfo){
             fitCoefficientMap.put(geoAssessInfoValue.getUserName(),geoAssessInfoValue.getFitCoefficient());
             workCoefficientMap.put(geoAssessInfoValue.getUserName(),geoAssessInfoValue.getWorkCoefficient());
+        }
+
+        for (SysGeoUserCoefficient userCoefficient:geoUserCoefficient){
+            geoUserCoefficientMap.put(userCoefficient.getName(),userCoefficient.getCoefficient());
         }
 
         for (SysGeoProject geoProject : projects) {
@@ -706,18 +718,25 @@ public class SysGeoLogController extends BaseController {
 
             Double fitCoefficient = (double)1;
             Double workCoefficient = (double)1;
+            Double userCoefficientMap = (double)1;
             if (fitCoefficientMap.containsKey(userName)){
                 fitCoefficient = fitCoefficientMap.get(userName);
             }
             if (workCoefficientMap.containsKey(userName)){
                 workCoefficient = workCoefficientMap.get(userName);
             }
+            if (geoUserCoefficientMap.containsKey(userName)){
+                userCoefficientMap = geoUserCoefficientMap.get(userName);
+            }
+
             logExport.setType51_gzl(fitCoefficient);
             logExport.setType52_gzl(workCoefficient);
+            logExport.setType53_gzl(userCoefficientMap);
 
             BigDecimal bigDecimalFitCoefficient = new BigDecimal(fitCoefficient);
             BigDecimal bigDecimalWorkCoefficient = new BigDecimal(workCoefficient);
-            logExport.setTotal_money(logExport.getTotal_money().multiply(bigDecimalFitCoefficient).multiply(bigDecimalWorkCoefficient));
+            BigDecimal bigDecimalUserCoefficient = new BigDecimal(userCoefficientMap);
+            logExport.setTotal_money(logExport.getTotal_money().multiply(bigDecimalFitCoefficient).multiply(bigDecimalWorkCoefficient).multiply(bigDecimalUserCoefficient));
 
             exportList.add(logExport);
         }

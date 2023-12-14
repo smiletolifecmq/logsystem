@@ -58,6 +58,7 @@ public class LogExport {
     private Double type50_gzl;
     private Double type51_gzl;
     private Double type52_gzl;
+    private Double type53_gzl;
     //产值金额
     private BigDecimal type1_jr;
     private BigDecimal type2_jr;
@@ -536,6 +537,14 @@ public class LogExport {
 
     public void setType52_gzl(Double type52_gzl) {
         this.type52_gzl = type52_gzl;
+    }
+
+    public Double getType53_gzl() {
+        return type53_gzl;
+    }
+
+    public void setType53_gzl(Double type53_gzl) {
+        this.type53_gzl = type53_gzl;
     }
 
     public BigDecimal getType1_jr() {
