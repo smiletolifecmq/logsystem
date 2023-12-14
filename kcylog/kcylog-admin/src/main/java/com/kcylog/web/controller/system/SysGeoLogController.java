@@ -169,6 +169,7 @@ public class SysGeoLogController extends BaseController {
                 BigDecimal multiplier = new BigDecimal("0.08");
                 allProjectMoney = allProjectMoney.multiply(multiplier);
                 logExport.setType51_jr(allProjectMoney);
+                logExport.setTotal_money(logExport.getTotal_money().add(allProjectMoney));
             }
 
             exportList.add(logExport);
