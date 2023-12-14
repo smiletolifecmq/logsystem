@@ -1,7 +1,8 @@
 package com.kcylog.system.mapper;
 
-import java.util.List;
 import com.kcylog.system.domain.SysGeoProject;
+
+import java.util.List;
 
 /**
  * 地理项目Mapper接口
@@ -58,4 +59,6 @@ public interface SysGeoProjectMapper
      * @return 结果
      */
     public int deleteSysGeoProjectByProjectIds(Long[] projectIds);
+
+    public List<SysGeoProject> selectSysGeoProjectAll();
 }

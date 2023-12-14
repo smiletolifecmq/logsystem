@@ -10,9 +10,11 @@ import com.kcylog.common.utils.SecurityUtils;
 import com.kcylog.system.common.LogExport;
 import com.kcylog.system.domain.SysGeoLog;
 import com.kcylog.system.domain.SysGeoLogInfo;
+import com.kcylog.system.domain.SysGeoProject;
 import com.kcylog.system.domain.SysGeoUser;
 import com.kcylog.system.service.ISysGeoLogInfoService;
 import com.kcylog.system.service.ISysGeoLogService;
+import com.kcylog.system.service.ISysGeoProjectService;
 import com.kcylog.system.service.ISysGeoUserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.transaction.annotation.Transactional;
@@ -41,6 +43,9 @@ public class SysGeoLogController extends BaseController {
 
     @Autowired
     private ISysGeoLogInfoService sysGeoLogInfoService;
+
+    @Autowired
+    private ISysGeoProjectService sysGeoProjectService;
 
     private static double simple = 0.8;
 
@@ -86,10 +91,27 @@ public class SysGeoLogController extends BaseController {
         List<SysGeoLog> list = sysGeoLogService.selectSysGeoLogListExport(sysGeoLog);
         //获取符合日期的所有用户数据
         List<SysGeoLog> listForDate = sysGeoLogService.selectSysGeoLogListExportByDate(sysGeoLog);
+        //获取所有项目
+        List<SysGeoProject> projects = sysGeoProjectService.selectSysGeoProjectAll();
 
         Map<String, List<SysGeoLog>> geoLogMap = new HashMap<>();
         Map<String, Boolean> userCheckMap = new HashMap<>();
+        Map<Long, BigDecimal> projectMoneyMap = new HashMap<>();
+        Map<String, List<Long>> projectsMap = new HashMap<>();
+
         BigDecimal allUserMoney = BigDecimal.ZERO;
+        for (SysGeoProject geoProject : projects) {
+            if (projectsMap.containsKey(geoProject.getUserName())) {
+                List<Long> projectIdArr = projectsMap.get(geoProject.getUserName());
+                projectIdArr.add(geoProject.getProjectId());
+                projectsMap.put(geoProject.getUserName(),projectIdArr);
+            } else {
+                List<Long> projectIdArr = new ArrayList<>();
+                projectIdArr.add(geoProject.getProjectId());
+                projectsMap.put(geoProject.getUserName(), projectIdArr);
+            }
+        }
+
         for (SysGeoLog geoLog : list) {
             if (geoLogMap.containsKey(geoLog.getUserName())) {
                 List<SysGeoLog> gl = geoLogMap.get(geoLog.getUserName());
@@ -100,18 +122,25 @@ public class SysGeoLogController extends BaseController {
                 gl.add(geoLog);
                 geoLogMap.put(geoLog.getUserName(), gl);
             }
-            if (geoLog.getGeoUser().getIsCheck() == 1){
-                userCheckMap.put(geoLog.getUserName(),true);
+            if (geoLog.getGeoUser().getIsCheck() == 1) {
+                userCheckMap.put(geoLog.getUserName(), true);
             }
         }
-
         for (SysGeoLog geoLog : listForDate) {
             for (SysGeoLogInfo geoLogInfo : geoLog.getGeoLogInfo()) {
-                if (geoLog.getGeoUser().getIsCheck() != 1 && geoLogInfo.getProjectId() != null && geoLogInfo.getProjectId() != 0){
-                    BigDecimal difficultyDegree = BigDecimal.valueOf(geoLogInfo.getDifficultyDegree());
-                    BigDecimal workload = BigDecimal.valueOf(geoLogInfo.getWorkload());
-                    BigDecimal jinEr = difficultyDegree.multiply(workload).multiply(geoLogInfo.getTypeMoney());
+                BigDecimal difficultyDegree = BigDecimal.valueOf(geoLogInfo.getDifficultyDegree());
+                BigDecimal workload = BigDecimal.valueOf(geoLogInfo.getWorkload());
+                BigDecimal jinEr = difficultyDegree.multiply(workload).multiply(geoLogInfo.getTypeMoney());
+                if (geoLog.getGeoUser().getIsCheck() != 1 && geoLogInfo.getProjectId() != null && geoLogInfo.getProjectId() != 0) {
                     allUserMoney = allUserMoney.add(jinEr);
+                }
+                if (geoLogInfo.getProjectId() != null && geoLogInfo.getProjectId() != 0) {
+                    if (projectMoneyMap.containsKey(geoLogInfo.getProjectId())) {
+                        projectMoneyMap.put(geoLogInfo.getProjectId(), projectMoneyMap.get(geoLogInfo.getProjectId()).add(jinEr));
+                    } else {
+                        BigDecimal projectMoney = BigDecimal.ZERO;
+                        projectMoneyMap.put(geoLogInfo.getProjectId(), projectMoney.add(jinEr));
+                    }
                 }
             }
         }
@@ -121,12 +150,27 @@ public class SysGeoLogController extends BaseController {
             String userName = entry.getKey();
             List<SysGeoLog> value = entry.getValue();
             LogExport logExport = this.integratedOutputValueSelf(value, userName);
+            //检查人
             if (userCheckMap.containsKey(userName)) {
                 BigDecimal multiplier = new BigDecimal("0.05");
                 allUserMoney = allUserMoney.multiply(multiplier);
                 logExport.setType52_jr(allUserMoney);
                 logExport.setTotal_money(logExport.getTotal_money().add(allUserMoney));
             }
+            //负责人
+            if (projectsMap.containsKey(userName)) {
+                BigDecimal allProjectMoney = BigDecimal.ZERO;
+                List<Long> projectIdArr = projectsMap.get(userName);
+                for (Long pId : projectIdArr){
+                    if (projectMoneyMap.containsKey(pId)) {
+                        allProjectMoney = allProjectMoney.add(projectMoneyMap.get(pId));
+                    }
+                }
+                BigDecimal multiplier = new BigDecimal("0.08");
+                allProjectMoney = allProjectMoney.multiply(multiplier);
+                logExport.setType51_jr(allProjectMoney);
+            }
+
             exportList.add(logExport);
         }
         return getDataTable(exportList);

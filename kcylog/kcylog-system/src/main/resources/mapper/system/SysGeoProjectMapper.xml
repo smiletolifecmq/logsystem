@@ -68,4 +68,8 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
             #{projectId}
         </foreach>
     </delete>
+
+    <select id="selectSysGeoProjectAll" resultMap="SysGeoProjectResult">
+        <include refid="selectSysGeoProjectVo"/>
+    </select>
 </mapper>

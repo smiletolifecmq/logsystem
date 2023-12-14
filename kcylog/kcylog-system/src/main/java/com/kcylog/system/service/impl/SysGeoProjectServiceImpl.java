@@ -1,11 +1,12 @@
 package com.kcylog.system.service.impl;
 
-import java.util.List;
+import com.kcylog.system.domain.SysGeoProject;
+import com.kcylog.system.mapper.SysGeoProjectMapper;
+import com.kcylog.system.service.ISysGeoProjectService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-import com.kcylog.system.mapper.SysGeoProjectMapper;
-import com.kcylog.system.domain.SysGeoProject;
-import com.kcylog.system.service.ISysGeoProjectService;
+
+import java.util.List;
 
 /**
  * 地理项目Service业务层处理
@@ -89,5 +90,11 @@ public class SysGeoProjectServiceImpl implements ISysGeoProjectService
     public int deleteSysGeoProjectByProjectId(Long projectId)
     {
         return sysGeoProjectMapper.deleteSysGeoProjectByProjectId(projectId);
+    }
+
+    @Override
+    public List<SysGeoProject> selectSysGeoProjectAll()
+    {
+        return sysGeoProjectMapper.selectSysGeoProjectAll();
     }
 }

@@ -1,7 +1,8 @@
 package com.kcylog.system.service;
 
-import java.util.List;
 import com.kcylog.system.domain.SysGeoProject;
+
+import java.util.List;
 
 /**
  * 地理项目Service接口
@@ -58,4 +59,6 @@ public interface ISysGeoProjectService
      * @return 结果
      */
     public int deleteSysGeoProjectByProjectId(Long projectId);
+
+    public List<SysGeoProject> selectSysGeoProjectAll();
 }
