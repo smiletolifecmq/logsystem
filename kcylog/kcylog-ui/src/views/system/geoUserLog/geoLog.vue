@@ -84,7 +84,7 @@
           plain
           icon="el-icon-download"
           size="mini"
-          @click="handleExport"
+          @click="handleExportExcel"
           v-hasPermi="['system:geoLog:exportExcel']"
           >excle导出</el-button
         >
@@ -434,6 +434,7 @@ import { listType } from "@/api/system/geoType";
 import { listProject } from "@/api/system/geoProject";
 import userInfo from "@/store/modules/user";
 import { exportMultipleDocx } from "@/utils/zip.js";
+import { utils, writeFile } from "xlsx";
 
 export default {
   name: "Log",
@@ -714,6 +715,29 @@ export default {
         const zipFileName =
           this.dateRange[0] + "~" + this.dateRange[1] + "地理信息部产值.zip";
         exportMultipleDocx("/log_word.docx", dataArray, zipFileName);
+      });
+    },
+    /** excel导出按钮操作 */
+    handleExportExcel() {
+      if (this.dateRange.length == 0) {
+        this.$modal.msgError("请填写选择日期范围");
+        return;
+      }
+      listLogExportWord(this.queryParams).then((response) => {
+        const dataArray = response.rows;
+        const excelData = [["人员", "产值"]];
+        for (var i = 0; i < dataArray.length; i++) {
+          let data = [];
+          data[0] = dataArray[i].user_name;
+          data[1] = dataArray[i].total_money.toFixed(2);
+          excelData.push(data);
+        }
+        const wb = utils.book_new();
+        const ws = utils.aoa_to_sheet(excelData);
+        utils.book_append_sheet(wb, ws, "Sheet1");
+        const fileName =
+          this.dateRange[0] + "~" + this.dateRange[1] + "地理信息部产值";
+        writeFile(wb, fileName + ".xlsx");
       });
     },
   },
