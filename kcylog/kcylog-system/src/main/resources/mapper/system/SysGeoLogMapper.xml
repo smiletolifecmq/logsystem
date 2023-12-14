@@ -134,4 +134,17 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
         <include refid="selectSysGeoLogVo"/>
         where log_date = #{logDate} and user_id = #{userId} and log_id != #{logId}
     </select>
+
+    <select id="selectSysGeoLogListExportByDate" parameterType="SysGeoLog" resultMap="SysGeoLogResult">
+        <include refid="selectSysGeoLogExportVo"/>
+        <where>
+            <if test="params.beginTime != null and params.beginTime != ''"><!-- 开始时间检索 -->
+                AND date_format(a.log_date,'%y%m%d') &gt;= date_format(#{params.beginTime},'%y%m%d')
+            </if>
+            <if test="params.endTime != null and params.endTime != ''"><!-- 结束时间检索 -->
+                AND date_format(a.log_date,'%y%m%d') &lt;= date_format(#{params.endTime},'%y%m%d')
+            </if>
+        </where>
+        order by a.log_id desc
+    </select>
 </mapper>

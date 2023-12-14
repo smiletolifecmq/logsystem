@@ -82,8 +82,14 @@ public class SysGeoLogController extends BaseController {
         for (SysGeoUser sysGeoUser : geoUsers) {
             sysGeoLog.getLookUserIds().add(sysGeoUser.getUserId());
         }
+        //获取符合日期以及权限的用户数据
         List<SysGeoLog> list = sysGeoLogService.selectSysGeoLogListExport(sysGeoLog);
+        //获取符合日期的所有用户数据
+        List<SysGeoLog> listForDate = sysGeoLogService.selectSysGeoLogListExportByDate(sysGeoLog);
+
         Map<String, List<SysGeoLog>> geoLogMap = new HashMap<>();
+        Map<String, Boolean> userCheckMap = new HashMap<>();
+        BigDecimal allUserMoney = BigDecimal.ZERO;
         for (SysGeoLog geoLog : list) {
             if (geoLogMap.containsKey(geoLog.getUserName())) {
                 List<SysGeoLog> gl = geoLogMap.get(geoLog.getUserName());
@@ -94,6 +100,20 @@ public class SysGeoLogController extends BaseController {
                 gl.add(geoLog);
                 geoLogMap.put(geoLog.getUserName(), gl);
             }
+            if (geoLog.getGeoUser().getIsCheck() == 1){
+                userCheckMap.put(geoLog.getUserName(),true);
+            }
+        }
+
+        for (SysGeoLog geoLog : listForDate) {
+            for (SysGeoLogInfo geoLogInfo : geoLog.getGeoLogInfo()) {
+                if (geoLog.getGeoUser().getIsCheck() != 1 && geoLogInfo.getProjectId() != null && geoLogInfo.getProjectId() != 0){
+                    BigDecimal difficultyDegree = BigDecimal.valueOf(geoLogInfo.getDifficultyDegree());
+                    BigDecimal workload = BigDecimal.valueOf(geoLogInfo.getWorkload());
+                    BigDecimal jinEr = difficultyDegree.multiply(workload).multiply(geoLogInfo.getTypeMoney());
+                    allUserMoney = allUserMoney.add(jinEr);
+                }
+            }
         }
         // 遍历值
         List<LogExport> exportList = new ArrayList<>();
@@ -101,6 +121,12 @@ public class SysGeoLogController extends BaseController {
             String userName = entry.getKey();
             List<SysGeoLog> value = entry.getValue();
             LogExport logExport = this.integratedOutputValueSelf(value, userName);
+            if (userCheckMap.containsKey(userName)) {
+                BigDecimal multiplier = new BigDecimal("0.05");
+                allUserMoney = allUserMoney.multiply(multiplier);
+                logExport.setType52_jr(allUserMoney);
+                logExport.setTotal_money(logExport.getTotal_money().add(allUserMoney));
+            }
             exportList.add(logExport);
         }
         return getDataTable(exportList);

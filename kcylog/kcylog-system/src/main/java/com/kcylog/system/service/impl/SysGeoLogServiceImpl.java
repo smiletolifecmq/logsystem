@@ -111,4 +111,10 @@ public class SysGeoLogServiceImpl implements ISysGeoLogService
     {
         return sysGeoLogMapper.selectSysGeoLogListExport(sysGeoLog);
     }
+
+    @Override
+    public List<SysGeoLog> selectSysGeoLogListExportByDate(SysGeoLog sysGeoLog)
+    {
+        return sysGeoLogMapper.selectSysGeoLogListExportByDate(sysGeoLog);
+    }
 }
