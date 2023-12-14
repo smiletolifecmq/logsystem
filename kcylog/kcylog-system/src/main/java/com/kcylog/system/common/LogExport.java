@@ -111,7 +111,7 @@ public class LogExport {
     private BigDecimal type52_jr;
     //总产值
     private BigDecimal total_money;
-    
+
     public String getUser_name() {
         return user_name;
     }
