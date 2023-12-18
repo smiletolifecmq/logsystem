@@ -15,6 +15,7 @@ import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.bind.annotation.*;
 
 import java.math.BigDecimal;
+import java.math.RoundingMode;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -171,7 +172,7 @@ public class SysGeoLogController extends BaseController {
                 logExport.setType51_jr(allProjectMoney);
                 logExport.setTotal_money(logExport.getTotal_money().add(allProjectMoney));
             }
-
+            logExport.setTotal_money(logExport.getTotal_money().setScale(2, RoundingMode.HALF_UP));
             exportList.add(logExport);
         }
         return getDataTable(exportList);
@@ -737,7 +738,7 @@ public class SysGeoLogController extends BaseController {
             BigDecimal bigDecimalWorkCoefficient = new BigDecimal(workCoefficient);
             BigDecimal bigDecimalUserCoefficient = new BigDecimal(userCoefficientMap);
             logExport.setTotal_money(logExport.getTotal_money().multiply(bigDecimalFitCoefficient).multiply(bigDecimalWorkCoefficient).multiply(bigDecimalUserCoefficient));
-
+            logExport.setTotal_money(logExport.getTotal_money().setScale(2, RoundingMode.HALF_UP));
             exportList.add(logExport);
         }
         return getDataTable(exportList);

@@ -241,19 +241,20 @@
                   </el-form-item>
                 </el-col>
                 <el-col :span="5">
-                  <el-form-item label="备注" style="margin-left: 40px">
-                    <el-input
-                      type="textarea"
-                      autosize
-                      v-model="logInfo.remark"
-                      placeholder="暂无备注"
-                      disabled
-                    >
-                    </el-input>
-                  </el-form-item>
+                  <el-tooltip
+                    :content="logInfo.remark"
+                    placement="bottom"
+                    effect="dark"
+                  >
+                    <el-form-item label="" style="margin-left: 90px">
+                      <el-button icon="el-icon-info" size="mini"
+                        >备注</el-button
+                      >
+                    </el-form-item>
+                  </el-tooltip>
                 </el-col>
                 <el-col :span="5">
-                  <el-form-item label="关联项目">
+                  <el-form-item label="关联项目" style="margin-left: -60px">
                     <el-select
                       v-model="logInfo.projectId"
                       placeholder="请选择"
@@ -617,6 +618,13 @@ export default {
     /** 新增按钮操作 */
     handleAdd() {
       this.reset();
+      var currentDate = new Date();
+      var year = currentDate.getFullYear();
+      var month = ("0" + (currentDate.getMonth() + 1)).slice(-2); // +1 是因为月份从 0 开始计数
+      var day = ("0" + currentDate.getDate()).slice(-2);
+      var formattedDate = year + "-" + month + "-" + day;
+      this.form.logDate = formattedDate;
+
       this.form.geoLogInfo = [];
       this.open = true;
       this.title = "添加日志";
