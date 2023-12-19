@@ -69,7 +69,7 @@
         width="180"
       >
         <template slot-scope="scope">
-          <span>{{ parseTime(scope.row.assessDate, "{y}-{m}-{d}") }}</span>
+          <span>{{ parseTime(scope.row.assessDate, "{y}-{m}") }}</span>
         </template>
       </el-table-column>
       <el-table-column

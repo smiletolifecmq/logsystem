@@ -38,7 +38,6 @@
           icon="el-icon-plus"
           size="mini"
           @click="handleAdd"
-          v-hasPermi="['system:coefficient:add']"
           >新增</el-button
         >
       </el-col>
@@ -66,7 +65,6 @@
             type="text"
             icon="el-icon-edit"
             @click="handleUpdate(scope.row)"
-            v-hasPermi="['system:coefficient:edit']"
             >修改</el-button
           >
           <el-button
@@ -74,7 +72,6 @@
             type="text"
             icon="el-icon-delete"
             @click="handleDelete(scope.row)"
-            v-hasPermi="['system:coefficient:remove']"
             >删除</el-button
           >
         </template>
@@ -93,7 +90,7 @@
     <el-dialog :title="title" :visible.sync="open" width="500px" append-to-body>
       <el-form ref="form" :model="form" :rules="rules" label-width="80px">
         <el-form-item label="用户名称" prop="userId">
-          <el-select v-model="form.userId" placeholder="请选择">
+          <el-select v-model="form.userId" filterable placeholder="请选择">
             <el-option
               v-for="item in userList"
               :key="item.userId"

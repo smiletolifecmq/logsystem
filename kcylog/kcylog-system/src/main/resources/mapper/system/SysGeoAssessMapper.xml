@@ -38,6 +38,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
         <where>
             <if test="assessDate != null "> and assess_date = #{assessDate}</if>
             <if test="assessUserName != null  and assessUserName != ''"> and assess_user_name like concat('%', #{assessUserName}, '%')</if>
+            and assess_user_id = #{assessUserId}
         </where>
         order by assess_id desc
     </select>
