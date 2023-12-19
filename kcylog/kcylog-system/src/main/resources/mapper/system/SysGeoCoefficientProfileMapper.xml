@@ -1,0 +1,68 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.kcylog.system.mapper.SysGeoCoefficientProfileMapper">
+    
+    <resultMap type="SysGeoCoefficientProfile" id="SysGeoCoefficientProfileResult">
+        <result property="profileId"    column="profile_id"    />
+        <result property="title"    column="title"    />
+        <collection property="manageFile" javaType="java.util.List" resultMap="manageFileResult"/>
+    </resultMap>
+
+    <resultMap type="SysManageFile" id="manageFileResult">
+        <result property="fileId" column="file_id"/>
+        <result property="newFileName" column="new_file_name"/>
+        <result property="oldFileName" column="old_file_name"/>
+        <result property="url" column="url"/>
+        <result property="fileName" column="file_name"/>
+        <result property="moduleId" column="module_id"/>
+        <result property="moduleType" column="module_type"/>
+    </resultMap>
+
+    <sql id="selectSysGeoCoefficientProfileVo">
+        select k.*, f.new_file_name, f.old_file_name, f.url, f.file_name from sys_geo_coefficient_profile k
+        inner join sys_manage_file f on k.profile_id = f.module_id and f.module_type = 7
+    </sql>
+
+    <select id="selectSysGeoCoefficientProfileList" parameterType="SysGeoCoefficientProfile" resultMap="SysGeoCoefficientProfileResult">
+        <include refid="selectSysGeoCoefficientProfileVo"/>
+        <where>  
+            <if test="title != null  and title != ''"> and title = #{title}</if>
+        </where>
+    </select>
+    
+    <select id="selectSysGeoCoefficientProfileByProfileId" parameterType="Long" resultMap="SysGeoCoefficientProfileResult">
+        <include refid="selectSysGeoCoefficientProfileVo"/>
+        where profile_id = #{profileId}
+    </select>
+        
+    <insert id="insertSysGeoCoefficientProfile" parameterType="SysGeoCoefficientProfile" useGeneratedKeys="true" keyProperty="profileId">
+        insert into sys_geo_coefficient_profile
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="title != null and title != ''">title,</if>
+         </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test="title != null and title != ''">#{title},</if>
+         </trim>
+    </insert>
+
+    <update id="updateSysGeoCoefficientProfile" parameterType="SysGeoCoefficientProfile">
+        update sys_geo_coefficient_profile
+        <trim prefix="SET" suffixOverrides=",">
+            <if test="title != null and title != ''">title = #{title},</if>
+        </trim>
+        where profile_id = #{profileId}
+    </update>
+
+    <delete id="deleteSysGeoCoefficientProfileByProfileId" parameterType="Long">
+        delete from sys_geo_coefficient_profile where profile_id = #{profileId}
+    </delete>
+
+    <delete id="deleteSysGeoCoefficientProfileByProfileIds" parameterType="String">
+        delete from sys_geo_coefficient_profile where profile_id in 
+        <foreach item="profileId" collection="array" open="(" separator="," close=")">
+            #{profileId}
+        </foreach>
+    </delete>
+</mapper>
