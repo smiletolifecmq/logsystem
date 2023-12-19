@@ -38,7 +38,6 @@
           icon="el-icon-plus"
           size="mini"
           @click="handleAdd"
-          v-hasPermi="['system:technicalUpdate:add']"
           >新增</el-button
         >
       </el-col>
