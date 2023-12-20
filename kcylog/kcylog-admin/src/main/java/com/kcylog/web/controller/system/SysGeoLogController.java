@@ -48,11 +48,15 @@ public class SysGeoLogController extends BaseController {
     @Autowired
     private ISysGeoUserCoefficientService sysGeoUserCoefficientService;
 
+    private static double poleSimple = 0.5;
+
     private static double simple = 0.8;
 
     private static double generally = 1;
 
     private static double difficulty = 1.2;
+
+    private static double poleDifficulty = 1.5;
 
     /**
      * 查询地理部门日志列表
@@ -216,11 +220,15 @@ public class SysGeoLogController extends BaseController {
             Gson gson = new Gson();
             String json = gson.toJson(geoLogInfo.getTypeArrJson());
             geoLogInfo.setTypeArr(json);
-            if (geoLogInfo.getDifficulty() == 1) {
+            if (geoLogInfo.getDifficulty() == 0){
+                geoLogInfo.setDifficultyDegree(poleSimple);
+            } else if (geoLogInfo.getDifficulty() == 1) {
                 geoLogInfo.setDifficultyDegree(simple);
             } else if (geoLogInfo.getDifficulty() == 3) {
                 geoLogInfo.setDifficultyDegree(difficulty);
-            } else {
+            } else if (geoLogInfo.getDifficulty() == 4){
+                geoLogInfo.setDifficultyDegree(poleDifficulty);
+            }else {
                 geoLogInfo.setDifficultyDegree(generally);
             }
             geoLogInfo.setLogDate(sysGeoLog.getLogDate());
@@ -249,11 +257,15 @@ public class SysGeoLogController extends BaseController {
             Gson gson = new Gson();
             String json = gson.toJson(geoLogInfo.getTypeArrJson());
             geoLogInfo.setTypeArr(json);
-            if (geoLogInfo.getDifficulty() == 1) {
+            if (geoLogInfo.getDifficulty() == 0){
+                geoLogInfo.setDifficultyDegree(poleSimple);
+            } else if (geoLogInfo.getDifficulty() == 1) {
                 geoLogInfo.setDifficultyDegree(simple);
             } else if (geoLogInfo.getDifficulty() == 3) {
                 geoLogInfo.setDifficultyDegree(difficulty);
-            } else {
+            } else if (geoLogInfo.getDifficulty() == 4){
+                geoLogInfo.setDifficultyDegree(poleDifficulty);
+            }else {
                 geoLogInfo.setDifficultyDegree(generally);
             }
             geoLogInfo.setLogDate(sysGeoLog.getLogDate());

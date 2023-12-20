@@ -448,16 +448,24 @@ export default {
       },
       difficultys: [
         {
+          value: 0,
+          label: "极简单(0.5)",
+        },
+        {
           value: 1,
-          label: "简单",
+          label: "简单(0.8)",
         },
         {
           value: 2,
-          label: "一般",
+          label: "一般(1)",
         },
         {
           value: 3,
-          label: "困难",
+          label: "困难(1.2)",
+        },
+        {
+          value: 4,
+          label: "极困难(1.5)",
         },
       ],
       typeListMap: {},
