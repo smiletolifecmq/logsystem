@@ -119,7 +119,7 @@
       >
         <template slot-scope="scope">
           <div v-for="(unit, index) in scope.row.geoLogInfo" :key="index">
-            {{ unit.workdetail }}
+            {{ index + 1 }}:{{ unit.workdetail }}
           </div>
         </template>
       </el-table-column>
@@ -259,7 +259,9 @@
                 <el-col :span="4">
                   <el-form-item label="工作内容" prop="workdetail">
                     <el-input
-                      v-model="logInfo.workdetail"
+                      type="textarea"
+                      :rows="1"
+                      v-model="logInfo.workload"
                       placeholder="请输入工作详情"
                     ></el-input>
                   </el-form-item>
@@ -398,7 +400,13 @@
                 </el-col>
                 <el-col :span="4">
                   <el-form-item label="工作内容" prop="workdetail">
-                    <el-input v-model="logInfo.workdetail" disabled></el-input>
+                    <el-input
+                      type="textarea"
+                      :rows="1"
+                      v-model="logInfo.workload"
+                      placeholder="请输入工作详情"
+                      disabled
+                    ></el-input>
                   </el-form-item>
                 </el-col>
                 <el-col :span="4">
@@ -574,7 +582,6 @@ export default {
       this.form.geoLogInfo[index].difficulty = 2;
       this.form.geoLogInfo[index].typeId = typeId;
       this.form.geoLogInfo[index].degree = typeObj.degree;
-      this.form.geoLogInfo[index].workdetail = "";
       if (typeObj.degree === 0) {
         this.form.geoLogInfo[index].disabled = true;
       } else {
