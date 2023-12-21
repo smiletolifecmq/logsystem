@@ -72,4 +72,14 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
     <select id="selectSysGeoProjectAll" resultMap="SysGeoProjectResult">
         <include refid="selectSysGeoProjectVo"/>
     </select>
+
+    <select id="selectSysGeoProjectByProjectNum" parameterType="SysGeoProject" resultMap="SysGeoProjectResult">
+        <include refid="selectSysGeoProjectVo"/>
+        where project_num = #{projectNum}
+    </select>
+
+    <select id="selectSysGeoProjectByProjectNumNotSelf" parameterType="SysGeoProject" resultMap="SysGeoProjectResult">
+        <include refid="selectSysGeoProjectVo"/>
+        where project_num = #{projectNum} and project_id != #{projectId}
+    </select>
 </mapper>

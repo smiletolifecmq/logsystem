@@ -97,4 +97,10 @@ public class SysGeoLogInfoServiceImpl implements ISysGeoLogInfoService
     {
         return sysGeoLogInfoMapper.deleteSysGeoLogInfoByLogIds(logIds);
     }
+
+    @Override
+    public List<SysGeoLogInfo> selectSysGeoLogInfoByProjectId(Long[] projectIds)
+    {
+        return sysGeoLogInfoMapper.selectSysGeoLogInfoByProjectId(projectIds);
+    }
 }

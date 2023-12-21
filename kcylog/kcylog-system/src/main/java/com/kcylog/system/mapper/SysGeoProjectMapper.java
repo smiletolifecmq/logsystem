@@ -61,4 +61,8 @@ public interface SysGeoProjectMapper
     public int deleteSysGeoProjectByProjectIds(Long[] projectIds);
 
     public List<SysGeoProject> selectSysGeoProjectAll();
+
+    public SysGeoProject selectSysGeoProjectByProjectNum(SysGeoProject sysGeoProject);
+
+    public SysGeoProject selectSysGeoProjectByProjectNumNotSelf(SysGeoProject sysGeoProject);
 }

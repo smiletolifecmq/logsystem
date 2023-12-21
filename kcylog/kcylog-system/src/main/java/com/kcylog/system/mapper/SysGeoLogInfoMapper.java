@@ -61,4 +61,6 @@ public interface SysGeoLogInfoMapper
     public int deleteSysGeoLogInfoByLogInfoIds(Long[] logInfoIds);
 
     public int deleteSysGeoLogInfoByLogIds(Long[] logIds);
+
+    public List<SysGeoLogInfo> selectSysGeoLogInfoByProjectId(Long[] projectIds);
 }

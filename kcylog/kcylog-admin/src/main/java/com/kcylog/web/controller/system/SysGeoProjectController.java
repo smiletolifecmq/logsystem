@@ -3,12 +3,15 @@ package com.kcylog.web.controller.system;
 import com.kcylog.common.annotation.Log;
 import com.kcylog.common.core.controller.BaseController;
 import com.kcylog.common.core.domain.AjaxResult;
+import com.kcylog.common.core.domain.entity.SysUser;
 import com.kcylog.common.core.page.TableDataInfo;
 import com.kcylog.common.enums.BusinessType;
-import com.kcylog.common.utils.SecurityUtils;
 import com.kcylog.common.utils.poi.ExcelUtil;
+import com.kcylog.system.domain.SysGeoLogInfo;
 import com.kcylog.system.domain.SysGeoProject;
+import com.kcylog.system.service.ISysGeoLogInfoService;
 import com.kcylog.system.service.ISysGeoProjectService;
+import com.kcylog.system.service.ISysUserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
@@ -27,6 +30,12 @@ public class SysGeoProjectController extends BaseController
 {
     @Autowired
     private ISysGeoProjectService sysGeoProjectService;
+
+    @Autowired
+    private ISysUserService userService;
+
+    @Autowired
+    private ISysGeoLogInfoService sysGeoLogInfoService;
 
     /**
      * 查询地理项目列表
@@ -67,8 +76,12 @@ public class SysGeoProjectController extends BaseController
     @PostMapping
     public AjaxResult add(@RequestBody SysGeoProject sysGeoProject)
     {
-        sysGeoProject.setUserId(SecurityUtils.getUserId());
-        sysGeoProject.setUserName(SecurityUtils.getUsername());
+        SysGeoProject geoProject = sysGeoProjectService.selectSysGeoProjectByProjectNum(sysGeoProject);
+        if (geoProject != null) {
+            return error("该项目编号已存在～");
+        }
+        SysUser sysUser = userService.selectUserById(sysGeoProject.getUserId());
+        sysGeoProject.setUserName(sysUser.getUserName());
         return toAjax(sysGeoProjectService.insertSysGeoProject(sysGeoProject));
     }
 
@@ -79,8 +92,12 @@ public class SysGeoProjectController extends BaseController
     @PutMapping
     public AjaxResult edit(@RequestBody SysGeoProject sysGeoProject)
     {
-        sysGeoProject.setUserId(SecurityUtils.getUserId());
-        sysGeoProject.setUserName(SecurityUtils.getUsername());
+        SysGeoProject geoProject = sysGeoProjectService.selectSysGeoProjectByProjectNumNotSelf(sysGeoProject);
+        if (geoProject != null) {
+            return error("修改后的项目编号已存在～");
+        }
+        SysUser sysUser = userService.selectUserById(sysGeoProject.getUserId());
+        sysGeoProject.setUserName(sysUser.getUserName());
         return toAjax(sysGeoProjectService.updateSysGeoProject(sysGeoProject));
     }
 
@@ -91,6 +108,10 @@ public class SysGeoProjectController extends BaseController
 	@DeleteMapping("/{projectIds}")
     public AjaxResult remove(@PathVariable Long[] projectIds)
     {
+        List<SysGeoLogInfo> geoLogInfo = sysGeoLogInfoService.selectSysGeoLogInfoByProjectId(projectIds);
+        if (geoLogInfo.size() != 0) {
+            return error("项目已关联日志，不可删除～");
+        }
         return toAjax(sysGeoProjectService.deleteSysGeoProjectByProjectIds(projectIds));
     }
 }

@@ -61,4 +61,6 @@ public interface ISysGeoLogInfoService
     public int deleteSysGeoLogInfoByLogInfoId(Long logInfoId);
 
     public int deleteSysGeoLogInfoByLogIds(Long[] logIds);
+
+    public List<SysGeoLogInfo> selectSysGeoLogInfoByProjectId(Long[] projectIds);
 }

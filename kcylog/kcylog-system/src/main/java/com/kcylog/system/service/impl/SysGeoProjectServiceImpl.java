@@ -97,4 +97,16 @@ public class SysGeoProjectServiceImpl implements ISysGeoProjectService
     {
         return sysGeoProjectMapper.selectSysGeoProjectAll();
     }
+
+    @Override
+    public SysGeoProject selectSysGeoProjectByProjectNum(SysGeoProject sysGeoProject)
+    {
+        return sysGeoProjectMapper.selectSysGeoProjectByProjectNum(sysGeoProject);
+    }
+
+    @Override
+    public SysGeoProject selectSysGeoProjectByProjectNumNotSelf(SysGeoProject sysGeoProject)
+    {
+        return sysGeoProjectMapper.selectSysGeoProjectByProjectNumNotSelf(sysGeoProject);
+    }
 }

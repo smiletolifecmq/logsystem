@@ -82,7 +82,6 @@
             type="text"
             icon="el-icon-edit"
             @click="handleUpdate(scope.row)"
-            v-if="showButton(scope.row.userId)"
             >修改</el-button
           >
           <el-button
@@ -90,7 +89,6 @@
             type="text"
             icon="el-icon-delete"
             @click="handleDelete(scope.row)"
-            v-if="showButton(scope.row.userId)"
             >删除</el-button
           >
         </template>
@@ -114,6 +112,21 @@
         <el-form-item label="项目名称" prop="projectName">
           <el-input v-model="form.projectName" placeholder="请输入项目名称" />
         </el-form-item>
+        <el-form-item label="负责人" prop="userId">
+          <el-select
+            v-model="form.userId"
+            placeholder="请选择负责人"
+            filterable
+          >
+            <el-option
+              v-for="item in userListAll"
+              :key="item.userId"
+              :label="item.userName"
+              :value="item.userId"
+            >
+            </el-option>
+          </el-select>
+        </el-form-item>
       </el-form>
       <div slot="footer" class="dialog-footer">
         <el-button type="primary" @click="submitForm">确 定</el-button>
@@ -132,11 +145,18 @@ import {
   updateProject,
 } from "@/api/system/geoProject";
 import userInfo from "@/store/modules/user";
+import { listUser } from "@/api/system/user";
 
 export default {
   name: "Project",
   data() {
     return {
+      dateRange: [],
+      userListAll: [],
+      queryUserParams: {
+        pageNum: 1,
+        pageSize: 9999,
+      },
       // 遮罩层
       loading: true,
       // 选中数组
@@ -174,9 +194,7 @@ export default {
         projectName: [
           { required: true, message: "项目名称不能为空", trigger: "blur" },
         ],
-        userId: [
-          { required: true, message: "负责人ID不能为空", trigger: "blur" },
-        ],
+        userId: [{ required: true, message: "请选择负责人", trigger: "blur" }],
         userName: [
           { required: true, message: "负责人名称不能为空", trigger: "blur" },
         ],
@@ -184,6 +202,11 @@ export default {
     };
   },
   created() {
+    listUser(this.addDateRange(this.queryUserParams, this.dateRange)).then(
+      (response) => {
+        this.userListAll = response.rows;
+      }
+    );
     this.getList();
   },
   methods: {

@@ -104,4 +104,12 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
             #{logId}
         </foreach>
     </delete>
+
+    <select id="selectSysGeoLogInfoByProjectId" parameterType="String" resultMap="SysGeoLogInfoResult">
+        <include refid="selectSysGeoLogInfoVo"/>
+        where project_id in
+        <foreach item="projectId" collection="array" open="(" separator="," close=")">
+            #{projectId}
+        </foreach>
+    </select>
 </mapper>
