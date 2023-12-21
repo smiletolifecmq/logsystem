@@ -249,7 +249,7 @@
                       :min="0"
                       :controls="false"
                       size="small"
-                      :placeholder="logInfo.unit"
+                      placeholder="请输入工作量"
                     ></el-input-number>
                   </el-form-item>
                 </el-col>
@@ -262,6 +262,7 @@
                       type="textarea"
                       :rows="1"
                       v-model="logInfo.workdetail"
+                      :key="index"
                       placeholder="请输入工作详情"
                     ></el-input>
                   </el-form-item>
@@ -654,8 +655,7 @@ export default {
       var month = ("0" + (currentDate.getMonth() + 1)).slice(-2); // +1 是因为月份从 0 开始计数
       var day = ("0" + currentDate.getDate()).slice(-2);
       var formattedDate = year + "-" + month + "-" + day;
-      this.form.logDate = formattedDate;
-      this.form.geoLogInfo = [];
+      this.form = { logDate: formattedDate, geoLogInfo: [] };
       this.open = true;
       this.title = "添加日志";
     },
