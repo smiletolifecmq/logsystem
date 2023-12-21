@@ -261,7 +261,7 @@
                     <el-input
                       type="textarea"
                       :rows="1"
-                      v-model="logInfo.workload"
+                      v-model="logInfo.workdetail"
                       placeholder="请输入工作详情"
                     ></el-input>
                   </el-form-item>
@@ -403,7 +403,7 @@
                     <el-input
                       type="textarea"
                       :rows="1"
-                      v-model="logInfo.workload"
+                      v-model="logInfo.workdetail"
                       placeholder="请输入工作详情"
                       disabled
                     ></el-input>
@@ -655,7 +655,6 @@ export default {
       var day = ("0" + currentDate.getDate()).slice(-2);
       var formattedDate = year + "-" + month + "-" + day;
       this.form.logDate = formattedDate;
-
       this.form.geoLogInfo = [];
       this.open = true;
       this.title = "添加日志";
