@@ -13,13 +13,14 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
         <result property="difficultyDegree"    column="difficulty_degree"    />
         <result property="logDate"    column="log_date"    />
         <result property="workload"    column="workload"    />
+        <result property="workdetail"    column="workdetail"    />
         <result property="typeMoney"    column="type_money"    />
         <result property="projectId"    column="project_id"    />
         <result property="degree"    column="degree"    />
     </resultMap>
 
     <sql id="selectSysGeoLogInfoVo">
-        select log_info_id, log_id, type_arr, type_id, difficulty, difficulty_degree, log_date, workload, type_money, project_id, degree from sys_geo_log_info
+        select log_info_id, log_id, type_arr, type_id, difficulty, difficulty_degree, log_date, workload, workdetail, type_money, project_id, degree from sys_geo_log_info
     </sql>
 
     <select id="selectSysGeoLogInfoList" parameterType="SysGeoLogInfo" resultMap="SysGeoLogInfoResult">
@@ -32,6 +33,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
             <if test="difficultyDegree != null "> and difficulty_degree = #{difficultyDegree}</if>
             <if test="logDate != null "> and log_date = #{logDate}</if>
             <if test="workload != null "> and workload = #{workload}</if>
+            <if test="workdetail != null "> and workdetail = #{workdetail}</if>
             <if test="typeMoney != null "> and type_money = #{typeMoney}</if>
             <if test="projectId != null "> and project_id = #{projectId}</if>
         </where>
@@ -52,6 +54,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
             <if test="difficultyDegree != null">difficulty_degree,</if>
             <if test="logDate != null">log_date,</if>
             <if test="workload != null">workload,</if>
+            <if test="workdetail != null">workdetail,</if>
             <if test="typeMoney != null">type_money,</if>
             <if test="projectId != null">project_id,</if>
             <if test="degree != null">degree,</if>
@@ -64,6 +67,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
             <if test="difficultyDegree != null">#{difficultyDegree},</if>
             <if test="logDate != null">#{logDate},</if>
             <if test="workload != null">#{workload},</if>
+            <if test="workdetail != null">#{workdetail},</if>
             <if test="typeMoney != null">#{typeMoney},</if>
             <if test="projectId != null">#{projectId},</if>
             <if test="degree != null">#{degree},</if>
@@ -80,6 +84,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
             <if test="difficultyDegree != null">difficulty_degree = #{difficultyDegree},</if>
             <if test="logDate != null">log_date = #{logDate},</if>
             <if test="workload != null">workload = #{workload},</if>
+            <if test="workdetail != null">workdetail = #{workdetail},</if>
             <if test="typeMoney != null">type_money = #{typeMoney},</if>
             <if test="projectId != null">project_id = #{projectId},</if>
             <if test="degree != null">degree = #{degree},</if>

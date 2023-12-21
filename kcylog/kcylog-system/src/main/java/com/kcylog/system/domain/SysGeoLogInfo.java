@@ -51,6 +51,8 @@ public class SysGeoLogInfo extends BaseEntity
     @Excel(name = "工作量")
     private Double workload;
 
+    private String workdetail;
+
     /** 单价 */
     @Excel(name = "单价")
     private BigDecimal typeMoney;
@@ -64,6 +66,14 @@ public class SysGeoLogInfo extends BaseEntity
     private Long degree;
 
     private boolean disabled;
+
+    public String getWorkdetail() {
+        return workdetail;
+    }
+
+    public void setWorkdetail(String workdetail) {
+        this.workdetail = workdetail;
+    }
 
     public boolean getDisabled() {
         return disabled;

@@ -112,6 +112,18 @@
       </el-table-column>
       <el-table-column label="用户名称" align="center" prop="userName" />
       <el-table-column
+        label="工作内容"
+        align="center"
+        prop="geoLogInfo"
+        width="180"
+      >
+        <template slot-scope="scope">
+          <div v-for="(unit, index) in scope.row.geoLogInfo" :key="index">
+            {{ unit.workdetail }}
+          </div>
+        </template>
+      </el-table-column>
+      <el-table-column
         label="操作"
         align="center"
         class-name="small-padding fixed-width"
@@ -156,7 +168,7 @@
     <el-dialog
       :title="title"
       :visible.sync="open"
-      width="1200px"
+      width="1400px"
       append-to-body
     >
       <el-form ref="form" :model="form" :rules="rules" label-width="80px">
@@ -186,12 +198,8 @@
               prop="geoLogInfo"
             >
               <el-row>
-                <el-col :span="5">
-                  <el-form-item
-                    label="类型"
-                    prop="typeArrJson"
-                    style="margin-left: -100px"
-                  >
+                <el-col :span="4" style="margin-left: -60px">
+                  <el-form-item label="类型" prop="typeArrJson">
                     <el-cascader
                       filterable
                       :options="typeList"
@@ -201,12 +209,21 @@
                     ></el-cascader>
                   </el-form-item>
                 </el-col>
-                <el-col :span="3">
-                  <el-form-item
-                    label="难度"
-                    style="margin-left: -70px"
-                    prop="difficulty"
+                <el-col :span="1">
+                  <el-tooltip
+                    :content="logInfo.remark"
+                    placement="bottom"
+                    effect="dark"
                   >
+                    <el-form-item label="">
+                      <el-button icon="el-icon-info" size="mini"
+                        >备注</el-button
+                      >
+                    </el-form-item>
+                  </el-tooltip>
+                </el-col>
+                <el-col :span="3">
+                  <el-form-item label="难度" prop="difficulty">
                     <el-select
                       @change="handleDifficultyChange()"
                       v-model="logInfo.difficulty"
@@ -223,12 +240,8 @@
                     </el-select>
                   </el-form-item>
                 </el-col>
-                <el-col :span="3">
-                  <el-form-item
-                    label="工作量"
-                    prop="workload"
-                    style="margin-left: -10px"
-                  >
+                <el-col :span="4">
+                  <el-form-item label="工作量" prop="workload">
                     <el-input-number
                       v-model="logInfo.workload"
                       :precision="2"
@@ -240,21 +253,19 @@
                     ></el-input-number>
                   </el-form-item>
                 </el-col>
-                <el-col :span="5">
-                  <el-tooltip
-                    :content="logInfo.remark"
-                    placement="bottom"
-                    effect="dark"
-                  >
-                    <el-form-item label="" style="margin-left: 90px">
-                      <el-button icon="el-icon-info" size="mini"
-                        >备注</el-button
-                      >
-                    </el-form-item>
-                  </el-tooltip>
+                <el-col :span="1.5" style="font-weight: bold">
+                  {{ logInfo.unit }}</el-col
+                >
+                <el-col :span="4">
+                  <el-form-item label="工作内容" prop="workdetail">
+                    <el-input
+                      v-model="logInfo.workdetail"
+                      placeholder="请输入工作详情"
+                    ></el-input>
+                  </el-form-item>
                 </el-col>
-                <el-col :span="5">
-                  <el-form-item label="关联项目" style="margin-left: -60px">
+                <el-col :span="4">
+                  <el-form-item label="关联项目">
                     <el-select
                       v-model="logInfo.projectId"
                       placeholder="请选择"
@@ -273,7 +284,7 @@
                     </el-select>
                   </el-form-item>
                 </el-col>
-                <el-col :span="2" style="display: none">
+                <el-col style="display: none">
                   <el-form-item label="单价">
                     <el-input v-model="logInfo.typeMoney" disabled> </el-input>
                   </el-form-item>
@@ -309,7 +320,7 @@
     <el-dialog
       title="详情"
       :visible.sync="detailOpen"
-      width="1200px"
+      width="1400px"
       append-to-body
     >
       <el-form
@@ -337,11 +348,11 @@
               prop="geoLogInfo"
             >
               <el-row>
-                <el-col :span="5">
+                <el-col :span="4">
                   <el-form-item
                     label="类型"
                     prop="typeArrJson"
-                    style="margin-left: -100px"
+                    style="margin-left: -60px"
                   >
                     <el-cascader
                       disabled
@@ -353,12 +364,8 @@
                     ></el-cascader>
                   </el-form-item>
                 </el-col>
-                <el-col :span="5">
-                  <el-form-item
-                    label="难度"
-                    style="margin-left: -70px"
-                    prop="difficulty"
-                  >
+                <el-col :span="4">
+                  <el-form-item label="难度" prop="difficulty">
                     <el-select
                       disabled
                       @change="handleDifficultyChange()"
@@ -375,12 +382,8 @@
                     </el-select>
                   </el-form-item>
                 </el-col>
-                <el-col :span="5">
-                  <el-form-item
-                    label="工作量"
-                    prop="workload"
-                    style="margin-left: -10px"
-                  >
+                <el-col :span="4">
+                  <el-form-item label="工作量" prop="workload">
                     <el-input-number
                       v-model="logInfo.workload"
                       :precision="2"
@@ -393,7 +396,12 @@
                     ></el-input-number>
                   </el-form-item>
                 </el-col>
-                <el-col :span="5">
+                <el-col :span="4">
+                  <el-form-item label="工作内容" prop="workdetail">
+                    <el-input v-model="logInfo.workdetail" disabled></el-input>
+                  </el-form-item>
+                </el-col>
+                <el-col :span="4">
                   <el-form-item label="关联项目">
                     <el-select
                       v-model="logInfo.projectId"
@@ -566,6 +574,7 @@ export default {
       this.form.geoLogInfo[index].difficulty = 2;
       this.form.geoLogInfo[index].typeId = typeId;
       this.form.geoLogInfo[index].degree = typeObj.degree;
+      this.form.geoLogInfo[index].workdetail = "";
       if (typeObj.degree === 0) {
         this.form.geoLogInfo[index].disabled = true;
       } else {
