@@ -267,6 +267,7 @@
                         :key="item.projectId"
                         :label="item.projectNum"
                         :value="item.projectId"
+                        :disabled="item.disabled"
                       >
                       </el-option>
                     </el-select>
@@ -529,6 +530,12 @@ export default {
     });
     listProject(this.queryProjectParams).then((response) => {
       this.projectList = response.rows;
+      const userId = userInfo.state.userId;
+      for (var i = 0; i < this.projectList.length; i++) {
+        if (this.projectList[i].userId == userId) {
+          this.projectList[i].disabled = true;
+        }
+      }
     });
   },
   methods: {
