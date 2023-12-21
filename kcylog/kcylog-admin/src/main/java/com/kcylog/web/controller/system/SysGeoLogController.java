@@ -5,6 +5,7 @@ import com.kcylog.common.annotation.Log;
 import com.kcylog.common.core.controller.BaseController;
 import com.kcylog.common.core.domain.AjaxResult;
 import com.kcylog.common.core.page.TableDataInfo;
+import com.kcylog.common.core.redis.RedisCache;
 import com.kcylog.common.enums.BusinessType;
 import com.kcylog.common.utils.SecurityUtils;
 import com.kcylog.system.common.LogExport;
@@ -47,6 +48,9 @@ public class SysGeoLogController extends BaseController {
 
     @Autowired
     private ISysGeoUserCoefficientService sysGeoUserCoefficientService;
+
+    @Autowired
+    private RedisCache redisCache;
 
     private static double poleSimple = 0.5;
 
@@ -216,6 +220,13 @@ public class SysGeoLogController extends BaseController {
         }
         sysGeoLogService.insertSysGeoLog(sysGeoLog);
         for (SysGeoLogInfo geoLogInfo : sysGeoLog.getGeoLogInfo()) {
+            Integer sortValue = redisCache.getCacheMapValue(SecurityUtils.getUsername(),Long.toString(geoLogInfo.getProjectId()));
+            if (sortValue == null){
+                redisCache.setCacheMapValue(SecurityUtils.getUsername(),Long.toString(geoLogInfo.getProjectId()),1);
+            }else {
+                sortValue ++;
+                redisCache.setCacheMapValue(SecurityUtils.getUsername(),Long.toString(geoLogInfo.getProjectId()),sortValue);
+            }
             geoLogInfo.setLogId(sysGeoLog.getLogId());
             Gson gson = new Gson();
             String json = gson.toJson(geoLogInfo.getTypeArrJson());

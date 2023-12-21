@@ -545,17 +545,20 @@ export default {
         this.typeListMap.set(response.rows[i].typeId, response.rows[i]);
       }
     });
-    listProject(this.queryProjectParams).then((response) => {
-      this.projectList = response.rows;
-      const userId = userInfo.state.userId;
-      for (var i = 0; i < this.projectList.length; i++) {
-        if (this.projectList[i].userId == userId) {
-          this.projectList[i].disabled = true;
-        }
-      }
-    });
+    this.getListProject();
   },
   methods: {
+    getListProject() {
+      listProject(this.queryProjectParams).then((response) => {
+        this.projectList = response.rows;
+        const userId = userInfo.state.userId;
+        for (var i = 0; i < this.projectList.length; i++) {
+          if (this.projectList[i].userId == userId) {
+            this.projectList[i].disabled = true;
+          }
+        }
+      });
+    },
     showButton(user) {
       const now = new Date();
       const createTimeDate = new Date(user.createTime);
@@ -710,6 +713,7 @@ export default {
               this.$modal.msgSuccess("新增成功");
               this.open = false;
               this.getList();
+              this.getListProject();
             });
           }
         }

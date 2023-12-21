@@ -34,6 +34,16 @@ public class SysGeoProject extends BaseEntity
     @Excel(name = "负责人名称")
     private String userName;
 
+    private Integer sort;
+
+    public Integer getSort() {
+        return sort;
+    }
+
+    public void setSort(Integer sort) {
+        this.sort = sort;
+    }
+
     public void setProjectId(Long projectId) 
     {
         this.projectId = projectId;

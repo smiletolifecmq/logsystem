@@ -5,7 +5,9 @@ import com.kcylog.common.core.controller.BaseController;
 import com.kcylog.common.core.domain.AjaxResult;
 import com.kcylog.common.core.domain.entity.SysUser;
 import com.kcylog.common.core.page.TableDataInfo;
+import com.kcylog.common.core.redis.RedisCache;
 import com.kcylog.common.enums.BusinessType;
+import com.kcylog.common.utils.SecurityUtils;
 import com.kcylog.common.utils.poi.ExcelUtil;
 import com.kcylog.system.domain.SysGeoLogInfo;
 import com.kcylog.system.domain.SysGeoProject;
@@ -16,7 +18,10 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
 import javax.servlet.http.HttpServletResponse;
+import java.util.Collections;
+import java.util.Comparator;
 import java.util.List;
+import java.util.Map;
 
 /**
  * 地理项目Controller
@@ -37,6 +42,9 @@ public class SysGeoProjectController extends BaseController
     @Autowired
     private ISysGeoLogInfoService sysGeoLogInfoService;
 
+    @Autowired
+    private RedisCache redisCache;
+
     /**
      * 查询地理项目列表
      */
@@ -44,7 +52,16 @@ public class SysGeoProjectController extends BaseController
     public TableDataInfo list(SysGeoProject sysGeoProject)
     {
         startPage();
+        Map<String, Integer> sortProject =  redisCache.getCacheMap(SecurityUtils.getUsername());
         List<SysGeoProject> list = sysGeoProjectService.selectSysGeoProjectList(sysGeoProject);
+        for (SysGeoProject project : list){
+            if (sortProject.containsKey(project.getProjectId().toString())) {
+                project.setSort(sortProject.get(project.getProjectId().toString()));
+            }else {
+                project.setSort(0);
+            }
+        }
+        Collections.sort(list, Comparator.comparingInt(SysGeoProject::getSort).reversed());
         return getDataTable(list);
     }
 
