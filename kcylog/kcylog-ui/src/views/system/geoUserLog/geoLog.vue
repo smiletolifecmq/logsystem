@@ -119,7 +119,7 @@
       >
         <template slot-scope="scope">
           <div v-for="(unit, index) in scope.row.geoLogInfo" :key="index">
-            {{ index + 1 }}:{{ unit.workdetail }}
+            {{ unit.workdetail }}
           </div>
         </template>
       </el-table-column>
