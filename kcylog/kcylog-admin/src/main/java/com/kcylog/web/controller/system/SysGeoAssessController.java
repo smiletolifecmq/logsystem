@@ -127,7 +127,7 @@ public class SysGeoAssessController extends BaseController {
     @GetMapping("/listAssessUser")
     public TableDataInfo listAssessUser(SysGeoAssess sysGeoAssess) {
         Long userId = SecurityUtils.getUserId();
-        List<SysGeoUser> geoUser = sysGeoUserService.selectSysAssessUserByGeoUser(userId);
+        List<SysGeoUser> geoUser = sysGeoUserService.selectSysAssessUserByGeoUserForLeaderAssess(userId);
         List<SysGeoAssessInfo> geoAssessInfo = new ArrayList<SysGeoAssessInfo>();
         for (SysGeoUser user : geoUser) {
             SysGeoAssessInfo newGeoAssessInfo = new SysGeoAssessInfo();

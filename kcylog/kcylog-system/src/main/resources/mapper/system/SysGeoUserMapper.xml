@@ -93,6 +93,11 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
     <select id="selectSysAssessUserByGeoUser" parameterType="Long" resultMap="SysGeoUserResult">
         <include refid="selectSysGeoUserVo"/>
         where user_id != #{userId} and FIND_IN_SET(#{userId},ancestors)
+    </select>
+
+    <select id="selectSysAssessUserByGeoUserForLeaderAssess" parameterType="Long" resultMap="SysGeoUserResult">
+        <include refid="selectSysGeoUserVo"/>
+        where user_id != #{userId} and FIND_IN_SET(#{userId},ancestors)
         <if test="userId == 15">and user_id in (70,71,72)</if>
     </select>
 </mapper>

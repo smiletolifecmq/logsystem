@@ -67,4 +67,6 @@ public interface ISysGeoUserService
     public int updateSysChildGeoUser(SysGeoUser sysGeoUser);
 
     public List<SysGeoUser> selectSysAssessUserByGeoUser(Long userId);
+
+    public List<SysGeoUser> selectSysAssessUserByGeoUserForLeaderAssess(Long userId);
 }

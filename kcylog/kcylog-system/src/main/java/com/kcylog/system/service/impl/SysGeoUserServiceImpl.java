@@ -115,4 +115,10 @@ public class SysGeoUserServiceImpl implements ISysGeoUserService
     {
         return sysGeoUserMapper.selectSysAssessUserByGeoUser(userId);
     }
+
+    @Override
+    public List<SysGeoUser> selectSysAssessUserByGeoUserForLeaderAssess(Long userId)
+    {
+        return sysGeoUserMapper.selectSysAssessUserByGeoUserForLeaderAssess(userId);
+    }
 }
