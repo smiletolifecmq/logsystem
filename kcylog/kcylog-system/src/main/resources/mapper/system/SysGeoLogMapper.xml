@@ -3,7 +3,7 @@
 PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.kcylog.system.mapper.SysGeoLogMapper">
-    
+
     <resultMap type="SysGeoLog" id="SysGeoLogResult">
         <result property="logId"    column="log_id"    />
         <result property="logDate"    column="log_date"    />
@@ -31,6 +31,12 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
         <result property="typeMoney"    column="type_money"    />
         <result property="projectId"    column="project_id"    />
         <result property="degree"    column="degree"    />
+        <association property="geoType" javaType="SysGeoType" resultMap="SysGeoTypeResult"/>
+    </resultMap>
+
+    <resultMap type="SysGeoType" id="SysGeoTypeResult">
+        <result property="typeName"    column="type_name"    />
+        <result property="unit"    column="unit"    />
     </resultMap>
 
     <sql id="selectSysGeoLogVo">
@@ -39,6 +45,12 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 
     <sql id="selectSysGeoLogDetailVo">
         select a.*,b.* from sys_geo_log as a inner join sys_geo_log_info as b on a.log_id = b.log_id
+    </sql>
+
+    <sql id="selectSysGeoLogListDetailVo">
+        select a.*,b.*,c.type_name,c.unit from sys_geo_log as a
+        inner join sys_geo_log_info as b on a.log_id = b.log_id
+        inner join sys_geo_type as c on b.type_id = c.type_id
     </sql>
 
     <sql id="selectSysGeoLogExportVo">
@@ -66,7 +78,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
     </select>
 
     <select id="selectSysGeoLogList" parameterType="SysGeoLog" resultMap="SysGeoLogResult">
-        <include refid="selectSysGeoLogDetailVo"/>
+        <include refid="selectSysGeoLogListDetailVo"/>
         <where>
             <if test="params.beginTime != null and params.beginTime != ''"><!-- 开始时间检索 -->
                 AND date_format(a.log_date,'%y%m%d') &gt;= date_format(#{params.beginTime},'%y%m%d')
@@ -82,12 +94,12 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
         </where>
         order by a.log_id desc
     </select>
-    
+
     <select id="selectSysGeoLogByLogId" parameterType="Long" resultMap="SysGeoLogResult">
         <include refid="selectSysGeoLogDetailVo"/>
         where a.log_id = #{logId}
     </select>
-        
+
     <insert id="insertSysGeoLog" parameterType="SysGeoLog" useGeneratedKeys="true" keyProperty="logId">
         insert into sys_geo_log
         <trim prefix="(" suffix=")" suffixOverrides=",">
@@ -120,7 +132,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
     </delete>
 
     <delete id="deleteSysGeoLogByLogIds" parameterType="String">
-        delete from sys_geo_log where log_id in 
+        delete from sys_geo_log where log_id in
         <foreach item="logId" collection="array" open="(" separator="," close=")">
             #{logId}
         </foreach>

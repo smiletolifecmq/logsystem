@@ -67,6 +67,16 @@ public class SysGeoLogInfo extends BaseEntity
 
     private boolean disabled;
 
+    private SysGeoType geoType;
+
+    public SysGeoType getGeoType() {
+        return geoType;
+    }
+
+    public void setGeoType(SysGeoType geoType) {
+        this.geoType = geoType;
+    }
+
     public String getWorkdetail() {
         return workdetail;
     }

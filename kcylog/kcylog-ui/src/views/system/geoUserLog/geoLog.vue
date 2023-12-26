@@ -119,7 +119,20 @@
       >
         <template slot-scope="scope">
           <div v-for="(unit, index) in scope.row.geoLogInfo" :key="index">
-            {{ unit.workdetail }}
+            {{ unit.geoType.typeName }}:{{ unit.workload }}
+            {{ unit.geoType.unit }}
+          </div>
+        </template>
+      </el-table-column>
+      <el-table-column
+        label="说明"
+        align="center"
+        prop="geoLogInfo"
+        width="180"
+      >
+        <template slot-scope="scope">
+          <div v-for="(unit, index) in scope.row.geoLogInfo" :key="index">
+            {{ unit.geoType.typeName }}:{{ unit.workdetail }};
           </div>
         </template>
       </el-table-column>
@@ -257,7 +270,7 @@
                   {{ logInfo.unit }}</el-col
                 >
                 <el-col :span="4">
-                  <el-form-item label="工作内容" prop="workdetail">
+                  <el-form-item label="说明" prop="workdetail">
                     <el-input
                       type="textarea"
                       :rows="1"
@@ -400,7 +413,7 @@
                   </el-form-item>
                 </el-col>
                 <el-col :span="4">
-                  <el-form-item label="工作内容" prop="workdetail">
+                  <el-form-item label="说明" prop="workdetail">
                     <el-input
                       type="textarea"
                       :rows="1"
