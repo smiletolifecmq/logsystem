@@ -220,12 +220,14 @@ public class SysGeoLogController extends BaseController {
         }
         sysGeoLogService.insertSysGeoLog(sysGeoLog);
         for (SysGeoLogInfo geoLogInfo : sysGeoLog.getGeoLogInfo()) {
-            Integer sortValue = redisCache.getCacheMapValue(SecurityUtils.getUsername(),Long.toString(geoLogInfo.getProjectId()));
-            if (sortValue == null){
-                redisCache.setCacheMapValue(SecurityUtils.getUsername(),Long.toString(geoLogInfo.getProjectId()),1);
-            }else {
-                sortValue ++;
-                redisCache.setCacheMapValue(SecurityUtils.getUsername(),Long.toString(geoLogInfo.getProjectId()),sortValue);
+            if (geoLogInfo.getProjectId() != null){
+                Integer sortValue = redisCache.getCacheMapValue(SecurityUtils.getUsername(),Long.toString(geoLogInfo.getProjectId()));
+                if (sortValue == null){
+                    redisCache.setCacheMapValue(SecurityUtils.getUsername(),Long.toString(geoLogInfo.getProjectId()),1);
+                }else {
+                    sortValue ++;
+                    redisCache.setCacheMapValue(SecurityUtils.getUsername(),Long.toString(geoLogInfo.getProjectId()),sortValue);
+                }
             }
             geoLogInfo.setLogId(sysGeoLog.getLogId());
             Gson gson = new Gson();
