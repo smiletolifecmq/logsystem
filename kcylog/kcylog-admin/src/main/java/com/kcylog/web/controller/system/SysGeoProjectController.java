@@ -1,5 +1,6 @@
 package com.kcylog.web.controller.system;
 
+import com.google.gson.Gson;
 import com.kcylog.common.annotation.Log;
 import com.kcylog.common.core.controller.BaseController;
 import com.kcylog.common.core.domain.AjaxResult;
@@ -83,7 +84,13 @@ public class SysGeoProjectController extends BaseController
     @GetMapping(value = "/{projectId}")
     public AjaxResult getInfo(@PathVariable("projectId") Long projectId)
     {
-        return success(sysGeoProjectService.selectSysGeoProjectByProjectId(projectId));
+        SysGeoProject geoProject = sysGeoProjectService.selectSysGeoProjectByProjectId(projectId);
+        Gson gson = new Gson();
+        Long[] oneArray = gson.fromJson(geoProject.getOneCheck(), Long[].class);
+        geoProject.setOneCheckJson(oneArray);
+        Long[] twoArray = gson.fromJson(geoProject.getTwoCheck(), Long[].class);
+        geoProject.setTwoCheckJson(twoArray);
+        return success(geoProject);
     }
 
     /**
@@ -97,6 +104,11 @@ public class SysGeoProjectController extends BaseController
         if (geoProject != null) {
             return error("该项目编号已存在～");
         }
+        Gson gson = new Gson();
+        String oneJson = gson.toJson(sysGeoProject.getOneCheckJson());
+        sysGeoProject.setOneCheck(oneJson);
+        String twoJson = gson.toJson(sysGeoProject.getTwoCheckJson());
+        sysGeoProject.setTwoCheck(twoJson);
         SysUser sysUser = userService.selectUserById(sysGeoProject.getUserId());
         sysGeoProject.setUserName(sysUser.getUserName());
         return toAjax(sysGeoProjectService.insertSysGeoProject(sysGeoProject));
@@ -113,6 +125,11 @@ public class SysGeoProjectController extends BaseController
         if (geoProject != null) {
             return error("修改后的项目编号已存在～");
         }
+        Gson gson = new Gson();
+        String oneJson = gson.toJson(sysGeoProject.getOneCheckJson());
+        sysGeoProject.setOneCheck(oneJson);
+        String twoJson = gson.toJson(sysGeoProject.getTwoCheckJson());
+        sysGeoProject.setTwoCheck(twoJson);
         SysUser sysUser = userService.selectUserById(sysGeoProject.getUserId());
         sysGeoProject.setUserName(sysUser.getUserName());
         return toAjax(sysGeoProjectService.updateSysGeoProject(sysGeoProject));

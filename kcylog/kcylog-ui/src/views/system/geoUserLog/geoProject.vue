@@ -127,6 +127,28 @@
             </el-option>
           </el-select>
         </el-form-item>
+        <el-form-item label="一检" prop="oneCheck">
+          <el-select v-model="form.oneCheckJson" multiple placeholder="请选择">
+            <el-option
+              v-for="item in userListAll"
+              :key="item.userId"
+              :label="item.userName"
+              :value="item.userId"
+            >
+            </el-option>
+          </el-select>
+        </el-form-item>
+        <el-form-item label="二检" prop="twoCheck">
+          <el-select v-model="form.twoCheckJson" multiple placeholder="请选择">
+            <el-option
+              v-for="item in userListAll"
+              :key="item.userId"
+              :label="item.userName"
+              :value="item.userId"
+            >
+            </el-option>
+          </el-select>
+        </el-form-item>
       </el-form>
       <div slot="footer" class="dialog-footer">
         <el-button type="primary" @click="submitForm">确 定</el-button>

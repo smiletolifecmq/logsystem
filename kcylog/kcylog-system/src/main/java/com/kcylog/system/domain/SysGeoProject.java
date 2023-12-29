@@ -1,13 +1,13 @@
 package com.kcylog.system.domain;
 
-import org.apache.commons.lang3.builder.ToStringBuilder;
-import org.apache.commons.lang3.builder.ToStringStyle;
 import com.kcylog.common.annotation.Excel;
 import com.kcylog.common.core.domain.BaseEntity;
+import org.apache.commons.lang3.builder.ToStringBuilder;
+import org.apache.commons.lang3.builder.ToStringStyle;
 
 /**
  * 地理项目对象 sys_geo_project
- * 
+ *
  * @author ruoyi
  * @date 2023-12-06
  */
@@ -35,6 +35,48 @@ public class SysGeoProject extends BaseEntity
     private String userName;
 
     private Integer sort;
+
+    private Long[] oneCheckJson;
+
+    private Long[] twoCheckJson;
+
+    private String oneCheck;
+
+    private String twoCheck;
+
+    public Long[] getOneCheckJson() {
+        return oneCheckJson;
+    }
+
+    public void setOneCheckJson(Long[] oneCheckJson) {
+        this.oneCheckJson = oneCheckJson;
+    }
+
+    public Long[] getTwoCheckJson() {
+        return twoCheckJson;
+    }
+
+    public void setTwoCheckJson(Long[] twoCheckJson) {
+        this.twoCheckJson = twoCheckJson;
+    }
+
+    public String getOneCheck() {
+        return oneCheck;
+    }
+
+    public void setOneCheck(String oneCheck) {
+        this.oneCheck = oneCheck;
+    }
+
+    public String getTwoCheck() {
+        return twoCheck;
+    }
+
+    public void setTwoCheck(String twoCheck) {
+        this.twoCheck = twoCheck;
+    }
+
+
 
     public Integer getSort() {
         return sort;
