@@ -21,11 +21,10 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
     <select id="selectSysGeoHolidayList" parameterType="SysGeoHoliday" resultMap="SysGeoHolidayResult">
         <include refid="selectSysGeoHolidayVo"/>
         <where>  
-            <if test="userId != null "> and user_id = #{userId}</if>
             <if test="userName != null  and userName != ''"> and user_name like concat('%', #{userName}, '%')</if>
-            <if test="start != null "> and start = #{start}</if>
-            <if test="end != null "> and end = #{end}</if>
-            <if test="day != null "> and day = #{day}</if>
+            <if test="params.beginTime != null and params.beginTime != ''"><!-- 开始时间检索 -->
+                AND ((date_format(start,'%y%m%d') &gt;= date_format(#{params.beginTime},'%y%m%d') AND date_format(start ,'%y%m%d') &lt;= date_format(#{params.endTime},'%y%m%d')) OR (date_format(end,'%y%m%d') &gt;= date_format(#{params.beginTime},'%y%m%d') AND date_format(end ,'%y%m%d') &lt;= date_format(#{params.endTime},'%y%m%d')))
+            </if>
         </where>
     </select>
     

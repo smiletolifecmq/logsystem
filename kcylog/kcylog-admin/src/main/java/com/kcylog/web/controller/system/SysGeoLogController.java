@@ -50,6 +50,9 @@ public class SysGeoLogController extends BaseController {
     private ISysGeoUserCoefficientService sysGeoUserCoefficientService;
 
     @Autowired
+    private ISysGeoHolidayService sysGeoHolidayService;
+
+    @Autowired
     private RedisCache redisCache;
 
     private static double poleSimple = 0.5;
@@ -104,12 +107,25 @@ public class SysGeoLogController extends BaseController {
         List<SysGeoProject> projects = sysGeoProjectService.selectSysGeoProjectAll();
         List<SysGeoUser> geoUser = sysGeoUserService.selectSysAllGeoUser();
 
+        //获取请假信息
+        SysGeoHoliday sysGeoHolidayParam = new SysGeoHoliday();
+        List<SysGeoHoliday> sysGeoHoliday = sysGeoHolidayService.selectSysGeoHolidayList(sysGeoHolidayParam);
+
         Map<Long, String> geoUserMap = new HashMap<>();
         Map<String, List<SysGeoLog>> geoLogMap = new HashMap<>();
         Map<Long, BigDecimal> projectMoneyMap = new HashMap<>();
         Map<String, List<Long>> projectsMap = new HashMap<>();
         Map<String, List<Long>> projectsOneCheckMap = new HashMap<>();
         Map<String, List<Long>> projectsTwoCheckMap = new HashMap<>();
+        Map<String, BigDecimal> geoHolidayMap = new HashMap<>();
+
+        for (SysGeoHoliday holidayV : sysGeoHoliday){
+            if (geoHolidayMap.containsKey(holidayV.getUserName())){
+                geoHolidayMap.put(holidayV.getUserName(),geoHolidayMap.get(holidayV.getUserName()).add(BigDecimal.valueOf(holidayV.getDay())));
+            }else {
+                geoHolidayMap.put(holidayV.getUserName(),BigDecimal.valueOf(holidayV.getDay()));
+            }
+        }
 
         for (SysGeoUser userValue : geoUser){
             geoUserMap.put(userValue.getUserId(), userValue.getUserName());
@@ -249,7 +265,18 @@ public class SysGeoLogController extends BaseController {
             allUserTwoMoney = allUserTwoMoney.multiply(multiplierCheck);
             logExport.setType52_jr(allUserOneMoney.add(allUserTwoMoney));
             logExport.setTotal_money(logExport.getTotal_money().add(allUserTwoMoney));
-            logExport.setTotal_money(logExport.getTotal_money().setScale(2, RoundingMode.HALF_UP));
+            //计算请假金额
+            BigDecimal totalMoney = logExport.getTotal_money();
+            if (geoHolidayMap.containsKey(userName)){
+                BigDecimal divisor = new BigDecimal("22");
+                BigDecimal qjMoney = totalMoney.divide(divisor, 2, RoundingMode.HALF_UP);
+                qjMoney = qjMoney.multiply(geoHolidayMap.get(userName));
+                totalMoney = totalMoney.subtract(qjMoney);
+                logExport.setType54_gzl(geoHolidayMap.get(userName).doubleValue());
+                logExport.setType53_jr(qjMoney);
+            }
+
+            logExport.setTotal_money(totalMoney.setScale(2, RoundingMode.HALF_UP));
             exportList.add(logExport);
         }
         return getDataTable(exportList);
