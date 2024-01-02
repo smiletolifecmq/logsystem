@@ -1,6 +1,7 @@
 package com.kcylog.system.common;
 
 import java.math.BigDecimal;
+import java.util.Map;
 
 public class LogExport {
     //用户名
@@ -117,12 +118,22 @@ public class LogExport {
     //总产值
     private BigDecimal total_money;
 
+    private Map<Long, BigDecimal> projectAllMoneyMap;
+
     public String getUser_name() {
         return user_name;
     }
 
     public void setUser_name(String user_name) {
         this.user_name = user_name;
+    }
+
+    public Map<Long, BigDecimal> getProjectAllMoneyMap() {
+        return projectAllMoneyMap;
+    }
+
+    public void setProjectAllMoneyMap(Map<Long, BigDecimal> projectAllMoneyMap) {
+        this.projectAllMoneyMap = projectAllMoneyMap;
     }
 
     public Double getType1_gzl() {

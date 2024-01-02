@@ -100,4 +100,8 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
         where user_id != #{userId} and FIND_IN_SET(#{userId},ancestors)
         <if test="userId == 15">and user_id in (70,71,72)</if>
     </select>
+
+    <select id="selectSysAllGeoUser" resultMap="SysGeoUserResult">
+        <include refid="selectSysGeoUserVo"/>
+    </select>
 </mapper>

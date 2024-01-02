@@ -69,4 +69,6 @@ public interface ISysGeoUserService
     public List<SysGeoUser> selectSysAssessUserByGeoUser(Long userId);
 
     public List<SysGeoUser> selectSysAssessUserByGeoUserForLeaderAssess(Long userId);
+
+    public List<SysGeoUser> selectSysAllGeoUser();
 }

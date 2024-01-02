@@ -98,18 +98,25 @@ public class SysGeoLogController extends BaseController {
         }
         //获取符合日期以及权限的用户数据
         List<SysGeoLog> list = sysGeoLogService.selectSysGeoLogListExport(sysGeoLog);
-        //获取符合日期的所有用户数据
+        //获取符合日期的所有包含项目的用户日志
         List<SysGeoLog> listForDate = sysGeoLogService.selectSysGeoLogListExportByDate(sysGeoLog);
         //获取所有项目
         List<SysGeoProject> projects = sysGeoProjectService.selectSysGeoProjectAll();
+        List<SysGeoUser> geoUser = sysGeoUserService.selectSysAllGeoUser();
 
+        Map<Long, String> geoUserMap = new HashMap<>();
         Map<String, List<SysGeoLog>> geoLogMap = new HashMap<>();
-        Map<String, Boolean> userCheckMap = new HashMap<>();
         Map<Long, BigDecimal> projectMoneyMap = new HashMap<>();
         Map<String, List<Long>> projectsMap = new HashMap<>();
+        Map<String, List<Long>> projectsOneCheckMap = new HashMap<>();
+        Map<String, List<Long>> projectsTwoCheckMap = new HashMap<>();
 
-        BigDecimal allUserMoney = BigDecimal.ZERO;
+        for (SysGeoUser userValue : geoUser){
+            geoUserMap.put(userValue.getUserId(), userValue.getUserName());
+        }
+
         for (SysGeoProject geoProject : projects) {
+            //负责人对应的项目ID
             if (projectsMap.containsKey(geoProject.getUserName())) {
                 List<Long> projectIdArr = projectsMap.get(geoProject.getUserName());
                 projectIdArr.add(geoProject.getProjectId());
@@ -118,6 +125,38 @@ public class SysGeoLogController extends BaseController {
                 List<Long> projectIdArr = new ArrayList<>();
                 projectIdArr.add(geoProject.getProjectId());
                 projectsMap.put(geoProject.getUserName(), projectIdArr);
+            }
+            //一检对应的项目ID
+            if (geoProject.getOneCheck() != null){
+                Gson gson = new Gson();
+                Long[] oneArray = gson.fromJson(geoProject.getOneCheck(), Long[].class);
+                for (Long one : oneArray){
+                    if (projectsOneCheckMap.containsKey(geoUserMap.get(one))){
+                        List<Long> projectIdArr = projectsOneCheckMap.get(geoUserMap.get(one));
+                        projectIdArr.add(geoProject.getProjectId());
+                        projectsOneCheckMap.put(geoUserMap.get(one),projectIdArr);
+                    }else {
+                        List<Long> projectIdArr = new ArrayList<>();
+                        projectIdArr.add(geoProject.getProjectId());
+                        projectsOneCheckMap.put(geoUserMap.get(one),projectIdArr);
+                    }
+                }
+            }
+            //二检对应的项目ID
+            if (geoProject.getTwoCheck() != null){
+                Gson gson = new Gson();
+                Long[] twoArray = gson.fromJson(geoProject.getTwoCheck(), Long[].class);
+                for (Long two : twoArray){
+                    if (projectsTwoCheckMap.containsKey(geoUserMap.get(two))){
+                        List<Long> projectIdArr = projectsTwoCheckMap.get(geoUserMap.get(two));
+                        projectIdArr.add(geoProject.getProjectId());
+                        projectsTwoCheckMap.put(geoUserMap.get(two),projectIdArr);
+                    }else {
+                        List<Long> projectIdArr = new ArrayList<>();
+                        projectIdArr.add(geoProject.getProjectId());
+                        projectsTwoCheckMap.put(geoUserMap.get(two),projectIdArr);
+                    }
+                }
             }
         }
 
@@ -131,25 +170,16 @@ public class SysGeoLogController extends BaseController {
                 gl.add(geoLog);
                 geoLogMap.put(geoLog.getUserName(), gl);
             }
-            if (geoLog.getGeoUser().getIsCheck() == 1) {
-                userCheckMap.put(geoLog.getUserName(), true);
-            }
         }
         for (SysGeoLog geoLog : listForDate) {
             for (SysGeoLogInfo geoLogInfo : geoLog.getGeoLogInfo()) {
                 BigDecimal difficultyDegree = BigDecimal.valueOf(geoLogInfo.getDifficultyDegree());
                 BigDecimal workload = BigDecimal.valueOf(geoLogInfo.getWorkload());
                 BigDecimal jinEr = difficultyDegree.multiply(workload).multiply(geoLogInfo.getTypeMoney());
-                if (geoLog.getGeoUser().getIsCheck() != 1 && geoLogInfo.getProjectId() != null && geoLogInfo.getProjectId() != 0) {
-                    allUserMoney = allUserMoney.add(jinEr);
-                }
-                if (geoLogInfo.getProjectId() != null && geoLogInfo.getProjectId() != 0) {
-                    if (projectMoneyMap.containsKey(geoLogInfo.getProjectId())) {
-                        projectMoneyMap.put(geoLogInfo.getProjectId(), projectMoneyMap.get(geoLogInfo.getProjectId()).add(jinEr));
-                    } else {
-                        BigDecimal projectMoney = BigDecimal.ZERO;
-                        projectMoneyMap.put(geoLogInfo.getProjectId(), projectMoney.add(jinEr));
-                    }
+                if (projectMoneyMap.containsKey(geoLogInfo.getProjectId())){
+                    projectMoneyMap.put(geoLogInfo.getProjectId(),projectMoneyMap.get(geoLogInfo.getProjectId()).add(jinEr));
+                }else {
+                    projectMoneyMap.put(geoLogInfo.getProjectId(),jinEr);
                 }
             }
         }
@@ -159,27 +189,66 @@ public class SysGeoLogController extends BaseController {
             String userName = entry.getKey();
             List<SysGeoLog> value = entry.getValue();
             LogExport logExport = this.integratedOutputValueSelf(value, userName);
-            //检查人
-            if (userCheckMap.containsKey(userName)) {
-                BigDecimal multiplier = new BigDecimal("0.05");
-                allUserMoney = allUserMoney.multiply(multiplier);
-                logExport.setType52_jr(allUserMoney);
-                logExport.setTotal_money(logExport.getTotal_money().add(allUserMoney));
-            }
             //负责人
-            if (projectsMap.containsKey(userName)) {
-                BigDecimal allProjectMoney = BigDecimal.ZERO;
-                List<Long> projectIdArr = projectsMap.get(userName);
-                for (Long pId : projectIdArr){
-                    if (projectMoneyMap.containsKey(pId)) {
-                        allProjectMoney = allProjectMoney.add(projectMoneyMap.get(pId));
+            BigDecimal allUserMoney = BigDecimal.ZERO;
+            if (projectsMap.containsKey(userName)){
+                for (Long pid : projectsMap.get(userName)){
+                    if(projectMoneyMap.containsKey(pid)){
+                        if (logExport.getProjectAllMoneyMap().containsKey(pid)){
+                            BigDecimal tempMoney = projectMoneyMap.get(pid).subtract(logExport.getProjectAllMoneyMap().get(pid));
+                            if (tempMoney.compareTo(BigDecimal.ZERO) > 0) {
+                                allUserMoney = allUserMoney.add(tempMoney);
+                            }
+                        }else {
+                            allUserMoney = allUserMoney.add(projectMoneyMap.get(pid));
+                        }
                     }
                 }
-                BigDecimal multiplier = new BigDecimal("0.08");
-                allProjectMoney = allProjectMoney.multiply(multiplier);
-                logExport.setType51_jr(allProjectMoney);
-                logExport.setTotal_money(logExport.getTotal_money().add(allProjectMoney));
             }
+            BigDecimal multiplier = new BigDecimal("0.08");
+            allUserMoney = allUserMoney.multiply(multiplier);
+            logExport.setType51_jr(allUserMoney);
+            logExport.setTotal_money(logExport.getTotal_money().add(allUserMoney));
+
+            //一检
+            BigDecimal allUserOneMoney = BigDecimal.ZERO;
+            if (projectsOneCheckMap.containsKey(userName)) {
+                for (Long pid : projectsOneCheckMap.get(userName)){
+                    if(projectMoneyMap.containsKey(pid)){
+                        if (logExport.getProjectAllMoneyMap().containsKey(pid)){
+                            BigDecimal tempMoney = projectMoneyMap.get(pid).subtract(logExport.getProjectAllMoneyMap().get(pid));
+                            if (tempMoney.compareTo(BigDecimal.ZERO) > 0) {
+                                allUserOneMoney = allUserOneMoney.add(tempMoney);
+                            }
+                        }else {
+                            allUserOneMoney = allUserOneMoney.add(projectMoneyMap.get(pid));
+                        }
+                    }
+                }
+            }
+            BigDecimal multiplierCheck = new BigDecimal("0.05");
+            allUserOneMoney = allUserOneMoney.multiply(multiplierCheck);
+            logExport.setTotal_money(logExport.getTotal_money().add(allUserOneMoney));
+
+            //二检
+            BigDecimal allUserTwoMoney = BigDecimal.ZERO;
+            if (projectsTwoCheckMap.containsKey(userName)) {
+                for (Long pid : projectsTwoCheckMap.get(userName)){
+                    if(projectMoneyMap.containsKey(pid)){
+                        if (logExport.getProjectAllMoneyMap().containsKey(pid)){
+                            BigDecimal tempMoney = projectMoneyMap.get(pid).subtract(logExport.getProjectAllMoneyMap().get(pid));
+                            if (tempMoney.compareTo(BigDecimal.ZERO) > 0) {
+                                allUserTwoMoney = allUserTwoMoney.add(tempMoney);
+                            }
+                        }else {
+                            allUserTwoMoney = allUserTwoMoney.add(projectMoneyMap.get(pid));
+                        }
+                    }
+                }
+            }
+            allUserTwoMoney = allUserTwoMoney.multiply(multiplierCheck);
+            logExport.setType52_jr(allUserOneMoney.add(allUserTwoMoney));
+            logExport.setTotal_money(logExport.getTotal_money().add(allUserTwoMoney));
             logExport.setTotal_money(logExport.getTotal_money().setScale(2, RoundingMode.HALF_UP));
             exportList.add(logExport);
         }
@@ -414,6 +483,9 @@ public class SysGeoLogController extends BaseController {
         logExport.setType53_jr(BigDecimal.valueOf(0));
         //总产值
         logExport.setTotal_money(BigDecimal.valueOf(0));
+        //带项目产值
+        Map<Long, BigDecimal> projectMoneyMap = new HashMap<>();
+        logExport.setProjectAllMoneyMap(projectMoneyMap);
 
         for (SysGeoLog geoLog : sysGeoLogList) {
             for (SysGeoLogInfo geoLogInfo : geoLog.getGeoLogInfo()) {
@@ -423,6 +495,14 @@ public class SysGeoLogController extends BaseController {
                 double workloadDouble = geoLogInfo.getWorkload();
                 BigDecimal jinEr = difficultyDegree.multiply(workload).multiply(geoLogInfo.getTypeMoney());
                 logExport.setTotal_money(logExport.getTotal_money().add(jinEr));
+                if (geoLogInfo.getProjectId() != null && geoLogInfo.getProjectId() != 0){
+                    projectMoneyMap = logExport.getProjectAllMoneyMap();
+                    if (projectMoneyMap.containsKey(geoLogInfo.getProjectId())){
+                        projectMoneyMap.put(geoLogInfo.getProjectId(),projectMoneyMap.get(geoLogInfo.getProjectId()).add(jinEr));
+                    }else {
+                        projectMoneyMap.put(geoLogInfo.getProjectId(),jinEr);
+                    }
+                }
                 switch (typeId) {
                     case 2:
                         logExport.setType1_gzl(logExport.getType1_gzl() + workloadDouble);
@@ -627,6 +707,7 @@ public class SysGeoLogController extends BaseController {
                 }
             }
         }
+        logExport.setProjectAllMoneyMap(projectMoneyMap);
         return logExport;
     }
 
