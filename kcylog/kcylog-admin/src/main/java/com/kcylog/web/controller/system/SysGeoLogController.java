@@ -357,6 +357,7 @@ public class SysGeoLogController extends BaseController {
         logExport.setType51_gzl((double) 0);
         logExport.setType52_gzl((double) 0);
         logExport.setType53_gzl((double) 0);
+        logExport.setType54_gzl((double) 0);
         //产值金额
         logExport.setType1_jr(BigDecimal.valueOf(0));
         logExport.setType2_jr(BigDecimal.valueOf(0));
@@ -410,6 +411,7 @@ public class SysGeoLogController extends BaseController {
         logExport.setType50_jr(BigDecimal.valueOf(0));
         logExport.setType51_jr(BigDecimal.valueOf(0));
         logExport.setType52_jr(BigDecimal.valueOf(0));
+        logExport.setType53_jr(BigDecimal.valueOf(0));
         //总产值
         logExport.setTotal_money(BigDecimal.valueOf(0));
 
