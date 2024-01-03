@@ -294,7 +294,6 @@
                         :key="item.projectId"
                         :label="item.projectNum"
                         :value="item.projectId"
-                        :disabled="item.disabled"
                       >
                       </el-option>
                     </el-select>
