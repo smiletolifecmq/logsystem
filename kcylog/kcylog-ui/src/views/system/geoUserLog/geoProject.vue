@@ -128,7 +128,12 @@
           </el-select>
         </el-form-item>
         <el-form-item label="一检" prop="oneCheck">
-          <el-select v-model="form.oneCheckJson" multiple placeholder="请选择">
+          <el-select
+            v-model="form.oneCheckJson"
+            filterable
+            multiple
+            placeholder="请选择"
+          >
             <el-option
               v-for="item in userListAll"
               :key="item.userId"
@@ -139,7 +144,12 @@
           </el-select>
         </el-form-item>
         <el-form-item label="二检" prop="twoCheck">
-          <el-select v-model="form.twoCheckJson" multiple placeholder="请选择">
+          <el-select
+            v-model="form.twoCheckJson"
+            filterable
+            multiple
+            placeholder="请选择"
+          >
             <el-option
               v-for="item in userListAll"
               :key="item.userId"
