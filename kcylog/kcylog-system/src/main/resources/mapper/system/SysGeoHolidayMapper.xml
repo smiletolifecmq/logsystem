@@ -22,10 +22,8 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
         <include refid="selectSysGeoHolidayVo"/>
         <where>  
             <if test="userName != null  and userName != ''"> and user_name like concat('%', #{userName}, '%')</if>
-            <if test="params.beginTime != null and params.beginTime != ''"><!-- 开始时间检索 -->
-                AND ((date_format(start,'%y%m%d') &gt;= date_format(#{params.beginTime},'%y%m%d') AND date_format(start ,'%y%m%d') &lt;= date_format(#{params.endTime},'%y%m%d')) OR (date_format(end,'%y%m%d') &gt;= date_format(#{params.beginTime},'%y%m%d') AND date_format(end ,'%y%m%d') &lt;= date_format(#{params.endTime},'%y%m%d')))
-            </if>
         </where>
+        order by holiday_id desc
     </select>
     
     <select id="selectSysGeoHolidayByHolidayId" parameterType="Long" resultMap="SysGeoHolidayResult">
@@ -76,4 +74,15 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
             #{holidayId}
         </foreach>
     </delete>
+
+    <select id="selectSysGeoHolidayListForLog" parameterType="SysGeoLog" resultMap="SysGeoHolidayResult">
+        <include refid="selectSysGeoHolidayVo"/>
+        <where>
+            <if test="userName != null  and userName != ''"> and user_name like concat('%', #{userName}, '%')</if>
+            <if test="params.beginTime != null and params.beginTime != ''"><!-- 开始时间检索 -->
+                AND ((date_format(start,'%y%m%d') &gt;= date_format(#{params.beginTime},'%y%m%d') AND date_format(start ,'%y%m%d') &lt;= date_format(#{params.endTime},'%y%m%d')) OR (date_format(end,'%y%m%d') &gt;= date_format(#{params.beginTime},'%y%m%d') AND date_format(end ,'%y%m%d') &lt;= date_format(#{params.endTime},'%y%m%d')))
+            </if>
+        </where>
+        order by holiday_id desc
+    </select>
 </mapper>

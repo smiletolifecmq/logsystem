@@ -108,8 +108,7 @@ public class SysGeoLogController extends BaseController {
         List<SysGeoUser> geoUser = sysGeoUserService.selectSysAllGeoUser();
 
         //获取请假信息
-        SysGeoHoliday sysGeoHolidayParam = new SysGeoHoliday();
-        List<SysGeoHoliday> sysGeoHoliday = sysGeoHolidayService.selectSysGeoHolidayList(sysGeoHolidayParam);
+        List<SysGeoHoliday> sysGeoHoliday = sysGeoHolidayService.selectSysGeoHolidayListForLog(sysGeoLog);
 
         Map<Long, String> geoUserMap = new HashMap<>();
         Map<String, List<SysGeoLog>> geoLogMap = new HashMap<>();
@@ -758,8 +757,7 @@ public class SysGeoLogController extends BaseController {
         List<SysGeoUser> geoUser = sysGeoUserService.selectSysAllGeoUser();
 
         //获取请假信息
-        SysGeoHoliday sysGeoHolidayParam = new SysGeoHoliday();
-        List<SysGeoHoliday> sysGeoHoliday = sysGeoHolidayService.selectSysGeoHolidayList(sysGeoHolidayParam);
+        List<SysGeoHoliday> sysGeoHoliday = sysGeoHolidayService.selectSysGeoHolidayListForLog(sysGeoLog);
 
         Map<Long, String> geoUserMap = new HashMap<>();
         Map<String, List<SysGeoLog>> geoLogMap = new HashMap<>();

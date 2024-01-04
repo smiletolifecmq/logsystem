@@ -154,7 +154,7 @@ import {
   addHoliday,
   updateHoliday,
 } from "@/api/system/geoHoliday";
-import { listUser } from "@/api/system/user";
+import { listGeoUser } from "@/api/system/geoUser";
 
 export default {
   name: "Holiday",
@@ -209,7 +209,7 @@ export default {
     };
   },
   created() {
-    listUser(this.addDateRange(this.queryUserParams, this.dateRange)).then(
+    listGeoUser(this.addDateRange(this.queryUserParams, this.dateRange)).then(
       (response) => {
         this.userList = response.rows;
       }

@@ -1,6 +1,8 @@
 package com.kcylog.system.service.impl;
 
 import java.util.List;
+
+import com.kcylog.system.domain.SysGeoLog;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import com.kcylog.system.mapper.SysGeoHolidayMapper;
@@ -89,5 +91,11 @@ public class SysGeoHolidayServiceImpl implements ISysGeoHolidayService
     public int deleteSysGeoHolidayByHolidayId(Long holidayId)
     {
         return sysGeoHolidayMapper.deleteSysGeoHolidayByHolidayId(holidayId);
+    }
+
+    @Override
+    public List<SysGeoHoliday> selectSysGeoHolidayListForLog(SysGeoLog sysGeoLog)
+    {
+        return sysGeoHolidayMapper.selectSysGeoHolidayListForLog(sysGeoLog);
     }
 }

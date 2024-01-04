@@ -1,6 +1,7 @@
 package com.kcylog.system.service;
 
 import com.kcylog.system.domain.SysGeoHoliday;
+import com.kcylog.system.domain.SysGeoLog;
 
 import java.util.List;
 
@@ -59,4 +60,6 @@ public interface ISysGeoHolidayService
      * @return 结果
      */
     public int deleteSysGeoHolidayByHolidayId(Long holidayId);
+
+    public List<SysGeoHoliday> selectSysGeoHolidayListForLog(SysGeoLog sysGeoLog);
 }
