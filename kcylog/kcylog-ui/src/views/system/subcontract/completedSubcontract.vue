@@ -204,33 +204,28 @@
                       {{ formInfo.serialNum }}
                     </el-descriptions-item>
                     <el-descriptions-item>
-                      <template slot="label"> 负责人 </template>
-                      {{ formInfo.user.userName }}
+                      <template slot="label"> 委托单位 </template>
+                      {{ formInfo.entrustUnit }}
                     </el-descriptions-item>
                     <el-descriptions-item>
                       <template slot="label"> 项目名称 </template>
                       {{ formInfo.projectName }}
                     </el-descriptions-item>
                     <el-descriptions-item>
-                      <template slot="label"> 项目类型 </template>
-                      {{ formInfo.businessName }}
+                      <template slot="label"> 负责人 </template>
+                      {{ formInfo.user.userName }}
                     </el-descriptions-item>
                     <el-descriptions-item>
-                      <template slot="label"> 委托单位 </template>
-                      {{ formInfo.entrustUnit }}
+                      <template slot="label"> 项目类型 </template>
+                      {{ formInfo.businessName }}
                     </el-descriptions-item>
                     <el-descriptions-item>
                       <template slot="label"> 工作内容 </template>
                       {{ formInfo.workcontent }}
                     </el-descriptions-item>
                     <el-descriptions-item>
-                      <template slot="label"> 分包类型 </template>
-                      <span v-if="formInfo.subType == 1">全部分包</span
-                      ><span v-if="formInfo.subType == 2">局部分包</span>
-                    </el-descriptions-item>
-                    <el-descriptions-item>
-                      <template slot="label"> 分包工作量 </template>
-                      {{ formInfo.workload }}
+                      <template slot="label"> 抽签时间 </template>
+                      {{ formInfo.lotTime }}
                     </el-descriptions-item>
                     <el-descriptions-item>
                       <template slot="label"> 抽签单位 </template>
@@ -242,16 +237,21 @@
                       </div>
                     </el-descriptions-item>
                     <el-descriptions-item>
-                      <template slot="label"> 中签单位 </template>
-                      {{ formInfo.winUnit }}
-                    </el-descriptions-item>
-                    <el-descriptions-item>
-                      <template slot="label"> 抽签时间 </template>
-                      {{ formInfo.lotTime }}
+                      <template slot="label"> 分包工作量 </template>
+                      {{ formInfo.workload }}
                     </el-descriptions-item>
                     <el-descriptions-item>
                       <template slot="label"> 工期开始 </template>
                       {{ formInfo.startTime }}
+                    </el-descriptions-item>
+                    <el-descriptions-item>
+                      <template slot="label"> 中签单位 </template>
+                      {{ formInfo.winUnit }}
+                    </el-descriptions-item>
+                    <el-descriptions-item>
+                      <template slot="label"> 分包类型 </template>
+                      <span v-if="formInfo.subType == 1">全部分包</span
+                      ><span v-if="formInfo.subType == 2">局部分包</span>
                     </el-descriptions-item>
                     <el-descriptions-item>
                       <template slot="label"> 工期结束 </template>
