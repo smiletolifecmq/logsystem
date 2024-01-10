@@ -115,8 +115,10 @@ public class LogExport {
     private BigDecimal type51_jr;
     private BigDecimal type52_jr;
     private BigDecimal type53_jr;
-    //总产值
+    //总产值（计算后）
     private BigDecimal total_money;
+    //总产值（计算前）
+    private BigDecimal before_total_money;
 
     private Map<Long, BigDecimal> projectAllMoneyMap;
 
@@ -998,6 +1000,14 @@ public class LogExport {
 
     public void setTotal_money(BigDecimal total_money) {
         this.total_money = total_money;
+    }
+
+    public BigDecimal getBefore_total_money() {
+        return before_total_money;
+    }
+
+    public void setBefore_total_money(BigDecimal before_total_money) {
+        this.before_total_money = before_total_money;
     }
 }
 

@@ -961,6 +961,7 @@ public class SysGeoLogController extends BaseController {
             BigDecimal bigDecimalWorkCoefficient = new BigDecimal(workCoefficient);
             BigDecimal bigDecimalUserCoefficient = new BigDecimal(userCoefficientMap);
 
+            logExport.setBefore_total_money(totalMoney);
             logExport.setTotal_money(totalMoney.multiply(bigDecimalFitCoefficient).multiply(bigDecimalWorkCoefficient).multiply(bigDecimalUserCoefficient));
             logExport.setTotal_money(logExport.getTotal_money().setScale(2, RoundingMode.HALF_UP));
             exportList.add(logExport);

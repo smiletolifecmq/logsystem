@@ -779,11 +779,24 @@ export default {
       }
       listLogExportWord(this.queryParams).then((response) => {
         const dataArray = response.rows;
-        const excelData = [["人员", "产值"]];
+        const excelData = [
+          [
+            "人员",
+            "配合系数",
+            "工期系数",
+            "个人系数",
+            "产值(乘系数前)",
+            "产值(乘系数后)",
+          ],
+        ];
         for (var i = 0; i < dataArray.length; i++) {
           let data = [];
           data[0] = dataArray[i].user_name;
-          data[1] = dataArray[i].total_money.toFixed(2);
+          data[1] = dataArray[i].type51_gzl;
+          data[2] = dataArray[i].type52_gzl;
+          data[3] = dataArray[i].type53_gzl;
+          data[4] = dataArray[i].before_total_money.toFixed(2);
+          data[5] = dataArray[i].total_money.toFixed(2);
           excelData.push(data);
         }
         const wb = utils.book_new();
