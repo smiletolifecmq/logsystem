@@ -17,10 +17,7 @@ import org.springframework.web.bind.annotation.*;
 
 import java.math.BigDecimal;
 import java.math.RoundingMode;
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
 /**
  * 地理部门日志Controller
@@ -142,7 +139,7 @@ public class SysGeoLogController extends BaseController {
                 projectsMap.put(geoProject.getUserName(), projectIdArr);
             }
             //一检对应的项目ID
-            if (geoProject.getOneCheck() != null){
+            if (geoProject.getOneCheck() != null && !Objects.equals(geoProject.getOneCheck(), "null")){
                 Gson gson = new Gson();
                 Long[] oneArray = gson.fromJson(geoProject.getOneCheck(), Long[].class);
                 for (Long one : oneArray){
@@ -158,7 +155,7 @@ public class SysGeoLogController extends BaseController {
                 }
             }
             //二检对应的项目ID
-            if (geoProject.getTwoCheck() != null){
+            if (geoProject.getTwoCheck() != null && !Objects.equals(geoProject.getTwoCheck(), "null")){
                 Gson gson = new Gson();
                 Long[] twoArray = gson.fromJson(geoProject.getTwoCheck(), Long[].class);
                 for (Long two : twoArray){
@@ -791,7 +788,7 @@ public class SysGeoLogController extends BaseController {
                 projectsMap.put(geoProject.getUserName(), projectIdArr);
             }
             //一检对应的项目ID
-            if (geoProject.getOneCheck() != null){
+            if (geoProject.getOneCheck() != null && !Objects.equals(geoProject.getOneCheck(), "null")){
                 Gson gson = new Gson();
                 Long[] oneArray = gson.fromJson(geoProject.getOneCheck(), Long[].class);
                 for (Long one : oneArray){
@@ -807,7 +804,7 @@ public class SysGeoLogController extends BaseController {
                 }
             }
             //二检对应的项目ID
-            if (geoProject.getTwoCheck() != null){
+            if (geoProject.getTwoCheck() != null && !Objects.equals(geoProject.getTwoCheck(), "null")){
                 Gson gson = new Gson();
                 Long[] twoArray = gson.fromJson(geoProject.getTwoCheck(), Long[].class);
                 for (Long two : twoArray){
