@@ -185,7 +185,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
         <include refid="selectSysReviewVo"/>
         inner join sys_review_process rp on r.review_id = rp.review_id
         <where>
-            <if test="serialNum != null  and serialNum != ''"> and r.serial_num = #{serialNum}</if>
+            <if test="serialNum != null  and serialNum != ''"> and r.serial_num like concat('%', #{serialNum}, '%')</if>
             <if test="projectName != null  and projectName != ''"> and r.project_name like concat('%', #{projectName}, '%')</if>
             <if test="requester != null  and requester != ''"> and r.requester = #{requester}</if>
             <if test="deptId != null  and deptId != ''"> and r.dept_id = #{deptId}</if>
@@ -208,7 +208,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
     <select id="selectCompletedReviewList" parameterType="SysReview" resultMap="SysReviewResult">
         <include refid="selectSysReviewVo"/>
         <where>
-            <if test="serialNum != null  and serialNum != ''"> and r.serial_num = #{serialNum}</if>
+            <if test="serialNum != null  and serialNum != ''"> and r.serial_num like concat('%', #{serialNum}, '%')</if>
             <if test="projectName != null  and projectName != ''"> and r.project_name like concat('%', #{projectName}, '%')</if>
             <if test="requester != null  and requester != ''"> and r.requester = #{requester}</if>
             <if test="status != null "> and r.status = #{status}</if>
@@ -227,7 +227,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
         <include refid="selectSysReviewVo"/>
         inner join sys_review_process rp on r.review_id = rp.review_id
         <where>
-            <if test="serialNum != null  and serialNum != ''"> and r.serial_num = #{serialNum}</if>
+            <if test="serialNum != null  and serialNum != ''"> and r.serial_num like concat('%', #{serialNum}, '%')</if>
             <if test="projectName != null  and projectName != ''"> and r.project_name like concat('%', #{projectName}, '%')</if>
             <if test="requester != null  and requester != ''"> and r.requester = #{requester}</if>
             <if test="deptId != null  and deptId != ''"> and r.dept_id = #{deptId}</if>
@@ -286,7 +286,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
         <include refid="selectSysReviewBySettlementVo"/>
         and a.settlement_id = #{settlementId}
         <where>
-            <if test="serialNum != null  and serialNum != ''"> and r.serial_num = #{serialNum}</if>
+            <if test="serialNum != null  and serialNum != ''"> and r.serial_num like concat('%', #{serialNum}, '%')</if>
             <if test="projectName != null  and projectName != ''"> and r.project_name like concat('%', #{projectName}, '%')</if>
             <if test="requester != null  and requester != ''"> and r.requester = #{requester}</if>
             <if test="status != null "> and r.status = #{status}</if>
