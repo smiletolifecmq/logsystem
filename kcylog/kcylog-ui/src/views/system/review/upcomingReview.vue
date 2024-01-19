@@ -785,7 +785,7 @@ export default {
     };
   },
   created() {
-    if (userInfo.state.userId === 8 || userInfo.state.userId === 11) {
+    if (userInfo.state.userId === 8) {
       this.isfg = true;
     }
     this.getUpcomingList();
