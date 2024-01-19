@@ -2,6 +2,7 @@ package com.kcylog.system.service.impl;
 
 import com.kcylog.common.utils.DateUtils;
 import com.kcylog.system.domain.SysReview;
+import com.kcylog.system.domain.SysReviewProcess;
 import com.kcylog.system.mapper.SysReviewMapper;
 import com.kcylog.system.service.ISysReviewService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -183,5 +184,11 @@ public class SysReviewServiceImpl implements ISysReviewService
     public List<SysReview> selectSysReviewListByReviewIds(Long[] reviewExportIds)
     {
         return sysReviewMapper.selectSysReviewListByReviewIds(reviewExportIds);
+    }
+
+    @Override
+    public int updateReviewManType(SysReviewProcess sysReviewProcess)
+    {
+        return sysReviewMapper.updateReviewManType(sysReviewProcess);
     }
 }

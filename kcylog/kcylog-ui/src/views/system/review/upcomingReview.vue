@@ -24,14 +24,14 @@
           @keyup.enter.native="handleQuery"
         />
       </el-form-item>
-      <el-form-item label="委托单位" prop="requester">
+      <!-- <el-form-item label="委托单位" prop="requester">
         <el-input
           v-model="queryParams.requester"
           placeholder="请输入委托单位"
           clearable
           @keyup.enter.native="handleQuery"
         />
-      </el-form-item>
+      </el-form-item> -->
       <el-form-item label="部门" prop="deptId">
         <el-cascader
           v-model="queryParamsDeptId"
@@ -104,8 +104,18 @@
           <span v-else></span>
         </template>
       </el-table-column>
-      <el-table-column label="雇工人数" align="center" prop="peopleNum" />
+      <!-- <el-table-column label="雇工人数" align="center" prop="peopleNum" /> -->
       <el-table-column label="雇工金额" align="center" prop="budgetMoney" />
+      <el-table-column label="雇工方式" align="center" prop="manType">
+        <template slot-scope="scope">
+          <span v-if="scope.row.manType === 0" style="color: red"
+            ><el-tag type="success">雇工</el-tag>
+          </span>
+          <span v-if="scope.row.manType === 1" style="color: green"
+            ><el-tag type="danger">第三方雇工</el-tag></span
+          >
+        </template>
+      </el-table-column>
       <el-table-column label="负责人" align="center" prop="user.userName" />
       <el-table-column label="部门" align="center" prop="dept.deptName" />
       <!-- <el-table-column label="审核状态" align="center" prop="status">
@@ -306,6 +316,27 @@
                     <el-descriptions-item>
                       <template slot="label"> 预算 </template>
                       {{ formInfo.budgetMoney }}
+                    </el-descriptions-item>
+                    <el-descriptions-item v-if="isfg">
+                      <template slot="label"> 雇工方式 </template>
+                      <span v-if="formInfo.manType === 0"
+                        ><el-tag type="success">雇工</el-tag>
+                      </span>
+                      <span v-if="formInfo.manType === 1"
+                        ><el-tag type="danger">第三方雇工</el-tag></span
+                      >
+                    </el-descriptions-item>
+                    <el-descriptions-item v-if="!isfg">
+                      <template slot="label"> 雇工方式 </template>
+                      <el-select v-model="formInfo.manType">
+                        <el-option
+                          v-for="item in manTypes"
+                          :key="item.value"
+                          :label="item.label"
+                          :value="item.value"
+                        >
+                        </el-option>
+                      </el-select>
                     </el-descriptions-item>
                     <el-descriptions-item>
                       <template slot="label"> 审核意见 </template>
@@ -638,6 +669,7 @@ import elDragDialog from "@/api/components/el-drag";
 import { listEmployee } from "@/api/system/reviewEmployee";
 import { deptTreeSelect } from "@/api/system/log";
 import { listUser } from "@/api/system/user";
+import userInfo from "@/store/modules/user";
 
 export default {
   filters: {
@@ -658,6 +690,7 @@ export default {
   },
   data() {
     return {
+      isfg: false,
       queryUserParams: {
         pageNum: 1,
         pageSize: 9999,
@@ -669,6 +702,10 @@ export default {
       auditOpinions: [
         { value: "同意", label: "同意" },
         { value: "不同意", label: "不同意" },
+      ],
+      manTypes: [
+        { value: 0, label: "雇工" },
+        { value: 1, label: "第三方雇工" },
       ],
       activeNames: ["1"],
       employeeList: [],
@@ -748,6 +785,9 @@ export default {
     };
   },
   created() {
+    if (userInfo.state.userId === 8 || userInfo.state.userId === 11) {
+      this.isfg = true;
+    }
     this.getUpcomingList();
     this.getDeptTree();
     this.loadAllUsers();
@@ -913,6 +953,7 @@ export default {
         .then(() => {
           this.form.reviewId = row.reviewId;
           this.form.status = status;
+          this.form.manType = row.manType;
           this.form.reason = this.formInfo.auditOpinion;
           setReviewProcessStatus(this.form).then((response) => {
             this.getUpcomingList();

@@ -67,6 +67,8 @@ public class SysReview extends BaseEntity
 
     private Long subcontract;
 
+    private Long manType;
+
     /** 人数 */
     private String peopleNum;
 
@@ -124,6 +126,14 @@ public class SysReview extends BaseEntity
     private Long[] reviewExportIds;
 
     private Long[] reviewExportEmployeeIds;
+
+    public Long getManType() {
+        return manType;
+    }
+
+    public void setManType(Long manType) {
+        this.manType = manType;
+    }
 
     public Long[] getReviewExportIds() {
         return reviewExportIds;

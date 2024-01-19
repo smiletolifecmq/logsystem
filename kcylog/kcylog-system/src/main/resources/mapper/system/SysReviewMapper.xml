@@ -29,6 +29,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
         <result property="createTime"    column="create_time"    />
         <result property="updateTime"    column="update_time"    />
         <result property="finalTime"    column="final_time"    />
+        <result property="manType"    column="man_type"    />
         <association property="dept" column="dept_name" javaType="SysDept" resultMap="sysReviewDeptResult"/>
         <association property="user" column="user_name" javaType="SysUser" resultMap="sysReviewUserResult"/>
         <association property="reviewEmployee" javaType="java.util.List" resultMap="sysReviewReviewEmployeeResult"/>
@@ -103,6 +104,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
             <if test="projectStart != null">project_start,</if>
             <if test="projectEnd != null">project_end,</if>
             <if test="budgetDay != null">budget_day,</if>
+            <if test="manType != null">man_type,</if>
             <if test="budgetMoney != null">budget_money,</if>
             <if test="createTime != null">create_time,</if>
             <if test="updateTime != null">update_time,</if>
@@ -125,6 +127,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
             <if test="projectStart != null">#{projectStart},</if>
             <if test="projectEnd != null">#{projectEnd},</if>
             <if test="budgetDay != null">#{budgetDay},</if>
+            <if test="manType != null">#{manType},</if>
             <if test="budgetMoney != null">#{budgetMoney},</if>
             <if test="createTime != null">#{createTime},</if>
             <if test="updateTime != null">#{updateTime},</if>
@@ -152,6 +155,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
             project_start = #{projectStart},
             project_end = #{projectEnd},
             <if test="budgetDay != null">budget_day = #{budgetDay},</if>
+            <if test="manType != null">man_type = #{manType},</if>
             <if test="budgetMoney != null">budget_money = #{budgetMoney},</if>
             <if test="createTime != null">create_time = #{createTime},</if>
             <if test="updateTime != null">update_time = #{updateTime},</if>
@@ -340,4 +344,10 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
             #{reviewId}
         </foreach>
     </select>
+
+    <update id="updateReviewManType" parameterType="SysReviewProcess">
+        update sys_review
+        set man_type = #{manType}
+        where review_id = #{reviewId}
+    </update>
 </mapper>

@@ -127,6 +127,16 @@
       </el-table-column>
       <el-table-column label="雇工人数" align="center" prop="peopleNum" />
       <el-table-column label="雇工金额" align="center" prop="budgetMoney" />
+      <el-table-column label="雇工方式" align="center" prop="manType">
+        <template slot-scope="scope">
+          <span v-if="scope.row.manType === 0" style="color: red"
+            ><el-tag type="success">雇工</el-tag>
+          </span>
+          <span v-if="scope.row.manType === 1" style="color: green"
+            ><el-tag type="danger">第三方雇工</el-tag></span
+          >
+        </template>
+      </el-table-column>
       <el-table-column label="负责人" align="center" prop="user.userName" />
       <el-table-column label="部门" align="center" prop="dept.deptName" />
       <!-- <el-table-column label="审核状态" align="center" prop="status">
@@ -313,6 +323,15 @@
                     <el-descriptions-item>
                       <template slot="label"> 雇工人数 </template>
                       {{ formInfo.peopleNum }}
+                    </el-descriptions-item>
+                    <el-descriptions-item>
+                      <template slot="label"> 雇工方式 </template>
+                      <span v-if="formInfo.manType === 0"
+                        ><el-tag type="success">雇工</el-tag>
+                      </span>
+                      <span v-if="formInfo.manType === 1"
+                        ><el-tag type="danger">第三方雇工</el-tag></span
+                      >
                     </el-descriptions-item>
                     <el-descriptions-item>
                       <template slot="label"> 天数 </template>

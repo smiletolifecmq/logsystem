@@ -1,6 +1,7 @@
 package com.kcylog.system.mapper;
 
 import com.kcylog.system.domain.SysReview;
+import com.kcylog.system.domain.SysReviewProcess;
 
 import java.util.List;
 
@@ -91,4 +92,6 @@ public interface SysReviewMapper
     public SysReview getSubcontractReview(String serialNum);
 
     public List<SysReview> selectSysReviewListByReviewIds(Long[] reviewExportIds);
+
+    public int updateReviewManType(SysReviewProcess sysReviewProcess);
 }
