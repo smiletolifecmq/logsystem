@@ -85,7 +85,23 @@
         @queryTable="getUpcomingList"
       ></right-toolbar>
     </el-row> -->
-
+    <el-table :data="statisticsData" style="width: 100%">
+      <el-table-column prop="deptName" label="部门" align="center">
+        <template slot-scope="scope">
+          <el-tag>{{ scope.row.deptName }}</el-tag>
+        </template>
+      </el-table-column>
+      <el-table-column prop="num" label="待审核总条数" align="center">
+        <template slot-scope="scope">
+          <el-tag type="danger">{{ scope.row.num }}</el-tag>
+        </template>
+      </el-table-column>
+      <el-table-column prop="budgetMoney" label="待审核总金额" align="center">
+        <template slot-scope="scope">
+          <el-tag type="danger">{{ scope.row.budgetMoney }}</el-tag>
+        </template>
+      </el-table-column>
+    </el-table>
     <el-table
       v-loading="loading"
       :data="reviewList"
@@ -690,6 +706,7 @@ export default {
   },
   data() {
     return {
+      statisticsData: [],
       isfg: false,
       queryUserParams: {
         pageNum: 1,
@@ -791,6 +808,33 @@ export default {
     this.getUpcomingList();
     this.getDeptTree();
     this.loadAllUsers();
+    upcomingListReview(
+      this.addDateRange({
+        pageNum: 1,
+        pageSize: 9999,
+      })
+    ).then((response) => {
+      const reviews = response.rows;
+      let reviewMap = new Map();
+      for (var i = 0; i < reviews.length; i++) {
+        if (reviewMap.has(reviews[i].dept.deptName)) {
+          let reviewTemp = reviewMap.get(reviews[i].dept.deptName);
+          reviewTemp.num++;
+          reviewTemp.budgetMoney =
+            reviewTemp.budgetMoney + reviews[i].budgetMoney;
+        } else {
+          let reviewTemp = {
+            deptName: reviews[i].dept.deptName,
+            num: 1,
+            budgetMoney: reviews[i].budgetMoney,
+          };
+          reviewMap.set(reviews[i].dept.deptName, reviewTemp);
+        }
+      }
+      reviewMap.forEach((value, key) => {
+        this.statisticsData.push(value);
+      });
+    });
   },
   methods: {
     loadAllUsers() {
