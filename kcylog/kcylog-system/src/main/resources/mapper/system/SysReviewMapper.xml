@@ -245,6 +245,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
             <if test="employmentReason != null  and employmentReason == 1"> and (r.final_hire = 1 and rp.status = 2)</if>
             <if test="employmentReason != null  and employmentReason == 2"> and (r.final_hire = 0 and rp.status = 2)</if>
             <if test="employmentReason == null  or employmentReason == 0"> AND (rp.status = 2 OR rp.status = 3)</if>
+            <if test="status != null  and status != ''"> and r.status = #{status}</if>
         </where>
         AND rp.user_id = #{userId}
         order by rp.review_time desc
