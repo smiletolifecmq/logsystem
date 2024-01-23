@@ -674,6 +674,10 @@ export default {
           value: 3,
           label: "未通过",
         },
+        {
+          value: 4,
+          label: "已结算",
+        },
       ],
       queryUserParams: {
         pageNum: 1,
