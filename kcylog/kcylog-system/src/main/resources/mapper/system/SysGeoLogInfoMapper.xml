@@ -17,10 +17,20 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
         <result property="typeMoney"    column="type_money"    />
         <result property="projectId"    column="project_id"    />
         <result property="degree"    column="degree"    />
+        <association property="geoType" javaType="SysGeoType" resultMap="SysGeoTypeResult"/>
+    </resultMap>
+
+    <resultMap type="SysGeoType" id="SysGeoTypeResult">
+        <result property="typeName"    column="type_name"    />
+        <result property="unit"    column="unit"    />
     </resultMap>
 
     <sql id="selectSysGeoLogInfoVo">
         select log_info_id, log_id, type_arr, type_id, difficulty, difficulty_degree, log_date, workload, workdetail, type_money, project_id, degree from sys_geo_log_info
+    </sql>
+
+    <sql id="selectSysGeoLogInfoDetail">
+        select a.*,b.type_name,b.unit from sys_geo_log_info a inner join sys_geo_type b on a.type_id = b.type_id
     </sql>
 
     <select id="selectSysGeoLogInfoList" parameterType="SysGeoLogInfo" resultMap="SysGeoLogInfoResult">
@@ -115,6 +125,14 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
         where project_id in
         <foreach item="projectId" collection="array" open="(" separator="," close=")">
             #{projectId}
+        </foreach>
+    </select>
+
+    <select id="selectSysGeoLogInfoByLogIds" parameterType="java.util.List" resultMap="SysGeoLogInfoResult">
+        <include refid="selectSysGeoLogInfoDetail"/>
+        where log_id in
+        <foreach item="logId" collection="list" open="(" separator="," close=")">
+            #{logId}
         </foreach>
     </select>
 </mapper>

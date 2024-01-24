@@ -48,9 +48,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
     </sql>
 
     <sql id="selectSysGeoLogListDetailVo">
-        select a.*,b.*,c.type_name,c.unit from sys_geo_log as a
-        inner join sys_geo_log_info as b on a.log_id = b.log_id
-        inner join sys_geo_type as c on b.type_id = c.type_id
+        select a.* from sys_geo_log as a
     </sql>
 
     <sql id="selectSysGeoLogExportVo">

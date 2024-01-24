@@ -67,18 +67,41 @@ public class SysGeoLogController extends BaseController {
      */
     @GetMapping("/list")
     public TableDataInfo list(SysGeoLog sysGeoLog) {
-        startPage();
         //查找登录用户可以查看的用户日志权限
         Long userId = SecurityUtils.getUserId();
         List<SysGeoUser> geoUsers = sysGeoUserService.selectSysAssessUserByGeoUser(userId);
-        List<Long> longIdsList = new ArrayList<>();
-        sysGeoLog.setLookUserIds(longIdsList);
+        List<Long> userIdsList = new ArrayList<>();
+        sysGeoLog.setLookUserIds(userIdsList);
         sysGeoLog.getLookUserIds().add(userId);
         for (SysGeoUser sysGeoUser : geoUsers) {
             sysGeoLog.getLookUserIds().add(sysGeoUser.getUserId());
         }
         //查找拥有查看日志的记录
+        startPage();
         List<SysGeoLog> list = sysGeoLogService.selectSysGeoLogList(sysGeoLog);
+        //获取日志详细信息
+        List<Long> longIdsList = new ArrayList<>();
+        for (SysGeoLog log : list){
+            longIdsList.add(log.getLogId());
+        }
+        List<SysGeoLogInfo> sysGeoLogInfo = sysGeoLogInfoService.selectSysGeoLogInfoByLogIds(longIdsList);
+        Map<Long, List<SysGeoLogInfo>> geoLogInfoMap = new HashMap<>();
+        for (SysGeoLogInfo v : sysGeoLogInfo){
+            if (geoLogInfoMap.containsKey(v.getLogId())){
+                List<SysGeoLogInfo> gli = geoLogInfoMap.get(v.getLogId());
+                gli.add(v);
+                geoLogInfoMap.put(v.getLogId(), gli);
+            }else {
+                List<SysGeoLogInfo> gli = new ArrayList<>();
+                gli.add(v);
+                geoLogInfoMap.put(v.getLogId(), gli);
+            }
+        }
+
+        for (SysGeoLog geoLog : list){
+            geoLog.setGeoLogInfo(geoLogInfoMap.get(geoLog.getLogId()));
+        }
+
         return getDataTable(list);
     }
 
