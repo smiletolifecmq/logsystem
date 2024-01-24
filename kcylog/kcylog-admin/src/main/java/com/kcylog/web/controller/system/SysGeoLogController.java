@@ -240,7 +240,7 @@ public class SysGeoLogController extends BaseController {
                     }
                 }
             }
-            BigDecimal multiplier = new BigDecimal("0.08");
+            BigDecimal multiplier = new BigDecimal("0.03");
             allUserMoney = allUserMoney.multiply(multiplier);
             logExport.setType51_jr(allUserMoney);
             logExport.setTotal_money(logExport.getTotal_money().add(allUserMoney));
@@ -291,7 +291,7 @@ public class SysGeoLogController extends BaseController {
                 BigDecimal qjMoney = totalMoney.divide(divisor, 2, RoundingMode.HALF_UP);
                 qjMoney = qjMoney.multiply(geoHolidayMap.get(userName));
                 totalMoney = totalMoney.subtract(qjMoney);
-                logExport.setType54_gzl(geoHolidayMap.get(userName).doubleValue());
+                logExport.setType54_gzl(geoHolidayMap.get(userName));
                 logExport.setType53_jr(qjMoney);
             }
 
@@ -419,60 +419,60 @@ public class SysGeoLogController extends BaseController {
         //用户名
         logExport.setUser_name(userName);
         //工作量
-        logExport.setType1_gzl((double) 0);
-        logExport.setType2_gzl((double) 0);
-        logExport.setType3_gzl((double) 0);
-        logExport.setType4_gzl((double) 0);
-        logExport.setType5_gzl((double) 0);
-        logExport.setType6_gzl((double) 0);
-        logExport.setType7_gzl((double) 0);
-        logExport.setType8_gzl((double) 0);
-        logExport.setType9_gzl((double) 0);
-        logExport.setType10_gzl((double) 0);
-        logExport.setType11_gzl((double) 0);
-        logExport.setType12_gzl((double) 0);
-        logExport.setType13_gzl((double) 0);
-        logExport.setType14_gzl((double) 0);
-        logExport.setType15_gzl((double) 0);
-        logExport.setType16_gzl((double) 0);
-        logExport.setType17_gzl((double) 0);
-        logExport.setType18_gzl((double) 0);
-        logExport.setType19_gzl((double) 0);
-        logExport.setType20_gzl((double) 0);
-        logExport.setType21_gzl((double) 0);
-        logExport.setType22_gzl((double) 0);
-        logExport.setType23_gzl((double) 0);
-        logExport.setType24_gzl((double) 0);
-        logExport.setType25_gzl((double) 0);
-        logExport.setType26_gzl((double) 0);
-        logExport.setType27_gzl((double) 0);
-        logExport.setType28_gzl((double) 0);
-        logExport.setType29_gzl((double) 0);
-        logExport.setType30_gzl((double) 0);
-        logExport.setType31_gzl((double) 0);
-        logExport.setType32_gzl((double) 0);
-        logExport.setType33_gzl((double) 0);
-        logExport.setType34_gzl((double) 0);
-        logExport.setType35_gzl((double) 0);
-        logExport.setType36_gzl((double) 0);
-        logExport.setType37_gzl((double) 0);
-        logExport.setType38_gzl((double) 0);
-        logExport.setType39_gzl((double) 0);
-        logExport.setType40_gzl((double) 0);
-        logExport.setType41_gzl((double) 0);
-        logExport.setType42_gzl((double) 0);
-        logExport.setType43_gzl((double) 0);
-        logExport.setType44_gzl((double) 0);
-        logExport.setType45_gzl((double) 0);
-        logExport.setType46_gzl((double) 0);
-        logExport.setType47_gzl((double) 0);
-        logExport.setType48_gzl((double) 0);
-        logExport.setType49_gzl((double) 0);
-        logExport.setType50_gzl((double) 0);
-        logExport.setType51_gzl((double) 0);
-        logExport.setType52_gzl((double) 0);
-        logExport.setType53_gzl((double) 0);
-        logExport.setType54_gzl((double) 0);
+        logExport.setType1_gzl(BigDecimal.ZERO);
+        logExport.setType2_gzl(BigDecimal.ZERO);
+        logExport.setType3_gzl(BigDecimal.ZERO);
+        logExport.setType4_gzl(BigDecimal.ZERO);
+        logExport.setType5_gzl(BigDecimal.ZERO);
+        logExport.setType6_gzl(BigDecimal.ZERO);
+        logExport.setType7_gzl(BigDecimal.ZERO);
+        logExport.setType8_gzl(BigDecimal.ZERO);
+        logExport.setType9_gzl(BigDecimal.ZERO);
+        logExport.setType10_gzl(BigDecimal.ZERO);
+        logExport.setType11_gzl(BigDecimal.ZERO);
+        logExport.setType12_gzl(BigDecimal.ZERO);
+        logExport.setType13_gzl(BigDecimal.ZERO);
+        logExport.setType14_gzl(BigDecimal.ZERO);
+        logExport.setType15_gzl(BigDecimal.ZERO);
+        logExport.setType16_gzl(BigDecimal.ZERO);
+        logExport.setType17_gzl(BigDecimal.ZERO);
+        logExport.setType18_gzl(BigDecimal.ZERO);
+        logExport.setType19_gzl(BigDecimal.ZERO);
+        logExport.setType20_gzl(BigDecimal.ZERO);
+        logExport.setType21_gzl(BigDecimal.ZERO);
+        logExport.setType22_gzl(BigDecimal.ZERO);
+        logExport.setType23_gzl(BigDecimal.ZERO);
+        logExport.setType24_gzl(BigDecimal.ZERO);
+        logExport.setType25_gzl(BigDecimal.ZERO);
+        logExport.setType26_gzl(BigDecimal.ZERO);
+        logExport.setType27_gzl(BigDecimal.ZERO);
+        logExport.setType28_gzl(BigDecimal.ZERO);
+        logExport.setType29_gzl(BigDecimal.ZERO);
+        logExport.setType30_gzl(BigDecimal.ZERO);
+        logExport.setType31_gzl(BigDecimal.ZERO);
+        logExport.setType32_gzl(BigDecimal.ZERO);
+        logExport.setType33_gzl(BigDecimal.ZERO);
+        logExport.setType34_gzl(BigDecimal.ZERO);
+        logExport.setType35_gzl(BigDecimal.ZERO);
+        logExport.setType36_gzl(BigDecimal.ZERO);
+        logExport.setType37_gzl(BigDecimal.ZERO);
+        logExport.setType38_gzl(BigDecimal.ZERO);
+        logExport.setType39_gzl(BigDecimal.ZERO);
+        logExport.setType40_gzl(BigDecimal.ZERO);
+        logExport.setType41_gzl(BigDecimal.ZERO);
+        logExport.setType42_gzl(BigDecimal.ZERO);
+        logExport.setType43_gzl(BigDecimal.ZERO);
+        logExport.setType44_gzl(BigDecimal.ZERO);
+        logExport.setType45_gzl(BigDecimal.ZERO);
+        logExport.setType46_gzl(BigDecimal.ZERO);
+        logExport.setType47_gzl(BigDecimal.ZERO);
+        logExport.setType48_gzl(BigDecimal.ZERO);
+        logExport.setType49_gzl(BigDecimal.ZERO);
+        logExport.setType50_gzl(BigDecimal.ZERO);
+        logExport.setType51_gzl(BigDecimal.ZERO);
+        logExport.setType52_gzl(BigDecimal.ZERO);
+        logExport.setType53_gzl(BigDecimal.ZERO);
+        logExport.setType54_gzl(BigDecimal.ZERO);
         //产值金额
         logExport.setType1_jr(BigDecimal.valueOf(0));
         logExport.setType2_jr(BigDecimal.valueOf(0));
@@ -538,7 +538,7 @@ public class SysGeoLogController extends BaseController {
                 int typeId = Math.toIntExact(geoLogInfo.getTypeId());
                 BigDecimal difficultyDegree = BigDecimal.valueOf(geoLogInfo.getDifficultyDegree());
                 BigDecimal workload = BigDecimal.valueOf(geoLogInfo.getWorkload());
-                double workloadDouble = geoLogInfo.getWorkload();
+                BigDecimal workloadDouble = new BigDecimal(geoLogInfo.getWorkload());
                 BigDecimal jinEr = difficultyDegree.multiply(workload).multiply(geoLogInfo.getTypeMoney());
                 logExport.setTotal_money(logExport.getTotal_money().add(jinEr));
                 if (geoLogInfo.getProjectId() != null && geoLogInfo.getProjectId() != 0){
@@ -551,203 +551,203 @@ public class SysGeoLogController extends BaseController {
                 }
                 switch (typeId) {
                     case 2:
-                        logExport.setType1_gzl(logExport.getType1_gzl() + workloadDouble);
+                        logExport.setType1_gzl(logExport.getType1_gzl().add(workloadDouble));
                         logExport.setType1_jr(logExport.getType1_jr().add(jinEr));
                         break;
                     case 3:
-                        logExport.setType2_gzl(logExport.getType2_gzl() + workloadDouble);
+                        logExport.setType2_gzl(logExport.getType2_gzl().add(workloadDouble));
                         logExport.setType2_jr(logExport.getType2_jr().add(jinEr));
                         break;
                     case 4:
-                        logExport.setType3_gzl(logExport.getType3_gzl() + workloadDouble);
+                        logExport.setType3_gzl(logExport.getType3_gzl().add(workloadDouble));
                         logExport.setType3_jr(logExport.getType3_jr().add(jinEr));
                         break;
                     case 5:
-                        logExport.setType4_gzl(logExport.getType4_gzl() + workloadDouble);
+                        logExport.setType4_gzl(logExport.getType4_gzl().add(workloadDouble));
                         logExport.setType4_jr(logExport.getType4_jr().add(jinEr));
                         break;
                     case 6:
-                        logExport.setType5_gzl(logExport.getType5_gzl() + workloadDouble);
+                        logExport.setType5_gzl(logExport.getType5_gzl().add(workloadDouble));
                         logExport.setType5_jr(logExport.getType5_jr().add(jinEr));
                         break;
                     case 7:
-                        logExport.setType6_gzl(logExport.getType6_gzl() + workloadDouble);
+                        logExport.setType6_gzl(logExport.getType6_gzl().add(workloadDouble));
                         logExport.setType6_jr(logExport.getType6_jr().add(jinEr));
                         break;
                     case 9:
-                        logExport.setType7_gzl(logExport.getType7_gzl() + workloadDouble);
+                        logExport.setType7_gzl(logExport.getType7_gzl().add(workloadDouble));
                         logExport.setType7_jr(logExport.getType7_jr().add(jinEr));
                         break;
                     case 10:
-                        logExport.setType8_gzl(logExport.getType8_gzl() + workloadDouble);
+                        logExport.setType8_gzl(logExport.getType8_gzl().add(workloadDouble));
                         logExport.setType8_jr(logExport.getType8_jr().add(jinEr));
                         break;
                     case 11:
-                        logExport.setType9_gzl(logExport.getType9_gzl() + workloadDouble);
+                        logExport.setType9_gzl(logExport.getType9_gzl().add(workloadDouble));
                         logExport.setType9_jr(logExport.getType9_jr().add(jinEr));
                         break;
                     case 12:
-                        logExport.setType10_gzl(logExport.getType10_gzl() + workloadDouble);
+                        logExport.setType10_gzl(logExport.getType10_gzl().add(workloadDouble));
                         logExport.setType10_jr(logExport.getType10_jr().add(jinEr));
                         break;
                     case 13:
-                        logExport.setType11_gzl(logExport.getType11_gzl() + workloadDouble);
+                        logExport.setType11_gzl(logExport.getType11_gzl().add(workloadDouble));
                         logExport.setType11_jr(logExport.getType11_jr().add(jinEr));
                         break;
                     case 14:
-                        logExport.setType12_gzl(logExport.getType12_gzl() + workloadDouble);
+                        logExport.setType12_gzl(logExport.getType12_gzl().add(workloadDouble));
                         logExport.setType12_jr(logExport.getType12_jr().add(jinEr));
                         break;
                     case 15:
-                        logExport.setType13_gzl(logExport.getType13_gzl() + workloadDouble);
+                        logExport.setType13_gzl(logExport.getType13_gzl().add(workloadDouble));
                         logExport.setType13_jr(logExport.getType13_jr().add(jinEr));
                         break;
                     case 16:
-                        logExport.setType14_gzl(logExport.getType14_gzl() + workloadDouble);
+                        logExport.setType14_gzl(logExport.getType14_gzl().add(workloadDouble));
                         logExport.setType14_jr(logExport.getType14_jr().add(jinEr));
                         break;
                     case 17:
-                        logExport.setType15_gzl(logExport.getType15_gzl() + workloadDouble);
+                        logExport.setType15_gzl(logExport.getType15_gzl().add(workloadDouble));
                         logExport.setType15_jr(logExport.getType15_jr().add(jinEr));
                         break;
                     case 18:
-                        logExport.setType16_gzl(logExport.getType16_gzl() + workloadDouble);
+                        logExport.setType16_gzl(logExport.getType16_gzl().add(workloadDouble));
                         logExport.setType16_jr(logExport.getType16_jr().add(jinEr));
                         break;
                     case 20:
-                        logExport.setType17_gzl(logExport.getType17_gzl() + workloadDouble);
+                        logExport.setType17_gzl(logExport.getType17_gzl().add(workloadDouble));
                         logExport.setType17_jr(logExport.getType17_jr().add(jinEr));
                         break;
                     case 21:
-                        logExport.setType18_gzl(logExport.getType18_gzl() + workloadDouble);
+                        logExport.setType18_gzl(logExport.getType18_gzl().add(workloadDouble));
                         logExport.setType18_jr(logExport.getType18_jr().add(jinEr));
                         break;
                     case 22:
-                        logExport.setType19_gzl(logExport.getType19_gzl() + workloadDouble);
+                        logExport.setType19_gzl(logExport.getType19_gzl().add(workloadDouble));
                         logExport.setType19_jr(logExport.getType19_jr().add(jinEr));
                         break;
                     case 23:
-                        logExport.setType20_gzl(logExport.getType20_gzl() + workloadDouble);
+                        logExport.setType20_gzl(logExport.getType20_gzl().add(workloadDouble));
                         logExport.setType20_jr(logExport.getType20_jr().add(jinEr));
                         break;
                     case 25:
-                        logExport.setType21_gzl(logExport.getType21_gzl() + workloadDouble);
+                        logExport.setType21_gzl(logExport.getType21_gzl().add(workloadDouble));
                         logExport.setType21_jr(logExport.getType21_jr().add(jinEr));
                         break;
                     case 26:
-                        logExport.setType22_gzl(logExport.getType22_gzl() + workloadDouble);
+                        logExport.setType22_gzl(logExport.getType22_gzl().add(workloadDouble));
                         logExport.setType22_jr(logExport.getType22_jr().add(jinEr));
                         break;
                     case 27:
-                        logExport.setType23_gzl(logExport.getType23_gzl() + workloadDouble);
+                        logExport.setType23_gzl(logExport.getType23_gzl().add(workloadDouble));
                         logExport.setType23_jr(logExport.getType23_jr().add(jinEr));
                         break;
                     case 28:
-                        logExport.setType24_gzl(logExport.getType24_gzl() + workloadDouble);
+                        logExport.setType24_gzl(logExport.getType24_gzl().add(workloadDouble));
                         logExport.setType24_jr(logExport.getType24_jr().add(jinEr));
                         break;
                     case 29:
-                        logExport.setType25_gzl(logExport.getType25_gzl() + workloadDouble);
+                        logExport.setType25_gzl(logExport.getType25_gzl().add(workloadDouble));
                         logExport.setType25_jr(logExport.getType25_jr().add(jinEr));
                         break;
                     case 30:
-                        logExport.setType26_gzl(logExport.getType26_gzl() + workloadDouble);
+                        logExport.setType26_gzl(logExport.getType26_gzl().add(workloadDouble));
                         logExport.setType26_jr(logExport.getType26_jr().add(jinEr));
                         break;
                     case 31:
-                        logExport.setType27_gzl(logExport.getType27_gzl() + workloadDouble);
+                        logExport.setType27_gzl(logExport.getType27_gzl().add(workloadDouble));
                         logExport.setType27_jr(logExport.getType27_jr().add(jinEr));
                         break;
                     case 32:
-                        logExport.setType28_gzl(logExport.getType28_gzl() + workloadDouble);
+                        logExport.setType28_gzl(logExport.getType28_gzl().add(workloadDouble));
                         logExport.setType28_jr(logExport.getType28_jr().add(jinEr));
                         break;
                     case 33:
-                        logExport.setType29_gzl(logExport.getType29_gzl() + workloadDouble);
+                        logExport.setType29_gzl(logExport.getType29_gzl().add(workloadDouble));
                         logExport.setType29_jr(logExport.getType29_jr().add(jinEr));
                         break;
                     case 34:
-                        logExport.setType30_gzl(logExport.getType30_gzl() + workloadDouble);
+                        logExport.setType30_gzl(logExport.getType30_gzl().add(workloadDouble));
                         logExport.setType30_jr(logExport.getType30_jr().add(jinEr));
                         break;
                     case 35:
-                        logExport.setType31_gzl(logExport.getType31_gzl() + workloadDouble);
+                        logExport.setType31_gzl(logExport.getType31_gzl().add(workloadDouble));
                         logExport.setType31_jr(logExport.getType31_jr().add(jinEr));
                         break;
                     case 36:
-                        logExport.setType32_gzl(logExport.getType32_gzl() + workloadDouble);
+                        logExport.setType32_gzl(logExport.getType32_gzl().add(workloadDouble));
                         logExport.setType32_jr(logExport.getType32_jr().add(jinEr));
                         break;
                     case 37:
-                        logExport.setType33_gzl(logExport.getType33_gzl() + workloadDouble);
+                        logExport.setType33_gzl(logExport.getType33_gzl().add(workloadDouble));
                         logExport.setType33_jr(logExport.getType33_jr().add(jinEr));
                         break;
                     case 38:
-                        logExport.setType34_gzl(logExport.getType34_gzl() + workloadDouble);
+                        logExport.setType34_gzl(logExport.getType34_gzl().add(workloadDouble));
                         logExport.setType34_jr(logExport.getType34_jr().add(jinEr));
                         break;
                     case 39:
-                        logExport.setType35_gzl(logExport.getType35_gzl() + workloadDouble);
+                        logExport.setType35_gzl(logExport.getType35_gzl().add(workloadDouble));
                         logExport.setType35_jr(logExport.getType35_jr().add(jinEr));
                         break;
                     case 40:
-                        logExport.setType36_gzl(logExport.getType36_gzl() + workloadDouble);
+                        logExport.setType36_gzl(logExport.getType36_gzl().add(workloadDouble));
                         logExport.setType36_jr(logExport.getType36_jr().add(jinEr));
                         break;
                     case 41:
-                        logExport.setType37_gzl(logExport.getType37_gzl() + workloadDouble);
+                        logExport.setType37_gzl(logExport.getType37_gzl().add(workloadDouble));
                         logExport.setType37_jr(logExport.getType37_jr().add(jinEr));
                         break;
                     case 42:
-                        logExport.setType38_gzl(logExport.getType38_gzl() + workloadDouble);
+                        logExport.setType38_gzl(logExport.getType38_gzl().add(workloadDouble));
                         logExport.setType38_jr(logExport.getType38_jr().add(jinEr));
                         break;
                     case 43:
-                        logExport.setType39_gzl(logExport.getType39_gzl() + workloadDouble);
+                        logExport.setType39_gzl(logExport.getType39_gzl().add(workloadDouble));
                         logExport.setType39_jr(logExport.getType39_jr().add(jinEr));
                         break;
                     case 44:
-                        logExport.setType40_gzl(logExport.getType40_gzl() + workloadDouble);
+                        logExport.setType40_gzl(logExport.getType40_gzl().add(workloadDouble));
                         logExport.setType40_jr(logExport.getType40_jr().add(jinEr));
                         break;
                     case 45:
-                        logExport.setType41_gzl(logExport.getType41_gzl() + workloadDouble);
+                        logExport.setType41_gzl(logExport.getType41_gzl().add(workloadDouble));
                         logExport.setType41_jr(logExport.getType41_jr().add(jinEr));
                         break;
                     case 46:
-                        logExport.setType42_gzl(logExport.getType42_gzl() + workloadDouble);
+                        logExport.setType42_gzl(logExport.getType42_gzl().add(workloadDouble));
                         logExport.setType42_jr(logExport.getType42_jr().add(jinEr));
                         break;
                     case 47:
-                        logExport.setType43_gzl(logExport.getType43_gzl() + workloadDouble);
+                        logExport.setType43_gzl(logExport.getType43_gzl().add(workloadDouble));
                         logExport.setType43_jr(logExport.getType43_jr().add(jinEr));
                         break;
                     case 48:
-                        logExport.setType44_gzl(logExport.getType44_gzl() + workloadDouble);
+                        logExport.setType44_gzl(logExport.getType44_gzl().add(workloadDouble));
                         logExport.setType44_jr(logExport.getType44_jr().add(jinEr));
                         break;
                     case 49:
-                        logExport.setType45_gzl(logExport.getType45_gzl() + workloadDouble);
+                        logExport.setType45_gzl(logExport.getType45_gzl().add(workloadDouble));
                         logExport.setType45_jr(logExport.getType45_jr().add(jinEr));
                         break;
                     case 50:
-                        logExport.setType46_gzl(logExport.getType46_gzl() + workloadDouble);
+                        logExport.setType46_gzl(logExport.getType46_gzl().add(workloadDouble));
                         logExport.setType46_jr(logExport.getType46_jr().add(jinEr));
                         break;
                     case 51:
-                        logExport.setType47_gzl(logExport.getType47_gzl() + workloadDouble);
+                        logExport.setType47_gzl(logExport.getType47_gzl().add(workloadDouble));
                         logExport.setType47_jr(logExport.getType47_jr().add(jinEr));
                         break;
                     case 54:
-                        logExport.setType48_gzl(logExport.getType48_gzl() + workloadDouble);
+                        logExport.setType48_gzl(logExport.getType48_gzl().add(workloadDouble));
                         logExport.setType48_jr(logExport.getType48_jr().add(jinEr));
                         break;
                     case 55:
-                        logExport.setType49_gzl(logExport.getType49_gzl() + workloadDouble);
+                        logExport.setType49_gzl(logExport.getType49_gzl().add(workloadDouble));
                         logExport.setType49_jr(logExport.getType49_jr().add(jinEr));
                         break;
                     case 56:
-                        logExport.setType50_gzl(logExport.getType50_gzl() + workloadDouble);
+                        logExport.setType50_gzl(logExport.getType50_gzl().add(workloadDouble));
                         logExport.setType50_jr(logExport.getType50_jr().add(jinEr));
                         break;
                 }
@@ -909,7 +909,7 @@ public class SysGeoLogController extends BaseController {
                     }
                 }
             }
-            BigDecimal multiplier = new BigDecimal("0.08");
+            BigDecimal multiplier = new BigDecimal("0.03");
             allUserMoney = allUserMoney.multiply(multiplier);
             logExport.setType51_jr(allUserMoney);
             logExport.setTotal_money(logExport.getTotal_money().add(allUserMoney));
@@ -960,29 +960,29 @@ public class SysGeoLogController extends BaseController {
                 BigDecimal qjMoney = totalMoney.divide(divisor, 2, RoundingMode.HALF_UP);
                 qjMoney = qjMoney.multiply(geoHolidayMap.get(userName));
                 totalMoney = totalMoney.subtract(qjMoney);
-                logExport.setType54_gzl(geoHolidayMap.get(userName).doubleValue());
+                logExport.setType54_gzl(geoHolidayMap.get(userName));
                 logExport.setType53_jr(qjMoney);
             }
 
-            Double fitCoefficient = (double)1;
-            Double workCoefficient = (double)1;
-            Double userCoefficientMap = (double)1;
+            BigDecimal fitCoefficient = new BigDecimal(1);
+            BigDecimal workCoefficient = new BigDecimal(1);
+            BigDecimal userCoefficientMap = new BigDecimal(1);
             if (fitCoefficientMap.containsKey(userName)){
-                fitCoefficient = fitCoefficientMap.get(userName);
+                fitCoefficient =  new BigDecimal(fitCoefficientMap.get(userName));
             }
             if (workCoefficientMap.containsKey(userName)){
-                workCoefficient = workCoefficientMap.get(userName);
+                workCoefficient = new BigDecimal(workCoefficientMap.get(userName));
             }
             if (geoUserCoefficientMap.containsKey(userName)){
-                userCoefficientMap = geoUserCoefficientMap.get(userName);
+                userCoefficientMap = new BigDecimal(geoUserCoefficientMap.get(userName));
             }
 
             logExport.setType51_gzl(fitCoefficient);
             logExport.setType52_gzl(workCoefficient);
             logExport.setType53_gzl(userCoefficientMap);
-            BigDecimal bigDecimalFitCoefficient = new BigDecimal(fitCoefficient);
-            BigDecimal bigDecimalWorkCoefficient = new BigDecimal(workCoefficient);
-            BigDecimal bigDecimalUserCoefficient = new BigDecimal(userCoefficientMap);
+            BigDecimal bigDecimalFitCoefficient = fitCoefficient;
+            BigDecimal bigDecimalWorkCoefficient = workCoefficient;
+            BigDecimal bigDecimalUserCoefficient = userCoefficientMap;
 
             logExport.setBefore_total_money(totalMoney);
             logExport.setTotal_money(totalMoney.multiply(bigDecimalFitCoefficient).multiply(bigDecimalWorkCoefficient).multiply(bigDecimalUserCoefficient));

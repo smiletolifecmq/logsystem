@@ -7,60 +7,60 @@ public class LogExport {
     //用户名
     private String user_name;
     //工作量
-    private Double type1_gzl;
-    private Double type2_gzl;
-    private Double type3_gzl;
-    private Double type4_gzl;
-    private Double type5_gzl;
-    private Double type6_gzl;
-    private Double type7_gzl;
-    private Double type8_gzl;
-    private Double type9_gzl;
-    private Double type10_gzl;
-    private Double type11_gzl;
-    private Double type12_gzl;
-    private Double type13_gzl;
-    private Double type14_gzl;
-    private Double type15_gzl;
-    private Double type16_gzl;
-    private Double type17_gzl;
-    private Double type18_gzl;
-    private Double type19_gzl;
-    private Double type20_gzl;
-    private Double type21_gzl;
-    private Double type22_gzl;
-    private Double type23_gzl;
-    private Double type24_gzl;
-    private Double type25_gzl;
-    private Double type26_gzl;
-    private Double type27_gzl;
-    private Double type28_gzl;
-    private Double type29_gzl;
-    private Double type30_gzl;
-    private Double type31_gzl;
-    private Double type32_gzl;
-    private Double type33_gzl;
-    private Double type34_gzl;
-    private Double type35_gzl;
-    private Double type36_gzl;
-    private Double type37_gzl;
-    private Double type38_gzl;
-    private Double type39_gzl;
-    private Double type40_gzl;
-    private Double type41_gzl;
-    private Double type42_gzl;
-    private Double type43_gzl;
-    private Double type44_gzl;
-    private Double type45_gzl;
-    private Double type46_gzl;
-    private Double type47_gzl;
-    private Double type48_gzl;
-    private Double type49_gzl;
-    private Double type50_gzl;
-    private Double type51_gzl;
-    private Double type52_gzl;
-    private Double type53_gzl;
-    private Double type54_gzl;
+    private BigDecimal type1_gzl;
+    private BigDecimal type2_gzl;
+    private BigDecimal type3_gzl;
+    private BigDecimal type4_gzl;
+    private BigDecimal type5_gzl;
+    private BigDecimal type6_gzl;
+    private BigDecimal type7_gzl;
+    private BigDecimal type8_gzl;
+    private BigDecimal type9_gzl;
+    private BigDecimal type10_gzl;
+    private BigDecimal type11_gzl;
+    private BigDecimal type12_gzl;
+    private BigDecimal type13_gzl;
+    private BigDecimal type14_gzl;
+    private BigDecimal type15_gzl;
+    private BigDecimal type16_gzl;
+    private BigDecimal type17_gzl;
+    private BigDecimal type18_gzl;
+    private BigDecimal type19_gzl;
+    private BigDecimal type20_gzl;
+    private BigDecimal type21_gzl;
+    private BigDecimal type22_gzl;
+    private BigDecimal type23_gzl;
+    private BigDecimal type24_gzl;
+    private BigDecimal type25_gzl;
+    private BigDecimal type26_gzl;
+    private BigDecimal type27_gzl;
+    private BigDecimal type28_gzl;
+    private BigDecimal type29_gzl;
+    private BigDecimal type30_gzl;
+    private BigDecimal type31_gzl;
+    private BigDecimal type32_gzl;
+    private BigDecimal type33_gzl;
+    private BigDecimal type34_gzl;
+    private BigDecimal type35_gzl;
+    private BigDecimal type36_gzl;
+    private BigDecimal type37_gzl;
+    private BigDecimal type38_gzl;
+    private BigDecimal type39_gzl;
+    private BigDecimal type40_gzl;
+    private BigDecimal type41_gzl;
+    private BigDecimal type42_gzl;
+    private BigDecimal type43_gzl;
+    private BigDecimal type44_gzl;
+    private BigDecimal type45_gzl;
+    private BigDecimal type46_gzl;
+    private BigDecimal type47_gzl;
+    private BigDecimal type48_gzl;
+    private BigDecimal type49_gzl;
+    private BigDecimal type50_gzl;
+    private BigDecimal type51_gzl;
+    private BigDecimal type52_gzl;
+    private BigDecimal type53_gzl;
+    private BigDecimal type54_gzl;
     //产值金额
     private BigDecimal type1_jr;
     private BigDecimal type2_jr;
@@ -138,435 +138,435 @@ public class LogExport {
         this.projectAllMoneyMap = projectAllMoneyMap;
     }
 
-    public Double getType1_gzl() {
+    public BigDecimal getType1_gzl() {
         return type1_gzl;
     }
 
-    public void setType1_gzl(Double type1_gzl) {
+    public void setType1_gzl(BigDecimal type1_gzl) {
         this.type1_gzl = type1_gzl;
     }
 
-    public Double getType2_gzl() {
+    public BigDecimal getType2_gzl() {
         return type2_gzl;
     }
 
-    public void setType2_gzl(Double type2_gzl) {
+    public void setType2_gzl(BigDecimal type2_gzl) {
         this.type2_gzl = type2_gzl;
     }
 
-    public Double getType3_gzl() {
+    public BigDecimal getType3_gzl() {
         return type3_gzl;
     }
 
-    public void setType3_gzl(Double type3_gzl) {
+    public void setType3_gzl(BigDecimal type3_gzl) {
         this.type3_gzl = type3_gzl;
     }
 
-    public Double getType4_gzl() {
+    public BigDecimal getType4_gzl() {
         return type4_gzl;
     }
 
-    public void setType4_gzl(Double type4_gzl) {
+    public void setType4_gzl(BigDecimal type4_gzl) {
         this.type4_gzl = type4_gzl;
     }
 
-    public Double getType5_gzl() {
+    public BigDecimal getType5_gzl() {
         return type5_gzl;
     }
 
-    public void setType5_gzl(Double type5_gzl) {
+    public void setType5_gzl(BigDecimal type5_gzl) {
         this.type5_gzl = type5_gzl;
     }
 
-    public Double getType6_gzl() {
+    public BigDecimal getType6_gzl() {
         return type6_gzl;
     }
 
-    public void setType6_gzl(Double type6_gzl) {
+    public void setType6_gzl(BigDecimal type6_gzl) {
         this.type6_gzl = type6_gzl;
     }
 
-    public Double getType7_gzl() {
+    public BigDecimal getType7_gzl() {
         return type7_gzl;
     }
 
-    public void setType7_gzl(Double type7_gzl) {
+    public void setType7_gzl(BigDecimal type7_gzl) {
         this.type7_gzl = type7_gzl;
     }
 
-    public Double getType8_gzl() {
+    public BigDecimal getType8_gzl() {
         return type8_gzl;
     }
 
-    public void setType8_gzl(Double type8_gzl) {
+    public void setType8_gzl(BigDecimal type8_gzl) {
         this.type8_gzl = type8_gzl;
     }
 
-    public Double getType9_gzl() {
+    public BigDecimal getType9_gzl() {
         return type9_gzl;
     }
 
-    public void setType9_gzl(Double type9_gzl) {
+    public void setType9_gzl(BigDecimal type9_gzl) {
         this.type9_gzl = type9_gzl;
     }
 
-    public Double getType10_gzl() {
+    public BigDecimal getType10_gzl() {
         return type10_gzl;
     }
 
-    public void setType10_gzl(Double type10_gzl) {
+    public void setType10_gzl(BigDecimal type10_gzl) {
         this.type10_gzl = type10_gzl;
     }
 
-    public Double getType11_gzl() {
+    public BigDecimal getType11_gzl() {
         return type11_gzl;
     }
 
-    public void setType11_gzl(Double type11_gzl) {
+    public void setType11_gzl(BigDecimal type11_gzl) {
         this.type11_gzl = type11_gzl;
     }
 
-    public Double getType12_gzl() {
+    public BigDecimal getType12_gzl() {
         return type12_gzl;
     }
 
-    public void setType12_gzl(Double type12_gzl) {
+    public void setType12_gzl(BigDecimal type12_gzl) {
         this.type12_gzl = type12_gzl;
     }
 
-    public Double getType13_gzl() {
+    public BigDecimal getType13_gzl() {
         return type13_gzl;
     }
 
-    public void setType13_gzl(Double type13_gzl) {
+    public void setType13_gzl(BigDecimal type13_gzl) {
         this.type13_gzl = type13_gzl;
     }
 
-    public Double getType14_gzl() {
+    public BigDecimal getType14_gzl() {
         return type14_gzl;
     }
 
-    public void setType14_gzl(Double type14_gzl) {
+    public void setType14_gzl(BigDecimal type14_gzl) {
         this.type14_gzl = type14_gzl;
     }
 
-    public Double getType15_gzl() {
+    public BigDecimal getType15_gzl() {
         return type15_gzl;
     }
 
-    public void setType15_gzl(Double type15_gzl) {
+    public void setType15_gzl(BigDecimal type15_gzl) {
         this.type15_gzl = type15_gzl;
     }
 
-    public Double getType16_gzl() {
+    public BigDecimal getType16_gzl() {
         return type16_gzl;
     }
 
-    public void setType16_gzl(Double type16_gzl) {
+    public void setType16_gzl(BigDecimal type16_gzl) {
         this.type16_gzl = type16_gzl;
     }
 
-    public Double getType17_gzl() {
+    public BigDecimal getType17_gzl() {
         return type17_gzl;
     }
 
-    public void setType17_gzl(Double type17_gzl) {
+    public void setType17_gzl(BigDecimal type17_gzl) {
         this.type17_gzl = type17_gzl;
     }
 
-    public Double getType18_gzl() {
+    public BigDecimal getType18_gzl() {
         return type18_gzl;
     }
 
-    public void setType18_gzl(Double type18_gzl) {
+    public void setType18_gzl(BigDecimal type18_gzl) {
         this.type18_gzl = type18_gzl;
     }
 
-    public Double getType19_gzl() {
+    public BigDecimal getType19_gzl() {
         return type19_gzl;
     }
 
-    public void setType19_gzl(Double type19_gzl) {
+    public void setType19_gzl(BigDecimal type19_gzl) {
         this.type19_gzl = type19_gzl;
     }
 
-    public Double getType20_gzl() {
+    public BigDecimal getType20_gzl() {
         return type20_gzl;
     }
 
-    public void setType20_gzl(Double type20_gzl) {
+    public void setType20_gzl(BigDecimal type20_gzl) {
         this.type20_gzl = type20_gzl;
     }
 
-    public Double getType21_gzl() {
+    public BigDecimal getType21_gzl() {
         return type21_gzl;
     }
 
-    public void setType21_gzl(Double type21_gzl) {
+    public void setType21_gzl(BigDecimal type21_gzl) {
         this.type21_gzl = type21_gzl;
     }
 
-    public Double getType22_gzl() {
+    public BigDecimal getType22_gzl() {
         return type22_gzl;
     }
 
-    public void setType22_gzl(Double type22_gzl) {
+    public void setType22_gzl(BigDecimal type22_gzl) {
         this.type22_gzl = type22_gzl;
     }
 
-    public Double getType23_gzl() {
+    public BigDecimal getType23_gzl() {
         return type23_gzl;
     }
 
-    public void setType23_gzl(Double type23_gzl) {
+    public void setType23_gzl(BigDecimal type23_gzl) {
         this.type23_gzl = type23_gzl;
     }
 
-    public Double getType24_gzl() {
+    public BigDecimal getType24_gzl() {
         return type24_gzl;
     }
 
-    public void setType24_gzl(Double type24_gzl) {
+    public void setType24_gzl(BigDecimal type24_gzl) {
         this.type24_gzl = type24_gzl;
     }
 
-    public Double getType25_gzl() {
+    public BigDecimal getType25_gzl() {
         return type25_gzl;
     }
 
-    public void setType25_gzl(Double type25_gzl) {
+    public void setType25_gzl(BigDecimal type25_gzl) {
         this.type25_gzl = type25_gzl;
     }
 
-    public Double getType26_gzl() {
+    public BigDecimal getType26_gzl() {
         return type26_gzl;
     }
 
-    public void setType26_gzl(Double type26_gzl) {
+    public void setType26_gzl(BigDecimal type26_gzl) {
         this.type26_gzl = type26_gzl;
     }
 
-    public Double getType27_gzl() {
+    public BigDecimal getType27_gzl() {
         return type27_gzl;
     }
 
-    public void setType27_gzl(Double type27_gzl) {
+    public void setType27_gzl(BigDecimal type27_gzl) {
         this.type27_gzl = type27_gzl;
     }
 
-    public Double getType28_gzl() {
+    public BigDecimal getType28_gzl() {
         return type28_gzl;
     }
 
-    public void setType28_gzl(Double type28_gzl) {
+    public void setType28_gzl(BigDecimal type28_gzl) {
         this.type28_gzl = type28_gzl;
     }
 
-    public Double getType29_gzl() {
+    public BigDecimal getType29_gzl() {
         return type29_gzl;
     }
 
-    public void setType29_gzl(Double type29_gzl) {
+    public void setType29_gzl(BigDecimal type29_gzl) {
         this.type29_gzl = type29_gzl;
     }
 
-    public Double getType30_gzl() {
+    public BigDecimal getType30_gzl() {
         return type30_gzl;
     }
 
-    public void setType30_gzl(Double type30_gzl) {
+    public void setType30_gzl(BigDecimal type30_gzl) {
         this.type30_gzl = type30_gzl;
     }
 
-    public Double getType31_gzl() {
+    public BigDecimal getType31_gzl() {
         return type31_gzl;
     }
 
-    public void setType31_gzl(Double type31_gzl) {
+    public void setType31_gzl(BigDecimal type31_gzl) {
         this.type31_gzl = type31_gzl;
     }
 
-    public Double getType32_gzl() {
+    public BigDecimal getType32_gzl() {
         return type32_gzl;
     }
 
-    public void setType32_gzl(Double type32_gzl) {
+    public void setType32_gzl(BigDecimal type32_gzl) {
         this.type32_gzl = type32_gzl;
     }
 
-    public Double getType33_gzl() {
+    public BigDecimal getType33_gzl() {
         return type33_gzl;
     }
 
-    public void setType33_gzl(Double type33_gzl) {
+    public void setType33_gzl(BigDecimal type33_gzl) {
         this.type33_gzl = type33_gzl;
     }
 
-    public Double getType34_gzl() {
+    public BigDecimal getType34_gzl() {
         return type34_gzl;
     }
 
-    public void setType34_gzl(Double type34_gzl) {
+    public void setType34_gzl(BigDecimal type34_gzl) {
         this.type34_gzl = type34_gzl;
     }
 
-    public Double getType35_gzl() {
+    public BigDecimal getType35_gzl() {
         return type35_gzl;
     }
 
-    public void setType35_gzl(Double type35_gzl) {
+    public void setType35_gzl(BigDecimal type35_gzl) {
         this.type35_gzl = type35_gzl;
     }
 
-    public Double getType36_gzl() {
+    public BigDecimal getType36_gzl() {
         return type36_gzl;
     }
 
-    public void setType36_gzl(Double type36_gzl) {
+    public void setType36_gzl(BigDecimal type36_gzl) {
         this.type36_gzl = type36_gzl;
     }
 
-    public Double getType37_gzl() {
+    public BigDecimal getType37_gzl() {
         return type37_gzl;
     }
 
-    public void setType37_gzl(Double type37_gzl) {
+    public void setType37_gzl(BigDecimal type37_gzl) {
         this.type37_gzl = type37_gzl;
     }
 
-    public Double getType38_gzl() {
+    public BigDecimal getType38_gzl() {
         return type38_gzl;
     }
 
-    public void setType38_gzl(Double type38_gzl) {
+    public void setType38_gzl(BigDecimal type38_gzl) {
         this.type38_gzl = type38_gzl;
     }
 
-    public Double getType39_gzl() {
+    public BigDecimal getType39_gzl() {
         return type39_gzl;
     }
 
-    public void setType39_gzl(Double type39_gzl) {
+    public void setType39_gzl(BigDecimal type39_gzl) {
         this.type39_gzl = type39_gzl;
     }
 
-    public Double getType40_gzl() {
+    public BigDecimal getType40_gzl() {
         return type40_gzl;
     }
 
-    public void setType40_gzl(Double type40_gzl) {
+    public void setType40_gzl(BigDecimal type40_gzl) {
         this.type40_gzl = type40_gzl;
     }
 
-    public Double getType41_gzl() {
+    public BigDecimal getType41_gzl() {
         return type41_gzl;
     }
 
-    public void setType41_gzl(Double type41_gzl) {
+    public void setType41_gzl(BigDecimal type41_gzl) {
         this.type41_gzl = type41_gzl;
     }
 
-    public Double getType42_gzl() {
+    public BigDecimal getType42_gzl() {
         return type42_gzl;
     }
 
-    public void setType42_gzl(Double type42_gzl) {
+    public void setType42_gzl(BigDecimal type42_gzl) {
         this.type42_gzl = type42_gzl;
     }
 
-    public Double getType43_gzl() {
+    public BigDecimal getType43_gzl() {
         return type43_gzl;
     }
 
-    public void setType43_gzl(Double type43_gzl) {
+    public void setType43_gzl(BigDecimal type43_gzl) {
         this.type43_gzl = type43_gzl;
     }
 
-    public Double getType44_gzl() {
+    public BigDecimal getType44_gzl() {
         return type44_gzl;
     }
 
-    public void setType44_gzl(Double type44_gzl) {
+    public void setType44_gzl(BigDecimal type44_gzl) {
         this.type44_gzl = type44_gzl;
     }
 
-    public Double getType45_gzl() {
+    public BigDecimal getType45_gzl() {
         return type45_gzl;
     }
 
-    public void setType45_gzl(Double type45_gzl) {
+    public void setType45_gzl(BigDecimal type45_gzl) {
         this.type45_gzl = type45_gzl;
     }
 
-    public Double getType46_gzl() {
+    public BigDecimal getType46_gzl() {
         return type46_gzl;
     }
 
-    public void setType46_gzl(Double type46_gzl) {
+    public void setType46_gzl(BigDecimal type46_gzl) {
         this.type46_gzl = type46_gzl;
     }
 
-    public Double getType47_gzl() {
+    public BigDecimal getType47_gzl() {
         return type47_gzl;
     }
 
-    public void setType47_gzl(Double type47_gzl) {
+    public void setType47_gzl(BigDecimal type47_gzl) {
         this.type47_gzl = type47_gzl;
     }
 
-    public Double getType48_gzl() {
+    public BigDecimal getType48_gzl() {
         return type48_gzl;
     }
 
-    public void setType48_gzl(Double type48_gzl) {
+    public void setType48_gzl(BigDecimal type48_gzl) {
         this.type48_gzl = type48_gzl;
     }
 
-    public Double getType49_gzl() {
+    public BigDecimal getType49_gzl() {
         return type49_gzl;
     }
 
-    public void setType49_gzl(Double type49_gzl) {
+    public void setType49_gzl(BigDecimal type49_gzl) {
         this.type49_gzl = type49_gzl;
     }
 
-    public Double getType50_gzl() {
+    public BigDecimal getType50_gzl() {
         return type50_gzl;
     }
 
-    public void setType50_gzl(Double type50_gzl) {
+    public void setType50_gzl(BigDecimal type50_gzl) {
         this.type50_gzl = type50_gzl;
     }
 
-    public Double getType51_gzl() {
+    public BigDecimal getType51_gzl() {
         return type51_gzl;
     }
 
-    public void setType51_gzl(Double type51_gzl) {
+    public void setType51_gzl(BigDecimal type51_gzl) {
         this.type51_gzl = type51_gzl;
     }
 
-    public Double getType52_gzl() {
+    public BigDecimal getType52_gzl() {
         return type52_gzl;
     }
 
-    public void setType52_gzl(Double type52_gzl) {
+    public void setType52_gzl(BigDecimal type52_gzl) {
         this.type52_gzl = type52_gzl;
     }
 
-    public Double getType53_gzl() {
+    public BigDecimal getType53_gzl() {
         return type53_gzl;
     }
 
-    public void setType53_gzl(Double type53_gzl) {
+    public void setType53_gzl(BigDecimal type53_gzl) {
         this.type53_gzl = type53_gzl;
     }
 
-    public Double getType54_gzl() {
+    public BigDecimal getType54_gzl() {
         return type54_gzl;
     }
 
-    public void setType54_gzl(Double type54_gzl) {
+    public void setType54_gzl(BigDecimal type54_gzl) {
         this.type54_gzl = type54_gzl;
     }
 
