@@ -538,7 +538,7 @@ public class SysGeoLogController extends BaseController {
                 int typeId = Math.toIntExact(geoLogInfo.getTypeId());
                 BigDecimal difficultyDegree = BigDecimal.valueOf(geoLogInfo.getDifficultyDegree());
                 BigDecimal workload = BigDecimal.valueOf(geoLogInfo.getWorkload());
-                BigDecimal workloadDouble = new BigDecimal(geoLogInfo.getWorkload());
+                BigDecimal workloadDouble = BigDecimal.valueOf(geoLogInfo.getWorkload());
                 BigDecimal jinEr = difficultyDegree.multiply(workload).multiply(geoLogInfo.getTypeMoney());
                 logExport.setTotal_money(logExport.getTotal_money().add(jinEr));
                 if (geoLogInfo.getProjectId() != null && geoLogInfo.getProjectId() != 0){
