@@ -61,6 +61,8 @@ public class LogExport {
     private BigDecimal type52_gzl;
     private BigDecimal type53_gzl;
     private BigDecimal type54_gzl;
+    private BigDecimal type55_gzl;
+
     //产值金额
     private BigDecimal type1_jr;
     private BigDecimal type2_jr;
@@ -115,6 +117,7 @@ public class LogExport {
     private BigDecimal type51_jr;
     private BigDecimal type52_jr;
     private BigDecimal type53_jr;
+    private BigDecimal type55_jr;
     //总产值（计算后）
     private BigDecimal total_money;
     //总产值（计算前）
@@ -992,6 +995,23 @@ public class LogExport {
 
     public void setType53_jr(BigDecimal type53_jr) {
         this.type53_jr = type53_jr;
+    }
+
+
+    public BigDecimal getType55_gzl() {
+        return type55_gzl;
+    }
+
+    public void setType55_gzl(BigDecimal type55_gzl) {
+        this.type55_gzl = type55_gzl;
+    }
+
+    public BigDecimal getType55_jr() {
+        return type55_jr;
+    }
+
+    public void setType55_jr(BigDecimal type55_jr) {
+        this.type55_jr = type55_jr;
     }
 
     public BigDecimal getTotal_money() {

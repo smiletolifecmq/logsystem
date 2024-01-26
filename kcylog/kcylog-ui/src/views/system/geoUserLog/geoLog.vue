@@ -211,7 +211,7 @@
               prop="geoLogInfo"
             >
               <el-row>
-                <el-col :span="4" style="margin-left: -60px">
+                <el-col :span="3" style="margin-left: -60px">
                   <el-form-item label="类型" prop="typeArrJson">
                     <el-cascader
                       filterable
@@ -253,6 +253,9 @@
                     </el-select>
                   </el-form-item>
                 </el-col>
+                <el-col :span="1.5" style="font-weight: bold">
+                  单价:{{ logInfo.typeMoney }}</el-col
+                >
                 <el-col :span="4">
                   <el-form-item label="工作量" prop="workload">
                     <el-input-number
@@ -297,11 +300,6 @@
                       >
                       </el-option>
                     </el-select>
-                  </el-form-item>
-                </el-col>
-                <el-col style="display: none">
-                  <el-form-item label="单价">
-                    <el-input v-model="logInfo.typeMoney" disabled> </el-input>
                   </el-form-item>
                 </el-col>
                 <el-col :span="2">
@@ -789,14 +787,31 @@ export default {
             "产值(乘系数后)",
           ],
         ];
-        for (var i = 0; i < dataArray.length; i++) {
+        const sortUser = [
+          "锜小芳",
+          "徐海雯",
+          "白金宝",
+          "黄晶晶",
+          "陈明强",
+          "黄金煌",
+          "林秀芳",
+          "高诚伟",
+          "张宾",
+          "朱小巧",
+          "朱思静",
+          "黄秋锋",
+          "郑晗昕",
+          "周文施",
+        ];
+        const sortedArray = customSort(dataArray, sortUser);
+        for (var i = 0; i < sortedArray.length; i++) {
           let data = [];
-          data[0] = dataArray[i].user_name;
-          data[1] = dataArray[i].type51_gzl;
-          data[2] = dataArray[i].type52_gzl;
-          data[3] = dataArray[i].type53_gzl;
-          data[4] = dataArray[i].before_total_money.toFixed(2);
-          data[5] = dataArray[i].total_money.toFixed(2);
+          data[0] = sortedArray[i].user_name;
+          data[1] = sortedArray[i].type51_gzl;
+          data[2] = sortedArray[i].type52_gzl;
+          data[3] = sortedArray[i].type53_gzl;
+          data[4] = sortedArray[i].before_total_money.toFixed(2);
+          data[5] = sortedArray[i].total_money.toFixed(2);
           excelData.push(data);
         }
         const wb = utils.book_new();
@@ -856,5 +871,24 @@ function convertToTree(data) {
   }
 
   return tree.map(traverseAndRename);
+}
+
+function customSort(array, order) {
+  // 将数组转换为映射，其中键是用户名，值是对应的对象
+  const map = new Map(array.map((obj) => [obj.user_name, obj]));
+
+  // 按照给定顺序构建排序后的数组
+  const sortedArray = order
+    .map((user_name) => map.get(user_name))
+    .filter(Boolean);
+
+  // 将原始数组中未包含在排序数组中的对象追加到结果中
+  array.forEach((obj) => {
+    if (!sortedArray.includes(obj)) {
+      sortedArray.push(obj);
+    }
+  });
+
+  return sortedArray;
 }
 </script>

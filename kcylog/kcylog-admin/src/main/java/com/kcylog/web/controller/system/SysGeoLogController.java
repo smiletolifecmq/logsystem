@@ -84,24 +84,25 @@ public class SysGeoLogController extends BaseController {
         for (SysGeoLog log : list){
             longIdsList.add(log.getLogId());
         }
-        List<SysGeoLogInfo> sysGeoLogInfo = sysGeoLogInfoService.selectSysGeoLogInfoByLogIds(longIdsList);
-        Map<Long, List<SysGeoLogInfo>> geoLogInfoMap = new HashMap<>();
-        for (SysGeoLogInfo v : sysGeoLogInfo){
-            if (geoLogInfoMap.containsKey(v.getLogId())){
-                List<SysGeoLogInfo> gli = geoLogInfoMap.get(v.getLogId());
-                gli.add(v);
-                geoLogInfoMap.put(v.getLogId(), gli);
-            }else {
-                List<SysGeoLogInfo> gli = new ArrayList<>();
-                gli.add(v);
-                geoLogInfoMap.put(v.getLogId(), gli);
+        if (longIdsList.size() != 0){
+            List<SysGeoLogInfo> sysGeoLogInfo = sysGeoLogInfoService.selectSysGeoLogInfoByLogIds(longIdsList);
+            Map<Long, List<SysGeoLogInfo>> geoLogInfoMap = new HashMap<>();
+            for (SysGeoLogInfo v : sysGeoLogInfo){
+                if (geoLogInfoMap.containsKey(v.getLogId())){
+                    List<SysGeoLogInfo> gli = geoLogInfoMap.get(v.getLogId());
+                    gli.add(v);
+                    geoLogInfoMap.put(v.getLogId(), gli);
+                }else {
+                    List<SysGeoLogInfo> gli = new ArrayList<>();
+                    gli.add(v);
+                    geoLogInfoMap.put(v.getLogId(), gli);
+                }
+            }
+
+            for (SysGeoLog geoLog : list){
+                geoLog.setGeoLogInfo(geoLogInfoMap.get(geoLog.getLogId()));
             }
         }
-
-        for (SysGeoLog geoLog : list){
-            geoLog.setGeoLogInfo(geoLogInfoMap.get(geoLog.getLogId()));
-        }
-
         return getDataTable(list);
     }
 
@@ -473,6 +474,7 @@ public class SysGeoLogController extends BaseController {
         logExport.setType52_gzl(BigDecimal.ZERO);
         logExport.setType53_gzl(BigDecimal.ZERO);
         logExport.setType54_gzl(BigDecimal.ZERO);
+        logExport.setType55_gzl(BigDecimal.ZERO);
         //产值金额
         logExport.setType1_jr(BigDecimal.valueOf(0));
         logExport.setType2_jr(BigDecimal.valueOf(0));
@@ -527,6 +529,7 @@ public class SysGeoLogController extends BaseController {
         logExport.setType51_jr(BigDecimal.valueOf(0));
         logExport.setType52_jr(BigDecimal.valueOf(0));
         logExport.setType53_jr(BigDecimal.valueOf(0));
+        logExport.setType55_jr(BigDecimal.valueOf(0));
         //总产值
         logExport.setTotal_money(BigDecimal.valueOf(0));
         //带项目产值
@@ -749,6 +752,10 @@ public class SysGeoLogController extends BaseController {
                     case 56:
                         logExport.setType50_gzl(logExport.getType50_gzl().add(workloadDouble));
                         logExport.setType50_jr(logExport.getType50_jr().add(jinEr));
+                        break;
+                    case 57:
+                        logExport.setType55_gzl(logExport.getType55_gzl().add(workloadDouble));
+                        logExport.setType55_jr(logExport.getType55_jr().add(jinEr));
                         break;
                 }
             }
