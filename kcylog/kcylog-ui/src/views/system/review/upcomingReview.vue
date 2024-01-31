@@ -91,14 +91,36 @@
           <el-tag>{{ scope.row.deptName }}</el-tag>
         </template>
       </el-table-column>
+      <el-table-column prop="ggNum" label="雇工条数" align="center">
+        <template slot-scope="scope">
+          <el-tag type="success">{{ scope.row.ggNum }}</el-tag>
+        </template>
+      </el-table-column>
+      <el-table-column prop="dsfggNum" label="第三方雇工条数" align="center">
+        <template slot-scope="scope">
+          <el-tag type="danger">{{ scope.row.dsfggNum }}</el-tag>
+        </template>
+      </el-table-column>
       <el-table-column prop="num" label="待审核总条数" align="center">
         <template slot-scope="scope">
-          <el-tag type="danger">{{ scope.row.num }}</el-tag>
+          <el-tag type="danger" effect="dark">{{ scope.row.num }}</el-tag>
+        </template>
+      </el-table-column>
+      <el-table-column prop="ggMoney" label="雇工金额" align="center">
+        <template slot-scope="scope">
+          <el-tag type="success">{{ scope.row.ggMoney }}</el-tag>
+        </template>
+      </el-table-column>
+      <el-table-column prop="dsfggMoney" label="第三方雇工金额" align="center">
+        <template slot-scope="scope">
+          <el-tag type="danger">{{ scope.row.dsfggMoney }}</el-tag>
         </template>
       </el-table-column>
       <el-table-column prop="budgetMoney" label="待审核总金额" align="center">
         <template slot-scope="scope">
-          <el-tag type="danger">{{ scope.row.budgetMoney }}</el-tag>
+          <el-tag type="danger" effect="dark">{{
+            scope.row.budgetMoney
+          }}</el-tag>
         </template>
       </el-table-column>
     </el-table>
@@ -808,35 +830,57 @@ export default {
     this.getUpcomingList();
     this.getDeptTree();
     this.loadAllUsers();
-    upcomingListReview(
-      this.addDateRange({
-        pageNum: 1,
-        pageSize: 9999,
-      })
-    ).then((response) => {
-      const reviews = response.rows;
-      let reviewMap = new Map();
-      for (var i = 0; i < reviews.length; i++) {
-        if (reviewMap.has(reviews[i].dept.deptName)) {
-          let reviewTemp = reviewMap.get(reviews[i].dept.deptName);
-          reviewTemp.num++;
-          reviewTemp.budgetMoney =
-            reviewTemp.budgetMoney + reviews[i].budgetMoney;
-        } else {
-          let reviewTemp = {
-            deptName: reviews[i].dept.deptName,
-            num: 1,
-            budgetMoney: reviews[i].budgetMoney,
-          };
-          reviewMap.set(reviews[i].dept.deptName, reviewTemp);
-        }
-      }
-      reviewMap.forEach((value, key) => {
-        this.statisticsData.push(value);
-      });
-    });
+    this.ggtj();
   },
   methods: {
+    ggtj() {
+      upcomingListReview(
+        this.addDateRange({
+          pageNum: 1,
+          pageSize: 9999,
+        })
+      ).then((response) => {
+        const reviews = response.rows;
+        let reviewMap = new Map();
+        for (var i = 0; i < reviews.length; i++) {
+          if (reviewMap.has(reviews[i].dept.deptName)) {
+            let reviewTemp = reviewMap.get(reviews[i].dept.deptName);
+            reviewTemp.num++;
+            reviewTemp.budgetMoney =
+              reviewTemp.budgetMoney + reviews[i].budgetMoney;
+            if (reviews[i].manType === 1) {
+              reviewTemp.dsfggNum++;
+              reviewTemp.dsfggMoney =
+                reviewTemp.dsfggMoney + reviews[i].budgetMoney;
+            } else {
+              reviewTemp.ggNum++;
+              reviewTemp.ggMoney = reviewTemp.ggMoney + reviews[i].budgetMoney;
+            }
+          } else {
+            let reviewTemp = {
+              deptName: reviews[i].dept.deptName,
+              num: 1,
+              budgetMoney: reviews[i].budgetMoney,
+              ggNum: 0,
+              dsfggNum: 0,
+              ggMoney: 0,
+              dsfggMoney: 0,
+            };
+            if (reviews[i].manType === 1) {
+              reviewTemp.dsfggNum = 1;
+              reviewTemp.dsfggMoney = reviews[i].budgetMoney;
+            } else {
+              reviewTemp.ggNum = 1;
+              reviewTemp.ggMoney = reviews[i].budgetMoney;
+            }
+            reviewMap.set(reviews[i].dept.deptName, reviewTemp);
+          }
+        }
+        reviewMap.forEach((value, key) => {
+          this.statisticsData.push(value);
+        });
+      });
+    },
     loadAllUsers() {
       listUser(this.queryUserParams).then((response) => {
         for (let i = 0; i < response.rows.length; i++) {
@@ -1006,6 +1050,8 @@ export default {
             } else {
               this.$modal.msgSuccess("已驳回审核");
             }
+            this.statisticsData = [];
+            this.ggtj();
             this.openInfo = false;
             this.formInfo.auditOpinion = "";
           });
