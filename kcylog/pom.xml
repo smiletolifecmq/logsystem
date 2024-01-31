@@ -175,6 +175,11 @@
                 <version>2.0.27</version> <!-- 根据需要使用适当的版本号 -->
             </dependency>
 
+            <dependency>
+                <groupId>org.postgresql</groupId>
+                <artifactId>postgresql</artifactId>
+            </dependency>
+
         </dependencies>
     </dependencyManagement>
 
