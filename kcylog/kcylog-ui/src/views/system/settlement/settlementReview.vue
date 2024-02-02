@@ -102,7 +102,8 @@
         </template>
       </el-table-column>
       <el-table-column label="雇工人数" align="center" prop="peopleNum" />
-      <el-table-column label="雇工金额" align="center" prop="budgetMoney" />
+      <el-table-column label="雇工预算金额" align="center" prop="budgetMoney" />
+      <el-table-column label="雇工金额" align="center" prop="guGongMoney" />
       <el-table-column label="负责人" align="center" prop="user.userName" />
       <el-table-column label="部门" align="center" prop="dept.deptName" />
       <!-- <el-table-column label="审核状态" align="center" prop="status">

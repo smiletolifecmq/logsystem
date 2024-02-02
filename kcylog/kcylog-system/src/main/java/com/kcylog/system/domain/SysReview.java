@@ -88,6 +88,9 @@ public class SysReview extends BaseEntity
     /** 预算金额 */
     private BigDecimal budgetMoney;
 
+    /** 预算金额 */
+    private BigDecimal guGongMoney;
+
     /** 填写单子的最终时间 */
     @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss")
     private Date finalTime;
@@ -133,6 +136,14 @@ public class SysReview extends BaseEntity
 
     public void setManType(Long manType) {
         this.manType = manType;
+    }
+
+    public BigDecimal getGuGongMoney() {
+        return guGongMoney;
+    }
+
+    public void setGuGongMoney(BigDecimal guGongMoney) {
+        this.guGongMoney = guGongMoney;
     }
 
     public Long[] getReviewExportIds() {

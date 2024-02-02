@@ -22,6 +22,7 @@ import org.springframework.web.bind.annotation.*;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 import java.io.OutputStream;
+import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -254,6 +255,26 @@ public class SysReviewController extends BaseController
         Long userId = SecurityUtils.getUserId();
         sysReview.setUserId(userId);
         List<SysReview> list = sysReviewService.selectSysUpcomingReviewList(sysReview);
+        List<Long> reviewIds = new ArrayList<>();
+        for (SysReview review : list){
+            reviewIds.add(review.getReviewId());
+        }
+        if (reviewIds.size() > 0){
+            List<SysReviewEmployee> reviewEmployee = sysReviewEmployeeService.selectSysReviewEmployeeByReviewIds(reviewIds);
+            Map<Long, BigDecimal> reviewEmployeeCostMap = new HashMap<>();
+            for (SysReviewEmployee value : reviewEmployee){
+                if (reviewEmployeeCostMap.containsKey(value.getReviewId())){
+                    reviewEmployeeCostMap.put(value.getReviewId(),reviewEmployeeCostMap.get(value.getReviewId()).add(value.getCost()));
+                }else {
+                    reviewEmployeeCostMap.put(value.getReviewId(),value.getCost());
+                }
+            }
+            for (SysReview review : list){
+                if (reviewEmployeeCostMap.containsKey(review.getReviewId())){
+                    review.setGuGongMoney(reviewEmployeeCostMap.get(review.getReviewId()));
+                }
+            }
+        }
         return getDataTable(list);
     }
 
@@ -319,6 +340,26 @@ public class SysReviewController extends BaseController
     {
         startPage();
         List<SysReview> list = sysReviewService.selectCompletedReviewList(sysReview);
+        List<Long> reviewIds = new ArrayList<>();
+        for (SysReview review : list){
+            reviewIds.add(review.getReviewId());
+        }
+        if (reviewIds.size() > 0){
+            List<SysReviewEmployee> reviewEmployee = sysReviewEmployeeService.selectSysReviewEmployeeByReviewIds(reviewIds);
+            Map<Long, BigDecimal> reviewEmployeeCostMap = new HashMap<>();
+            for (SysReviewEmployee value : reviewEmployee){
+                if (reviewEmployeeCostMap.containsKey(value.getReviewId())){
+                    reviewEmployeeCostMap.put(value.getReviewId(),reviewEmployeeCostMap.get(value.getReviewId()).add(value.getCost()));
+                }else {
+                    reviewEmployeeCostMap.put(value.getReviewId(),value.getCost());
+                }
+            }
+            for (SysReview review : list){
+                if (reviewEmployeeCostMap.containsKey(review.getReviewId())){
+                    review.setGuGongMoney(reviewEmployeeCostMap.get(review.getReviewId()));
+                }
+            }
+        }
         return getDataTable(list);
     }
 
@@ -329,6 +370,26 @@ public class SysReviewController extends BaseController
         Long userId = SecurityUtils.getUserId();
         sysReview.setUserId(userId);
         List<SysReview> list = sysReviewService.selectDoneReviewList(sysReview);
+        List<Long> reviewIds = new ArrayList<>();
+        for (SysReview review : list){
+            reviewIds.add(review.getReviewId());
+        }
+        if (reviewIds.size() > 0){
+            List<SysReviewEmployee> reviewEmployee = sysReviewEmployeeService.selectSysReviewEmployeeByReviewIds(reviewIds);
+            Map<Long, BigDecimal> reviewEmployeeCostMap = new HashMap<>();
+            for (SysReviewEmployee value : reviewEmployee){
+                if (reviewEmployeeCostMap.containsKey(value.getReviewId())){
+                    reviewEmployeeCostMap.put(value.getReviewId(),reviewEmployeeCostMap.get(value.getReviewId()).add(value.getCost()));
+                }else {
+                    reviewEmployeeCostMap.put(value.getReviewId(),value.getCost());
+                }
+            }
+            for (SysReview review : list){
+                if (reviewEmployeeCostMap.containsKey(review.getReviewId())){
+                    review.setGuGongMoney(reviewEmployeeCostMap.get(review.getReviewId()));
+                }
+            }
+        }
         return getDataTable(list);
     }
 
@@ -485,6 +546,26 @@ public class SysReviewController extends BaseController
     {
         startPage();
         List<SysReview> list = sysReviewService.settlementListReview(sysReview);
+        List<Long> reviewIds = new ArrayList<>();
+        for (SysReview review : list){
+            reviewIds.add(review.getReviewId());
+        }
+        if (reviewIds.size() > 0){
+            List<SysReviewEmployee> reviewEmployee = sysReviewEmployeeService.selectSysReviewEmployeeByReviewIds(reviewIds);
+            Map<Long, BigDecimal> reviewEmployeeCostMap = new HashMap<>();
+            for (SysReviewEmployee value : reviewEmployee){
+                if (reviewEmployeeCostMap.containsKey(value.getReviewId())){
+                    reviewEmployeeCostMap.put(value.getReviewId(),reviewEmployeeCostMap.get(value.getReviewId()).add(value.getCost()));
+                }else {
+                    reviewEmployeeCostMap.put(value.getReviewId(),value.getCost());
+                }
+            }
+            for (SysReview review : list){
+                if (reviewEmployeeCostMap.containsKey(review.getReviewId())){
+                    review.setGuGongMoney(reviewEmployeeCostMap.get(review.getReviewId()));
+                }
+            }
+        }
         return getDataTable(list);
     }
 

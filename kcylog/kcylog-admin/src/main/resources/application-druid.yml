@@ -11,7 +11,7 @@ spring:
             # 从库数据源
             slave:
                 # 从数据源开关/默认关闭
-                enabled: true
+                enabled: false
                 url: jdbc:postgresql://10.211.55.3:5432/lw
                 username: sde
                 password: 123456

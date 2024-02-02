@@ -106,22 +106,59 @@
           <el-tag type="danger" effect="dark">{{ scope.row.num }}</el-tag>
         </template>
       </el-table-column>
-      <el-table-column prop="ggMoney" label="雇工金额" align="center">
-        <template slot-scope="scope">
-          <el-tag type="success">{{ scope.row.ggMoney }}</el-tag>
-        </template>
+      <el-table-column label="预算信息" align="center">
+        <el-table-column prop="ggMoney" label="雇工预算金额" align="center">
+          <template slot-scope="scope">
+            <el-tag type="success">{{ scope.row.ggMoney }}</el-tag>
+          </template>
+        </el-table-column>
+        <el-table-column
+          prop="dsfggMoney"
+          label="第三方雇工预算金额"
+          align="center"
+        >
+          <template slot-scope="scope">
+            <el-tag type="danger">{{ scope.row.dsfggMoney }}</el-tag>
+          </template>
+        </el-table-column>
+        <el-table-column
+          prop="budgetMoney"
+          label="待审核预算总金额"
+          align="center"
+        >
+          <template slot-scope="scope">
+            <el-tag type="danger" effect="dark">{{
+              scope.row.budgetMoney
+            }}</el-tag>
+          </template>
+        </el-table-column>
       </el-table-column>
-      <el-table-column prop="dsfggMoney" label="第三方雇工金额" align="center">
-        <template slot-scope="scope">
-          <el-tag type="danger">{{ scope.row.dsfggMoney }}</el-tag>
-        </template>
-      </el-table-column>
-      <el-table-column prop="budgetMoney" label="待审核总金额" align="center">
-        <template slot-scope="scope">
-          <el-tag type="danger" effect="dark">{{
-            scope.row.budgetMoney
-          }}</el-tag>
-        </template>
+      <el-table-column label="实际信息" align="center">
+        <el-table-column prop="sjggMoney" label="雇工金额" align="center">
+          <template slot-scope="scope">
+            <el-tag type="success">{{ scope.row.sjggMoney }}</el-tag>
+          </template>
+        </el-table-column>
+        <el-table-column
+          prop="sjdsfggMoney"
+          label="第三方雇工金额"
+          align="center"
+        >
+          <template slot-scope="scope">
+            <el-tag type="danger">{{ scope.row.sjdsfggMoney }}</el-tag>
+          </template>
+        </el-table-column>
+        <el-table-column
+          prop="sjbudgetMoney"
+          label="待审核总金额"
+          align="center"
+        >
+          <template slot-scope="scope">
+            <el-tag type="danger" effect="dark">{{
+              scope.row.sjbudgetMoney
+            }}</el-tag>
+          </template>
+        </el-table-column>
       </el-table-column>
     </el-table>
     <el-table
@@ -143,7 +180,8 @@
         </template>
       </el-table-column>
       <!-- <el-table-column label="雇工人数" align="center" prop="peopleNum" /> -->
-      <el-table-column label="雇工金额" align="center" prop="budgetMoney" />
+      <el-table-column label="雇工预算金额" align="center" prop="budgetMoney" />
+      <el-table-column label="雇工金额" align="center" prop="guGongMoney" />
       <el-table-column label="雇工方式" align="center" prop="manType">
         <template slot-scope="scope">
           <span v-if="scope.row.manType === 0" style="color: red"
@@ -848,13 +886,19 @@ export default {
             reviewTemp.num++;
             reviewTemp.budgetMoney =
               reviewTemp.budgetMoney + reviews[i].budgetMoney;
+            reviewTemp.sjbudgetMoney =
+              reviewTemp.sjbudgetMoney + reviews[i].guGongMoney;
             if (reviews[i].manType === 1) {
               reviewTemp.dsfggNum++;
               reviewTemp.dsfggMoney =
                 reviewTemp.dsfggMoney + reviews[i].budgetMoney;
+              reviewTemp.sjdsfggMoney =
+                reviewTemp.sjdsfggMoney + reviews[i].guGongMoney;
             } else {
               reviewTemp.ggNum++;
               reviewTemp.ggMoney = reviewTemp.ggMoney + reviews[i].budgetMoney;
+              reviewTemp.sjggMoney =
+                reviewTemp.sjggMoney + reviews[i].guGongMoney;
             }
           } else {
             let reviewTemp = {
@@ -865,13 +909,18 @@ export default {
               dsfggNum: 0,
               ggMoney: 0,
               dsfggMoney: 0,
+              sjggMoney: 0,
+              sjdsfggMoney: 0,
+              sjbudgetMoney: reviews[i].guGongMoney,
             };
             if (reviews[i].manType === 1) {
               reviewTemp.dsfggNum = 1;
               reviewTemp.dsfggMoney = reviews[i].budgetMoney;
+              reviewTemp.sjdsfggMoney = reviews[i].guGongMoney;
             } else {
               reviewTemp.ggNum = 1;
               reviewTemp.ggMoney = reviews[i].budgetMoney;
+              reviewTemp.sjggMoney = reviews[i].guGongMoney;
             }
             reviewMap.set(reviews[i].dept.deptName, reviewTemp);
           }

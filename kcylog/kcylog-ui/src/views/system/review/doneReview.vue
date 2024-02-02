@@ -119,7 +119,8 @@
         </template>
       </el-table-column>
       <el-table-column label="雇工人数" align="center" prop="peopleNum" />
-      <el-table-column label="雇工金额" align="center" prop="budgetMoney" />
+      <el-table-column label="雇工预算金额" align="center" prop="budgetMoney" />
+      <el-table-column label="雇工金额" align="center" prop="guGongMoney" />
       <el-table-column label="雇工方式" align="center" prop="manType">
         <template slot-scope="scope">
           <span v-if="scope.row.manType === 0" style="color: red"

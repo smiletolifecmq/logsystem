@@ -128,4 +128,10 @@ public class SysReviewEmployeeServiceImpl implements ISysReviewEmployeeService
     {
         return sysReviewEmployeeMapper.selectSysReviewEmployeeByReviewIdMonth(sysReview);
     }
+
+    @Override
+    public  List<SysReviewEmployee> selectSysReviewEmployeeByReviewIds(List<Long> reviewIds)
+    {
+        return sysReviewEmployeeMapper.selectSysReviewEmployeeByReviewIds(reviewIds);
+    }
 }

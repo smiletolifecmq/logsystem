@@ -72,4 +72,6 @@ public interface ISysReviewEmployeeService
     public int updateIsJsByReviewEmployeeIds(Long[] reviewExportEmployeeIds);
 
     public List<SysReviewEmployee> selectSysReviewEmployeeByReviewIdMonth(SysReview sysReview);
+
+    public List<SysReviewEmployee> selectSysReviewEmployeeByReviewIds(List<Long> reviewIds);
 }
