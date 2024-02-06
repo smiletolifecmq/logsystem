@@ -97,11 +97,12 @@ spring:
     port: 5672
     username: guest
     password: guest
-    virtual-host: / # 虚拟host 可以不设置,使用server默认host
+    virtual-host: /fq # 虚拟host 可以不设置,使用server默认host
+    queue: FQ_INVOKE_QUEUE
     listener:
       simple:
-        concurrency: 10 # 消费端的监听个数(即@RabbitListener开启几个线程去处理数据。)
-        max-concurrency: 10 # 消费端的监听最大个数
+        concurrency: 1 # 消费端的监听个数(即@RabbitListener开启几个线程去处理数据。)
+        max-concurrency: 1 # 消费端的监听最大个数
         prefetch: 5
         acknowledge-mode: MANUAL # MANUAL:手动处理 AUTO:自动处理
         default-requeue-rejected: true # 消费不成功的消息拒绝入队

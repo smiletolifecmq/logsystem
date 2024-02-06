@@ -12,10 +12,9 @@ import java.io.IOException;
 public class MqConsume {
     /**
      * 监听一个简单的队列，队列不存在时候会创建
-     * @param content 消息
      */
-    @RabbitListener(queuesToDeclare = @Queue(name = "FQ_INVOKE_QUEUE"))
-    public void consumerSimpleMessage(String content, Message message, Channel channel) throws IOException {
+    @RabbitListener(queuesToDeclare = @Queue(name = "${spring.rabbitmq.queue}"))
+    public void consumerSimpleMessage(Message message, Channel channel) throws IOException {
         try {
             // 手动确认消息消费成功
             // 通过Message对象解析消息
