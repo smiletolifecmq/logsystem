@@ -11,6 +11,8 @@ import com.kcylog.common.utils.SecurityUtils;
 import com.kcylog.system.common.LogExport;
 import com.kcylog.system.domain.*;
 import com.kcylog.system.service.*;
+import org.springframework.amqp.rabbit.connection.ConnectionFactory;
+import org.springframework.amqp.rabbit.core.RabbitTemplate;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.bind.annotation.*;
@@ -997,5 +999,16 @@ public class SysGeoLogController extends BaseController {
             exportList.add(logExport);
         }
         return getDataTable(exportList);
+    }
+    private RabbitTemplate rabbitTemplate;
+
+    @Autowired
+    public SysGeoLogController(ConnectionFactory connectionFactory) {
+        this.rabbitTemplate = new RabbitTemplate(connectionFactory);
+    }
+    @GetMapping("/sendMessage")
+    public String sendMessage(@RequestParam(value = "message") String message){
+        rabbitTemplate.convertAndSend("FQ_INVOKE_QUEUE", message);
+        return "OK";
     }
 }
