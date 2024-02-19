@@ -2,16 +2,21 @@ package com.kcylog.web.monitor;
 
 import com.google.gson.Gson;
 import com.kcylog.system.common.MqMessage;
+import com.kcylog.system.domain.ViewFqProject;
+import com.kcylog.system.service.IViewFqProjectService;
 import com.rabbitmq.client.Channel;
 import org.springframework.amqp.core.Message;
 import org.springframework.amqp.rabbit.annotation.Queue;
 import org.springframework.amqp.rabbit.annotation.RabbitListener;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
 import java.io.IOException;
 
 @Component
 public class MqConsume {
+    @Autowired
+    private IViewFqProjectService viewFqProjectService;
     /**
      * 监听一个简单的队列，队列不存在时候会创建
      */
@@ -24,6 +29,7 @@ public class MqConsume {
             Gson gson = new Gson();
             MqMessage mqMessage = gson.fromJson(messageStr, MqMessage.class);
             String opType = mqMessage.getOpType();
+            ViewFqProject viewFqProject = viewFqProjectService.selectViewFqProjectByProjectCode(mqMessage.getProjectId());
             switch(opType){
                 case "TASK_TEMP_ARRANGE" :
                     //任务临时安排

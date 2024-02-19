@@ -1,6 +1,5 @@
 package com.kcylog.system.service.impl;
 
-import com.baomidou.dynamic.datasource.annotation.Slave;
 import com.kcylog.common.utils.DateUtils;
 import com.kcylog.system.domain.ViewFqProject;
 import com.kcylog.system.mapper.ViewFqProjectMapper;
@@ -25,13 +24,12 @@ public class ViewFqProjectServiceImpl implements IViewFqProjectService
     /**
      * 查询项目
      * 
-     * @param projectId 项目主键
      * @return 项目
      */
     @Override
-    public ViewFqProject selectViewFqProjectByProjectId(String projectId)
+    public ViewFqProject selectViewFqProjectByProjectCode(String projectCode)
     {
-        return viewFqProjectMapper.selectViewFqProjectByProjectId(projectId);
+        return viewFqProjectMapper.selectViewFqProjectByProjectCode(projectCode);
     }
 
     /**

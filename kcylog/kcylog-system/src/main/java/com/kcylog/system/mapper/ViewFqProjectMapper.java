@@ -18,10 +18,9 @@ public interface ViewFqProjectMapper
     /**
      * 查询项目
      * 
-     * @param projectId 项目主键
      * @return 项目
      */
-    public ViewFqProject selectViewFqProjectByProjectId(String projectId);
+    public ViewFqProject selectViewFqProjectByProjectCode(String projectCode);
 
     /**
      * 查询项目列表
