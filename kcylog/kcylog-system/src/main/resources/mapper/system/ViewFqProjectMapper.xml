@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.kcylog.system.mapper.ViewFqProjectMapper">
+    
+    <resultMap type="ViewFqProject" id="ViewFqProjectResult">
+        <result property="projectName"    column="project_name"    />
+        <result property="projectCode"    column="project_code"    />
+    </resultMap>
+
+    <sql id="selectViewFqProjectVo">
+        select project_name, project_code from view_fq_project
+    </sql>
+
+    <select id="selectViewFqProjectList" parameterType="ViewFqProject" resultMap="ViewFqProjectResult">
+        <include refid="selectViewFqProjectVo"/>
+        <where>
+            <if test="projectCode != null  and projectCode != ''"> and project_code = #{projectCode}</if>
+        </where>
+    </select>
+</mapper>

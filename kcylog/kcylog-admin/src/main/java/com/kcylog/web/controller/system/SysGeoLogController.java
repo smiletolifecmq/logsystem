@@ -53,6 +53,9 @@ public class SysGeoLogController extends BaseController {
     private ISysGeoHolidayService sysGeoHolidayService;
 
     @Autowired
+    private IViewFqProjectService viewFqProjectService;
+
+    @Autowired
     private RedisCache redisCache;
 
     private static double poleSimple = 0.5;
@@ -1009,6 +1012,8 @@ public class SysGeoLogController extends BaseController {
     }
     @PostMapping("/sendMessage")
     public String sendMessage(@RequestBody MqMessage mqMessage){
+        ViewFqProject fqProject = new ViewFqProject();
+        List<ViewFqProject> viewFqProject = viewFqProjectService.selectViewFqProjectList(fqProject);
         Gson gson = new Gson();
         String json = gson.toJson(mqMessage);
         rabbitTemplate.convertAndSend("FQ_INVOKE_QUEUE", json);
