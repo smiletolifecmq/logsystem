@@ -1,22 +1,42 @@
 <?xml version="1.0" encoding="UTF-8" ?>
 <!DOCTYPE mapper
-PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
-"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.kcylog.system.mapper.ViewFqProjectMapper">
-    
+
     <resultMap type="ViewFqProject" id="ViewFqProjectResult">
-        <result property="projectName"    column="project_name"    />
-        <result property="projectCode"    column="project_code"    />
+        <result property="projectName" column="project_name"/>
+        <result property="projectCode" column="project_code"/>
+        <result property="projectTypeName" column="project_type_name"/>
+        <result property="registerTime" column="register_time"/>
+        <result property="createUserName" column="create_user_name"/>
+        <result property="chargeItem" column="charge_item"/>
+        <result property="managerUserName" column="manager_user_name"/>
+        <result property="customerName" column="customer_name"/>
+        <result property="arrangeStartTime" column="arrange_start_time"/>
+        <result property="arrangeEndTime" column="arrange_end_time"/>
+        <result property="firstCheckTime" column="first_check_time"/>
+        <result property="secondCheckTime" column="second_check_time"/>
+        <result property="deliveryTime" column="delivery_time"/>
+        <result property="releaseTime" column="release_time"/>
+        <result property="arriveTime" column="arrive_time"/>
+        <result property="arrangeProfit" column="arrange_profit"/>
+        <result property="jobContent" column="job_content"/>
+        <result property="jobOrgName" column="job_org_name"/>
     </resultMap>
 
     <sql id="selectViewFqProjectVo">
-        select project_name, project_code from view_fq_project
+        select project_name, project_code, project_type_name, create_time as register_time,
+               create_user_name, charge_item, manager_user_name, customer_name, arrange_start_time,
+               arrange_end_time, first_check_time, second_check_time, delivery_time, release_time,
+               arrive_time, arrange_profit, job_content, job_org_name
+        from view_fq_project_info
     </sql>
 
     <select id="selectViewFqProjectList" parameterType="ViewFqProject" resultMap="ViewFqProjectResult">
         <include refid="selectViewFqProjectVo"/>
         <where>
-            <if test="projectCode != null  and projectCode != ''"> and project_code = #{projectCode}</if>
+            <if test="projectCode != null  and projectCode != ''">and project_code = #{projectCode}</if>
         </where>
     </select>
 

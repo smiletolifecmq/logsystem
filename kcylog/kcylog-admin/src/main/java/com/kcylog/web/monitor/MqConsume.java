@@ -43,6 +43,7 @@ public class MqConsume {
             viewFqProjectLog.setOperate(mqMessage.getOpType());
             viewFqProjectLogService.insertViewFqProjectLog(viewFqProjectLog);
             ViewFqProject viewFqProject = viewFqProjectService.selectViewFqProjectByProjectCode(mqMessage.getProjectId());
+            System.out.print(viewFqProject);
             switch(opType){
                 case "TASK_TEMP_ARRANGE" :
                     //任务临时安排
