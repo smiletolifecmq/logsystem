@@ -1,8 +1,11 @@
 package com.kcylog.web.monitor;
 
 import com.google.gson.Gson;
+import com.kcylog.common.utils.DateUtils;
 import com.kcylog.system.common.MqMessage;
 import com.kcylog.system.domain.ViewFqProject;
+import com.kcylog.system.domain.ViewFqProjectLog;
+import com.kcylog.system.service.IViewFqProjectLogService;
 import com.kcylog.system.service.IViewFqProjectService;
 import com.rabbitmq.client.Channel;
 import org.springframework.amqp.core.Message;
@@ -12,11 +15,15 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
 import java.io.IOException;
+import java.util.Date;
 
 @Component
 public class MqConsume {
     @Autowired
     private IViewFqProjectService viewFqProjectService;
+
+    @Autowired
+    private IViewFqProjectLogService viewFqProjectLogService;
     /**
      * 监听一个简单的队列，队列不存在时候会创建
      */
@@ -29,6 +36,12 @@ public class MqConsume {
             Gson gson = new Gson();
             MqMessage mqMessage = gson.fromJson(messageStr, MqMessage.class);
             String opType = mqMessage.getOpType();
+            Date nowTime = DateUtils.getNowDate();
+            ViewFqProjectLog viewFqProjectLog = new ViewFqProjectLog();
+            viewFqProjectLog.setOperateTime(nowTime);
+            viewFqProjectLog.setProjectCode(mqMessage.getProjectId());
+            viewFqProjectLog.setOperate(mqMessage.getOpType());
+            viewFqProjectLogService.insertViewFqProjectLog(viewFqProjectLog);
             ViewFqProject viewFqProject = viewFqProjectService.selectViewFqProjectByProjectCode(mqMessage.getProjectId());
             switch(opType){
                 case "TASK_TEMP_ARRANGE" :

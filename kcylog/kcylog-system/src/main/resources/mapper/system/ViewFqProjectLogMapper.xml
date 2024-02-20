@@ -1,0 +1,66 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.kcylog.system.mapper.ViewFqProjectLogMapper">
+    
+    <resultMap type="ViewFqProjectLog" id="ViewFqProjectLogResult">
+        <result property="id"    column="id"    />
+        <result property="projectCode"    column="project_code"    />
+        <result property="operate"    column="operate"    />
+        <result property="operateTime"    column="operate_time"    />
+    </resultMap>
+
+    <sql id="selectViewFqProjectLogVo">
+        select id, project_code, operate, operate_time from view_fq_project_log
+    </sql>
+
+    <select id="selectViewFqProjectLogList" parameterType="ViewFqProjectLog" resultMap="ViewFqProjectLogResult">
+        <include refid="selectViewFqProjectLogVo"/>
+        <where>  
+            <if test="projectCode != null  and projectCode != ''"> and project_code = #{projectCode}</if>
+            <if test="operate != null  and operate != ''"> and operate = #{operate}</if>
+            <if test="operateTime != null "> and operate_time = #{operateTime}</if>
+        </where>
+    </select>
+    
+    <select id="selectViewFqProjectLogById" parameterType="Long" resultMap="ViewFqProjectLogResult">
+        <include refid="selectViewFqProjectLogVo"/>
+        where id = #{id}
+    </select>
+        
+    <insert id="insertViewFqProjectLog" parameterType="ViewFqProjectLog" useGeneratedKeys="true" keyProperty="id">
+        insert into view_fq_project_log
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="projectCode != null">project_code,</if>
+            <if test="operate != null">operate,</if>
+            <if test="operateTime != null">operate_time,</if>
+         </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test="projectCode != null">#{projectCode},</if>
+            <if test="operate != null">#{operate},</if>
+            <if test="operateTime != null">#{operateTime},</if>
+         </trim>
+    </insert>
+
+    <update id="updateViewFqProjectLog" parameterType="ViewFqProjectLog">
+        update view_fq_project_log
+        <trim prefix="SET" suffixOverrides=",">
+            <if test="projectCode != null">project_code = #{projectCode},</if>
+            <if test="operate != null">operate = #{operate},</if>
+            <if test="operateTime != null">operate_time = #{operateTime},</if>
+        </trim>
+        where id = #{id}
+    </update>
+
+    <delete id="deleteViewFqProjectLogById" parameterType="Long">
+        delete from view_fq_project_log where id = #{id}
+    </delete>
+
+    <delete id="deleteViewFqProjectLogByIds" parameterType="String">
+        delete from view_fq_project_log where id in 
+        <foreach item="id" collection="array" open="(" separator="," close=")">
+            #{id}
+        </foreach>
+    </delete>
+</mapper>
