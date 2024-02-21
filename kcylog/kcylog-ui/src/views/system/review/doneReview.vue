@@ -878,7 +878,7 @@ export default {
         const reviews = response.rows;
         let reviewMap = new Map();
         for (var i = 0; i < reviews.length; i++) {
-          if (reviews[i].status === 3) {
+          if (reviews[i].status === 3 || reviews[i].status === 4) {
             continue;
           }
           if (reviewMap.has(reviews[i].dept.deptName)) {
