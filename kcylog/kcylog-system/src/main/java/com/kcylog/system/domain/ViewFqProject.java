@@ -4,7 +4,7 @@ import com.kcylog.common.core.domain.BaseEntity;
 import org.apache.commons.lang3.builder.ToStringBuilder;
 import org.apache.commons.lang3.builder.ToStringStyle;
 
-import java.math.BigDecimal;
+import java.time.LocalDateTime;
 
 /**
  * 项目对象 view_fq_project
@@ -23,7 +23,7 @@ public class ViewFqProject extends BaseEntity
     //项目类型
     private String projectTypeName;
     //登记时间
-    private String registerTime;
+    private LocalDateTime registerTime;
     //接待人
     private String createUserName;
     //工作量
@@ -33,21 +33,21 @@ public class ViewFqProject extends BaseEntity
     //委托单位
     private String customerName;
     //安排开始时间
-    private String arrangeStartTime;
+    private LocalDateTime arrangeStartTime;
     //安排结束时间
-    private String arrangeEndTime;
+    private LocalDateTime arrangeEndTime;
     //一检时间
-    private String firstCheckTime;
+    private LocalDateTime firstCheckTime;
     //二检时间
-    private String secondCheckTime;
+    private LocalDateTime secondCheckTime;
     //通知出件时间
-    private String deliveryTime;
+    private LocalDateTime deliveryTime;
     //项目出件时间
-    private String releaseTime;
+    private LocalDateTime releaseTime;
     //送达时间
-    private String arriveTime;
+    private LocalDateTime arriveTime;
     //安排产值
-    private BigDecimal arrangeProfit;
+    private Long arrangeProfit;
     //工作内容
     private String jobContent;
     //作业部门
@@ -69,7 +69,6 @@ public class ViewFqProject extends BaseEntity
         this.projectCode = projectCode;
     }
 
-
     public String getProjectTypeName() {
         return projectTypeName;
     }
@@ -78,11 +77,11 @@ public class ViewFqProject extends BaseEntity
         this.projectTypeName = projectTypeName;
     }
 
-    public String getRegisterTime() {
+    public LocalDateTime getRegisterTime() {
         return registerTime;
     }
 
-    public void setRegisterTime(String registerTime) {
+    public void setRegisterTime(LocalDateTime registerTime) {
         this.registerTime = registerTime;
     }
 
@@ -118,67 +117,67 @@ public class ViewFqProject extends BaseEntity
         this.customerName = customerName;
     }
 
-    public String getArrangeStartTime() {
+    public LocalDateTime getArrangeStartTime() {
         return arrangeStartTime;
     }
 
-    public void setArrangeStartTime(String arrangeStartTime) {
+    public void setArrangeStartTime(LocalDateTime arrangeStartTime) {
         this.arrangeStartTime = arrangeStartTime;
     }
 
-    public String getArrangeEndTime() {
+    public LocalDateTime getArrangeEndTime() {
         return arrangeEndTime;
     }
 
-    public void setArrangeEndTime(String arrangeEndTime) {
+    public void setArrangeEndTime(LocalDateTime arrangeEndTime) {
         this.arrangeEndTime = arrangeEndTime;
     }
 
-    public String getFirstCheckTime() {
+    public LocalDateTime getFirstCheckTime() {
         return firstCheckTime;
     }
 
-    public void setFirstCheckTime(String firstCheckTime) {
+    public void setFirstCheckTime(LocalDateTime firstCheckTime) {
         this.firstCheckTime = firstCheckTime;
     }
 
-    public String getSecondCheckTime() {
+    public LocalDateTime getSecondCheckTime() {
         return secondCheckTime;
     }
 
-    public void setSecondCheckTime(String secondCheckTime) {
+    public void setSecondCheckTime(LocalDateTime secondCheckTime) {
         this.secondCheckTime = secondCheckTime;
     }
 
-    public String getDeliveryTime() {
+    public LocalDateTime getDeliveryTime() {
         return deliveryTime;
     }
 
-    public void setDeliveryTime(String deliveryTime) {
+    public void setDeliveryTime(LocalDateTime deliveryTime) {
         this.deliveryTime = deliveryTime;
     }
 
-    public String getReleaseTime() {
+    public LocalDateTime getReleaseTime() {
         return releaseTime;
     }
 
-    public void setReleaseTime(String releaseTime) {
+    public void setReleaseTime(LocalDateTime releaseTime) {
         this.releaseTime = releaseTime;
     }
 
-    public String getArriveTime() {
+    public LocalDateTime getArriveTime() {
         return arriveTime;
     }
 
-    public void setArriveTime(String arriveTime) {
+    public void setArriveTime(LocalDateTime arriveTime) {
         this.arriveTime = arriveTime;
     }
 
-    public BigDecimal getArrangeProfit() {
+    public Long getArrangeProfit() {
         return arrangeProfit;
     }
 
-    public void setArrangeProfit(BigDecimal arrangeProfit) {
+    public void setArrangeProfit(Long arrangeProfit) {
         this.arrangeProfit = arrangeProfit;
     }
 

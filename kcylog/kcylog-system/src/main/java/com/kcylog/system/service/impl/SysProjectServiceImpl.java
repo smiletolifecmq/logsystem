@@ -162,4 +162,10 @@ public class SysProjectServiceImpl implements ISysProjectService
     {
         return sysProjectMapper.updateIsShowByReviewId(sysProject);
     }
+
+    @Override
+    public int updateSysProjectForMq(SysProject sysProject)
+    {
+        return sysProjectMapper.updateSysProjectForMq(sysProject);
+    }
 }

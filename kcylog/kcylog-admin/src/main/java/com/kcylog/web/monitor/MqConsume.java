@@ -3,8 +3,10 @@ package com.kcylog.web.monitor;
 import com.google.gson.Gson;
 import com.kcylog.common.utils.DateUtils;
 import com.kcylog.system.common.MqMessage;
+import com.kcylog.system.domain.SysProject;
 import com.kcylog.system.domain.ViewFqProject;
 import com.kcylog.system.domain.ViewFqProjectLog;
+import com.kcylog.system.service.ISysProjectService;
 import com.kcylog.system.service.IViewFqProjectLogService;
 import com.kcylog.system.service.IViewFqProjectService;
 import com.rabbitmq.client.Channel;
@@ -15,6 +17,9 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
 import java.io.IOException;
+import java.math.BigDecimal;
+import java.text.ParseException;
+import java.time.format.DateTimeFormatter;
 import java.util.Date;
 
 @Component
@@ -24,6 +29,9 @@ public class MqConsume {
 
     @Autowired
     private IViewFqProjectLogService viewFqProjectLogService;
+
+    @Autowired
+    private ISysProjectService sysProjectService;
     /**
      * 监听一个简单的队列，队列不存在时候会创建
      */
@@ -35,45 +43,98 @@ public class MqConsume {
             String messageStr = new String(message.getBody());
             Gson gson = new Gson();
             MqMessage mqMessage = gson.fromJson(messageStr, MqMessage.class);
-            String opType = mqMessage.getOpType();
+
+            //存储日志
             Date nowTime = DateUtils.getNowDate();
             ViewFqProjectLog viewFqProjectLog = new ViewFqProjectLog();
             viewFqProjectLog.setOperateTime(nowTime);
             viewFqProjectLog.setProjectCode(mqMessage.getProjectId());
             viewFqProjectLog.setOperate(mqMessage.getOpType());
             viewFqProjectLogService.insertViewFqProjectLog(viewFqProjectLog);
-            ViewFqProject viewFqProject = viewFqProjectService.selectViewFqProjectByProjectCode(mqMessage.getProjectId());
-            System.out.print(viewFqProject);
-            switch(opType){
-                case "TASK_TEMP_ARRANGE" :
-                    //任务临时安排
-                    break;
-                case "TASK_ARRANGE" :
-                    //任务正式安排
-                    break;
-                case "FIRST_CHECK" :
-                    //一检
-                    break;
-                case "SECOND_CHECK" :
-                    //二检
-                    break;
-                case "DELIVERY_REGISTER" :
-                    //送件登记
-                    break;
-                case "STAMP" :
-                    //盖章
-                    break;
-                case "FILE_RELEASE" :
-                    //出件
-                    break;
-                case "MODIFY_WORKLOAD" :
-                    //修改工作量
-                    break;
+
+            //获取视图数据
+            ViewFqProject viewFqProject = viewFqProjectService.selectViewFqProjectByProjectCode(Long.parseLong(mqMessage.getProjectId()));
+
+            //数据初始化
+            SysProject sysProject = new SysProject();
+            sysProject.setProjectNameAlias(viewFqProject.getProjectName());
+            sysProject.setProjectNum(viewFqProject.getProjectCode());
+            DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss");
+
+            if (viewFqProject.getProjectTypeName() != null){
+                sysProject.setProjectType(viewFqProject.getProjectTypeName());
             }
+            if (viewFqProject.getRegisterTime() != null){
+                String dateString = viewFqProject.getRegisterTime().format(formatter);
+                sysProject.setRegisterTime(dateString);
+            }
+            if (viewFqProject.getCreateUserName() != null){
+                sysProject.setReceptionist(viewFqProject.getCreateUserName());
+            }
+            if (viewFqProject.getChargeItem() != null){
+                sysProject.setWorkloadAlias(viewFqProject.getChargeItem());
+            }
+            if (viewFqProject.getManagerUserName() != null){
+                sysProject.setUserNameAlias(viewFqProject.getManagerUserName());
+            }
+            if (viewFqProject.getCustomerName() != null){
+                sysProject.setRequesterAlias(viewFqProject.getCustomerName());
+            }
+            if (viewFqProject.getArrangeStartTime() != null){
+                String dateString = viewFqProject.getArrangeStartTime().format(formatter);
+                sysProject.setProjectStartAlias(dateString);
+            }
+            if (viewFqProject.getArrangeEndTime() != null){
+                String dateString = viewFqProject.getArrangeEndTime().format(formatter);
+                sysProject.setProjectEndAlias(dateString);
+            }
+            if (viewFqProject.getFirstCheckTime() != null){
+                String dateString = viewFqProject.getFirstCheckTime().format(formatter);
+                sysProject.setOneCheck(dateString);
+            }
+            if (viewFqProject.getSecondCheckTime() != null){
+                String dateString = viewFqProject.getSecondCheckTime().format(formatter);
+                sysProject.setTwoCheck(dateString);
+            }
+            if (viewFqProject.getDeliveryTime() != null){
+                String dateString = viewFqProject.getDeliveryTime().format(formatter);
+                sysProject.setNoticeTime(dateString);
+            }
+            if (viewFqProject.getReleaseTime() != null){
+                String dateString = viewFqProject.getReleaseTime().format(formatter);
+                sysProject.setProjectTime(dateString);
+            }
+            if (viewFqProject.getArriveTime() != null){
+                String dateString = viewFqProject.getArriveTime().format(formatter);
+                sysProject.setDeliveryTime(dateString);
+            }
+            if (viewFqProject.getArrangeProfit() != null){
+                BigDecimal bigDecimalValue = new BigDecimal(viewFqProject.getArrangeProfit());
+                sysProject.setProjectMoneyAlias(bigDecimalValue);
+            }
+            if (viewFqProject.getJobContent() != null){
+                sysProject.setWorkcontentAlias(viewFqProject.getJobContent());
+            }
+            if (viewFqProject.getJobOrgName() != null){
+                sysProject.setDepartment(viewFqProject.getJobOrgName());
+            }
+
+            if (mqMessage.getOpType().equals("SECOND_CHECK") && sysProject.getTwoCheck() != null && !sysProject.getTwoCheck().equals("")){
+                sysProject.setIsTwoCheck(1);
+                Date date = DateUtils.parseDate(sysProject.getTwoCheck(), "yyyy-MM-dd HH:mm:ss");
+                sysProject.setTwoCheckTime(date);
+            }
+
+            if (sysProjectService.checkProjectKeyUnique(viewFqProject.getProjectCode()) != null) {
+                sysProjectService.updateSysProjectForMq(sysProject);
+            }else {
+                sysProjectService.insertSysProject(sysProject);
+            }
+
             System.out.println("通过Message:{}" + mqMessage.getOpType());
             System.out.println("通过Message:{}" + mqMessage.getProjectId());
             channel.basicAck(message.getMessageProperties().getDeliveryTag(), false); // 手动确认消息消费成功
-        }catch (IOException e) {
+        }catch (IOException | ParseException e) {
             // 处理其他确认失败的情况
             channel.basicNack(message.getMessageProperties().getDeliveryTag(), false, true); // 手动确认消息消费失败
         }

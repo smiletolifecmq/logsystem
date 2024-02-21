@@ -27,7 +27,7 @@ public class ViewFqProjectServiceImpl implements IViewFqProjectService
      * @return 项目
      */
     @Override
-    public ViewFqProject selectViewFqProjectByProjectCode(String projectCode)
+    public ViewFqProject selectViewFqProjectByProjectCode(Long projectCode)
     {
         return viewFqProjectMapper.selectViewFqProjectByProjectCode(projectCode);
     }

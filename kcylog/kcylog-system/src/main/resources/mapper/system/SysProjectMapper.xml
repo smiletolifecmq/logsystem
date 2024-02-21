@@ -355,4 +355,30 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
         SET spv.is_show = #{isShow}
         WHERE sp.review_id = #{projectId}
     </update>
+
+    <update id="updateSysProjectForMq" parameterType="SysProject">
+        update sys_project
+        <trim prefix="SET" suffixOverrides=",">
+            <if test="projectNameAlias != null and projectNameAlias != ''">project_name_alias = #{projectNameAlias},</if>
+            <if test="projectType != null and projectType != ''">project_type = #{projectType},</if>
+            <if test="registerTime != null and registerTime != ''">register_time = #{registerTime},</if>
+            <if test="receptionist != null and receptionist != ''">receptionist = #{receptionist},</if>
+            <if test="workloadAlias != null">workload_alias = #{workloadAlias},</if>
+            <if test="userNameAlias != null and userNameAlias != ''">user_name_alias = #{userNameAlias},</if>
+            <if test="requesterAlias != null and requesterAlias != ''">requester_alias = #{requesterAlias},</if>
+            <if test="projectStartAlias != null and projectStartAlias != ''">project_start_alias = #{projectStartAlias},</if>
+            <if test="projectEndAlias != null and projectEndAlias != ''">project_end_alias = #{projectEndAlias},</if>
+            <if test="oneCheck != null and oneCheck != ''">one_check = #{oneCheck},</if>
+            <if test="twoCheck != null and twoCheck != ''">two_check = #{twoCheck},</if>
+            <if test="noticeTime != null and noticeTime != ''">notice_time = #{noticeTime},</if>
+            <if test="projectTime != null and projectTime != ''">project_time = #{projectTime},</if>
+            <if test="deliveryTime != null and deliveryTime != ''">delivery_time = #{deliveryTime},</if>
+            <if test="projectMoneyAlias != null">project_money_alias = #{projectMoneyAlias},</if>
+            <if test="workcontentAlias != null">workcontent_alias = #{workcontentAlias},</if>
+            <if test="department != null and department != ''">department = #{department},</if>
+            <if test="isTwoCheck != null and isTwoCheck != 0">is_two_check = #{isTwoCheck},</if>
+            <if test="twoCheckTime != null and twoCheckTime">two_check_time = #{twoCheckTime},</if>
+        </trim>
+        where project_num = #{projectNum}
+    </update>
 </mapper>

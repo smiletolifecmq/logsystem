@@ -82,4 +82,6 @@ public interface SysProjectMapper
     public int updateIsShowByProjectId(SysProject sysProject);
 
     public int updateIsShowByReviewId(SysProject sysProject);
+
+    public int updateSysProjectForMq(SysProject sysProject);
 }

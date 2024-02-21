@@ -20,7 +20,7 @@ public interface ViewFqProjectMapper
      * 
      * @return 项目
      */
-    public ViewFqProject selectViewFqProjectByProjectCode(String projectCode);
+    public ViewFqProject selectViewFqProjectByProjectCode(Long projectCode);
 
     /**
      * 查询项目列表

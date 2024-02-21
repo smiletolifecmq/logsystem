@@ -40,8 +40,9 @@
         </where>
     </select>
 
-    <select id="selectViewFqProjectByProjectCode" parameterType="String" resultMap="ViewFqProjectResult">
+    <select id="selectViewFqProjectByProjectCode" parameterType="Long" resultMap="ViewFqProjectResult">
         <include refid="selectViewFqProjectVo"/>
-        where project_code = #{projectCode}
+        where project_id = #{projectCode}
     </select>
+
 </mapper>
