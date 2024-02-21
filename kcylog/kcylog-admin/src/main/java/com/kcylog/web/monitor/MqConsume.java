@@ -11,8 +11,6 @@ import com.kcylog.system.service.IViewFqProjectLogService;
 import com.kcylog.system.service.IViewFqProjectService;
 import com.rabbitmq.client.Channel;
 import org.springframework.amqp.core.Message;
-import org.springframework.amqp.rabbit.annotation.Queue;
-import org.springframework.amqp.rabbit.annotation.RabbitListener;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
@@ -35,7 +33,7 @@ public class MqConsume {
     /**
      * 监听一个简单的队列，队列不存在时候会创建
      */
-    @RabbitListener(queuesToDeclare = @Queue(name = "${spring.rabbitmq.queue}"))
+//    @RabbitListener(queuesToDeclare = @Queue(name = "${spring.rabbitmq.queue}"))
     public void consumerSimpleMessage(Message message, Channel channel) throws IOException {
         try {
             // 手动确认消息消费成功
