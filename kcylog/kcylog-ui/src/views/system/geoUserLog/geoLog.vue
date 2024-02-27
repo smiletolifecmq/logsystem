@@ -86,7 +86,7 @@
           size="mini"
           @click="handleExportExcel"
           v-hasPermi="['system:geoLog:exportExcel']"
-          >excle导出</el-button
+          >excel导出</el-button
         >
       </el-col>
       <right-toolbar
@@ -810,8 +810,8 @@ export default {
           data[1] = sortedArray[i].type51_gzl;
           data[2] = sortedArray[i].type52_gzl;
           data[3] = sortedArray[i].type53_gzl;
-          data[4] = sortedArray[i].before_total_money.toFixed(2);
-          data[5] = sortedArray[i].total_money.toFixed(2);
+          data[4] = { t: "n", v: sortedArray[i].before_total_money.toFixed(2) };
+          data[5] = { t: "n", v: sortedArray[i].total_money.toFixed(2) };
           excelData.push(data);
         }
         const wb = utils.book_new();
