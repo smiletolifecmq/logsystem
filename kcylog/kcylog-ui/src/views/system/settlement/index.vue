@@ -136,6 +136,14 @@
             @click="confirmSettlementInfo(scope.row)"
             >确认结算办结</el-button
           >
+
+          <el-button
+            size="mini"
+            type="text"
+            icon="el-icon-folder-add"
+            @click="actualFiling(scope.row)"
+            >实际表归档</el-button
+          >
         </template>
       </el-table-column>
     </el-table>
@@ -163,6 +171,44 @@
         <el-button @click="cancel">取 消</el-button>
       </div>
     </el-dialog>
+
+    <el-dialog
+      title="归档表信息"
+      :visible.sync="opengd"
+      width="500px"
+      append-to-body
+      :close-on-click-modal="false"
+      :close-on-press-escape="false"
+    >
+      <el-form ref="form" :model="guidanform" :rules="rules" label-width="80px">
+        <el-form-item label="文件" required>
+          <FileUpload
+            ref="fileUploadModule"
+            :fileSize="200"
+            :fileType="fileType"
+            :limit="10"
+          ></FileUpload>
+        </el-form-item>
+        <el-form-item label="整理人" prop="name">
+          <el-input
+            v-model="guidanform.name"
+            type="text"
+            placeholder="请输入整理人"
+          />
+        </el-form-item>
+        <el-form-item label="备注" prop="introduction">
+          <el-input
+            v-model="guidanform.name"
+            type="textarea"
+            placeholder="请输入备注"
+          />
+        </el-form-item>
+      </el-form>
+      <div slot="footer" class="dialog-footer">
+        <el-button type="primary" @click="submitGuidanform">确 定</el-button>
+        <el-button @click="cancel">取 消</el-button>
+      </div>
+    </el-dialog>
   </div>
 </template>
 
@@ -175,12 +221,20 @@ import {
   updateSettlement,
   confirmSettlement,
 } from "@/api/system/settlement";
+import FileUpload from "@/components/FileUpload";
 import userInfo from "@/store/modules/user";
 
 export default {
   name: "Settlement",
+  props: {
+    fileType: {
+      type: Array,
+      default: () => ["docx", "doc", "ppt", "pdf"],
+    },
+  },
   data() {
     return {
+      opengd: false,
       isSettlementArr: [
         {
           value: 0,
@@ -222,12 +276,18 @@ export default {
       form: {},
       // 表单校验
       rules: {},
+      guidanform: {},
     };
   },
   created() {
     this.getList();
   },
   methods: {
+    submitGuidanform() {},
+    actualFiling(row) {
+      this.opengd = true;
+      console.log(row);
+    },
     confirmSettlementInfo(row) {
       const settlementId = row.settlementId;
       this.$modal
@@ -286,10 +346,18 @@ export default {
     // 取消按钮
     cancel() {
       this.open = false;
+      this.opengd = false;
       this.reset();
     },
     // 表单重置
     reset() {
+      if (this.$refs.fileUploadModule != null) {
+        this.$refs.fileUploadModule.number = 0;
+        this.$refs.fileUploadModule.uploadList = [];
+        this.$refs.fileUploadModule.fileList = [];
+      }
+      this.uploadFileList = [];
+      this.guidanform = {};
       this.form = {
         settlementId: null,
         settlementName: null,
@@ -298,6 +366,7 @@ export default {
         updateTime: null,
       };
       this.resetForm("form");
+      this.resetForm("guidanform");
     },
     /** 搜索按钮操作 */
     handleQuery() {
