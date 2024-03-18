@@ -93,10 +93,10 @@ spring:
 
   # rabbitmq 配置
 #  rabbitmq:
-#    host: 127.0.0.1
+#    host: 192.168.150.14
 #    port: 5672
-#    username: guest
-#    password: guest
+#    username: mq
+#    password: mq@fzis
 #    virtual-host: /fq # 虚拟host 可以不设置,使用server默认host
 #    queue: FQ_INVOKE_QUEUE
 #    listener:
