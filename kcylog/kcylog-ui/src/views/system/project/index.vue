@@ -113,24 +113,22 @@
       :data="projectList"
       @selection-change="handleSelectionChange"
     >
+      <el-table-column label="委托单位" align="center" prop="requesterAlias" />
       <el-table-column
         label="项目名称"
         align="center"
         prop="projectNameAlias"
       />
       <el-table-column label="项目编号" align="center" prop="projectNum" />
-      <el-table-column label="项目类型" align="center" prop="projectType" />
-      <el-table-column label="工作量" align="center" prop="workloadAlias" />
+      <el-table-column label="工程负责人" align="center" prop="userNameAlias" />
+      <el-table-column label="作业部门" align="center" prop="department" />
+      <!-- <el-table-column label="项目类型" align="center" prop="projectType" />
       <el-table-column
         label="工程内容"
         align="center"
         prop="workcontentAlias"
-      />
-      <el-table-column label="工程负责人" align="center" prop="userNameAlias" />
-      <el-table-column label="作业部门" align="center" prop="department" />
+      /> -->
       <el-table-column label="登记时间" align="center" prop="registerTime" />
-      <el-table-column label="接待人" align="center" prop="receptionist" />
-      <el-table-column label="委托单位" align="center" prop="requesterAlias" />
       <el-table-column
         label="安排开始时间"
         align="center"
@@ -141,13 +139,24 @@
         align="center"
         prop="projectEndAlias"
       />
-      <el-table-column label="一检时间" align="center" prop="oneCheck" />
+      <el-table-column label="安排状态" align="center" prop="status">
+        <template slot-scope="scope">
+          <el-tag v-if="scope.row.userNameAlias == ''" type="danger"
+            >临时安排</el-tag
+          >
+          <el-tag v-else-if="scope.row.userNameAlias != ''" type="success"
+            >正式安排</el-tag
+          >
+          <el-tag v-else type="danger">其他状态</el-tag>
+        </template>
+      </el-table-column>
+      <!-- <el-table-column label="一检时间" align="center" prop="oneCheck" />
       <el-table-column label="二检时间" align="center" prop="twoCheckTime">
         <template slot-scope="scope">
           <span>{{ parseTime(scope.row.twoCheckTime, "{y}-{m}-{d}") }}</span>
         </template>
-      </el-table-column>
-      <el-table-column
+      </el-table-column> -->
+      <!-- <el-table-column
         label="结算时间"
         align="center"
         prop="settlementTime"
@@ -156,8 +165,8 @@
         <template slot-scope="scope">
           <span>{{ parseTime(scope.row.settlementTime, "{y}-{m}-{d}") }}</span>
         </template>
-      </el-table-column>
-      <el-table-column label="结算状态" align="center" prop="status">
+      </el-table-column> -->
+      <!-- <el-table-column label="结算状态" align="center" prop="status">
         <template slot-scope="scope">
           <el-tag v-if="scope.row.outputStatus === 0" type="warning"
             >未填写</el-tag
@@ -168,7 +177,7 @@
           >
           <el-tag v-else type="danger">其他状态</el-tag>
         </template>
-      </el-table-column>
+      </el-table-column> -->
       <el-table-column
         fixed="right"
         label="操作"
