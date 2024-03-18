@@ -47,10 +47,20 @@ public class SysReviewSubProcess extends BaseEntity
     @Excel(name = "审核时间", width = 30, dateFormat = "yyyy-MM-dd HH:mm:ss")
     private Date reviewTime;
 
+    private Long manType;
+
     /**
      * 用户对象
      */
     private SysUser user;
+
+    public Long getManType() {
+        return manType;
+    }
+
+    public void setManType(Long manType) {
+        this.manType = manType;
+    }
 
     public void setReviewProcessId(Long reviewProcessId) 
     {

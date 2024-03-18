@@ -2,6 +2,7 @@ package com.kcylog.system.service.impl;
 
 import com.kcylog.common.utils.DateUtils;
 import com.kcylog.system.domain.SysReviewSub;
+import com.kcylog.system.domain.SysReviewSubProcess;
 import com.kcylog.system.mapper.SysReviewSubMapper;
 import com.kcylog.system.service.ISysReviewSubService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -189,5 +190,11 @@ public class SysReviewSubServiceImpl implements ISysReviewSubService
     public List<SysReviewSub> selectSysReviewBySerialNum(String serialNum)
     {
         return sysReviewSubMapper.selectSysReviewBySerialNum(serialNum);
+    }
+
+    @Override
+    public int updateReviewManType(SysReviewSubProcess sysReviewSubProcess)
+    {
+        return sysReviewSubMapper.updateReviewManType(sysReviewSubProcess);
     }
 }

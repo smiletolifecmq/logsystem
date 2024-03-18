@@ -330,6 +330,8 @@ public class SysReviewSubController extends BaseController
 
         SysReviewSub review = new SysReviewSub();
         review.setReviewId(sysReviewSubProcess.getReviewId());
+        //修改审核单雇工方式
+        sysReviewSubService.updateReviewManType(sysReviewSubProcess);
         if (sysReviewSubProcess.getStatus() == (long)this.PassStatus){
             //审核通过
             //获取审核单审核流程

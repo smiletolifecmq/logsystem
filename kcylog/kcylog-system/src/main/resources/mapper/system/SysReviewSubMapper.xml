@@ -42,6 +42,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
         <result property="subCost"    column="sub_cost"    />
         <result property="subWorkload"    column="sub_workload"    />
         <result property="realWorkload"    column="real_workload"    />
+        <result property="manType"    column="man_type"    />
 
         <association property="dept" column="dept_name" javaType="SysDept" resultMap="SysReviewSubDeptResult"/>
         <association property="user" column="user_name" javaType="SysUser" resultMap="SysReviewSubUserResult"/>
@@ -154,6 +155,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
             <if test="updateTime != null">update_time,</if>
             <if test="finalTime != null">final_time,</if>
             <if test="subcontract != null">subcontract,</if>
+            <if test="manType != null">man_type,</if>
 
             <if test="lotTime != null">lot_time,</if>
             <if test="businessName != null">business_name,</if>
@@ -190,6 +192,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
             <if test="updateTime != null">#{updateTime},</if>
             <if test="finalTime != null">#{finalTime},</if>
             <if test="subcontract != null">#{subcontract},</if>
+            <if test="manType != null">#{manType},</if>
 
             <if test="lotTime != null">#{lotTime},</if>
             <if test="businessName != null">#{businessName},</if>
@@ -231,6 +234,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
             <if test="updateTime != null">update_time = #{updateTime},</if>
             <if test="finalTime != null">final_time = #{finalTime},</if>
             <if test="subcontract != null">subcontract = #{subcontract},</if>
+            <if test="manType != null">man_type = #{manType},</if>
 
             <if test="lotTime != null">lot_time = #{lotTime},</if>
             <if test="businessName != null">business_name = #{businessName},</if>
@@ -433,5 +437,11 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
     <select id="selectSysReviewBySerialNum" parameterType="String" resultMap="SysReviewSubResult">
         select * from sys_review_sub where serial_num = #{serialNum}
     </select>
+
+    <update id="updateReviewManType" parameterType="SysReviewSubProcess">
+        update sys_review_sub
+        set man_type = #{manType}
+        where review_id = #{reviewId}
+    </update>
 
 </mapper>

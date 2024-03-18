@@ -95,6 +95,8 @@ public class SysReviewSub extends BaseEntity
      */
     private SysUser user;
 
+    private Long manType;
+
     private SysProjectRelation projectRelation;
 
     private int finalSecondStatus;
@@ -150,6 +152,14 @@ public class SysReviewSub extends BaseEntity
     private Long[] reviewExportIds;
 
     private Long[] reviewExportEmployeeIds;
+
+    public Long getManType() {
+        return manType;
+    }
+
+    public void setManType(Long manType) {
+        this.manType = manType;
+    }
 
     public Long[] getReviewExportIds() {
         return reviewExportIds;

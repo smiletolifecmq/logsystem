@@ -1,6 +1,7 @@
 package com.kcylog.system.service;
 
 import com.kcylog.system.domain.SysReviewSub;
+import com.kcylog.system.domain.SysReviewSubProcess;
 
 import java.util.List;
 
@@ -93,4 +94,6 @@ public interface ISysReviewSubService
     public List<SysReviewSub> selectSysReviewSubListByReviewIds(Long[] reviewExportIds);
 
     public List<SysReviewSub> selectSysReviewBySerialNum(String serialNum);
+
+    public int updateReviewManType(SysReviewSubProcess sysReviewSubProcess);
 }
