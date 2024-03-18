@@ -1,0 +1,95 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.kcylog.system.mapper.SysSettlementFileMapper">
+    
+    <resultMap type="SysSettlementFile" id="SysSettlementFileResult">
+        <result property="fileId"    column="file_id"    />
+        <result property="newFileName"    column="new_file_name"    />
+        <result property="oldFileName"    column="old_file_name"    />
+        <result property="url"    column="url"    />
+        <result property="fileName"    column="file_name"    />
+        <result property="settlementId"    column="settlement_id"    />
+        <result property="name"    column="name"    />
+        <result property="bz"    column="bz"    />
+    </resultMap>
+
+    <sql id="selectSysSettlementFileVo">
+        select file_id, new_file_name, old_file_name, url, file_name, settlement_id, name, bz from sys_settlement_file
+    </sql>
+
+    <select id="selectSysSettlementFileList" parameterType="SysSettlementFile" resultMap="SysSettlementFileResult">
+        <include refid="selectSysSettlementFileVo"/>
+        <where>  
+            <if test="newFileName != null  and newFileName != ''"> and new_file_name like concat('%', #{newFileName}, '%')</if>
+            <if test="oldFileName != null  and oldFileName != ''"> and old_file_name like concat('%', #{oldFileName}, '%')</if>
+            <if test="url != null  and url != ''"> and url = #{url}</if>
+            <if test="fileName != null  and fileName != ''"> and file_name like concat('%', #{fileName}, '%')</if>
+            <if test="settlementId != null "> and settlement_id = #{settlementId}</if>
+            <if test="name != null  and name != ''"> and name like concat('%', #{name}, '%')</if>
+            <if test="bz != null  and bz != ''"> and bz = #{bz}</if>
+        </where>
+    </select>
+    
+    <select id="selectSysSettlementFileByFileId" parameterType="Long" resultMap="SysSettlementFileResult">
+        <include refid="selectSysSettlementFileVo"/>
+        where file_id = #{fileId}
+    </select>
+        
+    <insert id="insertSysSettlementFile" parameterType="SysSettlementFile" useGeneratedKeys="true" keyProperty="fileId">
+        insert into sys_settlement_file
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="newFileName != null and newFileName != ''">new_file_name,</if>
+            <if test="oldFileName != null and oldFileName != ''">old_file_name,</if>
+            <if test="url != null and url != ''">url,</if>
+            <if test="fileName != null and fileName != ''">file_name,</if>
+            <if test="settlementId != null">settlement_id,</if>
+            <if test="name != null and name != ''">name,</if>
+            <if test="bz != null">bz,</if>
+         </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test="newFileName != null and newFileName != ''">#{newFileName},</if>
+            <if test="oldFileName != null and oldFileName != ''">#{oldFileName},</if>
+            <if test="url != null and url != ''">#{url},</if>
+            <if test="fileName != null and fileName != ''">#{fileName},</if>
+            <if test="settlementId != null">#{settlementId},</if>
+            <if test="name != null and name != ''">#{name},</if>
+            <if test="bz != null">#{bz},</if>
+         </trim>
+    </insert>
+
+    <update id="updateSysSettlementFile" parameterType="SysSettlementFile">
+        update sys_settlement_file
+        <trim prefix="SET" suffixOverrides=",">
+            <if test="newFileName != null and newFileName != ''">new_file_name = #{newFileName},</if>
+            <if test="oldFileName != null and oldFileName != ''">old_file_name = #{oldFileName},</if>
+            <if test="url != null and url != ''">url = #{url},</if>
+            <if test="fileName != null and fileName != ''">file_name = #{fileName},</if>
+            <if test="settlementId != null">settlement_id = #{settlementId},</if>
+            <if test="name != null and name != ''">name = #{name},</if>
+            <if test="bz != null">bz = #{bz},</if>
+        </trim>
+        where file_id = #{fileId}
+    </update>
+
+    <delete id="deleteSysSettlementFileByFileId" parameterType="Long">
+        delete from sys_settlement_file where file_id = #{fileId}
+    </delete>
+
+    <delete id="deleteSysSettlementFileByFileIds" parameterType="String">
+        delete from sys_settlement_file where file_id in 
+        <foreach item="fileId" collection="array" open="(" separator="," close=")">
+            #{fileId}
+        </foreach>
+    </delete>
+
+    <select id="selectSysSettlementFileBySettlementId" parameterType="Long" resultMap="SysSettlementFileResult">
+        <include refid="selectSysSettlementFileVo"/>
+        where settlement_id = #{settlementId}
+    </select>
+
+    <delete id="deleteSysSettlementFileBySettlementId" parameterType="Long">
+        delete from sys_settlement_file where settlement_id = #{settlementId}
+    </delete>
+</mapper>

@@ -180,7 +180,12 @@
       :close-on-click-modal="false"
       :close-on-press-escape="false"
     >
-      <el-form ref="form" :model="guidanform" :rules="rules" label-width="80px">
+      <el-form
+        ref="guidanform"
+        :model="guidanform"
+        :rules="rules"
+        label-width="80px"
+      >
         <el-form-item label="文件" required>
           <FileUpload
             ref="fileUploadModule"
@@ -196,9 +201,9 @@
             placeholder="请输入整理人"
           />
         </el-form-item>
-        <el-form-item label="备注" prop="introduction">
+        <el-form-item label="备注" prop="bz">
           <el-input
-            v-model="guidanform.name"
+            v-model="guidanform.bz"
             type="textarea"
             placeholder="请输入备注"
           />
@@ -214,12 +219,14 @@
 
 <script>
 import {
+  addSettlementFile,
   listSettlement,
   getSettlement,
   delSettlement,
   addSettlement,
   updateSettlement,
   confirmSettlement,
+  getSettlementFile,
 } from "@/api/system/settlement";
 import FileUpload from "@/components/FileUpload";
 import userInfo from "@/store/modules/user";
@@ -283,10 +290,69 @@ export default {
     this.getList();
   },
   methods: {
-    submitGuidanform() {},
+    submitGuidanform() {
+      this.uploadFileList = [];
+      const uploadListComponent = this.$refs.fileUploadModule;
+      const fileList = uploadListComponent.fileList;
+      for (let i in fileList) {
+        let obj = {};
+        let fileName = fileList[i].name.split("/");
+        obj.newFileName = fileName[fileName.length - 1];
+        obj.oldFileName = "";
+        if (fileList[i].oldFileName == null || fileList[i].oldFileName == "") {
+          obj.oldFileName = fileList[i].oldName;
+        } else {
+          obj.oldFileName = fileList[i].oldFileName;
+        }
+        obj.fileName = fileList[i].name;
+        obj.url = fileList[i].url;
+        this.uploadFileList.push(obj);
+      }
+      if (this.uploadFileList.length == 0) {
+        this.$message.error("请上传文件～");
+        return;
+      }
+      this.guidanform.uploadFileList = this.uploadFileList;
+      this.$refs["guidanform"].validate((valid) => {
+        console.log(this.guidanform);
+        addSettlementFile(this.guidanform).then((response) => {
+          this.$modal.msgSuccess("保存成功");
+          this.opengd = true;
+          this.actualFiling(this.guidanform);
+        });
+      });
+    },
     actualFiling(row) {
       this.opengd = true;
-      console.log(row);
+      this.guidanform.settlementId = row.settlementId;
+      getSettlementFile(row.settlementId).then((response) => {
+        this.uploadFileList = [];
+        if (response.rows.length == 0) {
+          this.$refs.fileUploadModule.number = 0;
+          this.$refs.fileUploadModule.uploadList = [];
+          this.$refs.fileUploadModule.fileList = [];
+          this.guidanform.name = "";
+          this.guidanform.bz = "";
+        } else {
+          this.guidanform = response.rows[0];
+          this.$nextTick(() => {
+            if (this.$refs.fileUploadModule) {
+              this.$refs.fileUploadModule.number = 0;
+              this.$refs.fileUploadModule.uploadList = [];
+              this.$refs.fileUploadModule.fileList = [];
+              for (let i = 0; i < response.rows.length; i++) {
+                let fileTemp = {};
+                fileTemp.name = response.rows[i].fileName;
+                fileTemp.url = response.rows[i].url;
+                fileTemp.fileName = response.rows[i].fileName;
+                fileTemp.newFileName = response.rows[i].newFileName;
+                fileTemp.oldFileName = response.rows[i].oldFileName;
+                this.$refs.fileUploadModule.fileList.push(fileTemp);
+              }
+            }
+          });
+        }
+      });
     },
     confirmSettlementInfo(row) {
       const settlementId = row.settlementId;

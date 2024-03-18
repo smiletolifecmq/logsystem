@@ -50,3 +50,18 @@ export function confirmSettlement(settlementId) {
     method: 'put'
   })
 }
+
+export function getSettlementFile(settlementId) {
+  return request({
+    url: '/system/settlement/file/' + settlementId,
+    method: 'get'
+  })
+}
+
+export function addSettlementFile(data) {
+  return request({
+    url: '/system/settlement/addFile',
+    method: 'post',
+    data: data
+  })
+}

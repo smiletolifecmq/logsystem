@@ -6,12 +6,11 @@ import com.kcylog.common.core.domain.AjaxResult;
 import com.kcylog.common.core.page.TableDataInfo;
 import com.kcylog.common.enums.BusinessType;
 import com.kcylog.common.utils.poi.ExcelUtil;
-import com.kcylog.system.domain.SysReview;
-import com.kcylog.system.domain.SysReviewSettlement;
-import com.kcylog.system.domain.SysSettlementAssociate;
+import com.kcylog.system.domain.*;
 import com.kcylog.system.service.ISysReviewService;
 import com.kcylog.system.service.ISysReviewSettlementService;
 import com.kcylog.system.service.ISysSettlementAssociateService;
+import com.kcylog.system.service.ISysSettlementFileService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.transaction.annotation.Transactional;
@@ -37,6 +36,9 @@ public class SysReviewSettlementController extends BaseController
 
     @Autowired
     private ISysReviewService sysReviewService;
+
+    @Autowired
+    private ISysSettlementFileService sysSettlementFileService;
 
     /**
      * 查询结算单列表
@@ -121,5 +123,32 @@ public class SysReviewSettlementController extends BaseController
     public AjaxResult confirmSettlement(@PathVariable Long settlementId)
     {
         return toAjax(sysReviewSettlementService.updateIsSettlementBySettlementId(settlementId));
+    }
+
+    @GetMapping(value = "/file/{settlementId}")
+    public TableDataInfo getFileInfo(@PathVariable("settlementId") Long settlementId)
+    {
+        List<SysSettlementFile> list = sysSettlementFileService.selectSysSettlementFileBySettlementId(settlementId);
+        return getDataTable(list);
+    }
+
+    @Log(title = "保存结算单文件", businessType = BusinessType.INSERT)
+    @PostMapping(value = "/addFile")
+    @Transactional
+    public AjaxResult addFile(@RequestBody SysSettlementFile sysSettlementFile)
+    {
+        sysSettlementFileService.deleteSysSettlementFileBySettlementId(sysSettlementFile.getSettlementId());
+        for (UploadFileList file : sysSettlementFile.getUploadFileList()){
+            SysSettlementFile newFile = new SysSettlementFile();
+            newFile.setNewFileName(file.getNewFileName());
+            newFile.setOldFileName(file.getOldFileName());
+            newFile.setUrl(file.getUrl());
+            newFile.setFileName(file.getFileName());
+            newFile.setSettlementId(sysSettlementFile.getSettlementId());
+            newFile.setName(sysSettlementFile.getName());
+            newFile.setBz(sysSettlementFile.getBz());
+            sysSettlementFileService.insertSysSettlementFile(newFile);
+        }
+        return toAjax(1);
     }
 }
