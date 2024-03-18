@@ -34,6 +34,26 @@ public class ViewFqProjectLog extends BaseEntity
     @Excel(name = "时间", width = 30, dateFormat = "yyyy-MM-dd")
     private Date operateTime;
 
+    private String sysProjectJson;
+
+    private String viewFqProjectJson;
+
+    public String getSysProjectJson() {
+        return sysProjectJson;
+    }
+
+    public void setSysProjectJson(String sysProjectJson) {
+        this.sysProjectJson = sysProjectJson;
+    }
+
+    public String getViewFqProjectJson() {
+        return viewFqProjectJson;
+    }
+
+    public void setViewFqProjectJson(String viewFqProjectJson) {
+        this.viewFqProjectJson = viewFqProjectJson;
+    }
+
     public void setId(Long id) 
     {
         this.id = id;

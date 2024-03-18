@@ -1,5 +1,6 @@
 package com.kcylog.web.monitor;
 
+import com.fasterxml.jackson.databind.ObjectMapper;
 import com.google.gson.Gson;
 import com.kcylog.common.utils.DateUtils;
 import com.kcylog.system.common.MqMessage;
@@ -11,6 +12,8 @@ import com.kcylog.system.service.IViewFqProjectLogService;
 import com.kcylog.system.service.IViewFqProjectService;
 import com.rabbitmq.client.Channel;
 import org.springframework.amqp.core.Message;
+import org.springframework.amqp.rabbit.annotation.Queue;
+import org.springframework.amqp.rabbit.annotation.RabbitListener;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
@@ -48,11 +51,10 @@ public class MqConsume {
             viewFqProjectLog.setOperateTime(nowTime);
             viewFqProjectLog.setProjectCode(mqMessage.getProjectId());
             viewFqProjectLog.setOperate(mqMessage.getOpType());
-            viewFqProjectLogService.insertViewFqProjectLog(viewFqProjectLog);
-
+            ObjectMapper mapper = new ObjectMapper();
             //获取视图数据
             ViewFqProject viewFqProject = viewFqProjectService.selectViewFqProjectByProjectCode(Long.parseLong(mqMessage.getProjectId()));
-
+            String viewFqProjectJson = mapper.writeValueAsString(viewFqProject);
             //数据初始化
             SysProject sysProject = new SysProject();
             sysProject.setProjectNameAlias(viewFqProject.getProjectName());
@@ -122,6 +124,10 @@ public class MqConsume {
                 Date date = DateUtils.parseDate(sysProject.getTwoCheck(), "yyyy-MM-dd HH:mm:ss");
                 sysProject.setTwoCheckTime(date);
             }
+            String sysProjectJson = mapper.writeValueAsString(sysProject);
+            viewFqProjectLog.setViewFqProjectJson(viewFqProjectJson);
+            viewFqProjectLog.setSysProjectJson(sysProjectJson);
+            viewFqProjectLogService.insertViewFqProjectLog(viewFqProjectLog);
 
             if (sysProjectService.checkProjectKeyUnique(viewFqProject.getProjectCode()) != null) {
                 sysProjectService.updateSysProjectForMq(sysProject);

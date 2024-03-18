@@ -9,6 +9,8 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
         <result property="projectCode"    column="project_code"    />
         <result property="operate"    column="operate"    />
         <result property="operateTime"    column="operate_time"    />
+        <result property="sysProjectJson"    column="sys_project_json"    />
+        <result property="viewFqProjectJson"    column="view_fqProject_json"    />
     </resultMap>
 
     <sql id="selectViewFqProjectLogVo">
@@ -35,11 +37,15 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
             <if test="projectCode != null">project_code,</if>
             <if test="operate != null">operate,</if>
             <if test="operateTime != null">operate_time,</if>
+            <if test="sysProjectJson != null">sys_project_json,</if>
+            <if test="viewFqProjectJson != null">view_fqProject_json,</if>
          </trim>
         <trim prefix="values (" suffix=")" suffixOverrides=",">
             <if test="projectCode != null">#{projectCode},</if>
             <if test="operate != null">#{operate},</if>
             <if test="operateTime != null">#{operateTime},</if>
+            <if test="sysProjectJson != null">#{sysProjectJson},</if>
+            <if test="viewFqProjectJson != null">#{viewFqProjectJson},</if>
          </trim>
     </insert>
 
