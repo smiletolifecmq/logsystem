@@ -126,18 +126,18 @@ public class MqConsume {
             }
 
             //判断状态
-            if (viewFqProject.getManagerUserName() == null){
+            if (viewFqProject.getManagerUserName() == null || viewFqProject.getManagerUserName().equals("")){
                 sysProject.setStatus((long)0);
             }
-            if (viewFqProject.getManagerUserName() != null && sysProject.getOneCheck() == null && sysProject.getTwoCheck() == null){
+            if ((viewFqProject.getManagerUserName() != null && !(viewFqProject.getManagerUserName().equals(""))) && (sysProject.getOneCheck() == null || sysProject.getOneCheck().equals("")) && (sysProject.getTwoCheck() == null || sysProject.getTwoCheck().equals(""))){
                 sysProject.setStatus((long)1);
             }
 
-            if (sysProject.getOneCheck() != null && sysProject.getTwoCheck() == null){
+            if ((sysProject.getOneCheck() != null && !sysProject.getOneCheck().equals("")) && (sysProject.getTwoCheck() == null || sysProject.getTwoCheck().equals(""))){
                 sysProject.setStatus((long)2);
             }
 
-            if (sysProject.getTwoCheck() != null){
+            if (sysProject.getTwoCheck() != null && !sysProject.getTwoCheck().equals("")){
                 sysProject.setStatus((long)3);
             }
 
