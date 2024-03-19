@@ -24,6 +24,17 @@
           @keyup.enter.native="handleQuery"
         />
       </el-form-item>
+      <el-form-item label="工作状态" prop="status">
+        <el-select v-model="queryParams.status" placeholder="请选择">
+          <el-option
+            v-for="item in statusArr"
+            :key="item.value"
+            :label="item.label"
+            :value="item.value"
+          >
+          </el-option>
+        </el-select>
+      </el-form-item>
 
       <el-form-item label="作业部门" prop="department">
         <el-select
@@ -139,14 +150,16 @@
         align="center"
         prop="projectEndAlias"
       />
-      <el-table-column label="安排状态" align="center" prop="status">
+      <el-table-column label="工作状态" align="center" prop="status">
         <template slot-scope="scope">
-          <el-tag v-if="scope.row.userNameAlias == ''" type="danger"
-            >临时安排</el-tag
-          >
-          <el-tag v-else-if="scope.row.userNameAlias != ''" type="success"
+          <el-tag v-if="scope.row.status == 0" type="danger">临时安排</el-tag>
+          <el-tag v-else-if="scope.row.status == 1" type="success"
             >正式安排</el-tag
           >
+          <el-tag v-else-if="scope.row.status == 2" type="warning"
+            >一检办结</el-tag
+          >
+          <el-tag v-else-if="scope.row.status == 3">二检办结</el-tag>
           <el-tag v-else type="danger">其他状态</el-tag>
         </template>
       </el-table-column>
@@ -534,6 +547,24 @@ export default {
   },
   data() {
     return {
+      statusArr: [
+        {
+          value: 0,
+          label: "临时安排",
+        },
+        {
+          value: 1,
+          label: "正式安排",
+        },
+        {
+          value: 2,
+          label: "一检办结",
+        },
+        {
+          value: 3,
+          label: "二检办结",
+        },
+      ],
       outputStatusList: [
         {
           value: 0,
