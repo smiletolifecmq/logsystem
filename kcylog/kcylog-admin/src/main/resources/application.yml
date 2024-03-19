@@ -9,8 +9,8 @@ ruoyi:
   # 实例演示开关
   demoEnabled: true
   # 文件路径 示例（ Windows配置D:/ruoyi/uploadPath，Linux配置 /home/ruoyi/uploadPath）
-  profile: /Users/chenmingqiang/Documents/kcy/uploadPath
-#  profile: E:/LOGSystem/file/web
+#  profile: /Users/chenmingqiang/Documents/kcy/uploadPath
+  profile: E:/LOGSystem/file/web
   # 获取ip地址开关
   addressEnabled: false
   # 验证码类型 math 数组计算 char 字符验证
@@ -92,25 +92,25 @@ spring:
         max-wait: -1ms
 
   # rabbitmq 配置
-#  rabbitmq:
-#    host: 192.168.150.14
-#    port: 5672
-#    username: mq
-#    password: mq@fzis
-#    virtual-host: /fq # 虚拟host 可以不设置,使用server默认host
-#    queue: FQ_INVOKE_QUEUE
-#    listener:
-#      simple:
-#        concurrency: 1 # 消费端的监听个数(即@RabbitListener开启几个线程去处理数据。)
-#        max-concurrency: 1 # 消费端的监听最大个数
-#        prefetch: 5
-#        acknowledge-mode: MANUAL # MANUAL:手动处理 AUTO:自动处理
-#        default-requeue-rejected: true # 消费不成功的消息拒绝入队
-#        retry:
-#          enabled: true # 开启消息重试
-#          max-attempts: 5 # 重试次数
-#          max-interval: 10000   # 重试最大间隔时间
-#          initial-interval: 2000  # 重试初始间隔时间
+  rabbitmq:
+    host: 192.168.150.14
+    port: 5672
+    username: mq
+    password: mq@fzis
+    virtual-host: /fq # 虚拟host 可以不设置,使用server默认host
+    queue: FQ_INVOKE_QUEUE
+    listener:
+      simple:
+        concurrency: 1 # 消费端的监听个数(即@RabbitListener开启几个线程去处理数据。)
+        max-concurrency: 1 # 消费端的监听最大个数
+        prefetch: 5
+        acknowledge-mode: MANUAL # MANUAL:手动处理 AUTO:自动处理
+        default-requeue-rejected: true # 消费不成功的消息拒绝入队
+        retry:
+          enabled: true # 开启消息重试
+          max-attempts: 5 # 重试次数
+          max-interval: 10000   # 重试最大间隔时间
+          initial-interval: 2000  # 重试初始间隔时间
 
 # token配置
 token:

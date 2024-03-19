@@ -35,6 +35,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
         <result property="department"    column="department"    />
         <result property="settlementTime"    column="settlement_time"    />
         <result property="fbMoney"    column="fb_money"    />
+        <result property="status"    column="status"    />
         <association property="projectValue" javaType="java.util.List" resultMap="SysProjectValueResult"/>
         <association property="projectCar" javaType="java.util.List" resultMap="SysProjectCarResult"/>
         <association property="reviewSub" javaType="java.util.List" resultMap="SysReviewSubResult"/>
@@ -137,6 +138,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
             <if test="operateTime != null">operate_time,</if>
             <if test="createTime != null">create_time,</if>
             <if test="updateTime != null">update_time,</if>
+            <if test="status != null">status,</if>
          </trim>
         <trim prefix="values (" suffix=")" suffixOverrides=",">
             <if test="projectNameAlias != null and projectNameAlias != ''">#{projectNameAlias},</if>
@@ -164,6 +166,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
             <if test="operateTime != null">#{operateTime},</if>
             <if test="createTime != null">#{createTime},</if>
             <if test="updateTime != null">#{updateTime},</if>
+            <if test="status != null">#{status},</if>
          </trim>
     </insert>
 
@@ -197,6 +200,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
             <if test="operateTime != null">operate_time = #{operateTime},</if>
             <if test="createTime != null">create_time = #{createTime},</if>
             <if test="updateTime != null">update_time = #{updateTime},</if>
+            <if test="status != null">status = #{status},</if>
         </trim>
         where project_id = #{projectId}
     </update>
@@ -241,6 +245,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
             <if test="operateTime != null">operate_time = #{operateTime},</if>
             <if test="createTime != null">create_time = #{createTime},</if>
             <if test="updateTime != null">update_time = #{updateTime},</if>
+            <if test="status != null">status = #{status},</if>
         </trim>
         where project_num = #{projectNum}
     </update>
@@ -378,6 +383,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
             <if test="department != null and department != ''">department = #{department},</if>
             <if test="isTwoCheck != null and isTwoCheck != 0">is_two_check = #{isTwoCheck},</if>
             <if test="twoCheckTime != null and twoCheckTime">two_check_time = #{twoCheckTime},</if>
+            <if test="status != null">status = #{status},</if>
         </trim>
         where project_num = #{projectNum}
     </update>

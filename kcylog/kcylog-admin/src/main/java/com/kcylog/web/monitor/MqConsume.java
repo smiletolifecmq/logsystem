@@ -36,7 +36,7 @@ public class MqConsume {
     /**
      * 监听一个简单的队列，队列不存在时候会创建
      */
-//    @RabbitListener(queuesToDeclare = @Queue(name = "${spring.rabbitmq.queue}"))
+    @RabbitListener(queuesToDeclare = @Queue(name = "${spring.rabbitmq.queue}"))
     public void consumerSimpleMessage(Message message, Channel channel) throws IOException {
         try {
             // 手动确认消息消费成功
@@ -54,7 +54,7 @@ public class MqConsume {
             ObjectMapper mapper = new ObjectMapper();
             //获取视图数据
             ViewFqProject viewFqProject = viewFqProjectService.selectViewFqProjectByProjectCode(Long.parseLong(mqMessage.getProjectId()));
-            String viewFqProjectJson = mapper.writeValueAsString(viewFqProject);
+//            String viewFqProjectJson = mapper.writeValueAsString(viewFqProject);
             //数据初始化
             SysProject sysProject = new SysProject();
             sysProject.setProjectNameAlias(viewFqProject.getProjectName());
@@ -124,9 +124,26 @@ public class MqConsume {
                 Date date = DateUtils.parseDate(sysProject.getTwoCheck(), "yyyy-MM-dd HH:mm:ss");
                 sysProject.setTwoCheckTime(date);
             }
-            String sysProjectJson = mapper.writeValueAsString(sysProject);
-            viewFqProjectLog.setViewFqProjectJson(viewFqProjectJson);
-            viewFqProjectLog.setSysProjectJson(sysProjectJson);
+
+            //判断状态
+            if (viewFqProject.getManagerUserName() == null){
+                sysProject.setStatus((long)0);
+            }
+            if (viewFqProject.getManagerUserName() != null && sysProject.getOneCheck() == null && sysProject.getTwoCheck() == null){
+                sysProject.setStatus((long)1);
+            }
+
+            if (sysProject.getOneCheck() != null && sysProject.getTwoCheck() == null){
+                sysProject.setStatus((long)2);
+            }
+
+            if (sysProject.getTwoCheck() != null){
+                sysProject.setStatus((long)3);
+            }
+
+//            String sysProjectJson = mapper.writeValueAsString(sysProject);
+//            viewFqProjectLog.setViewFqProjectJson(viewFqProjectJson);
+//            viewFqProjectLog.setSysProjectJson(sysProjectJson);
             viewFqProjectLogService.insertViewFqProjectLog(viewFqProjectLog);
 
             if (sysProjectService.checkProjectKeyUnique(viewFqProject.getProjectCode()) != null) {
