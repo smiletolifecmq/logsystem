@@ -308,7 +308,10 @@
         <el-collapse v-model="activeNames">
           <el-collapse-item title="项目详情" name="1">
             <el-form-item label="关联项目" prop="projectId">
-              <el-select
+              <el-button type="primary" @click="showProjectView()"
+                >获取项目列表</el-button
+              >
+              <!-- <el-select
                 v-model="form.projectId"
                 placeholder="请选择关联项目"
                 filterable
@@ -322,7 +325,7 @@
                   :disabled="item.disabled"
                 >
                 </el-option>
-              </el-select>
+              </el-select> -->
             </el-form-item>
           </el-collapse-item>
           <el-collapse-item title="雇工详情" name="2">
@@ -1048,6 +1051,81 @@
         @pagination="getProjectList"
       />
     </el-dialog>
+
+    <!-- 获取项目 -->
+    <el-dialog :visible.sync="glProjectOpen" width="1000px" append-to-body>
+      <el-form
+        :model="queryProjectListParams"
+        ref="queryFormProject"
+        size="small"
+        :inline="true"
+        v-show="showSearch"
+        label-width="68px"
+      >
+        <el-form-item label="工程编号" prop="projectNum">
+          <el-input
+            v-model="queryProjectListParams.projectNum"
+            placeholder="请输入编号"
+            clearable
+            @keyup.enter.native="handleQueryProject"
+          />
+        </el-form-item>
+
+        <el-form-item>
+          <el-button
+            type="primary"
+            icon="el-icon-search"
+            size="mini"
+            @click="handleQueryProject"
+            >搜索</el-button
+          >
+          <el-button
+            icon="el-icon-refresh"
+            size="mini"
+            @click="resetQueryProject"
+            >重置</el-button
+          >
+        </el-form-item>
+      </el-form>
+      <div style="height: 400px; overflow: auto">
+        <el-table :data="listProjectLocal">
+          <el-table-column label="工程编号" align="center" prop="projectNum" />
+          <el-table-column
+            label="项目名称"
+            align="center"
+            prop="projectNameAlias"
+          />
+          <el-table-column label="负责人" align="center" prop="userNameAlias" />
+          <el-table-column label="部门" align="center" prop="department" />
+          <el-table-column
+            label="操作"
+            align="center"
+            class-name="small-padding fixed-width"
+            fixed="right"
+          >
+            <template slot-scope="scope">
+              <div>
+                <el-button
+                  size="mini"
+                  type="text"
+                  icon="el-icon-upload"
+                  @click="handleSelectChange(scope.row.projectId)"
+                  >导入</el-button
+                >
+              </div>
+            </template>
+          </el-table-column>
+        </el-table>
+
+        <pagination
+          v-show="glprojectTotal > 0"
+          :total="glprojectTotal"
+          :page.sync="queryProjectListParams.pageNum"
+          :limit.sync="queryParams.pageSize"
+          @pagination="getProjectListLocal"
+        />
+      </div>
+    </el-dialog>
   </div>
 </template>
 <style>
@@ -1104,6 +1182,8 @@ export default {
   name: "Review",
   data() {
     return {
+      glprojectTotal: 0,
+      glProjectOpen: false,
       queryParamsEmployee: {
         pageNum: 1,
         pageSize: 9999,
@@ -1179,6 +1259,7 @@ export default {
       dateRange: [],
       // 遮罩层
       loading: true,
+      glLoading: true,
       // 选中数组
       ids: [],
       // 非单个禁用
@@ -1220,7 +1301,7 @@ export default {
       },
       queryProjectListParams: {
         pageNum: 1,
-        pageSize: 9999,
+        pageSize: 10,
       },
       // 表单参数
       form: {},
@@ -1249,6 +1330,9 @@ export default {
     this.loadAllUnits();
   },
   methods: {
+    showProjectView() {
+      this.glProjectOpen = true;
+    },
     loadAllUnits() {
       listUnit().then((response) => {
         for (let i = 0; i < response.rows.length; i++) {
@@ -1333,9 +1417,11 @@ export default {
       if (projectInfo.projectType != null && projectInfo.projectType != "") {
         this.form.businessName = projectInfo.projectType;
       }
+      this.glProjectOpen = false;
     },
     getProjectListLocal() {
       listProject(this.queryProjectListParams).then((response) => {
+        this.glprojectTotal = response.total;
         this.listProjectLocalMap = new Map();
         for (var i = 0; i < response.rows.length; i++) {
           this.listProjectLocalMap.set(
@@ -1559,6 +1645,10 @@ export default {
       }
       this.getList();
     },
+    handleQueryProject() {
+      this.queryProjectListParams.pageNum = 1;
+      this.getProjectListLocal();
+    },
     /** 重置按钮操作 */
     resetQuery() {
       this.statusVaule = "";
@@ -1566,6 +1656,10 @@ export default {
       this.dateRange = [];
       this.resetForm("queryForm");
       this.handleQuery();
+    },
+    resetQueryProject() {
+      this.resetForm("queryFormProject");
+      this.handleQueryProject();
     },
     // 多选框选中数据
     handleSelectionChange(selection) {
