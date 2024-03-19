@@ -129,4 +129,10 @@ public class SysReviewSubEmployeeServiceImpl implements ISysReviewSubEmployeeSer
         return sysReviewSubEmployeeMapper.selectSysReviewEmployeeByReviewIdMonth(sysReviewSub);
     }
 
+    @Override
+    public List<SysReviewSubEmployee> selectSysReviewEmployeeByReviewIds(List<Long> reviewIds)
+    {
+        return sysReviewSubEmployeeMapper.selectSysReviewEmployeeByReviewIds(reviewIds);
+    }
+
 }

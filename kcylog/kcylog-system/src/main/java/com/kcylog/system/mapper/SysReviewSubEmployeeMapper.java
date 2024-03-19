@@ -72,4 +72,6 @@ public interface SysReviewSubEmployeeMapper
     public List<SysReviewSubEmployee> selectSysReviewSubEmployeeListJoinReviewMonth(SysReviewSub sysReviewSub);
 
     public List<SysReviewSubEmployee> selectSysReviewEmployeeByReviewIdMonth(SysReviewSub sysReviewSub);
+
+    public List<SysReviewSubEmployee> selectSysReviewEmployeeByReviewIds(List<Long> reviewIds);
 }

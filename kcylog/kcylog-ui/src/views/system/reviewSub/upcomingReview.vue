@@ -78,6 +78,82 @@
       </el-form-item>
     </el-form>
 
+    <el-table :data="statisticsData" style="width: 100%">
+      <el-table-column prop="deptName" label="部门" align="center">
+        <template slot-scope="scope">
+          <el-tag>{{ scope.row.deptName }}</el-tag>
+        </template>
+      </el-table-column>
+      <el-table-column prop="ggNum" label="雇工条数" align="center">
+        <template slot-scope="scope">
+          <el-tag type="success">{{ scope.row.ggNum }}</el-tag>
+        </template>
+      </el-table-column>
+      <el-table-column prop="dsfggNum" label="第三方雇工条数" align="center">
+        <template slot-scope="scope">
+          <el-tag type="danger">{{ scope.row.dsfggNum }}</el-tag>
+        </template>
+      </el-table-column>
+      <el-table-column prop="num" label="待审核总条数" align="center">
+        <template slot-scope="scope">
+          <el-tag type="danger" effect="dark">{{ scope.row.num }}</el-tag>
+        </template>
+      </el-table-column>
+      <el-table-column label="预算信息" align="center">
+        <el-table-column prop="ggMoney" label="雇工预算金额" align="center">
+          <template slot-scope="scope">
+            <el-tag type="success">{{ scope.row.ggMoney }}</el-tag>
+          </template>
+        </el-table-column>
+        <el-table-column
+          prop="dsfggMoney"
+          label="第三方雇工预算金额"
+          align="center"
+        >
+          <template slot-scope="scope">
+            <el-tag type="danger">{{ scope.row.dsfggMoney }}</el-tag>
+          </template>
+        </el-table-column>
+        <el-table-column
+          prop="budgetMoney"
+          label="待审核预算总金额"
+          align="center"
+        >
+          <template slot-scope="scope">
+            <el-tag type="danger" effect="dark">{{
+              scope.row.budgetMoney
+            }}</el-tag>
+          </template>
+        </el-table-column>
+      </el-table-column>
+      <el-table-column label="实际信息" align="center">
+        <el-table-column prop="sjggMoney" label="雇工金额" align="center">
+          <template slot-scope="scope">
+            <el-tag type="success">{{ scope.row.sjggMoney }}</el-tag>
+          </template>
+        </el-table-column>
+        <el-table-column
+          prop="sjdsfggMoney"
+          label="第三方雇工金额"
+          align="center"
+        >
+          <template slot-scope="scope">
+            <el-tag type="danger">{{ scope.row.sjdsfggMoney }}</el-tag>
+          </template>
+        </el-table-column>
+        <el-table-column
+          prop="sjbudgetMoney"
+          label="待审核总金额"
+          align="center"
+        >
+          <template slot-scope="scope">
+            <el-tag type="danger" effect="dark">{{
+              scope.row.sjbudgetMoney
+            }}</el-tag>
+          </template>
+        </el-table-column>
+      </el-table-column>
+    </el-table>
     <el-table
       v-loading="loading"
       :data="reviewList"
@@ -662,6 +738,7 @@ export default {
   },
   data() {
     return {
+      statisticsData: [],
       isfg: false,
       queryUserParams: {
         pageNum: 1,
@@ -763,8 +840,68 @@ export default {
     this.getUpcomingList();
     this.getDeptTree();
     this.loadAllUsers();
+    this.ggtj();
   },
   methods: {
+    ggtj() {
+      upcomingListReview(
+        this.addDateRange({
+          pageNum: 1,
+          pageSize: 9999,
+        })
+      ).then((response) => {
+        const reviews = response.rows;
+        let reviewMap = new Map();
+        for (var i = 0; i < reviews.length; i++) {
+          if (reviewMap.has(reviews[i].dept.deptName)) {
+            let reviewTemp = reviewMap.get(reviews[i].dept.deptName);
+            reviewTemp.num++;
+            reviewTemp.budgetMoney =
+              reviewTemp.budgetMoney + reviews[i].budgetMoney;
+            reviewTemp.sjbudgetMoney =
+              reviewTemp.sjbudgetMoney + reviews[i].guGongMoney;
+            if (reviews[i].manType === 1) {
+              reviewTemp.dsfggNum++;
+              reviewTemp.dsfggMoney =
+                reviewTemp.dsfggMoney + reviews[i].budgetMoney;
+              reviewTemp.sjdsfggMoney =
+                reviewTemp.sjdsfggMoney + reviews[i].guGongMoney;
+            } else {
+              reviewTemp.ggNum++;
+              reviewTemp.ggMoney = reviewTemp.ggMoney + reviews[i].budgetMoney;
+              reviewTemp.sjggMoney =
+                reviewTemp.sjggMoney + reviews[i].guGongMoney;
+            }
+          } else {
+            let reviewTemp = {
+              deptName: reviews[i].dept.deptName,
+              num: 1,
+              budgetMoney: reviews[i].budgetMoney ?? 0,
+              ggNum: 0,
+              dsfggNum: 0,
+              ggMoney: 0,
+              dsfggMoney: 0,
+              sjggMoney: 0,
+              sjdsfggMoney: 0,
+              sjbudgetMoney: reviews[i].guGongMoney ?? 0,
+            };
+            if (reviews[i].manType === 1) {
+              reviewTemp.dsfggNum = 1;
+              reviewTemp.dsfggMoney = reviews[i].budgetMoney ?? 0;
+              reviewTemp.sjdsfggMoney = reviews[i].guGongMoney ?? 0;
+            } else {
+              reviewTemp.ggNum = 1;
+              reviewTemp.ggMoney = reviews[i].budgetMoney ?? 0;
+              reviewTemp.sjggMoney = reviews[i].guGongMoney ?? 0;
+            }
+            reviewMap.set(reviews[i].dept.deptName, reviewTemp);
+          }
+        }
+        reviewMap.forEach((value, key) => {
+          this.statisticsData.push(value);
+        });
+      });
+    },
     loadAllUsers() {
       listUser(this.queryUserParams).then((response) => {
         for (let i = 0; i < response.rows.length; i++) {

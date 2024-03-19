@@ -123,42 +123,42 @@ public class SysReviewEmployeeController extends BaseController
 
         //设置第一行数据
         Sheet sheet = workbook.createSheet("Sheet1");
-        sheet.addMergedRegion(new CellRangeAddress(0, 0, 0, 10));
+        sheet.addMergedRegion(new CellRangeAddress(0, 0, 0, 11));
         Row headerRowTemp = sheet.createRow(0);
         headerRowTemp.setHeight((short) 500); // 设置行高，这里设置为500个点
         Cell mergedCell = headerRowTemp.createCell(0);
         mergedCell.setCellValue("福州市勘测院有限公司项目劳务费签领表");
         mergedCell.setCellStyle(headerStyle); // 应用居中对齐的样式
-        RegionUtil.setBorderTop(BorderStyle.THIN, new CellRangeAddress(0, 0, 0, 10), sheet);
-        RegionUtil.setTopBorderColor(IndexedColors.BLACK.getIndex(), new CellRangeAddress(0, 0, 0, 10), sheet);
-        RegionUtil.setBorderRight(BorderStyle.THIN, new CellRangeAddress(0, 0, 0, 10), sheet);
-        RegionUtil.setRightBorderColor(IndexedColors.BLACK.getIndex(), new CellRangeAddress(0, 0, 0, 10), sheet);
-        RegionUtil.setBorderBottom(BorderStyle.THIN, new CellRangeAddress(0, 0, 0, 10), sheet);
-        RegionUtil.setBottomBorderColor(IndexedColors.BLACK.getIndex(), new CellRangeAddress(0, 0, 0, 10), sheet);
-        RegionUtil.setBorderLeft(BorderStyle.THIN, new CellRangeAddress(0, 0, 0, 10), sheet);
-        RegionUtil.setLeftBorderColor(IndexedColors.BLACK.getIndex(), new CellRangeAddress(0, 0, 0, 10), sheet);
+        RegionUtil.setBorderTop(BorderStyle.THIN, new CellRangeAddress(0, 0, 0, 11), sheet);
+        RegionUtil.setTopBorderColor(IndexedColors.BLACK.getIndex(), new CellRangeAddress(0, 0, 0, 11), sheet);
+        RegionUtil.setBorderRight(BorderStyle.THIN, new CellRangeAddress(0, 0, 0, 11), sheet);
+        RegionUtil.setRightBorderColor(IndexedColors.BLACK.getIndex(), new CellRangeAddress(0, 0, 0, 11), sheet);
+        RegionUtil.setBorderBottom(BorderStyle.THIN, new CellRangeAddress(0, 0, 0, 11), sheet);
+        RegionUtil.setBottomBorderColor(IndexedColors.BLACK.getIndex(), new CellRangeAddress(0, 0, 0, 11), sheet);
+        RegionUtil.setBorderLeft(BorderStyle.THIN, new CellRangeAddress(0, 0, 0, 11), sheet);
+        RegionUtil.setLeftBorderColor(IndexedColors.BLACK.getIndex(), new CellRangeAddress(0, 0, 0, 11), sheet);
         //************************************************************
 
         //设置第二行数据
-        sheet.addMergedRegion(new CellRangeAddress(1, 1, 0, 10));
+        sheet.addMergedRegion(new CellRangeAddress(1, 1, 0, 11));
         headerRowTemp = sheet.createRow(1);
         headerRowTemp.setHeight((short) 500); // 设置行高，这里设置为500个点
         mergedCell = headerRowTemp.createCell(0);
         mergedCell.setCellValue("请修改成具体时间");
         mergedCell.setCellStyle(wrapCellStyle); // 应用居中对齐的样式
-        RegionUtil.setBorderTop(BorderStyle.THIN, new CellRangeAddress(1, 1, 0, 10), sheet);
-        RegionUtil.setTopBorderColor(IndexedColors.BLACK.getIndex(), new CellRangeAddress(1, 1, 0, 10), sheet);
-        RegionUtil.setBorderRight(BorderStyle.THIN, new CellRangeAddress(1, 1, 0, 10), sheet);
-        RegionUtil.setRightBorderColor(IndexedColors.BLACK.getIndex(), new CellRangeAddress(1, 1, 0, 10), sheet);
-        RegionUtil.setBorderBottom(BorderStyle.THIN, new CellRangeAddress(1, 1, 0, 10), sheet);
-        RegionUtil.setBottomBorderColor(IndexedColors.BLACK.getIndex(), new CellRangeAddress(1, 1, 0, 10), sheet);
-        RegionUtil.setBorderLeft(BorderStyle.THIN, new CellRangeAddress(1, 1, 0, 10), sheet);
-        RegionUtil.setLeftBorderColor(IndexedColors.BLACK.getIndex(), new CellRangeAddress(1, 1, 0, 10), sheet);
+        RegionUtil.setBorderTop(BorderStyle.THIN, new CellRangeAddress(1, 1, 0, 11), sheet);
+        RegionUtil.setTopBorderColor(IndexedColors.BLACK.getIndex(), new CellRangeAddress(1, 1, 0, 11), sheet);
+        RegionUtil.setBorderRight(BorderStyle.THIN, new CellRangeAddress(1, 1, 0, 11), sheet);
+        RegionUtil.setRightBorderColor(IndexedColors.BLACK.getIndex(), new CellRangeAddress(1, 1, 0, 11), sheet);
+        RegionUtil.setBorderBottom(BorderStyle.THIN, new CellRangeAddress(1, 1, 0, 11), sheet);
+        RegionUtil.setBottomBorderColor(IndexedColors.BLACK.getIndex(), new CellRangeAddress(1, 1, 0, 11), sheet);
+        RegionUtil.setBorderLeft(BorderStyle.THIN, new CellRangeAddress(1, 1, 0, 11), sheet);
+        RegionUtil.setLeftBorderColor(IndexedColors.BLACK.getIndex(), new CellRangeAddress(1, 1, 0, 11), sheet);
         //************************************************************
 
         //设置第三行数据
         sheet.addMergedRegion(new CellRangeAddress(2, 2, 0, 7));
-        sheet.addMergedRegion(new CellRangeAddress(2, 2, 8, 10));
+        sheet.addMergedRegion(new CellRangeAddress(2, 2, 8, 11));
         headerRowTemp = sheet.createRow(2);
         headerRowTemp.setHeight((short) 500); // 设置行高，这里设置为500个点
         mergedCell = headerRowTemp.createCell(0);
@@ -167,14 +167,14 @@ public class SysReviewEmployeeController extends BaseController
         mergedCell = headerRowTemp.createCell(8);
         mergedCell.setCellValue("项目编号：" + serialNum);
         mergedCell.setCellStyle(wrapCellStyle); // 应用居中对齐的样式
-        RegionUtil.setBorderTop(BorderStyle.THIN, new CellRangeAddress(2, 2, 0, 10), sheet);
-        RegionUtil.setTopBorderColor(IndexedColors.BLACK.getIndex(), new CellRangeAddress(2, 2, 0, 10), sheet);
-        RegionUtil.setBorderRight(BorderStyle.THIN, new CellRangeAddress(2, 2, 0, 10), sheet);
-        RegionUtil.setRightBorderColor(IndexedColors.BLACK.getIndex(), new CellRangeAddress(2, 2, 0, 10), sheet);
-        RegionUtil.setBorderBottom(BorderStyle.THIN, new CellRangeAddress(2, 2, 0, 10), sheet);
-        RegionUtil.setBottomBorderColor(IndexedColors.BLACK.getIndex(), new CellRangeAddress(2, 2, 0, 10), sheet);
-        RegionUtil.setBorderLeft(BorderStyle.THIN, new CellRangeAddress(2, 2, 0, 10), sheet);
-        RegionUtil.setLeftBorderColor(IndexedColors.BLACK.getIndex(), new CellRangeAddress(2, 2, 0, 10), sheet);
+        RegionUtil.setBorderTop(BorderStyle.THIN, new CellRangeAddress(2, 2, 0, 11), sheet);
+        RegionUtil.setTopBorderColor(IndexedColors.BLACK.getIndex(), new CellRangeAddress(2, 2, 0, 11), sheet);
+        RegionUtil.setBorderRight(BorderStyle.THIN, new CellRangeAddress(2, 2, 0, 11), sheet);
+        RegionUtil.setRightBorderColor(IndexedColors.BLACK.getIndex(), new CellRangeAddress(2, 2, 0, 11), sheet);
+        RegionUtil.setBorderBottom(BorderStyle.THIN, new CellRangeAddress(2, 2, 0, 11), sheet);
+        RegionUtil.setBottomBorderColor(IndexedColors.BLACK.getIndex(), new CellRangeAddress(2, 2, 0, 11), sheet);
+        RegionUtil.setBorderLeft(BorderStyle.THIN, new CellRangeAddress(2, 2, 0, 11), sheet);
+        RegionUtil.setLeftBorderColor(IndexedColors.BLACK.getIndex(), new CellRangeAddress(2, 2, 0, 11), sheet);
         //************************************************************
 
         // 设置行头
@@ -206,12 +206,15 @@ public class SysReviewEmployeeController extends BaseController
         headerCell8.setCellValue("实发劳务费");
         headerCell8.setCellStyle(wrapCellStyle);
         Cell headerCell9 = headerRow.createCell(8);
-        headerCell9.setCellValue("开户行和银行卡号");
+        headerCell9.setCellValue("开户行");
         headerCell9.setCellStyle(wrapCellStyle);
-        Cell headerCell10 = headerRow.createCell(9);
+        Cell headerCell12 = headerRow.createCell(9);
+        headerCell12.setCellValue("银行卡号");
+        headerCell12.setCellStyle(wrapCellStyle);
+        Cell headerCell10 = headerRow.createCell(10);
         headerCell10.setCellValue("身份证号");
         headerCell10.setCellStyle(wrapCellStyle);
-        Cell headerCell11 = headerRow.createCell(10);
+        Cell headerCell11 = headerRow.createCell(11);
         headerCell11.setCellValue("领取人签字");
         headerCell11.setCellStyle(wrapCellStyle);
 
@@ -223,8 +226,9 @@ public class SysReviewEmployeeController extends BaseController
         sheet.setColumnWidth(6, 3000);
         sheet.setColumnWidth(7, 3000);
         sheet.setColumnWidth(8, 6000);
-        sheet.setColumnWidth(9, 7000);
-        sheet.setColumnWidth(10, 4000);
+        sheet.setColumnWidth(9, 6000);
+        sheet.setColumnWidth(10, 7000);
+        sheet.setColumnWidth(11, 4000);
 
         float totalDay = 0;
         BigDecimal totalCost = new BigDecimal(0);
@@ -269,11 +273,15 @@ public class SysReviewEmployeeController extends BaseController
             cell9.setCellValue(sysReviewEmployee.getExportBankAndCardNumber());
             cell9.setCellStyle(wrapCellStyle);
 
-            Cell cell10 = row.createCell(9);
+            Cell cell12 = row.createCell(9);
+            cell12.setCellValue(sysReviewEmployee.getExportBankAndCardNumber());
+            cell12.setCellStyle(wrapCellStyle);
+
+            Cell cell10 = row.createCell(10);
             cell10.setCellValue(sysReviewEmployee.getIdCard());
             cell10.setCellStyle(wrapCellStyle);
 
-            Cell cell11 = row.createCell(10);
+            Cell cell11 = row.createCell(11);
             cell11.setCellValue(sysReviewEmployee.getExportRecipients());
             cell11.setCellStyle(wrapCellStyle);
 
@@ -322,11 +330,13 @@ public class SysReviewEmployeeController extends BaseController
         cell18.setCellStyle(wrapCellStyle);
         Cell cell19 = row.createCell(8);
         cell19.setCellValue("");
+        Cell cell22 = row.createCell(9);
+        cell22.setCellValue("");
         cell19.setCellStyle(wrapCellStyle);
-        Cell cell20 = row.createCell(9);
+        Cell cell20 = row.createCell(10);
         cell20.setCellValue("");
         cell20.setCellStyle(wrapCellStyle);
-        Cell cell21 = row.createCell(10);
+        Cell cell21 = row.createCell(11);
         cell21.setCellValue("");
         cell21.setCellStyle(wrapCellStyle);
 
@@ -335,7 +345,7 @@ public class SysReviewEmployeeController extends BaseController
         int firstColIndex1 = 0; // 第一个单元格的列索引（从 0 开始）
         int lastColIndex1 = 1;  // 最后一个单元格的列索引（从 0 开始）
         int firstColIndex2 = 2; // 第一个单元格的列索引（从 0 开始）
-        int lastColIndex2 = 10;  // 最后一个单元格的列索引（从 0 开始）
+        int lastColIndex2 = 11;  // 最后一个单元格的列索引（从 0 开始）
         sheet.addMergedRegion(new CellRangeAddress(rowIndex, rowIndex, firstColIndex1, lastColIndex1));
         sheet.addMergedRegion(new CellRangeAddress(rowIndex, rowIndex, firstColIndex2, lastColIndex2));
         // 创建第 n 行，并设置行高
@@ -370,7 +380,7 @@ public class SysReviewEmployeeController extends BaseController
         sheet.addMergedRegion(new CellRangeAddress(rowIndex, rowIndex, 0, 3));
         sheet.addMergedRegion(new CellRangeAddress(rowIndex, rowIndex, 4, 6));
         sheet.addMergedRegion(new CellRangeAddress(rowIndex, rowIndex, 7, 8));
-        sheet.addMergedRegion(new CellRangeAddress(rowIndex, rowIndex, 9, 10));
+        sheet.addMergedRegion(new CellRangeAddress(rowIndex, rowIndex, 9, 11));
         row = sheet.createRow(rowIndex);
         row.setHeight((short) 1000); // 设置行高，这里设置为500个点
         // 创建第一个合并后的单元格

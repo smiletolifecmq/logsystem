@@ -24,6 +24,7 @@ import org.springframework.web.bind.annotation.*;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 import java.io.OutputStream;
+import java.math.BigDecimal;
 import java.text.SimpleDateFormat;
 import java.util.*;
 
@@ -310,6 +311,26 @@ public class SysReviewSubController extends BaseController
         Long userId = SecurityUtils.getUserId();
         sysReviewSub.setUserId(userId);
         List<SysReviewSub> list = sysReviewSubService.selectSysUpcomingReviewList(sysReviewSub);
+        List<Long> reviewIds = new ArrayList<>();
+        for (SysReviewSub review : list){
+            reviewIds.add(review.getReviewId());
+        }
+        if (reviewIds.size() > 0){
+            List<SysReviewSubEmployee> reviewEmployee = sysReviewEmployeeService.selectSysReviewEmployeeByReviewIds(reviewIds);
+            Map<Long, BigDecimal> reviewEmployeeCostMap = new HashMap<>();
+            for (SysReviewSubEmployee value : reviewEmployee){
+                if (reviewEmployeeCostMap.containsKey(value.getReviewId())){
+                    reviewEmployeeCostMap.put(value.getReviewId(),reviewEmployeeCostMap.get(value.getReviewId()).add(value.getCost()));
+                }else {
+                    reviewEmployeeCostMap.put(value.getReviewId(),value.getCost());
+                }
+            }
+            for (SysReviewSub review : list){
+                if (reviewEmployeeCostMap.containsKey(review.getReviewId())){
+                    review.setGuGongMoney(reviewEmployeeCostMap.get(review.getReviewId()));
+                }
+            }
+        }
         return getDataTable(list);
     }
 
@@ -378,6 +399,26 @@ public class SysReviewSubController extends BaseController
     {
         startPage();
         List<SysReviewSub> list = sysReviewSubService.selectCompletedReviewList(sysReviewSub);
+        List<Long> reviewIds = new ArrayList<>();
+        for (SysReviewSub review : list){
+            reviewIds.add(review.getReviewId());
+        }
+        if (reviewIds.size() > 0){
+            List<SysReviewSubEmployee> reviewEmployee = sysReviewEmployeeService.selectSysReviewEmployeeByReviewIds(reviewIds);
+            Map<Long, BigDecimal> reviewEmployeeCostMap = new HashMap<>();
+            for (SysReviewSubEmployee value : reviewEmployee){
+                if (reviewEmployeeCostMap.containsKey(value.getReviewId())){
+                    reviewEmployeeCostMap.put(value.getReviewId(),reviewEmployeeCostMap.get(value.getReviewId()).add(value.getCost()));
+                }else {
+                    reviewEmployeeCostMap.put(value.getReviewId(),value.getCost());
+                }
+            }
+            for (SysReviewSub review : list){
+                if (reviewEmployeeCostMap.containsKey(review.getReviewId())){
+                    review.setGuGongMoney(reviewEmployeeCostMap.get(review.getReviewId()));
+                }
+            }
+        }
         return getDataTable(list);
     }
 
@@ -388,6 +429,26 @@ public class SysReviewSubController extends BaseController
         Long userId = SecurityUtils.getUserId();
         sysReviewSub.setUserId(userId);
         List<SysReviewSub> list = sysReviewSubService.selectDoneReviewList(sysReviewSub);
+        List<Long> reviewIds = new ArrayList<>();
+        for (SysReviewSub review : list){
+            reviewIds.add(review.getReviewId());
+        }
+        if (reviewIds.size() > 0){
+            List<SysReviewSubEmployee> reviewEmployee = sysReviewEmployeeService.selectSysReviewEmployeeByReviewIds(reviewIds);
+            Map<Long, BigDecimal> reviewEmployeeCostMap = new HashMap<>();
+            for (SysReviewSubEmployee value : reviewEmployee){
+                if (reviewEmployeeCostMap.containsKey(value.getReviewId())){
+                    reviewEmployeeCostMap.put(value.getReviewId(),reviewEmployeeCostMap.get(value.getReviewId()).add(value.getCost()));
+                }else {
+                    reviewEmployeeCostMap.put(value.getReviewId(),value.getCost());
+                }
+            }
+            for (SysReviewSub review : list){
+                if (reviewEmployeeCostMap.containsKey(review.getReviewId())){
+                    review.setGuGongMoney(reviewEmployeeCostMap.get(review.getReviewId()));
+                }
+            }
+        }
         return getDataTable(list);
     }
 

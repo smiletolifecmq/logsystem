@@ -236,7 +236,7 @@ export default {
   props: {
     fileType: {
       type: Array,
-      default: () => ["docx", "doc", "ppt", "pdf"],
+      default: () => ["docx", "doc", "ppt", "pdf", "xls", "xlsx"],
     },
   },
   data() {

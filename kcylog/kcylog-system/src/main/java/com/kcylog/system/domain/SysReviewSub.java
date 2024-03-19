@@ -153,6 +153,16 @@ public class SysReviewSub extends BaseEntity
 
     private Long[] reviewExportEmployeeIds;
 
+    private BigDecimal guGongMoney;
+
+    public BigDecimal getGuGongMoney() {
+        return guGongMoney;
+    }
+
+    public void setGuGongMoney(BigDecimal guGongMoney) {
+        this.guGongMoney = guGongMoney;
+    }
+
     public Long getManType() {
         return manType;
     }
