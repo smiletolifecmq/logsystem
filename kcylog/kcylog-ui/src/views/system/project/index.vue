@@ -184,12 +184,16 @@
         <el-table-column label="操作" align="center">
           <template slot-scope="scope">
             <el-button
+              v-if="scope.row.issq !== 1"
               size="mini"
               type="text"
               icon="el-icon-edit"
               @click="applyReviewSub(scope.row)"
               v-hasPermi="['system:project:applyReviewSub']"
               >申请雇工分包</el-button
+            >
+            <el-tag v-if="scope.row.issq == 1" type="success"
+              >已有审核单</el-tag
             >
           </template>
         </el-table-column>
@@ -839,6 +843,7 @@ import {
   delProject,
   addProject,
   updateProject,
+  listProjectSelected,
 } from "@/api/system/project";
 import elDragDialog from "@/api/components/el-drag";
 import { listUnit } from "@/api/system/unit";
@@ -851,6 +856,8 @@ export default {
   },
   data() {
     return {
+      projectIdMap: {},
+      listProjectLocalSelected: [],
       listProjectLocalMap: {},
       winUnits: [],
       startAmPm: "12:00:00",
@@ -1059,6 +1066,7 @@ export default {
     };
   },
   created() {
+    this.getReviewProject();
     this.getList();
     this.loadAllUnits();
   },
@@ -1242,6 +1250,7 @@ export default {
     },
     /** 查询项目列表 */
     getList() {
+      this.getReviewProject();
       this.loading = true;
       listProject(this.addDateRange(this.queryParams, this.dateRange)).then(
         (response) => {
@@ -1255,8 +1264,25 @@ export default {
               response.rows[i]
             );
           }
+          for (var j = 0; j < this.projectList.length; j++) {
+            if (this.projectIdMap.has(this.projectList[j].projectId)) {
+              this.projectList[j].issq = 1;
+            }
+          }
         }
       );
+    },
+    getReviewProject() {
+      listProjectSelected(1).then((response) => {
+        this.listProjectLocalSelected = response.rows;
+        this.projectIdMap = new Map();
+        for (var i = 0; i < this.listProjectLocalSelected.length; i++) {
+          this.projectIdMap.set(
+            this.listProjectLocalSelected[i].projectId,
+            true
+          );
+        }
+      });
     },
     // 取消按钮
     cancel() {

@@ -1124,7 +1124,7 @@
           v-show="glprojectTotal > 0"
           :total="glprojectTotal"
           :page.sync="queryProjectListParams.pageNum"
-          :limit.sync="queryParams.pageSize"
+          :limit.sync="queryProjectListParams.pageSize"
           @pagination="getProjectListLocal"
         />
       </div>
@@ -1283,6 +1283,7 @@ export default {
       reviewProcessOpen: false,
       openInfo: false,
       reviewProcessList: [],
+      projectIdMap: {},
       // 查询参数
       queryParams: {
         pageNum: 1,
@@ -1326,11 +1327,11 @@ export default {
   computed: {},
   created() {
     this.getList();
-    this.getProjectListLocal();
     this.loadAllUnits();
   },
   methods: {
     showProjectView() {
+      this.getProjectListLocal();
       this.glProjectOpen = true;
     },
     loadAllUnits() {
@@ -1420,7 +1421,20 @@ export default {
       }
       this.glProjectOpen = false;
     },
+    getReviewProject() {
+      listProjectSelected(1).then((response) => {
+        this.listProjectLocalSelected = response.rows;
+        this.projectIdMap = new Map();
+        for (var i = 0; i < this.listProjectLocalSelected.length; i++) {
+          this.projectIdMap.set(
+            this.listProjectLocalSelected[i].projectId,
+            true
+          );
+        }
+      });
+    },
     getProjectListLocal() {
+      this.getReviewProject();
       listProject(this.queryProjectListParams).then((response) => {
         this.glprojectTotal = response.total;
         this.listProjectLocalMap = new Map();
@@ -1431,19 +1445,11 @@ export default {
           );
         }
         this.listProjectLocal = response.rows;
-        listProjectSelected(1).then((response) => {
-          this.listProjectLocalSelected = response.rows;
-          const projectIdMap = new Map();
-          for (var i = 0; i < this.listProjectLocalSelected.length; i++) {
-            projectIdMap.set(this.listProjectLocalSelected[i].projectId, true);
+        for (var j = 0; j < this.listProjectLocal.length; j++) {
+          if (this.projectIdMap.has(this.listProjectLocal[j].projectId)) {
+            this.listProjectLocal[j].disabled = true;
           }
-
-          for (var j = 0; j < this.listProjectLocal.length; j++) {
-            if (projectIdMap.has(this.listProjectLocal[j].projectId)) {
-              this.listProjectLocal[j].disabled = true;
-            }
-          }
-        });
+        }
       });
     },
     checkImportProject(row) {
@@ -1785,7 +1791,6 @@ export default {
                   this.open = false;
                   this.openInfo = false;
                   this.getList();
-                  location.reload();
                 });
               }
             } else if (
@@ -1798,7 +1803,6 @@ export default {
                 this.open = false;
                 this.openInfo = false;
                 this.getList();
-                location.reload();
               });
             } else if (
               this.form.startTime == null &&
@@ -1810,7 +1814,6 @@ export default {
                 this.open = false;
                 this.openInfo = false;
                 this.getList();
-                location.reload();
               });
             } else {
               updateReview(this.form).then((response) => {
@@ -1818,7 +1821,6 @@ export default {
                 this.open = false;
                 this.openInfo = false;
                 this.getList();
-                location.reload();
               });
             }
           } else {
@@ -1841,7 +1843,6 @@ export default {
                   this.open = false;
                   this.openInfo = false;
                   this.getList();
-                  location.reload();
                 });
               }
             } else if (
@@ -1854,7 +1855,6 @@ export default {
                 this.open = false;
                 this.openInfo = false;
                 this.getList();
-                location.reload();
               });
             } else if (
               this.form.startTime == null &&
@@ -1866,7 +1866,6 @@ export default {
                 this.open = false;
                 this.openInfo = false;
                 this.getList();
-                location.reload();
               });
             } else {
               addReview(this.form).then((response) => {
@@ -1874,7 +1873,6 @@ export default {
                 this.open = false;
                 this.openInfo = false;
                 this.getList();
-                location.reload();
               });
             }
           }
@@ -1892,7 +1890,6 @@ export default {
         .then(() => {
           this.getList();
           this.$modal.msgSuccess("删除成功");
-          location.reload();
         })
         .catch(() => {});
     },
