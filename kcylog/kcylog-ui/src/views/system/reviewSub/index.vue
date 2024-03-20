@@ -1320,9 +1320,6 @@ export default {
         requester: [
           { required: true, message: "委托单位不能为空", trigger: "blur" },
         ],
-        projectId: [
-          { required: true, message: "请选择关联项目", trigger: "change" },
-        ],
       },
     };
   },
@@ -1350,6 +1347,7 @@ export default {
       this.activeNames.push("2");
       this.activeNames.push("3");
       const projectInfo = this.listProjectLocalMap.get(value);
+      this.form.projectId = value;
       if (projectInfo.projectNum != null && projectInfo.projectNum != "") {
         this.form.serialNum = projectInfo.projectNum;
       }

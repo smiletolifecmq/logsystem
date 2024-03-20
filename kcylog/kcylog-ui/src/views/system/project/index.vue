@@ -559,6 +559,276 @@
         </el-collapse-item>
       </el-collapse>
     </el-dialog>
+
+    <!-- 添加审核单对话框 -->
+    <el-dialog
+      :title="titleReviewSub"
+      :visible.sync="openReviewSub"
+      width="1000px"
+      append-to-body
+      :close-on-click-modal="false"
+      :close-on-press-escape="false"
+    >
+      <el-form
+        ref="formReviewSub"
+        :model="formReviewSub"
+        :rules="rulesReviewSub"
+        label-width="80px"
+      >
+        <el-collapse v-model="activeNamesReviewSub">
+          <el-collapse-item title="雇工详情" name="1">
+            <el-form-item label="工程编号" prop="serialNum">
+              <el-input
+                v-model="formReviewSub.serialNum"
+                placeholder="请输入编号"
+                disabled
+              />
+            </el-form-item>
+            <el-form-item label="项目名称" prop="projectName">
+              <el-input
+                v-model="formReviewSub.projectName"
+                placeholder="请输入项目名称"
+                disabled
+              />
+            </el-form-item>
+            <el-form-item label="委托单位" prop="requester">
+              <el-input
+                v-model="formReviewSub.requester"
+                placeholder="请输入委托单位"
+                disabled
+              />
+            </el-form-item>
+            <el-form-item label="项目金额" prop="porjectMoney">
+              <el-input-number
+                v-model="formReviewSub.porjectMoney"
+                :precision="2"
+                :step="0.1"
+                :min="0.0"
+                placeholder="请输入项目金额"
+              />
+            </el-form-item>
+            <el-form-item label="工作量" prop="workload">
+              <el-input
+                v-model="formReviewSub.workload"
+                type="textarea"
+                placeholder="请输入内容"
+              />
+            </el-form-item>
+
+            <el-form-item label="雇工人数" prop="peopleNum">
+              <el-input-number
+                v-model="formReviewSub.peopleNum"
+                placeholder="请预估雇工人数"
+                :min="0"
+                @change="handleTimeChange"
+              />
+            </el-form-item>
+            <el-form-item label="雇工内容" prop="employmentReason">
+              <el-input
+                v-model="formReviewSub.employmentReason"
+                type="textarea"
+                placeholder="未填写"
+              />
+            </el-form-item>
+            <el-form-item label="雇工开始时间" prop="startTime">
+              <el-date-picker
+                clearable
+                v-model="formReviewSub.startTime"
+                type="date"
+                value-format="yyyy-MM-dd"
+                placeholder="请选择预估雇工工作开始时间"
+                @change="handleTimeChange"
+              >
+              </el-date-picker>
+
+              <el-select
+                v-model="startAmPm"
+                placeholder="请选择"
+                @change="handleTimeChange"
+              >
+                <el-option label="上午" value="12:00:00"></el-option>
+                <el-option label="下午" value="23:59:59"></el-option>
+              </el-select>
+            </el-form-item>
+            <el-form-item label="雇工结束时间" prop="endTime">
+              <el-date-picker
+                clearable
+                v-model="formReviewSub.endTime"
+                type="date"
+                value-format="yyyy-MM-dd"
+                placeholder="请选择预估雇工工作结束时间"
+                @change="handleTimeChange"
+              >
+              </el-date-picker>
+              <el-select
+                v-model="endAmPm"
+                placeholder="请选择"
+                @change="handleTimeChange"
+              >
+                <el-option label="上午" value="12:00:00"></el-option>
+                <el-option label="下午" value="23:59:59"></el-option>
+              </el-select>
+            </el-form-item>
+            <el-form-item label="预估天数" prop="budgetDay">
+              <el-input-number
+                :precision="1"
+                :step="0.5"
+                :min="0.0"
+                v-model="formReviewSub.budgetDay"
+                placeholder="请输入预估天数"
+                @change="handleTimeChange(1)"
+              />
+            </el-form-item>
+            <el-form-item label="预算金额" prop="budgetMoney">
+              <el-input
+                v-model="formReviewSub.budgetMoney"
+                placeholder="请输入预算金额"
+                disabled
+              />
+            </el-form-item>
+            <div class="form-container">
+              <el-form-item label="项目工期" prop="projectStart">
+                <el-date-picker
+                  clearable
+                  v-model="formReviewSub.projectStart"
+                  type="date"
+                  value-format="yyyy-MM-dd"
+                  placeholder="请选择工期开始时间"
+                >
+                </el-date-picker>
+              </el-form-item>
+              <el-form-item label="" prop="projectEnd">
+                <el-date-picker
+                  clearable
+                  v-model="formReviewSub.projectEnd"
+                  type="date"
+                  value-format="yyyy-MM-dd"
+                  placeholder="请选择工期结束时间"
+                >
+                </el-date-picker>
+              </el-form-item>
+            </div>
+          </el-collapse-item>
+          <el-collapse-item title="分包详情" name="2">
+            <el-form-item label="工程编号" prop="serialNum">
+              <el-input
+                v-model="formReviewSub.serialNum"
+                placeholder="请输入工程编号"
+                disabled
+              />
+            </el-form-item>
+            <el-form-item label="项目名称" prop="projectName">
+              <el-input
+                v-model="formReviewSub.projectName"
+                placeholder="请输入项目名称"
+                disabled
+              />
+            </el-form-item>
+            <el-form-item label="项目类型" prop="businessName">
+              <el-input
+                v-model="formReviewSub.businessName"
+                placeholder="请输入抽检项目类型"
+                disabled
+              />
+            </el-form-item>
+            <el-form-item label="委托单位" prop="requester">
+              <el-input
+                v-model="formReviewSub.requester"
+                placeholder="请输入委托单位"
+                disabled
+              />
+            </el-form-item>
+            <el-form-item label="工作内容">
+              <el-input
+                v-model="formReviewSub.workcontent"
+                type="textarea"
+                placeholder="请输入工作内容"
+              />
+            </el-form-item>
+            <el-form-item label="分包类型" prop="subType">
+              <el-radio-group v-model="formReviewSub.subType">
+                <el-radio :label="1">全部分包</el-radio>
+                <el-radio :label="2">局部分包</el-radio>
+              </el-radio-group>
+            </el-form-item>
+            <el-form-item label="预估分包工作量" prop="subWorkload">
+              <el-input
+                v-model="formReviewSub.subWorkload"
+                type="textarea"
+                placeholder="请输入预估分包工作量"
+              />
+            </el-form-item>
+            <el-form-item label="抽签单位" prop="cooperationUnitJson">
+              <el-select
+                v-model="formReviewSub.cooperationUnitJson"
+                placeholder="抽签单位"
+                multiple
+                style="width: 260px"
+              >
+                <el-option
+                  v-for="item in winUnits"
+                  :key="item.value"
+                  :label="item.label"
+                  :value="item.value"
+                >
+                </el-option>
+              </el-select>
+            </el-form-item>
+            <el-form-item label="中签单位" prop="winUnit">
+              <el-select
+                v-model="formReviewSub.winUnit"
+                placeholder="请选择中签单位"
+                style="width: 260px"
+              >
+                <el-option
+                  v-for="item in winUnits"
+                  :key="item.value"
+                  :label="item.label"
+                  :value="item.value"
+                >
+                </el-option>
+              </el-select>
+            </el-form-item>
+            <el-form-item label="抽签时间" prop="lotTime">
+              <el-date-picker
+                clearable
+                v-model="formReviewSub.lotTime"
+                type="date"
+                value-format="yyyy-MM-dd"
+                placeholder="请选择抽签时间"
+              >
+              </el-date-picker>
+            </el-form-item>
+            <div class="form-container">
+              <el-form-item label="项目工期" prop="cpStartTime">
+                <el-date-picker
+                  clearable
+                  v-model="formReviewSub.cpStartTime"
+                  type="date"
+                  value-format="yyyy-MM-dd"
+                  placeholder="请选择工期开始时间"
+                >
+                </el-date-picker>
+              </el-form-item>
+              <el-form-item label="" prop="cpEndTime">
+                <el-date-picker
+                  clearable
+                  v-model="formReviewSub.cpEndTime"
+                  type="date"
+                  value-format="yyyy-MM-dd"
+                  placeholder="请选择工期结束时间"
+                >
+                </el-date-picker>
+              </el-form-item>
+            </div>
+          </el-collapse-item>
+        </el-collapse>
+      </el-form>
+      <div slot="footer" class="dialog-footer">
+        <el-button type="primary" @click="submitFormReviewSub">确 定</el-button>
+        <el-button @click="cancelReviewSub">取 消</el-button>
+      </div>
+    </el-dialog>
   </div>
 </template>
 
@@ -571,6 +841,8 @@ import {
   updateProject,
 } from "@/api/system/project";
 import elDragDialog from "@/api/components/el-drag";
+import { listUnit } from "@/api/system/unit";
+import { addReview } from "@/api/system/reviewSub";
 
 export default {
   name: "Project",
@@ -579,6 +851,25 @@ export default {
   },
   data() {
     return {
+      listProjectLocalMap: {},
+      winUnits: [],
+      startAmPm: "12:00:00",
+      endAmPm: "23:59:59",
+      activeNamesReviewSub: ["1", "2"],
+      formReviewSub: {},
+      rulesReviewSub: {
+        serialNum: [
+          { required: true, message: "编号不能为空", trigger: "blur" },
+        ],
+        projectName: [
+          { required: true, message: "项目名称不能为空", trigger: "blur" },
+        ],
+        requester: [
+          { required: true, message: "委托单位不能为空", trigger: "blur" },
+        ],
+      },
+      titleReviewSub: "",
+      openReviewSub: false,
       statusArr: [
         {
           value: 0,
@@ -769,8 +1060,186 @@ export default {
   },
   created() {
     this.getList();
+    this.loadAllUnits();
   },
   methods: {
+    submitFormReviewSub() {
+      this.$refs["formReviewSub"].validate((valid) => {
+        if (valid) {
+          if (
+            this.formReviewSub.startTime != null &&
+            this.formReviewSub.endTime != null
+          ) {
+            let oldStartTime = this.formReviewSub.startTime;
+            let oldEndTime = this.formReviewSub.endTime;
+            this.formReviewSub.startTime =
+              this.formReviewSub.startTime + " " + this.startAmPm;
+            this.formReviewSub.endTime =
+              this.formReviewSub.endTime + " " + this.endAmPm;
+            if (this.formReviewSub.startTime > this.formReviewSub.endTime) {
+              this.$message({
+                showClose: true,
+                message: "开始时间不能大于结束时间～",
+                type: "error",
+              });
+              this.formReviewSub.startTime = oldStartTime;
+              this.formReviewSub.endTime = oldEndTime;
+            } else {
+              addReview(this.formReviewSub).then((response) => {
+                this.$modal.msgSuccess("新增成功");
+                this.openReviewSub = false;
+                this.getList();
+              });
+            }
+          } else if (
+            this.formReviewSub.startTime != null &&
+            this.formReviewSub.endTime == null
+          ) {
+            this.formReviewSub.startTime =
+              this.formReviewSub.startTime + " " + this.startAmPm;
+            addReview(this.formReviewSub).then((response) => {
+              this.$modal.msgSuccess("新增成功");
+              this.openReviewSub = false;
+              this.getList();
+            });
+          } else if (
+            this.formReviewSub.startTime == null &&
+            this.formReviewSub.endTime != null
+          ) {
+            this.formReviewSub.endTime =
+              this.formReviewSub.endTime + " " + this.endAmPm;
+            addReview(this.formReviewSub).then((response) => {
+              this.$modal.msgSuccess("新增成功");
+              this.openReviewSub = false;
+              this.getList();
+            });
+          } else {
+            addReview(this.formReviewSub).then((response) => {
+              this.$modal.msgSuccess("新增成功");
+              this.openReviewSub = false;
+              this.getList();
+            });
+          }
+        }
+      });
+    },
+    loadAllUnits() {
+      listUnit().then((response) => {
+        for (let i = 0; i < response.rows.length; i++) {
+          const unit = {};
+          unit.value = response.rows[i].unitName;
+          unit.label = response.rows[i].unitName;
+          this.winUnits.push(unit);
+        }
+      });
+    },
+    applyReviewSub(value) {
+      this.formReviewSub = {};
+      const projectId = value.projectId;
+      const projectInfo = this.listProjectLocalMap.get(projectId);
+      this.formReviewSub.projectId = projectId;
+      if (projectInfo.projectNum != null && projectInfo.projectNum != "") {
+        this.formReviewSub.serialNum = projectInfo.projectNum;
+      }
+
+      if (
+        projectInfo.projectNameAlias != null &&
+        projectInfo.projectNameAlias != ""
+      ) {
+        this.formReviewSub.projectName = projectInfo.projectNameAlias;
+      }
+
+      if (
+        projectInfo.requesterAlias != null &&
+        projectInfo.requesterAlias != ""
+      ) {
+        this.formReviewSub.requester = projectInfo.requesterAlias;
+      }
+
+      if (
+        projectInfo.workloadAlias != null &&
+        projectInfo.workloadAlias != ""
+      ) {
+        this.formReviewSub.workload = projectInfo.workloadAlias;
+      }
+
+      if (
+        projectInfo.projectMoneyAlias != null &&
+        projectInfo.projectMoneyAlias != 0
+      ) {
+        this.formReviewSub.porjectMoney = projectInfo.projectMoneyAlias;
+      }
+
+      if (
+        projectInfo.projectStartAlias != null &&
+        projectInfo.projectStartAlias != 0
+      ) {
+        this.formReviewSub.projectStart = projectInfo.projectStartAlias;
+      }
+
+      if (
+        projectInfo.projectEndAlias != null &&
+        projectInfo.projectEndAlias != 0
+      ) {
+        this.formReviewSub.projectEnd = projectInfo.projectEndAlias;
+      }
+
+      if (
+        projectInfo.workcontentAlias != null &&
+        projectInfo.workcontentAlias != ""
+      ) {
+        this.formReviewSub.workcontent = projectInfo.workcontentAlias;
+      }
+
+      if (
+        projectInfo.projectStartAlias != null &&
+        projectInfo.projectStartAlias != 0
+      ) {
+        this.formReviewSub.cpStartTime = projectInfo.projectStartAlias;
+      }
+
+      if (
+        projectInfo.projectEndAlias != null &&
+        projectInfo.projectEndAlias != 0
+      ) {
+        this.formReviewSub.cpEndTime = projectInfo.projectEndAlias;
+      }
+
+      if (projectInfo.projectType != null && projectInfo.projectType != "") {
+        this.formReviewSub.businessName = projectInfo.projectType;
+      }
+      this.openReviewSub = true;
+    },
+    cancelReviewSub() {
+      this.openReviewSub = false;
+      this.formReviewSub = {};
+    },
+    handleTimeChange(budgetDayType) {
+      if (this.form.startTime != null && this.form.endTime != null) {
+        let startTimeTemp = "";
+        if (this.startAmPm == "23:59:59") {
+          startTimeTemp = this.form.startTime + " " + "24:00:00";
+        } else {
+          startTimeTemp = this.form.startTime + " " + this.startAmPm;
+        }
+
+        let endTimeTemp = "";
+        if (this.endAmPm == "23:59:59") {
+          endTimeTemp = this.form.endTime + " " + "24:00:00";
+        } else {
+          endTimeTemp = this.form.endTime + " " + this.endAmPm;
+        }
+        const date1 = new Date(startTimeTemp);
+        const date2 = new Date(endTimeTemp);
+        const diffInMs = date2 - date1;
+        const diffInHours = diffInMs / (1000 * 60 * 60);
+        if (budgetDayType != 1) {
+          this.form.budgetDay = (diffInHours / 12 + 1) * 0.5;
+        }
+        this.form.budgetMoney =
+          (this.form.budgetDay / 0.5) * this.money * this.form.peopleNum;
+      }
+    },
     /** 查询项目列表 */
     getList() {
       this.loading = true;
@@ -779,6 +1248,13 @@ export default {
           this.projectList = response.rows;
           this.total = response.total;
           this.loading = false;
+          this.listProjectLocalMap = new Map();
+          for (var i = 0; i < response.rows.length; i++) {
+            this.listProjectLocalMap.set(
+              response.rows[i].projectId,
+              response.rows[i]
+            );
+          }
         }
       );
     },
