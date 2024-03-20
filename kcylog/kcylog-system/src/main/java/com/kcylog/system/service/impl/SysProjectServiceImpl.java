@@ -168,4 +168,10 @@ public class SysProjectServiceImpl implements ISysProjectService
     {
         return sysProjectMapper.updateSysProjectForMq(sysProject);
     }
+
+    @Override
+    public int deleteSysProjectByCode(String projectCode)
+    {
+        return sysProjectMapper.deleteSysProjectByCode(projectCode);
+    }
 }

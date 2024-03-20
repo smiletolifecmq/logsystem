@@ -139,6 +139,7 @@ public class MqConsume {
 
             if (sysProject.getTwoCheck() != null && !sysProject.getTwoCheck().equals("")){
                 sysProject.setStatus((long)3);
+                sysProject.setIsTwoCheck(1);
             }
 
             if (viewFqProject.getSubpackageType() != null){
@@ -150,10 +151,14 @@ public class MqConsume {
 //            viewFqProjectLog.setSysProjectJson(sysProjectJson);
             viewFqProjectLogService.insertViewFqProjectLog(viewFqProjectLog);
 
-            if (sysProjectService.checkProjectKeyUnique(viewFqProject.getProjectCode()) != null) {
-                sysProjectService.updateSysProjectForMq(sysProject);
+            if (mqMessage.getOpType().equals("DELETE")){
+                sysProjectService.deleteSysProjectByCode(viewFqProject.getProjectCode());
             }else {
-                sysProjectService.insertSysProject(sysProject);
+                if (sysProjectService.checkProjectKeyUnique(viewFqProject.getProjectCode()) != null) {
+                    sysProjectService.updateSysProjectForMq(sysProject);
+                }else {
+                    sysProjectService.insertSysProject(sysProject);
+                }
             }
 
             System.out.println("通过Message:{}" + mqMessage.getOpType());
