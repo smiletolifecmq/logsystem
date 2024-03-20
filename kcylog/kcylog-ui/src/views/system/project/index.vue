@@ -163,6 +163,38 @@
           <el-tag v-else type="danger">其他状态</el-tag>
         </template>
       </el-table-column>
+      <el-table-column label="雇工分包" align="center">
+        <el-table-column label="状态" align="center" prop="subpackageType">
+          <template slot-scope="scope">
+            <el-tag v-if="scope.row.subpackageType == 0" type="danger"
+              >未设置</el-tag
+            >
+            <el-tag v-else-if="scope.row.subpackageType == 1" type="success"
+              >非分包</el-tag
+            >
+            <el-tag v-else-if="scope.row.subpackageType == 2" type="warning"
+              >单一合同分包</el-tag
+            >
+            <el-tag v-else-if="scope.row.subpackageType == 3"
+              >框架协议分包</el-tag
+            >
+            <el-tag v-else type="danger">其他状态</el-tag>
+          </template>
+        </el-table-column>
+        <el-table-column label="操作" align="center">
+          <template slot-scope="scope">
+            <el-button
+              size="mini"
+              type="text"
+              icon="el-icon-edit"
+              @click="applyReviewSub(scope.row)"
+              v-hasPermi="['system:project:applyReviewSub']"
+              >申请雇工分包</el-button
+            >
+          </template>
+        </el-table-column>
+      </el-table-column>
+
       <!-- <el-table-column label="一检时间" align="center" prop="oneCheck" />
       <el-table-column label="二检时间" align="center" prop="twoCheckTime">
         <template slot-scope="scope">
