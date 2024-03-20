@@ -23,13 +23,14 @@
         <result property="arrangeProfit" column="arrange_profit"/>
         <result property="jobContent" column="job_content"/>
         <result property="jobOrgName" column="job_org_name"/>
+        <result property="subpackageType" column="subpackage_type"/>
     </resultMap>
 
     <sql id="selectViewFqProjectVo">
         select project_name, project_code, project_type_name, create_time as register_time,
                create_user_name, charge_item, manager_user_name, customer_name, arrange_start_time,
                arrange_end_time, first_check_time, second_check_time, delivery_time, release_time,
-               arrive_time, arrange_profit, job_content, job_org_name
+               arrive_time, arrange_profit, job_content, job_org_name, subpackage_type
         from view_fq_project_info
     </sql>
 

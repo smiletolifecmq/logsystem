@@ -36,6 +36,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
         <result property="settlementTime"    column="settlement_time"    />
         <result property="fbMoney"    column="fb_money"    />
         <result property="status"    column="status"    />
+        <result property="subpackageType"    column="subpackage_type"    />
         <association property="projectValue" javaType="java.util.List" resultMap="SysProjectValueResult"/>
         <association property="projectCar" javaType="java.util.List" resultMap="SysProjectCarResult"/>
         <association property="reviewSub" javaType="java.util.List" resultMap="SysReviewSubResult"/>
@@ -140,6 +141,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
             <if test="createTime != null">create_time,</if>
             <if test="updateTime != null">update_time,</if>
             <if test="status != null">status,</if>
+            <if test="subpackageType != null">subpackage_type,</if>
          </trim>
         <trim prefix="values (" suffix=")" suffixOverrides=",">
             <if test="projectNameAlias != null and projectNameAlias != ''">#{projectNameAlias},</if>
@@ -168,6 +170,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
             <if test="createTime != null">#{createTime},</if>
             <if test="updateTime != null">#{updateTime},</if>
             <if test="status != null">#{status},</if>
+            <if test="subpackageType != null">#{subpackageType},</if>
          </trim>
     </insert>
 
@@ -385,6 +388,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
             <if test="isTwoCheck != null and isTwoCheck != 0">is_two_check = #{isTwoCheck},</if>
             <if test="twoCheckTime != null and twoCheckTime">two_check_time = #{twoCheckTime},</if>
             <if test="status != null">status = #{status},</if>
+            <if test="subpackageType != null">subpackage_type = #{subpackageType},</if>
         </trim>
         where project_num = #{projectNum}
     </update>

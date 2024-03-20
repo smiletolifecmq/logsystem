@@ -141,6 +141,10 @@ public class MqConsume {
                 sysProject.setStatus((long)3);
             }
 
+            if (viewFqProject.getSubpackageType() != null){
+                sysProject.setSubpackageType(viewFqProject.getSubpackageType());
+            }
+
 //            String sysProjectJson = mapper.writeValueAsString(sysProject);
 //            viewFqProjectLog.setViewFqProjectJson(viewFqProjectJson);
 //            viewFqProjectLog.setSysProjectJson(sysProjectJson);

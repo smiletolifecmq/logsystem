@@ -53,6 +53,16 @@ public class ViewFqProject extends BaseEntity
     //作业部门
     private String jobOrgName;
 
+    private Long subpackageType;
+
+    public Long getSubpackageType() {
+        return subpackageType;
+    }
+
+    public void setSubpackageType(Long subpackageType) {
+        this.subpackageType = subpackageType;
+    }
+
     public String getProjectName() {
         return projectName;
     }

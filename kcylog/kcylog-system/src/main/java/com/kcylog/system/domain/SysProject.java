@@ -135,6 +135,16 @@ public class SysProject extends BaseEntity
 
     private Long status;
 
+    private Long subpackageType;
+
+    public Long getSubpackageType() {
+        return subpackageType;
+    }
+
+    public void setSubpackageType(Long subpackageType) {
+        this.subpackageType = subpackageType;
+    }
+
     public Long getStatus() {
         return status;
     }
