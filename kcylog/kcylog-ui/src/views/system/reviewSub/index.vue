@@ -1053,7 +1053,7 @@
     </el-dialog>
 
     <!-- 获取项目 -->
-    <el-dialog :visible.sync="glProjectOpen" width="1000px" append-to-body>
+    <el-dialog :visible.sync="glProjectOpen" width="1200px" append-to-body>
       <el-form
         :model="queryProjectListParams"
         ref="queryFormProject"
@@ -1104,7 +1104,7 @@
             fixed="right"
           >
             <template slot-scope="scope">
-              <div>
+              <div v-if="!scope.row.disabled">
                 <el-button
                   size="mini"
                   type="text"
@@ -1112,6 +1112,9 @@
                   @click="handleSelectChange(scope.row.projectId)"
                   >导入</el-button
                 >
+              </div>
+              <div v-if="scope.row.disabled">
+                <el-tag type="success">该项目已有雇工分包审核单</el-tag>
               </div>
             </template>
           </el-table-column>
