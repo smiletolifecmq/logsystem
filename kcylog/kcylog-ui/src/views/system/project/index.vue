@@ -139,17 +139,29 @@
         align="center"
         prop="workcontentAlias"
       /> -->
-      <el-table-column label="登记时间" align="center" prop="registerTime" />
+      <el-table-column label="登记时间" align="center" prop="registerTime">
+        <template slot-scope="scope">
+          {{ formatDate(scope.row.registerTime) }}
+        </template>
+      </el-table-column>
       <el-table-column
         label="安排开始时间"
         align="center"
         prop="projectStartAlias"
-      />
+      >
+        <template slot-scope="scope">
+          {{ formatDate(scope.row.projectStartAlias) }}
+        </template></el-table-column
+      >
       <el-table-column
         label="安排结束时间"
         align="center"
         prop="projectEndAlias"
-      />
+      >
+        <template slot-scope="scope">
+          {{ formatDate(scope.row.projectEndAlias) }}
+        </template></el-table-column
+      >
       <el-table-column label="工作状态" align="center" prop="status">
         <template slot-scope="scope">
           <el-tag v-if="scope.row.status == 0" type="danger">临时安排</el-tag>
@@ -169,13 +181,13 @@
             <el-tag v-if="scope.row.subpackageType == 0" type="danger"
               >未设置</el-tag
             >
-            <el-tag v-else-if="scope.row.subpackageType == 1" type="success"
+            <el-tag v-else-if="scope.row.subpackageType == 1" type="danger"
               >非分包</el-tag
             >
-            <el-tag v-else-if="scope.row.subpackageType == 2" type="warning"
+            <el-tag v-else-if="scope.row.subpackageType == 2" type="success"
               >单一合同分包</el-tag
             >
-            <el-tag v-else-if="scope.row.subpackageType == 3"
+            <el-tag v-else-if="scope.row.subpackageType == 3" type="success"
               >框架协议分包</el-tag
             >
             <el-tag v-else type="danger">其他状态</el-tag>
@@ -190,6 +202,7 @@
               icon="el-icon-edit"
               @click="applyReviewSub(scope.row)"
               v-hasPermi="['system:project:applyReviewSub']"
+              style="color: red"
               >申请雇工分包</el-button
             >
             <el-tag v-if="scope.row.issq == 1" type="success"
@@ -399,7 +412,7 @@
                 <i class="el-icon-time"></i>
                 登记时间
               </template>
-              {{ form.registerTime }}
+              {{ formatDate(form.registerTime) }}
             </el-descriptions-item>
             <el-descriptions-item>
               <template slot="label">
@@ -420,14 +433,14 @@
                 <i class="el-icon-time"></i>
                 安排开始时间
               </template>
-              {{ form.projectStartAlias }}
+              {{ formatDate(form.projectStartAlias) }}
             </el-descriptions-item>
             <el-descriptions-item>
               <template slot="label">
                 <i class="el-icon-time"></i>
                 安排结束时间
               </template>
-              {{ form.projectEndAlias }}
+              {{ formatDate(form.projectEndAlias) }}
             </el-descriptions-item>
             <el-descriptions-item>
               <template slot="label">
@@ -448,14 +461,14 @@
                 <i class="el-icon-time"></i>
                 一检时间
               </template>
-              {{ form.oneCheck }}
+              {{ formatDate(form.oneCheck) }}
             </el-descriptions-item>
             <el-descriptions-item>
               <template slot="label">
                 <i class="el-icon-time"></i>
                 二检时间
               </template>
-              {{ form.twoCheck }}
+              {{ formatDate(form.twoCheck) }}
             </el-descriptions-item>
             <el-descriptions-item>
               <template slot="label">
@@ -469,21 +482,21 @@
                 <i class="el-icon-time"></i>
                 通知出件时间
               </template>
-              {{ form.noticeTime }}
+              {{ formatDate(form.noticeTime) }}
             </el-descriptions-item>
             <el-descriptions-item>
               <template slot="label">
                 <i class="el-icon-time"></i>
                 项目出件时间
               </template>
-              {{ form.projectTime }}
+              {{ formatDate(form.projectTime) }}
             </el-descriptions-item>
             <el-descriptions-item>
               <template slot="label">
                 <i class="el-icon-time"></i>
                 送达时间
               </template>
-              {{ form.deliveryTime }}
+              {{ formatDate(form.deliveryTime) }}
             </el-descriptions-item>
           </el-descriptions>
           <el-descriptions class="margin-top" :column="1" border>
@@ -1071,6 +1084,18 @@ export default {
     this.loadAllUnits();
   },
   methods: {
+    formatDate(dateString) {
+      if (dateString == "") {
+        return "";
+      }
+      const dateObject = new Date(dateString);
+      const year = dateObject.getFullYear();
+      const month = dateObject.getMonth() + 1;
+      const day = dateObject.getDate();
+      return `${year}-${(month < 10 ? "0" : "") + month}-${
+        (day < 10 ? "0" : "") + day
+      }`;
+    },
     submitFormReviewSub() {
       this.$refs["formReviewSub"].validate((valid) => {
         if (valid) {

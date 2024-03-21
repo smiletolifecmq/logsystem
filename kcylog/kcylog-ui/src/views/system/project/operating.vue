@@ -82,7 +82,11 @@
       <el-table-column label="项目编号" align="center" prop="projectNum" />
       <el-table-column label="项目类型" align="center" prop="projectType" />
       <el-table-column label="工程负责人" align="center" prop="userNameAlias" />
-      <el-table-column label="登记时间" align="center" prop="registerTime" />
+      <el-table-column label="登记时间" align="center" prop="registerTime">
+        <template slot-scope="scope">
+          {{ formatDate(scope.row.registerTime) }}
+        </template>
+      </el-table-column>
       <el-table-column label="接待人" align="center" prop="receptionist" />
       <el-table-column label="经营产值" align="center" prop="operate" />
       <el-table-column
@@ -147,7 +151,7 @@
                 <i class="el-icon-time"></i>
                 登记时间
               </template>
-              {{ form.registerTime }}
+              {{ formatDate(form.registerTime) }}
             </el-descriptions-item>
             <el-descriptions-item>
               <template slot="label">
@@ -168,14 +172,14 @@
                 <i class="el-icon-time"></i>
                 安排开始时间
               </template>
-              {{ form.projectStartAlias }}
+              {{ formatDate(form.projectStartAlias) }}
             </el-descriptions-item>
             <el-descriptions-item>
               <template slot="label">
                 <i class="el-icon-time"></i>
                 安排结束时间
               </template>
-              {{ form.projectEndAlias }}
+              {{ formatDate(form.projectEndAlias) }}
             </el-descriptions-item>
             <el-descriptions-item>
               <template slot="label">
@@ -196,14 +200,14 @@
                 <i class="el-icon-time"></i>
                 一检时间
               </template>
-              {{ form.oneCheck }}
+              {{ formatDate(form.oneCheck) }}
             </el-descriptions-item>
             <el-descriptions-item>
               <template slot="label">
                 <i class="el-icon-time"></i>
                 二检时间
               </template>
-              {{ form.twoCheck }}
+              {{ formatDate(form.twoCheck) }}
             </el-descriptions-item>
             <el-descriptions-item>
               <template slot="label">
@@ -217,21 +221,21 @@
                 <i class="el-icon-time"></i>
                 通知出件时间
               </template>
-              {{ form.noticeTime }}
+              {{ formatDate(form.noticeTime) }}
             </el-descriptions-item>
             <el-descriptions-item>
               <template slot="label">
                 <i class="el-icon-time"></i>
                 项目出件时间
               </template>
-              {{ form.projectTime }}
+              {{ formatDate(form.projectTime) }}
             </el-descriptions-item>
             <el-descriptions-item>
               <template slot="label">
                 <i class="el-icon-time"></i>
                 送达时间
               </template>
-              {{ form.deliveryTime }}
+              {{ formatDate(form.deliveryTime) }}
             </el-descriptions-item>
           </el-descriptions>
           <el-descriptions class="margin-top" :column="1" border>
@@ -359,6 +363,18 @@ export default {
     this.getList();
   },
   methods: {
+    formatDate(dateString) {
+      if (dateString == "") {
+        return "";
+      }
+      const dateObject = new Date(dateString);
+      const year = dateObject.getFullYear();
+      const month = dateObject.getMonth() + 1;
+      const day = dateObject.getDate();
+      return `${year}-${(month < 10 ? "0" : "") + month}-${
+        (day < 10 ? "0" : "") + day
+      }`;
+    },
     handleChange(val) {
       console.log(val);
     },

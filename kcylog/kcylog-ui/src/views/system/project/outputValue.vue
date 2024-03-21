@@ -72,7 +72,11 @@
         prop="workcontentAlias"
       />
       <el-table-column label="工程负责人" align="center" prop="userNameAlias" />
-      <el-table-column label="登记时间" align="center" prop="registerTime" />
+      <el-table-column label="登记时间" align="center" prop="registerTime">
+        <template slot-scope="scope">
+          {{ formatDate(scope.row.registerTime) }}
+        </template>
+      </el-table-column>
       <el-table-column label="接待人" align="center" prop="receptionist" />
       <el-table-column label="委托单位" align="center" prop="requesterAlias" />
       <!-- <el-table-column label="产值占比" align="center" prop="projectValue">
@@ -353,6 +357,18 @@ export default {
     this.getList();
   },
   methods: {
+    formatDate(dateString) {
+      if (dateString == "") {
+        return "";
+      }
+      const dateObject = new Date(dateString);
+      const year = dateObject.getFullYear();
+      const month = dateObject.getMonth() + 1;
+      const day = dateObject.getDate();
+      return `${year}-${(month < 10 ? "0" : "") + month}-${
+        (day < 10 ? "0" : "") + day
+      }`;
+    },
     querySearch(queryString, cb) {
       var restaurants = this.restaurants;
       var results = queryString
