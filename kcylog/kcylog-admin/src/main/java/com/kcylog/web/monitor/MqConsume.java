@@ -140,6 +140,8 @@ public class MqConsume {
             if (sysProject.getTwoCheck() != null && !sysProject.getTwoCheck().equals("")){
                 sysProject.setStatus((long)3);
                 sysProject.setIsTwoCheck(1);
+                Date date = DateUtils.parseDate(sysProject.getTwoCheck(), "yyyy-MM-dd HH:mm:ss");
+                sysProject.setTwoCheckTime(date);
             }
 
             if (viewFqProject.getSubpackageType() != null){
