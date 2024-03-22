@@ -458,18 +458,6 @@
                         <template slot="label"> 抽签时间 </template>
                         {{ parseTime(subcontractForm.lotTime, "{y}-{m}-{d}") }}
                       </el-descriptions-item>
-                      <el-descriptions-item>
-                        <template slot="label"> 工期开始 </template>
-                        {{
-                          parseTime(subcontractForm.cpStartTime, "{y}-{m}-{d}")
-                        }}
-                      </el-descriptions-item>
-                      <el-descriptions-item>
-                        <template slot="label"> 工期结束 </template>
-                        {{
-                          parseTime(subcontractForm.cpEndTime, "{y}-{m}-{d}")
-                        }}
-                      </el-descriptions-item>
                     </el-descriptions>
                   </div>
                 </el-card>

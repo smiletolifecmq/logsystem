@@ -339,14 +339,6 @@
                         <template slot="label"> 委托单位 </template>
                         {{ formInfo.requester }}
                       </el-descriptions-item> -->
-                    <el-descriptions-item>
-                      <template slot="label"> 工作量 </template>
-                      {{ formInfo.workload }}
-                    </el-descriptions-item>
-                    <el-descriptions-item>
-                      <template slot="label"> 项目金额 </template>
-                      {{ formInfo.porjectMoney }}
-                    </el-descriptions-item>
                     <!-- <el-descriptions-item>
                       <template slot="label"> 分包情况 </template>
                       <div v-if="formInfo.subcontract == 1">是</div>
@@ -388,6 +380,15 @@
                       <template slot="label"> 预算 </template>
                       {{ formInfo.budgetMoney }}
                     </el-descriptions-item>
+                    <el-descriptions-item>
+                      <template slot="label"> 雇工方式 </template>
+                      <span v-if="formInfo.manType === 0"
+                        ><el-tag type="success">雇工</el-tag>
+                      </span>
+                      <span v-if="formInfo.manType === 1"
+                        ><el-tag type="danger">第三方雇工</el-tag></span
+                      >
+                    </el-descriptions-item>
                   </el-descriptions>
                 </el-card>
               </el-col>
@@ -424,10 +425,6 @@
                           {{ subcontractForm.requester }}
                         </el-descriptions-item> -->
                       <el-descriptions-item>
-                        <template slot="label"> 工作内容 </template>
-                        {{ subcontractForm.workcontent }}
-                      </el-descriptions-item>
-                      <el-descriptions-item>
                         <template slot="label"> 分包类型 </template>
                         <span v-if="subcontractForm.subType == 1">全部分包</span
                         ><span v-if="subcontractForm.subType == 2"
@@ -460,18 +457,6 @@
                       <el-descriptions-item>
                         <template slot="label"> 抽签时间 </template>
                         {{ parseTime(subcontractForm.lotTime, "{y}-{m}-{d}") }}
-                      </el-descriptions-item>
-                      <el-descriptions-item>
-                        <template slot="label"> 工期开始 </template>
-                        {{
-                          parseTime(subcontractForm.cpStartTime, "{y}-{m}-{d}")
-                        }}
-                      </el-descriptions-item>
-                      <el-descriptions-item>
-                        <template slot="label"> 工期结束 </template>
-                        {{
-                          parseTime(subcontractForm.cpEndTime, "{y}-{m}-{d}")
-                        }}
                       </el-descriptions-item>
                     </el-descriptions>
                   </div>
