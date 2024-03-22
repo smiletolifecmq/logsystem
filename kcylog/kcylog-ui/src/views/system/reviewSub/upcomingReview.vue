@@ -292,7 +292,7 @@
                   <i class="el-icon-time"></i>
                   登记时间
                 </template>
-                {{ formInfo.project.registerTime }}
+                {{ formatDateReviewSub(formInfo.project.registerTime) }}
               </el-descriptions-item>
               <el-descriptions-item>
                 <template slot="label">
@@ -313,14 +313,14 @@
                   <i class="el-icon-time"></i>
                   安排开始时间
                 </template>
-                {{ formInfo.project.projectStartAlias }}
+                {{ formatDateReviewSub(formInfo.project.projectStartAlias) }}
               </el-descriptions-item>
               <el-descriptions-item>
                 <template slot="label">
                   <i class="el-icon-time"></i>
                   安排结束时间
                 </template>
-                {{ formInfo.project.projectEndAlias }}
+                {{ formatDateReviewSub(formInfo.project.projectEndAlias) }}
               </el-descriptions-item>
               <el-descriptions-item>
                 <template slot="label">
@@ -341,14 +341,14 @@
                   <i class="el-icon-time"></i>
                   一检时间
                 </template>
-                {{ formInfo.project.oneCheck }}
+                {{ formatDateReviewSub(formInfo.project.oneCheck) }}
               </el-descriptions-item>
               <el-descriptions-item>
                 <template slot="label">
                   <i class="el-icon-time"></i>
                   二检时间
                 </template>
-                {{ formInfo.project.twoCheck }}
+                {{ formatDateReviewSub(formInfo.project.twoCheck) }}
               </el-descriptions-item>
               <el-descriptions-item>
                 <template slot="label">
@@ -362,21 +362,21 @@
                   <i class="el-icon-time"></i>
                   通知出件时间
                 </template>
-                {{ formInfo.project.noticeTime }}
+                {{ formatDateReviewSub(formInfo.project.noticeTime) }}
               </el-descriptions-item>
               <el-descriptions-item>
                 <template slot="label">
                   <i class="el-icon-time"></i>
                   项目出件时间
                 </template>
-                {{ formInfo.project.projectTime }}
+                {{ formatDateReviewSub(formInfo.project.projectTime) }}
               </el-descriptions-item>
               <el-descriptions-item>
                 <template slot="label">
                   <i class="el-icon-time"></i>
                   送达时间
                 </template>
-                {{ formInfo.project.deliveryTime }}
+                {{ formatDateReviewSub(formInfo.project.deliveryTime) }}
               </el-descriptions-item>
             </el-descriptions>
             <el-descriptions class="margin-top" :column="1" border>
@@ -843,6 +843,18 @@ export default {
     this.ggtj();
   },
   methods: {
+    formatDateReviewSub(dateString) {
+      if (dateString == "") {
+        return "";
+      }
+      const dateObject = new Date(dateString);
+      const year = dateObject.getFullYear();
+      const month = dateObject.getMonth() + 1;
+      const day = dateObject.getDate();
+      return `${year}-${(month < 10 ? "0" : "") + month}-${
+        (day < 10 ? "0" : "") + day
+      }`;
+    },
     ggtj() {
       upcomingListReview(
         this.addDateRange({

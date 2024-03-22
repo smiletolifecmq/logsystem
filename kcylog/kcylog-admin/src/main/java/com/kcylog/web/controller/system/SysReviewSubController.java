@@ -233,13 +233,13 @@ public class SysReviewSubController extends BaseController
         sysProject.setIsShow(1);
         sysProjectService.updateIsShowByProjectId(sysProject);
 
-        int result = sysReviewSubProcessService.insertSysReviewSubProcessBatch(reviewProcess);
+        sysReviewSubProcessService.insertSysReviewSubProcessBatch(reviewProcess);
         SysProjectRelation projectRelation = new SysProjectRelation();
         projectRelation.setProjectId(sysReviewSub.getProjectId());
         projectRelation.setReviewType(HiredWorkerType);
         projectRelation.setReviewId(sysReviewSub.getReviewId());
         sysProjectRelationService.insertSysProjectRelation(projectRelation);
-        return toAjax(result);
+        return success(sysReviewSub.getReviewId().intValue());
     }
 
     /**
