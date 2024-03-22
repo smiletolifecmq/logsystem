@@ -141,7 +141,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 
     <update id="updateStatusByUserIdReviewId" parameterType="Long">
         update sys_review_sub_process
-        set status = 2
+        set status = 2,review_time = CONVERT_TZ(CURRENT_TIMESTAMP, 'UTC', 'Asia/Shanghai')
         where review_id = #{reviewId} and user_id = 1
     </update>
 

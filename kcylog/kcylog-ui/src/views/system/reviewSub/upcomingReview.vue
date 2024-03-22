@@ -240,7 +240,6 @@
                 ? ''
                 : reviewProcessDescription(reviewProcess)
             "
-            v-if="!(reviewProcess.userId === 1 && reviewProcess.status === 2)"
           ></el-step>
         </el-steps>
       </div>
@@ -962,6 +961,19 @@ export default {
             this.reviewProcessActive = this.reviewProcessActive + 1;
           }
         }
+        if (
+          this.reviewProcessList[2].userId === 1 &&
+          this.reviewProcessList[2].status === 2
+        ) {
+          let reviewProcessListTemp = [];
+          reviewProcessListTemp[0] = this.reviewProcessList[0];
+          reviewProcessListTemp[1] = this.reviewProcessList[2];
+          reviewProcessListTemp[1].user.userName = "填写最终雇工";
+          reviewProcessListTemp[1].userId = -1;
+          reviewProcessListTemp[2] = this.reviewProcessList[1];
+          reviewProcessListTemp[3] = this.reviewProcessList[3];
+          this.reviewProcessList = reviewProcessListTemp;
+        }
         this.reviewProcessOpen = true;
       });
     },
@@ -1053,6 +1065,8 @@ export default {
             } else {
               this.$modal.msgSuccess("已驳回审核");
             }
+            this.statisticsData = [];
+            this.ggtj();
             this.openInfo = false;
             this.formInfo.auditOpinion = "";
           });

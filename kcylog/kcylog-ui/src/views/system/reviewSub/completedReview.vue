@@ -833,6 +833,8 @@ export default {
             if (response.code == 200) {
               this.$modal.msgSuccess("已生成结算单");
               this.getUpcomingList();
+              this.statisticsData = [];
+              this.ggtj();
             } else {
               this.$message({
                 showClose: true,
