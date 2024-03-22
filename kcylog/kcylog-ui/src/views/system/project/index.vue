@@ -222,8 +222,11 @@
               style="color: red"
               >申请雇工分包</el-button
             >
-            <el-tag v-if="scope.row.issq == 1" type="success"
+            <el-tag v-if="showReviewStatus(scope.row.issq)" type="success"
               >已有审核单</el-tag
+            >
+            <el-tag v-if="!showReviewStatus(scope.row.issq)" type="danger"
+              >未有审核单</el-tag
             >
           </template>
         </el-table-column>
@@ -865,6 +868,7 @@ import {
 import elDragDialog from "@/api/components/el-drag";
 import { listUnit } from "@/api/system/unit";
 import { addReview, setReviewStatus } from "@/api/system/reviewSub";
+import userInfo from "@/store/modules/user";
 
 export default {
   name: "Project",
@@ -1087,8 +1091,26 @@ export default {
     this.getReviewProject();
     this.getList();
     this.loadAllUnits();
+    console.log(userInfo);
   },
   methods: {
+    showReviewStatus(status) {
+      if (status == 1) {
+        return true;
+      } else if (
+        status != 1 &&
+        (userInfo.state.userId == 8 ||
+          userInfo.state.userId == 9 ||
+          userInfo.state.userId == 1 ||
+          userInfo.state.userId == 11 ||
+          userInfo.state.userId == 12 ||
+          userInfo.state.userId == 13 ||
+          userInfo.state.userId == 14 ||
+          userInfo.state.userId == 15)
+      ) {
+        return false;
+      }
+    },
     formatDate(dateString) {
       if (dateString == "") {
         return "";
