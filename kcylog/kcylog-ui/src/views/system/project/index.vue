@@ -277,7 +277,7 @@
             type="text"
             icon="el-icon-tickets"
             @click="handleDetail(scope.row)"
-            v-hasPermi="['system:project:detail']"
+            v-hasPermi="['system:project:query']"
             >详情</el-button
           >
           <el-button
