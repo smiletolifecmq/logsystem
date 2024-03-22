@@ -3,7 +3,7 @@
     <el-form
       :model="queryParams"
       ref="queryForm"
-      size="small"
+      size="mini"
       :inline="true"
       v-show="showSearch"
       label-width="68px"
@@ -35,6 +35,14 @@
           </el-option>
         </el-select>
       </el-form-item>
+      <el-form-item label="项目类型" prop="projectType">
+        <el-input
+          v-model="queryParams.projectType"
+          placeholder="请输入项目类型"
+          clearable
+          @keyup.enter.native="handleQuery"
+        />
+      </el-form-item>
 
       <el-form-item label="作业部门" prop="department">
         <el-select
@@ -52,7 +60,7 @@
         </el-select>
       </el-form-item>
 
-      <el-form-item label="结算状态" prop="outputStatus">
+      <!-- <el-form-item label="结算状态" prop="outputStatus">
         <el-select v-model="queryParams.outputStatus" placeholder="请选择">
           <el-option
             v-for="item in outputStatusList"
@@ -62,8 +70,16 @@
           >
           </el-option>
         </el-select>
+      </el-form-item> -->
+      <el-form-item label="负责人" prop="userNameAlias">
+        <el-input
+          v-model="queryParams.userNameAlias"
+          placeholder="请输入项目负责人"
+          clearable
+          @keyup.enter.native="handleQuery"
+        />
       </el-form-item>
-      <el-form-item label="结算时间">
+      <el-form-item label="安排时间">
         <el-date-picker
           v-model="dateRange"
           style="width: 240px"
@@ -89,7 +105,7 @@
       </el-form-item>
     </el-form>
 
-    <el-row :gutter="10" class="mb8">
+    <!-- <el-row :gutter="10" class="mb8">
       <el-col :span="1.5">
         <el-button
           type="primary"
@@ -117,12 +133,13 @@
         :showSearch.sync="showSearch"
         @queryTable="getList"
       ></right-toolbar>
-    </el-row>
+    </el-row> -->
 
     <el-table
       v-loading="loading"
       :data="projectList"
       @selection-change="handleSelectionChange"
+      size="mini"
     >
       <el-table-column label="委托单位" align="center" prop="requesterAlias" />
       <el-table-column
