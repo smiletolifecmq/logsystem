@@ -43,6 +43,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
         <result property="subWorkload"    column="sub_workload"    />
         <result property="realWorkload"    column="real_workload"    />
         <result property="manType"    column="man_type"    />
+        <result property="subpackageType"    column="subpackage_type"    />
 
         <association property="dept" column="dept_name" javaType="SysDept" resultMap="SysReviewSubDeptResult"/>
         <association property="user" column="user_name" javaType="SysUser" resultMap="SysReviewSubUserResult"/>
@@ -156,6 +157,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
             <if test="finalTime != null">final_time,</if>
             <if test="subcontract != null">subcontract,</if>
             <if test="manType != null">man_type,</if>
+            <if test="subpackageType != null">subpackage_type,</if>
 
             <if test="lotTime != null">lot_time,</if>
             <if test="businessName != null">business_name,</if>
@@ -193,6 +195,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
             <if test="finalTime != null">#{finalTime},</if>
             <if test="subcontract != null">#{subcontract},</if>
             <if test="manType != null">#{manType},</if>
+            <if test="subpackageType != null">#{subpackageType},</if>
 
             <if test="lotTime != null">#{lotTime},</if>
             <if test="businessName != null">#{businessName},</if>

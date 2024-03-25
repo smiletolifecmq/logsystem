@@ -267,6 +267,12 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
             <if test="projectNum != null  and projectNum != ''"> and project_num like concat('%', #{projectNum}, '%')</if>
             <if test="operateUser == 1"> and operate != 0.00</if>
             <if test="operateUser == 2"> and operate = 0.00</if>
+            <if test="params.beginTime != null and params.beginTime != ''"><!-- 开始时间检索 -->
+                and (date_format(two_check,'%y%m') &gt;= date_format(#{params.beginTime},'%y%m'))
+            </if>
+            <if test="params.endTime != null and params.endTime != ''"><!-- 结束时间检索 -->
+                and (date_format(two_check,'%y%m') &lt;= date_format(#{params.endTime},'%y%m'))
+            </if>
             <if test="receptionist != null  and receptionist != ''"> and receptionist = #{receptionist}</if>
             and is_two_check = 1
         </where>

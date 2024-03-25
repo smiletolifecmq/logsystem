@@ -1302,6 +1302,8 @@ export default {
         this.formReviewSub.businessName = projectInfo.projectType;
       }
 
+      this.formReviewSub.subpackageType = projectInfo.subpackageType;
+
       this.titleReviewSub = "雇工分包申请";
       this.openReviewSub = true;
     },

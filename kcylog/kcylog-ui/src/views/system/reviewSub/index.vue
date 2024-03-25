@@ -1369,6 +1369,7 @@ export default {
       if (projectInfo.projectType != null && projectInfo.projectType != "") {
         this.form.businessName = projectInfo.projectType;
       }
+      this.form.subpackageType = projectInfo.subpackageType;
       this.glProjectOpen = false;
     },
     getReviewProject() {

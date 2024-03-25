@@ -32,6 +32,17 @@
           @keyup.enter.native="handleQuery"
         />
       </el-form-item>
+      <el-form-item label="二检时间">
+        <el-date-picker
+          v-model="dateRange"
+          type="monthrange"
+          value-format="yyyy-MM-dd"
+          range-separator="至"
+          start-placeholder="开始月份"
+          end-placeholder="结束月份"
+        >
+        </el-date-picker>
+      </el-form-item>
       <el-form-item label="经营产值" prop="operateUser">
         <el-select
           v-model="queryParams.operateUser"
@@ -85,6 +96,11 @@
       <el-table-column label="登记时间" align="center" prop="registerTime">
         <template slot-scope="scope">
           {{ formatDate(scope.row.registerTime) }}
+        </template>
+      </el-table-column>
+      <el-table-column label="二检时间" align="center" prop="twoCheck">
+        <template slot-scope="scope">
+          {{ formatDateToMonth(scope.row.twoCheck) }}
         </template>
       </el-table-column>
       <el-table-column label="接待人" align="center" prop="receptionist" />
@@ -294,6 +310,7 @@ export default {
   },
   data() {
     return {
+      dateRange: [],
       operates: [
         {
           value: "1",
@@ -375,13 +392,24 @@ export default {
         (day < 10 ? "0" : "") + day
       }`;
     },
+    formatDateToMonth(dateString) {
+      if (dateString == "") {
+        return "";
+      }
+      const dateObject = new Date(dateString);
+      const year = dateObject.getFullYear();
+      const month = dateObject.getMonth() + 1;
+      return `${year}-${(month < 10 ? "0" : "") + month}`;
+    },
     handleChange(val) {
       console.log(val);
     },
     /** 查询项目列表 */
     getList() {
       this.loading = true;
-      listProjectOperate(this.queryParams).then((response) => {
+      listProjectOperate(
+        this.addDateRange(this.queryParams, this.dateRange)
+      ).then((response) => {
         this.projectList = response.rows;
         this.total = response.total;
         this.loading = false;
@@ -428,6 +456,7 @@ export default {
     },
     /** 重置按钮操作 */
     resetQuery() {
+      this.dateRange = [];
       this.resetForm("queryForm");
       this.handleQuery();
     },

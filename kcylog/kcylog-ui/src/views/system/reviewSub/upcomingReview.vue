@@ -184,6 +184,23 @@
       </el-table-column>
       <el-table-column label="负责人" align="center" prop="user.userName" />
       <el-table-column label="部门" align="center" prop="dept.deptName" />
+      <el-table-column label="分包状态" align="center" prop="subpackageType">
+        <template slot-scope="scope">
+          <el-tag v-if="scope.row.subpackageType == 0" type="danger"
+            >未设置</el-tag
+          >
+          <el-tag v-else-if="scope.row.subpackageType == 1" type="danger"
+            >非分包</el-tag
+          >
+          <el-tag v-else-if="scope.row.subpackageType == 2" type="success"
+            >单一合同分包</el-tag
+          >
+          <el-tag v-else-if="scope.row.subpackageType == 3" type="success"
+            >框架协议分包</el-tag
+          >
+          <el-tag v-else type="danger">其他状态</el-tag>
+        </template>
+      </el-table-column>
       <el-table-column
         label="操作"
         align="center"
@@ -392,6 +409,25 @@
                   工作量
                 </template>
                 {{ formInfo.project.workloadAlias }}
+              </el-descriptions-item>
+              <el-descriptions-item>
+                <template slot="label">
+                  <i class="el-icon-document"></i>
+                  分包状态
+                </template>
+                <el-tag v-if="formInfo.subpackageType == 0" type="danger"
+                  >未设置</el-tag
+                >
+                <el-tag v-else-if="formInfo.subpackageType == 1" type="danger"
+                  >非分包</el-tag
+                >
+                <el-tag v-else-if="formInfo.subpackageType == 2" type="success"
+                  >单一合同分包</el-tag
+                >
+                <el-tag v-else-if="formInfo.subpackageType == 3" type="success"
+                  >框架协议分包</el-tag
+                >
+                <el-tag v-else type="danger">其他状态</el-tag>
               </el-descriptions-item>
             </el-descriptions>
           </div>

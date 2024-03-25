@@ -97,6 +97,8 @@ public class SysReviewSub extends BaseEntity
 
     private Long manType;
 
+    private Long subpackageType;
+
     private SysProjectRelation projectRelation;
 
     private int finalSecondStatus;
@@ -154,6 +156,14 @@ public class SysReviewSub extends BaseEntity
     private Long[] reviewExportEmployeeIds;
 
     private BigDecimal guGongMoney;
+
+    public Long getSubpackageType() {
+        return subpackageType;
+    }
+
+    public void setSubpackageType(Long subpackageType) {
+        this.subpackageType = subpackageType;
+    }
 
     public BigDecimal getGuGongMoney() {
         return guGongMoney;
