@@ -102,7 +102,7 @@
             icon="el-icon-tickets"
             @click="handleDetail(scope.row)"
             v-hasPermi="['system:project:detail']"
-            >产值结算</el-button
+            >详情</el-button
           >
         </template>
       </el-table-column>
@@ -125,62 +125,54 @@
     >
       <el-collapse v-model="activeNames" @change="handleChange">
         <el-collapse-item title="详情" name="1">
-          <el-descriptions class="margin-top" :column="3" border>
+          <el-descriptions class="margin-top" :column="2" border>
             <el-descriptions-item>
               <template slot="label">
                 <i class="el-icon-s-home"></i>
-                委托单位
+                经营产值
               </template>
-              {{ form.requesterAlias }}
+              {{ form.operate }}
             </el-descriptions-item>
             <el-descriptions-item>
               <template slot="label">
                 <i class="el-icon-tickets"></i>
-                项目编号
+                分包金额
               </template>
-              {{ form.projectNum }}
+              {{ form.fbMoney }}
             </el-descriptions-item>
             <el-descriptions-item>
               <template slot="label">
                 <i class="el-icon-user"></i>
-                工程负责人
+                分包工作量
               </template>
-              {{ form.userNameAlias }}
+              {{ form.fbWorkload }}
             </el-descriptions-item>
             <el-descriptions-item>
               <template slot="label">
                 <i class="el-icon-office-building"></i>
-                项目名称
+                雇工金额
               </template>
               {{ form.projectNameAlias }}
             </el-descriptions-item>
             <el-descriptions-item>
               <template slot="label">
                 <i class="el-icon-notebook-2"></i>
-                项目类型
+                利润
               </template>
               {{ form.projectType }}
             </el-descriptions-item>
-            <el-descriptions-item> </el-descriptions-item>
-            <el-descriptions-item>
-              <template slot="label">
-                <i class="el-icon-document"></i>
-                工作量
-              </template>
-              {{ form.workloadAlias }}
-            </el-descriptions-item>
           </el-descriptions>
         </el-collapse-item>
-        <el-collapse-item title="项目比例填写" name="2">
+        <el-collapse-item title="人员安排" name="2">
           <el-form ref="form" :model="form" :rules="rules" label-width="80px">
-            <el-button
+            <!-- <el-button
               v-if="form.projectValue != null && form.projectValue.length == 0"
               type="text"
               icon="el-icon-circle-plus"
               size="medium"
               style="margin-left: 20px; margin-bottom: 20px"
               @click="addProject()"
-            ></el-button>
+            ></el-button> -->
             <el-form-item
               v-for="(project, index) in form.projectValue"
               :key="index"
@@ -190,7 +182,7 @@
                 <el-col :span="8">
                   <el-form-item label="用户名" prop="userName">
                     <el-autocomplete
-                      :disabled="form.outputStatus === 1"
+                      disabled
                       class="inline-input"
                       v-model="project.userName"
                       :fetch-suggestions="querySearch"
@@ -201,14 +193,14 @@
                 <el-col :span="8">
                   <el-form-item label="占比" prop="proportion">
                     <el-input-number
-                      :disabled="form.outputStatus === 1"
+                      disabled
                       v-model="project.proportion"
                       :max="100"
                     ></el-input-number>
                   </el-form-item>
                 </el-col>
                 <el-col :span="1">% </el-col>
-                <el-col :span="7">
+                <!-- <el-col :span="7">
                   <el-button
                     :disabled="form.outputStatus === 1"
                     v-if="index != 0 || form.projectValue.length == 1"
@@ -226,7 +218,7 @@
                     style="margin-left: 20px; margin-bottom: 20px"
                     @click="removeProject(index)"
                   ></el-button>
-                </el-col>
+                </el-col> -->
               </el-row>
             </el-form-item>
           </el-form>
@@ -234,7 +226,7 @@
             class="dialog-footer"
             style="display: flex; justify-content: flex-end"
           >
-            <el-button
+            <!-- <el-button
               v-if="form.outputStatus === 0"
               type="success"
               @click="submitForm(1)"
@@ -245,7 +237,7 @@
               type="primary"
               @click="submitForm(0)"
               >保 存</el-button
-            >
+            > -->
             <el-button @click="cancel">取 消</el-button>
           </div>
         </el-collapse-item>

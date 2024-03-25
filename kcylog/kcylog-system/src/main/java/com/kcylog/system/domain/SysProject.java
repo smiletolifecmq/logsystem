@@ -109,6 +109,8 @@ public class SysProject extends BaseEntity
     /** 填写经营产值人 */
     private String operateUser;
 
+    private String fbWorkload;
+
     private Integer isCarRegister;
 
     private Integer isShow;
@@ -136,6 +138,14 @@ public class SysProject extends BaseEntity
     private Long status;
 
     private Long subpackageType;
+
+    public String getFbWorkload() {
+        return fbWorkload;
+    }
+
+    public void setFbWorkload(String fbWorkload) {
+        this.fbWorkload = fbWorkload;
+    }
 
     public Long getSubpackageType() {
         return subpackageType;
