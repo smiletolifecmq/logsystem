@@ -344,7 +344,6 @@
                     <el-input
                       v-model="form.porjectMoney"
                       placeholder="请输入项目金额"
-                      disabled
                     />
                   </el-form-item>
                   <el-form-item label="工作内容">

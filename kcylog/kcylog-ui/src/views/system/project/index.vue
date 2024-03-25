@@ -222,10 +222,10 @@
               style="color: red"
               >申请雇工分包</el-button
             >
-            <el-tag v-if="showReviewStatus(scope.row.issq)" type="success"
+            <el-tag v-if="scope.row.issq == 1" type="success"
               >已有审核单</el-tag
             >
-            <el-tag v-if="!showReviewStatus(scope.row.issq)" type="danger"
+            <el-tag v-if="showReviewStatus(scope.row.issq)" type="danger"
               >未有审核单</el-tag
             >
           </template>
@@ -1095,9 +1095,7 @@ export default {
   },
   methods: {
     showReviewStatus(status) {
-      if (status == 1) {
-        return true;
-      } else if (
+      if (
         status != 1 &&
         (userInfo.state.userId == 8 ||
           userInfo.state.userId == 9 ||
@@ -1108,6 +1106,8 @@ export default {
           userInfo.state.userId == 14 ||
           userInfo.state.userId == 15)
       ) {
+        return true;
+      } else {
         return false;
       }
     },
