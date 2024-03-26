@@ -218,6 +218,15 @@
               >审核单详情</el-button
             >
           </div>
+          <div>
+            <el-button
+              size="mini"
+              type="text"
+              icon="el-icon-s-operation"
+              @click="handleReviewProcess(scope.row)"
+              >流程详情</el-button
+            >
+          </div>
         </template>
       </el-table-column>
     </el-table>

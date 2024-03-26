@@ -310,13 +310,14 @@
 
     <select id="selectCompletedReviewList" parameterType="SysReviewSub" resultMap="SysReviewSubResult">
         <include refid="selectSysReviewSubVo"/>
+        inner join sys_review_sub_process rsp on r.review_id = rsp.review_id
         <where>
             <if test="serialNum != null  and serialNum != ''">and r.serial_num = #{serialNum}</if>
             <if test="projectName != null  and projectName != ''">and r.project_name like concat('%', #{projectName},
                 '%')
             </if>
             <if test="requester != null  and requester != ''">and r.requester = #{requester}</if>
-            <if test="status != null and status != -1">and r.status = #{status}</if>
+            <if test="status != null and status != -1">and (r.status = #{status} or (rsp.node = 4 and rsp.status = 1 and r.status != 4))</if>
             <if test="status != null and status == -1">and (r.status = 2 or r.status = 4)</if>
             <if test="deptId != null ">and r.dept_id = #{deptId}</if>
             <if test="params.beginTime != null and params.beginTime != ''"><!-- 开始时间检索 -->
@@ -463,6 +464,16 @@
         update sys_review_sub
         set man_type = #{manType}
         where review_id = #{reviewId}
+    </update>
+
+    <update id="setSysReviewSubGoBackByReviewId" parameterType="SysReviewSub">
+        UPDATE sys_review_sub s, sys_review_sub_process rs
+        SET s.status = CASE
+        WHEN rs.status = 1 THEN 1
+        WHEN rs.status = 2 THEN 2
+        END
+        WHERE s.review_id = #{reviewId}
+        AND rs.node = 4 and s.review_id = rs.review_id;
     </update>
 
 </mapper>

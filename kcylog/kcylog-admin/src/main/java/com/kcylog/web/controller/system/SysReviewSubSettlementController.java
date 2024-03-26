@@ -106,8 +106,7 @@ public class SysReviewSubSettlementController extends BaseController
             List<SysSettlementAssociate> settlementAssociateList = sysSettlementAssociateService.selectSysSettlementAssociateList(settlementAssociate);
             for (SysSettlementAssociate settlement:settlementAssociateList){
                 review.setReviewId(settlement.getReviewId());
-                review.setStatus((long)this.PassStatus);
-                sysReviewService.setSysReviewSubStatusByReviewId(review);
+                sysReviewService.setSysReviewSubGoBackByReviewId(review);
             }
             sysSettlementAssociateService.deleteSysSettlementAssociateBySettlementId(settlementId);
         }

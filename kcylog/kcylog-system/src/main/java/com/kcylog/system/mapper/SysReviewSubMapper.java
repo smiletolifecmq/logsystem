@@ -96,4 +96,6 @@ public interface SysReviewSubMapper
     public List<SysReviewSub> selectSysReviewBySerialNum(String serialNum);
 
     public int updateReviewManType(SysReviewSubProcess sysReviewSubProcess);
+
+    public int setSysReviewSubGoBackByReviewId(SysReviewSub sysReviewSub);
 }
