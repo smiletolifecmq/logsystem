@@ -133,11 +133,21 @@ public class SysProject extends BaseEntity
 
     private List<SysReviewSub> reviewSub;
 
+    private SysReviewSub reviewSubOne;
+
     private Long isJqr;
 
     private Long status;
 
     private Long subpackageType;
+
+    public SysReviewSub getReviewSubOne() {
+        return reviewSubOne;
+    }
+
+    public void setReviewSubOne(SysReviewSub reviewSubOne) {
+        this.reviewSubOne = reviewSubOne;
+    }
 
     public String getFbWorkload() {
         return fbWorkload;

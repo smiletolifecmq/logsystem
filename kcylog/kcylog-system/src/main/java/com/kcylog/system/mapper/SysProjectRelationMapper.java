@@ -63,4 +63,6 @@ public interface SysProjectRelationMapper
     public int deleteByReviewId(SysProjectRelation sysProjectRelation);
 
     public List<SysProjectRelation> selectProjectRelationByReviewType(Integer reviewType);
+
+    public SysProjectRelation selectSysProjectRelationByProjectId(Long projectId);
 }

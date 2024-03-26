@@ -10,10 +10,7 @@ import com.kcylog.common.utils.poi.ExcelMultUtil;
 import com.kcylog.system.common.ProjectEmployee;
 import com.kcylog.system.common.ProjectSubcontract;
 import com.kcylog.system.domain.*;
-import com.kcylog.system.service.ISysProjectRelationService;
-import com.kcylog.system.service.ISysProjectService;
-import com.kcylog.system.service.ISysProjectValueService;
-import com.kcylog.system.service.ISysReviewSubService;
+import com.kcylog.system.service.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.transaction.annotation.Transactional;
@@ -44,6 +41,9 @@ public class SysProjectController extends BaseController {
 
     @Autowired
     private ISysReviewSubService sysReviewSubService;
+
+    @Autowired
+    private ISysReviewSubEmployeeService sysReviewSubEmployeeService;
 
     /**
      * 查询项目列表
@@ -121,7 +121,15 @@ public class SysProjectController extends BaseController {
     @PreAuthorize("@ss.hasPermi('system:project:query')")
     @GetMapping(value = "/{projectId}")
     public AjaxResult getInfo(@PathVariable("projectId") String projectId) {
-        return success(sysProjectService.selectSysProjectByProjectId(projectId));
+        SysProject project = sysProjectService.selectSysProjectByProjectId(projectId);
+        SysProjectRelation projectRelation = sysProjectRelationService.selectSysProjectRelationByProjectId(project.getProjectId());
+        if (projectRelation != null){
+            SysReviewSub reviewSub = sysReviewSubService.selectSysReviewSubByReviewId(projectRelation.getReviewId().toString());
+            List<SysReviewSubEmployee> reviewSubEmployee = sysReviewSubEmployeeService.selectSysReviewSubEmployeeByReviewId(projectRelation.getReviewId());
+            reviewSub.setReviewEmployee(reviewSubEmployee);
+            project.setReviewSubOne(reviewSub);
+        }
+        return success(project);
     }
 
     /**

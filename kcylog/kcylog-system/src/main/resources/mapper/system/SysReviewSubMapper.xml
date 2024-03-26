@@ -1,94 +1,95 @@
 <?xml version="1.0" encoding="UTF-8" ?>
 <!DOCTYPE mapper
-PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
-"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.kcylog.system.mapper.SysReviewSubMapper">
-    
-    <resultMap type="SysReviewSub" id="SysReviewSubResult">
-        <result property="reviewId"    column="review_id"    />
-        <result property="serialNum"    column="serial_num"    />
-        <result property="projectName"    column="project_name"    />
-        <result property="requester"    column="requester"    />
-        <result property="porjectMoney"    column="porject_money"    />
-        <result property="workload"    column="workload"    />
-        <result property="employmentReason"    column="employment_reason"    />
-        <result property="userId"    column="user_id"    />
-        <result property="deptId"    column="dept_id"    />
-        <result property="status"    column="status"    />
-        <result property="finalSecondStatus"    column="final_second_status"    />
-        <result property="finalHire"    column="final_hire"    />
-        <result property="peopleNum"    column="people_num"    />
-        <result property="startEdit"    column="start_edit"    />
-        <result property="subcontract"    column="subcontract"    />
-        <result property="startTime"    column="start_time"    />
-        <result property="endTime"    column="end_time"    />
-        <result property="projectStart"    column="project_start"    />
-        <result property="projectEnd"    column="project_end"    />
-        <result property="budgetDay"    column="budget_day"    />
-        <result property="budgetMoney"    column="budget_money"    />
-        <result property="createTime"    column="create_time"    />
-        <result property="updateTime"    column="update_time"    />
-        <result property="finalTime"    column="final_time"    />
 
-        <result property="lotTime"    column="lot_time"    />
-        <result property="businessName"    column="business_name"    />
-        <result property="cooperationUnit"    column="cooperation_unit"    />
-        <result property="winUnit"    column="win_unit"    />
-        <result property="workcontent"    column="workcontent"    />
-        <result property="isPrint"    column="is_print"    />
-        <result property="cpStartTime"    column="cp_start_time"    />
-        <result property="cpEndTime"    column="cp_end_time"    />
-        <result property="subType"    column="sub_type"    />
-        <result property="subCost"    column="sub_cost"    />
-        <result property="subWorkload"    column="sub_workload"    />
-        <result property="realWorkload"    column="real_workload"    />
-        <result property="manType"    column="man_type"    />
-        <result property="subpackageType"    column="subpackage_type"    />
+    <resultMap type="SysReviewSub" id="SysReviewSubResult">
+        <result property="reviewId" column="review_id"/>
+        <result property="serialNum" column="serial_num"/>
+        <result property="projectName" column="project_name"/>
+        <result property="requester" column="requester"/>
+        <result property="porjectMoney" column="porject_money"/>
+        <result property="workload" column="workload"/>
+        <result property="employmentReason" column="employment_reason"/>
+        <result property="userId" column="user_id"/>
+        <result property="deptId" column="dept_id"/>
+        <result property="status" column="status"/>
+        <result property="finalSecondStatus" column="final_second_status"/>
+        <result property="finalHire" column="final_hire"/>
+        <result property="peopleNum" column="people_num"/>
+        <result property="startEdit" column="start_edit"/>
+        <result property="subcontract" column="subcontract"/>
+        <result property="startTime" column="start_time"/>
+        <result property="endTime" column="end_time"/>
+        <result property="projectStart" column="project_start"/>
+        <result property="projectEnd" column="project_end"/>
+        <result property="budgetDay" column="budget_day"/>
+        <result property="budgetMoney" column="budget_money"/>
+        <result property="createTime" column="create_time"/>
+        <result property="updateTime" column="update_time"/>
+        <result property="finalTime" column="final_time"/>
+
+        <result property="lotTime" column="lot_time"/>
+        <result property="businessName" column="business_name"/>
+        <result property="cooperationUnit" column="cooperation_unit"/>
+        <result property="winUnit" column="win_unit"/>
+        <result property="workcontent" column="workcontent"/>
+        <result property="isPrint" column="is_print"/>
+        <result property="cpStartTime" column="cp_start_time"/>
+        <result property="cpEndTime" column="cp_end_time"/>
+        <result property="subType" column="sub_type"/>
+        <result property="subCost" column="sub_cost"/>
+        <result property="subWorkload" column="sub_workload"/>
+        <result property="realWorkload" column="real_workload"/>
+        <result property="manType" column="man_type"/>
+        <result property="subpackageType" column="subpackage_type"/>
 
         <association property="dept" column="dept_name" javaType="SysDept" resultMap="SysReviewSubDeptResult"/>
         <association property="user" column="user_name" javaType="SysUser" resultMap="SysReviewSubUserResult"/>
         <association property="reviewEmployee" javaType="java.util.List" resultMap="SysReviewSubReviewEmployeeResult"/>
-        <association property="projectRelation" column="projectId" javaType="SysProjectRelation" resultMap="SysProjectRelationResult"/>
+        <association property="projectRelation" column="projectId" javaType="SysProjectRelation"
+                     resultMap="SysProjectRelationResult"/>
         <association property="project" javaType="SysProject" resultMap="SysProjectResult"/>
     </resultMap>
 
     <resultMap type="SysProject" id="SysProjectResult">
-        <result property="projectId"    column="project_id"    />
-        <result property="projectNameAlias"    column="project_name_alias"    />
-        <result property="projectNum"    column="project_num"    />
-        <result property="projectType"    column="project_type"    />
-        <result property="registerTime"    column="register_time"    />
-        <result property="receptionist"    column="receptionist"    />
-        <result property="workloadAlias"    column="workload_alias"    />
-        <result property="workcontentAlias"    column="workcontent_alias"    />
-        <result property="userNameAlias"    column="user_name_alias"    />
-        <result property="requesterAlias"    column="requester_alias"    />
-        <result property="projectStartAlias"    column="project_start_alias"    />
-        <result property="projectEndAlias"    column="project_end_alias"    />
-        <result property="oneCheck"    column="one_check"    />
-        <result property="twoCheck"    column="two_check"    />
-        <result property="noticeTime"    column="notice_time"    />
-        <result property="projectTime"    column="project_time"    />
-        <result property="deliveryTime"    column="delivery_time"    />
-        <result property="projectMoneyAlias"    column="project_money_alias"    />
-        <result property="operate"    column="operate"    />
-        <result property="operateUser"    column="operate_user"    />
-        <result property="operateTime"    column="operate_time"    />
-        <result property="department"    column="department"    />
+        <result property="projectId" column="project_id"/>
+        <result property="projectNameAlias" column="project_name_alias"/>
+        <result property="projectNum" column="project_num"/>
+        <result property="projectType" column="project_type"/>
+        <result property="registerTime" column="register_time"/>
+        <result property="receptionist" column="receptionist"/>
+        <result property="workloadAlias" column="workload_alias"/>
+        <result property="workcontentAlias" column="workcontent_alias"/>
+        <result property="userNameAlias" column="user_name_alias"/>
+        <result property="requesterAlias" column="requester_alias"/>
+        <result property="projectStartAlias" column="project_start_alias"/>
+        <result property="projectEndAlias" column="project_end_alias"/>
+        <result property="oneCheck" column="one_check"/>
+        <result property="twoCheck" column="two_check"/>
+        <result property="noticeTime" column="notice_time"/>
+        <result property="projectTime" column="project_time"/>
+        <result property="deliveryTime" column="delivery_time"/>
+        <result property="projectMoneyAlias" column="project_money_alias"/>
+        <result property="operate" column="operate"/>
+        <result property="operateUser" column="operate_user"/>
+        <result property="operateTime" column="operate_time"/>
+        <result property="department" column="department"/>
     </resultMap>
 
     <resultMap type="SysProjectRelation" id="SysProjectRelationResult">
-        <result property="projectId"    column="project_id"    />
+        <result property="projectId" column="project_id"/>
     </resultMap>
 
     <resultMap type="SysReviewEmployee" id="SysReviewSubReviewEmployeeResult">
-        <result property="reviewEmployeeId"    column="review_employee_id"    />
-        <result property="name"    column="name"    />
-        <result property="idCard"    column="id_card"    />
-        <result property="workTime"    column="work_time"    />
-        <result property="workDay"    column="work_day"    />
-        <result property="cost"    column="cost"    />
-        <result property="reviewId"    column="review_id"    />
+        <result property="reviewEmployeeId" column="review_employee_id"/>
+        <result property="name" column="name"/>
+        <result property="idCard" column="id_card"/>
+        <result property="workTime" column="work_time"/>
+        <result property="workDay" column="work_day"/>
+        <result property="cost" column="cost"/>
+        <result property="reviewId" column="review_id"/>
     </resultMap>
 
     <resultMap id="SysReviewSubDeptResult" type="SysDept">
@@ -101,23 +102,26 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 
 
     <sql id="selectSysReviewSubVo">
-        select r.*, d.dept_name, u.user_name, p.project_id, pp.* from sys_review_sub r
-        inner join sys_dept d on r.dept_id = d.dept_id
-        inner join sys_user u on r.user_id = u.user_id
-        left join sys_project_relation p on r.review_id = p.review_id and p.review_type = 1
-        left join sys_project pp on p.project_id = pp.project_id
+        select r.*, d.dept_name, u.user_name, p.project_id, pp.*
+        from sys_review_sub r
+                 inner join sys_dept d on r.dept_id = d.dept_id
+                 inner join sys_user u on r.user_id = u.user_id
+                 left join sys_project_relation p on r.review_id = p.review_id and p.review_type = 1
+                 left join sys_project pp on p.project_id = pp.project_id
     </sql>
 
     <select id="selectSysReviewSubList" parameterType="SysReviewSub" resultMap="SysReviewSubResult">
         <include refid="selectSysReviewSubVo"/>
-        <where>  
-            <if test="serialNum != null  and serialNum != ''"> and r.serial_num like concat('%', #{serialNum}, '%')</if>
-            <if test="projectName != null  and projectName != ''"> and r.project_name like concat('%', #{projectName}, '%')</if>
-            <if test="requester != null  and requester != ''"> and r.requester = #{requester}</if>
-            <if test="status != null "> and r.status = #{status}</if>
-            <if test="userId != null  and userId != ''"> and r.user_id = #{userId}</if>
-            <if test="deptId != null  and deptId != ''"> and r.dept_id = #{deptId}</if>
-            <if test="finalHire != null"> and r.final_hire = #{finalHire}</if>
+        <where>
+            <if test="serialNum != null  and serialNum != ''">and r.serial_num like concat('%', #{serialNum}, '%')</if>
+            <if test="projectName != null  and projectName != ''">and r.project_name like concat('%', #{projectName},
+                '%')
+            </if>
+            <if test="requester != null  and requester != ''">and r.requester = #{requester}</if>
+            <if test="status != null ">and r.status = #{status}</if>
+            <if test="userId != null  and userId != ''">and r.user_id = #{userId}</if>
+            <if test="deptId != null  and deptId != ''">and r.dept_id = #{deptId}</if>
+            <if test="finalHire != null">and r.final_hire = #{finalHire}</if>
             <if test="params.beginTime != null and params.beginTime != ''"><!-- 开始时间检索 -->
                 AND date_format(r.create_time,'%y%m%d') &gt;= date_format(#{params.beginTime},'%y%m%d')
             </if>
@@ -127,7 +131,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
         </where>
         order by r.review_id desc
     </select>
-    
+
     <select id="selectSysReviewSubByReviewId" parameterType="String" resultMap="SysReviewSubResult">
         <include refid="selectSysReviewSubVo"/>
         where r.review_id = #{reviewId}
@@ -172,7 +176,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
             <if test="subWorkload != null">sub_workload,</if>
             <if test="realWorkload != null">real_workload,</if>
 
-         </trim>
+        </trim>
         <trim prefix="values (" suffix=")" suffixOverrides=",">
             <if test="serialNum != null and serialNum != ''">#{serialNum},</if>
             <if test="projectName != null and projectName != ''">#{projectName},</if>
@@ -210,7 +214,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
             <if test="subWorkload != null">#{subWorkload},</if>
             <if test="realWorkload != null">#{realWorkload},</if>
 
-         </trim>
+        </trim>
     </insert>
 
     <update id="updateSysReviewSub" parameterType="SysReviewSub">
@@ -257,7 +261,9 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
     </update>
 
     <delete id="deleteSysReviewSubByReviewId" parameterType="String">
-        delete from sys_review_sub where review_id = #{reviewId}
+        delete
+        from sys_review_sub
+        where review_id = #{reviewId}
     </delete>
 
     <delete id="deleteSysReviewSubByReviewIds" parameterType="String">
@@ -280,11 +286,13 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
         <include refid="selectSysReviewSubVo"/>
         inner join sys_review_sub_process rp on r.review_id = rp.review_id
         <where>
-            <if test="serialNum != null  and serialNum != ''"> and r.serial_num = #{serialNum}</if>
-            <if test="projectName != null  and projectName != ''"> and r.project_name like concat('%', #{projectName}, '%')</if>
-            <if test="requester != null  and requester != ''"> and r.requester = #{requester}</if>
-            <if test="deptId != null  and deptId != ''"> and r.dept_id = #{deptId}</if>
-            <if test="fzrUserId != null  and fzrUserId != ''"> and r.user_id = #{fzrUserId}</if>
+            <if test="serialNum != null  and serialNum != ''">and r.serial_num = #{serialNum}</if>
+            <if test="projectName != null  and projectName != ''">and r.project_name like concat('%', #{projectName},
+                '%')
+            </if>
+            <if test="requester != null  and requester != ''">and r.requester = #{requester}</if>
+            <if test="deptId != null  and deptId != ''">and r.dept_id = #{deptId}</if>
+            <if test="fzrUserId != null  and fzrUserId != ''">and r.user_id = #{fzrUserId}</if>
             <if test="params.beginTime != null and params.beginTime != ''"><!-- 开始时间检索 -->
                 AND date_format(r.create_time,'%y%m%d') &gt;= date_format(#{params.beginTime},'%y%m%d')
             </if>
@@ -303,12 +311,14 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
     <select id="selectCompletedReviewList" parameterType="SysReviewSub" resultMap="SysReviewSubResult">
         <include refid="selectSysReviewSubVo"/>
         <where>
-            <if test="serialNum != null  and serialNum != ''"> and r.serial_num = #{serialNum}</if>
-            <if test="projectName != null  and projectName != ''"> and r.project_name like concat('%', #{projectName}, '%')</if>
-            <if test="requester != null  and requester != ''"> and r.requester = #{requester}</if>
-            <if test="status != null and status != -1"> and r.status = #{status}</if>
-            <if test="status != null and status == -1"> and (r.status = 2 or r.status = 4)</if>
-            <if test="deptId != null "> and r.dept_id = #{deptId}</if>
+            <if test="serialNum != null  and serialNum != ''">and r.serial_num = #{serialNum}</if>
+            <if test="projectName != null  and projectName != ''">and r.project_name like concat('%', #{projectName},
+                '%')
+            </if>
+            <if test="requester != null  and requester != ''">and r.requester = #{requester}</if>
+            <if test="status != null and status != -1">and r.status = #{status}</if>
+            <if test="status != null and status == -1">and (r.status = 2 or r.status = 4)</if>
+            <if test="deptId != null ">and r.dept_id = #{deptId}</if>
             <if test="params.beginTime != null and params.beginTime != ''"><!-- 开始时间检索 -->
                 AND date_format(r.create_time,'%y%m%d') &gt;= date_format(#{params.beginTime},'%y%m%d')
             </if>
@@ -323,20 +333,22 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
         <include refid="selectSysReviewSubVo"/>
         inner join sys_review_sub_process rp on r.review_id = rp.review_id
         <where>
-            <if test="serialNum != null  and serialNum != ''"> and r.serial_num = #{serialNum}</if>
-            <if test="projectName != null  and projectName != ''"> and r.project_name like concat('%', #{projectName}, '%')</if>
-            <if test="requester != null  and requester != ''"> and r.requester = #{requester}</if>
-            <if test="deptId != null  and deptId != ''"> and r.dept_id = #{deptId}</if>
-            <if test="fzrUserId != null  and fzrUserId != ''"> and r.user_id = #{fzrUserId}</if>
+            <if test="serialNum != null  and serialNum != ''">and r.serial_num = #{serialNum}</if>
+            <if test="projectName != null  and projectName != ''">and r.project_name like concat('%', #{projectName},
+                '%')
+            </if>
+            <if test="requester != null  and requester != ''">and r.requester = #{requester}</if>
+            <if test="deptId != null  and deptId != ''">and r.dept_id = #{deptId}</if>
+            <if test="fzrUserId != null  and fzrUserId != ''">and r.user_id = #{fzrUserId}</if>
             <if test="params.beginTime != null and params.beginTime != ''"><!-- 开始时间检索 -->
                 AND date_format(r.create_time,'%y%m%d') &gt;= date_format(#{params.beginTime},'%y%m%d')
             </if>
             <if test="params.endTime != null and params.endTime != ''"><!-- 结束时间检索 -->
                 AND date_format(r.create_time,'%y%m%d') &lt;= date_format(#{params.endTime},'%y%m%d')
             </if>
-            <if test="employmentReason != null  and employmentReason == 1"> and (r.final_hire = 1 and rp.status = 2)</if>
-            <if test="employmentReason != null  and employmentReason == 2"> and (r.final_hire = 0 and rp.status = 2)</if>
-            <if test="employmentReason == null  or employmentReason == 0"> AND (rp.status = 2 OR rp.status = 3)</if>
+            <if test="employmentReason != null  and employmentReason == 1">and (r.final_hire = 1 and rp.status = 2)</if>
+            <if test="employmentReason != null  and employmentReason == 2">and (r.final_hire = 0 and rp.status = 2)</if>
+            <if test="employmentReason == null  or employmentReason == 0">AND (rp.status = 2 OR rp.status = 3)</if>
         </where>
         AND rp.user_id = #{userId}
         order by rp.review_time desc
@@ -372,21 +384,24 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
     </update>
 
     <sql id="selectSysReviewSubBySettlementVo">
-        select r.*, d.dept_name, u.user_name from sys_review_sub r
-        inner join sys_dept d on r.dept_id = d.dept_id
-        inner join sys_user u on r.user_id = u.user_id
-        inner join sys_settlement_associate a on r.review_id = a.review_id
+        select r.*, d.dept_name, u.user_name
+        from sys_review_sub r
+                 inner join sys_dept d on r.dept_id = d.dept_id
+                 inner join sys_user u on r.user_id = u.user_id
+                 inner join sys_settlement_associate a on r.review_id = a.review_id
     </sql>
 
     <select id="settlementListReview" parameterType="SysReviewSub" resultMap="SysReviewSubResult">
         <include refid="selectSysReviewSubBySettlementVo"/>
         and a.settlement_id = #{settlementId}
         <where>
-            <if test="serialNum != null  and serialNum != ''"> and r.serial_num = #{serialNum}</if>
-            <if test="projectName != null  and projectName != ''"> and r.project_name like concat('%', #{projectName}, '%')</if>
-            <if test="requester != null  and requester != ''"> and r.requester = #{requester}</if>
-            <if test="status != null "> and r.status = #{status}</if>
-            <if test="deptId != null "> and r.dept_id = #{deptId}</if>
+            <if test="serialNum != null  and serialNum != ''">and r.serial_num = #{serialNum}</if>
+            <if test="projectName != null  and projectName != ''">and r.project_name like concat('%', #{projectName},
+                '%')
+            </if>
+            <if test="requester != null  and requester != ''">and r.requester = #{requester}</if>
+            <if test="status != null ">and r.status = #{status}</if>
+            <if test="deptId != null ">and r.dept_id = #{deptId}</if>
             <if test="params.beginTime != null and params.beginTime != ''"><!-- 开始时间检索 -->
                 AND date_format(r.create_time,'%y%m%d') &gt;= date_format(#{params.beginTime},'%y%m%d')
             </if>
@@ -398,16 +413,17 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
     </select>
 
     <sql id="selectSysReviewSubSettlementVo">
-        select r.*, d.dept_name, u.user_name from sys_review_sub r
-        inner join sys_dept d on r.dept_id = d.dept_id
-        inner join sys_user u on r.user_id = u.user_id
-        inner join sys_settlement_associate a on r.review_id = a.review_id
+        select r.*, d.dept_name, u.user_name
+        from sys_review_sub r
+                 inner join sys_dept d on r.dept_id = d.dept_id
+                 inner join sys_user u on r.user_id = u.user_id
+                 inner join sys_settlement_associate a on r.review_id = a.review_id
     </sql>
     <select id="selectSysReviewSubListBySettlementId" parameterType="SysReviewSub" resultMap="SysReviewSubResult">
         <include refid="selectSysReviewSubSettlementVo"/>
         <where>
-            <if test="status != null "> and r.status = #{status}</if>
-             and a.settlement_id = #{settlementId}
+            <if test="status != null ">and r.status = #{status}</if>
+            and a.settlement_id = #{settlementId}
         </where>
         order by review_id desc
     </select>
@@ -438,7 +454,9 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
     </select>
 
     <select id="selectSysReviewBySerialNum" parameterType="String" resultMap="SysReviewSubResult">
-        select * from sys_review_sub where serial_num = #{serialNum}
+        select *
+        from sys_review_sub
+        where serial_num = #{serialNum}
     </select>
 
     <update id="updateReviewManType" parameterType="SysReviewSubProcess">

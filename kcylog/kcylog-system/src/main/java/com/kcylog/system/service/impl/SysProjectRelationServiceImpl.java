@@ -103,4 +103,10 @@ public class SysProjectRelationServiceImpl implements ISysProjectRelationService
     {
         return sysProjectRelationMapper.selectProjectRelationByReviewType(reviewType);
     }
+
+    @Override
+    public SysProjectRelation selectSysProjectRelationByProjectId(Long projectId)
+    {
+        return sysProjectRelationMapper.selectSysProjectRelationByProjectId(projectId);
+    }
 }

@@ -152,14 +152,19 @@
                 <i class="el-icon-office-building"></i>
                 雇工金额
               </template>
-              {{ form.projectNameAlias }}
+              {{ ggje(form) }}
             </el-descriptions-item>
             <el-descriptions-item>
               <template slot="label">
                 <i class="el-icon-notebook-2"></i>
                 利润
               </template>
-              {{ form.projectType }}
+              <el-tag v-if="calculateProfit(form) > 0">
+                {{ calculateProfit(form) }}</el-tag
+              >
+              <el-tag type="danger" v-if="calculateProfit(form) <= 0">
+                {{ calculateProfit(form) }}</el-tag
+              >
             </el-descriptions-item>
           </el-descriptions>
         </el-collapse-item>
@@ -349,6 +354,36 @@ export default {
     this.getList();
   },
   methods: {
+    ggje(value) {
+      if (value.reviewSubOne == null || value.reviewSubOne == undefined) {
+        return 0;
+      }
+      if (
+        value.reviewSubOne.reviewEmployee == null ||
+        value.reviewSubOne.reviewEmployee == undefined
+      ) {
+        return 0;
+      }
+      var cost = 0;
+      for (let i = 0; i < value.reviewSubOne.reviewEmployee.length; i++) {
+        cost = cost + value.reviewSubOne.reviewEmployee[i].cost;
+      }
+      return cost;
+    },
+    calculateProfit(value) {
+      var cost = 0;
+      if (
+        value.reviewSubOne != null &&
+        value.reviewSubOne != undefined &&
+        value.reviewSubOne.reviewEmployee != null &&
+        value.reviewSubOne.reviewEmployee != undefined
+      ) {
+        for (let i = 0; i < value.reviewSubOne.reviewEmployee.length; i++) {
+          cost = cost + value.reviewSubOne.reviewEmployee[i].cost;
+        }
+      }
+      return value.operate - value.fbMoney - cost;
+    },
     formatDate(dateString) {
       if (dateString == "") {
         return "";
