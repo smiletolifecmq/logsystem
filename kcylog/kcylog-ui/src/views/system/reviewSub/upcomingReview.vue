@@ -521,14 +521,14 @@
                       }}<span v-if="endAmPm == '12:00:00'">上午</span
                       ><span v-if="endAmPm == '23:59:59'">下午</span>
                     </el-descriptions-item>
-                    <el-descriptions-item>
+                    <!-- <el-descriptions-item>
                       <template slot="label"> 项目工期开始时间 </template>
                       {{ formInfo.projectStart | formatDate }}
                     </el-descriptions-item>
                     <el-descriptions-item>
                       <template slot="label"> 项目工期结束时间 </template>
                       {{ formInfo.projectEnd | formatDate }}
-                    </el-descriptions-item>
+                    </el-descriptions-item> -->
                     <el-descriptions-item>
                       <template slot="label"> 雇工人数 </template>
                       {{ formInfo.peopleNum }}
