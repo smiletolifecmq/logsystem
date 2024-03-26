@@ -1002,10 +1002,10 @@ export default {
           this.reviewProcessList[2].status === 2
         ) {
           let reviewProcessListTemp = [];
-          reviewProcessListTemp[0] = this.reviewProcessList[0];
-          reviewProcessListTemp[1] = this.reviewProcessList[2];
-          reviewProcessListTemp[1].user.userName = "填写最终雇工";
-          reviewProcessListTemp[1].userId = -1;
+          reviewProcessListTemp[1] = this.reviewProcessList[0];
+          reviewProcessListTemp[0] = this.reviewProcessList[2];
+          reviewProcessListTemp[0].user.userName = "填写最终雇工";
+          reviewProcessListTemp[0].userId = -1;
           reviewProcessListTemp[2] = this.reviewProcessList[1];
           reviewProcessListTemp[3] = this.reviewProcessList[3];
           this.reviewProcessList = reviewProcessListTemp;

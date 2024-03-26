@@ -159,8 +159,8 @@ public class SysReviewSubProcessServiceImpl implements ISysReviewSubProcessServi
     }
 
     @Override
-    public int reSetStatusByReviewProcessId(Long reviewProcessId)
+    public int reSetStatusByReviewId(Long reviewId)
     {
-        return sysReviewSubProcessMapper.reSetStatusByReviewProcessId(reviewProcessId);
+        return sysReviewSubProcessMapper.reSetStatusByReviewId(reviewId);
     }
 }

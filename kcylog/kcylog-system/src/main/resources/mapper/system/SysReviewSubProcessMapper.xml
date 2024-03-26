@@ -3,7 +3,7 @@
 PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.kcylog.system.mapper.SysReviewSubProcessMapper">
-    
+
     <resultMap type="SysReviewSubProcess" id="SysReviewSubProcessResult">
         <result property="reviewProcessId"    column="review_process_id"    />
         <result property="reviewId"    column="review_id"    />
@@ -26,17 +26,17 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 
     <select id="selectSysReviewSubProcessList" parameterType="SysReviewSubProcess" resultMap="SysReviewSubProcessResult">
         <include refid="selectSysReviewSubProcessVo"/>
-        <where>  
+        <where>
             <if test="reviewId != null "> and review_id = #{reviewId}</if>
         </where>
         order by node asc
     </select>
-    
+
     <select id="selectSysReviewSubProcessByReviewProcessId" parameterType="Long" resultMap="SysReviewSubProcessResult">
         <include refid="selectSysReviewSubProcessVo"/>
         where review_process_id = #{reviewProcessId}
     </select>
-        
+
     <insert id="insertSysReviewSubProcess" parameterType="SysReviewSubProcess" useGeneratedKeys="true" keyProperty="reviewProcessId">
         insert into sys_review_sub_process
         <trim prefix="(" suffix=")" suffixOverrides=",">
@@ -84,7 +84,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
     </delete>
 
     <delete id="deleteSysReviewSubProcessByReviewProcessIds" parameterType="String">
-        delete from sys_review_sub_process where review_process_id in 
+        delete from sys_review_sub_process where review_process_id in
         <foreach item="reviewProcessId" collection="array" open="(" separator="," close=")">
             #{reviewProcessId}
         </foreach>
@@ -145,9 +145,13 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
         where review_id = #{reviewId} and user_id = 1
     </update>
 
-    <update id="reSetStatusByReviewProcessId" parameterType="Long">
-        update sys_review_sub_process
-        set status = 1
-        where review_process_id = #{reviewProcessId}
+    <update id="reSetStatusByReviewId" parameterType="Long">
+        UPDATE sys_review_sub_process
+        SET status = CASE
+                WHEN node = 1 THEN 1
+                WHEN node = 2 THEN 0
+            END
+        WHERE review_id = #{reviewId}
+        AND node IN (1, 2);
     </update>
 </mapper>

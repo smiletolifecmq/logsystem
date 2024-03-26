@@ -98,5 +98,5 @@ public interface ISysReviewSubProcessService
 
     public int updateStatusByUserIdReviewId(Long reviewId);
 
-    public int reSetStatusByReviewProcessId(Long reviewProcessId);
+    public int reSetStatusByReviewId(Long reviewId);
 }

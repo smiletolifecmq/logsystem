@@ -779,12 +779,12 @@ public class SysReviewSubEmployeeController extends BaseController
         sysReviewService.updateRealWorkloadByReviewId(sysReviewSub);
         //修改填写雇工审核状态
         sysReviewProcessService.updateStatusByUserIdReviewId(sysReviewSub.getReviewId());
-        //重新开启审核
-        SysReviewSubProcess sysReviewProcess = new SysReviewSubProcess();
-        sysReviewProcess.setReviewId(sysReviewSub.getReviewId());
-        List<SysReviewSubProcess> list = sysReviewProcessService.selectSysReviewSubProcessList(sysReviewProcess);
-        Long reviewProcessId = list.get(list.size()-3).getReviewProcessId();
-        sysReviewProcessService.reSetStatusByReviewProcessId(reviewProcessId);
+        //重新开启审核（从部长开始）
+//        SysReviewSubProcess sysReviewProcess = new SysReviewSubProcess();
+//        sysReviewProcess.setReviewId(sysReviewSub.getReviewId());
+//        List<SysReviewSubProcess> list = sysReviewProcessService.selectSysReviewSubProcessList(sysReviewProcess);
+//        Long reviewProcessId = list.get(list.size()-3).getReviewProcessId();
+        sysReviewProcessService.reSetStatusByReviewId(sysReviewSub.getReviewId());
         return toAjax(1);
     }
 
