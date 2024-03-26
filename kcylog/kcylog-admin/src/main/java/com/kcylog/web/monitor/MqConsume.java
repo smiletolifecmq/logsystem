@@ -153,7 +153,7 @@ public class MqConsume {
 //            viewFqProjectLog.setSysProjectJson(sysProjectJson);
             viewFqProjectLogService.insertViewFqProjectLog(viewFqProjectLog);
 
-            if (mqMessage.getOpType().equals("DELETE")){
+            if (mqMessage.getOpType().equals("DELETE") || mqMessage.getOpType().equals("PROJECT_INVALID") || mqMessage.getOpType().equals("PROJECT_HANG")){
                 sysProjectService.deleteSysProjectByCode(viewFqProject.getProjectCode());
             }else {
                 if (sysProjectService.checkProjectKeyUnique(viewFqProject.getProjectCode()) != null) {
