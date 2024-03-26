@@ -75,11 +75,14 @@
       <el-table-column label="部门" align="center" prop="dept.deptName" />
       <el-table-column label="雇工方式" align="center" prop="manType">
         <template slot-scope="scope">
-          <span v-if="scope.row.manType === 0" style="color: red"
-            ><el-tag type="success">雇工</el-tag>
+          <span v-if="scope.row.manType === 0"
+            ><el-tag type="danger">非雇工</el-tag>
           </span>
-          <span v-if="scope.row.manType === 1" style="color: green"
-            ><el-tag type="danger">第三方雇工</el-tag></span
+          <span v-if="scope.row.manType === 1"
+            ><el-tag type="success">雇工</el-tag></span
+          >
+          <span v-if="scope.row.manType === 2"
+            ><el-tag type="success">第三方雇工</el-tag></span
           >
         </template>
       </el-table-column>
@@ -415,10 +418,13 @@
                     <el-descriptions-item>
                       <template slot="label"> 雇工方式 </template>
                       <span v-if="formInfo.manType === 0"
-                        ><el-tag type="success">雇工</el-tag>
+                        ><el-tag type="danger">非雇工</el-tag>
                       </span>
                       <span v-if="formInfo.manType === 1"
-                        ><el-tag type="danger">第三方雇工</el-tag></span
+                        ><el-tag type="success">雇工</el-tag></span
+                      >
+                      <span v-if="formInfo.manType === 2"
+                        ><el-tag type="success">第三方雇工</el-tag></span
                       >
                     </el-descriptions-item>
                   </el-descriptions>

@@ -52,6 +52,28 @@
           @change="handleQuery"
         ></el-date-picker>
       </el-form-item> -->
+      <el-form-item label="雇工方式" prop="manType">
+        <el-select v-model="queryParams.manType" placeholder="请选择">
+          <el-option
+            v-for="item in manTypes"
+            :key="item.value"
+            :label="item.label"
+            :value="item.value"
+          >
+          </el-option>
+        </el-select>
+      </el-form-item>
+      <el-form-item label="分包状态" prop="subpackageType">
+        <el-select v-model="queryParams.subpackageType" placeholder="请选择">
+          <el-option
+            v-for="item in subpackageTypes"
+            :key="item.value"
+            :label="item.label"
+            :value="item.value"
+          >
+          </el-option>
+        </el-select>
+      </el-form-item>
       <el-form-item>
         <el-button
           type="primary"
@@ -84,6 +106,11 @@
           <el-tag>{{ scope.row.deptName }}</el-tag>
         </template>
       </el-table-column>
+      <el-table-column prop="notGg" label="非雇工条数" align="center">
+        <template slot-scope="scope">
+          <el-tag type="danger">{{ scope.row.notGg }}</el-tag>
+        </template>
+      </el-table-column>
       <el-table-column prop="ggNum" label="雇工条数" align="center">
         <template slot-scope="scope">
           <el-tag type="success">{{ scope.row.ggNum }}</el-tag>
@@ -91,7 +118,7 @@
       </el-table-column>
       <el-table-column prop="dsfggNum" label="第三方雇工条数" align="center">
         <template slot-scope="scope">
-          <el-tag type="danger">{{ scope.row.dsfggNum }}</el-tag>
+          <el-tag type="success">{{ scope.row.dsfggNum }}</el-tag>
         </template>
       </el-table-column>
       <el-table-column prop="num" label="待结算总条数" align="center">
@@ -111,7 +138,7 @@
           align="center"
         >
           <template slot-scope="scope">
-            <el-tag type="danger">{{ scope.row.dsfggMoney }}</el-tag>
+            <el-tag type="success">{{ scope.row.dsfggMoney }}</el-tag>
           </template>
         </el-table-column>
         <el-table-column
@@ -138,7 +165,7 @@
           align="center"
         >
           <template slot-scope="scope">
-            <el-tag type="danger">{{ scope.row.sjdsfggMoney }}</el-tag>
+            <el-tag type="success">{{ scope.row.sjdsfggMoney }}</el-tag>
           </template>
         </el-table-column>
         <el-table-column
@@ -176,11 +203,14 @@
       <el-table-column label="部门" align="center" prop="dept.deptName" />
       <el-table-column label="雇工方式" align="center" prop="manType">
         <template slot-scope="scope">
-          <span v-if="scope.row.manType === 0" style="color: red"
-            ><el-tag type="success">雇工</el-tag>
+          <span v-if="scope.row.manType === 0"
+            ><el-tag type="danger">非雇工</el-tag>
           </span>
-          <span v-if="scope.row.manType === 1" style="color: green"
-            ><el-tag type="danger">第三方雇工</el-tag></span
+          <span v-if="scope.row.manType === 1"
+            ><el-tag type="success">雇工</el-tag></span
+          >
+          <span v-if="scope.row.manType === 2"
+            ><el-tag type="success">第三方雇工</el-tag></span
           >
         </template>
       </el-table-column>
@@ -517,10 +547,13 @@
                     <el-descriptions-item>
                       <template slot="label"> 雇工方式 </template>
                       <span v-if="formInfo.manType === 0"
-                        ><el-tag type="success">雇工</el-tag>
+                        ><el-tag type="danger">非雇工</el-tag>
                       </span>
                       <span v-if="formInfo.manType === 1"
-                        ><el-tag type="danger">第三方雇工</el-tag></span
+                        ><el-tag type="success">雇工</el-tag></span
+                      >
+                      <span v-if="formInfo.manType === 2"
+                        ><el-tag type="success">第三方雇工</el-tag></span
                       >
                     </el-descriptions-item>
                   </el-descriptions>
@@ -699,6 +732,17 @@ export default {
   },
   data() {
     return {
+      manTypes: [
+        { value: 0, label: "非雇工" },
+        { value: 1, label: "雇工" },
+        { value: 2, label: "第三方雇工" },
+      ],
+      subpackageTypes: [
+        { value: 0, label: "未设置" },
+        { value: 1, label: "非分包" },
+        { value: 2, label: "单一合同分包" },
+        { value: 3, label: "框架协议分包" },
+      ],
       statisticsData: [],
       activeNames: ["1", "2", "3"],
       employeeList: [],
@@ -816,17 +860,19 @@ export default {
               reviewTemp.budgetMoney + reviews[i].budgetMoney;
             reviewTemp.sjbudgetMoney =
               reviewTemp.sjbudgetMoney + reviews[i].guGongMoney;
-            if (reviews[i].manType === 1) {
+            if (reviews[i].manType === 2) {
               reviewTemp.dsfggNum++;
               reviewTemp.dsfggMoney =
                 reviewTemp.dsfggMoney + reviews[i].budgetMoney;
               reviewTemp.sjdsfggMoney =
                 reviewTemp.sjdsfggMoney + reviews[i].guGongMoney;
-            } else {
+            } else if (reviews[i].manType === 1) {
               reviewTemp.ggNum++;
               reviewTemp.ggMoney = reviewTemp.ggMoney + reviews[i].budgetMoney;
               reviewTemp.sjggMoney =
                 reviewTemp.sjggMoney + reviews[i].guGongMoney;
+            } else {
+              reviewTemp.notGg++;
             }
           } else {
             let reviewTemp = {
@@ -839,16 +885,19 @@ export default {
               dsfggMoney: 0,
               sjggMoney: 0,
               sjdsfggMoney: 0,
+              notGg: 0,
               sjbudgetMoney: reviews[i].guGongMoney,
             };
-            if (reviews[i].manType === 1) {
+            if (reviews[i].manType === 2) {
               reviewTemp.dsfggNum = 1;
               reviewTemp.dsfggMoney = reviews[i].budgetMoney;
               reviewTemp.sjdsfggMoney = reviews[i].guGongMoney;
-            } else {
+            } else if (reviews[i].manType === 1) {
               reviewTemp.ggNum = 1;
               reviewTemp.ggMoney = reviews[i].budgetMoney;
               reviewTemp.sjggMoney = reviews[i].guGongMoney;
+            } else {
+              reviewTemp.notGg = 1;
             }
             reviewMap.set(reviews[i].dept.deptName, reviewTemp);
           }
