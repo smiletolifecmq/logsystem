@@ -123,6 +123,11 @@ public class MqConsume {
                 sysProject.setIsTwoCheck(1);
                 Date date = DateUtils.parseDate(sysProject.getTwoCheck(), "yyyy-MM-dd HH:mm:ss");
                 sysProject.setTwoCheckTime(date);
+                // todo 需要同步分包工作量、分包金额、人员安排
+            }
+
+            if (mqMessage.getOpType().equals("RESOURCE_ARRANGE_CHANGE")){
+                // todo 需要同步人员安排
             }
 
             //判断状态
