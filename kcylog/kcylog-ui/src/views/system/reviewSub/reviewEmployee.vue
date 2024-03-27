@@ -43,7 +43,7 @@
     </el-row>
 
     <el-collapse v-model="activeNamesTemp">
-      <el-collapse-item title="实际分包工作量（没有分包可不填写）" name="1">
+      <!-- <el-collapse-item title="实际分包工作量（没有分包可不填写）" name="1">
         <el-form ref="subform" :model="subform" label-width="80px">
           <el-input
             v-model="subform.realWorkload"
@@ -52,8 +52,8 @@
             :disabled="subform.finalHire === 1"
           />
         </el-form>
-      </el-collapse-item>
-      <el-collapse-item title="雇工信息（没有雇工可不填写）" name="2">
+      </el-collapse-item> -->
+      <el-collapse-item title="雇工信息（没有雇工可不填写）" name="1">
         <el-table
           v-loading="loading"
           :data="employeeList"
@@ -249,7 +249,7 @@ export default {
   data() {
     return {
       subform: {},
-      activeNamesTemp: ["1", "2"],
+      activeNamesTemp: ["1"],
       money: 100,
       startAmPm: "12:00:00",
       endAmPm: "23:59:59",

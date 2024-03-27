@@ -286,7 +286,12 @@
             class="dialog-footer"
             style="display: flex; justify-content: flex-end"
           >
-            <el-button type="primary" @click="submitForm">确 定</el-button>
+            <el-button
+              v-hasPermi="['system:operating:add']"
+              type="primary"
+              @click="submitForm"
+              >确 定</el-button
+            >
             <el-button @click="cancel">取 消</el-button>
           </div>
         </el-collapse-item>

@@ -684,6 +684,13 @@
                 </template>
                 {{ formInfo.project.workloadAlias }}
               </el-descriptions-item>
+              <el-descriptions-item>
+                <template slot="label">
+                  <i class="el-icon-document"></i>
+                  实际分包工作量
+                </template>
+                {{ formInfo.project.fbWorkload }}
+              </el-descriptions-item>
             </el-descriptions>
           </div>
         </el-collapse-item>
@@ -747,14 +754,14 @@
                       }}<span v-if="endAmPm == '12:00:00'">上午</span
                       ><span v-if="endAmPm == '23:59:59'">下午</span>
                     </el-descriptions-item>
-                    <el-descriptions-item>
+                    <!-- <el-descriptions-item>
                       <template slot="label"> 项目工期开始时间 </template>
                       {{ formInfo.projectStart | formatDate }}
                     </el-descriptions-item>
                     <el-descriptions-item>
                       <template slot="label"> 项目工期结束时间 </template>
                       {{ formInfo.projectEnd | formatDate }}
-                    </el-descriptions-item>
+                    </el-descriptions-item> -->
                     <el-descriptions-item>
                       <template slot="label"> 雇工人数 </template>
                       {{ formInfo.peopleNum }}
@@ -818,10 +825,10 @@
                         <template slot="label"> 预估分包工作量 </template>
                         {{ subcontractForm.subWorkload }}
                       </el-descriptions-item>
-                      <el-descriptions-item>
+                      <!-- <el-descriptions-item>
                         <template slot="label"> 实际分包工作量 </template>
-                        {{ subcontractForm.realWorkload }}
-                      </el-descriptions-item>
+                        {{ formInfo.project.fbWorkload }}
+                      </el-descriptions-item> -->
                       <el-descriptions-item>
                         <template slot="label"> 抽签单位 </template>
                         <div
@@ -841,7 +848,7 @@
                         <template slot="label"> 抽签时间 </template>
                         {{ parseTime(subcontractForm.lotTime, "{y}-{m}-{d}") }}
                       </el-descriptions-item>
-                      <el-descriptions-item>
+                      <!-- <el-descriptions-item>
                         <template slot="label"> 工期开始 </template>
                         {{
                           parseTime(subcontractForm.cpStartTime, "{y}-{m}-{d}")
@@ -852,7 +859,7 @@
                         {{
                           parseTime(subcontractForm.cpEndTime, "{y}-{m}-{d}")
                         }}
-                      </el-descriptions-item>
+                      </el-descriptions-item> -->
                     </el-descriptions>
                   </div>
                 </el-card>

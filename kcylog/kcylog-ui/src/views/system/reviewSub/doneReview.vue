@@ -473,6 +473,13 @@
                 >
                 <el-tag v-else type="danger">其他状态</el-tag>
               </el-descriptions-item>
+              <el-descriptions-item>
+                <template slot="label">
+                  <i class="el-icon-document"></i>
+                  实际分包工作量
+                </template>
+                {{ formInfo.project.fbWorkload }}
+              </el-descriptions-item>
             </el-descriptions>
           </div>
         </el-collapse-item>
@@ -618,10 +625,10 @@
                         <template slot="label"> 预估分包工作量 </template>
                         {{ subcontractForm.subWorkload }}
                       </el-descriptions-item>
-                      <el-descriptions-item>
+                      <!-- <el-descriptions-item>
                         <template slot="label"> 实际分包工作量 </template>
                         {{ subcontractForm.realWorkload }}
-                      </el-descriptions-item>
+                      </el-descriptions-item> -->
                       <el-descriptions-item>
                         <template slot="label"> 抽签单位 </template>
                         <div
