@@ -649,10 +649,9 @@
                       />
                     </el-form-item>
                     <el-form-item label="项目金额" prop="porjectMoney">
-                      <el-input
+                      <el-input-number
                         v-model="formReviewSub.porjectMoney"
                         placeholder="请输入项目金额"
-                        disabled
                       />
                     </el-form-item>
                     <el-form-item label="工作内容">
