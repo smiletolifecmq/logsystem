@@ -1,0 +1,60 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.kcylog.system.mapper.ViewFqProjectWorkResourceArrangeMapper">
+    
+    <resultMap type="ViewFqProjectWorkResourceArrange" id="ViewFqProjectWorkResourceArrangeResult">
+        <result property="userName"    column="user_name"    />
+        <result property="performanceRate"    column="performance_rate"    />
+    </resultMap>
+
+    <sql id="selectViewFqProjectWorkResourceArrangeVo">
+        select user_name, performance_rate from view_fq_project_work_resource_arrange
+    </sql>
+
+    <select id="selectViewFqProjectWorkResourceArrangeList" parameterType="ViewFqProjectWorkResourceArrange" resultMap="ViewFqProjectWorkResourceArrangeResult">
+        <include refid="selectViewFqProjectWorkResourceArrangeVo"/>
+        <where>  
+            <if test="userName != null  and userName != ''"> and user_name like concat('%', #{userName}, '%')</if>
+            <if test="performanceRate != null "> and performance_rate = #{performanceRate}</if>
+        </where>
+    </select>
+    
+    <select id="selectViewFqProjectWorkResourceArrangeByProjectId" parameterType="Long" resultMap="ViewFqProjectWorkResourceArrangeResult">
+        <include refid="selectViewFqProjectWorkResourceArrangeVo"/>
+        where project_id = #{projectId}
+    </select>
+        
+    <insert id="insertViewFqProjectWorkResourceArrange" parameterType="ViewFqProjectWorkResourceArrange" useGeneratedKeys="true" keyProperty="projectId">
+        insert into view_fq_project_work_resource_arrange
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="userName != null and userName != ''">user_name,</if>
+            <if test="performanceRate != null">performance_rate,</if>
+         </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test="userName != null and userName != ''">#{userName},</if>
+            <if test="performanceRate != null">#{performanceRate},</if>
+         </trim>
+    </insert>
+
+    <update id="updateViewFqProjectWorkResourceArrange" parameterType="ViewFqProjectWorkResourceArrange">
+        update view_fq_project_work_resource_arrange
+        <trim prefix="SET" suffixOverrides=",">
+            <if test="userName != null and userName != ''">user_name = #{userName},</if>
+            <if test="performanceRate != null">performance_rate = #{performanceRate},</if>
+        </trim>
+        where project_id = #{projectId}
+    </update>
+
+    <delete id="deleteViewFqProjectWorkResourceArrangeByProjectId" parameterType="Long">
+        delete from view_fq_project_work_resource_arrange where project_id = #{projectId}
+    </delete>
+
+    <delete id="deleteViewFqProjectWorkResourceArrangeByProjectIds" parameterType="String">
+        delete from view_fq_project_work_resource_arrange where project_id in 
+        <foreach item="projectId" collection="array" open="(" separator="," close=")">
+            #{projectId}
+        </foreach>
+    </delete>
+</mapper>
