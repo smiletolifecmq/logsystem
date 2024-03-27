@@ -10,6 +10,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
         <result property="userName"    column="user_name"    />
         <result property="proportion"    column="proportion"    />
         <result property="money"    column="money"    />
+        <result property="profitMoney"    column="profit_money"    />
     </resultMap>
 
     <sql id="selectSysProjectValueVo">
@@ -37,12 +38,14 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
             <if test="userName != null and userName != ''">user_name,</if>
             <if test="proportion != null">proportion,</if>
             <if test="money != null">money,</if>
+            <if test="profitMoney != null">profit_money,</if>
          </trim>
         <trim prefix="values (" suffix=")" suffixOverrides=",">
             <if test="projectId != null">#{projectId},</if>
             <if test="userName != null and userName != ''">#{userName},</if>
             <if test="proportion != null">#{proportion},</if>
             <if test="money != null">#{money},</if>
+            <if test="profitMoney != null">#{profitMoney},</if>
          </trim>
     </insert>
 
@@ -52,7 +55,8 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
             <if test="projectId != null">project_id = #{projectId},</if>
             <if test="userName != null and userName != ''">user_name = #{userName},</if>
             <if test="proportion != null">proportion = #{proportion},</if>
-            <if test="money != null">proportion = #{money},</if>
+            <if test="money != null">money = #{money},</if>
+            <if test="profitMoney != null">profit_money = #{profitMoney},</if>
         </trim>
         where value_id = #{valueId}
     </update>
