@@ -144,6 +144,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
             <if test="updateTime != null">update_time,</if>
             <if test="status != null">status,</if>
             <if test="subpackageType != null">subpackage_type,</if>
+            <if test="isTwoCheck != null">is_two_check,</if>
          </trim>
         <trim prefix="values (" suffix=")" suffixOverrides=",">
             <if test="projectNameAlias != null and projectNameAlias != ''">#{projectNameAlias},</if>
@@ -173,6 +174,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
             <if test="updateTime != null">#{updateTime},</if>
             <if test="status != null">#{status},</if>
             <if test="subpackageType != null">#{subpackageType},</if>
+            <if test="isTwoCheck != null">#{isTwoCheck},</if>
          </trim>
     </insert>
 
