@@ -77,4 +77,9 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
         <include refid="selectSysProjectRelationVo"/>
         where project_id = #{projectId}
     </select>
+
+    <select id="selectSysProjectRelationByReviewId" parameterType="Long" resultMap="SysProjectRelationResult">
+        <include refid="selectSysProjectRelationVo"/>
+        where review_id = #{reviewId}
+    </select>
 </mapper>

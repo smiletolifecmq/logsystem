@@ -106,6 +106,8 @@ public class SysProject extends BaseEntity
     @Excel(name = "经营产值", needMerge = true)
     private BigDecimal operate;
 
+    private BigDecimal guGongMoney;
+
     /** 填写经营产值人 */
     private String operateUser;
 
@@ -118,6 +120,14 @@ public class SysProject extends BaseEntity
     /** 填写经营产值时间 */
     @JsonFormat(pattern = "yyyy-MM-dd")
     private Date operateTime;
+
+    public BigDecimal getGuGongMoney() {
+        return guGongMoney;
+    }
+
+    public void setGuGongMoney(BigDecimal guGongMoney) {
+        this.guGongMoney = guGongMoney;
+    }
 
     @Excel(name = "产值结算", isIngoreSubList = true, subIndex = 0, headerBackgroundColor = IndexedColors.GREEN)
     private List<SysProjectValue> projectValue;

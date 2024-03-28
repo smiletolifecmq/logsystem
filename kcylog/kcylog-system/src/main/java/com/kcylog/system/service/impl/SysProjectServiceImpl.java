@@ -174,4 +174,16 @@ public class SysProjectServiceImpl implements ISysProjectService
     {
         return sysProjectMapper.deleteSysProjectByCode(projectCode);
     }
+
+    @Override
+    public int jsProjectLiRunCz(String[] projectIds)
+    {
+        return sysProjectMapper.jsProjectLiRunCz(projectIds);
+    }
+
+    @Override
+    public int jsProjectLiRunCzForReview(SysProject sysProject)
+    {
+        return sysProjectMapper.jsProjectLiRunCzForReview(sysProject);
+    }
 }

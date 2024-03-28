@@ -327,7 +327,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
     <update id="jsProjectCz" parameterType="String">
         UPDATE sys_project_value AS spv
         JOIN sys_project AS sp ON spv.project_id = sp.project_id
-        SET spv.money = (sp.operate - sp.fb_money) * (spv.proportion / 100),sp.output_status = 2,sp.settlement_time = CURRENT_TIMESTAMP()
+        SET spv.money = sp.operate * (spv.proportion / 100),sp.output_status = 2,sp.settlement_time = CURRENT_TIMESTAMP()
         WHERE spv.project_id IN
         <foreach item="projectId" collection="array" open="(" separator="," close=")">
             #{projectId}
@@ -407,4 +407,21 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
     <delete id="deleteSysProjectByCode" parameterType="String">
         delete from sys_project where project_num = #{projectCode}
     </delete>
+
+    <update id="jsProjectLiRunCz" parameterType="String">
+        UPDATE sys_project_value AS spv
+        JOIN sys_project AS sp ON spv.project_id = sp.project_id
+        SET spv.profit_money = (sp.operate - sp.fb_money) * (spv.proportion / 100),sp.output_status = 2,sp.settlement_time = CURRENT_TIMESTAMP()
+        WHERE spv.project_id IN
+        <foreach item="projectId" collection="array" open="(" separator="," close=")">
+            #{projectId}
+        </foreach>
+    </update>
+
+    <update id="jsProjectLiRunCzForReview" parameterType="SysProject">
+        UPDATE sys_project_value AS spv
+        JOIN sys_project AS sp ON spv.project_id = sp.project_id
+        SET spv.profit_money = (sp.operate - sp.fb_money - #{guGongMoney}) * (spv.proportion / 100),sp.output_status = 2,sp.settlement_time = CURRENT_TIMESTAMP()
+        WHERE spv.project_id = #{projectId}
+    </update>
 </mapper>

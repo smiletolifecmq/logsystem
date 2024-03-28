@@ -65,4 +65,6 @@ public interface ISysProjectRelationService
     public List<SysProjectRelation> selectProjectRelationByReviewType(Integer reviewType);
 
     public SysProjectRelation selectSysProjectRelationByProjectId(Long projectId);
+
+    public SysProjectRelation selectSysProjectRelationByReviewId(Long reviewId);
 }

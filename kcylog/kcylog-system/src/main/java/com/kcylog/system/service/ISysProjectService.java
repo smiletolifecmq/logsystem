@@ -86,4 +86,8 @@ public interface ISysProjectService
     public int updateSysProjectForMq(SysProject sysProject);
 
     public int deleteSysProjectByCode(String projectCode);
+
+    public int jsProjectLiRunCz(String[] projectIds);
+
+    public int jsProjectLiRunCzForReview(SysProject sysProject);
 }

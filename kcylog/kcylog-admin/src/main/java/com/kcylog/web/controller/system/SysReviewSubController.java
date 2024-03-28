@@ -69,6 +69,8 @@ public class SysReviewSubController extends BaseController
     @Autowired
     private ISysProjectService sysProjectService;
 
+    @Autowired
+    private ISysReviewSubEmployeeService sysReviewSubEmployeeService;
 
     /**
      * 查询审核单列表
@@ -353,6 +355,11 @@ public class SysReviewSubController extends BaseController
         review.setReviewId(sysReviewSubProcess.getReviewId());
         //修改审核单雇工方式
         sysReviewSubService.updateReviewManType(sysReviewSubProcess);
+        //获取项目信息
+        SysProjectRelation projectRelation = sysProjectRelationService.selectSysProjectRelationByReviewId(sysReviewSubProcess.getReviewId());
+        SysProject project = sysProjectService.selectSysProjectByProjectId(String.valueOf(projectRelation.getProjectId()));
+        SysReviewSub reviewSub = sysReviewSubService.selectSysReviewSubByReviewId(projectRelation.getReviewId().toString());
+
         if (sysReviewSubProcess.getStatus() == (long)this.PassStatus){
             //审核通过
             //获取审核单审核流程
@@ -373,6 +380,19 @@ public class SysReviewSubController extends BaseController
 
                 review.setStatus((long)this.PassStatus);
                 sysReviewSubService.setSysReviewSubStatusByReviewId(review);
+                // 计算利润
+                SysReviewSubProcess reviewSubProcessObj = new SysReviewSubProcess();
+                reviewSubProcessObj.setReviewId(projectRelation.getReviewId());
+                List<SysReviewSubProcess> reviewSubProcess = sysReviewSubProcessService.selectSysReviewSubProcessList(reviewSubProcessObj);
+                List<SysReviewSubEmployee> reviewSubEmployee = sysReviewSubEmployeeService.selectSysReviewSubEmployeeByReviewId(projectRelation.getReviewId());
+                if (reviewSubEmployee != null && reviewSubEmployee.size() > 0 && ((reviewSub.getStatus() == 2 || reviewSub.getStatus() == 4) || reviewSubProcess.get(3).getStatus() == 1)){
+                    BigDecimal money = new BigDecimal(0);
+                    for (SysReviewSubEmployee reviewSubEmployee1 : reviewSubEmployee){
+                        money = money.add(reviewSubEmployee1.getCost());
+                    }
+                    project.setGuGongMoney(money);
+                    sysProjectService.jsProjectLiRunCzForReview(project);
+                }
             } else if (passNum == list.size() - 2) {
                 //审核到终审的前一个
                 review.setFinalSecondStatus(1);
@@ -381,6 +401,19 @@ public class SysReviewSubController extends BaseController
             } else {
                 //审核单流程没有全部通过，进入下一个流程审核
                 sysReviewSubProcessService.setNextStatusByReviewId(sysReviewSubProcess.getReviewId());
+                // 如果是最终雇工分管通过，计算利润
+                SysReviewSubProcess reviewSubProcessObj = new SysReviewSubProcess();
+                reviewSubProcessObj.setReviewId(projectRelation.getReviewId());
+                List<SysReviewSubProcess> reviewSubProcess = sysReviewSubProcessService.selectSysReviewSubProcessList(reviewSubProcessObj);
+                List<SysReviewSubEmployee> reviewSubEmployee = sysReviewSubEmployeeService.selectSysReviewSubEmployeeByReviewId(projectRelation.getReviewId());
+                if (reviewSubEmployee != null && reviewSubEmployee.size() > 0 && ((reviewSub.getStatus() == 2 || reviewSub.getStatus() == 4) || reviewSubProcess.get(3).getStatus() == 1)){
+                    BigDecimal money = new BigDecimal(0);
+                    for (SysReviewSubEmployee reviewSubEmployee1 : reviewSubEmployee){
+                        money = money.add(reviewSubEmployee1.getCost());
+                    }
+                    project.setGuGongMoney(money);
+                    sysProjectService.jsProjectLiRunCzForReview(project);
+                }
             }
 
         }else {
@@ -481,6 +514,11 @@ public class SysReviewSubController extends BaseController
                     passNum ++;
                 }
             }
+            //获取项目信息
+            SysProjectRelation projectRelation = sysProjectRelationService.selectSysProjectRelationByReviewId(sysReviewSubProcess.getReviewId());
+            SysProject project = sysProjectService.selectSysProjectByProjectId(String.valueOf(projectRelation.getProjectId()));
+            SysReviewSub reviewSub = sysReviewSubService.selectSysReviewSubByReviewId(projectRelation.getReviewId().toString());
+
             //判断流程是否都已经通过了
             if (passNum == list.size()){
                 //审核单通过
@@ -491,11 +529,38 @@ public class SysReviewSubController extends BaseController
 
                 review.setStatus((long)this.PassStatus);
                 sysReviewSubService.setSysReviewSubStatusByReviewId(review);
+
+                SysReviewSubProcess reviewSubProcessObj = new SysReviewSubProcess();
+                reviewSubProcessObj.setReviewId(projectRelation.getReviewId());
+                List<SysReviewSubProcess> reviewSubProcess = sysReviewSubProcessService.selectSysReviewSubProcessList(reviewSubProcessObj);
+                List<SysReviewSubEmployee> reviewSubEmployee = sysReviewSubEmployeeService.selectSysReviewSubEmployeeByReviewId(projectRelation.getReviewId());
+                if (reviewSubEmployee != null && reviewSubEmployee.size() > 0 && ((reviewSub.getStatus() == 2 || reviewSub.getStatus() == 4) || reviewSubProcess.get(3).getStatus() == 1)){
+                    BigDecimal money = new BigDecimal(0);
+                    for (SysReviewSubEmployee reviewSubEmployee1 : reviewSubEmployee){
+                        money = money.add(reviewSubEmployee1.getCost());
+                    }
+                    project.setGuGongMoney(money);
+                    sysProjectService.jsProjectLiRunCzForReview(project);
+                }
+
             } else if (passNum == list.size() - 2) {
                 //审核到终审的前一个
                 review.setFinalSecondStatus(1);
                 sysReviewSubService.setSysReviewSubFinalSecondStatusByReviewId(review);
                 sysReviewSubProcessService.setNextStatusByReviewId(sysReviewSubProcess.getReviewId());
+
+                SysReviewSubProcess reviewSubProcessObj = new SysReviewSubProcess();
+                reviewSubProcessObj.setReviewId(projectRelation.getReviewId());
+                List<SysReviewSubProcess> reviewSubProcess = sysReviewSubProcessService.selectSysReviewSubProcessList(reviewSubProcessObj);
+                List<SysReviewSubEmployee> reviewSubEmployee = sysReviewSubEmployeeService.selectSysReviewSubEmployeeByReviewId(projectRelation.getReviewId());
+                if (reviewSubEmployee != null && reviewSubEmployee.size() > 0 && ((reviewSub.getStatus() == 2 || reviewSub.getStatus() == 4) || reviewSubProcess.get(3).getStatus() == 1)){
+                    BigDecimal money = new BigDecimal(0);
+                    for (SysReviewSubEmployee reviewSubEmployee1 : reviewSubEmployee){
+                        money = money.add(reviewSubEmployee1.getCost());
+                    }
+                    project.setGuGongMoney(money);
+                    sysProjectService.jsProjectLiRunCzForReview(project);
+                }
             } else {
                 //审核单流程没有全部通过，进入下一个流程审核
                 sysReviewSubProcessService.setNextStatusByReviewId(sysReviewSubProcess.getReviewId());

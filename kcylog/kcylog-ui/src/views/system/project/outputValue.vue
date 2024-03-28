@@ -180,8 +180,16 @@
             <el-table :data="form.projectValue" style="width: 100%">
               <el-table-column prop="userName" label="用户名" align="center" />
               <el-table-column prop="proportion" label="占比" align="center" />
-              <el-table-column prop="money" label="经营产值" align="center" />
-              <el-table-column prop="profitMoney" label="利润" align="center" />
+              <el-table-column prop="money" label="经营产值" align="center">
+                <template slot-scope="scope">
+                  <el-tag> {{ scope.row.money }}</el-tag>
+                </template>
+              </el-table-column>
+              <el-table-column prop="profitMoney" label="利润" align="center">
+                <template slot-scope="scope">
+                  <el-tag type="success"> {{ scope.row.profitMoney }}</el-tag>
+                </template>
+              </el-table-column>
             </el-table>
           </template>
         </el-collapse-item>

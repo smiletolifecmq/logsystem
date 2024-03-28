@@ -64,5 +64,8 @@ public interface SysProjectRelationMapper
 
     public List<SysProjectRelation> selectProjectRelationByReviewType(Integer reviewType);
 
+    public SysProjectRelation selectSysProjectRelationByReviewId(Long reviewId);
+
     public SysProjectRelation selectSysProjectRelationByProjectId(Long projectId);
+
 }

@@ -17,6 +17,7 @@ import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.bind.annotation.*;
 
 import javax.servlet.http.HttpServletResponse;
+import java.math.BigDecimal;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.*;
@@ -156,7 +157,37 @@ public class SysProjectController extends BaseController {
     @Log(title = "项目", businessType = BusinessType.UPDATE)
     @PutMapping
     public AjaxResult edit(@RequestBody SysProject sysProject) {
-        return toAjax(sysProjectService.updateSysProject(sysProject));
+        sysProjectService.updateSysProject(sysProject);
+        // 经营产值计算
+        String[] stringArray = new String[1];
+        stringArray[0] = String.valueOf(sysProject.getProjectId());
+        sysProjectService.jsProjectCz(stringArray);
+        // 利润产值计算
+        SysProject project = sysProjectService.selectSysProjectByProjectId(String.valueOf(sysProject.getProjectId()));
+        SysProjectRelation projectRelation = sysProjectRelationService.selectSysProjectRelationByProjectId(project.getProjectId());
+        if (projectRelation != null){
+            // 存在审核单
+            SysReviewSub reviewSub = sysReviewSubService.selectSysReviewSubByReviewId(projectRelation.getReviewId().toString());
+            SysReviewSubProcess reviewSubProcessObj = new SysReviewSubProcess();
+            reviewSubProcessObj.setReviewId(projectRelation.getReviewId());
+            List<SysReviewSubProcess> reviewSubProcess = sysReviewSubProcessService.selectSysReviewSubProcessList(reviewSubProcessObj);
+            List<SysReviewSubEmployee> reviewSubEmployee = sysReviewSubEmployeeService.selectSysReviewSubEmployeeByReviewId(projectRelation.getReviewId());
+            if (reviewSubEmployee != null && reviewSubEmployee.size() > 0 && ((reviewSub.getStatus() == 2 || reviewSub.getStatus() == 4) || reviewSubProcess.get(3).getStatus() == 1)){
+                BigDecimal money = new BigDecimal(0);
+                for (SysReviewSubEmployee reviewSubEmployee1 : reviewSubEmployee){
+                    money = money.add(reviewSubEmployee1.getCost());
+                }
+                project.setGuGongMoney(money);
+                sysProjectService.jsProjectLiRunCzForReview(project);
+            }else {
+                sysProjectService.jsProjectLiRunCz(stringArray);
+            }
+        }else {
+            // 不存在审核单
+            sysProjectService.jsProjectLiRunCz(stringArray);
+        }
+
+        return toAjax(1);
     }
 
     /**
