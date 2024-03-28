@@ -176,69 +176,14 @@
           </el-descriptions>
         </el-collapse-item>
         <el-collapse-item title="人员安排" name="2">
-          <el-form ref="form" :model="form" :rules="rules" label-width="80px">
-            <!-- <el-button
-              v-if="form.projectValue != null && form.projectValue.length == 0"
-              type="text"
-              icon="el-icon-circle-plus"
-              size="medium"
-              style="margin-left: 20px; margin-bottom: 20px"
-              @click="addProject()"
-            ></el-button> -->
-            <el-form-item
-              v-for="(project, index) in form.projectValue"
-              :key="index"
-              prop="projectValue"
-            >
-              <el-row>
-                <el-col :span="8">
-                  <el-form-item label="用户名" prop="userName">
-                    <!-- <el-autocomplete
-                      disabled
-                      class="inline-input"
-                      v-model="project.userName"
-                      :fetch-suggestions="querySearch"
-                      placeholder="请输入用户名"
-                    ></el-autocomplete> -->
-                    <el-input
-                      disabled
-                      class="inline-input"
-                      v-model="project.userName"
-                    ></el-input>
-                  </el-form-item>
-                </el-col>
-                <el-col :span="8">
-                  <el-form-item label="占比" prop="proportion">
-                    <el-input-number
-                      disabled
-                      v-model="project.proportion"
-                      :max="100"
-                    ></el-input-number>
-                  </el-form-item>
-                </el-col>
-                <el-col :span="1">% </el-col>
-                <!-- <el-col :span="7">
-                  <el-button
-                    :disabled="form.outputStatus === 1"
-                    v-if="index != 0 || form.projectValue.length == 1"
-                    type="text"
-                    icon="el-icon-circle-plus"
-                    size="medium"
-                    style="margin-left: 20px; margin-bottom: 20px"
-                    @click="addProject()"
-                  ></el-button>
-                  <el-button
-                    :disabled="form.outputStatus === 1"
-                    type="text"
-                    icon="el-icon-remove"
-                    size="medium"
-                    style="margin-left: 20px; margin-bottom: 20px"
-                    @click="removeProject(index)"
-                  ></el-button>
-                </el-col> -->
-              </el-row>
-            </el-form-item>
-          </el-form>
+          <template>
+            <el-table :data="form.projectValue" style="width: 100%">
+              <el-table-column prop="userName" label="用户名" align="center" />
+              <el-table-column prop="proportion" label="占比" align="center" />
+              <el-table-column prop="money" label="经营产值" align="center" />
+              <el-table-column prop="profitMoney" label="利润" align="center" />
+            </el-table>
+          </template>
           <div
             class="dialog-footer"
             style="display: flex; justify-content: flex-end"

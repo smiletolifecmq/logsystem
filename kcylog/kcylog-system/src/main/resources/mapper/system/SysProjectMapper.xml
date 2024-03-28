@@ -76,6 +76,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
         <result property="userName"    column="user_name"    />
         <result property="proportion"    column="proportion"    />
         <result property="money"    column="money"    />
+        <result property="profitMoney"    column="profit_money"    />
     </resultMap>
 
     <sql id="selectSysProjectVo">
@@ -83,7 +84,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
     </sql>
 
     <sql id="selectSysProjectDetail">
-        select p.*, v.user_name, v.proportion, v.money, c.project_name, c.car_num, c.car_type, c.number, c.car_expenses, c.record_time
+        select p.*, v.user_name, v.proportion, v.money, v.profit_money, c.project_name, c.car_num, c.car_type, c.number, c.car_expenses, c.record_time
         from sys_project p left join sys_project_value v on p.project_id = v.project_id
                            left join sys_project_car c on p.project_id = c.project_id
     </sql>

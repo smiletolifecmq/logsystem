@@ -35,6 +35,16 @@ public class SysProjectValue extends BaseEntity
     @Excel(name = "产值", headerBackgroundColor = IndexedColors.GREEN)
     private BigDecimal money;
 
+    private BigDecimal profitMoney;
+
+    public BigDecimal getProfitMoney() {
+        return profitMoney;
+    }
+
+    public void setProfitMoney(BigDecimal profitMoney) {
+        this.profitMoney = profitMoney;
+    }
+
     public BigDecimal getMoney() {
         return money;
     }
