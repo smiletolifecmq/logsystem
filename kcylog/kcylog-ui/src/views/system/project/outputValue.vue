@@ -142,13 +142,6 @@
             </el-descriptions-item>
             <el-descriptions-item>
               <template slot="label">
-                <i class="el-icon-user"></i>
-                分包工作量
-              </template>
-              {{ form.fbWorkload }}
-            </el-descriptions-item>
-            <el-descriptions-item>
-              <template slot="label">
                 <i class="el-icon-office-building"></i>
                 雇工金额
               </template>
@@ -165,6 +158,20 @@
               <el-tag type="danger" v-if="calculateProfit(form) <= 0">
                 {{ calculateProfit(form) }}</el-tag
               >
+            </el-descriptions-item>
+            <el-descriptions-item>
+              <template slot="label">
+                <i class="el-icon-user"></i>
+                分包工作量
+              </template>
+              {{ form.fbWorkload }}
+            </el-descriptions-item>
+            <el-descriptions-item>
+              <template slot="label">
+                <i class="el-icon-user"></i>
+                雇工分包申请单
+              </template>
+              <el-tag>{{ calculateLaborSub(form) }}</el-tag>
             </el-descriptions-item>
           </el-descriptions>
         </el-collapse-item>
@@ -186,13 +193,18 @@
               <el-row>
                 <el-col :span="8">
                   <el-form-item label="用户名" prop="userName">
-                    <el-autocomplete
+                    <!-- <el-autocomplete
                       disabled
                       class="inline-input"
                       v-model="project.userName"
                       :fetch-suggestions="querySearch"
                       placeholder="请输入用户名"
-                    ></el-autocomplete>
+                    ></el-autocomplete> -->
+                    <el-input
+                      disabled
+                      class="inline-input"
+                      v-model="project.userName"
+                    ></el-input>
                   </el-form-item>
                 </el-col>
                 <el-col :span="8">
@@ -369,6 +381,42 @@ export default {
         cost = cost + value.reviewSubOne.reviewEmployee[i].cost;
       }
       return cost;
+    },
+    calculateLaborSub(value) {
+      // 0无、1未开始、2驳回、3进行中（展示是谁审核中）、通过
+      var status = "无审核单";
+      if (
+        value.reviewSubOne != null &&
+        value.reviewSubOne != undefined &&
+        value.reviewSubOne.reviewEmployee != null &&
+        value.reviewSubOne.reviewEmployee != undefined
+      ) {
+        if (value.reviewSubOne.status == 2 || value.reviewSubOne.status == 4) {
+          status = "该项目审核单已通过";
+        } else if (value.reviewSubOne.status == 3) {
+          status = "该项目审核单被驳回";
+        } else if (value.reviewSubOne.status == 0) {
+          status = "该项目审核单未发起审核";
+        } else if (
+          value.reviewSubOne.status == 1 &&
+          value.reviewSubOne.reviewSubProcess[3].status == 1
+        ) {
+          status = "该项目审核单已通过";
+        } else {
+          if (value.reviewSubOne.reviewSubProcess[0].status == 1) {
+            status =
+              value.reviewSubOne.reviewSubProcess[0].user.userName + "审核中";
+          }
+          if (value.reviewSubOne.reviewSubProcess[1].status == 1) {
+            status =
+              value.reviewSubOne.reviewSubProcess[1].user.userName + "审核中";
+          }
+          if (value.reviewSubOne.reviewSubProcess[2].status == 1) {
+            status = "填写最终雇工信息中";
+          }
+        }
+      }
+      return status;
     },
     calculateProfit(value) {
       var cost = 0;

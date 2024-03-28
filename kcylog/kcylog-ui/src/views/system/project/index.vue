@@ -550,7 +550,7 @@
             </el-descriptions-item>
           </el-descriptions>
         </el-collapse-item>
-        <el-collapse-item title="产值结算" name="3">
+        <el-collapse-item title="人员安排" name="3">
           <el-table :data="form.projectValue" border style="width: 100%">
             <el-table-column prop="userName" label="用户名" style="width: 100%">
             </el-table-column>

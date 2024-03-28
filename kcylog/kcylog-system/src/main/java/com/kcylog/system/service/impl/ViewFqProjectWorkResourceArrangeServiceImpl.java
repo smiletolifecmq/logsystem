@@ -1,11 +1,12 @@
 package com.kcylog.system.service.impl;
 
-import java.util.List;
+import com.kcylog.system.domain.ViewFqProjectWorkResourceArrange;
+import com.kcylog.system.mapper.ViewFqProjectWorkResourceArrangeMapper;
+import com.kcylog.system.service.IViewFqProjectWorkResourceArrangeService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-import com.kcylog.system.mapper.ViewFqProjectWorkResourceArrangeMapper;
-import com.kcylog.system.domain.ViewFqProjectWorkResourceArrange;
-import com.kcylog.system.service.IViewFqProjectWorkResourceArrangeService;
+
+import java.util.List;
 
 /**
  * 人员安排比例视图Service业务层处理

@@ -45,6 +45,9 @@ public class SysProjectController extends BaseController {
     @Autowired
     private ISysReviewSubEmployeeService sysReviewSubEmployeeService;
 
+    @Autowired
+    private ISysReviewSubProcessService sysReviewSubProcessService;
+
     /**
      * 查询项目列表
      */
@@ -127,6 +130,10 @@ public class SysProjectController extends BaseController {
             SysReviewSub reviewSub = sysReviewSubService.selectSysReviewSubByReviewId(projectRelation.getReviewId().toString());
             List<SysReviewSubEmployee> reviewSubEmployee = sysReviewSubEmployeeService.selectSysReviewSubEmployeeByReviewId(projectRelation.getReviewId());
             reviewSub.setReviewEmployee(reviewSubEmployee);
+            SysReviewSubProcess reviewSubProcessObj = new SysReviewSubProcess();
+            reviewSubProcessObj.setReviewId(projectRelation.getReviewId());
+            List<SysReviewSubProcess> reviewSubProcess = sysReviewSubProcessService.selectSysReviewSubProcessList(reviewSubProcessObj);
+            reviewSub.setReviewSubProcess(reviewSubProcess);
             project.setReviewSubOne(reviewSub);
         }
         return success(project);

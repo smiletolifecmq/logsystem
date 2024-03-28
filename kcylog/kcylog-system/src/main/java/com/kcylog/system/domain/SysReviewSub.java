@@ -109,6 +109,8 @@ public class SysReviewSub extends BaseEntity
 
     private List<SysReviewSubEmployee> reviewEmployee;
 
+    private List<SysReviewSubProcess> reviewSubProcess;
+
     private List<Long> reviewIds;
 
     private String settlementName;
@@ -156,6 +158,14 @@ public class SysReviewSub extends BaseEntity
     private Long[] reviewExportEmployeeIds;
 
     private BigDecimal guGongMoney;
+
+    public List<SysReviewSubProcess> getReviewSubProcess() {
+        return reviewSubProcess;
+    }
+
+    public void setReviewSubProcess(List<SysReviewSubProcess> reviewSubProcess) {
+        this.reviewSubProcess = reviewSubProcess;
+    }
 
     public Long getSubpackageType() {
         return subpackageType;
