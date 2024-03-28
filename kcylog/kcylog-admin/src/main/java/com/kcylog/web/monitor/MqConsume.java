@@ -4,12 +4,8 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import com.google.gson.Gson;
 import com.kcylog.common.utils.DateUtils;
 import com.kcylog.system.common.MqMessage;
-import com.kcylog.system.domain.SysProject;
-import com.kcylog.system.domain.ViewFqProject;
-import com.kcylog.system.domain.ViewFqProjectLog;
-import com.kcylog.system.service.ISysProjectService;
-import com.kcylog.system.service.IViewFqProjectLogService;
-import com.kcylog.system.service.IViewFqProjectService;
+import com.kcylog.system.domain.*;
+import com.kcylog.system.service.*;
 import com.rabbitmq.client.Channel;
 import org.springframework.amqp.core.Message;
 import org.springframework.amqp.rabbit.annotation.Queue;
@@ -22,6 +18,7 @@ import java.math.BigDecimal;
 import java.text.ParseException;
 import java.time.format.DateTimeFormatter;
 import java.util.Date;
+import java.util.List;
 
 @Component
 public class MqConsume {
@@ -33,6 +30,12 @@ public class MqConsume {
 
     @Autowired
     private ISysProjectService sysProjectService;
+
+    @Autowired
+    private IViewFqProjectWorkResourceArrangeService viewFqProjectWorkResourceArrangeService;
+
+    @Autowired
+    private ISysProjectValueService sysProjectValueService;
     /**
      * 监听一个简单的队列，队列不存在时候会创建
      */
@@ -123,11 +126,6 @@ public class MqConsume {
                 sysProject.setIsTwoCheck(1);
                 Date date = DateUtils.parseDate(sysProject.getTwoCheck(), "yyyy-MM-dd HH:mm:ss");
                 sysProject.setTwoCheckTime(date);
-                // todo 需要同步分包工作量、分包金额、人员安排
-            }
-
-            if (mqMessage.getOpType().equals("RESOURCE_ARRANGE_CHANGE")){
-                // todo 需要同步人员安排
             }
 
             //判断状态
@@ -165,6 +163,24 @@ public class MqConsume {
                     sysProjectService.updateSysProjectForMq(sysProject);
                 }else {
                     sysProjectService.insertSysProject(sysProject);
+                }
+            }
+
+
+            //同步人员安排配比
+            if (mqMessage.getOpType().equals("RESOURCE_ARRANGE_CHANGE") || (mqMessage.getOpType().equals("SECOND_CHECK") && sysProject.getTwoCheck() != null && !sysProject.getTwoCheck().equals("")) || (sysProject.getTwoCheck() != null && !sysProject.getTwoCheck().equals(""))){
+                // todo 需要同步人员安排
+                List<ViewFqProjectWorkResourceArrange>  resourceArrange = viewFqProjectWorkResourceArrangeService.selectViewFqProjectWorkResourceArrangeByProjectId(Long.parseLong(mqMessage.getProjectId()));
+                SysProject project = sysProjectService.checkProjectKeyUnique(viewFqProject.getProjectCode());
+                sysProjectValueService.deleteSysProjectValueByProjectId(project.getProjectId());
+                if (resourceArrange != null){
+                    for (ViewFqProjectWorkResourceArrange resourceArrange1 : resourceArrange){
+                        SysProjectValue sysProjectValue = new SysProjectValue();
+                        sysProjectValue.setProjectId(project.getProjectId());
+                        sysProjectValue.setUserName(resourceArrange1.getUserName());
+                        sysProjectValue.setProportion(resourceArrange1.getPerformanceRate());
+                        sysProjectValueService.insertSysProjectValue(sysProjectValue);
+                    }
                 }
             }
 

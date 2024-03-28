@@ -18,7 +18,7 @@ public interface ViewFqProjectWorkResourceArrangeMapper
      * @param projectId 人员安排比例视图主键
      * @return 人员安排比例视图
      */
-    public ViewFqProjectWorkResourceArrange selectViewFqProjectWorkResourceArrangeByProjectId(Long projectId);
+    public List<ViewFqProjectWorkResourceArrange> selectViewFqProjectWorkResourceArrangeByProjectId(Long projectId);
 
     /**
      * 查询人员安排比例视图列表

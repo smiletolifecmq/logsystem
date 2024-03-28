@@ -27,7 +27,7 @@ public class ViewFqProjectWorkResourceArrangeServiceImpl implements IViewFqProje
      * @return 人员安排比例视图
      */
     @Override
-    public ViewFqProjectWorkResourceArrange selectViewFqProjectWorkResourceArrangeByProjectId(Long projectId)
+    public List<ViewFqProjectWorkResourceArrange> selectViewFqProjectWorkResourceArrangeByProjectId(Long projectId)
     {
         return viewFqProjectWorkResourceArrangeMapper.selectViewFqProjectWorkResourceArrangeByProjectId(projectId);
     }
