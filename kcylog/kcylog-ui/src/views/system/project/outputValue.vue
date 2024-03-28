@@ -184,24 +184,6 @@
               <el-table-column prop="profitMoney" label="利润" align="center" />
             </el-table>
           </template>
-          <div
-            class="dialog-footer"
-            style="display: flex; justify-content: flex-end"
-          >
-            <!-- <el-button
-              v-if="form.outputStatus === 0"
-              type="success"
-              @click="submitForm(1)"
-              >办 结</el-button
-            >
-            <el-button
-              v-if="form.outputStatus === 0"
-              type="primary"
-              @click="submitForm(0)"
-              >保 存</el-button
-            > -->
-            <el-button @click="cancel">取 消</el-button>
-          </div>
         </el-collapse-item>
       </el-collapse>
     </el-dialog>
