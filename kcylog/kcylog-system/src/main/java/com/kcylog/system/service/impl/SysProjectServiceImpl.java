@@ -186,4 +186,10 @@ public class SysProjectServiceImpl implements ISysProjectService
     {
         return sysProjectMapper.jsProjectLiRunCzForReview(sysProject);
     }
+
+    @Override
+    public List<SysProject> selectSysProjectListHandover(SysProject sysProject)
+    {
+        return sysProjectMapper.selectSysProjectListHandover(sysProject);
+    }
 }

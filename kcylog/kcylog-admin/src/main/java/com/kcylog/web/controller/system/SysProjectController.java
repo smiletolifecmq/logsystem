@@ -297,4 +297,11 @@ public class SysProjectController extends BaseController {
         List<SysProject> list = sysProjectService.selectSysProjectListUpcoming(sysProject);
         return getDataTable(list);
     }
+
+    @GetMapping("/listHandover")
+    public TableDataInfo listHandover(SysProject sysProject) {
+        startPage();
+        List<SysProject> list = sysProjectService.selectSysProjectListHandover(sysProject);
+        return getDataTable(list);
+    }
 }

@@ -90,4 +90,6 @@ public interface SysProjectMapper
     public int jsProjectLiRunCz(String[] projectIds);
 
     public int jsProjectLiRunCzForReview(SysProject sysProject);
+
+    public List<SysProject> selectSysProjectListHandover(SysProject sysProject);
 }

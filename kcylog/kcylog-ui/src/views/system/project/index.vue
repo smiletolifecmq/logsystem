@@ -910,10 +910,10 @@ export default {
           value: 2,
           label: "一检办结",
         },
-        {
-          value: 3,
-          label: "二检办结",
-        },
+        // {
+        //   value: 3,
+        //   label: "二检办结",
+        // },
       ],
       outputStatusList: [
         {

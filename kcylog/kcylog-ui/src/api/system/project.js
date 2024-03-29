@@ -81,3 +81,11 @@ export function listUpcomingProject(query) {
     params: query
   })
 }
+
+export function listProjectHandover(query) {
+  return request({
+    url: '/system/project/listHandover',
+    method: 'get',
+    params: query
+  })
+}

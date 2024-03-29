@@ -106,6 +106,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
             <if test="params.endTime != null and params.endTime != ''"><!-- 结束时间检索 -->
                 and (date_format(project_start_alias,'%y%m%d') &lt;= date_format(#{params.endTime},'%y%m%d'))
             </if>
+            and status != 3
         </where>
         order by p.status, p.project_id desc
     </select>
@@ -146,6 +147,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
             <if test="status != null">status,</if>
             <if test="subpackageType != null">subpackage_type,</if>
             <if test="isTwoCheck != null">is_two_check,</if>
+            <if test="twoCheckTime != null">two_check_time,</if>
          </trim>
         <trim prefix="values (" suffix=")" suffixOverrides=",">
             <if test="projectNameAlias != null and projectNameAlias != ''">#{projectNameAlias},</if>
@@ -176,6 +178,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
             <if test="status != null">#{status},</if>
             <if test="subpackageType != null">#{subpackageType},</if>
             <if test="isTwoCheck != null">#{isTwoCheck},</if>
+            <if test="twoCheckTime != null">#{twoCheckTime},</if>
          </trim>
     </insert>
 
@@ -397,7 +400,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
             <if test="workcontentAlias != null">workcontent_alias = #{workcontentAlias},</if>
             <if test="department != null and department != ''">department = #{department},</if>
             <if test="isTwoCheck != null and isTwoCheck != 0">is_two_check = #{isTwoCheck},</if>
-            <if test="twoCheckTime != null and twoCheckTime">two_check_time = #{twoCheckTime},</if>
+            <if test="twoCheckTime != null">two_check_time = #{twoCheckTime},</if>
             <if test="status != null">status = #{status},</if>
             <if test="subpackageType != null">subpackage_type = #{subpackageType},</if>
         </trim>
@@ -424,4 +427,25 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
         SET spv.profit_money = (sp.operate - sp.fb_money - #{guGongMoney}) * (spv.proportion / 100),sp.output_status = 2,sp.settlement_time = CURRENT_TIMESTAMP()
         WHERE spv.project_id = #{projectId}
     </update>
+
+    <select id="selectSysProjectListHandover" parameterType="SysProject" resultMap="SysProjectResult">
+        <include refid="selectSysProjectVo"/>
+        <where>
+            <if test="userNameAlias != null and userNameAlias != ''">and user_name_alias like concat('%', #{userNameAlias}, '%')</if>
+            <if test="projectType != null and projectType != ''">and project_type like concat('%', #{projectType}, '%')</if>
+            <if test="projectNameAlias != null  and projectNameAlias != ''"> and project_name_alias like concat('%', #{projectNameAlias}, '%')</if>
+            <if test="outputStatus != null">and output_status = #{outputStatus}</if>
+            <if test="department != null  and department != ''"> and department like concat('%', #{department}, '%')</if>
+            <if test="projectNum != null  and projectNum != ''"> and project_num like concat('%', #{projectNum}, '%')</if>
+            <if test="isJqr != null">and user_name_alias != '机器人'</if>
+            <if test="params.beginTime != null and params.beginTime != ''"><!-- 开始时间检索 -->
+                and (date_format(project_start_alias,'%y%m%d') &gt;= date_format(#{params.beginTime},'%y%m%d'))
+            </if>
+            <if test="params.endTime != null and params.endTime != ''"><!-- 结束时间检索 -->
+                and (date_format(project_start_alias,'%y%m%d') &lt;= date_format(#{params.endTime},'%y%m%d'))
+            </if>
+            and status = 3
+        </where>
+        order by p.status, p.project_id desc
+    </select>
 </mapper>

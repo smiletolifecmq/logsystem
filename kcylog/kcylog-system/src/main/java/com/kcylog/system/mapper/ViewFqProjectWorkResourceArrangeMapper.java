@@ -1,5 +1,7 @@
 package com.kcylog.system.mapper;
 
+import com.kcylog.common.annotation.DataSource;
+import com.kcylog.common.enums.DataSourceType;
 import com.kcylog.system.domain.ViewFqProjectWorkResourceArrange;
 
 import java.util.List;
@@ -10,6 +12,7 @@ import java.util.List;
  * @author ruoyi
  * @date 2024-03-27
  */
+@DataSource(value = DataSourceType.SLAVE)
 public interface ViewFqProjectWorkResourceArrangeMapper 
 {
     /**
