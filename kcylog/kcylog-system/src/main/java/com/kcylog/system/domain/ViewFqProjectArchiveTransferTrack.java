@@ -46,11 +46,11 @@ public class ViewFqProjectArchiveTransferTrack extends BaseEntity
 
     /** 收件截止时间（最后一次二检通过时间加上5个工作日） */
     @Excel(name = "收件截止时间", readConverterExp = "最=后一次二检通过时间加上5个工作日")
-    private LocalDateTime receiveCutofftime;
+    private LocalDateTime receiveCutoffTime;
 
     /** 整改截止时间（第一次被退回整改的时间加上5个工作日） */
     @Excel(name = "整改截止时间", readConverterExp = "第=一次被退回整改的时间加上5个工作日")
-    private LocalDateTime rectifyCutofftime;
+    private LocalDateTime rectifyCutoffTime;
 
     public String getProjectCode() {
         return projectCode;
@@ -132,23 +132,23 @@ public class ViewFqProjectArchiveTransferTrack extends BaseEntity
     {
         return checkStatus;
     }
-    public void setReceiveCutofftime(LocalDateTime receiveCutofftime)
+    public void setReceiveCutoffTime(LocalDateTime receiveCutoffTime)
     {
-        this.receiveCutofftime = receiveCutofftime;
+        this.receiveCutoffTime = receiveCutoffTime;
     }
 
-    public LocalDateTime getReceiveCutofftime()
+    public LocalDateTime getReceiveCutoffTime()
     {
-        return receiveCutofftime;
+        return receiveCutoffTime;
     }
-    public void setRectifyCutofftime(LocalDateTime rectifyCutofftime)
+    public void setRectifyCutoffTime(LocalDateTime rectifyCutoffTime)
     {
-        this.rectifyCutofftime = rectifyCutofftime;
+        this.rectifyCutoffTime = rectifyCutoffTime;
     }
 
-    public LocalDateTime getRectifyCutofftime()
+    public LocalDateTime getRectifyCutoffTime()
     {
-        return rectifyCutofftime;
+        return rectifyCutoffTime;
     }
 
     @Override

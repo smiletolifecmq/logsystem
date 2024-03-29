@@ -14,8 +14,8 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
         <result property="stampStatus"    column="stamp_status"    />
         <result property="marketingConfirm"    column="marketing_confirm"    />
         <result property="checkStatus"    column="check_status"    />
-        <result property="receiveCutofftime"    column="receive_cutoffTime"    />
-        <result property="rectifyCutofftime"    column="rectify_cutoffTime"    />
+        <result property="receiveCutoffTime"    column="receive_cutoff_time"    />
+        <result property="rectifyCutoffTime"    column="rectify_cutoff_time"    />
     </resultMap>
 
     <sql id="selectViewFqProjectArchiveTransferTrackVo">
