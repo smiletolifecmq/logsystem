@@ -162,8 +162,8 @@ public class ViewFqProjectArchiveTransferTrack extends BaseEntity
             .append("stampStatus", getStampStatus())
             .append("marketingConfirm", getMarketingConfirm())
             .append("checkStatus", getCheckStatus())
-            .append("receiveCutofftime", getReceiveCutofftime())
-            .append("rectifyCutofftime", getRectifyCutofftime())
+            .append("receiveCutofftime", getReceiveCutoffTime())
+            .append("rectifyCutofftime", getRectifyCutoffTime())
             .toString();
     }
 }
