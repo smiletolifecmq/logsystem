@@ -89,3 +89,12 @@ export function listProjectHandover(query) {
     params: query
   })
 }
+
+
+export function listProjectDemo(query) {
+  return request({
+    url: '/system/project/listProjectDemo',
+    method: 'get',
+    params: query
+  })
+}

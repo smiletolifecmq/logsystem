@@ -49,6 +49,11 @@ public class SysProjectController extends BaseController {
     @Autowired
     private ISysReviewSubProcessService sysReviewSubProcessService;
 
+    @Autowired
+    private IViewFqProjectArchiveTransferTrackService viewFqProjectArchiveTransferTrackService;
+
+    @Autowired
+    private IViewFqProjectWorkDoneService viewFqProjectWorkDoneService;
     /**
      * 查询项目列表
      */
@@ -302,6 +307,39 @@ public class SysProjectController extends BaseController {
     public TableDataInfo listHandover(SysProject sysProject) {
         startPage();
         List<SysProject> list = sysProjectService.selectSysProjectListHandover(sysProject);
+        return getDataTable(list);
+    }
+
+    @GetMapping("/listProjectDemo")
+    public TableDataInfo listProjectDemo(SysProject sysProject) {
+        startPage();
+        List<SysProject> list = sysProjectService.selectSysProjectList(sysProject);
+        List<String> projectCodes = new ArrayList<>();
+        for (SysProject project : list) {
+            projectCodes.add(project.getProjectNum());
+        }
+        Map<String, Long> workMap = new HashMap<>();
+        List<ViewFqProjectArchiveTransferTrack> projectArchiveTransferTrack = viewFqProjectArchiveTransferTrackService.selectViewFqProjectArchiveTransferTrackByProjectCode(projectCodes);
+        for (ViewFqProjectArchiveTransferTrack track : projectArchiveTransferTrack) {
+            if (track.getWorkStatus() != null) {
+                workMap.put(track.getProjectCode(), track.getWorkStatus());
+            }
+        }
+        Map<String, String> doTimeMap = new HashMap<>();
+        List<ViewFqProjectWorkDone> workDoneList = viewFqProjectWorkDoneService.selectViewFqProjectWorkDoneByProjectCodes(projectCodes);
+        for (ViewFqProjectWorkDone workDone : workDoneList) {
+            if (workDone.getDoTime() != null) {
+                doTimeMap.put(workDone.getProjectCode(), workDone.getDoTime().toString());
+            }
+        }
+        for (SysProject project : list) {
+            if (workMap.get(project.getProjectNum()) != null) {
+                project.setWorkStatus(workMap.get(project.getProjectNum()));
+            }
+            if (doTimeMap.get(project.getProjectNum()) != null) {
+                project.setDoTime(doTimeMap.get(project.getProjectNum()));
+            }
+        }
         return getDataTable(list);
     }
 }

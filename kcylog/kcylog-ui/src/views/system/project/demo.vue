@@ -24,6 +24,17 @@
           @keyup.enter.native="handleQuery"
         />
       </el-form-item>
+      <el-form-item label="工作状态" prop="status">
+        <el-select v-model="queryParams.status" placeholder="请选择">
+          <el-option
+            v-for="item in statusArr"
+            :key="item.value"
+            :label="item.label"
+            :value="item.value"
+          >
+          </el-option>
+        </el-select>
+      </el-form-item>
       <el-form-item label="项目类型" prop="projectType">
         <el-input
           v-model="queryParams.projectType"
@@ -68,7 +79,7 @@
           @keyup.enter.native="handleQuery"
         />
       </el-form-item>
-      <el-form-item label="二检时间">
+      <el-form-item label="安排时间">
         <el-date-picker
           v-model="dateRange"
           style="width: 240px"
@@ -168,11 +179,46 @@
           {{ formatDate(scope.row.projectEndAlias) }}
         </template></el-table-column
       >
-      <el-table-column label="二检时间" align="center" prop="twoCheck">
+      <el-table-column label="作业办结时间" align="center" prop="doTime">
         <template slot-scope="scope">
-          {{ formatDate(scope.row.twoCheck) }}
+          {{ homeworkCompleted(scope.row) }}
         </template></el-table-column
       >
+      <el-table-column label="提前工期" align="center">
+        <template slot-scope="scope">
+          <el-tag
+            type="danger"
+            v-if="
+              onstructionCalculation(scope.row) !== '' &&
+              onstructionCalculation(scope.row) < 0
+            "
+            >{{ constructionCalculation(scope.row) }}</el-tag
+          >
+          <el-tag
+            type="success"
+            v-if="
+              onstructionCalculation(scope.row) !== '' &&
+              onstructionCalculation(scope.row) >= 0
+            "
+            >{{ constructionCalculation(scope.row) }}</el-tag
+          >
+        </template></el-table-column
+      >
+      <el-table-column label="作业状态" align="center" prop="status">
+        <template slot-scope="scope">
+          <el-tag v-if="scope.row.workStatus == 1" type="danger">待办结</el-tag>
+          <el-tag v-else-if="scope.row.workStatus == 2" type="warning"
+            >作业中</el-tag
+          >
+          <el-tag v-else-if="scope.row.workStatus == 3" type="success"
+            >作业完成</el-tag
+          >
+          <el-tag v-else-if="scope.row.workStatus == 4" type="success"
+            >作业办结</el-tag
+          >
+          <el-tag v-else type="danger">新增作业</el-tag>
+        </template>
+      </el-table-column>
       <el-table-column label="工作状态" align="center" prop="status">
         <template slot-scope="scope">
           <el-tag v-if="scope.row.status == 0" type="danger">临时安排</el-tag>
@@ -186,7 +232,7 @@
           <el-tag v-else type="danger">其他状态</el-tag>
         </template>
       </el-table-column>
-      <!-- <el-table-column label="雇工分包" align="center">
+      <el-table-column label="雇工分包" align="center">
         <el-table-column label="状态" align="center" prop="subpackageType">
           <template slot-scope="scope">
             <el-tag v-if="scope.row.subpackageType == 0" type="danger"
@@ -224,7 +270,7 @@
             >
           </template>
         </el-table-column>
-      </el-table-column> -->
+      </el-table-column>
 
       <!-- <el-table-column label="一检时间" align="center" prop="oneCheck" />
         <el-table-column label="二检时间" align="center" prop="twoCheckTime">
@@ -261,14 +307,14 @@
         class-name="small-padding fixed-width"
       >
         <template slot-scope="scope">
-          <!-- <el-button
+          <el-button
             size="mini"
             type="text"
             icon="el-icon-edit"
             @click="handleUpdate(scope.row)"
             v-hasPermi="['system:project:edit']"
             >修改</el-button
-          > -->
+          >
           <el-button
             size="mini"
             type="text"
@@ -277,14 +323,14 @@
             v-hasPermi="['system:project:query']"
             >详情</el-button
           >
-          <!-- <el-button
+          <el-button
             size="mini"
             type="text"
             icon="el-icon-delete"
             @click="handleDelete(scope.row)"
             v-hasPermi="['system:project:remove']"
             >删除</el-button
-          > -->
+          >
         </template>
       </el-table-column>
     </el-table>
@@ -851,7 +897,7 @@
 
 <script>
 import {
-  listProjectHandover,
+  listProjectDemo,
   getProject,
   delProject,
   addProject,
@@ -1087,6 +1133,45 @@ export default {
     console.log(userInfo);
   },
   methods: {
+    homeworkCompleted(value) {
+      var doTime = this.formatDate(value.doTime);
+      if (value.workStatus == 4) {
+        return doTime;
+      } else {
+        return "";
+      }
+    },
+    constructionCalculation(value) {
+      if (value.workStatus == 4) {
+        if (value.projectEndAlias == "" || value.doTime == "") {
+          return "";
+        }
+        var projectEndAlias = this.formatDate(value.projectEndAlias);
+        var doTime = this.formatDate(value.doTime);
+        const startDate = new Date(projectEndAlias);
+        const endDate = new Date(doTime);
+        // 计算两个日期之间的差值（以毫秒为单位）
+        const differenceInMilliseconds = endDate - startDate;
+        // 将毫秒转换为天数
+        const differenceInDays = differenceInMilliseconds / (1000 * 3600 * 24);
+        return differenceInDays;
+      } else {
+        if (value.projectEndAlias == "") {
+          return "";
+        } else {
+          // 设定起始日期和当前日期
+          var startDate = new Date(value.projectEndAlias);
+          var currentDate = new Date();
+          // 计算相差的毫秒数
+          var timeDifference = startDate.getTime() - currentDate.getTime();
+          // 转换为天数
+          var daysDifference = Math.floor(
+            timeDifference / (1000 * 60 * 60 * 24)
+          );
+          return daysDifference;
+        }
+      }
+    },
     showReviewStatus(status) {
       if (
         status != 1 &&
@@ -1342,25 +1427,26 @@ export default {
     getList() {
       this.getReviewProject();
       this.loading = true;
-      listProjectHandover(
-        this.addDateRange(this.queryParams, this.dateRange)
-      ).then((response) => {
-        this.projectList = response.rows;
-        this.total = response.total;
-        this.loading = false;
-        this.listProjectLocalMap = new Map();
-        for (var i = 0; i < response.rows.length; i++) {
-          this.listProjectLocalMap.set(
-            response.rows[i].projectId,
-            response.rows[i]
-          );
-        }
-        for (var j = 0; j < this.projectList.length; j++) {
-          if (this.projectIdMap.has(this.projectList[j].projectId)) {
-            this.projectList[j].issq = 1;
+      listProjectDemo(this.addDateRange(this.queryParams, this.dateRange)).then(
+        (response) => {
+          this.projectList = [];
+          this.projectList = response.rows;
+          this.total = response.total;
+          this.loading = false;
+          this.listProjectLocalMap = new Map();
+          for (var i = 0; i < response.rows.length; i++) {
+            this.listProjectLocalMap.set(
+              response.rows[i].projectId,
+              response.rows[i]
+            );
+          }
+          for (var j = 0; j < this.projectList.length; j++) {
+            if (this.projectIdMap.has(this.projectList[j].projectId)) {
+              this.projectList[j].issq = 1;
+            }
           }
         }
-      });
+      );
     },
     getReviewProject() {
       listProjectSelected(1).then((response) => {

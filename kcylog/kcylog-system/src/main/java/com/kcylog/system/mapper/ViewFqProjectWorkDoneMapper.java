@@ -62,4 +62,6 @@ public interface ViewFqProjectWorkDoneMapper
      * @return 结果
      */
     public int deleteViewFqProjectWorkDoneByProjectIds(Long[] projectIds);
+
+    public List<ViewFqProjectWorkDone> selectViewFqProjectWorkDoneByProjectCodes(List<String> projectCodes);
 }

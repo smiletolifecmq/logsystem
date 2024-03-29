@@ -59,4 +59,6 @@ public interface IViewFqProjectWorkDoneService
      * @return 结果
      */
     public int deleteViewFqProjectWorkDoneByProjectId(Long projectId);
+
+    public List<ViewFqProjectWorkDone> selectViewFqProjectWorkDoneByProjectCodes(List<String> projectCodes);
 }

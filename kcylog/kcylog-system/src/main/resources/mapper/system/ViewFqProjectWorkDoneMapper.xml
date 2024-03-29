@@ -8,10 +8,11 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
         <result property="projectId"    column="project_id"    />
         <result property="doTime"    column="do_time"    />
         <result property="opType"    column="op_type"    />
+        <result property="projectCode"    column="project_code"    />
     </resultMap>
 
     <sql id="selectViewFqProjectWorkDoneVo">
-        select project_id, do_time, op_type from view_fq_project_work_done
+        select project_id, project_code, do_time, op_type from view_fq_project_work_done
     </sql>
 
     <select id="selectViewFqProjectWorkDoneList" parameterType="ViewFqProjectWorkDone" resultMap="ViewFqProjectWorkDoneResult">
@@ -61,4 +62,12 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
             #{projectId}
         </foreach>
     </delete>
+
+    <insert id="selectViewFqProjectWorkDoneByProjectCodes" parameterType="java.util.List">
+        <include refid="selectViewFqProjectWorkDoneVo"/>
+        where project_code in
+        <foreach item="item" collection="list" open="(" separator="," close=")">
+            #{item}
+        </foreach>
+    </insert>
 </mapper>

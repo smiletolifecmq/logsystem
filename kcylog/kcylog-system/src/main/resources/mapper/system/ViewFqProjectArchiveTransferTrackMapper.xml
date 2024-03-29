@@ -6,6 +6,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
     
     <resultMap type="ViewFqProjectArchiveTransferTrack" id="ViewFqProjectArchiveTransferTrackResult">
         <result property="projectId"    column="project_id"    />
+        <result property="projectCode"    column="project_code"    />
         <result property="registerStatus"    column="register_status"    />
         <result property="workStatus"    column="work_status"    />
         <result property="transferStatus"    column="transfer_status"    />
@@ -18,7 +19,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
     </resultMap>
 
     <sql id="selectViewFqProjectArchiveTransferTrackVo">
-        select project_id, register_status, work_status, transfer_status, receive_status, stamp_status, marketing_confirm, check_status, receive_cutoffTime, rectify_cutoffTime from view_fq_project_archive_transfer_track
+        select project_id, project_code, register_status, work_status, transfer_status, receive_status, stamp_status, marketing_confirm, check_status, receive_cutoffTime, rectify_cutoffTime from view_fq_project_archive_transfer_track
     </sql>
 
     <select id="selectViewFqProjectArchiveTransferTrackList" parameterType="ViewFqProjectArchiveTransferTrack" resultMap="ViewFqProjectArchiveTransferTrackResult">
@@ -96,4 +97,12 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
             #{projectId}
         </foreach>
     </delete>
+
+    <insert id="selectViewFqProjectArchiveTransferTrackByProjectCode" parameterType="java.util.List">
+        <include refid="selectViewFqProjectArchiveTransferTrackVo"/>
+        where project_code in
+        <foreach item="item" collection="list" open="(" separator="," close=")">
+            #{item}
+        </foreach>
+    </insert>
 </mapper>

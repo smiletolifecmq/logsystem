@@ -91,4 +91,10 @@ public class ViewFqProjectWorkDoneServiceImpl implements IViewFqProjectWorkDoneS
     {
         return viewFqProjectWorkDoneMapper.deleteViewFqProjectWorkDoneByProjectId(projectId);
     }
+
+    @Override
+    public List<ViewFqProjectWorkDone> selectViewFqProjectWorkDoneByProjectCodes(List<String> projectCodes)
+    {
+        return viewFqProjectWorkDoneMapper.selectViewFqProjectWorkDoneByProjectCodes(projectCodes);
+    }
 }

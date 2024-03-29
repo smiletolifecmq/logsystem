@@ -121,6 +121,26 @@ public class SysProject extends BaseEntity
     @JsonFormat(pattern = "yyyy-MM-dd")
     private Date operateTime;
 
+    private Long workStatus;
+
+    private String doTime;
+
+    public Long getWorkStatus() {
+        return workStatus;
+    }
+
+    public void setWorkStatus(Long workStatus) {
+        this.workStatus = workStatus;
+    }
+
+    public String getDoTime() {
+        return doTime;
+    }
+
+    public void setDoTime(String doTime) {
+        this.doTime = doTime;
+    }
+
     public BigDecimal getGuGongMoney() {
         return guGongMoney;
     }

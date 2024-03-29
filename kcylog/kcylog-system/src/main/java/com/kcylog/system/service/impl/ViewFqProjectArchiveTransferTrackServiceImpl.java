@@ -1,11 +1,12 @@
 package com.kcylog.system.service.impl;
 
-import java.util.List;
+import com.kcylog.system.domain.ViewFqProjectArchiveTransferTrack;
+import com.kcylog.system.mapper.ViewFqProjectArchiveTransferTrackMapper;
+import com.kcylog.system.service.IViewFqProjectArchiveTransferTrackService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-import com.kcylog.system.mapper.ViewFqProjectArchiveTransferTrackMapper;
-import com.kcylog.system.domain.ViewFqProjectArchiveTransferTrack;
-import com.kcylog.system.service.IViewFqProjectArchiveTransferTrackService;
+
+import java.util.List;
 
 /**
  * 移交流程Service业务层处理
@@ -89,5 +90,11 @@ public class ViewFqProjectArchiveTransferTrackServiceImpl implements IViewFqProj
     public int deleteViewFqProjectArchiveTransferTrackByProjectId(Long projectId)
     {
         return viewFqProjectArchiveTransferTrackMapper.deleteViewFqProjectArchiveTransferTrackByProjectId(projectId);
+    }
+
+    @Override
+    public List<ViewFqProjectArchiveTransferTrack> selectViewFqProjectArchiveTransferTrackByProjectCode(List<String> projectCodes)
+    {
+        return viewFqProjectArchiveTransferTrackMapper.selectViewFqProjectArchiveTransferTrackByProjectCode(projectCodes);
     }
 }

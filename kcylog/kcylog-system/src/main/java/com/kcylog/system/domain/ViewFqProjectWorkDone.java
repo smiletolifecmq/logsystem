@@ -29,7 +29,17 @@ public class ViewFqProjectWorkDone extends BaseEntity
     @Excel(name = "${comment}", readConverterExp = "$column.readConverterExp()")
     private Long opType;
 
-    public void setProjectId(Long projectId) 
+    private String projectCode;
+
+    public String getProjectCode() {
+        return projectCode;
+    }
+
+    public void setProjectCode(String projectCode) {
+        this.projectCode = projectCode;
+    }
+
+    public void setProjectId(Long projectId)
     {
         this.projectId = projectId;
     }

@@ -5,7 +5,7 @@ import com.kcylog.common.core.domain.BaseEntity;
 import org.apache.commons.lang3.builder.ToStringBuilder;
 import org.apache.commons.lang3.builder.ToStringStyle;
 
-import java.util.Date;
+import java.time.LocalDateTime;
 
 /**
  * 移交流程对象 view_fq_project_archive_transfer_track
@@ -18,8 +18,9 @@ public class ViewFqProjectArchiveTransferTrack extends BaseEntity
     private static final long serialVersionUID = 1L;
 
     /** $column.columnComment */
-    @Excel(name = "${comment}", readConverterExp = "$column.readConverterExp()")
     private Long projectId;
+
+    private String projectCode;
 
     /** 登记(1："登记中"，2："登记办结") */
     private Long registerStatus;
@@ -45,11 +46,19 @@ public class ViewFqProjectArchiveTransferTrack extends BaseEntity
 
     /** 收件截止时间（最后一次二检通过时间加上5个工作日） */
     @Excel(name = "收件截止时间", readConverterExp = "最=后一次二检通过时间加上5个工作日")
-    private Date receiveCutofftime;
+    private LocalDateTime receiveCutofftime;
 
     /** 整改截止时间（第一次被退回整改的时间加上5个工作日） */
     @Excel(name = "整改截止时间", readConverterExp = "第=一次被退回整改的时间加上5个工作日")
-    private Date rectifyCutofftime;
+    private LocalDateTime rectifyCutofftime;
+
+    public String getProjectCode() {
+        return projectCode;
+    }
+
+    public void setProjectCode(String projectCode) {
+        this.projectCode = projectCode;
+    }
 
     public void setProjectId(Long projectId) 
     {
@@ -123,21 +132,21 @@ public class ViewFqProjectArchiveTransferTrack extends BaseEntity
     {
         return checkStatus;
     }
-    public void setReceiveCutofftime(Date receiveCutofftime) 
+    public void setReceiveCutofftime(LocalDateTime receiveCutofftime)
     {
         this.receiveCutofftime = receiveCutofftime;
     }
 
-    public Date getReceiveCutofftime() 
+    public LocalDateTime getReceiveCutofftime()
     {
         return receiveCutofftime;
     }
-    public void setRectifyCutofftime(Date rectifyCutofftime) 
+    public void setRectifyCutofftime(LocalDateTime rectifyCutofftime)
     {
         this.rectifyCutofftime = rectifyCutofftime;
     }
 
-    public Date getRectifyCutofftime() 
+    public LocalDateTime getRectifyCutofftime()
     {
         return rectifyCutofftime;
     }
