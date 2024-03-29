@@ -1,0 +1,99 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.kcylog.system.mapper.ViewFqProjectArchiveTransferTrackMapper">
+    
+    <resultMap type="ViewFqProjectArchiveTransferTrack" id="ViewFqProjectArchiveTransferTrackResult">
+        <result property="projectId"    column="project_id"    />
+        <result property="registerStatus"    column="register_status"    />
+        <result property="workStatus"    column="work_status"    />
+        <result property="transferStatus"    column="transfer_status"    />
+        <result property="receiveStatus"    column="receive_status"    />
+        <result property="stampStatus"    column="stamp_status"    />
+        <result property="marketingConfirm"    column="marketing_confirm"    />
+        <result property="checkStatus"    column="check_status"    />
+        <result property="receiveCutofftime"    column="receive_cutoffTime"    />
+        <result property="rectifyCutofftime"    column="rectify_cutoffTime"    />
+    </resultMap>
+
+    <sql id="selectViewFqProjectArchiveTransferTrackVo">
+        select project_id, register_status, work_status, transfer_status, receive_status, stamp_status, marketing_confirm, check_status, receive_cutoffTime, rectify_cutoffTime from view_fq_project_archive_transfer_track
+    </sql>
+
+    <select id="selectViewFqProjectArchiveTransferTrackList" parameterType="ViewFqProjectArchiveTransferTrack" resultMap="ViewFqProjectArchiveTransferTrackResult">
+        <include refid="selectViewFqProjectArchiveTransferTrackVo"/>
+        <where>  
+            <if test="projectId != null "> and project_id = #{projectId}</if>
+            <if test="registerStatus != null "> and register_status = #{registerStatus}</if>
+            <if test="workStatus != null "> and work_status = #{workStatus}</if>
+            <if test="transferStatus != null "> and transfer_status = #{transferStatus}</if>
+            <if test="receiveStatus != null "> and receive_status = #{receiveStatus}</if>
+            <if test="stampStatus != null "> and stamp_status = #{stampStatus}</if>
+            <if test="marketingConfirm != null "> and marketing_confirm = #{marketingConfirm}</if>
+            <if test="checkStatus != null "> and check_status = #{checkStatus}</if>
+            <if test="receiveCutofftime != null "> and receive_cutoffTime = #{receiveCutofftime}</if>
+            <if test="rectifyCutofftime != null "> and rectify_cutoffTime = #{rectifyCutofftime}</if>
+        </where>
+    </select>
+    
+    <select id="selectViewFqProjectArchiveTransferTrackByProjectId" parameterType="Long" resultMap="ViewFqProjectArchiveTransferTrackResult">
+        <include refid="selectViewFqProjectArchiveTransferTrackVo"/>
+        where project_id = #{projectId}
+    </select>
+        
+    <insert id="insertViewFqProjectArchiveTransferTrack" parameterType="ViewFqProjectArchiveTransferTrack">
+        insert into view_fq_project_archive_transfer_track
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="projectId != null">project_id,</if>
+            <if test="registerStatus != null">register_status,</if>
+            <if test="workStatus != null">work_status,</if>
+            <if test="transferStatus != null">transfer_status,</if>
+            <if test="receiveStatus != null">receive_status,</if>
+            <if test="stampStatus != null">stamp_status,</if>
+            <if test="marketingConfirm != null">marketing_confirm,</if>
+            <if test="checkStatus != null">check_status,</if>
+            <if test="receiveCutofftime != null">receive_cutoffTime,</if>
+            <if test="rectifyCutofftime != null">rectify_cutoffTime,</if>
+         </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test="projectId != null">#{projectId},</if>
+            <if test="registerStatus != null">#{registerStatus},</if>
+            <if test="workStatus != null">#{workStatus},</if>
+            <if test="transferStatus != null">#{transferStatus},</if>
+            <if test="receiveStatus != null">#{receiveStatus},</if>
+            <if test="stampStatus != null">#{stampStatus},</if>
+            <if test="marketingConfirm != null">#{marketingConfirm},</if>
+            <if test="checkStatus != null">#{checkStatus},</if>
+            <if test="receiveCutofftime != null">#{receiveCutofftime},</if>
+            <if test="rectifyCutofftime != null">#{rectifyCutofftime},</if>
+         </trim>
+    </insert>
+
+    <update id="updateViewFqProjectArchiveTransferTrack" parameterType="ViewFqProjectArchiveTransferTrack">
+        update view_fq_project_archive_transfer_track
+        <trim prefix="SET" suffixOverrides=",">
+            <if test="registerStatus != null">register_status = #{registerStatus},</if>
+            <if test="workStatus != null">work_status = #{workStatus},</if>
+            <if test="transferStatus != null">transfer_status = #{transferStatus},</if>
+            <if test="receiveStatus != null">receive_status = #{receiveStatus},</if>
+            <if test="stampStatus != null">stamp_status = #{stampStatus},</if>
+            <if test="marketingConfirm != null">marketing_confirm = #{marketingConfirm},</if>
+            <if test="checkStatus != null">check_status = #{checkStatus},</if>
+            <if test="receiveCutofftime != null">receive_cutoffTime = #{receiveCutofftime},</if>
+            <if test="rectifyCutofftime != null">rectify_cutoffTime = #{rectifyCutofftime},</if>
+        </trim>
+        where project_id = #{projectId}
+    </update>
+
+    <delete id="deleteViewFqProjectArchiveTransferTrackByProjectId" parameterType="Long">
+        delete from view_fq_project_archive_transfer_track where project_id = #{projectId}
+    </delete>
+
+    <delete id="deleteViewFqProjectArchiveTransferTrackByProjectIds" parameterType="String">
+        delete from view_fq_project_archive_transfer_track where project_id in 
+        <foreach item="projectId" collection="array" open="(" separator="," close=")">
+            #{projectId}
+        </foreach>
+    </delete>
+</mapper>

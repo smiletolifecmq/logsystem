@@ -1,0 +1,64 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.kcylog.system.mapper.ViewFqProjectWorkDoneMapper">
+    
+    <resultMap type="ViewFqProjectWorkDone" id="ViewFqProjectWorkDoneResult">
+        <result property="projectId"    column="project_id"    />
+        <result property="doTime"    column="do_time"    />
+        <result property="opType"    column="op_type"    />
+    </resultMap>
+
+    <sql id="selectViewFqProjectWorkDoneVo">
+        select project_id, do_time, op_type from view_fq_project_work_done
+    </sql>
+
+    <select id="selectViewFqProjectWorkDoneList" parameterType="ViewFqProjectWorkDone" resultMap="ViewFqProjectWorkDoneResult">
+        <include refid="selectViewFqProjectWorkDoneVo"/>
+        <where>  
+            <if test="projectId != null "> and project_id = #{projectId}</if>
+            <if test="doTime != null "> and do_time = #{doTime}</if>
+            <if test="opType != null "> and op_type = #{opType}</if>
+        </where>
+    </select>
+    
+    <select id="selectViewFqProjectWorkDoneByProjectId" parameterType="Long" resultMap="ViewFqProjectWorkDoneResult">
+        <include refid="selectViewFqProjectWorkDoneVo"/>
+        where project_id = #{projectId}
+    </select>
+        
+    <insert id="insertViewFqProjectWorkDone" parameterType="ViewFqProjectWorkDone">
+        insert into view_fq_project_work_done
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="projectId != null">project_id,</if>
+            <if test="doTime != null">do_time,</if>
+            <if test="opType != null">op_type,</if>
+         </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test="projectId != null">#{projectId},</if>
+            <if test="doTime != null">#{doTime},</if>
+            <if test="opType != null">#{opType},</if>
+         </trim>
+    </insert>
+
+    <update id="updateViewFqProjectWorkDone" parameterType="ViewFqProjectWorkDone">
+        update view_fq_project_work_done
+        <trim prefix="SET" suffixOverrides=",">
+            <if test="doTime != null">do_time = #{doTime},</if>
+            <if test="opType != null">op_type = #{opType},</if>
+        </trim>
+        where project_id = #{projectId}
+    </update>
+
+    <delete id="deleteViewFqProjectWorkDoneByProjectId" parameterType="Long">
+        delete from view_fq_project_work_done where project_id = #{projectId}
+    </delete>
+
+    <delete id="deleteViewFqProjectWorkDoneByProjectIds" parameterType="String">
+        delete from view_fq_project_work_done where project_id in 
+        <foreach item="projectId" collection="array" open="(" separator="," close=")">
+            #{projectId}
+        </foreach>
+    </delete>
+</mapper>
