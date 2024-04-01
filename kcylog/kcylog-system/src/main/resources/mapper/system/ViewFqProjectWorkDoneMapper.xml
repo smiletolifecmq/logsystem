@@ -63,11 +63,11 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
         </foreach>
     </delete>
 
-    <insert id="selectViewFqProjectWorkDoneByProjectCodes" parameterType="java.util.List">
+    <select id="selectViewFqProjectWorkDoneByProjectCodes" parameterType="java.util.List" resultMap="ViewFqProjectWorkDoneResult">
         <include refid="selectViewFqProjectWorkDoneVo"/>
         where project_code in
         <foreach item="item" collection="list" open="(" separator="," close=")">
             #{item}
         </foreach>
-    </insert>
+    </select>
 </mapper>

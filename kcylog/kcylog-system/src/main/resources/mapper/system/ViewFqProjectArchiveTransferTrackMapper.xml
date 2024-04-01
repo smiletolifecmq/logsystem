@@ -19,7 +19,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
     </resultMap>
 
     <sql id="selectViewFqProjectArchiveTransferTrackVo">
-        select project_id, project_code, register_status, work_status, transfer_status, receive_status, stamp_status, marketing_confirm, check_status, receive_cutoffTime, rectify_cutoffTime from view_fq_project_archive_transfer_track
+        select project_id, project_code, register_status, work_status, transfer_status, receive_status, stamp_status, marketing_confirm, check_status, receive_cutoff_time, rectify_cutoff_time from view_fq_project_archive_transfer_track
     </sql>
 
     <select id="selectViewFqProjectArchiveTransferTrackList" parameterType="ViewFqProjectArchiveTransferTrack" resultMap="ViewFqProjectArchiveTransferTrackResult">
@@ -33,8 +33,6 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
             <if test="stampStatus != null "> and stamp_status = #{stampStatus}</if>
             <if test="marketingConfirm != null "> and marketing_confirm = #{marketingConfirm}</if>
             <if test="checkStatus != null "> and check_status = #{checkStatus}</if>
-            <if test="receiveCutofftime != null "> and receive_cutoffTime = #{receiveCutofftime}</if>
-            <if test="rectifyCutofftime != null "> and rectify_cutoffTime = #{rectifyCutofftime}</if>
         </where>
     </select>
     
@@ -54,8 +52,6 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
             <if test="stampStatus != null">stamp_status,</if>
             <if test="marketingConfirm != null">marketing_confirm,</if>
             <if test="checkStatus != null">check_status,</if>
-            <if test="receiveCutofftime != null">receive_cutoffTime,</if>
-            <if test="rectifyCutofftime != null">rectify_cutoffTime,</if>
          </trim>
         <trim prefix="values (" suffix=")" suffixOverrides=",">
             <if test="projectId != null">#{projectId},</if>
@@ -66,8 +62,6 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
             <if test="stampStatus != null">#{stampStatus},</if>
             <if test="marketingConfirm != null">#{marketingConfirm},</if>
             <if test="checkStatus != null">#{checkStatus},</if>
-            <if test="receiveCutofftime != null">#{receiveCutofftime},</if>
-            <if test="rectifyCutofftime != null">#{rectifyCutofftime},</if>
          </trim>
     </insert>
 
@@ -81,8 +75,6 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
             <if test="stampStatus != null">stamp_status = #{stampStatus},</if>
             <if test="marketingConfirm != null">marketing_confirm = #{marketingConfirm},</if>
             <if test="checkStatus != null">check_status = #{checkStatus},</if>
-            <if test="receiveCutofftime != null">receive_cutoffTime = #{receiveCutofftime},</if>
-            <if test="rectifyCutofftime != null">rectify_cutoffTime = #{rectifyCutofftime},</if>
         </trim>
         where project_id = #{projectId}
     </update>
@@ -98,11 +90,11 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
         </foreach>
     </delete>
 
-    <insert id="selectViewFqProjectArchiveTransferTrackByProjectCode" parameterType="java.util.List">
+    <select id="selectViewFqProjectArchiveTransferTrackByProjectCode" parameterType="java.util.List" resultMap="ViewFqProjectArchiveTransferTrackResult">
         <include refid="selectViewFqProjectArchiveTransferTrackVo"/>
         where project_code in
         <foreach item="item" collection="list" open="(" separator="," close=")">
             #{item}
         </foreach>
-    </insert>
+    </select>
 </mapper>

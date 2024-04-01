@@ -117,6 +117,8 @@ public class SysProject extends BaseEntity
 
     private Integer isShow;
 
+    private Integer leadTime;
+
     /** 填写经营产值时间 */
     @JsonFormat(pattern = "yyyy-MM-dd")
     private Date operateTime;
@@ -124,6 +126,14 @@ public class SysProject extends BaseEntity
     private Long workStatus;
 
     private String doTime;
+
+    public Integer getLeadTime() {
+        return leadTime;
+    }
+
+    public void setLeadTime(Integer leadTime) {
+        this.leadTime = leadTime;
+    }
 
     public Long getWorkStatus() {
         return workStatus;

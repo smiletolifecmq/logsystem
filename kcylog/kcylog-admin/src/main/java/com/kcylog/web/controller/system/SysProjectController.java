@@ -311,7 +311,7 @@ public class SysProjectController extends BaseController {
     }
 
     @GetMapping("/listProjectDemo")
-    public TableDataInfo listProjectDemo(SysProject sysProject) {
+    public TableDataInfo listProjectDemo(SysProject sysProject) throws ParseException {
         startPage();
         List<SysProject> list = sysProjectService.selectSysProjectList(sysProject);
         List<String> projectCodes = new ArrayList<>();
@@ -339,7 +339,32 @@ public class SysProjectController extends BaseController {
             if (doTimeMap.get(project.getProjectNum()) != null) {
                 project.setDoTime(doTimeMap.get(project.getProjectNum()));
             }
+
+            if (project.getWorkStatus() != null && project.getWorkStatus() == 4){
+                if (project.getProjectEndAlias() == null || project.getDoTime() == null) {
+                    project.setLeadTime(0);
+                }else {
+                    SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd");
+                    Date startDate = dateFormat.parse(project.getProjectEndAlias());
+                    Date endDate = dateFormat.parse(project.getDoTime());
+                    long differenceInMilliseconds = endDate.getTime() - startDate.getTime();
+                    long differenceInDays = differenceInMilliseconds / (1000 * 3600 * 24);
+                    project.setLeadTime((int)differenceInDays);
+                }
+            }else {
+                if (project.getProjectEndAlias() == null) {
+                    project.setLeadTime(0);
+                }else {
+                    SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd");
+                    Date startDate = dateFormat.parse(project.getProjectEndAlias());
+                    Date currentDate = new Date();
+                    long timeDifference = startDate.getTime() - currentDate.getTime();
+                    long daysDifference = timeDifference / (1000 * 60 * 60 * 24);
+                    project.setLeadTime((int)daysDifference);
+                }
+            }
         }
+
         return getDataTable(list);
     }
 }

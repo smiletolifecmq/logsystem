@@ -186,22 +186,12 @@
       >
       <el-table-column label="提前工期" align="center">
         <template slot-scope="scope">
-          <el-tag
-            type="danger"
-            v-if="
-              onstructionCalculation(scope.row) !== '' &&
-              onstructionCalculation(scope.row) < 0
-            "
-            >{{ constructionCalculation(scope.row) }}</el-tag
-          >
-          <el-tag
-            type="success"
-            v-if="
-              onstructionCalculation(scope.row) !== '' &&
-              onstructionCalculation(scope.row) >= 0
-            "
-            >{{ constructionCalculation(scope.row) }}</el-tag
-          >
+          <el-tag type="danger" v-if="scope.row.leadTime < 0">{{
+            scope.row.leadTime
+          }}</el-tag>
+          <el-tag type="success" v-if="scope.row.leadTime >= 0">{{
+            scope.row.leadTime
+          }}</el-tag>
         </template></el-table-column
       >
       <el-table-column label="作业状态" align="center" prop="status">
@@ -1139,37 +1129,6 @@ export default {
         return doTime;
       } else {
         return "";
-      }
-    },
-    constructionCalculation(value) {
-      if (value.workStatus == 4) {
-        if (value.projectEndAlias == "" || value.doTime == "") {
-          return "";
-        }
-        var projectEndAlias = this.formatDate(value.projectEndAlias);
-        var doTime = this.formatDate(value.doTime);
-        const startDate = new Date(projectEndAlias);
-        const endDate = new Date(doTime);
-        // 计算两个日期之间的差值（以毫秒为单位）
-        const differenceInMilliseconds = endDate - startDate;
-        // 将毫秒转换为天数
-        const differenceInDays = differenceInMilliseconds / (1000 * 3600 * 24);
-        return differenceInDays;
-      } else {
-        if (value.projectEndAlias == "") {
-          return "";
-        } else {
-          // 设定起始日期和当前日期
-          var startDate = new Date(value.projectEndAlias);
-          var currentDate = new Date();
-          // 计算相差的毫秒数
-          var timeDifference = startDate.getTime() - currentDate.getTime();
-          // 转换为天数
-          var daysDifference = Math.floor(
-            timeDifference / (1000 * 60 * 60 * 24)
-          );
-          return daysDifference;
-        }
       }
     },
     showReviewStatus(status) {
