@@ -38,6 +38,9 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
         <result property="status"    column="status"    />
         <result property="fbWorkload"    column="fb_workload"    />
         <result property="subpackageType"    column="subpackage_type"    />
+        <result property="workStatus"    column="work_status"    />
+        <result property="doTime"    column="do_time"    />
+
         <association property="projectValue" javaType="java.util.List" resultMap="SysProjectValueResult"/>
         <association property="projectCar" javaType="java.util.List" resultMap="SysProjectCarResult"/>
         <association property="reviewSub" javaType="java.util.List" resultMap="SysReviewSubResult"/>
@@ -148,6 +151,8 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
             <if test="subpackageType != null">subpackage_type,</if>
             <if test="isTwoCheck != null">is_two_check,</if>
             <if test="twoCheckTime != null">two_check_time,</if>
+            <if test="doTime != null">do_time,</if>
+            <if test="workStatus != null">work_status,</if>
          </trim>
         <trim prefix="values (" suffix=")" suffixOverrides=",">
             <if test="projectNameAlias != null and projectNameAlias != ''">#{projectNameAlias},</if>
@@ -179,6 +184,8 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
             <if test="subpackageType != null">#{subpackageType},</if>
             <if test="isTwoCheck != null">#{isTwoCheck},</if>
             <if test="twoCheckTime != null">#{twoCheckTime},</if>
+            <if test="doTime != null">#{doTime},</if>
+            <if test="workStatus != null">#{workStatus},</if>
          </trim>
     </insert>
 
@@ -403,6 +410,8 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
             <if test="twoCheckTime != null">two_check_time = #{twoCheckTime},</if>
             <if test="status != null">status = #{status},</if>
             <if test="subpackageType != null">subpackage_type = #{subpackageType},</if>
+            <if test="doTime != null">do_time = #{doTime},</if>
+            <if test="workStatus != null">work_status = #{workStatus},</if>
         </trim>
         where project_num = #{projectNum}
     </update>

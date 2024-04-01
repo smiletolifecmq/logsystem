@@ -889,7 +889,7 @@
 
 <script>
 import {
-  listProjectDemo,
+  listProject,
   getProject,
   delProject,
   addProject,
@@ -1388,7 +1388,7 @@ export default {
     getList() {
       this.getReviewProject();
       this.loading = true;
-      listProjectDemo(this.addDateRange(this.queryParams, this.dateRange)).then(
+      listProject(this.addDateRange(this.queryParams, this.dateRange)).then(
         (response) => {
           this.projectList = [];
           this.projectList = response.rows;

@@ -10,6 +10,7 @@ import org.apache.commons.lang3.builder.ToStringStyle;
 import org.apache.poi.ss.usermodel.IndexedColors;
 
 import java.math.BigDecimal;
+import java.time.LocalDateTime;
 import java.util.Date;
 import java.util.List;
 
@@ -123,13 +124,143 @@ public class SysProject extends BaseEntity
     @JsonFormat(pattern = "yyyy-MM-dd")
     private Date operateTime;
 
+    private String doTime;
+
+    // 作业状态：(1： "新增作业"，2："作业中"，3："作业完成"，4："作业办结")
     private Long workStatus;
 
-    private String doTime;
+    // 登记状态： (1："登记中"，2："登记办结")
+    private Long registerStatus;
+
+    // 一检状态：1通过 2不通过 空：待办
+    private Long firstCheck;
+
+    // 二检状态：1通过 2不通过 空：待办
+    private Long secondCheck;
+
+    // 移交:（1："未移交"，2："移交办结")
+    private Long transferStatus;
+
+    // 收件:（ 1： "未收件"，2："收件办结")
+    private Long receiveStatus;
+
+    // 盖章:（1："未盖章"；2："已盖章"；3："盖章拒绝"；4："无需盖章"）
+    private Long stampStatus;
+
+    // 验收通过、验收办结(归档)：（1："未验收"；2："验收办结"；3："验收拒绝"，4： "验收通过"）
+    private Long checkStatus;
+
+    // 盖章确认 0未确认，1确认
+    private Long marketingConfirm;
+
+    private LocalDateTime receiveCutoffTime;
+
+    private LocalDateTime rectifyCutoffTime;
+
+    private Integer receiveCutoffTimeDays;
+
+    private Integer rectifyCutoffTimeDays;
+
+    public Long getRegisterStatus() {
+        return registerStatus;
+    }
+
+    public void setRegisterStatus(Long registerStatus) {
+        this.registerStatus = registerStatus;
+    }
+
+    public Long getFirstCheck() {
+        return firstCheck;
+    }
+
+    public void setFirstCheck(Long firstCheck) {
+        this.firstCheck = firstCheck;
+    }
+
+    public Long getSecondCheck() {
+        return secondCheck;
+    }
+
+    public void setSecondCheck(Long secondCheck) {
+        this.secondCheck = secondCheck;
+    }
+
+    public Long getTransferStatus() {
+        return transferStatus;
+    }
+
+    public void setTransferStatus(Long transferStatus) {
+        this.transferStatus = transferStatus;
+    }
+
+    public Long getReceiveStatus() {
+        return receiveStatus;
+    }
+
+    public void setReceiveStatus(Long receiveStatus) {
+        this.receiveStatus = receiveStatus;
+    }
+
+    public Long getStampStatus() {
+        return stampStatus;
+    }
+
+    public void setStampStatus(Long stampStatus) {
+        this.stampStatus = stampStatus;
+    }
+
+    public Long getCheckStatus() {
+        return checkStatus;
+    }
+
+    public void setCheckStatus(Long checkStatus) {
+        this.checkStatus = checkStatus;
+    }
+
+    public Long getMarketingConfirm() {
+        return marketingConfirm;
+    }
+
+    public void setMarketingConfirm(Long marketingConfirm) {
+        this.marketingConfirm = marketingConfirm;
+    }
 
     public Integer getLeadTime() {
         return leadTime;
     }
+
+    public LocalDateTime getReceiveCutoffTime() {
+        return receiveCutoffTime;
+    }
+
+    public void setReceiveCutoffTime(LocalDateTime receiveCutoffTime) {
+        this.receiveCutoffTime = receiveCutoffTime;
+    }
+
+    public LocalDateTime getRectifyCutoffTime() {
+        return rectifyCutoffTime;
+    }
+
+    public void setRectifyCutoffTime(LocalDateTime rectifyCutoffTime) {
+        this.rectifyCutoffTime = rectifyCutoffTime;
+    }
+
+    public Integer getReceiveCutoffTimeDays() {
+        return receiveCutoffTimeDays;
+    }
+
+    public void setReceiveCutoffTimeDays(Integer receiveCutoffTimeDays) {
+        this.receiveCutoffTimeDays = receiveCutoffTimeDays;
+    }
+
+    public Integer getRectifyCutoffTimeDays() {
+        return rectifyCutoffTimeDays;
+    }
+
+    public void setRectifyCutoffTimeDays(Integer rectifyCutoffTimeDays) {
+        this.rectifyCutoffTimeDays = rectifyCutoffTimeDays;
+    }
+
 
     public void setLeadTime(Integer leadTime) {
         this.leadTime = leadTime;

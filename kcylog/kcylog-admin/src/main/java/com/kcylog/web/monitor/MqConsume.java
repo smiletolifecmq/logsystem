@@ -36,6 +36,12 @@ public class MqConsume {
 
     @Autowired
     private ISysProjectValueService sysProjectValueService;
+
+    @Autowired
+    private IViewFqProjectArchiveTransferTrackService viewFqProjectArchiveTransferTrackService;
+
+    @Autowired
+    private IViewFqProjectWorkDoneService viewFqProjectWorkDoneService;
     /**
      * 监听一个简单的队列，队列不存在时候会创建
      */
@@ -151,10 +157,18 @@ public class MqConsume {
                 sysProject.setSubpackageType(viewFqProject.getSubpackageType());
             }
 
-//            String sysProjectJson = mapper.writeValueAsString(sysProject);
-//            viewFqProjectLog.setViewFqProjectJson(viewFqProjectJson);
-//            viewFqProjectLog.setSysProjectJson(sysProjectJson);
             viewFqProjectLogService.insertViewFqProjectLog(viewFqProjectLog);
+
+            //作业状态
+            ViewFqProjectArchiveTransferTrack projectArchiveTransferTrack = viewFqProjectArchiveTransferTrackService.selectViewFqProjectArchiveTransferTrackByProjectId(Long.parseLong(mqMessage.getProjectId()));
+            if (projectArchiveTransferTrack != null && projectArchiveTransferTrack.getWorkStatus() != null){
+                sysProject.setWorkStatus(projectArchiveTransferTrack.getWorkStatus());
+            }
+            //作业办结时间
+            ViewFqProjectWorkDone workDoneList = viewFqProjectWorkDoneService.selectViewFqProjectWorkDoneByProjectId(Long.parseLong(mqMessage.getProjectId()));
+            if (workDoneList != null && workDoneList.getDoTime() != null){
+                sysProject.setDoTime(workDoneList.getDoTime().toString());
+            }
 
             if (mqMessage.getOpType().equals("DELETE") || mqMessage.getOpType().equals("PROJECT_INVALID") || mqMessage.getOpType().equals("PROJECT_HANG")){
                 sysProjectService.deleteSysProjectByCode(viewFqProject.getProjectCode());
