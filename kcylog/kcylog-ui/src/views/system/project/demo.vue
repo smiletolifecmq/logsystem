@@ -196,7 +196,9 @@
       >
       <el-table-column label="作业状态" align="center" prop="status">
         <template slot-scope="scope">
-          <el-tag v-if="scope.row.workStatus == 1" type="danger">待办结</el-tag>
+          <el-tag v-if="scope.row.workStatus == 1" type="danger"
+            >新增作业</el-tag
+          >
           <el-tag v-else-if="scope.row.workStatus == 2" type="warning"
             >作业中</el-tag
           >
@@ -1149,7 +1151,7 @@ export default {
       }
     },
     formatDate(dateString) {
-      if (dateString == "") {
+      if (dateString == "" || dateString == null || dateString == undefined) {
         return "";
       }
       const dateObject = new Date(dateString);

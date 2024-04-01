@@ -61,16 +61,16 @@
       </el-form-item>
 
       <!-- <el-form-item label="结算状态" prop="outputStatus">
-        <el-select v-model="queryParams.outputStatus" placeholder="请选择">
-          <el-option
-            v-for="item in outputStatusList"
-            :key="item.value"
-            :label="item.label"
-            :value="item.value"
-          >
-          </el-option>
-        </el-select>
-      </el-form-item> -->
+          <el-select v-model="queryParams.outputStatus" placeholder="请选择">
+            <el-option
+              v-for="item in outputStatusList"
+              :key="item.value"
+              :label="item.label"
+              :value="item.value"
+            >
+            </el-option>
+          </el-select>
+        </el-form-item> -->
       <el-form-item label="负责人" prop="userNameAlias">
         <el-input
           v-model="queryParams.userNameAlias"
@@ -106,34 +106,34 @@
     </el-form>
 
     <!-- <el-row :gutter="10" class="mb8">
-      <el-col :span="1.5">
-        <el-button
-          type="primary"
-          plain
-          icon="el-icon-plus"
-          size="mini"
-          @click="handleAdd"
-          v-hasPermi="['system:project:add']"
-          >新增</el-button
-        >
-      </el-col>
-      <el-col :span="1.5">
-        <el-button
-          type="warning"
-          plain
-          icon="el-icon-download"
-          size="mini"
-          @click="handleExport"
-          v-hasPermi="['system:project:export']"
-          >导出</el-button
-        >
-      </el-col>
-
-      <right-toolbar
-        :showSearch.sync="showSearch"
-        @queryTable="getList"
-      ></right-toolbar>
-    </el-row> -->
+        <el-col :span="1.5">
+          <el-button
+            type="primary"
+            plain
+            icon="el-icon-plus"
+            size="mini"
+            @click="handleAdd"
+            v-hasPermi="['system:project:add']"
+            >新增</el-button
+          >
+        </el-col>
+        <el-col :span="1.5">
+          <el-button
+            type="warning"
+            plain
+            icon="el-icon-download"
+            size="mini"
+            @click="handleExport"
+            v-hasPermi="['system:project:export']"
+            >导出</el-button
+          >
+        </el-col>
+  
+        <right-toolbar
+          :showSearch.sync="showSearch"
+          @queryTable="getList"
+        ></right-toolbar>
+      </el-row> -->
 
     <el-table
       v-loading="loading"
@@ -151,11 +151,11 @@
       <el-table-column label="工程负责人" align="center" prop="userNameAlias" />
       <el-table-column label="作业部门" align="center" prop="department" />
       <!-- <el-table-column label="项目类型" align="center" prop="projectType" />
-      <el-table-column
-        label="工程内容"
-        align="center"
-        prop="workcontentAlias"
-      /> -->
+        <el-table-column
+          label="工程内容"
+          align="center"
+          prop="workcontentAlias"
+        /> -->
       <el-table-column label="登记时间" align="center" prop="registerTime">
         <template slot-scope="scope">
           {{ formatDate(scope.row.registerTime) }}
@@ -179,6 +179,38 @@
           {{ formatDate(scope.row.projectEndAlias) }}
         </template></el-table-column
       >
+      <el-table-column label="作业办结时间" align="center" prop="doTime">
+        <template slot-scope="scope">
+          {{ homeworkCompleted(scope.row) }}
+        </template></el-table-column
+      >
+      <el-table-column label="提前工期" align="center">
+        <template slot-scope="scope">
+          <el-tag type="danger" v-if="scope.row.leadTime < 0">{{
+            scope.row.leadTime
+          }}</el-tag>
+          <el-tag type="success" v-if="scope.row.leadTime >= 0">{{
+            scope.row.leadTime
+          }}</el-tag>
+        </template></el-table-column
+      >
+      <el-table-column label="作业状态" align="center" prop="status">
+        <template slot-scope="scope">
+          <el-tag v-if="scope.row.workStatus == 1" type="danger"
+            >新增作业</el-tag
+          >
+          <el-tag v-else-if="scope.row.workStatus == 2" type="warning"
+            >作业中</el-tag
+          >
+          <el-tag v-else-if="scope.row.workStatus == 3" type="success"
+            >作业完成</el-tag
+          >
+          <el-tag v-else-if="scope.row.workStatus == 4" type="success"
+            >作业办结</el-tag
+          >
+          <el-tag v-else type="danger">新增作业</el-tag>
+        </template>
+      </el-table-column>
       <el-table-column label="工作状态" align="center" prop="status">
         <template slot-scope="scope">
           <el-tag v-if="scope.row.status == 0" type="danger">临时安排</el-tag>
@@ -233,33 +265,33 @@
       </el-table-column>
 
       <!-- <el-table-column label="一检时间" align="center" prop="oneCheck" />
-      <el-table-column label="二检时间" align="center" prop="twoCheckTime">
-        <template slot-scope="scope">
-          <span>{{ parseTime(scope.row.twoCheckTime, "{y}-{m}-{d}") }}</span>
-        </template>
-      </el-table-column> -->
+        <el-table-column label="二检时间" align="center" prop="twoCheckTime">
+          <template slot-scope="scope">
+            <span>{{ parseTime(scope.row.twoCheckTime, "{y}-{m}-{d}") }}</span>
+          </template>
+        </el-table-column> -->
       <!-- <el-table-column
-        label="结算时间"
-        align="center"
-        prop="settlementTime"
-        width="160"
-      >
-        <template slot-scope="scope">
-          <span>{{ parseTime(scope.row.settlementTime, "{y}-{m}-{d}") }}</span>
-        </template>
-      </el-table-column> -->
+          label="结算时间"
+          align="center"
+          prop="settlementTime"
+          width="160"
+        >
+          <template slot-scope="scope">
+            <span>{{ parseTime(scope.row.settlementTime, "{y}-{m}-{d}") }}</span>
+          </template>
+        </el-table-column> -->
       <!-- <el-table-column label="结算状态" align="center" prop="status">
-        <template slot-scope="scope">
-          <el-tag v-if="scope.row.outputStatus === 0" type="warning"
-            >未填写</el-tag
-          >
-          <el-tag v-else-if="scope.row.outputStatus === 1">待结算</el-tag>
-          <el-tag v-else-if="scope.row.outputStatus === 2" type="success"
-            >已结算</el-tag
-          >
-          <el-tag v-else type="danger">其他状态</el-tag>
-        </template>
-      </el-table-column> -->
+          <template slot-scope="scope">
+            <el-tag v-if="scope.row.outputStatus === 0" type="warning"
+              >未填写</el-tag
+            >
+            <el-tag v-else-if="scope.row.outputStatus === 1">待结算</el-tag>
+            <el-tag v-else-if="scope.row.outputStatus === 2" type="success"
+              >已结算</el-tag
+            >
+            <el-tag v-else type="danger">其他状态</el-tag>
+          </template>
+        </el-table-column> -->
       <el-table-column
         fixed="right"
         label="操作"
@@ -695,14 +727,14 @@
                   </div>
                   <div>
                     <!-- <el-form-item label="项目金额" prop="porjectMoney">
-                      <el-input-number
-                        v-model="formReviewSub.porjectMoney"
-                        :precision="2"
-                        :step="0.1"
-                        :min="0.0"
-                        placeholder="请输入项目金额"
-                      />
-                    </el-form-item> -->
+                        <el-input-number
+                          v-model="formReviewSub.porjectMoney"
+                          :precision="2"
+                          :step="0.1"
+                          :min="0.0"
+                          placeholder="请输入项目金额"
+                        />
+                      </el-form-item> -->
                     <el-form-item label="雇工人数" prop="peopleNum">
                       <el-input-number
                         v-model="formReviewSub.peopleNum"
@@ -857,7 +889,7 @@
 
 <script>
 import {
-  listProject,
+  listProjectDemo,
   getProject,
   delProject,
   addProject,
@@ -1093,6 +1125,14 @@ export default {
     console.log(userInfo);
   },
   methods: {
+    homeworkCompleted(value) {
+      var doTime = this.formatDate(value.doTime);
+      if (value.workStatus == 4) {
+        return doTime;
+      } else {
+        return "";
+      }
+    },
     showReviewStatus(status) {
       if (
         status != 1 &&
@@ -1111,7 +1151,7 @@ export default {
       }
     },
     formatDate(dateString) {
-      if (dateString == "") {
+      if (dateString == "" || dateString == null || dateString == undefined) {
         return "";
       }
       const dateObject = new Date(dateString);
@@ -1348,8 +1388,9 @@ export default {
     getList() {
       this.getReviewProject();
       this.loading = true;
-      listProject(this.addDateRange(this.queryParams, this.dateRange)).then(
+      listProjectDemo(this.addDateRange(this.queryParams, this.dateRange)).then(
         (response) => {
+          this.projectList = [];
           this.projectList = response.rows;
           this.total = response.total;
           this.loading = false;
