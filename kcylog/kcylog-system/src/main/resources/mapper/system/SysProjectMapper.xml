@@ -99,7 +99,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
             <if test="projectType != null and projectType != ''">and project_type like concat('%', #{projectType}, '%')</if>
             <if test="projectNameAlias != null  and projectNameAlias != ''"> and project_name_alias like concat('%', #{projectNameAlias}, '%')</if>
             <if test="outputStatus != null">and output_status = #{outputStatus}</if>
-            <if test="status != null">and status = #{status}</if>
+            <if test="workStatus != null">and work_status = #{workStatus}</if>
             <if test="department != null  and department != ''"> and department like concat('%', #{department}, '%')</if>
             <if test="projectNum != null  and projectNum != ''"> and project_num like concat('%', #{projectNum}, '%')</if>
             <if test="isJqr != null">and user_name_alias != '机器人'</if>
@@ -109,7 +109,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
             <if test="params.endTime != null and params.endTime != ''"><!-- 结束时间检索 -->
                 and (date_format(project_start_alias,'%y%m%d') &lt;= date_format(#{params.endTime},'%y%m%d'))
             </if>
-            and status != 3
+            and status != 2 and status != 3
         </where>
         order by p.status, p.project_id desc
     </select>
@@ -444,6 +444,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
             <if test="projectType != null and projectType != ''">and project_type like concat('%', #{projectType}, '%')</if>
             <if test="projectNameAlias != null  and projectNameAlias != ''"> and project_name_alias like concat('%', #{projectNameAlias}, '%')</if>
             <if test="outputStatus != null">and output_status = #{outputStatus}</if>
+            <if test="status != null">and status = #{status}</if>
             <if test="department != null  and department != ''"> and department like concat('%', #{department}, '%')</if>
             <if test="projectNum != null  and projectNum != ''"> and project_num like concat('%', #{projectNum}, '%')</if>
             <if test="isJqr != null">and user_name_alias != '机器人'</if>
@@ -453,8 +454,8 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
             <if test="params.endTime != null and params.endTime != ''"><!-- 结束时间检索 -->
                 and (date_format(two_check,'%y%m%d') &lt;= date_format(#{params.endTime},'%y%m%d'))
             </if>
-            and status = 3
+            and (status = 2 or status = 3)
         </where>
-        order by two_check desc
+        order by one_check desc,two_check desc
     </select>
 </mapper>

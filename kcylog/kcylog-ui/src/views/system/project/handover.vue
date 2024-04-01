@@ -68,6 +68,18 @@
           @keyup.enter.native="handleQuery"
         />
       </el-form-item>
+
+      <el-form-item label="作业状态" prop="workStatus">
+        <el-select v-model="queryParams.status" placeholder="请选择">
+          <el-option
+            v-for="item in statusArr"
+            :key="item.value"
+            :label="item.label"
+            :value="item.value"
+          >
+          </el-option>
+        </el-select>
+      </el-form-item>
       <el-form-item label="二检时间">
         <el-date-picker
           v-model="dateRange"
@@ -893,21 +905,13 @@ export default {
       openReviewSub: false,
       statusArr: [
         {
-          value: 0,
-          label: "临时安排",
-        },
-        {
-          value: 1,
-          label: "正式安排",
-        },
-        {
           value: 2,
           label: "一检办结",
         },
-        // {
-        //   value: 3,
-        //   label: "二检办结",
-        // },
+        {
+          value: 3,
+          label: "二检办结",
+        },
       ],
       outputStatusList: [
         {
