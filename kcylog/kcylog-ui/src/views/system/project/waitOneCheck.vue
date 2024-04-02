@@ -56,30 +56,6 @@
           @keyup.enter.native="handleQuery"
         />
       </el-form-item>
-
-      <el-form-item label="作业状态" prop="status">
-        <el-select v-model="queryParams.status" placeholder="请选择">
-          <el-option
-            v-for="item in statusArr"
-            :key="item.value"
-            :label="item.label"
-            :value="item.value"
-          >
-          </el-option>
-        </el-select>
-      </el-form-item>
-      <el-form-item label="二检时间">
-        <el-date-picker
-          v-model="dateRange"
-          style="width: 240px"
-          value-format="yyyy-MM-dd"
-          type="daterange"
-          range-separator="-"
-          start-placeholder="开始日期"
-          end-placeholder="结束日期"
-          @change="handleQuery"
-        ></el-date-picker>
-      </el-form-item>
       <el-form-item>
         <el-button
           type="primary"
@@ -138,28 +114,8 @@
           {{ formatDate(scope.row.projectEndAlias) }}
         </template></el-table-column
       >
-      <el-table-column label="一检时间" align="center" prop="oneCheck">
-        <template slot-scope="scope">
-          {{ formatDate(scope.row.oneCheck) }}
-        </template></el-table-column
-      >
-      <el-table-column label="二检时间" align="center" prop="twoCheck">
-        <template slot-scope="scope">
-          {{ formatDate(scope.row.twoCheck) }}
-        </template></el-table-column
-      >
       <el-table-column label="工作状态" align="center" prop="status">
-        <template slot-scope="scope">
-          <el-tag v-if="scope.row.status == 0" type="danger">临时安排</el-tag>
-          <el-tag v-else-if="scope.row.status == 1" type="success"
-            >正式安排</el-tag
-          >
-          <el-tag v-else-if="scope.row.status == 2" type="warning"
-            >一检办结</el-tag
-          >
-          <el-tag v-else-if="scope.row.status == 3">二检办结</el-tag>
-          <el-tag v-else type="danger">其他状态</el-tag>
-        </template>
+        <el-tag type="danger">待一检</el-tag>
       </el-table-column>
       <el-table-column
         fixed="right"
@@ -742,7 +698,7 @@
 
 <script>
 import {
-  listProjectHandover,
+  listProjectWaitOneCheck,
   getProject,
   delProject,
   addProject,
@@ -1226,7 +1182,7 @@ export default {
     getList() {
       this.getReviewProject();
       this.loading = true;
-      listProjectHandover(
+      listProjectWaitOneCheck(
         this.addDateRange(this.queryParams, this.dateRange)
       ).then((response) => {
         this.projectList = response.rows;

@@ -92,4 +92,8 @@ public interface SysProjectMapper
     public int jsProjectLiRunCzForReview(SysProject sysProject);
 
     public List<SysProject> selectSysProjectListHandover(SysProject sysProject);
+
+    public List<SysProject> selectSysProjectWaitOneCheck(SysProject sysProject);
+
+    public List<SysProject> selectSysProjectWaitTwoCheck(SysProject sysProject);
 }

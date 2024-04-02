@@ -93,7 +93,7 @@
       </el-form-item>
     </el-form>
 
-    <el-row :gutter="10" class="mb8">
+    <el-row v-show="false" :gutter="10" class="mb8">
       <right-toolbar
         :showSearch.sync="showSearch"
         @queryTable="getList"
@@ -106,13 +106,25 @@
       @selection-change="handleSelectionChange"
       size="mini"
     >
-      <el-table-column label="委托单位" align="center" prop="requesterAlias" />
       <el-table-column
+        fixed
+        label="委托单位"
+        align="center"
+        prop="requesterAlias"
+      />
+      <el-table-column
+        fixed
         label="项目名称"
         align="center"
         prop="projectNameAlias"
       />
-      <el-table-column label="项目编号" align="center" prop="projectNum" />
+      <el-table-column
+        fixed
+        label="项目编号"
+        width="200px"
+        align="center"
+        prop="projectNum"
+      />
       <el-table-column label="工程负责人" align="center" prop="userNameAlias" />
       <el-table-column label="作业部门" align="center" prop="department" />
       <!-- <el-table-column label="项目类型" align="center" prop="projectType" />

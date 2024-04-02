@@ -458,4 +458,48 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
         </where>
         order by status asc, one_check desc,two_check desc
     </select>
+
+    <select id="selectSysProjectWaitOneCheck" parameterType="SysProject" resultMap="SysProjectResult">
+        <include refid="selectSysProjectVo"/>
+        <where>
+            <if test="userNameAlias != null and userNameAlias != ''">and user_name_alias like concat('%', #{userNameAlias}, '%')</if>
+            <if test="projectType != null and projectType != ''">and project_type like concat('%', #{projectType}, '%')</if>
+            <if test="projectNameAlias != null  and projectNameAlias != ''"> and project_name_alias like concat('%', #{projectNameAlias}, '%')</if>
+            <if test="outputStatus != null">and output_status = #{outputStatus}</if>
+            <if test="status != null">and status = #{status}</if>
+            <if test="department != null  and department != ''"> and department like concat('%', #{department}, '%')</if>
+            <if test="projectNum != null  and projectNum != ''"> and project_num like concat('%', #{projectNum}, '%')</if>
+            <if test="isJqr != null">and user_name_alias != '机器人'</if>
+            <if test="params.beginTime != null and params.beginTime != ''"><!-- 开始时间检索 -->
+                and (date_format(two_check,'%y%m%d') &gt;= date_format(#{params.beginTime},'%y%m%d'))
+            </if>
+            <if test="params.endTime != null and params.endTime != ''"><!-- 结束时间检索 -->
+                and (date_format(two_check,'%y%m%d') &lt;= date_format(#{params.endTime},'%y%m%d'))
+            </if>
+            and status = 1 and work_status = 4
+        </where>
+        order by doTime desc
+    </select>
+
+    <select id="selectSysProjectWaitTwoCheck" parameterType="SysProject" resultMap="SysProjectResult">
+        <include refid="selectSysProjectVo"/>
+        <where>
+            <if test="userNameAlias != null and userNameAlias != ''">and user_name_alias like concat('%', #{userNameAlias}, '%')</if>
+            <if test="projectType != null and projectType != ''">and project_type like concat('%', #{projectType}, '%')</if>
+            <if test="projectNameAlias != null  and projectNameAlias != ''"> and project_name_alias like concat('%', #{projectNameAlias}, '%')</if>
+            <if test="outputStatus != null">and output_status = #{outputStatus}</if>
+            <if test="status != null">and status = #{status}</if>
+            <if test="department != null  and department != ''"> and department like concat('%', #{department}, '%')</if>
+            <if test="projectNum != null  and projectNum != ''"> and project_num like concat('%', #{projectNum}, '%')</if>
+            <if test="isJqr != null">and user_name_alias != '机器人'</if>
+            <if test="params.beginTime != null and params.beginTime != ''"><!-- 开始时间检索 -->
+                and (date_format(two_check,'%y%m%d') &gt;= date_format(#{params.beginTime},'%y%m%d'))
+            </if>
+            <if test="params.endTime != null and params.endTime != ''"><!-- 结束时间检索 -->
+                and (date_format(two_check,'%y%m%d') &lt;= date_format(#{params.endTime},'%y%m%d'))
+            </if>
+            and status = 2
+        </where>
+        order by one_check desc
+    </select>
 </mapper>

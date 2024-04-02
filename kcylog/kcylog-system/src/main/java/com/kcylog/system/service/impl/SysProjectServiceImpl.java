@@ -192,4 +192,16 @@ public class SysProjectServiceImpl implements ISysProjectService
     {
         return sysProjectMapper.selectSysProjectListHandover(sysProject);
     }
+
+    @Override
+    public List<SysProject> selectSysProjectWaitOneCheck(SysProject sysProject)
+    {
+        return sysProjectMapper.selectSysProjectWaitOneCheck(sysProject);
+    }
+
+    @Override
+    public List<SysProject> selectSysProjectWaitTwoCheck(SysProject sysProject)
+    {
+        return sysProjectMapper.selectSysProjectWaitTwoCheck(sysProject);
+    }
 }

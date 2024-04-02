@@ -90,3 +90,19 @@ export function listProjectHandover(query) {
   })
 }
 
+export function listProjectWaitOneCheck(query) {
+  return request({
+    url: '/system/project/listProjectWaitOneCheck',
+    method: 'get',
+    params: query
+  })
+}
+
+export function listProjectWaitTwoCheck(query) {
+  return request({
+    url: '/system/project/listProjectWaitTwoCheck',
+    method: 'get',
+    params: query
+  })
+}
+

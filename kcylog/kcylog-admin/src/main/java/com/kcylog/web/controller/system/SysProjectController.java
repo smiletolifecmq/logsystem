@@ -335,4 +335,18 @@ public class SysProjectController extends BaseController {
         List<SysProject> list = sysProjectService.selectSysProjectListHandover(sysProject);
         return getDataTable(list);
     }
+
+    @GetMapping("/listProjectWaitOneCheck")
+    public TableDataInfo listProjectWaitOneCheck(SysProject sysProject) {
+        startPage();
+        List<SysProject> list = sysProjectService.selectSysProjectWaitOneCheck(sysProject);
+        return getDataTable(list);
+    }
+
+    @GetMapping("/listProjectWaitTwoCheck")
+    public TableDataInfo listProjectWaitTwoCheck(SysProject sysProject) {
+        startPage();
+        List<SysProject> list = sysProjectService.selectSysProjectWaitTwoCheck(sysProject);
+        return getDataTable(list);
+    }
 }
