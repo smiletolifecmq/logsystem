@@ -59,18 +59,6 @@
           </el-option>
         </el-select>
       </el-form-item>
-
-      <!-- <el-form-item label="结算状态" prop="outputStatus">
-          <el-select v-model="queryParams.outputStatus" placeholder="请选择">
-            <el-option
-              v-for="item in outputStatusList"
-              :key="item.value"
-              :label="item.label"
-              :value="item.value"
-            >
-            </el-option>
-          </el-select>
-        </el-form-item> -->
       <el-form-item label="负责人" prop="userNameAlias">
         <el-input
           v-model="queryParams.userNameAlias"
@@ -105,35 +93,12 @@
       </el-form-item>
     </el-form>
 
-    <!-- <el-row :gutter="10" class="mb8">
-        <el-col :span="1.5">
-          <el-button
-            type="primary"
-            plain
-            icon="el-icon-plus"
-            size="mini"
-            @click="handleAdd"
-            v-hasPermi="['system:project:add']"
-            >新增</el-button
-          >
-        </el-col>
-        <el-col :span="1.5">
-          <el-button
-            type="warning"
-            plain
-            icon="el-icon-download"
-            size="mini"
-            @click="handleExport"
-            v-hasPermi="['system:project:export']"
-            >导出</el-button
-          >
-        </el-col>
-  
-        <right-toolbar
-          :showSearch.sync="showSearch"
-          @queryTable="getList"
-        ></right-toolbar>
-      </el-row> -->
+    <el-row :gutter="10" class="mb8">
+      <right-toolbar
+        :showSearch.sync="showSearch"
+        @queryTable="getList"
+      ></right-toolbar>
+    </el-row>
 
     <el-table
       v-loading="loading"
@@ -186,53 +151,54 @@
       >
       <el-table-column label="提前工期" align="center">
         <template slot-scope="scope">
-          <el-tag type="danger" v-if="scope.row.leadTime < 0">{{
+          <el-tag type="danger" v-show="scope.row.leadTime < 0">{{
             scope.row.leadTime
           }}</el-tag>
-          <el-tag type="success" v-if="scope.row.leadTime >= 0">{{
+          <el-tag type="success" v-show="scope.row.leadTime >= 0">{{
             scope.row.leadTime
           }}</el-tag>
         </template></el-table-column
       >
       <el-table-column label="作业状态" align="center" prop="status">
         <template slot-scope="scope">
-          <el-tag v-if="scope.row.workStatus == 1" type="danger"
+          <el-tag v-show="scope.row.workStatus == 1" type="danger"
             >新增作业</el-tag
           >
-          <el-tag v-else-if="scope.row.workStatus == 2" type="warning"
+          <el-tag v-show="scope.row.workStatus == 2" type="warning"
             >作业中</el-tag
           >
-          <el-tag v-else-if="scope.row.workStatus == 3" type="success"
+          <el-tag v-show="scope.row.workStatus == 3" type="success"
             >作业完成</el-tag
           >
-          <el-tag v-else-if="scope.row.workStatus == 4" type="success"
+          <el-tag v-show="scope.row.workStatus == 4" type="success"
             >作业办结</el-tag
           >
-          <el-tag v-else type="danger">新增作业</el-tag>
+          <el-tag v-show="scope.row.workStatus == 0" type="danger"
+            >新增作业</el-tag
+          >
         </template>
       </el-table-column>
       <el-table-column label="雇工分包" align="center">
         <el-table-column label="状态" align="center" prop="subpackageType">
           <template slot-scope="scope">
-            <el-tag v-if="scope.row.subpackageType == 0" type="danger"
+            <el-tag v-show="scope.row.subpackageType == 0" type="danger"
               >未设置</el-tag
             >
-            <el-tag v-else-if="scope.row.subpackageType == 1" type="danger"
+            <el-tag v-show="scope.row.subpackageType == 1" type="danger"
               >非分包</el-tag
             >
-            <el-tag v-else-if="scope.row.subpackageType == 2" type="success"
+            <el-tag v-show="scope.row.subpackageType == 2" type="success"
               >单一合同分包</el-tag
             >
-            <el-tag v-else-if="scope.row.subpackageType == 3" type="success"
+            <el-tag v-show="scope.row.subpackageType == 3" type="success"
               >框架协议分包</el-tag
             >
-            <el-tag v-else type="danger">其他状态</el-tag>
           </template>
         </el-table-column>
         <el-table-column label="操作" align="center">
           <template slot-scope="scope">
             <el-button
-              v-if="scope.row.issq !== 1"
+              v-show="scope.row.issq == 0"
               size="mini"
               type="text"
               icon="el-icon-edit"
@@ -241,44 +207,15 @@
               style="color: red"
               >申请雇工分包</el-button
             >
-            <el-tag v-if="scope.row.issq == 1" type="success"
+            <el-tag v-show="scope.row.issq == 1" type="success"
               >已有审核单</el-tag
             >
-            <el-tag v-if="showReviewStatus(scope.row.issq)" type="danger"
+            <el-tag v-show="showReviewStatus(scope.row.issq)" type="danger"
               >未有审核单</el-tag
             >
           </template>
         </el-table-column>
       </el-table-column>
-
-      <!-- <el-table-column label="一检时间" align="center" prop="oneCheck" />
-        <el-table-column label="二检时间" align="center" prop="twoCheckTime">
-          <template slot-scope="scope">
-            <span>{{ parseTime(scope.row.twoCheckTime, "{y}-{m}-{d}") }}</span>
-          </template>
-        </el-table-column> -->
-      <!-- <el-table-column
-          label="结算时间"
-          align="center"
-          prop="settlementTime"
-          width="160"
-        >
-          <template slot-scope="scope">
-            <span>{{ parseTime(scope.row.settlementTime, "{y}-{m}-{d}") }}</span>
-          </template>
-        </el-table-column> -->
-      <!-- <el-table-column label="结算状态" align="center" prop="status">
-          <template slot-scope="scope">
-            <el-tag v-if="scope.row.outputStatus === 0" type="warning"
-              >未填写</el-tag
-            >
-            <el-tag v-else-if="scope.row.outputStatus === 1">待结算</el-tag>
-            <el-tag v-else-if="scope.row.outputStatus === 2" type="success"
-              >已结算</el-tag
-            >
-            <el-tag v-else type="danger">其他状态</el-tag>
-          </template>
-        </el-table-column> -->
       <el-table-column
         fixed="right"
         label="操作"
@@ -1109,7 +1046,6 @@ export default {
     this.getReviewProject();
     this.getList();
     this.loadAllUnits();
-    console.log(userInfo);
   },
   methods: {
     homeworkCompleted(value) {
@@ -1377,22 +1313,26 @@ export default {
       this.loading = true;
       listProject(this.addDateRange(this.queryParams, this.dateRange)).then(
         (response) => {
-          this.projectList = [];
-          this.projectList = response.rows;
-          this.total = response.total;
-          this.loading = false;
-          this.listProjectLocalMap = new Map();
-          for (var i = 0; i < response.rows.length; i++) {
-            this.listProjectLocalMap.set(
-              response.rows[i].projectId,
-              response.rows[i]
-            );
-          }
-          for (var j = 0; j < this.projectList.length; j++) {
-            if (this.projectIdMap.has(this.projectList[j].projectId)) {
-              this.projectList[j].issq = 1;
+          this.$nextTick(() => {
+            this.projectList = [];
+            this.projectList = response.rows;
+            this.total = response.total;
+            this.loading = false;
+            this.listProjectLocalMap = new Map();
+            for (var i = 0; i < response.rows.length; i++) {
+              this.listProjectLocalMap.set(
+                response.rows[i].projectId,
+                response.rows[i]
+              );
             }
-          }
+            for (var j = 0; j < this.projectList.length; j++) {
+              if (this.projectIdMap.has(this.projectList[j].projectId)) {
+                this.projectList[j].issq = 1;
+              } else {
+                this.projectList[j].issq = 0;
+              }
+            }
+          });
         }
       );
     },
