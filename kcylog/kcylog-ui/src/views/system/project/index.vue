@@ -1098,6 +1098,20 @@ export default {
       }`;
     },
     submitFormReviewSub(status) {
+      if (
+        (this.formReviewSub.budgetMoney != 0 &&
+          this.formReviewSub.budgetMoney != null) ||
+        this.formReviewSub.budgetMoney != undefined
+      ) {
+        if (this.formReviewSub.porjectMoney == 0) {
+          this.$message({
+            showClose: true,
+            message: "雇工必须填写基本信息中的项目金额～",
+            type: "error",
+          });
+          return;
+        }
+      }
       this.$refs["formReviewSub"].validate((valid) => {
         if (valid) {
           if (

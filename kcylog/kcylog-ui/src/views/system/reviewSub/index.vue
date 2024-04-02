@@ -1726,6 +1726,19 @@ export default {
     },
     /** 提交按钮 */
     submitForm() {
+      if (
+        (this.form.budgetMoney != 0 && this.form.budgetMoney != null) ||
+        this.form.budgetMoney != undefined
+      ) {
+        if (this.form.porjectMoney == 0) {
+          this.$message({
+            showClose: true,
+            message: "雇工必须填写基本信息中的项目金额～",
+            type: "error",
+          });
+          return;
+        }
+      }
       this.$refs["form"].validate((valid) => {
         if (valid) {
           if (this.form.reviewId != null) {
