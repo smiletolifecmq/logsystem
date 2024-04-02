@@ -69,7 +69,7 @@
         />
       </el-form-item>
 
-      <el-form-item label="作业状态" prop="workStatus">
+      <el-form-item label="作业状态" prop="status">
         <el-select v-model="queryParams.status" placeholder="请选择">
           <el-option
             v-for="item in statusArr"
@@ -1021,6 +1021,7 @@ export default {
         operateTime: null,
         department: "",
         outputStatus: null,
+        status: null,
       },
       // 表单参数
       form: {},

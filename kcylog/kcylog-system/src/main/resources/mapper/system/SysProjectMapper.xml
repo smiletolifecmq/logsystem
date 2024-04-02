@@ -456,6 +456,6 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
             </if>
             and (status = 2 or status = 3)
         </where>
-        order by one_check desc,two_check desc
+        order by status asc, one_check desc,two_check desc
     </select>
 </mapper>
