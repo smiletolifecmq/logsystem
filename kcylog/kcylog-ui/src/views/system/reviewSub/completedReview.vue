@@ -306,176 +306,211 @@
       :close-on-press-escape="false"
     >
       <el-collapse v-model="activeNames" @change="handleChange">
-        <el-collapse-item title="项目详情" name="1">
-          <div
-            v-if="!formInfo.project || !formInfo.project.projectNum"
-            style="text-align: center"
-          >
-            未找到关联项目数据～
-          </div>
-          <div v-if="formInfo.project && formInfo.project.projectNum">
-            <el-descriptions class="margin-top" :column="4" border>
-              <el-descriptions-item>
-                <template slot="label">
-                  <i class="el-icon-s-home"></i>
-                  委托单位
-                </template>
-                {{ formInfo.project.requesterAlias }}
-              </el-descriptions-item>
-              <el-descriptions-item>
-                <template slot="label">
-                  <i class="el-icon-tickets"></i>
-                  项目编号
-                </template>
-                {{ formInfo.project.projectNum }}
-              </el-descriptions-item>
-              <el-descriptions-item>
-                <template slot="label">
-                  <i class="el-icon-user"></i>
-                  接待人
-                </template>
-                {{ formInfo.project.receptionist }}
-              </el-descriptions-item>
-              <el-descriptions-item>
-                <template slot="label">
-                  <i class="el-icon-time"></i>
-                  登记时间
-                </template>
-                {{ formatDateReviewSub(formInfo.project.registerTime) }}
-              </el-descriptions-item>
-              <el-descriptions-item>
-                <template slot="label">
-                  <i class="el-icon-office-building"></i>
-                  项目名称
-                </template>
-                {{ formInfo.project.projectNameAlias }}
-              </el-descriptions-item>
-              <el-descriptions-item>
-                <template slot="label">
-                  <i class="el-icon-user"></i>
-                  工程负责人
-                </template>
-                {{ formInfo.project.userNameAlias }}
-              </el-descriptions-item>
-              <el-descriptions-item>
-                <template slot="label">
-                  <i class="el-icon-time"></i>
-                  安排开始时间
-                </template>
-                {{ formatDateReviewSub(formInfo.project.projectStartAlias) }}
-              </el-descriptions-item>
-              <el-descriptions-item>
-                <template slot="label">
-                  <i class="el-icon-time"></i>
-                  安排结束时间
-                </template>
-                {{ formatDateReviewSub(formInfo.project.projectEndAlias) }}
-              </el-descriptions-item>
-              <el-descriptions-item>
-                <template slot="label">
-                  <i class="el-icon-notebook-2"></i>
-                  项目类型
-                </template>
-                {{ formInfo.project.projectType }}
-              </el-descriptions-item>
-              <el-descriptions-item>
-                <template slot="label">
-                  <i class="el-icon-notebook-2"></i>
-                  作业部门
-                </template>
-                {{ formInfo.project.department }}
-              </el-descriptions-item>
-              <el-descriptions-item>
-                <template slot="label">
-                  <i class="el-icon-time"></i>
-                  一检时间
-                </template>
-                {{ formatDateReviewSub(formInfo.project.oneCheck) }}
-              </el-descriptions-item>
-              <el-descriptions-item>
-                <template slot="label">
-                  <i class="el-icon-time"></i>
-                  二检时间
-                </template>
-                {{ formatDateReviewSub(formInfo.project.twoCheck) }}
-              </el-descriptions-item>
-              <el-descriptions-item>
-                <template slot="label">
-                  <i class="el-icon-money"></i>
-                  项目金额
-                </template>
-                {{ formInfo.project.projectMoneyAlias }}
-              </el-descriptions-item>
-              <el-descriptions-item>
-                <template slot="label">
-                  <i class="el-icon-time"></i>
-                  通知出件时间
-                </template>
-                {{ formatDateReviewSub(formInfo.project.noticeTime) }}
-              </el-descriptions-item>
-              <el-descriptions-item>
-                <template slot="label">
-                  <i class="el-icon-time"></i>
-                  项目出件时间
-                </template>
-                {{ formatDateReviewSub(formInfo.project.projectTime) }}
-              </el-descriptions-item>
-              <el-descriptions-item>
-                <template slot="label">
-                  <i class="el-icon-time"></i>
-                  送达时间
-                </template>
-                {{ formatDateReviewSub(formInfo.project.deliveryTime) }}
-              </el-descriptions-item>
-            </el-descriptions>
-            <el-descriptions class="margin-top" :column="1" border>
-              <el-descriptions-item>
-                <template slot="label">
-                  <i class="el-icon-document"></i>
-                  工程内容
-                </template>
-                {{ formInfo.project.workcontentAlias }}
-              </el-descriptions-item>
-              <el-descriptions-item>
-                <template slot="label">
-                  <i class="el-icon-document"></i>
-                  工作量
-                </template>
-                {{ formInfo.project.workloadAlias }}
-              </el-descriptions-item>
-              <el-descriptions-item>
-                <template slot="label">
-                  <i class="el-icon-document"></i>
-                  分包状态
-                </template>
-                <el-tag v-if="formInfo.subpackageType == 0" type="danger"
-                  >未设置</el-tag
+        <div>
+          <el-row :gutter="10">
+            <el-col style="width: 50%">
+              <el-card class="box-card">
+                <div slot="header" class="clearfix">
+                  <span>项目详情</span>
+                </div>
+                <div
+                  v-if="!formInfo.project || !formInfo.project.projectNum"
+                  style="text-align: center"
                 >
-                <el-tag v-else-if="formInfo.subpackageType == 1" type="danger"
-                  >非分包</el-tag
-                >
-                <el-tag v-else-if="formInfo.subpackageType == 2" type="success"
-                  >单一合同分包</el-tag
-                >
-                <el-tag v-else-if="formInfo.subpackageType == 3" type="success"
-                  >框架协议分包</el-tag
-                >
-                <el-tag v-else type="danger">其他状态</el-tag>
-              </el-descriptions-item>
-              <el-descriptions-item>
-                <template slot="label">
-                  <i class="el-icon-document"></i>
-                  实际分包工作量
-                </template>
-                {{ formInfo.project.fbWorkload }}
-              </el-descriptions-item>
-            </el-descriptions>
-          </div>
-        </el-collapse-item>
-        <el-collapse-item title="审核单详情" name="2">
-          <div>
-            <el-row :gutter="10">
-              <el-col style="width: 50%">
+                  未找到关联项目数据～
+                </div>
+                <div v-if="formInfo.project && formInfo.project.projectNum">
+                  <el-descriptions class="margin-top" :column="2" border>
+                    <el-descriptions-item>
+                      <template slot="label">
+                        <i class="el-icon-s-home"></i>
+                        委托单位
+                      </template>
+                      {{ formInfo.project.requesterAlias }}
+                    </el-descriptions-item>
+                    <el-descriptions-item>
+                      <template slot="label">
+                        <i class="el-icon-tickets"></i>
+                        项目编号
+                      </template>
+                      {{ formInfo.project.projectNum }}
+                    </el-descriptions-item>
+                    <el-descriptions-item>
+                      <template slot="label">
+                        <i class="el-icon-office-building"></i>
+                        项目名称
+                      </template>
+                      {{ formInfo.project.projectNameAlias }}
+                    </el-descriptions-item>
+                    <el-descriptions-item>
+                      <template slot="label">
+                        <i class="el-icon-user"></i>
+                        工程负责人
+                      </template>
+                      {{ formInfo.project.userNameAlias }}
+                    </el-descriptions-item>
+                    <el-descriptions-item>
+                      <template slot="label">
+                        <i class="el-icon-notebook-2"></i>
+                        项目类型
+                      </template>
+                      {{ formInfo.project.projectType }}
+                    </el-descriptions-item>
+                    <el-descriptions-item>
+                      <template slot="label">
+                        <i class="el-icon-notebook-2"></i>
+                        作业部门
+                      </template>
+                      {{ formInfo.project.department }}
+                    </el-descriptions-item>
+                    <el-descriptions-item>
+                      <template slot="label">
+                        <i class="el-icon-time"></i>
+                        登记时间
+                      </template>
+                      {{ formatDateReviewSub(formInfo.project.registerTime) }}
+                    </el-descriptions-item>
+                    <el-descriptions-item>
+                      <template slot="label">
+                        <i class="el-icon-user"></i>
+                        接待人
+                      </template>
+                      {{ formInfo.project.receptionist }}
+                    </el-descriptions-item>
+                    <el-descriptions-item>
+                      <template slot="label">
+                        <i class="el-icon-time"></i>
+                        安排开始时间
+                      </template>
+                      {{
+                        formatDateReviewSub(formInfo.project.projectStartAlias)
+                      }}
+                    </el-descriptions-item>
+                    <el-descriptions-item>
+                      <template slot="label">
+                        <i class="el-icon-time"></i>
+                        安排结束时间
+                      </template>
+                      {{
+                        formatDateReviewSub(formInfo.project.projectEndAlias)
+                      }}
+                    </el-descriptions-item>
+                    <el-descriptions-item>
+                      <template slot="label">
+                        <i class="el-icon-time"></i>
+                        一检时间
+                      </template>
+                      {{ formatDateReviewSub(formInfo.project.oneCheck) }}
+                    </el-descriptions-item>
+                    <el-descriptions-item>
+                      <template slot="label">
+                        <i class="el-icon-time"></i>
+                        二检时间
+                      </template>
+                      {{ formatDateReviewSub(formInfo.project.twoCheck) }}
+                    </el-descriptions-item>
+                    <el-descriptions-item>
+                      <template slot="label">
+                        <i class="el-icon-money"></i>
+                        项目预估金额
+                      </template>
+                      {{ formInfo.project.projectMoneyAlias }}
+                    </el-descriptions-item>
+                  </el-descriptions>
+                  <el-descriptions class="margin-top" :column="1" border>
+                    <el-descriptions-item>
+                      <template slot="label">
+                        <i class="el-icon-document"></i>
+                        工程内容
+                      </template>
+                      {{ formInfo.project.workcontentAlias }}
+                    </el-descriptions-item>
+                    <el-descriptions-item>
+                      <template slot="label">
+                        <i class="el-icon-document"></i>
+                        工作量
+                      </template>
+                      {{ formInfo.project.workloadAlias }}
+                    </el-descriptions-item>
+                  </el-descriptions>
+                </div>
+              </el-card>
+            </el-col>
+            <el-col style="width: 50%">
+              <el-card class="box-card">
+                <div slot="header" class="clearfix">
+                  <span>审核单详情</span>
+                </div>
+                <el-card>
+                  <div slot="header">
+                    <span>分包详情</span>
+                    <el-button
+                      style="float: right; padding: 3px 0"
+                      type="text"
+                    ></el-button>
+                  </div>
+                  <div style="text-align: center">
+                    <el-descriptions class="margin-top" :column="2" border>
+                      <el-descriptions-item>
+                        <template slot="label"> 分包类型 </template>
+                        <span v-if="subcontractForm.subType == 1">全部分包</span
+                        ><span v-if="subcontractForm.subType == 2"
+                          >局部分包</span
+                        >
+                      </el-descriptions-item>
+                      <el-descriptions-item>
+                        <template slot="label">
+                          <i class="el-icon-document"></i>
+                          分包状态
+                        </template>
+                        <el-tag
+                          v-if="formInfo.subpackageType == 0"
+                          type="danger"
+                          >未设置</el-tag
+                        >
+                        <el-tag
+                          v-else-if="formInfo.subpackageType == 1"
+                          type="danger"
+                          >非分包</el-tag
+                        >
+                        <el-tag
+                          v-else-if="formInfo.subpackageType == 2"
+                          type="success"
+                          >单一合同分包</el-tag
+                        >
+                        <el-tag
+                          v-else-if="formInfo.subpackageType == 3"
+                          type="success"
+                          >框架协议分包</el-tag
+                        >
+                        <el-tag v-else type="danger">其他状态</el-tag>
+                      </el-descriptions-item>
+                      <el-descriptions-item>
+                        <template slot="label"> 抽签单位 </template>
+                        <div
+                          v-for="(
+                            unit, index
+                          ) in subcontractForm.cooperationUnitJson"
+                          :key="index"
+                        >
+                          {{ unit }}
+                        </div>
+                      </el-descriptions-item>
+                      <el-descriptions-item>
+                        <template slot="label"> 中签单位 </template>
+                        {{ subcontractForm.winUnit }}
+                      </el-descriptions-item>
+                      <el-descriptions-item>
+                        <template slot="label"> 抽签时间 </template>
+                        {{ parseTime(subcontractForm.lotTime, "{y}-{m}-{d}") }}
+                      </el-descriptions-item>
+                      <el-descriptions-item>
+                        <template slot="label"> 预估分包工作量 </template>
+                        {{ subcontractForm.subWorkload }}
+                      </el-descriptions-item>
+                    </el-descriptions>
+                  </div>
+                </el-card>
                 <el-card>
                   <div slot="header">
                     <span>雇工详情</span>
@@ -486,39 +521,6 @@
                   </div>
 
                   <el-descriptions class="margin-top" :column="2" border>
-                    <!-- <el-descriptions-item>
-                      <template slot="label"> 工程编号 </template>
-                      {{ formInfo.serialNum }}
-                    </el-descriptions-item>
-                    <el-descriptions-item>
-                      <template slot="label"> 负责人 </template>
-                      {{ formInfo.user.userName }}
-                    </el-descriptions-item>
-                    <el-descriptions-item>
-                      <template slot="label"> 项目名称 </template>
-                      {{ formInfo.projectName }}
-                    </el-descriptions-item>
-                    <el-descriptions-item>
-                      <template slot="label"> 委托单位 </template>
-                      {{ formInfo.requester }}
-                    </el-descriptions-item> -->
-                    <!-- <el-descriptions-item>
-                      <template slot="label"> 工作量 </template>
-                      {{ formInfo.workload }}
-                    </el-descriptions-item>
-                    <el-descriptions-item>
-                      <template slot="label"> 项目金额 </template>
-                      {{ formInfo.porjectMoney }}
-                    </el-descriptions-item> -->
-                    <!-- <el-descriptions-item>
-                      <template slot="label"> 分包情况 </template>
-                      <div v-if="formInfo.subcontract == 1">是</div>
-                      <div v-if="formInfo.subcontract == 2">否</div>
-                    </el-descriptions-item> -->
-                    <el-descriptions-item>
-                      <template slot="label"> 雇工内容 </template>
-                      {{ formInfo.employmentReason }}
-                    </el-descriptions-item>
                     <el-descriptions-item>
                       <template slot="label"> 雇工开始时间 </template>
                       {{ formInfo.startTime
@@ -531,14 +533,6 @@
                       }}<span v-if="endAmPm == '12:00:00'">上午</span
                       ><span v-if="endAmPm == '23:59:59'">下午</span>
                     </el-descriptions-item>
-                    <!-- <el-descriptions-item>
-                      <template slot="label"> 项目工期开始时间 </template>
-                      {{ formInfo.projectStart | formatDate }}
-                    </el-descriptions-item>
-                    <el-descriptions-item>
-                      <template slot="label"> 项目工期结束时间 </template>
-                      {{ formInfo.projectEnd | formatDate }}
-                    </el-descriptions-item> -->
                     <el-descriptions-item>
                       <template slot="label"> 雇工人数 </template>
                       {{ formInfo.peopleNum }}
@@ -564,87 +558,22 @@
                       >
                     </el-descriptions-item>
                   </el-descriptions>
+                  <el-descriptions class="margin-top" :column="1" border>
+                    <el-descriptions-item>
+                      <template slot="label">
+                        <i class="el-icon-document"></i>
+                        雇工内容
+                      </template>
+                      {{ formInfo.employmentReason }}
+                    </el-descriptions-item>
+                  </el-descriptions>
                 </el-card>
-              </el-col>
+              </el-card>
+            </el-col>
+          </el-row>
+        </div>
 
-              <el-col style="width: 50%">
-                <el-card>
-                  <div slot="header">
-                    <span>分包详情</span>
-                    <el-button
-                      style="float: right; padding: 3px 0"
-                      type="text"
-                    ></el-button>
-                  </div>
-                  <div style="text-align: center">
-                    <el-descriptions class="margin-top" :column="2" border>
-                      <!-- <el-descriptions-item>
-                        <template slot="label"> 工程编号 </template>
-                        {{ subcontractForm.serialNum }}
-                      </el-descriptions-item>
-                      <el-descriptions-item>
-                        <template slot="label"> 负责人 </template>
-                        {{ subcontractForm.user.userName }}
-                      </el-descriptions-item>
-                      <el-descriptions-item>
-                        <template slot="label"> 项目名称 </template>
-                        {{ subcontractForm.projectName }}
-                      </el-descriptions-item>
-                      <el-descriptions-item>
-                        <template slot="label"> 项目类型 </template>
-                        {{ subcontractForm.businessName }}
-                      </el-descriptions-item>
-                      <el-descriptions-item>
-                        <template slot="label"> 委托单位 </template>
-                        {{ subcontractForm.requester }}
-                      </el-descriptions-item> -->
-                      <!-- <el-descriptions-item>
-                        <template slot="label"> 工作内容 </template>
-                        {{ subcontractForm.workcontent }}
-                      </el-descriptions-item> -->
-                      <el-descriptions-item>
-                        <template slot="label"> 分包类型 </template>
-                        <span v-if="subcontractForm.subType == 1">全部分包</span
-                        ><span v-if="subcontractForm.subType == 2"
-                          >局部分包</span
-                        >
-                      </el-descriptions-item>
-                      <el-descriptions-item>
-                        <template slot="label"> 预估分包工作量 </template>
-                        {{ subcontractForm.subWorkload }}
-                      </el-descriptions-item>
-                      <!-- <el-descriptions-item>
-                        <template slot="label"> 实际分包工作量 </template>
-                        {{ subcontractForm.realWorkload }}
-                      </el-descriptions-item> -->
-                      <el-descriptions-item>
-                        <template slot="label"> 抽签单位 </template>
-                        <div
-                          v-for="(
-                            unit, index
-                          ) in subcontractForm.cooperationUnitJson"
-                          :key="index"
-                        >
-                          {{ unit }}
-                        </div>
-                      </el-descriptions-item>
-                      <el-descriptions-item>
-                        <template slot="label"> 中签单位 </template>
-                        {{ subcontractForm.winUnit }}
-                      </el-descriptions-item>
-                      <el-descriptions-item>
-                        <template slot="label"> 抽签时间 </template>
-                        {{ parseTime(subcontractForm.lotTime, "{y}-{m}-{d}") }}
-                      </el-descriptions-item>
-                    </el-descriptions>
-                  </div>
-                </el-card>
-              </el-col>
-            </el-row>
-          </div>
-        </el-collapse-item>
-
-        <el-collapse-item title="雇工信息详情" name="3">
+        <el-collapse-item title="雇工信息详情" name="1">
           <div>
             <el-row :gutter="10">
               <el-col style="width: 100%">
