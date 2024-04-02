@@ -477,8 +477,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
                 and (date_format(two_check,'%y%m%d') &lt;= date_format(#{params.endTime},'%y%m%d'))
             </if>
             and status = 1 and work_status = 4
-        </where>
-        order by doTime desc
+        </where
     </select>
 
     <select id="selectSysProjectWaitTwoCheck" parameterType="SysProject" resultMap="SysProjectResult">
