@@ -35,11 +35,12 @@
       <el-form-item label="二检时间">
         <el-date-picker
           v-model="dateRange"
-          type="monthrange"
+          style="width: 240px"
+          type="daterange"
           value-format="yyyy-MM-dd"
           range-separator="至"
-          start-placeholder="开始月份"
-          end-placeholder="结束月份"
+          start-placeholder="开始日期"
+          end-placeholder="结束日期"
         >
         </el-date-picker>
       </el-form-item>
@@ -100,7 +101,7 @@
       </el-table-column>
       <el-table-column label="二检时间" align="center" prop="twoCheck">
         <template slot-scope="scope">
-          {{ formatDateToMonth(scope.row.twoCheck) }}
+          {{ formatDate(scope.row.twoCheck) }}
         </template>
       </el-table-column>
       <el-table-column label="接待人" align="center" prop="receptionist" />

@@ -111,7 +111,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
             </if>
             and status != 2 and status != 3
         </where>
-        order by p.status, p.project_id desc
+        order by p.work_status asc , p.project_id desc
     </select>
     
     <select id="selectSysProjectByProjectId" parameterType="String" resultMap="SysProjectResult">
@@ -282,10 +282,10 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
             <if test="operateUser == 1"> and operate != 0.00</if>
             <if test="operateUser == 2"> and operate = 0.00</if>
             <if test="params.beginTime != null and params.beginTime != ''"><!-- 开始时间检索 -->
-                and (date_format(two_check,'%y%m') &gt;= date_format(#{params.beginTime},'%y%m'))
+                and (date_format(two_check,'%y%m%d') &gt;= date_format(#{params.beginTime},'%y%m%d'))
             </if>
             <if test="params.endTime != null and params.endTime != ''"><!-- 结束时间检索 -->
-                and (date_format(two_check,'%y%m') &lt;= date_format(#{params.endTime},'%y%m'))
+                and (date_format(two_check,'%y%m%d') &lt;= date_format(#{params.endTime},'%y%m%d'))
             </if>
             <if test="receptionist != null  and receptionist != ''"> and receptionist = #{receptionist}</if>
             and is_two_check = 1
@@ -477,7 +477,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
                 and (date_format(two_check,'%y%m%d') &lt;= date_format(#{params.endTime},'%y%m%d'))
             </if>
             and status = 1 and work_status = 4
-        </where
+        </where>
     </select>
 
     <select id="selectSysProjectWaitTwoCheck" parameterType="SysProject" resultMap="SysProjectResult">

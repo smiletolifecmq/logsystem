@@ -196,7 +196,7 @@
             <el-tag v-show="scope.row.subpackageType == 0" type="danger"
               >未设置</el-tag
             >
-            <el-tag v-show="scope.row.subpackageType == 1" type="danger"
+            <el-tag v-show="scope.row.subpackageType == 1" type="info"
               >非分包</el-tag
             >
             <el-tag v-show="scope.row.subpackageType == 2" type="success"
@@ -222,7 +222,7 @@
             <el-tag v-show="scope.row.issq == 1" type="success"
               >已有审核单</el-tag
             >
-            <el-tag v-show="showReviewStatus(scope.row.issq)" type="danger"
+            <el-tag v-show="showReviewStatus(scope.row.issq)" type="info"
               >未有审核单</el-tag
             >
           </template>

@@ -989,7 +989,7 @@ export default {
       }
     },
     formatDate(dateString) {
-      if (dateString == "") {
+      if (dateString == "" || dateString == null || dateString == undefined) {
         return "";
       }
       const dateObject = new Date(dateString);

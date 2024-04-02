@@ -114,6 +114,11 @@
           {{ formatDate(scope.row.projectEndAlias) }}
         </template></el-table-column
       >
+      <el-table-column label="一检时间" align="center" prop="oneCheck">
+        <template slot-scope="scope">
+          {{ formatDate(scope.row.oneCheck) }}
+        </template></el-table-column
+      >
       <el-table-column label="工作状态" align="center" prop="status">
         <el-tag type="danger">待二检</el-tag>
       </el-table-column>
@@ -924,7 +929,6 @@ export default {
     this.getReviewProject();
     this.getList();
     this.loadAllUnits();
-    console.log(userInfo);
   },
   methods: {
     showReviewStatus(status) {
@@ -945,7 +949,7 @@ export default {
       }
     },
     formatDate(dateString) {
-      if (dateString == "") {
+      if (dateString == "" || dateString == null || dateString == undefined) {
         return "";
       }
       const dateObject = new Date(dateString);
