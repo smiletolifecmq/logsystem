@@ -12,7 +12,6 @@ import com.kcylog.system.common.ProjectSubcontract;
 import com.kcylog.system.domain.*;
 import com.kcylog.system.service.*;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.bind.annotation.*;
 
@@ -57,7 +56,6 @@ public class SysProjectController extends BaseController {
     /**
      * 查询项目列表
      */
-    @PreAuthorize("@ss.hasPermi('system:project:list')")
     @GetMapping("/list")
     public TableDataInfo list(SysProject sysProject) throws ParseException {
         startPage();
@@ -94,7 +92,6 @@ public class SysProjectController extends BaseController {
     /**
      * 导出项目列表
      */
-    @PreAuthorize("@ss.hasPermi('system:project:export')")
     @Log(title = "项目", businessType = BusinessType.EXPORT)
     @PostMapping("/export")
     public void export(HttpServletResponse response, SysProject sysProject) {
@@ -153,7 +150,6 @@ public class SysProjectController extends BaseController {
     /**
      * 获取项目详细信息
      */
-    @PreAuthorize("@ss.hasPermi('system:project:query')")
     @GetMapping(value = "/{projectId}")
     public AjaxResult getInfo(@PathVariable("projectId") String projectId) {
         SysProject project = sysProjectService.selectSysProjectByProjectId(projectId);
@@ -174,7 +170,6 @@ public class SysProjectController extends BaseController {
     /**
      * 新增项目
      */
-    @PreAuthorize("@ss.hasPermi('system:project:add')")
     @Log(title = "项目", businessType = BusinessType.INSERT)
     @PostMapping
     public AjaxResult add(@RequestBody SysProject sysProject) {
@@ -184,7 +179,6 @@ public class SysProjectController extends BaseController {
     /**
      * 修改项目
      */
-    @PreAuthorize("@ss.hasPermi('system:project:edit')")
     @Log(title = "项目", businessType = BusinessType.UPDATE)
     @PutMapping
     public AjaxResult edit(@RequestBody SysProject sysProject) {
@@ -224,7 +218,6 @@ public class SysProjectController extends BaseController {
     /**
      * 删除项目
      */
-    @PreAuthorize("@ss.hasPermi('system:project:remove')")
     @Log(title = "项目", businessType = BusinessType.DELETE)
     @DeleteMapping("/{projectIds}")
     public AjaxResult remove(@PathVariable String[] projectIds) {
@@ -238,7 +231,6 @@ public class SysProjectController extends BaseController {
     }
 
 
-    @PreAuthorize("@ss.hasPermi('system:project:detail')")
     @GetMapping(value = "/detail/{projectId}")
     public AjaxResult getProjectDetail(@PathVariable("projectId") String projectId) {
         return success(sysProjectService.selectSysProjectByProjectId(projectId));
