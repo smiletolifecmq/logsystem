@@ -191,7 +191,7 @@
                   未找到关联项目数据～
                 </div>
                 <div v-if="formInfo.project && formInfo.project.projectNum">
-                  <el-descriptions class="margin-top" :column="2" border>
+                  <el-descriptions class="margin-top" :column="2">
                     <el-descriptions-item>
                       <template slot="label">
                         <i class="el-icon-s-home"></i>
@@ -288,7 +288,7 @@
                       {{ formInfo.project.projectMoneyAlias }}
                     </el-descriptions-item>
                   </el-descriptions>
-                  <el-descriptions class="margin-top" :column="1" border>
+                  <el-descriptions class="margin-top" :column="1">
                     <el-descriptions-item>
                       <template slot="label">
                         <i class="el-icon-document"></i>
@@ -321,7 +321,7 @@
                     ></el-button>
                   </div>
                   <div style="text-align: center">
-                    <el-descriptions class="margin-top" :column="2" border>
+                    <el-descriptions class="margin-top" :column="2">
                       <el-descriptions-item>
                         <template slot="label"> 分包类型 </template>
                         <span v-if="subcontractForm.subType == 1">全部分包</span
@@ -330,31 +330,34 @@
                         >
                       </el-descriptions-item>
                       <el-descriptions-item>
-                        <template slot="label">
-                          <i class="el-icon-document"></i>
-                          分包状态
-                        </template>
+                        <template slot="label"> 分包状态 </template>
                         <el-tag
+                          size="mini"
                           v-if="formInfo.subpackageType == 0"
                           type="danger"
                           >未设置</el-tag
                         >
                         <el-tag
+                          size="mini"
                           v-else-if="formInfo.subpackageType == 1"
                           type="danger"
                           >非分包</el-tag
                         >
                         <el-tag
+                          size="mini"
                           v-else-if="formInfo.subpackageType == 2"
                           type="success"
                           >单一合同分包</el-tag
                         >
                         <el-tag
+                          size="mini"
                           v-else-if="formInfo.subpackageType == 3"
                           type="success"
                           >框架协议分包</el-tag
                         >
-                        <el-tag v-else type="danger">其他状态</el-tag>
+                        <el-tag v-else type="danger" size="mini"
+                          >其他状态</el-tag
+                        >
                       </el-descriptions-item>
                       <el-descriptions-item>
                         <template slot="label"> 抽签单位 </template>
@@ -391,7 +394,7 @@
                     ></el-button>
                   </div>
 
-                  <el-descriptions class="margin-top" :column="2" border>
+                  <el-descriptions class="margin-top" :column="2">
                     <el-descriptions-item>
                       <template slot="label"> 雇工开始时间 </template>
                       {{ formInfo.startTime
@@ -419,22 +422,21 @@
                     <el-descriptions-item>
                       <template slot="label"> 雇工方式 </template>
                       <span v-if="formInfo.manType === 0"
-                        ><el-tag type="danger">非雇工</el-tag>
+                        ><el-tag size="mini" type="danger">非雇工</el-tag>
                       </span>
                       <span v-if="formInfo.manType === 1"
-                        ><el-tag type="success">雇工</el-tag></span
+                        ><el-tag size="mini" type="success">雇工</el-tag></span
                       >
                       <span v-if="formInfo.manType === 2"
-                        ><el-tag type="success">第三方雇工</el-tag></span
+                        ><el-tag size="mini" type="success"
+                          >第三方雇工</el-tag
+                        ></span
                       >
                     </el-descriptions-item>
                   </el-descriptions>
-                  <el-descriptions class="margin-top" :column="1" border>
+                  <el-descriptions class="margin-top" :column="1">
                     <el-descriptions-item>
-                      <template slot="label">
-                        <i class="el-icon-document"></i>
-                        雇工内容
-                      </template>
+                      <template slot="label"> 雇工内容 </template>
                       {{ formInfo.employmentReason }}
                     </el-descriptions-item>
                   </el-descriptions>
