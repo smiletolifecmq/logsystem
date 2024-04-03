@@ -38,7 +38,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
     
     <select id="selectViewFqProjectArchiveTransferTrackByProjectId" parameterType="Long" resultMap="ViewFqProjectArchiveTransferTrackResult">
         <include refid="selectViewFqProjectArchiveTransferTrackVo"/>
-        where project_id = #{projectId}
+        where project_id = #{projectId} LIMIT 1
     </select>
         
     <insert id="insertViewFqProjectArchiveTransferTrack" parameterType="ViewFqProjectArchiveTransferTrack">

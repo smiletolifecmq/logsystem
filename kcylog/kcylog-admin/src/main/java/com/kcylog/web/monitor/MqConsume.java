@@ -1,6 +1,5 @@
 package com.kcylog.web.monitor;
 
-import com.fasterxml.jackson.databind.ObjectMapper;
 import com.google.gson.Gson;
 import com.kcylog.common.utils.DateUtils;
 import com.kcylog.system.common.MqMessage;
@@ -60,140 +59,142 @@ public class MqConsume {
             viewFqProjectLog.setOperateTime(nowTime);
             viewFqProjectLog.setProjectCode(mqMessage.getProjectId());
             viewFqProjectLog.setOperate(mqMessage.getOpType());
-            ObjectMapper mapper = new ObjectMapper();
+            viewFqProjectLogService.insertViewFqProjectLog(viewFqProjectLog);
             //获取视图数据
             ViewFqProject viewFqProject = viewFqProjectService.selectViewFqProjectByProjectCode(Long.parseLong(mqMessage.getProjectId()));
-//            String viewFqProjectJson = mapper.writeValueAsString(viewFqProject);
-            //数据初始化
-            SysProject sysProject = new SysProject();
-            sysProject.setProjectNameAlias(viewFqProject.getProjectName());
-            sysProject.setProjectNum(viewFqProject.getProjectCode());
-            DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss");
+            if (viewFqProject != null){
+                //数据初始化
+                SysProject sysProject = new SysProject();
+                sysProject.setProjectNameAlias(viewFqProject.getProjectName());
+                sysProject.setProjectNum(viewFqProject.getProjectCode());
+                DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss");
 
-            if (viewFqProject.getProjectTypeName() != null){
-                sysProject.setProjectType(viewFqProject.getProjectTypeName());
-            }
-            if (viewFqProject.getRegisterTime() != null){
-                String dateString = viewFqProject.getRegisterTime().format(formatter);
-                sysProject.setRegisterTime(dateString);
-            }
-            if (viewFqProject.getCreateUserName() != null){
-                sysProject.setReceptionist(viewFqProject.getCreateUserName());
-            }
-            if (viewFqProject.getChargeItem() != null){
-                sysProject.setWorkloadAlias(viewFqProject.getChargeItem());
-            }
-            if (viewFqProject.getManagerUserName() != null){
-                sysProject.setUserNameAlias(viewFqProject.getManagerUserName());
-            }
-            if (viewFqProject.getCustomerName() != null){
-                sysProject.setRequesterAlias(viewFqProject.getCustomerName());
-            }
-            if (viewFqProject.getArrangeStartTime() != null){
-                String dateString = viewFqProject.getArrangeStartTime().format(formatter);
-                sysProject.setProjectStartAlias(dateString);
-            }
-            if (viewFqProject.getArrangeEndTime() != null){
-                String dateString = viewFqProject.getArrangeEndTime().format(formatter);
-                sysProject.setProjectEndAlias(dateString);
-            }
-            if (viewFqProject.getFirstCheckTime() != null){
-                String dateString = viewFqProject.getFirstCheckTime().format(formatter);
-                sysProject.setOneCheck(dateString);
-            }
-            if (viewFqProject.getSecondCheckTime() != null){
-                String dateString = viewFqProject.getSecondCheckTime().format(formatter);
-                sysProject.setTwoCheck(dateString);
-            }
-            if (viewFqProject.getDeliveryTime() != null){
-                String dateString = viewFqProject.getDeliveryTime().format(formatter);
-                sysProject.setNoticeTime(dateString);
-            }
-            if (viewFqProject.getReleaseTime() != null){
-                String dateString = viewFqProject.getReleaseTime().format(formatter);
-                sysProject.setProjectTime(dateString);
-            }
-            if (viewFqProject.getArriveTime() != null){
-                String dateString = viewFqProject.getArriveTime().format(formatter);
-                sysProject.setDeliveryTime(dateString);
-            }
-            if (viewFqProject.getArrangeProfit() != null){
-                BigDecimal bigDecimalValue = new BigDecimal(viewFqProject.getArrangeProfit());
-                sysProject.setProjectMoneyAlias(bigDecimalValue);
-            }
-            if (viewFqProject.getJobContent() != null){
-                sysProject.setWorkcontentAlias(viewFqProject.getJobContent());
-            }
-            if (viewFqProject.getJobOrgName() != null){
-                sysProject.setDepartment(viewFqProject.getJobOrgName());
-            }
-
-            if (mqMessage.getOpType().equals("SECOND_CHECK") && sysProject.getTwoCheck() != null && !sysProject.getTwoCheck().equals("")){
-                sysProject.setIsTwoCheck(1);
-                Date date = DateUtils.parseDate(sysProject.getTwoCheck(), "yyyy-MM-dd HH:mm:ss");
-                sysProject.setTwoCheckTime(date);
-            }
-
-            //判断状态
-            if (viewFqProject.getManagerUserName() == null || viewFqProject.getManagerUserName().equals("")){
-                sysProject.setStatus((long)0);
-            }
-            if ((viewFqProject.getManagerUserName() != null && !(viewFqProject.getManagerUserName().equals(""))) && (sysProject.getOneCheck() == null || sysProject.getOneCheck().equals("")) && (sysProject.getTwoCheck() == null || sysProject.getTwoCheck().equals(""))){
-                sysProject.setStatus((long)1);
-            }
-
-            if ((sysProject.getOneCheck() != null && !sysProject.getOneCheck().equals("")) && (sysProject.getTwoCheck() == null || sysProject.getTwoCheck().equals(""))){
-                sysProject.setStatus((long)2);
-            }
-
-            if (sysProject.getTwoCheck() != null && !sysProject.getTwoCheck().equals("")){
-                sysProject.setStatus((long)3);
-                sysProject.setIsTwoCheck(1);
-                Date date = DateUtils.parseDate(sysProject.getTwoCheck(), "yyyy-MM-dd HH:mm:ss");
-                sysProject.setTwoCheckTime(date);
-            }
-
-            if (viewFqProject.getSubpackageType() != null){
-                sysProject.setSubpackageType(viewFqProject.getSubpackageType());
-            }
-
-            viewFqProjectLogService.insertViewFqProjectLog(viewFqProjectLog);
-
-            //作业状态
-            ViewFqProjectArchiveTransferTrack projectArchiveTransferTrack = viewFqProjectArchiveTransferTrackService.selectViewFqProjectArchiveTransferTrackByProjectId(Long.parseLong(mqMessage.getProjectId()));
-            if (projectArchiveTransferTrack != null && projectArchiveTransferTrack.getWorkStatus() != null){
-                sysProject.setWorkStatus(projectArchiveTransferTrack.getWorkStatus());
-            }
-            //作业办结时间
-            ViewFqProjectWorkDone workDoneList = viewFqProjectWorkDoneService.selectViewFqProjectWorkDoneByProjectId(Long.parseLong(mqMessage.getProjectId()));
-            if (workDoneList != null && workDoneList.getDoTime() != null){
-                sysProject.setDoTime(workDoneList.getDoTime().toString());
-            }
-
-            if (mqMessage.getOpType().equals("DELETE") || mqMessage.getOpType().equals("PROJECT_INVALID") || mqMessage.getOpType().equals("PROJECT_HANG")){
-                sysProjectService.deleteSysProjectByCode(viewFqProject.getProjectCode());
-            }else {
-                if (sysProjectService.checkProjectKeyUnique(viewFqProject.getProjectCode()) != null) {
-                    sysProjectService.updateSysProjectForMq(sysProject);
-                }else {
-                    sysProjectService.insertSysProject(sysProject);
+                if (viewFqProject.getProjectTypeName() != null){
+                    sysProject.setProjectType(viewFqProject.getProjectTypeName());
                 }
-            }
+                if (viewFqProject.getRegisterTime() != null){
+                    String dateString = viewFqProject.getRegisterTime().format(formatter);
+                    sysProject.setRegisterTime(dateString);
+                }
+                if (viewFqProject.getCreateUserName() != null){
+                    sysProject.setReceptionist(viewFqProject.getCreateUserName());
+                }
+                if (viewFqProject.getChargeItem() != null){
+                    sysProject.setWorkloadAlias(viewFqProject.getChargeItem());
+                }
+                if (viewFqProject.getManagerUserName() != null){
+                    sysProject.setUserNameAlias(viewFqProject.getManagerUserName());
+                }
+                if (viewFqProject.getCustomerName() != null){
+                    sysProject.setRequesterAlias(viewFqProject.getCustomerName());
+                }
+                if (viewFqProject.getArrangeStartTime() != null){
+                    String dateString = viewFqProject.getArrangeStartTime().format(formatter);
+                    sysProject.setProjectStartAlias(dateString);
+                }
+                if (viewFqProject.getArrangeEndTime() != null){
+                    String dateString = viewFqProject.getArrangeEndTime().format(formatter);
+                    sysProject.setProjectEndAlias(dateString);
+                }
+                if (viewFqProject.getFirstCheckTime() != null){
+                    String dateString = viewFqProject.getFirstCheckTime().format(formatter);
+                    sysProject.setOneCheck(dateString);
+                }
+                if (viewFqProject.getSecondCheckTime() != null){
+                    String dateString = viewFqProject.getSecondCheckTime().format(formatter);
+                    sysProject.setTwoCheck(dateString);
+                }
+                if (viewFqProject.getDeliveryTime() != null){
+                    String dateString = viewFqProject.getDeliveryTime().format(formatter);
+                    sysProject.setNoticeTime(dateString);
+                }
+                if (viewFqProject.getReleaseTime() != null){
+                    String dateString = viewFqProject.getReleaseTime().format(formatter);
+                    sysProject.setProjectTime(dateString);
+                }
+                if (viewFqProject.getArriveTime() != null){
+                    String dateString = viewFqProject.getArriveTime().format(formatter);
+                    sysProject.setDeliveryTime(dateString);
+                }
+                if (viewFqProject.getArrangeProfit() != null){
+                    BigDecimal bigDecimalValue = new BigDecimal(viewFqProject.getArrangeProfit());
+                    sysProject.setProjectMoneyAlias(bigDecimalValue);
+                }
+                if (viewFqProject.getJobContent() != null){
+                    sysProject.setWorkcontentAlias(viewFqProject.getJobContent());
+                }
+                if (viewFqProject.getJobOrgName() != null){
+                    sysProject.setDepartment(viewFqProject.getJobOrgName());
+                }
+
+                if (mqMessage.getOpType().equals("SECOND_CHECK") && sysProject.getTwoCheck() != null && !sysProject.getTwoCheck().equals("")){
+                    sysProject.setIsTwoCheck(1);
+                    Date date = DateUtils.parseDate(sysProject.getTwoCheck(), "yyyy-MM-dd HH:mm:ss");
+                    sysProject.setTwoCheckTime(date);
+                }
+
+                //判断状态
+                if (viewFqProject.getManagerUserName() == null || viewFqProject.getManagerUserName().equals("")){
+                    sysProject.setStatus((long)0);
+                }
+                if ((viewFqProject.getManagerUserName() != null && !(viewFqProject.getManagerUserName().equals(""))) && (sysProject.getOneCheck() == null || sysProject.getOneCheck().equals("")) && (sysProject.getTwoCheck() == null || sysProject.getTwoCheck().equals(""))){
+                    sysProject.setStatus((long)1);
+                }
+
+                if ((sysProject.getOneCheck() != null && !sysProject.getOneCheck().equals("")) && (sysProject.getTwoCheck() == null || sysProject.getTwoCheck().equals(""))){
+                    sysProject.setStatus((long)2);
+                }
+
+                if (sysProject.getTwoCheck() != null && !sysProject.getTwoCheck().equals("")){
+                    sysProject.setStatus((long)3);
+                    sysProject.setIsTwoCheck(1);
+                    Date date = DateUtils.parseDate(sysProject.getTwoCheck(), "yyyy-MM-dd HH:mm:ss");
+                    sysProject.setTwoCheckTime(date);
+                }
+
+                if (viewFqProject.getSubpackageType() != null){
+                    sysProject.setSubpackageType(viewFqProject.getSubpackageType());
+                }
+
+                //作业状态
+                ViewFqProjectArchiveTransferTrack projectArchiveTransferTrack = viewFqProjectArchiveTransferTrackService.selectViewFqProjectArchiveTransferTrackByProjectId(Long.parseLong(mqMessage.getProjectId()));
+                if (projectArchiveTransferTrack != null && projectArchiveTransferTrack.getWorkStatus() != null){
+                    sysProject.setWorkStatus(projectArchiveTransferTrack.getWorkStatus());
+                }
+                //作业办结时间
+                ViewFqProjectWorkDone workDoneList = viewFqProjectWorkDoneService.selectViewFqProjectWorkDoneByProjectId(Long.parseLong(mqMessage.getProjectId()));
+                if (workDoneList != null && workDoneList.getDoTime() != null){
+                    sysProject.setDoTime(workDoneList.getDoTime().toString());
+                }
+
+                if (mqMessage.getOpType().equals("DELETE") || mqMessage.getOpType().equals("PROJECT_INVALID") || mqMessage.getOpType().equals("PROJECT_HANG")){
+                    sysProjectService.deleteSysProjectByCode(viewFqProject.getProjectCode());
+                }else {
+                    if (sysProjectService.checkProjectKeyUnique(viewFqProject.getProjectCode()) != null) {
+                        sysProjectService.updateSysProjectForMq(sysProject);
+                    }else {
+                        sysProjectService.insertSysProject(sysProject);
+                    }
+                }
 
 
-            //同步人员安排配比
-            if (mqMessage.getOpType().equals("RESOURCE_ARRANGE_CHANGE") || (mqMessage.getOpType().equals("SECOND_CHECK") && sysProject.getTwoCheck() != null && !sysProject.getTwoCheck().equals("")) || (sysProject.getTwoCheck() != null && !sysProject.getTwoCheck().equals(""))){
-                // todo 需要同步人员安排
-                List<ViewFqProjectWorkResourceArrange>  resourceArrange = viewFqProjectWorkResourceArrangeService.selectViewFqProjectWorkResourceArrangeByProjectId(Long.parseLong(mqMessage.getProjectId()));
-                SysProject project = sysProjectService.checkProjectKeyUnique(viewFqProject.getProjectCode());
-                sysProjectValueService.deleteSysProjectValueByProjectId(project.getProjectId());
-                if (resourceArrange != null){
-                    for (ViewFqProjectWorkResourceArrange resourceArrange1 : resourceArrange){
-                        SysProjectValue sysProjectValue = new SysProjectValue();
-                        sysProjectValue.setProjectId(project.getProjectId());
-                        sysProjectValue.setUserName(resourceArrange1.getUserName());
-                        sysProjectValue.setProportion(resourceArrange1.getPerformanceRate());
-                        sysProjectValueService.insertSysProjectValue(sysProjectValue);
+                //同步人员安排配比
+                if (mqMessage.getOpType().equals("RESOURCE_ARRANGE_CHANGE") || (mqMessage.getOpType().equals("SECOND_CHECK") && sysProject.getTwoCheck() != null && !sysProject.getTwoCheck().equals("")) || (sysProject.getTwoCheck() != null && !sysProject.getTwoCheck().equals(""))){
+                    // todo 需要同步人员安排
+                    List<ViewFqProjectWorkResourceArrange>  resourceArrange = viewFqProjectWorkResourceArrangeService.selectViewFqProjectWorkResourceArrangeByProjectId(Long.parseLong(mqMessage.getProjectId()));
+                    SysProject project = sysProjectService.checkProjectKeyUnique(viewFqProject.getProjectCode());
+                    sysProjectValueService.deleteSysProjectValueByProjectId(project.getProjectId());
+                    if (resourceArrange != null){
+                        for (ViewFqProjectWorkResourceArrange resourceArrange1 : resourceArrange){
+                            if(resourceArrange1 == null || resourceArrange1.getUserName() == null || resourceArrange1.getPerformanceRate() == null){
+                                continue;
+                            }
+                            SysProjectValue sysProjectValue = new SysProjectValue();
+                            sysProjectValue.setProjectId(project.getProjectId());
+                            sysProjectValue.setUserName(resourceArrange1.getUserName());
+                            sysProjectValue.setProportion(resourceArrange1.getPerformanceRate());
+                            sysProjectValueService.insertSysProjectValue(sysProjectValue);
+                        }
                     }
                 }
             }
