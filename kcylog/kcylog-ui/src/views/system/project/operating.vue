@@ -105,6 +105,16 @@
         </template>
       </el-table-column>
       <el-table-column label="接待人" align="center" prop="receptionist" />
+      <el-table-column label="产值状态" align="center">
+        <template slot-scope="scope">
+          <el-tag v-show="scope.row.operateStatus == 0" type="danger"
+            >未分配</el-tag
+          >
+          <el-tag v-show="scope.row.operateStatus == 1" type="success"
+            >已分配</el-tag
+          >
+        </template>
+      </el-table-column>
       <el-table-column label="经营产值" align="center" prop="operate" />
       <el-table-column
         label="操作"
@@ -119,6 +129,13 @@
             @click="handleDetail(scope.row)"
             v-hasPermi="['system:project:detail']"
             >经营产值</el-button
+          >
+          <el-button
+            size="mini"
+            type="text"
+            icon="el-icon-tickets"
+            @click="handlePeopleDetail(scope.row)"
+            >详情</el-button
           >
         </template>
       </el-table-column>
@@ -298,6 +315,86 @@
         </el-collapse-item>
       </el-collapse>
     </el-dialog>
+
+    <el-dialog
+      title="项目"
+      :visible.sync="detailPeopleOpen"
+      width="1000px"
+      append-to-body
+      v-el-drag-dialog
+    >
+      <el-collapse v-model="activeNames" @change="handleChange">
+        <el-collapse-item title="详情" name="1">
+          <el-descriptions class="margin-top" :column="2" border>
+            <el-descriptions-item>
+              <template slot="label">
+                <i class="el-icon-s-home"></i>
+                经营产值
+              </template>
+              {{ formPeople.operate }}
+            </el-descriptions-item>
+            <el-descriptions-item>
+              <template slot="label">
+                <i class="el-icon-tickets"></i>
+                分包金额
+              </template>
+              {{ formPeople.fbMoney }}
+            </el-descriptions-item>
+            <el-descriptions-item>
+              <template slot="label">
+                <i class="el-icon-office-building"></i>
+                雇工金额
+              </template>
+              {{ ggje(formPeople) }}
+            </el-descriptions-item>
+            <el-descriptions-item>
+              <template slot="label">
+                <i class="el-icon-notebook-2"></i>
+                利润
+              </template>
+              <el-tag v-if="calculateProfit(formPeople) > 0">
+                {{ calculateProfit(formPeople) }}</el-tag
+              >
+              <el-tag type="danger" v-if="calculateProfit(formPeople) <= 0">
+                {{ calculateProfit(formPeople) }}</el-tag
+              >
+            </el-descriptions-item>
+            <el-descriptions-item>
+              <template slot="label">
+                <i class="el-icon-user"></i>
+                分包工作量
+              </template>
+              {{ formPeople.fbWorkload }}
+            </el-descriptions-item>
+            <el-descriptions-item>
+              <template slot="label">
+                <i class="el-icon-user"></i>
+                雇工分包申请单
+              </template>
+              <el-tag>{{ calculateLaborSub(formPeople) }}</el-tag>
+            </el-descriptions-item>
+          </el-descriptions>
+        </el-collapse-item>
+        <el-collapse-item title="人员安排" name="2">
+          <template>
+            <el-table :data="formPeople.projectValue" style="width: 100%">
+              <el-table-column prop="userName" label="用户名" align="center" />
+              <el-table-column prop="proportion" label="占比" align="center" />
+              <el-table-column prop="money" label="经营产值" align="center">
+                <template slot-scope="scope">
+                  <el-tag> {{ scope.row.money }}</el-tag>
+                </template>
+              </el-table-column>
+              <el-table-column prop="profitMoney" label="利润" align="center">
+                <template slot-scope="scope">
+                  <el-tag type="success"> {{ scope.row.profitMoney }}</el-tag>
+                </template>
+              </el-table-column>
+            </el-table>
+          </template>
+        </el-collapse-item>
+      </el-collapse>
+    </el-dialog>
   </div>
 </template>
 
@@ -316,6 +413,7 @@ export default {
   },
   data() {
     return {
+      formPeople: {},
       dateRange: [],
       operates: [
         {
@@ -329,6 +427,7 @@ export default {
       ],
       activeNames: ["1", "2"],
       detailOpen: false,
+      detailPeopleOpen: false,
       detailTitle: "项目",
       // 遮罩层
       loading: true,
@@ -386,6 +485,72 @@ export default {
     this.getList();
   },
   methods: {
+    calculateLaborSub(value) {
+      // 0无、1未开始、2驳回、3进行中（展示是谁审核中）、通过
+      var status = "无审核单";
+      if (
+        value.reviewSubOne != null &&
+        value.reviewSubOne != undefined &&
+        value.reviewSubOne.reviewEmployee != null &&
+        value.reviewSubOne.reviewEmployee != undefined
+      ) {
+        if (value.reviewSubOne.status == 2 || value.reviewSubOne.status == 4) {
+          status = "该项目审核单已通过";
+        } else if (value.reviewSubOne.status == 3) {
+          status = "该项目审核单被驳回";
+        } else if (value.reviewSubOne.status == 0) {
+          status = "该项目审核单未发起审核";
+        } else if (
+          value.reviewSubOne.status == 1 &&
+          value.reviewSubOne.reviewSubProcess[3].status == 1
+        ) {
+          status = "该项目审核单已通过";
+        } else {
+          if (value.reviewSubOne.reviewSubProcess[0].status == 1) {
+            status =
+              value.reviewSubOne.reviewSubProcess[0].user.userName + "审核中";
+          }
+          if (value.reviewSubOne.reviewSubProcess[1].status == 1) {
+            status =
+              value.reviewSubOne.reviewSubProcess[1].user.userName + "审核中";
+          }
+          if (value.reviewSubOne.reviewSubProcess[2].status == 1) {
+            status = "填写最终雇工信息中";
+          }
+        }
+      }
+      return status;
+    },
+    calculateProfit(value) {
+      var cost = 0;
+      if (
+        value.reviewSubOne != null &&
+        value.reviewSubOne != undefined &&
+        value.reviewSubOne.reviewEmployee != null &&
+        value.reviewSubOne.reviewEmployee != undefined
+      ) {
+        for (let i = 0; i < value.reviewSubOne.reviewEmployee.length; i++) {
+          cost = cost + value.reviewSubOne.reviewEmployee[i].cost;
+        }
+      }
+      return value.operate - value.fbMoney - cost;
+    },
+    ggje(value) {
+      if (value.reviewSubOne == null || value.reviewSubOne == undefined) {
+        return 0;
+      }
+      if (
+        value.reviewSubOne.reviewEmployee == null ||
+        value.reviewSubOne.reviewEmployee == undefined
+      ) {
+        return 0;
+      }
+      var cost = 0;
+      for (let i = 0; i < value.reviewSubOne.reviewEmployee.length; i++) {
+        cost = cost + value.reviewSubOne.reviewEmployee[i].cost;
+      }
+      return cost;
+    },
     formatDate(dateString) {
       if (dateString == "") {
         return "";
@@ -454,6 +619,15 @@ export default {
         updateTime: null,
       };
       this.resetForm("form");
+    },
+    handlePeopleDetail(row) {
+      this.reset();
+      const projectId = row.projectId || this.ids;
+      this.projectId = projectId;
+      getProject(projectId).then((response) => {
+        this.formPeople = response.data;
+        this.detailPeopleOpen = true;
+      });
     },
     /** 搜索按钮操作 */
     handleQuery() {

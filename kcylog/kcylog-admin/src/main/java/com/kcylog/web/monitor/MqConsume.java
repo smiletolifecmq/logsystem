@@ -41,6 +41,9 @@ public class MqConsume {
 
     @Autowired
     private IViewFqProjectWorkDoneService viewFqProjectWorkDoneService;
+
+    @Autowired
+    private IViewFqChargeMoneyService viewFqChargeMoneyService;
     /**
      * 监听一个简单的队列，队列不存在时候会创建
      */
@@ -156,6 +159,14 @@ public class MqConsume {
                     sysProject.setSubpackageType(viewFqProject.getSubpackageType());
                 }
 
+                if (viewFqProject.getCustomerContractName() != null){
+                    sysProject.setCustomerContractName(viewFqProject.getCustomerContractName());
+                }
+
+                if (viewFqProject.getCustomerContractPhone() != null){
+                    sysProject.setCustomerContractPhone(viewFqProject.getCustomerContractPhone());
+                }
+
                 //作业状态
                 ViewFqProjectArchiveTransferTrack projectArchiveTransferTrack = viewFqProjectArchiveTransferTrackService.selectViewFqProjectArchiveTransferTrackByProjectId(Long.parseLong(mqMessage.getProjectId()));
                 if (projectArchiveTransferTrack != null && projectArchiveTransferTrack.getWorkStatus() != null){
@@ -165,6 +176,12 @@ public class MqConsume {
                 ViewFqProjectWorkDone workDoneList = viewFqProjectWorkDoneService.selectViewFqProjectWorkDoneByProjectId(Long.parseLong(mqMessage.getProjectId()));
                 if (workDoneList != null && workDoneList.getDoTime() != null){
                     sysProject.setDoTime(workDoneList.getDoTime().toString());
+                }
+                //分包金额
+                ViewFqChargeMoney chargeMoney = viewFqChargeMoneyService.selectViewFqChargeMoneyByProjectCode(viewFqProject.getProjectCode());
+                if (chargeMoney != null && chargeMoney.getSum() != null){
+                    BigDecimal bigDecimalValue = new BigDecimal((chargeMoney.getSum()/100));
+                    sysProject.setFbMoney(bigDecimalValue);
                 }
 
                 if (mqMessage.getOpType().equals("DELETE") || mqMessage.getOpType().equals("PROJECT_INVALID") || mqMessage.getOpType().equals("PROJECT_HANG")){

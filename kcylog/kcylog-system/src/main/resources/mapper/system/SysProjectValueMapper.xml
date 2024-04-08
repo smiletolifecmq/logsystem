@@ -75,4 +75,12 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
     <delete id="deleteSysProjectValueByProjectId" parameterType="Long">
         delete from sys_project_value where project_id = #{projectId}
     </delete>
+
+    <select id="selectSysProjectValueListByProjectIds" parameterType="java.util.List" resultMap="SysProjectValueResult">
+        <include refid="selectSysProjectValueVo"/>
+        where project_id in
+        <foreach item="projectId" collection="list" open="(" separator="," close=")">
+            #{projectId}
+        </foreach>
+    </select>
 </mapper>

@@ -61,4 +61,6 @@ public interface SysProjectValueMapper
     public int deleteSysProjectValueByValueIds(Long[] valueIds);
 
     public int deleteSysProjectValueByProjectId(Long projectId);
+
+    public List<SysProjectValue> selectSysProjectValueListByProjectIds(List<Long> projectIds);
 }

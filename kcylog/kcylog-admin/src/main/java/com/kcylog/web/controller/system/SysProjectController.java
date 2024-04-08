@@ -276,6 +276,24 @@ public class SysProjectController extends BaseController {
     public TableDataInfo listProjectOperate(SysProject sysProject) {
         startPage();
         List<SysProject> list = sysProjectService.listProjectOperate(sysProject);
+        List<Long> projectIds = new ArrayList<>();
+        for (SysProject project : list){
+            projectIds.add(project.getProjectId());
+        }
+        List<SysProjectValue> projectValue = sysProjectValueService.selectSysProjectValueListByProjectIds(projectIds);
+        Map<Long, Integer> hashMap = new HashMap<>();
+        for (SysProjectValue value : projectValue){
+            if (!hashMap.containsKey(value.getProjectId())){
+                hashMap.put(value.getProjectId(), 1);
+            }
+        }
+        for (SysProject project : list){
+            if (hashMap.containsKey(project.getProjectId())){
+                project.setOperateStatus(hashMap.get(project.getProjectId()));
+            }else {
+                project.setOperateStatus(0);
+            }
+        }
         return getDataTable(list);
     }
 

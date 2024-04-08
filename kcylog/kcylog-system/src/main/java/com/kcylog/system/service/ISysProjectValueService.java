@@ -62,4 +62,6 @@ public interface ISysProjectValueService
 
     public int deleteSysProjectValueByProjectId(Long projectId);
 
+    public List<SysProjectValue> selectSysProjectValueListByProjectIds(List<Long> projectIds);
+
 }
