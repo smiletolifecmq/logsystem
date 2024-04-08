@@ -420,13 +420,6 @@
                       </template>
                       {{ formatDateReviewSub(formInfo.project.twoCheck) }}
                     </el-descriptions-item>
-                    <el-descriptions-item>
-                      <template slot="label">
-                        <i class="el-icon-money"></i>
-                        项目预估金额
-                      </template>
-                      {{ formInfo.project.projectMoneyAlias }}
-                    </el-descriptions-item>
                   </el-descriptions>
                   <el-descriptions class="margin-top" :column="1">
                     <el-descriptions-item>
@@ -443,6 +436,13 @@
                       </template>
                       {{ formInfo.project.workloadAlias }}
                     </el-descriptions-item>
+                    <el-descriptions-item>
+                      <template slot="label">
+                        <i class="el-icon-money"></i>
+                        项目预估金额
+                      </template>
+                      {{ formInfo.project.projectMoneyAlias }}
+                    </el-descriptions-item>
                   </el-descriptions>
                 </div>
               </el-card>
@@ -452,135 +452,156 @@
                 <div slot="header" class="clearfix">
                   <span>审核单详情</span>
                 </div>
-                <el-card>
-                  <div slot="header">
-                    <span>分包详情</span>
-                    <el-button
-                      style="float: right; padding: 3px 0"
-                      type="text"
-                    ></el-button>
-                  </div>
-                  <div style="text-align: center">
+
+                <el-collapse-item name="5">
+                  <template slot="title">
+                    分包详情<i>
+                      <el-tag
+                        size="mini"
+                        v-if="formInfo.subpackageType == 0"
+                        type="danger"
+                        >未设置</el-tag
+                      >
+                      <el-tag
+                        size="mini"
+                        v-else-if="formInfo.subpackageType == 1"
+                        type="danger"
+                        >非分包</el-tag
+                      >
+                      <el-tag
+                        size="mini"
+                        v-else-if="formInfo.subpackageType == 2"
+                        type="success"
+                        >单一合同分包</el-tag
+                      >
+                      <el-tag
+                        size="mini"
+                        v-else-if="formInfo.subpackageType == 3"
+                        type="success"
+                        >框架协议分包</el-tag
+                      >
+                      <el-tag size="mini" v-else type="danger">其他状态</el-tag>
+                    </i>
+                  </template>
+                  <el-card>
+                    <div style="text-align: center">
+                      <el-descriptions class="margin-top" :column="2">
+                        <el-descriptions-item>
+                          <template slot="label"> 分包类型 </template>
+                          <span v-if="subcontractForm.subType == 1"
+                            >全部分包</span
+                          ><span v-if="subcontractForm.subType == 2"
+                            >局部分包</span
+                          >
+                        </el-descriptions-item>
+                        <el-descriptions-item>
+                          <template slot="label"> 抽签时间 </template>
+                          {{
+                            parseTime(subcontractForm.lotTime, "{y}-{m}-{d}")
+                          }}
+                        </el-descriptions-item>
+                      </el-descriptions>
+                      <el-descriptions class="margin-top" :column="1">
+                        <el-descriptions-item>
+                          <template slot="label"> 抽签单位 </template>
+                          <div
+                            v-for="(
+                              unit, index
+                            ) in subcontractForm.cooperationUnitJson"
+                            :key="index"
+                          >
+                            {{ unit }}
+                          </div>
+                        </el-descriptions-item>
+                        <el-descriptions-item>
+                          <template slot="label"> 中签单位 </template>
+                          {{ subcontractForm.winUnit }}
+                        </el-descriptions-item>
+                        <el-descriptions-item>
+                          <template slot="label"> 预估分包工作量 </template>
+                          {{ subcontractForm.subWorkload }}
+                        </el-descriptions-item>
+                      </el-descriptions>
+                    </div>
+                  </el-card>
+                </el-collapse-item>
+
+                <el-collapse-item name="6">
+                  <template slot="title">
+                    雇工详情<i>
+                      <el-tag
+                        size="mini"
+                        v-if="formInfo.manType == 0"
+                        type="danger"
+                        >非雇工</el-tag
+                      >
+
+                      <el-tag
+                        size="mini"
+                        v-else-if="formInfo.manType == 1"
+                        type="success"
+                        >雇工</el-tag
+                      >
+                      <el-tag
+                        size="mini"
+                        v-else-if="formInfo.manType == 2"
+                        type="success"
+                        >第三方雇工</el-tag
+                      >
+                    </i>
+                  </template>
+
+                  <el-card>
                     <el-descriptions class="margin-top" :column="2">
                       <el-descriptions-item>
-                        <template slot="label"> 分包类型 </template>
-                        <span v-if="subcontractForm.subType == 1">全部分包</span
-                        ><span v-if="subcontractForm.subType == 2"
-                          >局部分包</span
-                        >
+                        <template slot="label"> 雇工开始时间 </template>
+                        {{ formInfo.startTime
+                        }}<span v-if="startAmPm == '12:00:00'">上午</span
+                        ><span v-if="startAmPm == '23:59:59'">下午</span>
                       </el-descriptions-item>
                       <el-descriptions-item>
-                        <template slot="label"> 分包状态 </template>
-                        <el-tag
-                          size="mini"
-                          v-if="formInfo.subpackageType == 0"
-                          type="danger"
-                          >未设置</el-tag
-                        >
-                        <el-tag
-                          size="mini"
-                          v-else-if="formInfo.subpackageType == 1"
-                          type="danger"
-                          >非分包</el-tag
-                        >
-                        <el-tag
-                          size="mini"
-                          v-else-if="formInfo.subpackageType == 2"
-                          type="success"
-                          >单一合同分包</el-tag
-                        >
-                        <el-tag
-                          size="mini"
-                          v-else-if="formInfo.subpackageType == 3"
-                          type="success"
-                          >框架协议分包</el-tag
-                        >
-                        <el-tag v-else type="danger" size="mini"
-                          >其他状态</el-tag
-                        >
+                        <template slot="label"> 雇工结束时间 </template>
+                        {{ formInfo.endTime
+                        }}<span v-if="endAmPm == '12:00:00'">上午</span
+                        ><span v-if="endAmPm == '23:59:59'">下午</span>
                       </el-descriptions-item>
                       <el-descriptions-item>
-                        <template slot="label"> 抽签单位 </template>
-                        <div
-                          v-for="(
-                            unit, index
-                          ) in subcontractForm.cooperationUnitJson"
-                          :key="index"
+                        <template slot="label"> 雇工人数 </template>
+                        {{ formInfo.peopleNum }}
+                      </el-descriptions-item>
+                      <el-descriptions-item>
+                        <template slot="label"> 天数 </template>
+                        {{ formInfo.budgetDay }}
+                      </el-descriptions-item>
+                      <el-descriptions-item>
+                        <template slot="label"> 预算 </template>
+                        {{ formInfo.budgetMoney }}
+                      </el-descriptions-item>
+                      <el-descriptions-item>
+                        <template slot="label"> 雇工方式 </template>
+                        <span v-if="formInfo.manType === 0"
+                          ><el-tag type="danger" size="mini">非雇工</el-tag>
+                        </span>
+                        <span v-if="formInfo.manType === 1"
+                          ><el-tag type="success" size="mini"
+                            >雇工</el-tag
+                          ></span
                         >
-                          {{ unit }}
-                        </div>
-                      </el-descriptions-item>
-                      <el-descriptions-item>
-                        <template slot="label"> 中签单位 </template>
-                        {{ subcontractForm.winUnit }}
-                      </el-descriptions-item>
-                      <el-descriptions-item>
-                        <template slot="label"> 抽签时间 </template>
-                        {{ parseTime(subcontractForm.lotTime, "{y}-{m}-{d}") }}
-                      </el-descriptions-item>
-                      <el-descriptions-item>
-                        <template slot="label"> 预估分包工作量 </template>
-                        {{ subcontractForm.subWorkload }}
+                        <span v-if="formInfo.manType === 2"
+                          ><el-tag type="success" size="mini"
+                            >第三方雇工</el-tag
+                          ></span
+                        >
                       </el-descriptions-item>
                     </el-descriptions>
-                  </div>
-                </el-card>
-                <el-card>
-                  <div slot="header">
-                    <span>雇工详情</span>
-                    <el-button
-                      style="float: right; padding: 3px 0"
-                      type="text"
-                    ></el-button>
-                  </div>
-
-                  <el-descriptions class="margin-top" :column="2">
-                    <el-descriptions-item>
-                      <template slot="label"> 雇工开始时间 </template>
-                      {{ formInfo.startTime
-                      }}<span v-if="startAmPm == '12:00:00'">上午</span
-                      ><span v-if="startAmPm == '23:59:59'">下午</span>
-                    </el-descriptions-item>
-                    <el-descriptions-item>
-                      <template slot="label"> 雇工结束时间 </template>
-                      {{ formInfo.endTime
-                      }}<span v-if="endAmPm == '12:00:00'">上午</span
-                      ><span v-if="endAmPm == '23:59:59'">下午</span>
-                    </el-descriptions-item>
-                    <el-descriptions-item>
-                      <template slot="label"> 雇工人数 </template>
-                      {{ formInfo.peopleNum }}
-                    </el-descriptions-item>
-                    <el-descriptions-item>
-                      <template slot="label"> 天数 </template>
-                      {{ formInfo.budgetDay }}
-                    </el-descriptions-item>
-                    <el-descriptions-item>
-                      <template slot="label"> 预算 </template>
-                      {{ formInfo.budgetMoney }}
-                    </el-descriptions-item>
-                    <el-descriptions-item>
-                      <template slot="label"> 雇工方式 </template>
-                      <span v-if="formInfo.manType === 0"
-                        ><el-tag size="mini" type="danger">非雇工</el-tag>
-                      </span>
-                      <span v-if="formInfo.manType === 1"
-                        ><el-tag size="mini" type="success">雇工</el-tag></span
-                      >
-                      <span v-if="formInfo.manType === 2"
-                        ><el-tag size="mini" type="success"
-                          >第三方雇工</el-tag
-                        ></span
-                      >
-                    </el-descriptions-item>
-                  </el-descriptions>
-                  <el-descriptions class="margin-top" :column="1">
-                    <el-descriptions-item>
-                      <template slot="label"> 雇工内容 </template>
-                      {{ formInfo.employmentReason }}
-                    </el-descriptions-item>
-                  </el-descriptions>
-                </el-card>
+                    <el-descriptions class="margin-top" :column="1">
+                      <el-descriptions-item>
+                        <template slot="label"> 雇工内容 </template>
+                        {{ formInfo.employmentReason }}
+                      </el-descriptions-item>
+                    </el-descriptions>
+                  </el-card>
+                </el-collapse-item>
               </el-card>
             </el-col>
           </el-row>
@@ -1022,6 +1043,16 @@ export default {
           response.data.endTime = response.data.endTime.substring(0, 10);
         }
         this.formInfo = response.data;
+        this.activeNames = ["1", "2", "3", "4"];
+        if (
+          this.formInfo.subpackageType != 0 &&
+          this.formInfo.subpackageType != 1
+        ) {
+          this.activeNames.push("5");
+        }
+        if (this.formInfo.manType != 0) {
+          this.activeNames.push("6");
+        }
         if (this.formInfo.subcontract == 0) {
           this.formInfo.subcontract = null;
         }

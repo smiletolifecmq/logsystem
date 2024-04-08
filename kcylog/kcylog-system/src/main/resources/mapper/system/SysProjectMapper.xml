@@ -111,7 +111,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
             <if test="params.endTime != null and params.endTime != ''"><!-- 结束时间检索 -->
                 and (date_format(project_start_alias,'%y%m%d') &lt;= date_format(#{params.endTime},'%y%m%d'))
             </if>
-            and status != 2 and status != 3
+            and status != 2 and status != 3 and  work_status != 4
         </where>
         order by p.work_status asc , p.project_id desc
     </select>

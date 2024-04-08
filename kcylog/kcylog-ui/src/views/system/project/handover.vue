@@ -305,20 +305,23 @@
               </template>
               {{ form.projectNum }}
             </el-descriptions-item>
+
             <el-descriptions-item>
               <template slot="label">
-                <i class="el-icon-user"></i>
-                接待人
+                <i class="el-icon-office-building"></i>
+                经办人
               </template>
-              {{ form.receptionist }}
+              {{ form.customerContractName }}
             </el-descriptions-item>
+
             <el-descriptions-item>
               <template slot="label">
-                <i class="el-icon-time"></i>
-                登记时间
+                <i class="el-icon-office-building"></i>
+                手机号
               </template>
-              {{ formatDate(form.registerTime) }}
+              {{ form.customerContractPhone }}
             </el-descriptions-item>
+
             <el-descriptions-item>
               <template slot="label">
                 <i class="el-icon-office-building"></i>
@@ -335,17 +338,17 @@
             </el-descriptions-item>
             <el-descriptions-item>
               <template slot="label">
-                <i class="el-icon-time"></i>
-                安排开始时间
+                <i class="el-icon-user"></i>
+                接待人
               </template>
-              {{ formatDate(form.projectStartAlias) }}
+              {{ form.receptionist }}
             </el-descriptions-item>
             <el-descriptions-item>
               <template slot="label">
                 <i class="el-icon-time"></i>
-                安排结束时间
+                登记时间
               </template>
-              {{ formatDate(form.projectEndAlias) }}
+              {{ formatDate(form.registerTime) }}
             </el-descriptions-item>
             <el-descriptions-item>
               <template slot="label">
@@ -364,30 +367,24 @@
             <el-descriptions-item>
               <template slot="label">
                 <i class="el-icon-time"></i>
-                一检时间
+                安排开始时间
               </template>
-              {{ formatDate(form.oneCheck) }}
+              {{ formatDate(form.projectStartAlias) }}
             </el-descriptions-item>
             <el-descriptions-item>
               <template slot="label">
                 <i class="el-icon-time"></i>
-                二检时间
+                安排结束时间
               </template>
-              {{ formatDate(form.twoCheck) }}
+              {{ formatDate(form.projectEndAlias) }}
             </el-descriptions-item>
+
             <el-descriptions-item>
               <template slot="label">
                 <i class="el-icon-money"></i>
                 项目金额
               </template>
               {{ form.projectMoneyAlias }}
-            </el-descriptions-item>
-            <el-descriptions-item>
-              <template slot="label">
-                <i class="el-icon-time"></i>
-                通知出件时间
-              </template>
-              {{ formatDate(form.noticeTime) }}
             </el-descriptions-item>
             <el-descriptions-item>
               <template slot="label">
@@ -399,11 +396,19 @@
             <el-descriptions-item>
               <template slot="label">
                 <i class="el-icon-time"></i>
-                送达时间
+                一检时间
               </template>
-              {{ formatDate(form.deliveryTime) }}
+              {{ formatDate(form.oneCheck) }}
+            </el-descriptions-item>
+            <el-descriptions-item>
+              <template slot="label">
+                <i class="el-icon-time"></i>
+                二检时间
+              </template>
+              {{ formatDate(form.twoCheck) }}
             </el-descriptions-item>
           </el-descriptions>
+
           <el-descriptions class="margin-top" :column="1" border>
             <el-descriptions-item>
               <template slot="label">
@@ -968,7 +973,6 @@ export default {
     this.getReviewProject();
     this.getList();
     this.loadAllUnits();
-    console.log(userInfo);
   },
   methods: {
     showReviewStatus(status) {
