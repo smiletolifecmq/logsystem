@@ -53,7 +53,28 @@ public class ViewFqProject extends BaseEntity
     //作业部门
     private String jobOrgName;
 
+    //经办人
+    private String customerContractName;
+    //经办人手机号
+    private String customerContractPhone;
+
     private Long subpackageType;
+
+    public String getCustomerContractName() {
+        return customerContractName;
+    }
+
+    public void setCustomerContractName(String customerContractName) {
+        this.customerContractName = customerContractName;
+    }
+
+    public String getCustomerContractPhone() {
+        return customerContractPhone;
+    }
+
+    public void setCustomerContractPhone(String customerContractPhone) {
+        this.customerContractPhone = customerContractPhone;
+    }
 
     public Long getSubpackageType() {
         return subpackageType;

@@ -161,6 +161,27 @@ public class SysProject extends BaseEntity
 
     private Integer rectifyCutoffTimeDays;
 
+    //经办人
+    private String customerContractName;
+    //经办人手机号
+    private String customerContractPhone;
+
+    public String getCustomerContractName() {
+        return customerContractName;
+    }
+
+    public void setCustomerContractName(String customerContractName) {
+        this.customerContractName = customerContractName;
+    }
+
+    public String getCustomerContractPhone() {
+        return customerContractPhone;
+    }
+
+    public void setCustomerContractPhone(String customerContractPhone) {
+        this.customerContractPhone = customerContractPhone;
+    }
+
     public Long getRegisterStatus() {
         return registerStatus;
     }

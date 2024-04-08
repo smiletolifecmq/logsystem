@@ -1,0 +1,59 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.kcylog.system.mapper.ViewFqChargeMoneyMapper">
+    
+    <resultMap type="ViewFqChargeMoney" id="ViewFqChargeMoneyResult">
+        <result property="projectCode"    column="project_code"    />
+        <result property="sum"    column="sum"    />
+    </resultMap>
+
+    <sql id="selectViewFqChargeMoneyVo">
+        select project_code, sum from view_fq_charge_money
+    </sql>
+
+    <select id="selectViewFqChargeMoneyList" parameterType="ViewFqChargeMoney" resultMap="ViewFqChargeMoneyResult">
+        <include refid="selectViewFqChargeMoneyVo"/>
+        <where>  
+            <if test="projectCode != null  and projectCode != ''"> and project_code = #{projectCode}</if>
+            <if test="sum != null "> and sum = #{sum}</if>
+        </where>
+    </select>
+    
+    <select id="selectViewFqChargeMoneyByProjectCode" parameterType="String" resultMap="ViewFqChargeMoneyResult">
+        <include refid="selectViewFqChargeMoneyVo"/>
+        where project_code = #{projectCode}
+    </select>
+        
+    <insert id="insertViewFqChargeMoney" parameterType="ViewFqChargeMoney">
+        insert into view_fq_charge_money
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="projectCode != null">project_code,</if>
+            <if test="sum != null">sum,</if>
+         </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test="projectCode != null">#{projectCode},</if>
+            <if test="sum != null">#{sum},</if>
+         </trim>
+    </insert>
+
+    <update id="updateViewFqChargeMoney" parameterType="ViewFqChargeMoney">
+        update view_fq_charge_money
+        <trim prefix="SET" suffixOverrides=",">
+            <if test="sum != null">sum = #{sum},</if>
+        </trim>
+        where project_code = #{projectCode}
+    </update>
+
+    <delete id="deleteViewFqChargeMoneyByProjectCode" parameterType="String">
+        delete from view_fq_charge_money where project_code = #{projectCode}
+    </delete>
+
+    <delete id="deleteViewFqChargeMoneyByProjectCodes" parameterType="String">
+        delete from view_fq_charge_money where project_code in 
+        <foreach item="projectCode" collection="array" open="(" separator="," close=")">
+            #{projectCode}
+        </foreach>
+    </delete>
+</mapper>
