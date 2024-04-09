@@ -259,6 +259,14 @@
             v-hasPermi="['system:project:remove']"
             >删除</el-button
           >
+          <el-button
+            size="mini"
+            type="text"
+            icon="el-icon-picture"
+            @click="handleGeo(scope.row)"
+            v-hasPermi="['system:project:geoInfo']"
+            >查看选图</el-button
+          >
         </template>
       </el-table-column>
     </el-table>
@@ -1061,6 +1069,9 @@ export default {
     this.loadAllUnits();
   },
   methods: {
+    handleGeo(value) {
+      console.log(value);
+    },
     homeworkCompleted(value) {
       var doTime = this.formatDate(value.doTime);
       if (value.workStatus == 4) {

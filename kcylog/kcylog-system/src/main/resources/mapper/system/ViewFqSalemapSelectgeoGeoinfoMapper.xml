@@ -1,0 +1,84 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.kcylog.system.mapper.ViewFqSalemapSelectgeoGeoinfoMapper">
+    
+    <resultMap type="ViewFqSalemapSelectgeoGeoinfo" id="ViewFqSalemapSelectgeoGeoinfoResult">
+        <result property="projectId"    column="project_id"    />
+        <result property="geometry"    column="geometry"    />
+        <result property="geometry2000"    column="geometry2000"    />
+        <result property="bufferGeometry"    column="buffer_geometry"    />
+        <result property="bufferGeometry2000"    column="buffer_geometry2000"    />
+        <result property="geometryGauss2000"    column="geometry_gauss2000"    />
+        <result property="bufferGeometryGauss2000"    column="buffer_geometry_gauss2000"    />
+    </resultMap>
+
+    <sql id="selectViewFqSalemapSelectgeoGeoinfoVo">
+        select project_id, geometry, geometry2000, buffer_geometry, buffer_geometry2000, geometry_gauss2000, buffer_geometry_gauss2000 from view_fq_salemap_selectgeo_geoinfo
+    </sql>
+
+    <select id="selectViewFqSalemapSelectgeoGeoinfoList" parameterType="ViewFqSalemapSelectgeoGeoinfo" resultMap="ViewFqSalemapSelectgeoGeoinfoResult">
+        <include refid="selectViewFqSalemapSelectgeoGeoinfoVo"/>
+        <where>  
+            <if test="projectId != null "> and project_id = #{projectId}</if>
+            <if test="geometry != null  and geometry != ''"> and geometry = #{geometry}</if>
+            <if test="geometry2000 != null  and geometry2000 != ''"> and geometry2000 = #{geometry2000}</if>
+            <if test="bufferGeometry != null  and bufferGeometry != ''"> and buffer_geometry = #{bufferGeometry}</if>
+            <if test="bufferGeometry2000 != null  and bufferGeometry2000 != ''"> and buffer_geometry2000 = #{bufferGeometry2000}</if>
+            <if test="geometryGauss2000 != null  and geometryGauss2000 != ''"> and geometry_gauss2000 = #{geometryGauss2000}</if>
+            <if test="bufferGeometryGauss2000 != null  and bufferGeometryGauss2000 != ''"> and buffer_geometry_gauss2000 = #{bufferGeometryGauss2000}</if>
+        </where>
+    </select>
+    
+    <select id="selectViewFqSalemapSelectgeoGeoinfoByProjectId" parameterType="Long" resultMap="ViewFqSalemapSelectgeoGeoinfoResult">
+        <include refid="selectViewFqSalemapSelectgeoGeoinfoVo"/>
+        where project_id = #{projectId}
+    </select>
+        
+    <insert id="insertViewFqSalemapSelectgeoGeoinfo" parameterType="ViewFqSalemapSelectgeoGeoinfo">
+        insert into view_fq_salemap_selectgeo_geoinfo
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="projectId != null">project_id,</if>
+            <if test="geometry != null">geometry,</if>
+            <if test="geometry2000 != null">geometry2000,</if>
+            <if test="bufferGeometry != null">buffer_geometry,</if>
+            <if test="bufferGeometry2000 != null">buffer_geometry2000,</if>
+            <if test="geometryGauss2000 != null">geometry_gauss2000,</if>
+            <if test="bufferGeometryGauss2000 != null">buffer_geometry_gauss2000,</if>
+         </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test="projectId != null">#{projectId},</if>
+            <if test="geometry != null">#{geometry},</if>
+            <if test="geometry2000 != null">#{geometry2000},</if>
+            <if test="bufferGeometry != null">#{bufferGeometry},</if>
+            <if test="bufferGeometry2000 != null">#{bufferGeometry2000},</if>
+            <if test="geometryGauss2000 != null">#{geometryGauss2000},</if>
+            <if test="bufferGeometryGauss2000 != null">#{bufferGeometryGauss2000},</if>
+         </trim>
+    </insert>
+
+    <update id="updateViewFqSalemapSelectgeoGeoinfo" parameterType="ViewFqSalemapSelectgeoGeoinfo">
+        update view_fq_salemap_selectgeo_geoinfo
+        <trim prefix="SET" suffixOverrides=",">
+            <if test="geometry != null">geometry = #{geometry},</if>
+            <if test="geometry2000 != null">geometry2000 = #{geometry2000},</if>
+            <if test="bufferGeometry != null">buffer_geometry = #{bufferGeometry},</if>
+            <if test="bufferGeometry2000 != null">buffer_geometry2000 = #{bufferGeometry2000},</if>
+            <if test="geometryGauss2000 != null">geometry_gauss2000 = #{geometryGauss2000},</if>
+            <if test="bufferGeometryGauss2000 != null">buffer_geometry_gauss2000 = #{bufferGeometryGauss2000},</if>
+        </trim>
+        where project_id = #{projectId}
+    </update>
+
+    <delete id="deleteViewFqSalemapSelectgeoGeoinfoByProjectId" parameterType="Long">
+        delete from view_fq_salemap_selectgeo_geoinfo where project_id = #{projectId}
+    </delete>
+
+    <delete id="deleteViewFqSalemapSelectgeoGeoinfoByProjectIds" parameterType="String">
+        delete from view_fq_salemap_selectgeo_geoinfo where project_id in 
+        <foreach item="projectId" collection="array" open="(" separator="," close=")">
+            #{projectId}
+        </foreach>
+    </delete>
+</mapper>

@@ -43,6 +43,13 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
         <result property="customerContractName" column="customer_contract_name"/>
         <result property="customerContractPhone" column="customer_contract_phone"/>
 
+        <result property="geometry" column="geometry"/>
+        <result property="geometry2000" column="geometry2000"/>
+        <result property="bufferGeometry" column="buffer_geometry"/>
+        <result property="bufferGeometry2000" column="buffer_geometry2000"/>
+        <result property="geometryGauss2000" column="geometry_gauss2000"/>
+        <result property="bufferGeometryGauss2000" column="buffer_geometry_gauss2000"/>
+
         <association property="projectValue" javaType="java.util.List" resultMap="SysProjectValueResult"/>
         <association property="projectCar" javaType="java.util.List" resultMap="SysProjectCarResult"/>
         <association property="reviewSub" javaType="java.util.List" resultMap="SysReviewSubResult"/>
@@ -157,6 +164,12 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
             <if test="workStatus != null">work_status,</if>
             <if test="customerContractName != null">customer_contract_name,</if>
             <if test="customerContractPhone != null">customer_contract_phone,</if>
+            <if test="geometry != null">geometry,</if>
+            <if test="geometry2000 != null">geometry2000,</if>
+            <if test="bufferGeometry != null">buffer_geometry,</if>
+            <if test="bufferGeometry2000 != null">buffer_geometry2000,</if>
+            <if test="geometryGauss2000 != null">geometry_gauss2000,</if>
+            <if test="bufferGeometryGauss2000 != null">buffer_geometry_gauss2000,</if>
          </trim>
         <trim prefix="values (" suffix=")" suffixOverrides=",">
             <if test="projectNameAlias != null and projectNameAlias != ''">#{projectNameAlias},</if>
@@ -192,6 +205,12 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
             <if test="workStatus != null">#{workStatus},</if>
             <if test="customerContractName != null">#{customerContractName},</if>
             <if test="customerContractPhone != null">#{customerContractPhone},</if>
+            <if test="geometry != null">#{geometry},</if>
+            <if test="geometry2000 != null">#{geometry2000},</if>
+            <if test="bufferGeometry != null">#{bufferGeometry},</if>
+            <if test="bufferGeometry2000 != null">#{bufferGeometry2000},</if>
+            <if test="geometryGauss2000 != null">#{geometryGauss2000},</if>
+            <if test="bufferGeometryGauss2000 != null">#{bufferGeometryGauss2000},</if>
          </trim>
     </insert>
 
@@ -420,6 +439,12 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
             <if test="workStatus != null">work_status = #{workStatus},</if>
             <if test="customerContractName != null">customer_contract_name = #{customerContractName},</if>
             <if test="customerContractPhone != null">customer_contract_phone = #{customerContractPhone},</if>
+            <if test="geometry != null">geometry = #{geometry},</if>
+            <if test="geometry2000 != null">geometry2000 = #{geometry2000},</if>
+            <if test="bufferGeometry != null">buffer_geometry = #{bufferGeometry},</if>
+            <if test="bufferGeometry2000 != null">buffer_geometry2000 = #{bufferGeometry2000},</if>
+            <if test="geometryGauss2000 != null">geometry_gauss2000 = #{geometryGauss2000},</if>
+            <if test="bufferGeometryGauss2000 != null">buffer_geometry_gauss2000 = #{bufferGeometryGauss2000},</if>
         </trim>
         where project_num = #{projectNum}
     </update>

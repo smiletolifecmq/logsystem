@@ -359,4 +359,13 @@ public class SysProjectController extends BaseController {
         List<SysProject> list = sysProjectService.selectSysProjectWaitTwoCheck(sysProject);
         return getDataTable(list);
     }
+
+    @Anonymous
+    @CrossOrigin
+    @GetMapping("/get_project_geo/{projectId}")
+    public AjaxResult projectGeo(@PathVariable("projectId") String projectId)
+    {
+        SysProject project = sysProjectService.selectSysProjectByProjectId(projectId);
+        return success(project);
+    }
 }
