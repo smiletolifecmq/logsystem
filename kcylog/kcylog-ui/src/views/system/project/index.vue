@@ -100,6 +100,24 @@
       ></right-toolbar>
     </el-row>
 
+    <el-table :data="statisticsData" style="width: 100%">
+      <el-table-column prop="deptName" label="部门" align="center">
+        <template slot-scope="scope">
+          <el-tag>{{ scope.row.department }}</el-tag>
+        </template>
+      </el-table-column>
+      <el-table-column prop="workCount" label="作业中条数" align="center">
+        <template slot-scope="scope">
+          <el-tag type="success">{{ scope.row.workCount }}</el-tag>
+        </template>
+      </el-table-column>
+      <el-table-column prop="overdueNum" label="超期条数" align="center">
+        <template slot-scope="scope">
+          <el-tag type="danger">{{ scope.row.overdueNum }}</el-tag>
+        </template>
+      </el-table-column>
+    </el-table>
+
     <el-table
       v-loading="loading"
       :data="projectList"
@@ -874,6 +892,7 @@ export default {
   },
   data() {
     return {
+      statisticsData: [],
       centerDialogVisible: false,
       projectCode: "",
       projectIdMap: {},
@@ -995,6 +1014,10 @@ export default {
       // 是否显示弹出层
       open: false,
       // 查询参数
+      queryStatisticsParams: {
+        pageNum: 1,
+        pageSize: 9999,
+      },
       queryParams: {
         pageNum: 1,
         pageSize: 10,
@@ -1086,8 +1109,45 @@ export default {
     this.getReviewProject();
     this.getList();
     this.loadAllUnits();
+    this.getStatisticsData();
   },
   methods: {
+    getStatisticsData() {
+      listProject(this.addDateRange(this.queryStatisticsParams)).then(
+        (response) => {
+          const project = response.rows;
+          let myMap = new Map();
+          for (let i = 0; i < project.length; i++) {
+            let key = project[i].department;
+            if (myMap.has(key)) {
+              let num = myMap.get(key);
+              num.workCount++;
+              if (project[i].leadTime < 0) {
+                num.overdueNum++;
+              }
+              myMap.set(key, num);
+            } else {
+              let num = {
+                workCount: 1,
+                overdueNum: 0,
+              };
+              if (project[i].leadTime < 0) {
+                num.overdueNum++;
+              }
+              myMap.set(key, num);
+            }
+          }
+          myMap.forEach((value, key) => {
+            let numData = {
+              department: key,
+              workCount: value.workCount,
+              overdueNum: value.overdueNum,
+            };
+            this.statisticsData.push(numData);
+          });
+        }
+      );
+    },
     handleGeo(value) {
       this.projectCode = value.projectNum;
       // this.centerDialogVisible = true;
