@@ -238,7 +238,7 @@ public class MqConsume {
                     }
                     //同步网格
                     List<ViewFqSalemapSelectmapTfinfo> tfinfoList = viewFqSalemapSelectmapTfinfoService.selectViewFqSalemapSelectmapTfinfoByProjectId(Long.parseLong(mqMessage.getProjectId()));
-                    sysProjectSelectmapTfinfoService.deleteSysProjectSelectmapTfinfoByProjectId(Long.parseLong(mqMessage.getProjectId()));
+                    sysProjectSelectmapTfinfoService.deleteSysProjectSelectmapTfinfoByProjectId(sysProject.getProjectId());
                     if (tfinfoList != null){
                         for (ViewFqSalemapSelectmapTfinfo tfinfo : tfinfoList){
                             SysProjectSelectmapTfinfo sysProjectSelectmapTfinfo = new SysProjectSelectmapTfinfo();
