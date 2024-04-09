@@ -260,6 +260,11 @@
             >删除</el-button
           >
           <el-button
+            v-if="
+              ['图', '售', '数'].some((substring) =>
+                scope.row.projectNum.includes(substring)
+              )
+            "
             size="mini"
             type="text"
             icon="el-icon-picture"
