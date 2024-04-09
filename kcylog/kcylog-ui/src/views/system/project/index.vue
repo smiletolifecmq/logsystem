@@ -833,6 +833,18 @@
         <el-button @click="cancelReviewSub">取 消</el-button>
       </div>
     </el-dialog>
+
+    <!-- <el-dialog
+      :title="projectCode"
+      :visible.sync="centerDialogVisible"
+      width="100%"
+      height="100%"
+      center
+    >
+      <span>
+        <iframe src="https://ruoyi.vip/" width="100%" height="600px"></iframe>
+      </span>
+    </el-dialog> -->
   </div>
 </template>
 
@@ -857,6 +869,8 @@ export default {
   },
   data() {
     return {
+      centerDialogVisible: false,
+      projectCode: "",
       projectIdMap: {},
       listProjectLocalSelected: [],
       listProjectLocalMap: {},
@@ -1070,7 +1084,12 @@ export default {
   },
   methods: {
     handleGeo(value) {
-      console.log(value);
+      this.projectCode = value.projectNum;
+      // this.centerDialogVisible = true;
+      window.open(
+        "https://www.baidu.com?projectId=" + value.projectId,
+        "_blank"
+      );
     },
     homeworkCompleted(value) {
       var doTime = this.formatDate(value.doTime);

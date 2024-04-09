@@ -44,6 +44,9 @@ public class MqConsume {
 
     @Autowired
     private IViewFqChargeMoneyService viewFqChargeMoneyService;
+
+    @Autowired
+    private IViewFqSalemapSelectgeoGeoinfoService viewFqSalemapSelectgeoGeoinfoService;
     /**
      * 监听一个简单的队列，队列不存在时候会创建
      */
@@ -182,6 +185,28 @@ public class MqConsume {
                 if (chargeMoney != null && chargeMoney.getSum() != null){
                     BigDecimal bigDecimalValue = new BigDecimal((chargeMoney.getSum()/100));
                     sysProject.setFbMoney(bigDecimalValue);
+                }
+                //同步坐标系
+                ViewFqSalemapSelectgeoGeoinfo geoInfo = viewFqSalemapSelectgeoGeoinfoService.selectViewFqSalemapSelectgeoGeoinfoByProjectId(Long.parseLong(mqMessage.getProjectId()));
+                if (geoInfo != null){
+                    if (geoInfo.getGeometry() != null){
+                        sysProject.setGeometry(geoInfo.getGeometry());
+                    }
+                    if (geoInfo.getGeometry2000() != null){
+                        sysProject.setGeometry2000(geoInfo.getGeometry2000());
+                    }
+                    if (geoInfo.getBufferGeometry() != null){
+                        sysProject.setBufferGeometry(geoInfo.getBufferGeometry());
+                    }
+                    if (geoInfo.getBufferGeometry2000() != null){
+                        sysProject.setBufferGeometry2000(geoInfo.getBufferGeometry2000());
+                    }
+                    if (geoInfo.getGeometryGauss2000() != null){
+                        sysProject.setGeometryGauss2000(geoInfo.getGeometryGauss2000());
+                    }
+                    if (geoInfo.getBufferGeometryGauss2000() != null){
+                        sysProject.setBufferGeometryGauss2000(geoInfo.getBufferGeometryGauss2000());
+                    }
                 }
 
                 if (mqMessage.getOpType().equals("DELETE") || mqMessage.getOpType().equals("PROJECT_INVALID") || mqMessage.getOpType().equals("PROJECT_HANG")){

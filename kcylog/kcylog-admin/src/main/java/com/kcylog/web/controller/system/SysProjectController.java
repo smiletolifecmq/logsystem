@@ -8,6 +8,7 @@ import com.kcylog.common.core.page.TableDataInfo;
 import com.kcylog.common.enums.BusinessType;
 import com.kcylog.common.utils.poi.ExcelMultUtil;
 import com.kcylog.system.common.ProjectEmployee;
+import com.kcylog.system.common.ProjectGeo;
 import com.kcylog.system.common.ProjectSubcontract;
 import com.kcylog.system.domain.*;
 import com.kcylog.system.service.*;
@@ -366,6 +367,17 @@ public class SysProjectController extends BaseController {
     public AjaxResult projectGeo(@PathVariable("projectId") String projectId)
     {
         SysProject project = sysProjectService.selectSysProjectByProjectId(projectId);
-        return success(project);
+        ProjectGeo projectGeo = new ProjectGeo();
+        if (project != null)
+        {
+            projectGeo.setProjectCode(project.getProjectNum());
+            projectGeo.setGeometry(project.getGeometry());
+            projectGeo.setGeometry2000(project.getGeometry2000());
+            projectGeo.setBufferGeometry(project.getBufferGeometry());
+            projectGeo.setBufferGeometry2000(project.getBufferGeometry2000());
+            projectGeo.setGeometryGauss2000(project.getGeometryGauss2000());
+            projectGeo.setBufferGeometryGauss2000(project.getBufferGeometryGauss2000());
+        }
+        return success(projectGeo);
     }
 }
