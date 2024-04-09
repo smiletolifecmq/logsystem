@@ -1,7 +1,6 @@
 package com.kcylog.system.common;
 
 public class ProjectGeo {
-    private String projectCode;
     //福州本地坐标系
     private String geometry;
 
@@ -19,14 +18,6 @@ public class ProjectGeo {
 
     //缓冲区坐标串，国家2000平面，福州
     private String bufferGeometryGauss2000;
-
-    public String getProjectCode() {
-        return projectCode;
-    }
-
-    public void setProjectCode(String projectCode) {
-        this.projectCode = projectCode;
-    }
 
     public String getGeometry() {
         return geometry;

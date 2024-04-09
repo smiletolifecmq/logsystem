@@ -9,6 +9,7 @@ import com.kcylog.common.enums.BusinessType;
 import com.kcylog.common.utils.poi.ExcelMultUtil;
 import com.kcylog.system.common.ProjectEmployee;
 import com.kcylog.system.common.ProjectGeo;
+import com.kcylog.system.common.ProjectGeoList;
 import com.kcylog.system.common.ProjectSubcontract;
 import com.kcylog.system.domain.*;
 import com.kcylog.system.service.*;
@@ -50,10 +51,8 @@ public class SysProjectController extends BaseController {
     private ISysReviewSubProcessService sysReviewSubProcessService;
 
     @Autowired
-    private IViewFqProjectArchiveTransferTrackService viewFqProjectArchiveTransferTrackService;
+    private ISysProjectGeoinfoService sysProjectGeoinfoService;
 
-    @Autowired
-    private IViewFqProjectWorkDoneService viewFqProjectWorkDoneService;
     /**
      * 查询项目列表
      */
@@ -367,17 +366,29 @@ public class SysProjectController extends BaseController {
     public AjaxResult projectGeo(@PathVariable("projectId") String projectId)
     {
         SysProject project = sysProjectService.selectSysProjectByProjectId(projectId);
-        ProjectGeo projectGeo = new ProjectGeo();
-        if (project != null)
+        List<SysProjectGeoinfo> projectGeoinfo = sysProjectGeoinfoService.selectSysProjectGeoinfoByProjectId(Long.valueOf(projectId));
+        ProjectGeoList projectGeoList = new ProjectGeoList();
+        List<ProjectGeo> projectGeoArr = new ArrayList<>();
+        if (project != null )
         {
-            projectGeo.setProjectCode(project.getProjectNum());
-            projectGeo.setGeometry(project.getGeometry());
-            projectGeo.setGeometry2000(project.getGeometry2000());
-            projectGeo.setBufferGeometry(project.getBufferGeometry());
-            projectGeo.setBufferGeometry2000(project.getBufferGeometry2000());
-            projectGeo.setGeometryGauss2000(project.getGeometryGauss2000());
-            projectGeo.setBufferGeometryGauss2000(project.getBufferGeometryGauss2000());
+            projectGeoList.setProjectCode(project.getProjectNum());
+            projectGeoList.setProjectName(project.getProjectNameAlias());
+            projectGeoList.setRequester(project.getRequesterAlias());
+            projectGeoList.setRegisterTime(project.getRegisterTime());
+            if (projectGeoinfo != null){
+                for (SysProjectGeoinfo geoInfo : projectGeoinfo){
+                    ProjectGeo projectGeo = new ProjectGeo();
+                    projectGeo.setGeometry(geoInfo.getGeometry());
+                    projectGeo.setGeometry2000(geoInfo.getGeometry2000());
+                    projectGeo.setBufferGeometry(geoInfo.getBufferGeometry());
+                    projectGeo.setBufferGeometry2000(geoInfo.getBufferGeometry2000());
+                    projectGeo.setGeometryGauss2000(geoInfo.getGeometryGauss2000());
+                    projectGeo.setBufferGeometryGauss2000(geoInfo.getBufferGeometryGauss2000());
+                    projectGeoArr.add(projectGeo);
+                }
+            }
+            projectGeoList.setProjectGeo(projectGeoArr);
         }
-        return success(projectGeo);
+        return success(projectGeoList);
     }
 }

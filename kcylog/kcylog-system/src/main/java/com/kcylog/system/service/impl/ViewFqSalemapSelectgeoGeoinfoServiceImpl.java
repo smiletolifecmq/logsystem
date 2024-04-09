@@ -1,11 +1,12 @@
 package com.kcylog.system.service.impl;
 
-import java.util.List;
+import com.kcylog.system.domain.ViewFqSalemapSelectgeoGeoinfo;
+import com.kcylog.system.mapper.ViewFqSalemapSelectgeoGeoinfoMapper;
+import com.kcylog.system.service.IViewFqSalemapSelectgeoGeoinfoService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-import com.kcylog.system.mapper.ViewFqSalemapSelectgeoGeoinfoMapper;
-import com.kcylog.system.domain.ViewFqSalemapSelectgeoGeoinfo;
-import com.kcylog.system.service.IViewFqSalemapSelectgeoGeoinfoService;
+
+import java.util.List;
 
 /**
  * 项目坐标系Service业务层处理
@@ -26,7 +27,7 @@ public class ViewFqSalemapSelectgeoGeoinfoServiceImpl implements IViewFqSalemapS
      * @return 项目坐标系
      */
     @Override
-    public ViewFqSalemapSelectgeoGeoinfo selectViewFqSalemapSelectgeoGeoinfoByProjectId(Long projectId)
+    public List<ViewFqSalemapSelectgeoGeoinfo> selectViewFqSalemapSelectgeoGeoinfoByProjectId(Long projectId)
     {
         return viewFqSalemapSelectgeoGeoinfoMapper.selectViewFqSalemapSelectgeoGeoinfoByProjectId(projectId);
     }

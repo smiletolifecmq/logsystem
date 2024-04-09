@@ -21,7 +21,7 @@ public interface ViewFqSalemapSelectgeoGeoinfoMapper
      * @param projectId 项目坐标系主键
      * @return 项目坐标系
      */
-    public ViewFqSalemapSelectgeoGeoinfo selectViewFqSalemapSelectgeoGeoinfoByProjectId(Long projectId);
+    public List<ViewFqSalemapSelectgeoGeoinfo> selectViewFqSalemapSelectgeoGeoinfoByProjectId(Long projectId);
 
     /**
      * 查询项目坐标系列表

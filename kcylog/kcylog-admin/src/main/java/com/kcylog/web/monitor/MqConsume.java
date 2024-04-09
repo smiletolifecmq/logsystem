@@ -47,6 +47,9 @@ public class MqConsume {
 
     @Autowired
     private IViewFqSalemapSelectgeoGeoinfoService viewFqSalemapSelectgeoGeoinfoService;
+
+    @Autowired
+    private ISysProjectGeoinfoService projectGeoinfoService;
     /**
      * 监听一个简单的队列，队列不存在时候会创建
      */
@@ -186,39 +189,50 @@ public class MqConsume {
                     BigDecimal bigDecimalValue = new BigDecimal((chargeMoney.getSum()/100));
                     sysProject.setFbMoney(bigDecimalValue);
                 }
-                //同步坐标系
-                ViewFqSalemapSelectgeoGeoinfo geoInfo = viewFqSalemapSelectgeoGeoinfoService.selectViewFqSalemapSelectgeoGeoinfoByProjectId(Long.parseLong(mqMessage.getProjectId()));
-                if (geoInfo != null){
-                    if (geoInfo.getGeometry() != null){
-                        sysProject.setGeometry(geoInfo.getGeometry());
-                    }
-                    if (geoInfo.getGeometry2000() != null){
-                        sysProject.setGeometry2000(geoInfo.getGeometry2000());
-                    }
-                    if (geoInfo.getBufferGeometry() != null){
-                        sysProject.setBufferGeometry(geoInfo.getBufferGeometry());
-                    }
-                    if (geoInfo.getBufferGeometry2000() != null){
-                        sysProject.setBufferGeometry2000(geoInfo.getBufferGeometry2000());
-                    }
-                    if (geoInfo.getGeometryGauss2000() != null){
-                        sysProject.setGeometryGauss2000(geoInfo.getGeometryGauss2000());
-                    }
-                    if (geoInfo.getBufferGeometryGauss2000() != null){
-                        sysProject.setBufferGeometryGauss2000(geoInfo.getBufferGeometryGauss2000());
-                    }
-                }
 
                 if (mqMessage.getOpType().equals("DELETE") || mqMessage.getOpType().equals("PROJECT_INVALID") || mqMessage.getOpType().equals("PROJECT_HANG")){
                     sysProjectService.deleteSysProjectByCode(viewFqProject.getProjectCode());
                 }else {
                     if (sysProjectService.checkProjectKeyUnique(viewFqProject.getProjectCode()) != null) {
+                        sysProject.setProjectId(sysProjectService.checkProjectKeyUnique(viewFqProject.getProjectCode()).getProjectId());
                         sysProjectService.updateSysProjectForMq(sysProject);
                     }else {
                         sysProjectService.insertSysProject(sysProject);
                     }
-                }
+                    //同步坐标系
 
+                    List<ViewFqSalemapSelectgeoGeoinfo> geoInfoList = viewFqSalemapSelectgeoGeoinfoService.selectViewFqSalemapSelectgeoGeoinfoByProjectId(Long.parseLong(mqMessage.getProjectId()));
+                    projectGeoinfoService.deleteSysProjectGeoinfoByProjectId(sysProject.getProjectId());
+                    if (geoInfoList != null){
+                        for (ViewFqSalemapSelectgeoGeoinfo geoInfo : geoInfoList){
+                            SysProjectGeoinfo sysProjectGeoinfo = new SysProjectGeoinfo();
+                            if (geoInfo != null){
+                                if (geoInfo.getGeometry() != null){
+                                    sysProjectGeoinfo.setGeometry(geoInfo.getGeometry());
+                                }
+                                if (geoInfo.getGeometry2000() != null){
+                                    sysProjectGeoinfo.setGeometry2000(geoInfo.getGeometry2000());
+                                }
+                                if (geoInfo.getBufferGeometry() != null){
+                                    sysProjectGeoinfo.setBufferGeometry(geoInfo.getBufferGeometry());
+                                }
+                                if (geoInfo.getBufferGeometry2000() != null){
+                                    sysProjectGeoinfo.setBufferGeometry2000(geoInfo.getBufferGeometry2000());
+                                }
+                                if (geoInfo.getGeometryGauss2000() != null){
+                                    sysProjectGeoinfo.setGeometryGauss2000(geoInfo.getGeometryGauss2000());
+                                }
+                                if (geoInfo.getBufferGeometryGauss2000() != null){
+                                    sysProjectGeoinfo.setBufferGeometryGauss2000(geoInfo.getBufferGeometryGauss2000());
+                                }
+                                sysProjectGeoinfo.setProjectId(sysProject.getProjectId());
+                            }
+                            projectGeoinfoService.insertSysProjectGeoinfo(sysProjectGeoinfo);
+                        }
+
+                    }
+
+                }
 
                 //同步人员安排配比
                 if (mqMessage.getOpType().equals("RESOURCE_ARRANGE_CHANGE") || (mqMessage.getOpType().equals("SECOND_CHECK") && sysProject.getTwoCheck() != null && !sysProject.getTwoCheck().equals("")) || (sysProject.getTwoCheck() != null && !sysProject.getTwoCheck().equals(""))){
