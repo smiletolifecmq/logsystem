@@ -8,6 +8,16 @@ public class ProjectGeoList {
     private String requester;
     private String registerTime;
     private List<ProjectGeo> projectGeo;
+    private List<Geotfinfo> geotfinfo;
+
+    public List<Geotfinfo> getGeotfinfo() {
+        return geotfinfo;
+    }
+
+    public void setGeotfinfo(List<Geotfinfo> geotfinfo) {
+        this.geotfinfo = geotfinfo;
+    }
+
     public String getProjectName() {
         return projectName;
     }

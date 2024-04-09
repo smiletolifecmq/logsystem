@@ -50,6 +50,12 @@ public class MqConsume {
 
     @Autowired
     private ISysProjectGeoinfoService projectGeoinfoService;
+
+    @Autowired
+    private IViewFqSalemapSelectmapTfinfoService viewFqSalemapSelectmapTfinfoService;
+
+    @Autowired
+    private ISysProjectSelectmapTfinfoService sysProjectSelectmapTfinfoService;
     /**
      * 监听一个简单的队列，队列不存在时候会创建
      */
@@ -200,7 +206,6 @@ public class MqConsume {
                         sysProjectService.insertSysProject(sysProject);
                     }
                     //同步坐标系
-
                     List<ViewFqSalemapSelectgeoGeoinfo> geoInfoList = viewFqSalemapSelectgeoGeoinfoService.selectViewFqSalemapSelectgeoGeoinfoByProjectId(Long.parseLong(mqMessage.getProjectId()));
                     projectGeoinfoService.deleteSysProjectGeoinfoByProjectId(sysProject.getProjectId());
                     if (geoInfoList != null){
@@ -231,6 +236,24 @@ public class MqConsume {
                         }
 
                     }
+                    //同步网格
+                    List<ViewFqSalemapSelectmapTfinfo> tfinfoList = viewFqSalemapSelectmapTfinfoService.selectViewFqSalemapSelectmapTfinfoByProjectId(Long.parseLong(mqMessage.getProjectId()));
+                    sysProjectSelectmapTfinfoService.deleteSysProjectSelectmapTfinfoByProjectId(Long.parseLong(mqMessage.getProjectId()));
+                    if (tfinfoList != null){
+                        for (ViewFqSalemapSelectmapTfinfo tfinfo : tfinfoList){
+                            SysProjectSelectmapTfinfo sysProjectSelectmapTfinfo = new SysProjectSelectmapTfinfo();
+                            if (tfinfo != null){
+                                if (tfinfo.getMapCode() != null){
+                                    sysProjectSelectmapTfinfo.setMapCode(tfinfo.getMapCode());
+                                }
+                               if (tfinfo.getMapAddinfo() != null){
+                                   sysProjectSelectmapTfinfo.setMapAddinfo(tfinfo.getMapAddinfo());
+                               }
+                                sysProjectSelectmapTfinfo.setProjectId(sysProject.getProjectId());
+                           }
+                            sysProjectSelectmapTfinfoService.insertSysProjectSelectmapTfinfo(sysProjectSelectmapTfinfo);
+                       }
+                   }
 
                 }
 

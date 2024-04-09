@@ -1,0 +1,64 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.kcylog.system.mapper.SysProjectSelectmapTfinfoMapper">
+    
+    <resultMap type="SysProjectSelectmapTfinfo" id="SysProjectSelectmapTfinfoResult">
+        <result property="projectId"    column="project_id"    />
+        <result property="mapCode"    column="map_code"    />
+        <result property="mapAddinfo"    column="map_addinfo"    />
+    </resultMap>
+
+    <sql id="selectSysProjectSelectmapTfinfoVo">
+        select project_id, map_code, map_addinfo from sys_project_selectmap_tfinfo
+    </sql>
+
+    <select id="selectSysProjectSelectmapTfinfoList" parameterType="SysProjectSelectmapTfinfo" resultMap="SysProjectSelectmapTfinfoResult">
+        <include refid="selectSysProjectSelectmapTfinfoVo"/>
+        <where>  
+            <if test="projectId != null "> and project_id = #{projectId}</if>
+            <if test="mapCode != null  and mapCode != ''"> and map_code = #{mapCode}</if>
+            <if test="mapAddinfo != null  and mapAddinfo != ''"> and map_addinfo = #{mapAddinfo}</if>
+        </where>
+    </select>
+    
+    <select id="selectSysProjectSelectmapTfinfoByProjectId" parameterType="Long" resultMap="SysProjectSelectmapTfinfoResult">
+        <include refid="selectSysProjectSelectmapTfinfoVo"/>
+        where project_id = #{projectId}
+    </select>
+        
+    <insert id="insertSysProjectSelectmapTfinfo" parameterType="SysProjectSelectmapTfinfo">
+        insert into sys_project_selectmap_tfinfo
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="projectId != null">project_id,</if>
+            <if test="mapCode != null">map_code,</if>
+            <if test="mapAddinfo != null">map_addinfo,</if>
+         </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test="projectId != null">#{projectId},</if>
+            <if test="mapCode != null">#{mapCode},</if>
+            <if test="mapAddinfo != null">#{mapAddinfo},</if>
+         </trim>
+    </insert>
+
+    <update id="updateSysProjectSelectmapTfinfo" parameterType="SysProjectSelectmapTfinfo">
+        update sys_project_selectmap_tfinfo
+        <trim prefix="SET" suffixOverrides=",">
+            <if test="mapCode != null">map_code = #{mapCode},</if>
+            <if test="mapAddinfo != null">map_addinfo = #{mapAddinfo},</if>
+        </trim>
+        where project_id = #{projectId}
+    </update>
+
+    <delete id="deleteSysProjectSelectmapTfinfoByProjectId" parameterType="Long">
+        delete from sys_project_selectmap_tfinfo where project_id = #{projectId}
+    </delete>
+
+    <delete id="deleteSysProjectSelectmapTfinfoByProjectIds" parameterType="String">
+        delete from sys_project_selectmap_tfinfo where project_id in 
+        <foreach item="projectId" collection="array" open="(" separator="," close=")">
+            #{projectId}
+        </foreach>
+    </delete>
+</mapper>

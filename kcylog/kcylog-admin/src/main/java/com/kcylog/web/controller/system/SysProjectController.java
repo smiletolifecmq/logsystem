@@ -7,10 +7,7 @@ import com.kcylog.common.core.domain.AjaxResult;
 import com.kcylog.common.core.page.TableDataInfo;
 import com.kcylog.common.enums.BusinessType;
 import com.kcylog.common.utils.poi.ExcelMultUtil;
-import com.kcylog.system.common.ProjectEmployee;
-import com.kcylog.system.common.ProjectGeo;
-import com.kcylog.system.common.ProjectGeoList;
-import com.kcylog.system.common.ProjectSubcontract;
+import com.kcylog.system.common.*;
 import com.kcylog.system.domain.*;
 import com.kcylog.system.service.*;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -52,6 +49,9 @@ public class SysProjectController extends BaseController {
 
     @Autowired
     private ISysProjectGeoinfoService sysProjectGeoinfoService;
+
+    @Autowired
+    private ISysProjectSelectmapTfinfoService sysProjectSelectmapTfinfoService;
 
     /**
      * 查询项目列表
@@ -367,8 +367,10 @@ public class SysProjectController extends BaseController {
     {
         SysProject project = sysProjectService.selectSysProjectByProjectId(projectId);
         List<SysProjectGeoinfo> projectGeoinfo = sysProjectGeoinfoService.selectSysProjectGeoinfoByProjectId(Long.valueOf(projectId));
+        List<SysProjectSelectmapTfinfo> projectSelectmapTfinfo = sysProjectSelectmapTfinfoService.selectSysProjectSelectmapTfinfoByProjectId(Long.valueOf(projectId));
         ProjectGeoList projectGeoList = new ProjectGeoList();
         List<ProjectGeo> projectGeoArr = new ArrayList<>();
+        List<Geotfinfo> geotfinfoArr = new ArrayList<>();
         if (project != null )
         {
             projectGeoList.setProjectCode(project.getProjectNum());
@@ -387,7 +389,16 @@ public class SysProjectController extends BaseController {
                     projectGeoArr.add(projectGeo);
                 }
             }
+            if (projectSelectmapTfinfo != null){
+                for (SysProjectSelectmapTfinfo selectmapTfinfo : projectSelectmapTfinfo){
+                    Geotfinfo geotfinfo = new Geotfinfo();
+                    geotfinfo.setMapCode(selectmapTfinfo.getMapCode());
+                    geotfinfo.setMapAddinfo(selectmapTfinfo.getMapAddinfo());
+                    geotfinfoArr.add(geotfinfo);
+                }
+            }
             projectGeoList.setProjectGeo(projectGeoArr);
+            projectGeoList.setGeotfinfo(geotfinfoArr);
         }
         return success(projectGeoList);
     }
