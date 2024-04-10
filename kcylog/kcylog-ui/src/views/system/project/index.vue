@@ -104,9 +104,11 @@
       <el-table-column prop="status" label="类型" align="center">
         <template slot-scope="scope">
           <el-tag v-show="scope.row.status == 1" type="success"
-            >作业中条数</el-tag
+            >作业中项目数</el-tag
           >
-          <el-tag v-show="scope.row.status == 0" type="danger">超期条数</el-tag>
+          <el-tag v-show="scope.row.status == 0" type="danger"
+            >超期项目数</el-tag
+          >
         </template>
       </el-table-column>
       <el-table-column prop="gcchbNumWork" label="工程测绘部" align="center">

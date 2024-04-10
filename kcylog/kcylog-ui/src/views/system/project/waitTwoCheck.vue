@@ -73,7 +73,9 @@
     <el-table :data="statisticsData" style="width: 100%">
       <el-table-column prop="status" label="类型" align="center">
         <template slot-scope="scope">
-          <el-tag v-show="scope.row.status == 1" type="danger">待二检</el-tag>
+          <el-tag v-show="scope.row.status == 1" type="danger"
+            >待二检项目数</el-tag
+          >
         </template>
       </el-table-column>
       <el-table-column prop="gcchbNumWork" label="工程测绘部" align="center">

@@ -1126,7 +1126,7 @@ export default {
           response.data.endTime = response.data.endTime.substring(0, 10);
         }
         this.formInfo = response.data;
-        this.activeNames = ["1", "2", "3", "4"];
+        this.activeNames = ["1", "3", "4"];
         if (
           this.formInfo.subpackageType != 0 &&
           this.formInfo.subpackageType != 1
@@ -1135,6 +1135,7 @@ export default {
         }
         if (this.formInfo.manType != 0) {
           this.activeNames.push("6");
+          this.activeNames.push("2");
         }
 
         if (this.formInfo.subcontract == 0) {
