@@ -34,7 +34,17 @@ public class SysEmployeeWorktime extends BaseEntity
     @Excel(name = "审核单ID")
     private Long reviewId;
 
+    private Long manType;
+
     private Long reviewEmployeeId;
+
+    public Long getManType() {
+        return manType;
+    }
+
+    public void setManType(Long manType) {
+        this.manType = manType;
+    }
 
     public Long getDeptId() {
         return deptId;

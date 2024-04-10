@@ -102,6 +102,9 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
     <select id="selectSysEmployeeSubWorktimeListByTime" parameterType="SysEmployeeWorktime" resultMap="SysEmployeeWorktimeResult">
         select a.* from sys_employee_worktime a
             inner join sys_review_sub b on a.review_id = b.review_id
+            <where>
+                <if test="manType != null  and manType != -1"> and b.man_type = #{manType}</if>
+            </where>
             and b.dept_id = #{deptId}
             and (
                    (YEAR(FROM_UNIXTIME(a.start_time-1)) >= #{startTimeYear} and YEAR(FROM_UNIXTIME(a.start_time-1)) &lt;= #{endTimeYear})

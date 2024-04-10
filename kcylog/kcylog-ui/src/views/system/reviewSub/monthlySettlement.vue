@@ -28,30 +28,118 @@
       </el-form-item>
 
       <el-form-item>
-        <el-button
-          type="primary"
-          plain
-          icon="el-icon-download"
-          size="mini"
-          @click="handleEmployeeExport(1)"
-          >签领表导出</el-button
-        >
-        <el-button
-          type="success"
-          plain
-          icon="el-icon-download"
-          size="mini"
-          @click="handleEmployeeExport(2)"
-          >外包申请表导出</el-button
-        >
-        <el-button
-          type="warning"
-          plain
-          icon="el-icon-download"
-          size="mini"
-          @click="handleEmployeeExport(3)"
-          >按部门导出</el-button
-        >
+        <el-popover placement="bottom" trigger="click">
+          <el-button
+            slot="reference"
+            type="primary"
+            plain
+            icon="el-icon-download"
+            size="mini"
+            >签领表导出</el-button
+          >
+          <div>
+            <el-button
+              type="primary"
+              plain
+              icon="el-icon-download"
+              size="mini"
+              @click="handleEmployeeExport(1, -1)"
+              >签领表导出(包含雇工与第三方雇工)</el-button
+            >
+            <el-button
+              type="primary"
+              plain
+              icon="el-icon-download"
+              size="mini"
+              @click="handleEmployeeExport(1, 0)"
+              >签领表导出(雇工)</el-button
+            >
+            <el-button
+              type="primary"
+              plain
+              icon="el-icon-download"
+              size="mini"
+              @click="handleEmployeeExport(1, 1)"
+              >签领表导出(第三方雇工)</el-button
+            >
+          </div>
+        </el-popover>
+
+        <el-popover placement="bottom" trigger="click">
+          <el-button
+            slot="reference"
+            type="success"
+            plain
+            icon="el-icon-download"
+            size="mini"
+            >外包申请表导出</el-button
+          >
+
+          <div>
+            <el-button
+              type="success"
+              plain
+              icon="el-icon-download"
+              size="mini"
+              @click="handleEmployeeExport(2, -1)"
+              >外包申请表导出(包含雇工与第三方雇工)</el-button
+            >
+            <el-button
+              type="success"
+              plain
+              icon="el-icon-download"
+              size="mini"
+              @click="handleEmployeeExport(2, 0)"
+              >外包申请表导出(雇工)</el-button
+            >
+            <el-button
+              type="success"
+              plain
+              icon="el-icon-download"
+              size="mini"
+              @click="handleEmployeeExport(2, 1)"
+              >外包申请表导出(第三方雇工)</el-button
+            >
+          </div>
+        </el-popover>
+
+        <el-popover placement="bottom" trigger="click">
+          <el-button
+            slot="reference"
+            type="warning"
+            plain
+            icon="el-icon-download"
+            size="mini"
+            >按部门导出</el-button
+          >
+          <div>
+            <el-button
+              type="warning"
+              plain
+              icon="el-icon-download"
+              size="mini"
+              @click="handleEmployeeExport(3, -1)"
+              >按部门导出(包含雇工与第三方雇工)</el-button
+            >
+            <el-button
+              type="warning"
+              plain
+              icon="el-icon-download"
+              size="mini"
+              @click="handleEmployeeExport(3, 0)"
+              >按部门导出(雇工)</el-button
+            >
+            <el-button
+              type="warning"
+              plain
+              icon="el-icon-download"
+              size="mini"
+              @click="handleEmployeeExport(3, 1)"
+              >按部门导出(第三方雇工)</el-button
+            >
+          </div>
+        </el-popover>
+
         <el-button icon="el-icon-refresh" size="mini" @click="resetQuery"
           >重置</el-button
         >
@@ -103,7 +191,7 @@ export default {
       this.queryParams.deptId = null;
       this.resetForm("queryForm");
     },
-    handleEmployeeExport(value) {
+    handleEmployeeExport(value, manType) {
       if (this.exportDate == "" || this.queryParamsDeptId.length == 0) {
         this.$message({
           message: "日期与部门为必选项～",
@@ -121,7 +209,7 @@ export default {
       this.queryParams.endTimeMonth = (this.exportDate[1].getMonth() + 1)
         .toString()
         .padStart(2, "0");
-
+      this.queryParams.manType = manType;
       this.$confirm(
         "由于导出相关数据后,已导出的数据将被锁定不可修改,请仔细确认导出的筛选条件,是否继续?",
         "提示",
