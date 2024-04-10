@@ -5,6 +5,8 @@ import org.apache.commons.lang3.builder.ToStringStyle;
 import com.kcylog.common.annotation.Excel;
 import com.kcylog.common.core.domain.BaseEntity;
 
+import java.math.BigDecimal;
+
 /**
  * 项目坐标系对象 sys_project_geoinfo
  * 
@@ -43,7 +45,17 @@ public class SysProjectGeoinfo extends BaseEntity
     @Excel(name = "国家2000平面，福州")
     private String bufferGeometryGauss2000;
 
-    public void setProjectId(Long projectId) 
+    private BigDecimal bufferDistance;
+
+    public BigDecimal getBufferDistance() {
+        return bufferDistance;
+    }
+
+    public void setBufferDistance(BigDecimal bufferDistance) {
+        this.bufferDistance = bufferDistance;
+    }
+
+    public void setProjectId(Long projectId)
     {
         this.projectId = projectId;
     }

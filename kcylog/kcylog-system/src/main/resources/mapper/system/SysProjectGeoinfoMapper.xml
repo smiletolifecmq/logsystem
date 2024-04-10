@@ -12,10 +12,11 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
         <result property="bufferGeometry2000"    column="buffer_geometry2000"    />
         <result property="geometryGauss2000"    column="geometry_gauss2000"    />
         <result property="bufferGeometryGauss2000"    column="buffer_geometry_gauss2000"    />
+        <result property="bufferDistance"    column="buffer_distance"    />
     </resultMap>
 
     <sql id="selectSysProjectGeoinfoVo">
-        select project_id, geometry, geometry2000, buffer_geometry, buffer_geometry2000, geometry_gauss2000, buffer_geometry_gauss2000 from sys_project_geoinfo
+        select project_id, geometry, geometry2000, buffer_geometry, buffer_geometry2000, geometry_gauss2000, buffer_geometry_gauss2000, buffer_distance from sys_project_geoinfo
     </sql>
 
     <select id="selectSysProjectGeoinfoList" parameterType="SysProjectGeoinfo" resultMap="SysProjectGeoinfoResult">
@@ -46,6 +47,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
             <if test="bufferGeometry2000 != null">buffer_geometry2000,</if>
             <if test="geometryGauss2000 != null">geometry_gauss2000,</if>
             <if test="bufferGeometryGauss2000 != null">buffer_geometry_gauss2000,</if>
+            <if test="bufferDistance != null">buffer_distance,</if>
          </trim>
         <trim prefix="values (" suffix=")" suffixOverrides=",">
             <if test="projectId != null">#{projectId},</if>
@@ -55,6 +57,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
             <if test="bufferGeometry2000 != null">#{bufferGeometry2000},</if>
             <if test="geometryGauss2000 != null">#{geometryGauss2000},</if>
             <if test="bufferGeometryGauss2000 != null">#{bufferGeometryGauss2000},</if>
+            <if test="bufferDistance != null">#{bufferDistance},</if>
          </trim>
     </insert>
 
@@ -67,6 +70,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
             <if test="bufferGeometry2000 != null">buffer_geometry2000 = #{bufferGeometry2000},</if>
             <if test="geometryGauss2000 != null">geometry_gauss2000 = #{geometryGauss2000},</if>
             <if test="bufferGeometryGauss2000 != null">buffer_geometry_gauss2000 = #{bufferGeometryGauss2000},</if>
+            <if test="bufferDistance != null">buffer_distance = #{bufferDistance},</if>
         </trim>
         where project_id = #{projectId}
     </update>
