@@ -1227,7 +1227,8 @@ export default {
       this.projectCode = value.projectNum;
       // this.centerDialogVisible = true;
       window.open(
-        "https://www.baidu.com?projectId=" + value.projectId,
+        "http://192.168.110.100/fqismap/?sysname=ViewMapInFQIS&salemapid=" +
+          value.projectId,
         "_blank"
       );
     },
