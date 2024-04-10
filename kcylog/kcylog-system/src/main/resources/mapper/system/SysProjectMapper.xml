@@ -49,6 +49,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
         <result property="bufferGeometry2000" column="buffer_geometry2000"/>
         <result property="geometryGauss2000" column="geometry_gauss2000"/>
         <result property="bufferGeometryGauss2000" column="buffer_geometry_gauss2000"/>
+        <result property="mapScale" column="map_scale"/>
 
         <association property="projectValue" javaType="java.util.List" resultMap="SysProjectValueResult"/>
         <association property="projectCar" javaType="java.util.List" resultMap="SysProjectCarResult"/>
@@ -170,6 +171,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
             <if test="bufferGeometry2000 != null">buffer_geometry2000,</if>
             <if test="geometryGauss2000 != null">geometry_gauss2000,</if>
             <if test="bufferGeometryGauss2000 != null">buffer_geometry_gauss2000,</if>
+            <if test="mapScale != null">map_scale,</if>
          </trim>
         <trim prefix="values (" suffix=")" suffixOverrides=",">
             <if test="projectNameAlias != null and projectNameAlias != ''">#{projectNameAlias},</if>
@@ -211,6 +213,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
             <if test="bufferGeometry2000 != null">#{bufferGeometry2000},</if>
             <if test="geometryGauss2000 != null">#{geometryGauss2000},</if>
             <if test="bufferGeometryGauss2000 != null">#{bufferGeometryGauss2000},</if>
+            <if test="mapScale != null">#{mapScale},</if>
          </trim>
     </insert>
 
@@ -445,6 +448,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
             <if test="bufferGeometry2000 != null">buffer_geometry2000 = #{bufferGeometry2000},</if>
             <if test="geometryGauss2000 != null">geometry_gauss2000 = #{geometryGauss2000},</if>
             <if test="bufferGeometryGauss2000 != null">buffer_geometry_gauss2000 = #{bufferGeometryGauss2000},</if>
+            <if test="mapScale != null">map_scale = #{mapScale},</if>
         </trim>
         where project_num = #{projectNum}
     </update>

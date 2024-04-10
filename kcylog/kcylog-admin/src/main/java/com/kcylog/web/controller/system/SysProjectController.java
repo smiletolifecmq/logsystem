@@ -377,6 +377,7 @@ public class SysProjectController extends BaseController {
             projectGeoList.setProjectName(project.getProjectNameAlias());
             projectGeoList.setRequester(project.getRequesterAlias());
             projectGeoList.setRegisterTime(project.getRegisterTime());
+            projectGeoList.setMapScale(project.getMapScale());
             if (projectGeoinfo != null){
                 for (SysProjectGeoinfo geoInfo : projectGeoinfo){
                     ProjectGeo projectGeo = new ProjectGeo();
@@ -386,6 +387,7 @@ public class SysProjectController extends BaseController {
                     projectGeo.setBufferGeometry2000(geoInfo.getBufferGeometry2000());
                     projectGeo.setGeometryGauss2000(geoInfo.getGeometryGauss2000());
                     projectGeo.setBufferGeometryGauss2000(geoInfo.getBufferGeometryGauss2000());
+                    projectGeo.setBufferDistance(geoInfo.getBufferDistance());
                     projectGeoArr.add(projectGeo);
                 }
             }

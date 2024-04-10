@@ -7,8 +7,17 @@ public class ProjectGeoList {
     private String projectCode;
     private String requester;
     private String registerTime;
+    private Integer mapScale;
     private List<ProjectGeo> projectGeo;
     private List<Geotfinfo> geotfinfo;
+
+    public Integer getMapScale() {
+        return mapScale;
+    }
+
+    public void setMapScale(Integer mapScale) {
+        this.mapScale = mapScale;
+    }
 
     public List<Geotfinfo> getGeotfinfo() {
         return geotfinfo;

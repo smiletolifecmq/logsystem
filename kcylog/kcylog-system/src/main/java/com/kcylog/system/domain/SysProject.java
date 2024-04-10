@@ -91,6 +91,8 @@ public class SysProject extends BaseEntity
 
     private Integer outputStatus;
 
+    private Integer mapScale;
+
     /** 通知出件时间 */
     @Excel(name = "通知出件时间", needMerge = true)
     private String noticeTime;
@@ -185,6 +187,15 @@ public class SysProject extends BaseEntity
 
     //缓冲区坐标串，国家2000平面，福州
     private String bufferGeometryGauss2000;
+
+
+    public Integer getMapScale() {
+        return mapScale;
+    }
+
+    public void setMapScale(Integer mapScale) {
+        this.mapScale = mapScale;
+    }
 
     public String getGeometry() {
         return geometry;

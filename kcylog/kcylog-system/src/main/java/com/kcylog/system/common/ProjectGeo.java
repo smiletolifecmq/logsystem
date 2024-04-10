@@ -1,5 +1,7 @@
 package com.kcylog.system.common;
 
+import java.math.BigDecimal;
+
 public class ProjectGeo {
     //福州本地坐标系
     private String geometry;
@@ -18,6 +20,16 @@ public class ProjectGeo {
 
     //缓冲区坐标串，国家2000平面，福州
     private String bufferGeometryGauss2000;
+
+    private BigDecimal bufferDistance;
+
+    public BigDecimal getBufferDistance() {
+        return bufferDistance;
+    }
+
+    public void setBufferDistance(BigDecimal bufferDistance) {
+        this.bufferDistance = bufferDistance;
+    }
 
     public String getGeometry() {
         return geometry;

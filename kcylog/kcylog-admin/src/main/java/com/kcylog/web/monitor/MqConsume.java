@@ -56,6 +56,9 @@ public class MqConsume {
 
     @Autowired
     private ISysProjectSelectmapTfinfoService sysProjectSelectmapTfinfoService;
+
+    @Autowired
+    private IViewFqSalemapSelectmapBaseinfoService viewFqSalemapSelectmapBaseinfoService;
     /**
      * 监听一个简单的队列，队列不存在时候会创建
      */
@@ -195,6 +198,11 @@ public class MqConsume {
                     BigDecimal bigDecimalValue = new BigDecimal((chargeMoney.getSum()/100));
                     sysProject.setFbMoney(bigDecimalValue);
                 }
+                //地图比例
+                ViewFqSalemapSelectmapBaseinfo mapBaseinfo = viewFqSalemapSelectmapBaseinfoService.selectViewFqSalemapSelectmapBaseinfoByProjectId(Long.parseLong(mqMessage.getProjectId()));
+                if (mapBaseinfo != null && mapBaseinfo.getMapScale() != null){
+                    sysProject.setMapScale(mapBaseinfo.getMapScale());
+                }
 
                 if (mqMessage.getOpType().equals("DELETE") || mqMessage.getOpType().equals("PROJECT_INVALID") || mqMessage.getOpType().equals("PROJECT_HANG")){
                     sysProjectService.deleteSysProjectByCode(viewFqProject.getProjectCode());
@@ -229,6 +237,9 @@ public class MqConsume {
                                 }
                                 if (geoInfo.getBufferGeometryGauss2000() != null){
                                     sysProjectGeoinfo.setBufferGeometryGauss2000(geoInfo.getBufferGeometryGauss2000());
+                                }
+                                if (geoInfo.getBufferDistance() != null){
+                                    sysProjectGeoinfo.setBufferDistance(geoInfo.getBufferDistance());
                                 }
                                 sysProjectGeoinfo.setProjectId(sysProject.getProjectId());
                             }
