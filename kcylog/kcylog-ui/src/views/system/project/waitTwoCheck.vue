@@ -70,6 +70,42 @@
       </el-form-item>
     </el-form>
 
+    <el-table :data="statisticsData" style="width: 100%">
+      <el-table-column prop="status" label="类型" align="center">
+        <template slot-scope="scope">
+          <el-tag v-show="scope.row.status == 1" type="danger">待二检</el-tag>
+        </template>
+      </el-table-column>
+      <el-table-column prop="gcchbNumWork" label="工程测绘部" align="center">
+        <template slot-scope="scope">
+          <el-tag v-show="scope.row.status == 1" type="danger">{{
+            scope.row.gcchbNumWork
+          }}</el-tag>
+        </template>
+      </el-table-column>
+      <el-table-column prop="bdcchbWork" label="不动产测绘部" align="center">
+        <template slot-scope="scope">
+          <el-tag v-show="scope.row.status == 1" type="danger">{{
+            scope.row.bdcchbWork
+          }}</el-tag>
+        </template>
+      </el-table-column>
+      <el-table-column prop="gxgcbWork" label="管线工程部" align="center">
+        <template slot-scope="scope">
+          <el-tag v-show="scope.row.status == 1" type="danger">{{
+            scope.row.gxgcbWork
+          }}</el-tag>
+        </template>
+      </el-table-column>
+      <el-table-column prop="dlxxbWork" label="地理信息部" align="center">
+        <template slot-scope="scope">
+          <el-tag v-show="scope.row.status == 1" type="danger">{{
+            scope.row.dlxxbWork
+          }}</el-tag>
+        </template>
+      </el-table-column>
+    </el-table>
+
     <el-table
       v-loading="loading"
       :data="projectList"
@@ -727,6 +763,11 @@ export default {
   },
   data() {
     return {
+      statisticsData: [],
+      queryStatisticsParams: {
+        pageNum: 1,
+        pageSize: 9999,
+      },
       projectIdMap: {},
       listProjectLocalSelected: [],
       listProjectLocalMap: {},
@@ -934,8 +975,55 @@ export default {
     this.getReviewProject();
     this.getList();
     this.loadAllUnits();
+    this.getStatisticsData();
   },
   methods: {
+    getStatisticsData() {
+      listProjectWaitTwoCheck(
+        this.addDateRange(this.queryStatisticsParams)
+      ).then((response) => {
+        const project = response.rows;
+        let myMap = new Map();
+        for (let i = 0; i < project.length; i++) {
+          let key = project[i].department;
+          if (key == "" || key == null || key == undefined) {
+            continue;
+          }
+          if (myMap.has(key)) {
+            let num = myMap.get(key);
+            num.workCount++;
+            myMap.set(key, num);
+          } else {
+            let num = {
+              workCount: 1,
+            };
+            myMap.set(key, num);
+          }
+        }
+
+        let numData = {
+          status: 1,
+          gcchbNumWork: 0,
+          bdcchbWork: 0,
+          gxgcbWork: 0,
+          dlxxbWork: 0,
+        };
+
+        if (myMap.has("工程测绘部")) {
+          numData.gcchbNumWork = myMap.get("工程测绘部").workCount;
+        }
+        if (myMap.has("不动产测绘部")) {
+          numData.bdcchbWork = myMap.get("不动产测绘部").workCount;
+        }
+        if (myMap.has("管线工程部")) {
+          numData.gxgcbWork = myMap.get("管线工程部").workCount;
+        }
+        if (myMap.has("地理信息部")) {
+          numData.dlxxbWork = myMap.get("地理信息部").workCount;
+        }
+        this.statisticsData.push(numData);
+      });
+    },
     showReviewStatus(status) {
       if (
         status != 1 &&
