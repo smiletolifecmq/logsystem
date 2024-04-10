@@ -258,7 +258,7 @@ public class MqConsume {
                 }
 
                 //同步人员安排配比
-                if (mqMessage.getOpType().equals("RESOURCE_ARRANGE_CHANGE") || (mqMessage.getOpType().equals("SECOND_CHECK") && sysProject.getTwoCheck() != null && !sysProject.getTwoCheck().equals("")) || (sysProject.getTwoCheck() != null && !sysProject.getTwoCheck().equals(""))){
+                if (mqMessage.getOpType().equals("RESOURCE_ARRANGE_CHANGE") || (mqMessage.getOpType().equals("SECOND_CHECK") && sysProject.getTwoCheck() != null && !sysProject.getTwoCheck().equals(""))){
                     // todo 需要同步人员安排
                     List<ViewFqProjectWorkResourceArrange>  resourceArrange = viewFqProjectWorkResourceArrangeService.selectViewFqProjectWorkResourceArrangeByProjectId(Long.parseLong(mqMessage.getProjectId()));
                     SysProject project = sysProjectService.checkProjectKeyUnique(viewFqProject.getProjectCode());

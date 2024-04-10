@@ -101,19 +101,52 @@
     </el-row>
 
     <el-table :data="statisticsData" style="width: 100%">
-      <el-table-column prop="deptName" label="部门" align="center">
+      <el-table-column prop="status" label="类型" align="center">
         <template slot-scope="scope">
-          <el-tag>{{ scope.row.department }}</el-tag>
+          <el-tag v-show="scope.row.status == 1" type="success"
+            >作业中条数</el-tag
+          >
+          <el-tag v-show="scope.row.status == 0" type="danger">超期条数</el-tag>
         </template>
       </el-table-column>
-      <el-table-column prop="workCount" label="作业中条数" align="center">
+      <el-table-column prop="gcchbNumWork" label="工程测绘部" align="center">
         <template slot-scope="scope">
-          <el-tag type="success">{{ scope.row.workCount }}</el-tag>
+          <el-tag v-show="scope.row.status == 1" type="success">{{
+            scope.row.gcchbNumWork
+          }}</el-tag>
+          <el-tag v-show="scope.row.status == 0" type="danger">{{
+            scope.row.gcchbNumWork
+          }}</el-tag>
         </template>
       </el-table-column>
-      <el-table-column prop="overdueNum" label="超期条数" align="center">
+      <el-table-column prop="bdcchbWork" label="不动产测绘部" align="center">
         <template slot-scope="scope">
-          <el-tag type="danger">{{ scope.row.overdueNum }}</el-tag>
+          <el-tag v-show="scope.row.status == 1" type="success">{{
+            scope.row.bdcchbWork
+          }}</el-tag>
+          <el-tag v-show="scope.row.status == 0" type="danger">{{
+            scope.row.bdcchbWork
+          }}</el-tag>
+        </template>
+      </el-table-column>
+      <el-table-column prop="gxgcbWork" label="管线工程部" align="center">
+        <template slot-scope="scope">
+          <el-tag v-show="scope.row.status == 1" type="success">{{
+            scope.row.gxgcbWork
+          }}</el-tag>
+          <el-tag v-show="scope.row.status == 0" type="danger">{{
+            scope.row.gxgcbWork
+          }}</el-tag>
+        </template>
+      </el-table-column>
+      <el-table-column prop="dlxxbWork" label="地理信息部" align="center">
+        <template slot-scope="scope">
+          <el-tag v-show="scope.row.status == 1" type="success">{{
+            scope.row.dlxxbWork
+          }}</el-tag>
+          <el-tag v-show="scope.row.status == 0" type="danger">{{
+            scope.row.dlxxbWork
+          }}</el-tag>
         </template>
       </el-table-column>
     </el-table>
@@ -1119,6 +1152,9 @@ export default {
           let myMap = new Map();
           for (let i = 0; i < project.length; i++) {
             let key = project[i].department;
+            if (key == "" || key == null || key == undefined) {
+              continue;
+            }
             if (myMap.has(key)) {
               let num = myMap.get(key);
               num.workCount++;
@@ -1137,14 +1173,51 @@ export default {
               myMap.set(key, num);
             }
           }
-          myMap.forEach((value, key) => {
-            let numData = {
-              department: key,
-              workCount: value.workCount,
-              overdueNum: value.overdueNum,
-            };
-            this.statisticsData.push(numData);
-          });
+
+          let numData = {
+            status: 1,
+            gcchbNumWork: 0,
+            bdcchbWork: 0,
+            gxgcbWork: 0,
+            dlxxbWork: 0,
+          };
+
+          if (myMap.has("工程测绘部")) {
+            numData.gcchbNumWork = myMap.get("工程测绘部").workCount;
+          }
+          if (myMap.has("不动产测绘部")) {
+            numData.bdcchbWork = myMap.get("不动产测绘部").workCount;
+          }
+          if (myMap.has("管线工程部")) {
+            numData.gxgcbWork = myMap.get("管线工程部").workCount;
+          }
+          if (myMap.has("地理信息部")) {
+            numData.dlxxbWork = myMap.get("地理信息部").workCount;
+          }
+          this.statisticsData.push(numData);
+
+          numData = {
+            status: 0,
+            gcchbNumWork: 0,
+            bdcchbWork: 0,
+            gxgcbWork: 0,
+            dlxxbWork: 0,
+          };
+
+          if (myMap.has("工程测绘部")) {
+            numData.gcchbNumWork = myMap.get("工程测绘部").overdueNum;
+          }
+          if (myMap.has("不动产测绘部")) {
+            numData.bdcchbWork = myMap.get("不动产测绘部").overdueNum;
+          }
+          if (myMap.has("管线工程部")) {
+            numData.gxgcbWork = myMap.get("管线工程部").overdueNum;
+          }
+          if (myMap.has("地理信息部")) {
+            numData.dlxxbWork = myMap.get("地理信息部").overdueNum;
+          }
+
+          this.statisticsData.push(numData);
         }
       );
     },
