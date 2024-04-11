@@ -926,7 +926,12 @@
       append-to-body
       v-el-drag-dialog
     >
-      <el-table v-loading="loading" :data="overTimeProjectList" size="mini">
+      <el-table
+        v-loading="loading"
+        :data="overTimeProjectList"
+        size="mini"
+        height="500"
+      >
         <el-table-column
           fixed
           label="委托单位"
