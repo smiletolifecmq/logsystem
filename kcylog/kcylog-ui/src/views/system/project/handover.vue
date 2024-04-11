@@ -317,7 +317,7 @@
             size="mini"
             type="text"
             icon="el-icon-s-order"
-            @click="handleDetail(scope.row)"
+            @click="handleProcessDetail(scope.row)"
             >流程详情</el-button
           >
         </template>
@@ -886,6 +886,27 @@
         <el-button @click="cancelReviewSub">取 消</el-button>
       </div>
     </el-dialog>
+
+    <el-dialog
+      :visible.sync="projectProcessOpen"
+      width="400px"
+      append-to-body
+      :title="projectProcessTitle"
+    >
+      <el-steps
+        :active="activeProcessNum"
+        align-center
+        finish-status="success"
+        direction="vertical"
+      >
+        <el-step title="移交" :description="yjDescription"></el-step>
+        <el-step title="收件" :description="sjDescription"></el-step>
+        <el-step title="盖章" :description="gzDescription"></el-step>
+        <el-step title="验收" :description="ysDescription"></el-step>
+        <el-step title="盖章确认" :description="gzqrDescription"></el-step>
+        <el-step title="归档" :description="gdDescription"></el-step>
+      </el-steps>
+    </el-dialog>
   </div>
 </template>
 
@@ -910,6 +931,15 @@ export default {
   },
   data() {
     return {
+      yjDescription: "",
+      sjDescription: "",
+      gzDescription: "",
+      ysDescription: "",
+      gzqrDescription: "",
+      gdDescription: "",
+      activeProcessNum: 0,
+      projectProcessTitle: "",
+      projectProcessOpen: false,
       projectIdMap: {},
       listProjectLocalSelected: [],
       listProjectLocalMap: {},
@@ -1139,6 +1169,89 @@ export default {
     this.loadAllUnits();
   },
   methods: {
+    handleProcessDetail(projectInfo) {
+      this.projectProcessTitle = projectInfo.projectNum;
+      if (projectInfo.fqProjectProcess != null) {
+        //移交
+        if (projectInfo.fqProjectProcess.transferStatus == 2) {
+          this.activeProcessNum++;
+          this.yjDescription =
+            "移交人员:" +
+            projectInfo.fqProjectProcess.transferUserName +
+            "  移交时间:" +
+            projectInfo.fqProjectProcess.transferTime;
+        }
+        //收件
+        if (projectInfo.fqProjectProcess.receiveStatus == 2) {
+          this.activeProcessNum++;
+          this.sjDescription =
+            "收件人员:" +
+            projectInfo.fqProjectProcess.receiveUserName +
+            "  收件时间:" +
+            projectInfo.fqProjectProcess.receiveTime;
+        }
+        //盖章
+        if (
+          projectInfo.fqProjectProcess.stampStatus == 2 ||
+          projectInfo.fqProjectProcess.stampStatus == 4
+        ) {
+          if (projectInfo.fqProjectProcess.stampStatus == 2) {
+            this.activeProcessNum++;
+            this.gzDescription =
+              "盖章人员:" +
+              projectInfo.fqProjectProcess.stampUserName +
+              "  盖章时间:" +
+              projectInfo.fqProjectProcess.stampTime;
+          }
+          if (projectInfo.fqProjectProcess.stampStatus == 4) {
+            this.activeProcessNum++;
+            this.gzDescription = "无需盖章";
+          }
+        }
+        //验收
+        if (
+          projectInfo.fqProjectProcess.checkStatus == 2 ||
+          projectInfo.fqProjectProcess.checkStatus == 4
+        ) {
+          this.activeProcessNum++;
+          this.ysDescription =
+            "验收人员:" +
+            projectInfo.fqProjectProcess.checkUserName +
+            "  验收时间:" +
+            projectInfo.fqProjectProcess.checkTime;
+        }
+        //盖章确认
+        if (
+          projectInfo.fqProjectProcess.marketingConfirm == 1 ||
+          ((projectInfo.fqProjectProcess.checkStatus == 2 ||
+            projectInfo.fqProjectProcess.checkStatus == 4) &&
+            projectInfo.fqProjectProcess.stampStatus == 4)
+        ) {
+          this.activeProcessNum++;
+          if (projectInfo.fqProjectProcess.stampStatus == 4) {
+            this.gzqrDescription =
+              "盖章确认人员:" +
+              projectInfo.fqProjectProcess.marketingUserName +
+              "  盖章确认时间:" +
+              projectInfo.fqProjectProcess.marketingTime;
+          } else {
+            this.gzqrDescription = "无需盖章";
+          }
+        }
+        //归档
+        if (projectInfo.fqProjectProcess.checkStatus == 4) {
+          this.activeProcessNum++;
+          this.gzqrDescription =
+            "归档人员:" +
+            projectInfo.fqProjectProcess.archiveUserName +
+            "  归档时间:" +
+            projectInfo.fqProjectProcess.archiveTime;
+        }
+      } else {
+        this.activeProcessNum = 0;
+      }
+      this.projectProcessOpen = true;
+    },
     showReviewStatus(status) {
       if (
         status != 1 &&
