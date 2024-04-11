@@ -93,6 +93,8 @@ public class SysProject extends BaseEntity
 
     private Integer mapScale;
 
+    private FqProjectProcess fqProjectProcess;
+
     /** 通知出件时间 */
     @Excel(name = "通知出件时间", needMerge = true)
     private String noticeTime;
@@ -121,6 +123,10 @@ public class SysProject extends BaseEntity
     private Integer isShow;
 
     private Integer leadTime;
+
+    private Integer receiveDays;
+
+    private Integer archiveDays;
 
     /** 填写经营产值时间 */
     @JsonFormat(pattern = "yyyy-MM-dd")
@@ -188,6 +194,29 @@ public class SysProject extends BaseEntity
     //缓冲区坐标串，国家2000平面，福州
     private String bufferGeometryGauss2000;
 
+    public Integer getReceiveDays() {
+        return receiveDays;
+    }
+
+    public void setReceiveDays(Integer receiveDays) {
+        this.receiveDays = receiveDays;
+    }
+
+    public Integer getArchiveDays() {
+        return archiveDays;
+    }
+
+    public void setArchiveDays(Integer archiveDays) {
+        this.archiveDays = archiveDays;
+    }
+
+    public FqProjectProcess getFqProjectProcess() {
+        return fqProjectProcess;
+    }
+
+    public void setFqProjectProcess(FqProjectProcess fqProjectProcess) {
+        this.fqProjectProcess = fqProjectProcess;
+    }
 
     public Integer getMapScale() {
         return mapScale;

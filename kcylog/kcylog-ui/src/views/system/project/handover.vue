@@ -56,11 +56,21 @@
           @keyup.enter.native="handleQuery"
         />
       </el-form-item>
-
-      <el-form-item label="作业状态" prop="status">
-        <el-select v-model="queryParams.status" placeholder="请选择">
+      <el-form-item label="收件状态" prop="receiveStatus">
+        <el-select v-model="queryParams.receiveStatus" placeholder="请选择">
           <el-option
-            v-for="item in statusArr"
+            v-for="item in receiveStatusArr"
+            :key="item.value"
+            :label="item.label"
+            :value="item.value"
+          >
+          </el-option>
+        </el-select>
+      </el-form-item>
+      <el-form-item label="归档状态" prop="checkStatus">
+        <el-select v-model="queryParams.checkStatus" placeholder="请选择">
+          <el-option
+            v-for="item in checkStatusArr"
             :key="item.value"
             :label="item.label"
             :value="item.value"
@@ -100,55 +110,156 @@
       @selection-change="handleSelectionChange"
       size="mini"
     >
-      <el-table-column label="委托单位" align="center" prop="requesterAlias" />
       <el-table-column
+        fixed
+        label="委托单位"
+        align="center"
+        prop="requesterAlias"
+      />
+      <el-table-column
+        fixed
         label="项目名称"
         align="center"
         prop="projectNameAlias"
       />
-      <el-table-column label="项目编号" align="center" prop="projectNum" />
+      <el-table-column
+        fixed
+        label="项目编号"
+        align="center"
+        prop="projectNum"
+      />
       <el-table-column label="工程负责人" align="center" prop="userNameAlias" />
       <el-table-column label="作业部门" align="center" prop="department" />
-      <!-- <el-table-column label="项目类型" align="center" prop="projectType" />
-        <el-table-column
-          label="工程内容"
-          align="center"
-          prop="workcontentAlias"
-        /> -->
-      <el-table-column label="登记时间" align="center" prop="registerTime">
-        <template slot-scope="scope">
-          {{ formatDate(scope.row.registerTime) }}
-        </template>
-      </el-table-column>
-      <el-table-column
-        label="安排开始时间"
-        align="center"
-        prop="projectStartAlias"
-      >
-        <template slot-scope="scope">
-          {{ formatDate(scope.row.projectStartAlias) }}
-        </template></el-table-column
-      >
-      <el-table-column
-        label="安排结束时间"
-        align="center"
-        prop="projectEndAlias"
-      >
-        <template slot-scope="scope">
-          {{ formatDate(scope.row.projectEndAlias) }}
-        </template></el-table-column
-      >
-      <el-table-column label="一检时间" align="center" prop="oneCheck">
-        <template slot-scope="scope">
-          {{ formatDate(scope.row.oneCheck) }}
-        </template></el-table-column
-      >
       <el-table-column label="二检时间" align="center" prop="twoCheck">
         <template slot-scope="scope">
           {{ formatDate(scope.row.twoCheck) }}
         </template></el-table-column
       >
-      <el-table-column label="工作状态" align="center" prop="status">
+      <el-table-column label="移交时间" align="center" prop="transferTime">
+        <template
+          slot-scope="scope"
+          v-if="
+            scope.row.fqProjectProcess != null &&
+            scope.row.fqProjectProcess.transferTime != null
+          "
+        >
+          {{ formatDate(scope.row.fqProjectProcess.transferTime) }}
+        </template>
+        <template slot-scope="scope" v-else> </template>
+      </el-table-column>
+      <el-table-column label="收件时间" align="center" prop="receiveTime">
+        <template
+          slot-scope="scope"
+          v-if="
+            scope.row.fqProjectProcess != null &&
+            scope.row.fqProjectProcess.receiveTime != null
+          "
+        >
+          {{ formatDate(scope.row.fqProjectProcess.receiveTime) }}
+        </template>
+        <template slot-scope="scope" v-else> </template>
+      </el-table-column>
+      <el-table-column
+        label="收件截止时间"
+        align="center"
+        prop="receiveCutoffTime"
+      >
+        <template
+          slot-scope="scope"
+          v-if="
+            scope.row.fqProjectProcess != null &&
+            scope.row.fqProjectProcess.receiveCutoffTime != null
+          "
+        >
+          {{ formatDate(scope.row.fqProjectProcess.receiveCutoffTime) }}
+        </template>
+        <template slot-scope="scope" v-else> </template>
+      </el-table-column>
+      <el-table-column label="收件提前天数" align="center">
+        <template slot-scope="scope">
+          <el-tag type="danger" v-show="scope.row.receiveDays < 0">{{
+            scope.row.receiveDays
+          }}</el-tag>
+          <el-tag type="success" v-show="scope.row.receiveDays >= 0">{{
+            scope.row.receiveDays
+          }}</el-tag>
+        </template></el-table-column
+      >
+      <el-table-column label="盖章时间" align="center" prop="stampTime">
+        <template
+          slot-scope="scope"
+          v-if="
+            scope.row.fqProjectProcess != null &&
+            scope.row.fqProjectProcess.stampTime != null
+          "
+        >
+          {{ formatDate(scope.row.fqProjectProcess.stampTime) }}
+        </template>
+        <template slot-scope="scope" v-else> </template>
+      </el-table-column>
+      <el-table-column label="验收时间" align="center" prop="checkTime">
+        <template
+          slot-scope="scope"
+          v-if="
+            scope.row.fqProjectProcess != null &&
+            scope.row.fqProjectProcess.checkTime != null
+          "
+        >
+          {{ formatDate(scope.row.fqProjectProcess.checkTime) }}
+        </template>
+        <template slot-scope="scope" v-else> </template>
+      </el-table-column>
+      <el-table-column label="盖章确认时间" align="center" prop="marketingTime">
+        <template
+          slot-scope="scope"
+          v-if="
+            scope.row.fqProjectProcess != null &&
+            scope.row.fqProjectProcess.marketingTime != null
+          "
+        >
+          {{ formatDate(scope.row.fqProjectProcess.marketingTime) }}
+        </template>
+        <template slot-scope="scope" v-else> </template>
+      </el-table-column>
+      <el-table-column label="归档时间" align="center" prop="archiveTime">
+        <template
+          slot-scope="scope"
+          v-if="
+            scope.row.fqProjectProcess != null &&
+            scope.row.fqProjectProcess.archiveTime != null
+          "
+        >
+          {{ formatDate(scope.row.fqProjectProcess.archiveTime) }}
+        </template>
+        <template slot-scope="scope" v-else> </template>
+      </el-table-column>
+      <el-table-column
+        label="归档截止时间"
+        align="center"
+        prop="rectifyCutoffTime"
+      >
+        <template
+          slot-scope="scope"
+          v-if="
+            scope.row.fqProjectProcess != null &&
+            scope.row.fqProjectProcess.rectifyCutoffTime != null
+          "
+        >
+          {{ formatDate(scope.row.fqProjectProcess.rectifyCutoffTime) }}
+        </template>
+        <template slot-scope="scope" v-else> </template>
+      </el-table-column>
+      <el-table-column label="归档提前天数" align="center">
+        <template slot-scope="scope">
+          <el-tag type="danger" v-show="scope.row.archiveDays < 0">{{
+            scope.row.archiveDays
+          }}</el-tag>
+          <el-tag type="success" v-show="scope.row.archiveDays >= 0">{{
+            scope.row.archiveDays
+          }}</el-tag>
+        </template></el-table-column
+      >
+      <!-- <el-table-column label="工作状态" align="center" prop="status">
         <template slot-scope="scope">
           <el-tag v-if="scope.row.status == 0" type="danger">临时安排</el-tag>
           <el-tag v-else-if="scope.row.status == 1" type="success"
@@ -159,6 +270,32 @@
           >
           <el-tag v-else-if="scope.row.status == 3">二检办结</el-tag>
           <el-tag v-else type="danger">其他状态</el-tag>
+        </template>
+      </el-table-column> -->
+      <el-table-column label="是否已收件" align="center" prop="receiveStatus">
+        <template slot-scope="scope">
+          <el-tag
+            v-if="
+              scope.row.fqProjectProcess != null &&
+              scope.row.fqProjectProcess.receiveStatus == 2
+            "
+            type="success"
+            >是</el-tag
+          >
+          <el-tag v-else type="danger">否</el-tag>
+        </template>
+      </el-table-column>
+      <el-table-column label="是否已归档" align="center" prop="checkStatus">
+        <template slot-scope="scope">
+          <el-tag
+            v-if="
+              scope.row.fqProjectProcess != null &&
+              scope.row.fqProjectProcess.checkStatus == 2
+            "
+            type="success"
+            >是</el-tag
+          >
+          <el-tag v-else type="danger">否</el-tag>
         </template>
       </el-table-column>
       <el-table-column
@@ -174,7 +311,14 @@
             icon="el-icon-tickets"
             @click="handleDetail(scope.row)"
             v-hasPermi="['system:project:query']"
-            >详情</el-button
+            >项目详情</el-button
+          >
+          <el-button
+            size="mini"
+            type="text"
+            icon="el-icon-s-order"
+            @click="handleDetail(scope.row)"
+            >流程详情</el-button
           >
         </template>
       </el-table-column>
@@ -787,6 +931,26 @@ export default {
       },
       titleReviewSub: "",
       openReviewSub: false,
+      receiveStatusArr: [
+        {
+          value: 1,
+          label: "未收件",
+        },
+        {
+          value: 2,
+          label: "已收件",
+        },
+      ],
+      checkStatusArr: [
+        {
+          value: 2,
+          label: "已归档",
+        },
+        {
+          value: -1,
+          label: "未归档",
+        },
+      ],
       statusArr: [
         {
           value: 2,

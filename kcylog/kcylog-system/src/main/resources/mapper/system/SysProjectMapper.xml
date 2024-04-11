@@ -54,7 +54,31 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
         <association property="projectValue" javaType="java.util.List" resultMap="SysProjectValueResult"/>
         <association property="projectCar" javaType="java.util.List" resultMap="SysProjectCarResult"/>
         <association property="reviewSub" javaType="java.util.List" resultMap="SysReviewSubResult"/>
+        <association property="fqProjectProcess" javaType="FqProjectProcess" resultMap="FqProjectProcessResult"/>
     </resultMap>
+
+    <resultMap type="FqProjectProcess" id="FqProjectProcessResult">
+        <result property="transferStatus"    column="transfer_status"    />
+        <result property="transferTime"    column="transfer_time"    />
+        <result property="transferUserName"    column="transfer_user_name"    />
+        <result property="receiveStatus"    column="receive_status"    />
+        <result property="receiveTime"    column="receive_time"    />
+        <result property="receiveUserName"    column="receive_user_name"    />
+        <result property="stampStatus"    column="stamp_status"    />
+        <result property="stampTime"    column="stamp_time"    />
+        <result property="stampUserName"    column="stamp_user_name"    />
+        <result property="marketingConfirm"    column="marketing_confirm"    />
+        <result property="marketingTime"    column="marketing_time"    />
+        <result property="marketingUserName"    column="marketing_user_name"    />
+        <result property="checkStatus"    column="check_status"    />
+        <result property="checkTime"    column="check_time"    />
+        <result property="checkUserName"    column="check_user_name"    />
+        <result property="archiveTime"    column="archive_time"    />
+        <result property="archiveUserName"    column="archive_user_name"    />
+        <result property="receiveCutoffTime"    column="receive_cutoff_time"    />
+        <result property="rectifyCutoffTime"    column="rectify_cutoff_time"    />
+    </resultMap>
+
 
     <resultMap type="SysReviewSub" id="SysReviewSubResult">
         <!--雇工信息-->
@@ -474,26 +498,45 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
         WHERE spv.project_id = #{projectId}
     </update>
 
+    <sql id="selectSysProjectListHandoverVo">
+        select p.*,
+               f.transfer_status, f.transfer_time,
+               f.transfer_user_name, f.receive_status,
+               f.receive_time, f.receive_user_name,
+               f.stamp_status, f.stamp_time,
+               f.stamp_user_name, f.marketing_confirm,
+               f.marketing_time, f.marketing_user_name,
+               f.check_status, f.check_time,
+               f.check_user_name, f.archive_time,
+               f.archive_user_name, f.receive_cutoff_time,
+               f.rectify_cutoff_time
+        from sys_project p left join fq_project_process f on p.project_id = f.project_id
+    </sql>
+
     <select id="selectSysProjectListHandover" parameterType="SysProject" resultMap="SysProjectResult">
-        <include refid="selectSysProjectVo"/>
+        <include refid="selectSysProjectListHandoverVo"/>
         <where>
-            <if test="userNameAlias != null and userNameAlias != ''">and user_name_alias like concat('%', #{userNameAlias}, '%')</if>
-            <if test="projectType != null and projectType != ''">and project_type like concat('%', #{projectType}, '%')</if>
-            <if test="projectNameAlias != null  and projectNameAlias != ''"> and project_name_alias like concat('%', #{projectNameAlias}, '%')</if>
-            <if test="outputStatus != null">and output_status = #{outputStatus}</if>
-            <if test="status != null">and status = #{status}</if>
-            <if test="department != null  and department != ''"> and department like concat('%', #{department}, '%')</if>
-            <if test="projectNum != null  and projectNum != ''"> and project_num like concat('%', #{projectNum}, '%')</if>
-            <if test="isJqr != null">and user_name_alias != '机器人'</if>
+            <if test="userNameAlias != null and userNameAlias != ''">and p.user_name_alias like concat('%', #{userNameAlias}, '%')</if>
+            <if test="projectType != null and projectType != ''">and p.project_type like concat('%', #{projectType}, '%')</if>
+            <if test="projectNameAlias != null  and projectNameAlias != ''"> and p.project_name_alias like concat('%', #{projectNameAlias}, '%')</if>
+            <if test="outputStatus != null">and p.output_status = #{outputStatus}</if>
+            <if test="status != null">and p.status = #{status}</if>
+            <if test="department != null  and department != ''"> and p.department like concat('%', #{department}, '%')</if>
+            <if test="checkStatus != null  and checkStatus != -1"> and f.check_status = #{checkStatus}</if>
+            <if test="checkStatus != null  and checkStatus == -1"> and (f.check_status != 2 or f.check_status is null )</if>
+            <if test="receiveStatus != null  and receiveStatus == 2"> and f.receive_status = 2</if>
+            <if test="receiveStatus != null  and receiveStatus != 2"> and (f.receive_status = 1 or f.receive_status is null)</if>
+            <if test="projectNum != null  and projectNum != ''"> and p.project_num like concat('%', #{projectNum}, '%')</if>
+            <if test="isJqr != null">and p.user_name_alias != '机器人'</if>
             <if test="params.beginTime != null and params.beginTime != ''"><!-- 开始时间检索 -->
-                and (date_format(two_check,'%y%m%d') &gt;= date_format(#{params.beginTime},'%y%m%d'))
+                and (date_format(p.two_check,'%y%m%d') &gt;= date_format(#{params.beginTime},'%y%m%d'))
             </if>
             <if test="params.endTime != null and params.endTime != ''"><!-- 结束时间检索 -->
-                and (date_format(two_check,'%y%m%d') &lt;= date_format(#{params.endTime},'%y%m%d'))
+                and (date_format(p.two_check,'%y%m%d') &lt;= date_format(#{params.endTime},'%y%m%d'))
             </if>
             and status = 3
         </where>
-        order by status asc, one_check desc,two_check desc
+        order by p.two_check desc
     </select>
 
     <select id="selectSysProjectWaitOneCheck" parameterType="SysProject" resultMap="SysProjectResult">
