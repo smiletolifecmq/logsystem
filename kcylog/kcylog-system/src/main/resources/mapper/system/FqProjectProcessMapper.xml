@@ -76,7 +76,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
     
     <select id="selectFqProjectProcessById" parameterType="Long" resultMap="FqProjectProcessResult">
         <include refid="selectFqProjectProcessVo"/>
-        where id = #{id}
+        where project_id = #{id}
     </select>
         
     <insert id="insertFqProjectProcess" parameterType="FqProjectProcess" useGeneratedKeys="true" keyProperty="id">
@@ -146,7 +146,6 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
     <update id="updateFqProjectProcess" parameterType="FqProjectProcess">
         update fq_project_process
         <trim prefix="SET" suffixOverrides=",">
-            <if test="projectId != null">project_id = #{projectId},</if>
             <if test="registerStatus != null">register_status = #{registerStatus},</if>
             <if test="registerTime != null and registerTime != ''">register_time = #{registerTime},</if>
             <if test="workStatus != null">work_status = #{workStatus},</if>
@@ -175,7 +174,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
             <if test="receiveCutoffTime != null and receiveCutoffTime != ''">receive_cutoff_time = #{receiveCutoffTime},</if>
             <if test="rectifyCutoffTime != null and rectifyCutoffTime != ''">rectify_cutoff_time = #{rectifyCutoffTime},</if>
         </trim>
-        where id = #{id}
+        where project_id = #{projectId}
     </update>
 
     <delete id="deleteFqProjectProcessById" parameterType="Long">

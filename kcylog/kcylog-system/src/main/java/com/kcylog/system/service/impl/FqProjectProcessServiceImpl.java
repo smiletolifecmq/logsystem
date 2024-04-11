@@ -1,11 +1,12 @@
 package com.kcylog.system.service.impl;
 
-import java.util.List;
+import com.kcylog.system.domain.FqProjectProcess;
+import com.kcylog.system.mapper.FqProjectProcessMapper;
+import com.kcylog.system.service.IFqProjectProcessService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-import com.kcylog.system.mapper.FqProjectProcessMapper;
-import com.kcylog.system.domain.FqProjectProcess;
-import com.kcylog.system.service.IFqProjectProcessService;
+
+import java.util.List;
 
 /**
  * 新系统项目流程同步Service业务层处理
