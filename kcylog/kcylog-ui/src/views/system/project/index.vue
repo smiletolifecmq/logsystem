@@ -742,6 +742,17 @@
                           placeholder="请输入项目金额"
                         />
                       </el-form-item> -->
+                    <el-form-item label="雇工方式" prop="manType">
+                      <el-select v-model="formReviewSub.manType" size="mini">
+                        <el-option
+                          v-for="item in manTypes"
+                          :key="item.value"
+                          :label="item.label"
+                          :value="item.value"
+                        >
+                        </el-option>
+                      </el-select>
+                    </el-form-item>
                     <el-form-item label="雇工人数" prop="peopleNum">
                       <el-input-number
                         v-model="formReviewSub.peopleNum"
@@ -927,6 +938,11 @@ export default {
   },
   data() {
     return {
+      manTypes: [
+        { value: 0, label: "非雇工" },
+        { value: 1, label: "雇工" },
+        { value: 2, label: "第三方雇工" },
+      ],
       statisticsData: [],
       centerDialogVisible: false,
       projectCode: "",
