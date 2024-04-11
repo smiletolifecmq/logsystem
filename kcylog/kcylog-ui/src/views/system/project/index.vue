@@ -933,19 +933,16 @@
         height="500"
       >
         <el-table-column
-          fixed
           label="委托单位"
           align="center"
           prop="requesterAlias"
         />
         <el-table-column
-          fixed
           label="项目名称"
           align="center"
           prop="projectNameAlias"
         />
         <el-table-column
-          fixed
           label="项目编号"
           width="200px"
           align="center"
