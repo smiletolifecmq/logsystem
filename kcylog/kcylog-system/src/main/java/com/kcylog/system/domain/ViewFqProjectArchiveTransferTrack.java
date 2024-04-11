@@ -30,19 +30,31 @@ public class ViewFqProjectArchiveTransferTrack extends BaseEntity
 
     /** 移交（1："未移交"，2："移交办结") */
     private Long transferStatus;
+    private LocalDateTime transferTime;
+    private String transferUserName;
 
     /** 收件（ 1： "未收件"，2："收件办结") */
     private Long receiveStatus;
+    private LocalDateTime sjsj;
+    private String sjUserName;
 
     /** 盖章（1："未盖章"；2："已盖章"；3："盖章拒绝"；4："无需盖章"） */
     private Long stampStatus;
+    private LocalDateTime gzsj;
+    private String gzUserName;
 
     /** 是否确认盖章 */
     @Excel(name = "是否确认盖章")
     private Long marketingConfirm;
+    private LocalDateTime marketingConfirmTime;
+    private String marketingUserName;
 
     /** 验收（1："未验收"；2："验收办结"；3："验收拒绝"，4： "验收通过"） */
     private Long checkStatus;
+    private LocalDateTime ystgsj;
+    private String ysTgUserName;
+    private LocalDateTime yssj;
+    private String ysUserName;
 
     /** 收件截止时间（最后一次二检通过时间加上5个工作日） */
     @Excel(name = "收件截止时间", readConverterExp = "最=后一次二检通过时间加上5个工作日")
@@ -51,6 +63,102 @@ public class ViewFqProjectArchiveTransferTrack extends BaseEntity
     /** 整改截止时间（第一次被退回整改的时间加上5个工作日） */
     @Excel(name = "整改截止时间", readConverterExp = "第=一次被退回整改的时间加上5个工作日")
     private LocalDateTime rectifyCutoffTime;
+
+    public LocalDateTime getTransferTime() {
+        return transferTime;
+    }
+
+    public void setTransferTime(LocalDateTime transferTime) {
+        this.transferTime = transferTime;
+    }
+
+    public String getTransferUserName() {
+        return transferUserName;
+    }
+
+    public void setTransferUserName(String transferUserName) {
+        this.transferUserName = transferUserName;
+    }
+
+    public LocalDateTime getSjsj() {
+        return sjsj;
+    }
+
+    public void setSjsj(LocalDateTime sjsj) {
+        this.sjsj = sjsj;
+    }
+
+    public String getSjUserName() {
+        return sjUserName;
+    }
+
+    public void setSjUserName(String sjUserName) {
+        this.sjUserName = sjUserName;
+    }
+
+    public LocalDateTime getGzsj() {
+        return gzsj;
+    }
+
+    public void setGzsj(LocalDateTime gzsj) {
+        this.gzsj = gzsj;
+    }
+
+    public String getGzUserName() {
+        return gzUserName;
+    }
+
+    public void setGzUserName(String gzUserName) {
+        this.gzUserName = gzUserName;
+    }
+
+    public LocalDateTime getMarketingConfirmTime() {
+        return marketingConfirmTime;
+    }
+
+    public void setMarketingConfirmTime(LocalDateTime marketingConfirmTime) {
+        this.marketingConfirmTime = marketingConfirmTime;
+    }
+
+    public String getMarketingUserName() {
+        return marketingUserName;
+    }
+
+    public void setMarketingUserName(String marketingUserName) {
+        this.marketingUserName = marketingUserName;
+    }
+
+    public LocalDateTime getYstgsj() {
+        return ystgsj;
+    }
+
+    public void setYstgsj(LocalDateTime ystgsj) {
+        this.ystgsj = ystgsj;
+    }
+
+    public String getYsTgUserName() {
+        return ysTgUserName;
+    }
+
+    public void setYsTgUserName(String ysTgUserName) {
+        this.ysTgUserName = ysTgUserName;
+    }
+
+    public LocalDateTime getYssj() {
+        return yssj;
+    }
+
+    public void setYssj(LocalDateTime yssj) {
+        this.yssj = yssj;
+    }
+
+    public String getYsUserName() {
+        return ysUserName;
+    }
+
+    public void setYsUserName(String ysUserName) {
+        this.ysUserName = ysUserName;
+    }
 
     public String getProjectCode() {
         return projectCode;

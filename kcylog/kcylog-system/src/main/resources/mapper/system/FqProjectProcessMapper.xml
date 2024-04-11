@@ -1,0 +1,191 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.kcylog.system.mapper.FqProjectProcessMapper">
+    
+    <resultMap type="FqProjectProcess" id="FqProjectProcessResult">
+        <result property="id"    column="id"    />
+        <result property="projectId"    column="project_id"    />
+        <result property="registerStatus"    column="register_status"    />
+        <result property="registerTime"    column="register_time"    />
+        <result property="workStatus"    column="work_status"    />
+        <result property="workTime"    column="work_time"    />
+        <result property="oneCheckStatus"    column="one_check_status"    />
+        <result property="oneCheckTime"    column="one_check_time"    />
+        <result property="twoCheckStatus"    column="two_check_status"    />
+        <result property="twoCheckTime"    column="two_check_time"    />
+        <result property="transferStatus"    column="transfer_status"    />
+        <result property="transferTime"    column="transfer_time"    />
+        <result property="transferUserName"    column="transfer_user_name"    />
+        <result property="receiveStatus"    column="receive_status"    />
+        <result property="receiveTime"    column="receive_time"    />
+        <result property="receiveUserName"    column="receive_user_name"    />
+        <result property="stampStatus"    column="stamp_status"    />
+        <result property="stampTime"    column="stamp_time"    />
+        <result property="stampUserName"    column="stamp_user_name"    />
+        <result property="marketingConfirm"    column="marketing_confirm"    />
+        <result property="marketingTime"    column="marketing_time"    />
+        <result property="marketingUserName"    column="marketing_user_name"    />
+        <result property="checkStatus"    column="check_status"    />
+        <result property="checkTime"    column="check_time"    />
+        <result property="checkUserName"    column="check_user_name"    />
+        <result property="archiveTime"    column="archive_time"    />
+        <result property="archiveUserName"    column="archive_user_name"    />
+        <result property="receiveCutoffTime"    column="receive_cutoff_time"    />
+        <result property="rectifyCutoffTime"    column="rectify_cutoff_time"    />
+    </resultMap>
+
+    <sql id="selectFqProjectProcessVo">
+        select id, project_id, register_status, register_time, work_status, work_time, one_check_status, one_check_time, two_check_status, two_check_time, transfer_status, transfer_time, transfer_user_name, receive_status, receive_time, receive_user_name, stamp_status, stamp_time, stamp_user_name, marketing_confirm, marketing_time, marketing_user_name, check_status, check_time, check_user_name, archive_time, archive_user_name, receive_cutoff_time, rectify_cutoff_time from fq_project_process
+    </sql>
+
+    <select id="selectFqProjectProcessList" parameterType="FqProjectProcess" resultMap="FqProjectProcessResult">
+        <include refid="selectFqProjectProcessVo"/>
+        <where>  
+            <if test="projectId != null "> and project_id = #{projectId}</if>
+            <if test="registerStatus != null "> and register_status = #{registerStatus}</if>
+            <if test="registerTime != null  and registerTime != ''"> and register_time = #{registerTime}</if>
+            <if test="workStatus != null "> and work_status = #{workStatus}</if>
+            <if test="workTime != null  and workTime != ''"> and work_time = #{workTime}</if>
+            <if test="oneCheckStatus != null "> and one_check_status = #{oneCheckStatus}</if>
+            <if test="oneCheckTime != null  and oneCheckTime != ''"> and one_check_time = #{oneCheckTime}</if>
+            <if test="twoCheckStatus != null "> and two_check_status = #{twoCheckStatus}</if>
+            <if test="twoCheckTime != null  and twoCheckTime != ''"> and two_check_time = #{twoCheckTime}</if>
+            <if test="transferStatus != null "> and transfer_status = #{transferStatus}</if>
+            <if test="transferTime != null  and transferTime != ''"> and transfer_time = #{transferTime}</if>
+            <if test="transferUserName != null  and transferUserName != ''"> and transfer_user_name like concat('%', #{transferUserName}, '%')</if>
+            <if test="receiveStatus != null "> and receive_status = #{receiveStatus}</if>
+            <if test="receiveTime != null  and receiveTime != ''"> and receive_time = #{receiveTime}</if>
+            <if test="receiveUserName != null  and receiveUserName != ''"> and receive_user_name like concat('%', #{receiveUserName}, '%')</if>
+            <if test="stampStatus != null "> and stamp_status = #{stampStatus}</if>
+            <if test="stampTime != null  and stampTime != ''"> and stamp_time = #{stampTime}</if>
+            <if test="stampUserName != null  and stampUserName != ''"> and stamp_user_name like concat('%', #{stampUserName}, '%')</if>
+            <if test="marketingConfirm != null "> and marketing_confirm = #{marketingConfirm}</if>
+            <if test="marketingTime != null  and marketingTime != ''"> and marketing_time = #{marketingTime}</if>
+            <if test="marketingUserName != null  and marketingUserName != ''"> and marketing_user_name like concat('%', #{marketingUserName}, '%')</if>
+            <if test="checkStatus != null "> and check_status = #{checkStatus}</if>
+            <if test="checkTime != null  and checkTime != ''"> and check_time = #{checkTime}</if>
+            <if test="checkUserName != null  and checkUserName != ''"> and check_user_name like concat('%', #{checkUserName}, '%')</if>
+            <if test="archiveTime != null  and archiveTime != ''"> and archive_time = #{archiveTime}</if>
+            <if test="archiveUserName != null  and archiveUserName != ''"> and archive_user_name like concat('%', #{archiveUserName}, '%')</if>
+            <if test="receiveCutoffTime != null  and receiveCutoffTime != ''"> and receive_cutoff_time = #{receiveCutoffTime}</if>
+            <if test="rectifyCutoffTime != null  and rectifyCutoffTime != ''"> and rectify_cutoff_time = #{rectifyCutoffTime}</if>
+        </where>
+    </select>
+    
+    <select id="selectFqProjectProcessById" parameterType="Long" resultMap="FqProjectProcessResult">
+        <include refid="selectFqProjectProcessVo"/>
+        where id = #{id}
+    </select>
+        
+    <insert id="insertFqProjectProcess" parameterType="FqProjectProcess" useGeneratedKeys="true" keyProperty="id">
+        insert into fq_project_process
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="projectId != null">project_id,</if>
+            <if test="registerStatus != null">register_status,</if>
+            <if test="registerTime != null and registerTime != ''">register_time,</if>
+            <if test="workStatus != null">work_status,</if>
+            <if test="workTime != null and workTime != ''">work_time,</if>
+            <if test="oneCheckStatus != null">one_check_status,</if>
+            <if test="oneCheckTime != null and oneCheckTime != ''">one_check_time,</if>
+            <if test="twoCheckStatus != null">two_check_status,</if>
+            <if test="twoCheckTime != null and twoCheckTime != ''">two_check_time,</if>
+            <if test="transferStatus != null">transfer_status,</if>
+            <if test="transferTime != null and transferTime != ''">transfer_time,</if>
+            <if test="transferUserName != null and transferUserName != ''">transfer_user_name,</if>
+            <if test="receiveStatus != null">receive_status,</if>
+            <if test="receiveTime != null and receiveTime != ''">receive_time,</if>
+            <if test="receiveUserName != null and receiveUserName != ''">receive_user_name,</if>
+            <if test="stampStatus != null">stamp_status,</if>
+            <if test="stampTime != null and stampTime != ''">stamp_time,</if>
+            <if test="stampUserName != null and stampUserName != ''">stamp_user_name,</if>
+            <if test="marketingConfirm != null">marketing_confirm,</if>
+            <if test="marketingTime != null and marketingTime != ''">marketing_time,</if>
+            <if test="marketingUserName != null and marketingUserName != ''">marketing_user_name,</if>
+            <if test="checkStatus != null">check_status,</if>
+            <if test="checkTime != null and checkTime != ''">check_time,</if>
+            <if test="checkUserName != null and checkUserName != ''">check_user_name,</if>
+            <if test="archiveTime != null and archiveTime != ''">archive_time,</if>
+            <if test="archiveUserName != null and archiveUserName != ''">archive_user_name,</if>
+            <if test="receiveCutoffTime != null and receiveCutoffTime != ''">receive_cutoff_time,</if>
+            <if test="rectifyCutoffTime != null and rectifyCutoffTime != ''">rectify_cutoff_time,</if>
+         </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test="projectId != null">#{projectId},</if>
+            <if test="registerStatus != null">#{registerStatus},</if>
+            <if test="registerTime != null and registerTime != ''">#{registerTime},</if>
+            <if test="workStatus != null">#{workStatus},</if>
+            <if test="workTime != null and workTime != ''">#{workTime},</if>
+            <if test="oneCheckStatus != null">#{oneCheckStatus},</if>
+            <if test="oneCheckTime != null and oneCheckTime != ''">#{oneCheckTime},</if>
+            <if test="twoCheckStatus != null">#{twoCheckStatus},</if>
+            <if test="twoCheckTime != null and twoCheckTime != ''">#{twoCheckTime},</if>
+            <if test="transferStatus != null">#{transferStatus},</if>
+            <if test="transferTime != null and transferTime != ''">#{transferTime},</if>
+            <if test="transferUserName != null and transferUserName != ''">#{transferUserName},</if>
+            <if test="receiveStatus != null">#{receiveStatus},</if>
+            <if test="receiveTime != null and receiveTime != ''">#{receiveTime},</if>
+            <if test="receiveUserName != null and receiveUserName != ''">#{receiveUserName},</if>
+            <if test="stampStatus != null">#{stampStatus},</if>
+            <if test="stampTime != null and stampTime != ''">#{stampTime},</if>
+            <if test="stampUserName != null and stampUserName != ''">#{stampUserName},</if>
+            <if test="marketingConfirm != null">#{marketingConfirm},</if>
+            <if test="marketingTime != null and marketingTime != ''">#{marketingTime},</if>
+            <if test="marketingUserName != null and marketingUserName != ''">#{marketingUserName},</if>
+            <if test="checkStatus != null">#{checkStatus},</if>
+            <if test="checkTime != null and checkTime != ''">#{checkTime},</if>
+            <if test="checkUserName != null and checkUserName != ''">#{checkUserName},</if>
+            <if test="archiveTime != null and archiveTime != ''">#{archiveTime},</if>
+            <if test="archiveUserName != null and archiveUserName != ''">#{archiveUserName},</if>
+            <if test="receiveCutoffTime != null and receiveCutoffTime != ''">#{receiveCutoffTime},</if>
+            <if test="rectifyCutoffTime != null and rectifyCutoffTime != ''">#{rectifyCutoffTime},</if>
+         </trim>
+    </insert>
+
+    <update id="updateFqProjectProcess" parameterType="FqProjectProcess">
+        update fq_project_process
+        <trim prefix="SET" suffixOverrides=",">
+            <if test="projectId != null">project_id = #{projectId},</if>
+            <if test="registerStatus != null">register_status = #{registerStatus},</if>
+            <if test="registerTime != null and registerTime != ''">register_time = #{registerTime},</if>
+            <if test="workStatus != null">work_status = #{workStatus},</if>
+            <if test="workTime != null and workTime != ''">work_time = #{workTime},</if>
+            <if test="oneCheckStatus != null">one_check_status = #{oneCheckStatus},</if>
+            <if test="oneCheckTime != null and oneCheckTime != ''">one_check_time = #{oneCheckTime},</if>
+            <if test="twoCheckStatus != null">two_check_status = #{twoCheckStatus},</if>
+            <if test="twoCheckTime != null and twoCheckTime != ''">two_check_time = #{twoCheckTime},</if>
+            <if test="transferStatus != null">transfer_status = #{transferStatus},</if>
+            <if test="transferTime != null and transferTime != ''">transfer_time = #{transferTime},</if>
+            <if test="transferUserName != null and transferUserName != ''">transfer_user_name = #{transferUserName},</if>
+            <if test="receiveStatus != null">receive_status = #{receiveStatus},</if>
+            <if test="receiveTime != null and receiveTime != ''">receive_time = #{receiveTime},</if>
+            <if test="receiveUserName != null and receiveUserName != ''">receive_user_name = #{receiveUserName},</if>
+            <if test="stampStatus != null">stamp_status = #{stampStatus},</if>
+            <if test="stampTime != null and stampTime != ''">stamp_time = #{stampTime},</if>
+            <if test="stampUserName != null and stampUserName != ''">stamp_user_name = #{stampUserName},</if>
+            <if test="marketingConfirm != null">marketing_confirm = #{marketingConfirm},</if>
+            <if test="marketingTime != null and marketingTime != ''">marketing_time = #{marketingTime},</if>
+            <if test="marketingUserName != null and marketingUserName != ''">marketing_user_name = #{marketingUserName},</if>
+            <if test="checkStatus != null">check_status = #{checkStatus},</if>
+            <if test="checkTime != null and checkTime != ''">check_time = #{checkTime},</if>
+            <if test="checkUserName != null and checkUserName != ''">check_user_name = #{checkUserName},</if>
+            <if test="archiveTime != null and archiveTime != ''">archive_time = #{archiveTime},</if>
+            <if test="archiveUserName != null and archiveUserName != ''">archive_user_name = #{archiveUserName},</if>
+            <if test="receiveCutoffTime != null and receiveCutoffTime != ''">receive_cutoff_time = #{receiveCutoffTime},</if>
+            <if test="rectifyCutoffTime != null and rectifyCutoffTime != ''">rectify_cutoff_time = #{rectifyCutoffTime},</if>
+        </trim>
+        where id = #{id}
+    </update>
+
+    <delete id="deleteFqProjectProcessById" parameterType="Long">
+        delete from fq_project_process where id = #{id}
+    </delete>
+
+    <delete id="deleteFqProjectProcessByIds" parameterType="String">
+        delete from fq_project_process where id in 
+        <foreach item="id" collection="array" open="(" separator="," close=")">
+            #{id}
+        </foreach>
+    </delete>
+</mapper>

@@ -10,16 +10,28 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
         <result property="registerStatus"    column="register_status"    />
         <result property="workStatus"    column="work_status"    />
         <result property="transferStatus"    column="transfer_status"    />
+        <result property="transferTime"    column="transfer_time"    />
+        <result property="transferUserName"    column="transfer_user_name"    />
         <result property="receiveStatus"    column="receive_status"    />
+        <result property="sjsj"    column="sjsj"    />
+        <result property="sjUserName"    column="sj_user_name"    />
         <result property="stampStatus"    column="stamp_status"    />
+        <result property="gzsj"    column="gzsj"    />
+        <result property="gzUserName"    column="gz_user_name"    />
         <result property="marketingConfirm"    column="marketing_confirm"    />
+        <result property="marketingConfirmTime"    column="marketing_confirm_time"    />
+        <result property="marketingUserName"    column="marketing_user_name"    />
         <result property="checkStatus"    column="check_status"    />
+        <result property="ystgsj"    column="ystgsj"    />
+        <result property="ysTgUserName"    column="ys_tg_user_name"    />
+        <result property="yssj"    column="yssj"    />
+        <result property="ysUserName"    column="ys_user_name"    />
         <result property="receiveCutoffTime"    column="receive_cutoff_time"    />
         <result property="rectifyCutoffTime"    column="rectify_cutoff_time"    />
     </resultMap>
 
     <sql id="selectViewFqProjectArchiveTransferTrackVo">
-        select project_id, project_code, register_status, work_status, transfer_status, receive_status, stamp_status, marketing_confirm, check_status, receive_cutoff_time, rectify_cutoff_time from view_fq_project_archive_transfer_track
+        select project_id, project_code, register_status, work_status, transfer_status, transfer_time, transfer_user_name, receive_status, sjsj, sj_user_name, stamp_status, gzsj, gz_user_name,  marketing_confirm, marketing_confirm_time, marketing_user_name, check_status, ystgsj, ys_tg_user_name, yssj, ys_user_name, receive_cutoff_time, rectify_cutoff_time from view_fq_project_archive_transfer_track
     </sql>
 
     <select id="selectViewFqProjectArchiveTransferTrackList" parameterType="ViewFqProjectArchiveTransferTrack" resultMap="ViewFqProjectArchiveTransferTrackResult">
