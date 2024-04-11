@@ -491,7 +491,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
             <if test="params.endTime != null and params.endTime != ''"><!-- 结束时间检索 -->
                 and (date_format(two_check,'%y%m%d') &lt;= date_format(#{params.endTime},'%y%m%d'))
             </if>
-            and (status = 2 or status = 3)
+            and status = 3
         </where>
         order by status asc, one_check desc,two_check desc
     </select>

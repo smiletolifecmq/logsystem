@@ -116,9 +116,13 @@
           <el-tag v-show="scope.row.status == 1" type="success">{{
             scope.row.gcchbNumWork
           }}</el-tag>
-          <el-tag v-show="scope.row.status == 0" type="danger">{{
-            scope.row.gcchbNumWork
-          }}</el-tag>
+          <el-tag
+            v-show="scope.row.status == 0"
+            type="danger"
+            class="hover-effect"
+            @click="handleOverTimeOpen('工程测绘部')"
+            >{{ scope.row.gcchbNumWork }}</el-tag
+          >
         </template>
       </el-table-column>
       <el-table-column prop="bdcchbWork" label="不动产测绘部" align="center">
@@ -126,9 +130,13 @@
           <el-tag v-show="scope.row.status == 1" type="success">{{
             scope.row.bdcchbWork
           }}</el-tag>
-          <el-tag v-show="scope.row.status == 0" type="danger">{{
-            scope.row.bdcchbWork
-          }}</el-tag>
+          <el-tag
+            v-show="scope.row.status == 0"
+            type="danger"
+            class="hover-effect"
+            @click="handleOverTimeOpen('不动产测绘部')"
+            >{{ scope.row.bdcchbWork }}</el-tag
+          >
         </template>
       </el-table-column>
       <el-table-column prop="gxgcbWork" label="管线工程部" align="center">
@@ -136,9 +144,13 @@
           <el-tag v-show="scope.row.status == 1" type="success">{{
             scope.row.gxgcbWork
           }}</el-tag>
-          <el-tag v-show="scope.row.status == 0" type="danger">{{
-            scope.row.gxgcbWork
-          }}</el-tag>
+          <el-tag
+            v-show="scope.row.status == 0"
+            type="danger"
+            class="hover-effect"
+            @click="handleOverTimeOpen('管线工程部')"
+            >{{ scope.row.gxgcbWork }}</el-tag
+          >
         </template>
       </el-table-column>
       <el-table-column prop="dlxxbWork" label="地理信息部" align="center">
@@ -146,9 +158,13 @@
           <el-tag v-show="scope.row.status == 1" type="success">{{
             scope.row.dlxxbWork
           }}</el-tag>
-          <el-tag v-show="scope.row.status == 0" type="danger">{{
-            scope.row.dlxxbWork
-          }}</el-tag>
+          <el-tag
+            v-show="scope.row.status == 0"
+            type="danger"
+            class="hover-effect"
+            @click="handleOverTimeOpen('地理信息部')"
+            >{{ scope.row.dlxxbWork }}</el-tag
+          >
         </template>
       </el-table-column>
     </el-table>
@@ -903,19 +919,105 @@
       </div>
     </el-dialog>
 
-    <!-- <el-dialog
-      :title="projectCode"
-      :visible.sync="centerDialogVisible"
-      width="100%"
-      height="100%"
-      center
+    <el-dialog
+      title="超期项目"
+      :visible.sync="overTimeOpen"
+      width="1260px"
+      append-to-body
+      v-el-drag-dialog
     >
-      <span>
-        <iframe src="https://ruoyi.vip/" width="100%" height="600px"></iframe>
-      </span>
-    </el-dialog> -->
+      <el-table v-loading="loading" :data="overTimeProjectList" size="mini">
+        <el-table-column
+          fixed
+          label="委托单位"
+          align="center"
+          prop="requesterAlias"
+        />
+        <el-table-column
+          fixed
+          label="项目名称"
+          align="center"
+          prop="projectNameAlias"
+        />
+        <el-table-column
+          fixed
+          label="项目编号"
+          width="200px"
+          align="center"
+          prop="projectNum"
+        />
+        <el-table-column
+          label="工程负责人"
+          align="center"
+          prop="userNameAlias"
+        />
+        <el-table-column label="作业部门" align="center" prop="department" />
+        <el-table-column label="登记时间" align="center" prop="registerTime">
+          <template slot-scope="scope">
+            {{ formatDate(scope.row.registerTime) }}
+          </template>
+        </el-table-column>
+        <el-table-column
+          label="安排开始时间"
+          align="center"
+          prop="projectStartAlias"
+        >
+          <template slot-scope="scope">
+            {{ formatDate(scope.row.projectStartAlias) }}
+          </template></el-table-column
+        >
+        <el-table-column
+          label="安排结束时间"
+          align="center"
+          prop="projectEndAlias"
+        >
+          <template slot-scope="scope">
+            {{ formatDate(scope.row.projectEndAlias) }}
+          </template></el-table-column
+        >
+        <el-table-column label="作业办结时间" align="center" prop="doTime">
+          <template slot-scope="scope">
+            {{ homeworkCompleted(scope.row) }}
+          </template></el-table-column
+        >
+        <el-table-column label="提前工期" align="center">
+          <template slot-scope="scope">
+            <el-tag type="danger" v-show="scope.row.leadTime < 0">{{
+              scope.row.leadTime
+            }}</el-tag>
+            <el-tag type="success" v-show="scope.row.leadTime >= 0">{{
+              scope.row.leadTime
+            }}</el-tag>
+          </template></el-table-column
+        >
+        <el-table-column label="作业状态" align="center" prop="status">
+          <template slot-scope="scope">
+            <el-tag v-show="scope.row.workStatus == 1" type="danger"
+              >新增作业</el-tag
+            >
+            <el-tag v-show="scope.row.workStatus == 2" type="warning"
+              >作业中</el-tag
+            >
+            <el-tag v-show="scope.row.workStatus == 3" type="success"
+              >作业完成</el-tag
+            >
+            <el-tag v-show="scope.row.workStatus == 4" type="success"
+              >作业办结</el-tag
+            >
+            <el-tag v-show="scope.row.workStatus == 0" type="danger"
+              >新增作业</el-tag
+            >
+          </template>
+        </el-table-column>
+      </el-table>
+    </el-dialog>
   </div>
 </template>
+<style>
+.hover-effect:hover {
+  cursor: pointer;
+}
+</style>
 
 <script>
 import {
@@ -938,6 +1040,7 @@ export default {
   },
   data() {
     return {
+      overTimeOpen: false,
       manTypes: [
         { value: 0, label: "非雇工" },
         { value: 1, label: "雇工" },
@@ -1060,12 +1163,17 @@ export default {
       total: 0,
       // 项目表格数据
       projectList: [],
+      overTimeProjectList: [],
       // 弹出层标题
       title: "",
       // 是否显示弹出层
       open: false,
       // 查询参数
       queryStatisticsParams: {
+        pageNum: 1,
+        pageSize: 9999,
+      },
+      queryOverTimeParams: {
         pageNum: 1,
         pageSize: 9999,
       },
@@ -1163,6 +1271,24 @@ export default {
     this.getStatisticsData();
   },
   methods: {
+    handleOverTimeOpen(value) {
+      this.queryOverTimeParams.department = value;
+      listProject(this.addDateRange(this.queryOverTimeParams)).then(
+        (response) => {
+          this.overTimeProjectList = [];
+          for (let i = 0; i < response.rows.length; i++) {
+            let project = response.rows[i];
+            let leadTime = project.leadTime;
+            if (leadTime < 0) {
+              this.overTimeProjectList.push(project);
+            }
+          }
+        }
+      );
+
+      this.overTimeOpen = true;
+      console.log(value);
+    },
     getStatisticsData() {
       listProject(this.addDateRange(this.queryStatisticsParams)).then(
         (response) => {
