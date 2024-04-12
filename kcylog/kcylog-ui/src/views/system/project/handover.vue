@@ -182,7 +182,7 @@
           <el-tag v-show="scope.row.isArchive != 1" type="success"
             >无归档</el-tag
           >
-          <div v-show="scope.row.isArchive == 1">
+          <div v-show="scope.row.isArchive == 1 || scope.row.isArchive == null">
             <el-tag
               type="danger"
               v-show="scope.row.projectList.receiveDays < 0"
@@ -232,10 +232,10 @@
       </el-table-column>
       <el-table-column label="归档提前天数" align="center">
         <template slot-scope="scope">
-          <el-tag v-show="scope.row.isArchive != 1" type="success"
+          <el-tag v-show="scope.row.isArchive !== 1" type="success"
             >无归档</el-tag
           >
-          <div v-show="scope.row.isArchive == 1">
+          <div v-show="scope.row.isArchive == 1 || scope.row.isArchive == null">
             <el-tag
               type="danger"
               v-show="scope.row.projectList.archiveDays < 0"
@@ -290,7 +290,7 @@
             >项目详情</el-button
           >
           <el-button
-            v-show="scope.row.isArchive == 1"
+            v-show="scope.row.isArchive == 1 || scope.row.isArchive == null"
             size="mini"
             type="text"
             icon="el-icon-s-order"
