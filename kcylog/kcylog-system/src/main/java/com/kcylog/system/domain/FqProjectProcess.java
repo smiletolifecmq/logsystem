@@ -1,9 +1,9 @@
 package com.kcylog.system.domain;
 
-import org.apache.commons.lang3.builder.ToStringBuilder;
-import org.apache.commons.lang3.builder.ToStringStyle;
 import com.kcylog.common.annotation.Excel;
 import com.kcylog.common.core.domain.BaseEntity;
+import org.apache.commons.lang3.builder.ToStringBuilder;
+import org.apache.commons.lang3.builder.ToStringStyle;
 
 /**
  * 新系统项目流程同步对象 fq_project_process
@@ -124,7 +124,37 @@ public class FqProjectProcess extends BaseEntity
     @Excel(name = "整改截止时间")
     private String rectifyCutoffTime;
 
-    public void setId(Long id) 
+    private String version;
+
+    private Integer isArchive;
+
+    private SysProject projectList;
+
+    public SysProject getProjectList() {
+        return projectList;
+    }
+
+    public void setProjectList(SysProject projectList) {
+        this.projectList = projectList;
+    }
+
+    public String getVersion() {
+        return version;
+    }
+
+    public void setVersion(String version) {
+        this.version = version;
+    }
+
+    public Integer getIsArchive() {
+        return isArchive;
+    }
+
+    public void setIsArchive(Integer isArchive) {
+        this.isArchive = isArchive;
+    }
+
+    public void setId(Long id)
     {
         this.id = id;
     }

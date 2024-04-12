@@ -97,4 +97,10 @@ public class ViewFqProjectArchiveTransferTrackServiceImpl implements IViewFqProj
     {
         return viewFqProjectArchiveTransferTrackMapper.selectViewFqProjectArchiveTransferTrackByProjectCode(projectCodes);
     }
+
+    @Override
+    public List<ViewFqProjectArchiveTransferTrack> selectViewFqProjectArchiveTransferTrackListByProjectId(Long projectId)
+    {
+        return viewFqProjectArchiveTransferTrackMapper.selectViewFqProjectArchiveTransferTrackListByProjectId(projectId);
+    }
 }

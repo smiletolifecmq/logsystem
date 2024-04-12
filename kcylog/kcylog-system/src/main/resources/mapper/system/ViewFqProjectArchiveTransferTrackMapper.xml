@@ -28,10 +28,12 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
         <result property="ysUserName"    column="ys_user_name"    />
         <result property="receiveCutoffTime"    column="receive_cutoff_time"    />
         <result property="rectifyCutoffTime"    column="rectify_cutoff_time"    />
+        <result property="version"    column="version"    />
+        <result property="isArchive"    column="is_archive"    />
     </resultMap>
 
     <sql id="selectViewFqProjectArchiveTransferTrackVo">
-        select project_id, project_code, register_status, work_status, transfer_status, transfer_time, transfer_user_name, receive_status, sjsj, sj_user_name, stamp_status, gzsj, gz_user_name,  marketing_confirm, marketing_confirm_time, marketing_user_name, check_status, ystgsj, ys_tg_user_name, yssj, ys_user_name, receive_cutoff_time, rectify_cutoff_time from view_fq_project_archive_transfer_track
+        select project_id, version, is_archive, project_code, register_status, work_status, transfer_status, transfer_time, transfer_user_name, receive_status, sjsj, sj_user_name, stamp_status, gzsj, gz_user_name,  marketing_confirm, marketing_confirm_time, marketing_user_name, check_status, ystgsj, ys_tg_user_name, yssj, ys_user_name, receive_cutoff_time, rectify_cutoff_time from view_fq_project_archive_transfer_track
     </sql>
 
     <select id="selectViewFqProjectArchiveTransferTrackList" parameterType="ViewFqProjectArchiveTransferTrack" resultMap="ViewFqProjectArchiveTransferTrackResult">
@@ -108,5 +110,10 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
         <foreach item="item" collection="list" open="(" separator="," close=")">
             #{item}
         </foreach>
+    </select>
+
+    <select id="selectViewFqProjectArchiveTransferTrackListByProjectId" parameterType="Long" resultMap="ViewFqProjectArchiveTransferTrackResult">
+        <include refid="selectViewFqProjectArchiveTransferTrackVo"/>
+        where project_id = #{projectId}
     </select>
 </mapper>

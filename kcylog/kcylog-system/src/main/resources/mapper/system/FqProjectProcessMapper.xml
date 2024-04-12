@@ -34,44 +34,102 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
         <result property="archiveUserName"    column="archive_user_name"    />
         <result property="receiveCutoffTime"    column="receive_cutoff_time"    />
         <result property="rectifyCutoffTime"    column="rectify_cutoff_time"    />
+        <result property="version"    column="version"    />
+        <result property="isArchive"    column="is_archive"    />
+        <association property="projectList" javaType="SysProject" resultMap="SysProjectResult"/>
     </resultMap>
 
+    <resultMap type="SysProject" id="SysProjectResult">
+        <result property="projectId"    column="project_id"    />
+        <result property="projectNameAlias"    column="project_name_alias"    />
+        <result property="projectNum"    column="project_num"    />
+        <result property="projectType"    column="project_type"    />
+        <result property="registerTime"    column="register_time"    />
+        <result property="receptionist"    column="receptionist"    />
+        <result property="workloadAlias"    column="workload_alias"    />
+        <result property="workcontentAlias"    column="workcontent_alias"    />
+        <result property="userNameAlias"    column="user_name_alias"    />
+        <result property="requesterAlias"    column="requester_alias"    />
+        <result property="projectStartAlias"    column="project_start_alias"    />
+        <result property="projectEndAlias"    column="project_end_alias"    />
+        <result property="oneCheck"    column="one_check"    />
+        <result property="twoCheck"    column="two_check"    />
+        <result property="outputStatus"    column="output_status"    />
+        <result property="twoCheckTime"    column="two_check_time"    />
+        <result property="isTwoCheck"    column="is_two_check"    />
+        <result property="noticeTime"    column="notice_time"    />
+        <result property="projectTime"    column="project_time"    />
+        <result property="deliveryTime"    column="delivery_time"    />
+        <result property="projectMoneyAlias"    column="project_money_alias"    />
+        <result property="operate"    column="operate"    />
+        <result property="operateUser"    column="operate_user"    />
+        <result property="operateTime"    column="operate_time"    />
+        <result property="isCarRegister"    column="is_car_register"    />
+        <result property="createTime"    column="create_time"    />
+        <result property="updateTime"    column="update_time"    />
+        <result property="department"    column="department"    />
+        <result property="settlementTime"    column="settlement_time"    />
+        <result property="fbMoney"    column="fb_money"    />
+        <result property="status"    column="status"    />
+        <result property="fbWorkload"    column="fb_workload"    />
+        <result property="subpackageType"    column="subpackage_type"    />
+        <result property="workStatus"    column="work_status"    />
+        <result property="doTime"    column="do_time"    />
+        <result property="customerContractName" column="customer_contract_name"/>
+        <result property="customerContractPhone" column="customer_contract_phone"/>
+
+        <result property="geometry" column="geometry"/>
+        <result property="geometry2000" column="geometry2000"/>
+        <result property="bufferGeometry" column="buffer_geometry"/>
+        <result property="bufferGeometry2000" column="buffer_geometry2000"/>
+        <result property="geometryGauss2000" column="geometry_gauss2000"/>
+        <result property="bufferGeometryGauss2000" column="buffer_geometry_gauss2000"/>
+        <result property="mapScale" column="map_scale"/>
+    </resultMap>
+
+
     <sql id="selectFqProjectProcessVo">
-        select id, project_id, register_status, register_time, work_status, work_time, one_check_status, one_check_time, two_check_status, two_check_time, transfer_status, transfer_time, transfer_user_name, receive_status, receive_time, receive_user_name, stamp_status, stamp_time, stamp_user_name, marketing_confirm, marketing_time, marketing_user_name, check_status, check_time, check_user_name, archive_time, archive_user_name, receive_cutoff_time, rectify_cutoff_time from fq_project_process
+        select id, version, is_archive, project_id, register_status, register_time, work_status, work_time, one_check_status, one_check_time, two_check_status, two_check_time, transfer_status, transfer_time, transfer_user_name, receive_status, receive_time, receive_user_name, stamp_status, stamp_time, stamp_user_name, marketing_confirm, marketing_time, marketing_user_name, check_status, check_time, check_user_name, archive_time, archive_user_name, receive_cutoff_time, rectify_cutoff_time from fq_project_process
     </sql>
 
-    <select id="selectFqProjectProcessList" parameterType="FqProjectProcess" resultMap="FqProjectProcessResult">
-        <include refid="selectFqProjectProcessVo"/>
-        <where>  
-            <if test="projectId != null "> and project_id = #{projectId}</if>
-            <if test="registerStatus != null "> and register_status = #{registerStatus}</if>
-            <if test="registerTime != null  and registerTime != ''"> and register_time = #{registerTime}</if>
-            <if test="workStatus != null "> and work_status = #{workStatus}</if>
-            <if test="workTime != null  and workTime != ''"> and work_time = #{workTime}</if>
-            <if test="oneCheckStatus != null "> and one_check_status = #{oneCheckStatus}</if>
-            <if test="oneCheckTime != null  and oneCheckTime != ''"> and one_check_time = #{oneCheckTime}</if>
-            <if test="twoCheckStatus != null "> and two_check_status = #{twoCheckStatus}</if>
-            <if test="twoCheckTime != null  and twoCheckTime != ''"> and two_check_time = #{twoCheckTime}</if>
-            <if test="transferStatus != null "> and transfer_status = #{transferStatus}</if>
-            <if test="transferTime != null  and transferTime != ''"> and transfer_time = #{transferTime}</if>
-            <if test="transferUserName != null  and transferUserName != ''"> and transfer_user_name like concat('%', #{transferUserName}, '%')</if>
-            <if test="receiveStatus != null "> and receive_status = #{receiveStatus}</if>
-            <if test="receiveTime != null  and receiveTime != ''"> and receive_time = #{receiveTime}</if>
-            <if test="receiveUserName != null  and receiveUserName != ''"> and receive_user_name like concat('%', #{receiveUserName}, '%')</if>
-            <if test="stampStatus != null "> and stamp_status = #{stampStatus}</if>
-            <if test="stampTime != null  and stampTime != ''"> and stamp_time = #{stampTime}</if>
-            <if test="stampUserName != null  and stampUserName != ''"> and stamp_user_name like concat('%', #{stampUserName}, '%')</if>
-            <if test="marketingConfirm != null "> and marketing_confirm = #{marketingConfirm}</if>
-            <if test="marketingTime != null  and marketingTime != ''"> and marketing_time = #{marketingTime}</if>
-            <if test="marketingUserName != null  and marketingUserName != ''"> and marketing_user_name like concat('%', #{marketingUserName}, '%')</if>
-            <if test="checkStatus != null "> and check_status = #{checkStatus}</if>
-            <if test="checkTime != null  and checkTime != ''"> and check_time = #{checkTime}</if>
-            <if test="checkUserName != null  and checkUserName != ''"> and check_user_name like concat('%', #{checkUserName}, '%')</if>
-            <if test="archiveTime != null  and archiveTime != ''"> and archive_time = #{archiveTime}</if>
-            <if test="archiveUserName != null  and archiveUserName != ''"> and archive_user_name like concat('%', #{archiveUserName}, '%')</if>
-            <if test="receiveCutoffTime != null  and receiveCutoffTime != ''"> and receive_cutoff_time = #{receiveCutoffTime}</if>
-            <if test="rectifyCutoffTime != null  and rectifyCutoffTime != ''"> and rectify_cutoff_time = #{rectifyCutoffTime}</if>
+    <sql id="selectFqProjectProcessListVo">
+        select  f.transfer_status, f.transfer_time,
+                f.transfer_user_name, f.receive_status,
+                f.receive_time, f.receive_user_name,
+                f.stamp_status, f.stamp_time,
+                f.stamp_user_name, f.marketing_confirm,
+                f.marketing_time, f.marketing_user_name,
+                f.check_status, f.check_time,
+                f.check_user_name, f.archive_time,
+                f.archive_user_name, f.receive_cutoff_time,
+                f.rectify_cutoff_time, f.version, f.is_archive,  p.* from fq_project_process f
+        inner join sys_project p on f.project_id = p.project_id
+    </sql>
+
+    <select id="selectFqProjectProcessList" parameterType="SysProject" resultMap="FqProjectProcessResult">
+        <include refid="selectFqProjectProcessListVo"/>
+        <where>
+            <if test="userNameAlias != null and userNameAlias != ''">and p.user_name_alias like concat('%', #{userNameAlias}, '%')</if>
+            <if test="projectType != null and projectType != ''">and p.project_type like concat('%', #{projectType}, '%')</if>
+            <if test="projectNameAlias != null  and projectNameAlias != ''"> and p.project_name_alias like concat('%', #{projectNameAlias}, '%')</if>
+            <if test="outputStatus != null">and p.output_status = #{outputStatus}</if>
+            <if test="status != null">and p.status = #{status}</if>
+            <if test="department != null  and department != ''"> and p.department like concat('%', #{department}, '%')</if>
+            <if test="checkStatus != null  and checkStatus != -1"> and f.check_status = #{checkStatus}</if>
+            <if test="checkStatus != null  and checkStatus == -1"> and (f.check_status != 2 or f.check_status is null )</if>
+            <if test="receiveStatus != null  and receiveStatus == 2"> and f.receive_status = 2</if>
+            <if test="receiveStatus != null  and receiveStatus != 2"> and (f.receive_status = 1 or f.receive_status is null)</if>
+            <if test="projectNum != null  and projectNum != ''"> and p.project_num like concat('%', #{projectNum}, '%')</if>
+            <if test="isJqr != null">and p.user_name_alias != '机器人'</if>
+            <if test="params.beginTime != null and params.beginTime != ''"><!-- 开始时间检索 -->
+                and (date_format(p.two_check,'%y%m%d') &gt;= date_format(#{params.beginTime},'%y%m%d'))
+            </if>
+            <if test="params.endTime != null and params.endTime != ''"><!-- 结束时间检索 -->
+                and (date_format(p.two_check,'%y%m%d') &lt;= date_format(#{params.endTime},'%y%m%d'))
+            </if>
+            and p.status = 3
         </where>
+        order by p.project_num desc, f.version asc
     </select>
     
     <select id="selectFqProjectProcessById" parameterType="Long" resultMap="FqProjectProcessResult">
@@ -110,6 +168,8 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
             <if test="archiveUserName != null and archiveUserName != ''">archive_user_name,</if>
             <if test="receiveCutoffTime != null and receiveCutoffTime != ''">receive_cutoff_time,</if>
             <if test="rectifyCutoffTime != null and rectifyCutoffTime != ''">rectify_cutoff_time,</if>
+            <if test="version != null and version != ''">version,</if>
+            <if test="isArchive != null">is_archive,</if>
          </trim>
         <trim prefix="values (" suffix=")" suffixOverrides=",">
             <if test="projectId != null">#{projectId},</if>
@@ -140,6 +200,8 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
             <if test="archiveUserName != null and archiveUserName != ''">#{archiveUserName},</if>
             <if test="receiveCutoffTime != null and receiveCutoffTime != ''">#{receiveCutoffTime},</if>
             <if test="rectifyCutoffTime != null and rectifyCutoffTime != ''">#{rectifyCutoffTime},</if>
+            <if test="version != null and version != ''">#{version},</if>
+            <if test="isArchive != null">#{isArchive},</if>
          </trim>
     </insert>
 
@@ -173,12 +235,14 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
             <if test="archiveUserName != null and archiveUserName != ''">archive_user_name = #{archiveUserName},</if>
             <if test="receiveCutoffTime != null and receiveCutoffTime != ''">receive_cutoff_time = #{receiveCutoffTime},</if>
             <if test="rectifyCutoffTime != null and rectifyCutoffTime != ''">rectify_cutoff_time = #{rectifyCutoffTime},</if>
+            <if test="version != null and version != ''">version = #{version},</if>
+            <if test="isArchive != null">is_archive = #{isArchive},</if>
         </trim>
         where project_id = #{projectId}
     </update>
 
     <delete id="deleteFqProjectProcessById" parameterType="Long">
-        delete from fq_project_process where id = #{id}
+        delete from fq_project_process where project_id = #{id}
     </delete>
 
     <delete id="deleteFqProjectProcessByIds" parameterType="String">

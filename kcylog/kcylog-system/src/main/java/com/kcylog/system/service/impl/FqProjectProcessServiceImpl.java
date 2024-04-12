@@ -1,6 +1,7 @@
 package com.kcylog.system.service.impl;
 
 import com.kcylog.system.domain.FqProjectProcess;
+import com.kcylog.system.domain.SysProject;
 import com.kcylog.system.mapper.FqProjectProcessMapper;
 import com.kcylog.system.service.IFqProjectProcessService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -35,13 +36,12 @@ public class FqProjectProcessServiceImpl implements IFqProjectProcessService
     /**
      * 查询新系统项目流程同步列表
      * 
-     * @param fqProjectProcess 新系统项目流程同步
      * @return 新系统项目流程同步
      */
     @Override
-    public List<FqProjectProcess> selectFqProjectProcessList(FqProjectProcess fqProjectProcess)
+    public List<FqProjectProcess> selectFqProjectProcessList(SysProject sysProject)
     {
-        return fqProjectProcessMapper.selectFqProjectProcessList(fqProjectProcess);
+        return fqProjectProcessMapper.selectFqProjectProcessList(sysProject);
     }
 
     /**

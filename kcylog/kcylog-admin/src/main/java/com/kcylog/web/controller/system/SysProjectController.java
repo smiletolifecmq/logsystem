@@ -53,6 +53,9 @@ public class SysProjectController extends BaseController {
     @Autowired
     private ISysProjectSelectmapTfinfoService sysProjectSelectmapTfinfoService;
 
+    @Autowired
+    private IFqProjectProcessService fqProjectProcessService;
+
     /**
      * 查询项目列表
      */
@@ -344,64 +347,57 @@ public class SysProjectController extends BaseController {
     @GetMapping("/listHandover")
     public TableDataInfo listHandover(SysProject sysProject) throws ParseException {
         startPage();
-        List<SysProject> list = sysProjectService.selectSysProjectListHandover(sysProject);
-
-        for (SysProject project : list) {
-            if (project.getFqProjectProcess() != null){
+        List<FqProjectProcess> list = fqProjectProcessService.selectFqProjectProcessList(sysProject);
+        for (FqProjectProcess projectProcess : list) {
                 //计算收件提前天数
-                if (project.getFqProjectProcess().getReceiveStatus() != null && project.getFqProjectProcess().getReceiveStatus() == 2){
-                    if (project.getFqProjectProcess().getReceiveTime() == null || project.getFqProjectProcess().getReceiveTime().isEmpty() || project.getFqProjectProcess().getReceiveCutoffTime() == null || project.getFqProjectProcess().getReceiveCutoffTime().isEmpty()) {
-                        project.setReceiveDays(0);
+                if (projectProcess.getReceiveStatus() != null && projectProcess.getReceiveStatus() == 2){
+                    if (projectProcess.getReceiveTime() == null || projectProcess.getReceiveTime().isEmpty() || projectProcess.getReceiveCutoffTime() == null || projectProcess.getReceiveCutoffTime().isEmpty()) {
+                        projectProcess.getProjectList().setReceiveDays(0);
                     }else {
                         SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd");
-                        Date startDate = dateFormat.parse(project.getFqProjectProcess().getReceiveCutoffTime());
-                        Date endDate = dateFormat.parse(project.getFqProjectProcess().getReceiveTime());
+                        Date startDate = dateFormat.parse(projectProcess.getReceiveCutoffTime());
+                        Date endDate = dateFormat.parse(projectProcess.getReceiveTime());
                         long differenceInMilliseconds = startDate.getTime() - endDate.getTime();
                         long differenceInDays = (long) Math.ceil((double) differenceInMilliseconds / (1000 * 3600 * 24));
-                        project.setReceiveDays((int)differenceInDays);
+                        projectProcess.getProjectList().setReceiveDays((int)differenceInDays);
                     }
                 }else {
-                    if (project.getFqProjectProcess().getReceiveCutoffTime() == null || project.getFqProjectProcess().getReceiveCutoffTime().isEmpty()) {
-                        project.setReceiveDays(0);
+                    if (projectProcess.getReceiveCutoffTime() == null || projectProcess.getReceiveCutoffTime().isEmpty()) {
+                        projectProcess.getProjectList().setReceiveDays(0);
                     }else {
                         SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd");
-                        Date startDate = dateFormat.parse(project.getFqProjectProcess().getReceiveCutoffTime());
+                        Date startDate = dateFormat.parse(projectProcess.getReceiveCutoffTime());
                         Date currentDate = new Date();
                         long timeDifference = startDate.getTime() - currentDate.getTime();
                         long daysDifference = (long) Math.ceil((double) timeDifference / (1000 * 60 * 60 * 24));
-                        project.setReceiveDays((int)daysDifference);
+                        projectProcess.getProjectList().setReceiveDays((int)daysDifference);
                     }
                 }
 
                 //计算归档提前天数
-                if (project.getFqProjectProcess().getCheckStatus() != null && project.getFqProjectProcess().getCheckStatus() == 2){
-                    if (project.getFqProjectProcess().getArchiveTime() == null || project.getFqProjectProcess().getArchiveTime().isEmpty() || project.getFqProjectProcess().getRectifyCutoffTime() == null || project.getFqProjectProcess().getRectifyCutoffTime().isEmpty()) {
-                        project.setArchiveDays(0);
+                if (projectProcess.getCheckStatus() != null && projectProcess.getCheckStatus() == 2){
+                    if (projectProcess.getArchiveTime() == null || projectProcess.getArchiveTime().isEmpty() || projectProcess.getRectifyCutoffTime() == null || projectProcess.getRectifyCutoffTime().isEmpty()) {
+                        projectProcess.getProjectList().setArchiveDays(0);
                     }else {
                         SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd");
-                        Date startDate = dateFormat.parse(project.getFqProjectProcess().getRectifyCutoffTime());
-                        Date endDate = dateFormat.parse(project.getFqProjectProcess().getArchiveTime());
+                        Date startDate = dateFormat.parse(projectProcess.getRectifyCutoffTime());
+                        Date endDate = dateFormat.parse(projectProcess.getArchiveTime());
                         long differenceInMilliseconds = startDate.getTime() - endDate.getTime();
                         long differenceInDays = (long) Math.ceil((double) differenceInMilliseconds / (1000 * 3600 * 24));
-                        project.setArchiveDays((int)differenceInDays);
+                        projectProcess.getProjectList().setArchiveDays((int)differenceInDays);
                     }
                 }else {
-                    if (project.getFqProjectProcess().getRectifyCutoffTime() == null || project.getFqProjectProcess().getRectifyCutoffTime().isEmpty()) {
-                        project.setArchiveDays(0);
+                    if (projectProcess.getRectifyCutoffTime() == null || projectProcess.getRectifyCutoffTime().isEmpty()) {
+                        projectProcess.getProjectList().setArchiveDays(0);
                     }else {
                         SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd");
-                        Date startDate = dateFormat.parse(project.getFqProjectProcess().getRectifyCutoffTime());
+                        Date startDate = dateFormat.parse(projectProcess.getRectifyCutoffTime());
                         Date currentDate = new Date();
                         long timeDifference = startDate.getTime() - currentDate.getTime();
                         long daysDifference = (long) Math.ceil((double) timeDifference / (1000 * 60 * 60 * 24));
-                        project.setArchiveDays((int)daysDifference);
+                        projectProcess.getProjectList().setArchiveDays((int)daysDifference);
                     }
                 }
-            }else {
-                project.setReceiveDays(0);
-                project.setArchiveDays(0);
-            }
-
         }
 
         return getDataTable(list);

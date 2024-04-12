@@ -115,47 +115,55 @@
         label="委托单位"
         align="center"
         prop="requesterAlias"
-      />
+      >
+        <template slot-scope="scope">
+          {{ scope.row.projectList.requesterAlias }}
+        </template>
+      </el-table-column>
       <el-table-column
         fixed
         label="项目名称"
         align="center"
         prop="projectNameAlias"
-      />
-      <el-table-column
-        fixed
-        label="项目编号"
-        align="center"
-        prop="projectNum"
-      />
-      <el-table-column label="工程负责人" align="center" prop="userNameAlias" />
-      <el-table-column label="作业部门" align="center" prop="department" />
+      >
+        <template slot-scope="scope">
+          {{ scope.row.projectList.projectNameAlias }}
+        </template>
+      </el-table-column>
+      <el-table-column fixed label="项目编号" align="center" prop="projectNum">
+        <template slot-scope="scope">
+          {{ scope.row.projectList.projectNum }}
+        </template>
+      </el-table-column>
+      <el-table-column fixed label="版本" align="center" prop="version">
+        <template slot-scope="scope">
+          {{ scope.row.version }}
+        </template>
+      </el-table-column>
+      <el-table-column label="工程负责人" align="center" prop="userNameAlias">
+        <template slot-scope="scope">
+          {{ scope.row.projectList.userNameAlias }}
+        </template>
+      </el-table-column>
+      <el-table-column label="作业部门" align="center" prop="department">
+        <template slot-scope="scope">
+          {{ scope.row.projectList.department }}
+        </template>
+      </el-table-column>
       <el-table-column label="二检时间" align="center" prop="twoCheck">
         <template slot-scope="scope">
-          {{ formatDate(scope.row.twoCheck) }}
+          {{ formatDate(scope.row.projectList.twoCheck) }}
         </template></el-table-column
       >
       <el-table-column label="移交时间" align="center" prop="transferTime">
-        <template
-          slot-scope="scope"
-          v-if="
-            scope.row.fqProjectProcess != null &&
-            scope.row.fqProjectProcess.transferTime != null
-          "
-        >
-          {{ formatDate(scope.row.fqProjectProcess.transferTime) }}
+        <template slot-scope="scope" v-if="scope.row.transferTime != null">
+          {{ formatDate(scope.row.transferTime) }}
         </template>
         <template slot-scope="scope" v-else> </template>
       </el-table-column>
       <el-table-column label="收件时间" align="center" prop="receiveTime">
-        <template
-          slot-scope="scope"
-          v-if="
-            scope.row.fqProjectProcess != null &&
-            scope.row.fqProjectProcess.receiveTime != null
-          "
-        >
-          {{ formatDate(scope.row.fqProjectProcess.receiveTime) }}
+        <template slot-scope="scope" v-if="scope.row.receiveTime != null">
+          {{ formatDate(scope.row.receiveTime) }}
         </template>
         <template slot-scope="scope" v-else> </template>
       </el-table-column>
@@ -164,72 +172,51 @@
         align="center"
         prop="receiveCutoffTime"
       >
-        <template
-          slot-scope="scope"
-          v-if="
-            scope.row.fqProjectProcess != null &&
-            scope.row.fqProjectProcess.receiveCutoffTime != null
-          "
-        >
-          {{ formatDate(scope.row.fqProjectProcess.receiveCutoffTime) }}
+        <template slot-scope="scope" v-if="scope.row.receiveCutoffTime != null">
+          {{ formatDate(scope.row.receiveCutoffTime) }}
         </template>
         <template slot-scope="scope" v-else> </template>
       </el-table-column>
       <el-table-column label="收件提前天数" align="center">
         <template slot-scope="scope">
-          <el-tag type="danger" v-show="scope.row.receiveDays < 0">{{
-            scope.row.receiveDays
-          }}</el-tag>
-          <el-tag type="success" v-show="scope.row.receiveDays >= 0">{{
-            scope.row.receiveDays
-          }}</el-tag>
+          <el-tag v-show="scope.row.isArchive != 1" type="success"
+            >无归档</el-tag
+          >
+          <div v-show="scope.row.isArchive == 1">
+            <el-tag
+              type="danger"
+              v-show="scope.row.projectList.receiveDays < 0"
+              >{{ scope.row.projectList.receiveDays }}</el-tag
+            >
+            <el-tag
+              type="success"
+              v-show="scope.row.projectList.receiveDays >= 0"
+              >{{ scope.row.projectList.receiveDays }}</el-tag
+            >
+          </div>
         </template></el-table-column
       >
       <el-table-column label="盖章时间" align="center" prop="stampTime">
-        <template
-          slot-scope="scope"
-          v-if="
-            scope.row.fqProjectProcess != null &&
-            scope.row.fqProjectProcess.stampTime != null
-          "
-        >
-          {{ formatDate(scope.row.fqProjectProcess.stampTime) }}
+        <template slot-scope="scope" v-if="scope.row.stampTime != null">
+          {{ formatDate(scope.row.stampTime) }}
         </template>
         <template slot-scope="scope" v-else> </template>
       </el-table-column>
       <el-table-column label="验收时间" align="center" prop="checkTime">
-        <template
-          slot-scope="scope"
-          v-if="
-            scope.row.fqProjectProcess != null &&
-            scope.row.fqProjectProcess.checkTime != null
-          "
-        >
-          {{ formatDate(scope.row.fqProjectProcess.checkTime) }}
+        <template slot-scope="scope" v-if="scope.row.checkTime != null">
+          {{ formatDate(scope.row.checkTime) }}
         </template>
         <template slot-scope="scope" v-else> </template>
       </el-table-column>
       <el-table-column label="盖章确认时间" align="center" prop="marketingTime">
-        <template
-          slot-scope="scope"
-          v-if="
-            scope.row.fqProjectProcess != null &&
-            scope.row.fqProjectProcess.marketingTime != null
-          "
-        >
-          {{ formatDate(scope.row.fqProjectProcess.marketingTime) }}
+        <template slot-scope="scope" v-if="scope.row.marketingTime != null">
+          {{ formatDate(scope.row.marketingTime) }}
         </template>
         <template slot-scope="scope" v-else> </template>
       </el-table-column>
       <el-table-column label="归档时间" align="center" prop="archiveTime">
-        <template
-          slot-scope="scope"
-          v-if="
-            scope.row.fqProjectProcess != null &&
-            scope.row.fqProjectProcess.archiveTime != null
-          "
-        >
-          {{ formatDate(scope.row.fqProjectProcess.archiveTime) }}
+        <template slot-scope="scope" v-if="scope.row.archiveTime != null">
+          {{ formatDate(scope.row.archiveTime) }}
         </template>
         <template slot-scope="scope" v-else> </template>
       </el-table-column>
@@ -238,25 +225,28 @@
         align="center"
         prop="rectifyCutoffTime"
       >
-        <template
-          slot-scope="scope"
-          v-if="
-            scope.row.fqProjectProcess != null &&
-            scope.row.fqProjectProcess.rectifyCutoffTime != null
-          "
-        >
-          {{ formatDate(scope.row.fqProjectProcess.rectifyCutoffTime) }}
+        <template slot-scope="scope" v-if="scope.row.rectifyCutoffTime != null">
+          {{ formatDate(scope.row.rectifyCutoffTime) }}
         </template>
         <template slot-scope="scope" v-else> </template>
       </el-table-column>
       <el-table-column label="归档提前天数" align="center">
         <template slot-scope="scope">
-          <el-tag type="danger" v-show="scope.row.archiveDays < 0">{{
-            scope.row.archiveDays
-          }}</el-tag>
-          <el-tag type="success" v-show="scope.row.archiveDays >= 0">{{
-            scope.row.archiveDays
-          }}</el-tag>
+          <el-tag v-show="scope.row.isArchive != 1" type="success"
+            >无归档</el-tag
+          >
+          <div v-show="scope.row.isArchive == 1">
+            <el-tag
+              type="danger"
+              v-show="scope.row.projectList.archiveDays < 0"
+              >{{ scope.row.projectList.archiveDays }}</el-tag
+            >
+            <el-tag
+              type="success"
+              v-show="scope.row.projectList.archiveDays >= 0"
+              >{{ scope.row.projectList.archiveDays }}</el-tag
+            >
+          </div>
         </template></el-table-column
       >
       <!-- <el-table-column label="工作状态" align="center" prop="status">
@@ -274,27 +264,13 @@
       </el-table-column> -->
       <el-table-column label="是否已收件" align="center" prop="receiveStatus">
         <template slot-scope="scope">
-          <el-tag
-            v-if="
-              scope.row.fqProjectProcess != null &&
-              scope.row.fqProjectProcess.receiveStatus == 2
-            "
-            type="success"
-            >是</el-tag
-          >
+          <el-tag v-if="scope.row.receiveStatus == 2" type="success">是</el-tag>
           <el-tag v-else type="danger">否</el-tag>
         </template>
       </el-table-column>
       <el-table-column label="是否已归档" align="center" prop="checkStatus">
         <template slot-scope="scope">
-          <el-tag
-            v-if="
-              scope.row.fqProjectProcess != null &&
-              scope.row.fqProjectProcess.checkStatus == 2
-            "
-            type="success"
-            >是</el-tag
-          >
+          <el-tag v-if="scope.row.checkStatus == 2" type="success">是</el-tag>
           <el-tag v-else type="danger">否</el-tag>
         </template>
       </el-table-column>
@@ -314,11 +290,15 @@
             >项目详情</el-button
           >
           <el-button
+            v-show="scope.row.isArchive == 1"
             size="mini"
             type="text"
             icon="el-icon-s-order"
             @click="handleProcessDetail(scope.row)"
             >流程详情</el-button
+          >
+          <el-tag v-show="scope.row.isArchive != 1" type="success"
+            >无归档</el-tag
           >
         </template>
       </el-table-column>
@@ -1170,7 +1150,7 @@ export default {
   },
   methods: {
     handleProcessDetail(projectInfo) {
-      this.projectProcessTitle = projectInfo.projectNum;
+      this.projectProcessTitle = projectInfo.projectList.projectNum;
       this.activeProcessNum = 0;
       this.yjDescription = "";
       this.sjDescription = "";
@@ -1178,81 +1158,84 @@ export default {
       this.ysDescription = "";
       this.gzqrDescription = "";
       this.gdDescription = "";
-      if (projectInfo.fqProjectProcess != null) {
+      if (
+        projectInfo.isArchive != 0 &&
+        projectInfo.isArchive != null &&
+        projectInfo.isArchive != undefined
+      ) {
         //移交
-        if (projectInfo.fqProjectProcess.transferStatus == 2) {
+        if (projectInfo.transferStatus == 2) {
           this.activeProcessNum++;
           this.yjDescription =
             "移交人员:" +
-            projectInfo.fqProjectProcess.transferUserName +
+            projectInfo.transferUserName +
             "  移交时间:" +
-            this.formatDate(projectInfo.fqProjectProcess.transferTime);
+            this.formatDate(projectInfo.transferTime);
         }
         //收件
-        if (projectInfo.fqProjectProcess.receiveStatus == 2) {
+        if (projectInfo.receiveStatus == 2) {
           this.activeProcessNum++;
           this.sjDescription =
             "收件人员:" +
-            projectInfo.fqProjectProcess.receiveUserName +
+            projectInfo.receiveUserName +
             "  收件时间:" +
-            this.formatDate(projectInfo.fqProjectProcess.receiveTime);
+            this.formatDate(projectInfo.receiveTime);
         }
         //盖章
-        if (
-          projectInfo.fqProjectProcess.stampStatus == 2 ||
-          projectInfo.fqProjectProcess.stampStatus == 4
-        ) {
-          if (projectInfo.fqProjectProcess.stampStatus == 2) {
+        if (projectInfo.stampStatus == 2 || projectInfo.stampStatus == 4) {
+          if (projectInfo.stampStatus == 2) {
             this.activeProcessNum++;
             this.gzDescription =
               "盖章人员:" +
-              projectInfo.fqProjectProcess.stampUserName +
+              projectInfo.stampUserName +
               "  盖章时间:" +
-              this.formatDate(projectInfo.fqProjectProcess.stampTime);
+              this.formatDate(projectInfo.stampTime);
           }
-          if (projectInfo.fqProjectProcess.stampStatus == 4) {
+          if (projectInfo.stampStatus == 4) {
             this.activeProcessNum++;
             this.gzDescription = "无需盖章";
           }
         }
         //验收
-        if (
-          projectInfo.fqProjectProcess.checkStatus == 2 ||
-          projectInfo.fqProjectProcess.checkStatus == 4
-        ) {
+        if (projectInfo.checkStatus == 2 || projectInfo.checkStatus == 4) {
           this.activeProcessNum++;
           this.ysDescription =
             "验收人员:" +
-            projectInfo.fqProjectProcess.checkUserName +
+            projectInfo.checkUserName +
             "  验收时间:" +
-            this.formatDate(projectInfo.fqProjectProcess.checkTime);
+            this.formatDate(projectInfo.checkTime);
         }
         //盖章确认
         if (
-          projectInfo.fqProjectProcess.marketingConfirm == 1 ||
-          ((projectInfo.fqProjectProcess.checkStatus == 2 ||
-            projectInfo.fqProjectProcess.checkStatus == 4) &&
-            projectInfo.fqProjectProcess.stampStatus == 4)
+          projectInfo.marketingConfirm == 1 ||
+          ((projectInfo.checkStatus == 2 || projectInfo.checkStatus == 4) &&
+            projectInfo.stampStatus == 4) ||
+          projectInfo.checkStatus == 2
         ) {
           this.activeProcessNum++;
-          if (projectInfo.fqProjectProcess.stampStatus == 4) {
+          if (projectInfo.stampStatus == 4) {
             this.gzqrDescription =
               "盖章确认人员:" +
-              projectInfo.fqProjectProcess.marketingUserName +
+              projectInfo.marketingUserName +
               "  盖章确认时间:" +
-              this.formatDate(projectInfo.fqProjectProcess.marketingTime);
+              this.formatDate(projectInfo.marketingTime);
+          } else if (
+            projectInfo.stampStatus != 4 &&
+            projectInfo.checkStatus == 2
+          ) {
+            this.gzqrDescription = "未盖章，但已归档";
           } else {
             this.gzqrDescription = "无需盖章";
           }
         }
         //归档
-        if (projectInfo.fqProjectProcess.checkStatus == 4) {
+        if (projectInfo.checkStatus == 2) {
           this.activeProcessNum++;
           this.gzqrDescription =
             "归档人员:" +
-            projectInfo.fqProjectProcess.archiveUserName +
+            projectInfo.archiveUserName +
             "  归档时间:" +
-            this.formatDate(projectInfo.fqProjectProcess.archiveTime);
+            this.formatDate(projectInfo.archiveTime);
         }
       } else {
         this.activeProcessNum = 0;
@@ -1616,7 +1599,7 @@ export default {
 
     handleDetail(row) {
       this.reset();
-      const projectId = row.projectId || this.ids;
+      const projectId = row.projectId;
       getProject(projectId).then((response) => {
         this.form = response.data;
         this.detailOpen = true;

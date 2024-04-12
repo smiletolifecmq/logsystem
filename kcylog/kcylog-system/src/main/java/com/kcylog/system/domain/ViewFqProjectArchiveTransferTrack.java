@@ -64,6 +64,26 @@ public class ViewFqProjectArchiveTransferTrack extends BaseEntity
     @Excel(name = "整改截止时间", readConverterExp = "第=一次被退回整改的时间加上5个工作日")
     private LocalDateTime rectifyCutoffTime;
 
+    private String version;
+
+    private Integer isArchive;
+
+    public String getVersion() {
+        return version;
+    }
+
+    public void setVersion(String version) {
+        this.version = version;
+    }
+
+    public Integer getIsArchive() {
+        return isArchive;
+    }
+
+    public void setIsArchive(Integer isArchive) {
+        this.isArchive = isArchive;
+    }
+
     public LocalDateTime getTransferTime() {
         return transferTime;
     }

@@ -61,4 +61,6 @@ public interface IViewFqProjectArchiveTransferTrackService
     public int deleteViewFqProjectArchiveTransferTrackByProjectId(Long projectId);
 
     public List<ViewFqProjectArchiveTransferTrack> selectViewFqProjectArchiveTransferTrackByProjectCode(List<String> projectCodes);
+
+    public List<ViewFqProjectArchiveTransferTrack> selectViewFqProjectArchiveTransferTrackListByProjectId(Long projectId);
 }

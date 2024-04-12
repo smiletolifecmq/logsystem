@@ -1,6 +1,7 @@
 package com.kcylog.system.mapper;
 
 import com.kcylog.system.domain.FqProjectProcess;
+import com.kcylog.system.domain.SysProject;
 
 import java.util.List;
 
@@ -23,10 +24,9 @@ public interface FqProjectProcessMapper
     /**
      * 查询新系统项目流程同步列表
      * 
-     * @param fqProjectProcess 新系统项目流程同步
      * @return 新系统项目流程同步集合
      */
-    public List<FqProjectProcess> selectFqProjectProcessList(FqProjectProcess fqProjectProcess);
+    public List<FqProjectProcess> selectFqProjectProcessList(SysProject sysProject);
 
     /**
      * 新增新系统项目流程同步
