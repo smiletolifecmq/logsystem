@@ -179,7 +179,9 @@
       </el-table-column>
       <el-table-column label="收件提前天数" align="center">
         <template slot-scope="scope">
-          <el-tag v-show="scope.row.isArchive != 1" type="success"
+          <el-tag
+            v-show="scope.row.isArchive != 1 && scope.row.isArchive != null"
+            type="success"
             >无归档</el-tag
           >
           <div v-show="scope.row.isArchive == 1 || scope.row.isArchive == null">
@@ -232,7 +234,9 @@
       </el-table-column>
       <el-table-column label="归档提前天数" align="center">
         <template slot-scope="scope">
-          <el-tag v-show="scope.row.isArchive !== 1" type="success"
+          <el-tag
+            v-show="scope.row.isArchive != 1 && scope.row.isArchive != null"
+            type="success"
             >无归档</el-tag
           >
           <div v-show="scope.row.isArchive == 1 || scope.row.isArchive == null">
@@ -297,7 +301,9 @@
             @click="handleProcessDetail(scope.row)"
             >流程详情</el-button
           >
-          <el-tag v-show="scope.row.isArchive != 1" type="success"
+          <el-tag
+            v-show="scope.row.isArchive != 1 || scope.row.isArchive != null"
+            type="success"
             >无归档</el-tag
           >
         </template>
