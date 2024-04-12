@@ -1171,6 +1171,13 @@ export default {
   methods: {
     handleProcessDetail(projectInfo) {
       this.projectProcessTitle = projectInfo.projectNum;
+      this.activeProcessNum = 0;
+      this.yjDescription = "";
+      this.sjDescription = "";
+      this.gzDescription = "";
+      this.ysDescription = "";
+      this.gzqrDescription = "";
+      this.gdDescription = "";
       if (projectInfo.fqProjectProcess != null) {
         //移交
         if (projectInfo.fqProjectProcess.transferStatus == 2) {
@@ -1179,7 +1186,7 @@ export default {
             "移交人员:" +
             projectInfo.fqProjectProcess.transferUserName +
             "  移交时间:" +
-            projectInfo.fqProjectProcess.transferTime;
+            this.formatDate(projectInfo.fqProjectProcess.transferTime);
         }
         //收件
         if (projectInfo.fqProjectProcess.receiveStatus == 2) {
@@ -1188,7 +1195,7 @@ export default {
             "收件人员:" +
             projectInfo.fqProjectProcess.receiveUserName +
             "  收件时间:" +
-            projectInfo.fqProjectProcess.receiveTime;
+            this.formatDate(projectInfo.fqProjectProcess.receiveTime);
         }
         //盖章
         if (
@@ -1201,7 +1208,7 @@ export default {
               "盖章人员:" +
               projectInfo.fqProjectProcess.stampUserName +
               "  盖章时间:" +
-              projectInfo.fqProjectProcess.stampTime;
+              this.formatDate(projectInfo.fqProjectProcess.stampTime);
           }
           if (projectInfo.fqProjectProcess.stampStatus == 4) {
             this.activeProcessNum++;
@@ -1218,7 +1225,7 @@ export default {
             "验收人员:" +
             projectInfo.fqProjectProcess.checkUserName +
             "  验收时间:" +
-            projectInfo.fqProjectProcess.checkTime;
+            this.formatDate(projectInfo.fqProjectProcess.checkTime);
         }
         //盖章确认
         if (
@@ -1233,7 +1240,7 @@ export default {
               "盖章确认人员:" +
               projectInfo.fqProjectProcess.marketingUserName +
               "  盖章确认时间:" +
-              projectInfo.fqProjectProcess.marketingTime;
+              this.formatDate(projectInfo.fqProjectProcess.marketingTime);
           } else {
             this.gzqrDescription = "无需盖章";
           }
@@ -1245,7 +1252,7 @@ export default {
             "归档人员:" +
             projectInfo.fqProjectProcess.archiveUserName +
             "  归档时间:" +
-            projectInfo.fqProjectProcess.archiveTime;
+            this.formatDate(projectInfo.fqProjectProcess.archiveTime);
         }
       } else {
         this.activeProcessNum = 0;
