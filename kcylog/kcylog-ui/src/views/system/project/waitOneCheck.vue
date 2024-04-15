@@ -73,37 +73,68 @@
     <el-table :data="statisticsData" style="width: 100%">
       <el-table-column prop="status" label="类型" align="center">
         <template slot-scope="scope">
-          <el-tag v-show="scope.row.status == 1" type="danger"
+          <el-tag v-show="scope.row.status == 1" type="success"
             >待一检项目数</el-tag
+          >
+          <el-tag v-show="scope.row.status == 0" type="danger"
+            >超期项目数</el-tag
           >
         </template>
       </el-table-column>
       <el-table-column prop="gcchbNumWork" label="工程测绘部" align="center">
         <template slot-scope="scope">
-          <el-tag v-show="scope.row.status == 1" type="danger">{{
+          <el-tag v-show="scope.row.status == 1" type="success">{{
             scope.row.gcchbNumWork
           }}</el-tag>
+          <el-tag
+            v-show="scope.row.status == 0"
+            type="danger"
+            class="hover-effect"
+            @click="handleOverTimeOpen('工程测绘部')"
+            >{{ scope.row.gcchbNumWork }}</el-tag
+          >
         </template>
       </el-table-column>
       <el-table-column prop="bdcchbWork" label="不动产测绘部" align="center">
         <template slot-scope="scope">
-          <el-tag v-show="scope.row.status == 1" type="danger">{{
+          <el-tag v-show="scope.row.status == 1" type="success">{{
             scope.row.bdcchbWork
           }}</el-tag>
+          <el-tag
+            v-show="scope.row.status == 0"
+            type="danger"
+            class="hover-effect"
+            @click="handleOverTimeOpen('不动产测绘部')"
+            >{{ scope.row.bdcchbWork }}</el-tag
+          >
         </template>
       </el-table-column>
       <el-table-column prop="gxgcbWork" label="管线工程部" align="center">
         <template slot-scope="scope">
-          <el-tag v-show="scope.row.status == 1" type="danger">{{
+          <el-tag v-show="scope.row.status == 1" type="success">{{
             scope.row.gxgcbWork
           }}</el-tag>
+          <el-tag
+            v-show="scope.row.status == 0"
+            type="danger"
+            class="hover-effect"
+            @click="handleOverTimeOpen('管线工程部')"
+            >{{ scope.row.gxgcbWork }}</el-tag
+          >
         </template>
       </el-table-column>
       <el-table-column prop="dlxxbWork" label="地理信息部" align="center">
         <template slot-scope="scope">
-          <el-tag v-show="scope.row.status == 1" type="danger">{{
+          <el-tag v-show="scope.row.status == 1" type="success">{{
             scope.row.dlxxbWork
           }}</el-tag>
+          <el-tag
+            v-show="scope.row.status == 0"
+            type="danger"
+            class="hover-effect"
+            @click="handleOverTimeOpen('地理信息部')"
+            >{{ scope.row.dlxxbWork }}</el-tag
+          >
         </template>
       </el-table-column>
     </el-table>
@@ -150,6 +181,16 @@
       >
         <template slot-scope="scope">
           {{ formatDate(scope.row.projectEndAlias) }}
+        </template></el-table-column
+      >
+      <el-table-column label="提前工期" align="center">
+        <template slot-scope="scope">
+          <el-tag type="danger" v-show="scope.row.oneCheckDays < 0">{{
+            scope.row.oneCheckDays
+          }}</el-tag>
+          <el-tag type="success" v-show="scope.row.oneCheckDays >= 0">{{
+            scope.row.oneCheckDays
+          }}</el-tag>
         </template></el-table-column
       >
       <el-table-column label="作业办结时间" align="center" prop="doTime">
@@ -741,9 +782,77 @@
         <el-button @click="cancelReviewSub">取 消</el-button>
       </div>
     </el-dialog>
+
+    <el-dialog
+      title="超期项目"
+      :visible.sync="overTimeOpen"
+      width="1260px"
+      append-to-body
+      v-el-drag-dialog
+    >
+      <el-table
+        v-loading="loading"
+        :data="overTimeProjectList"
+        size="mini"
+        height="500"
+      >
+        <el-table-column
+          label="委托单位"
+          align="center"
+          prop="requesterAlias"
+        />
+        <el-table-column
+          label="项目名称"
+          align="center"
+          prop="projectNameAlias"
+        />
+        <el-table-column label="项目编号" align="center" prop="projectNum" />
+        <el-table-column
+          label="工程负责人"
+          align="center"
+          prop="userNameAlias"
+        />
+        <el-table-column label="作业部门" align="center" prop="department" />
+        <el-table-column
+          label="安排开始时间"
+          align="center"
+          prop="projectStartAlias"
+        >
+          <template slot-scope="scope">
+            {{ formatDate(scope.row.projectStartAlias) }}
+          </template></el-table-column
+        >
+        <el-table-column
+          label="安排结束时间"
+          align="center"
+          prop="projectEndAlias"
+        >
+          <template slot-scope="scope">
+            {{ formatDate(scope.row.projectEndAlias) }}
+          </template></el-table-column
+        >
+        <el-table-column label="提前工期" align="center">
+          <template slot-scope="scope">
+            <el-tag type="danger" v-show="scope.row.oneCheckDays < 0">{{
+              scope.row.oneCheckDays
+            }}</el-tag>
+            <el-tag type="success" v-show="scope.row.oneCheckDays >= 0">{{
+              scope.row.oneCheckDays
+            }}</el-tag>
+          </template></el-table-column
+        >
+        <el-table-column label="工作状态" align="center" prop="status">
+          <el-tag type="danger">待一检</el-tag>
+        </el-table-column>
+      </el-table>
+    </el-dialog>
   </div>
 </template>
-
+<style>
+.hover-effect:hover {
+  cursor: pointer;
+}
+</style>
 <script>
 import {
   listProjectWaitOneCheck,
@@ -765,6 +874,8 @@ export default {
   },
   data() {
     return {
+      overTimeProjectList: [],
+      overTimeOpen: false,
       statisticsData: [],
       projectIdMap: {},
       listProjectLocalSelected: [],
@@ -980,6 +1091,26 @@ export default {
     this.getStatisticsData();
   },
   methods: {
+    handleOverTimeOpen(value) {
+      this.overTimeProjectList = [];
+      this.queryStatisticsParams.department = value;
+      listProjectWaitOneCheck(
+        this.addDateRange(this.queryStatisticsParams)
+      ).then((response) => {
+        const project = response.rows;
+        for (let i = 0; i < project.length; i++) {
+          let key = project[i].department;
+          if (key == "" || key == null || key == undefined) {
+            continue;
+          }
+          if (project[i].oneCheckDays < 0) {
+            this.overTimeProjectList.push(project[i]);
+          }
+        }
+        this.queryStatisticsParams.department = null;
+        this.overTimeOpen = true;
+      });
+    },
     getStatisticsData() {
       listProjectWaitOneCheck(
         this.addDateRange(this.queryStatisticsParams)
@@ -994,11 +1125,18 @@ export default {
           if (myMap.has(key)) {
             let num = myMap.get(key);
             num.workCount++;
+            if (project[i].oneCheckDays < 0) {
+              num.oneCheckDays++;
+            }
             myMap.set(key, num);
           } else {
             let num = {
               workCount: 1,
+              oneCheckDays: 0,
             };
+            if (project[i].oneCheckDays < 0) {
+              num.oneCheckDays++;
+            }
             myMap.set(key, num);
           }
         }
@@ -1022,6 +1160,28 @@ export default {
         }
         if (myMap.has("地理信息部")) {
           numData.dlxxbWork = myMap.get("地理信息部").workCount;
+        }
+        this.statisticsData.push(numData);
+
+        numData = {
+          status: 0,
+          gcchbNumWork: 0,
+          bdcchbWork: 0,
+          gxgcbWork: 0,
+          dlxxbWork: 0,
+        };
+
+        if (myMap.has("工程测绘部")) {
+          numData.gcchbNumWork = myMap.get("工程测绘部").oneCheckDays;
+        }
+        if (myMap.has("不动产测绘部")) {
+          numData.bdcchbWork = myMap.get("不动产测绘部").oneCheckDays;
+        }
+        if (myMap.has("管线工程部")) {
+          numData.gxgcbWork = myMap.get("管线工程部").oneCheckDays;
+        }
+        if (myMap.has("地理信息部")) {
+          numData.dlxxbWork = myMap.get("地理信息部").oneCheckDays;
         }
         this.statisticsData.push(numData);
       });

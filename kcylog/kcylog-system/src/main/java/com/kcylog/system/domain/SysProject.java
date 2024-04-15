@@ -128,6 +128,10 @@ public class SysProject extends BaseEntity
 
     private Integer archiveDays;
 
+    private Integer oneCheckDays;
+
+    private Integer twoCheckDays;
+
     /** 填写经营产值时间 */
     @JsonFormat(pattern = "yyyy-MM-dd")
     private Date operateTime;
@@ -193,6 +197,22 @@ public class SysProject extends BaseEntity
 
     //缓冲区坐标串，国家2000平面，福州
     private String bufferGeometryGauss2000;
+
+    public Integer getOneCheckDays() {
+        return oneCheckDays;
+    }
+
+    public void setOneCheckDays(Integer oneCheckDays) {
+        this.oneCheckDays = oneCheckDays;
+    }
+
+    public Integer getTwoCheckDays() {
+        return twoCheckDays;
+    }
+
+    public void setTwoCheckDays(Integer twoCheckDays) {
+        this.twoCheckDays = twoCheckDays;
+    }
 
     public Integer getReceiveDays() {
         return receiveDays;

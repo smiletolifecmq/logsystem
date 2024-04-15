@@ -404,16 +404,41 @@ public class SysProjectController extends BaseController {
     }
 
     @GetMapping("/listProjectWaitOneCheck")
-    public TableDataInfo listProjectWaitOneCheck(SysProject sysProject) {
+    public TableDataInfo listProjectWaitOneCheck(SysProject sysProject) throws ParseException {
         startPage();
         List<SysProject> list = sysProjectService.selectSysProjectWaitOneCheck(sysProject);
+        for (SysProject project : list) {
+            SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd");
+            if (project.getProjectEndAlias() != null && !project.getProjectEndAlias().isEmpty() && !project.getProjectEndAlias().equals("")){
+                Date startDate = dateFormat.parse(project.getProjectEndAlias());
+                Date currentDate = new Date();
+                long timeDifference = startDate.getTime() - currentDate.getTime();
+                long daysDifference = (long) Math.ceil((double) timeDifference / (1000 * 60 * 60 * 24));
+                project.setOneCheckDays((int)daysDifference);
+            }else {
+                project.setOneCheckDays(0);
+            }
+
+        }
         return getDataTable(list);
     }
 
     @GetMapping("/listProjectWaitTwoCheck")
-    public TableDataInfo listProjectWaitTwoCheck(SysProject sysProject) {
+    public TableDataInfo listProjectWaitTwoCheck(SysProject sysProject) throws ParseException {
         startPage();
         List<SysProject> list = sysProjectService.selectSysProjectWaitTwoCheck(sysProject);
+        for (SysProject project : list) {
+            SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd");
+            if (project.getProjectEndAlias() != null && !project.getProjectEndAlias().isEmpty() && !project.getProjectEndAlias().equals("")){
+                Date startDate = dateFormat.parse(project.getProjectEndAlias());
+                Date currentDate = new Date();
+                long timeDifference = startDate.getTime() - currentDate.getTime();
+                long daysDifference = (long) Math.ceil((double) timeDifference / (1000 * 60 * 60 * 24));
+                project.setTwoCheckDays((int)daysDifference);
+            }else {
+                project.setTwoCheckDays(0);
+            }
+        }
         return getDataTable(list);
     }
 

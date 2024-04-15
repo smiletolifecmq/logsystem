@@ -988,7 +988,7 @@
     <el-dialog
       :title="overTitle"
       :visible.sync="overTimeOpen"
-      width="1260px"
+      width="1400px"
       append-to-body
       v-el-drag-dialog
     >
