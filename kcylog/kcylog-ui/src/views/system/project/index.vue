@@ -1289,7 +1289,6 @@ export default {
       );
 
       this.overTimeOpen = true;
-      console.log(value);
     },
     getStatisticsData() {
       listProject(this.addDateRange(this.queryStatisticsParams)).then(

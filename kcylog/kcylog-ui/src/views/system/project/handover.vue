@@ -104,6 +104,106 @@
       </el-form-item>
     </el-form>
 
+    <el-table :data="statisticsData" style="width: 100%">
+      <el-table-column prop="status" label="类型" align="center">
+        <template slot-scope="scope">
+          <el-tag v-show="scope.row.status == 1" type="success"
+            >归档中项目数</el-tag
+          >
+          <el-tag v-show="scope.row.status == 0" type="danger"
+            >收件超期项目数</el-tag
+          >
+          <el-tag v-show="scope.row.status == -1" type="danger"
+            >归档超期项目数</el-tag
+          >
+        </template>
+      </el-table-column>
+      <el-table-column prop="gcchbNumWork" label="工程测绘部" align="center">
+        <template slot-scope="scope">
+          <el-tag v-show="scope.row.status == 1" type="success">{{
+            scope.row.gcchbNumWork
+          }}</el-tag>
+          <el-tag
+            v-show="scope.row.status == 0"
+            type="danger"
+            class="hover-effect"
+            @click="handleOverTimeOpen('工程测绘部', 0)"
+            >{{ scope.row.gcchbNumWork }}</el-tag
+          >
+          <el-tag
+            v-show="scope.row.status == -1"
+            type="danger"
+            class="hover-effect"
+            @click="handleOverTimeOpen('工程测绘部', -1)"
+            >{{ scope.row.gcchbNumWork }}</el-tag
+          >
+        </template>
+      </el-table-column>
+      <el-table-column prop="bdcchbWork" label="不动产测绘部" align="center">
+        <template slot-scope="scope">
+          <el-tag v-show="scope.row.status == 1" type="success">{{
+            scope.row.bdcchbWork
+          }}</el-tag>
+          <el-tag
+            v-show="scope.row.status == 0"
+            type="danger"
+            class="hover-effect"
+            @click="handleOverTimeOpen('不动产测绘部', 0)"
+            >{{ scope.row.bdcchbWork }}</el-tag
+          >
+          <el-tag
+            v-show="scope.row.status == -1"
+            type="danger"
+            class="hover-effect"
+            @click="handleOverTimeOpen('不动产测绘部', -1)"
+            >{{ scope.row.bdcchbWork }}</el-tag
+          >
+        </template>
+      </el-table-column>
+      <el-table-column prop="gxgcbWork" label="管线工程部" align="center">
+        <template slot-scope="scope">
+          <el-tag v-show="scope.row.status == 1" type="success">{{
+            scope.row.gxgcbWork
+          }}</el-tag>
+          <el-tag
+            v-show="scope.row.status == 0"
+            type="danger"
+            class="hover-effect"
+            @click="handleOverTimeOpen('管线工程部', 0)"
+            >{{ scope.row.gxgcbWork }}</el-tag
+          >
+          <el-tag
+            v-show="scope.row.status == -1"
+            type="danger"
+            class="hover-effect"
+            @click="handleOverTimeOpen('管线工程部', -1)"
+            >{{ scope.row.gxgcbWork }}</el-tag
+          >
+        </template>
+      </el-table-column>
+      <el-table-column prop="dlxxbWork" label="地理信息部" align="center">
+        <template slot-scope="scope">
+          <el-tag v-show="scope.row.status == 1" type="success">{{
+            scope.row.dlxxbWork
+          }}</el-tag>
+          <el-tag
+            v-show="scope.row.status == 0"
+            type="danger"
+            class="hover-effect"
+            @click="handleOverTimeOpen('地理信息部', 0)"
+            >{{ scope.row.dlxxbWork }}</el-tag
+          >
+          <el-tag
+            v-show="scope.row.status == -1"
+            type="danger"
+            class="hover-effect"
+            @click="handleOverTimeOpen('地理信息部', -1)"
+            >{{ scope.row.dlxxbWork }}</el-tag
+          >
+        </template>
+      </el-table-column>
+    </el-table>
+
     <el-table
       v-loading="loading"
       :data="projectList"
@@ -173,7 +273,9 @@
         prop="receiveCutoffTime"
       >
         <template slot-scope="scope" v-if="scope.row.receiveCutoffTime != null">
-          {{ formatDate(scope.row.receiveCutoffTime) }}
+          <span style="color: green">
+            {{ formatDate(scope.row.receiveCutoffTime) }}</span
+          >
         </template>
         <template slot-scope="scope" v-else> </template>
       </el-table-column>
@@ -228,7 +330,9 @@
         prop="rectifyCutoffTime"
       >
         <template slot-scope="scope" v-if="scope.row.rectifyCutoffTime != null">
-          {{ formatDate(scope.row.rectifyCutoffTime) }}
+          <span style="color: green">{{
+            formatDate(scope.row.rectifyCutoffTime)
+          }}</span>
         </template>
         <template slot-scope="scope" v-else> </template>
       </el-table-column>
@@ -253,19 +357,6 @@
           </div>
         </template></el-table-column
       >
-      <!-- <el-table-column label="工作状态" align="center" prop="status">
-        <template slot-scope="scope">
-          <el-tag v-if="scope.row.status == 0" type="danger">临时安排</el-tag>
-          <el-tag v-else-if="scope.row.status == 1" type="success"
-            >正式安排</el-tag
-          >
-          <el-tag v-else-if="scope.row.status == 2" type="warning"
-            >一检办结</el-tag
-          >
-          <el-tag v-else-if="scope.row.status == 3">二检办结</el-tag>
-          <el-tag v-else type="danger">其他状态</el-tag>
-        </template>
-      </el-table-column> -->
       <el-table-column label="是否已收件" align="center" prop="receiveStatus">
         <template slot-scope="scope">
           <el-tag v-if="scope.row.receiveStatus == 2" type="success">是</el-tag>
@@ -302,7 +393,7 @@
             >流程详情</el-button
           >
           <el-tag
-            v-show="scope.row.isArchive != 1 || scope.row.isArchive != null"
+            v-show="scope.row.isArchive != 1 && scope.row.isArchive != null"
             type="success"
             >无归档</el-tag
           >
@@ -893,9 +984,196 @@
         <el-step title="归档" :description="gdDescription"></el-step>
       </el-steps>
     </el-dialog>
+
+    <el-dialog
+      :title="overTitle"
+      :visible.sync="overTimeOpen"
+      width="1260px"
+      append-to-body
+      v-el-drag-dialog
+    >
+      <el-table
+        v-loading="loading"
+        :data="overTimeProjectList"
+        size="mini"
+        height="500"
+      >
+        <el-table-column
+          fixed
+          label="委托单位"
+          align="center"
+          prop="requesterAlias"
+        >
+          <template slot-scope="scope">
+            {{ scope.row.projectList.requesterAlias }}
+          </template>
+        </el-table-column>
+        <el-table-column
+          fixed
+          label="项目名称"
+          align="center"
+          prop="projectNameAlias"
+        >
+          <template slot-scope="scope">
+            {{ scope.row.projectList.projectNameAlias }}
+          </template>
+        </el-table-column>
+        <el-table-column
+          fixed
+          label="项目编号"
+          align="center"
+          prop="projectNum"
+        >
+          <template slot-scope="scope">
+            {{ scope.row.projectList.projectNum }}
+          </template>
+        </el-table-column>
+        <el-table-column fixed label="版本" align="center" prop="version">
+          <template slot-scope="scope">
+            {{ scope.row.version }}
+          </template>
+        </el-table-column>
+        <el-table-column label="工程负责人" align="center" prop="userNameAlias">
+          <template slot-scope="scope">
+            {{ scope.row.projectList.userNameAlias }}
+          </template>
+        </el-table-column>
+        <el-table-column label="作业部门" align="center" prop="department">
+          <template slot-scope="scope">
+            {{ scope.row.projectList.department }}
+          </template>
+        </el-table-column>
+        <el-table-column label="二检时间" align="center" prop="twoCheck">
+          <template slot-scope="scope">
+            {{ formatDate(scope.row.projectList.twoCheck) }}
+          </template></el-table-column
+        >
+        <el-table-column label="移交时间" align="center" prop="transferTime">
+          <template slot-scope="scope" v-if="scope.row.transferTime != null">
+            {{ formatDate(scope.row.transferTime) }}
+          </template>
+          <template slot-scope="scope" v-else> </template>
+        </el-table-column>
+        <el-table-column label="收件时间" align="center" prop="receiveTime">
+          <template slot-scope="scope" v-if="scope.row.receiveTime != null">
+            {{ formatDate(scope.row.receiveTime) }}
+          </template>
+          <template slot-scope="scope" v-else> </template>
+        </el-table-column>
+        <el-table-column
+          label="收件截止时间"
+          align="center"
+          prop="receiveCutoffTime"
+        >
+          <template
+            slot-scope="scope"
+            v-if="scope.row.receiveCutoffTime != null"
+          >
+            <span style="color: green">
+              {{ formatDate(scope.row.receiveCutoffTime) }}</span
+            >
+          </template>
+          <template slot-scope="scope" v-else> </template>
+        </el-table-column>
+        <el-table-column label="收件提前天数" align="center">
+          <template slot-scope="scope">
+            <el-tag
+              v-show="scope.row.isArchive != 1 && scope.row.isArchive != null"
+              type="success"
+              >无归档</el-tag
+            >
+            <div
+              v-show="scope.row.isArchive == 1 || scope.row.isArchive == null"
+            >
+              <el-tag
+                type="danger"
+                v-show="scope.row.projectList.receiveDays < 0"
+                >{{ scope.row.projectList.receiveDays }}</el-tag
+              >
+              <el-tag
+                type="success"
+                v-show="scope.row.projectList.receiveDays >= 0"
+                >{{ scope.row.projectList.receiveDays }}</el-tag
+              >
+            </div>
+          </template></el-table-column
+        >
+        <el-table-column label="盖章时间" align="center" prop="stampTime">
+          <template slot-scope="scope" v-if="scope.row.stampTime != null">
+            {{ formatDate(scope.row.stampTime) }}
+          </template>
+          <template slot-scope="scope" v-else> </template>
+        </el-table-column>
+        <el-table-column label="验收时间" align="center" prop="checkTime">
+          <template slot-scope="scope" v-if="scope.row.checkTime != null">
+            {{ formatDate(scope.row.checkTime) }}
+          </template>
+          <template slot-scope="scope" v-else> </template>
+        </el-table-column>
+        <el-table-column
+          label="盖章确认时间"
+          align="center"
+          prop="marketingTime"
+        >
+          <template slot-scope="scope" v-if="scope.row.marketingTime != null">
+            {{ formatDate(scope.row.marketingTime) }}
+          </template>
+          <template slot-scope="scope" v-else> </template>
+        </el-table-column>
+        <el-table-column label="归档时间" align="center" prop="archiveTime">
+          <template slot-scope="scope" v-if="scope.row.archiveTime != null">
+            {{ formatDate(scope.row.archiveTime) }}
+          </template>
+          <template slot-scope="scope" v-else> </template>
+        </el-table-column>
+        <el-table-column
+          fixed="right"
+          label="归档截止时间"
+          align="center"
+          prop="rectifyCutoffTime"
+        >
+          <template
+            slot-scope="scope"
+            v-if="scope.row.rectifyCutoffTime != null"
+          >
+            <span style="color: green">{{
+              formatDate(scope.row.rectifyCutoffTime)
+            }}</span>
+          </template>
+          <template slot-scope="scope" v-else> </template>
+        </el-table-column>
+        <el-table-column label="归档提前天数" align="center" fixed="right">
+          <template slot-scope="scope">
+            <el-tag
+              v-show="scope.row.isArchive != 1 && scope.row.isArchive != null"
+              type="success"
+              >无归档</el-tag
+            >
+            <div
+              v-show="scope.row.isArchive == 1 || scope.row.isArchive == null"
+            >
+              <el-tag
+                type="danger"
+                v-show="scope.row.projectList.archiveDays < 0"
+                >{{ scope.row.projectList.archiveDays }}</el-tag
+              >
+              <el-tag
+                type="success"
+                v-show="scope.row.projectList.archiveDays >= 0"
+                >{{ scope.row.projectList.archiveDays }}</el-tag
+              >
+            </div>
+          </template></el-table-column
+        >
+      </el-table>
+    </el-dialog>
   </div>
 </template>
-
+<style>
+.hover-effect:hover {
+  cursor: pointer;
+}
+</style>
 <script>
 import {
   listProjectHandover,
@@ -917,6 +1195,10 @@ export default {
   },
   data() {
     return {
+      overTitle: "",
+      overTimeOpen: false,
+      overTimeProjectList: [],
+      statisticsData: [],
       yjDescription: "",
       sjDescription: "",
       gzDescription: "",
@@ -1061,6 +1343,11 @@ export default {
       // 是否显示弹出层
       open: false,
       // 查询参数
+      queryParamsTj: {
+        pageNum: 1,
+        pageSize: 9999,
+        checkStatus: -1,
+      },
       queryParams: {
         pageNum: 1,
         pageSize: 10,
@@ -1153,8 +1440,167 @@ export default {
     this.getReviewProject();
     this.getList();
     this.loadAllUnits();
+    this.getStatisticsData();
   },
   methods: {
+    getStatisticsData() {
+      listProjectHandover(this.addDateRange(this.queryParamsTj)).then(
+        (response) => {
+          const project = response.rows;
+          let myMap = new Map();
+          for (let i = 0; i < project.length; i++) {
+            let key = project[i].projectList.department;
+            if (key == "" || key == null || key == undefined) {
+              continue;
+            }
+            if (myMap.has(key)) {
+              let num = myMap.get(key);
+              num.workCount++;
+              if (
+                project[i].receiveStatus == 1 &&
+                project[i].isArchive == 1 &&
+                project[i].projectList.receiveDays < 0
+              ) {
+                num.receiveDays++;
+              }
+              if (
+                project[i].checkStatus != 2 &&
+                project[i].isArchive == 1 &&
+                project[i].projectList.archiveDays < 0
+              ) {
+                num.archiveDays++;
+              }
+              myMap.set(key, num);
+            } else {
+              let num = {
+                workCount: 1,
+                receiveDays: 0,
+                archiveDays: 0,
+              };
+              if (
+                project[i].receiveStatus == 1 &&
+                project[i].isArchive == 1 &&
+                project[i].projectList.receiveDays < 0
+              ) {
+                num.receiveDays++;
+              }
+              if (
+                project[i].checkStatus != 2 &&
+                project[i].isArchive == 1 &&
+                project[i].projectList.archiveDays < 0
+              ) {
+                num.archiveDays++;
+              }
+              myMap.set(key, num);
+            }
+          }
+          let numData = {
+            status: 1,
+            gcchbNumWork: 0,
+            bdcchbWork: 0,
+            gxgcbWork: 0,
+            dlxxbWork: 0,
+          };
+
+          if (myMap.has("工程测绘部")) {
+            numData.gcchbNumWork = myMap.get("工程测绘部").workCount;
+          }
+          if (myMap.has("不动产测绘部")) {
+            numData.bdcchbWork = myMap.get("不动产测绘部").workCount;
+          }
+          if (myMap.has("管线工程部")) {
+            numData.gxgcbWork = myMap.get("管线工程部").workCount;
+          }
+          if (myMap.has("地理信息部")) {
+            numData.dlxxbWork = myMap.get("地理信息部").workCount;
+          }
+          this.statisticsData.push(numData);
+
+          numData = {
+            status: 0,
+            gcchbNumWork: 0,
+            bdcchbWork: 0,
+            gxgcbWork: 0,
+            dlxxbWork: 0,
+          };
+
+          if (myMap.has("工程测绘部")) {
+            numData.gcchbNumWork = myMap.get("工程测绘部").receiveDays;
+          }
+          if (myMap.has("不动产测绘部")) {
+            numData.bdcchbWork = myMap.get("不动产测绘部").receiveDays;
+          }
+          if (myMap.has("管线工程部")) {
+            numData.gxgcbWork = myMap.get("管线工程部").receiveDays;
+          }
+          if (myMap.has("地理信息部")) {
+            numData.dlxxbWork = myMap.get("地理信息部").receiveDays;
+          }
+          this.statisticsData.push(numData);
+
+          numData = {
+            status: -1,
+            gcchbNumWork: 0,
+            bdcchbWork: 0,
+            gxgcbWork: 0,
+            dlxxbWork: 0,
+          };
+
+          if (myMap.has("工程测绘部")) {
+            numData.gcchbNumWork = myMap.get("工程测绘部").archiveDays;
+          }
+          if (myMap.has("不动产测绘部")) {
+            numData.bdcchbWork = myMap.get("不动产测绘部").archiveDays;
+          }
+          if (myMap.has("管线工程部")) {
+            numData.gxgcbWork = myMap.get("管线工程部").archiveDays;
+          }
+          if (myMap.has("地理信息部")) {
+            numData.dlxxbWork = myMap.get("地理信息部").archiveDays;
+          }
+          this.statisticsData.push(numData);
+        }
+      );
+    },
+    handleOverTimeOpen(value, status) {
+      if (status == 0) {
+        this.overTitle = "收件超期项目";
+      } else {
+        this.overTitle = "归档超期项目";
+      }
+      this.overTimeProjectList = [];
+      this.queryParamsTj.department = value;
+      listProjectHandover(this.addDateRange(this.queryParamsTj)).then(
+        (response) => {
+          const project = response.rows;
+          for (let i = 0; i < project.length; i++) {
+            let key = project[i].projectList.department;
+            if (key == "" || key == null || key == undefined) {
+              continue;
+            }
+
+            if (
+              project[i].receiveStatus == 1 &&
+              project[i].isArchive == 1 &&
+              project[i].projectList.receiveDays < 0 &&
+              status == 0
+            ) {
+              this.overTimeProjectList.push(project[i]);
+            }
+            if (
+              project[i].checkStatus != 2 &&
+              project[i].isArchive == 1 &&
+              project[i].projectList.archiveDays < 0 &&
+              status == -1
+            ) {
+              this.overTimeProjectList.push(project[i]);
+            }
+          }
+          this.queryParamsTj.department = null;
+          this.overTimeOpen = true;
+        }
+      );
+    },
     handleProcessDetail(projectInfo) {
       this.projectProcessTitle = projectInfo.projectList.projectNum;
       this.activeProcessNum = 0;
@@ -1219,14 +1665,14 @@ export default {
           projectInfo.checkStatus == 2
         ) {
           this.activeProcessNum++;
-          if (projectInfo.stampStatus == 4) {
+          if (projectInfo.stampStatus == 2) {
             this.gzqrDescription =
               "盖章确认人员:" +
               projectInfo.marketingUserName +
               "  盖章确认时间:" +
               this.formatDate(projectInfo.marketingTime);
           } else if (
-            projectInfo.stampStatus != 4 &&
+            projectInfo.stampStatus != 2 &&
             projectInfo.checkStatus == 2
           ) {
             this.gzqrDescription = "未盖章，但已归档";
@@ -1237,7 +1683,7 @@ export default {
         //归档
         if (projectInfo.checkStatus == 2) {
           this.activeProcessNum++;
-          this.gzqrDescription =
+          this.gdDescription =
             "归档人员:" +
             projectInfo.archiveUserName +
             "  归档时间:" +
