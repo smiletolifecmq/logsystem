@@ -1257,6 +1257,7 @@ export default {
       queryProjectListParams: {
         pageNum: 1,
         pageSize: 10,
+        status: -1,
       },
       // 表单参数
       form: {},
