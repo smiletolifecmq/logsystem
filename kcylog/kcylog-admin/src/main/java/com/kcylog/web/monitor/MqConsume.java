@@ -83,7 +83,7 @@ public class MqConsume {
             viewFqProjectLogService.insertViewFqProjectLog(viewFqProjectLog);
             //获取视图数据
             ViewFqProject viewFqProject = viewFqProjectService.selectViewFqProjectByProjectCode(Long.parseLong(mqMessage.getProjectId()));
-            if (viewFqProject != null && viewFqProject.getProjectCode() != null && !viewFqProject.getProjectCode().equals("")){
+            if (viewFqProject != null && viewFqProject.getProjectCode() != null && !viewFqProject.getProjectCode().equals("") && !viewFqProject.getProjectCode().contains("图")){
                 //数据初始化
                 SysProject sysProject = new SysProject();
                 sysProject.setProjectNameAlias(viewFqProject.getProjectName());
