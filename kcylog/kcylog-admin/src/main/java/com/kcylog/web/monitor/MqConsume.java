@@ -86,7 +86,7 @@ public class MqConsume {
             viewFqProjectLogService.insertViewFqProjectLog(viewFqProjectLog);
             //获取视图数据
             ViewFqProject viewFqProject = viewFqProjectService.selectViewFqProjectByProjectCode(Long.parseLong(mqMessage.getProjectId()));
-            if (viewFqProject != null && viewFqProject.getProjectCode() != null && !viewFqProject.getProjectCode().equals("") && !viewFqProject.getProjectCode().contains("图")){
+            if (viewFqProject != null && viewFqProject.getProjectCode() != null && !viewFqProject.getProjectCode().equals("") && !viewFqProject.getProjectCode().contains("图") && !(mqMessage.getOpType().equals("DELETE") || mqMessage.getOpType().equals("PROJECT_INVALID") || mqMessage.getOpType().equals("PROJECT_HANG") || mqMessage.getOpType().equals("PROJECT_DELETE"))){
                 //数据初始化
                 SysProject sysProject = new SysProject();
                 sysProject.setProjectNameAlias(viewFqProject.getProjectName());
@@ -390,6 +390,18 @@ public class MqConsume {
                         }
                     }
                 }
+            }
+
+            if (mqMessage.getOpType().equals("DELETE") || mqMessage.getOpType().equals("PROJECT_INVALID") || mqMessage.getOpType().equals("PROJECT_HANG") || mqMessage.getOpType().equals("PROJECT_DELETE")){
+                SysProject sysProject = new SysProject();
+                if (sysProjectService.checkProjectKeyUniqueByViewProjectId(mqMessage.getProjectId()) != null) {
+                    sysProject.setProjectId(sysProjectService.checkProjectKeyUniqueByViewProjectId(mqMessage.getProjectId()).getProjectId());
+                }
+                sysProjectService.deleteSysProjectByCode(mqMessage.getProjectId());
+                projectGeoinfoService.deleteSysProjectGeoinfoByProjectId(sysProject.getProjectId());
+                sysProjectSelectmapTfinfoService.deleteSysProjectSelectmapTfinfoByProjectId(sysProject.getProjectId());
+                fqProjectProcessService.deleteFqProjectProcessById(sysProject.getProjectId());
+                sysProjectValueService.deleteSysProjectValueByProjectId(sysProject.getProjectId());
             }
 
             System.out.println("通过Message:{}" + mqMessage.getOpType());
