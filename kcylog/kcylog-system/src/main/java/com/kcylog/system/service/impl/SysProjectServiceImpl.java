@@ -204,4 +204,10 @@ public class SysProjectServiceImpl implements ISysProjectService
     {
         return sysProjectMapper.selectSysProjectWaitTwoCheck(sysProject);
     }
+
+    @Override
+    public SysProject checkProjectKeyUniqueByViewProjectId(String projectNum)
+    {
+        return sysProjectMapper.checkProjectKeyUniqueByViewProjectId(projectNum);
+    }
 }

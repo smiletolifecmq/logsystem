@@ -32,6 +32,14 @@
           @keyup.enter.native="handleQuery"
         />
       </el-form-item>
+      <el-form-item label="负责人" prop="userNameAlias">
+        <el-input
+          v-model="queryParams.userNameAlias"
+          placeholder="请输入项目负责人"
+          clearable
+          @keyup.enter.native="handleQuery"
+        />
+      </el-form-item>
       <el-form-item label="二检时间">
         <el-date-picker
           v-model="dateRange"

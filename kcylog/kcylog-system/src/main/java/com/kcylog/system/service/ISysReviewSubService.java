@@ -98,4 +98,6 @@ public interface ISysReviewSubService
     public int updateReviewManType(SysReviewSubProcess sysReviewSubProcess);
 
     public int setSysReviewSubGoBackByReviewId(SysReviewSub sysReviewSub);
+
+    public int updateSubpackageTypeByProjectNum(SysReviewSub sysReviewSub);
 }

@@ -62,6 +62,9 @@ public class MqConsume {
 
     @Autowired
     private IFqProjectProcessService fqProjectProcessService;
+
+    @Autowired
+    private ISysReviewSubService sysReviewSubService;
     /**
      * 监听一个简单的队列，队列不存在时候会创建
      */
@@ -90,6 +93,7 @@ public class MqConsume {
                 sysProject.setProjectNum(viewFqProject.getProjectCode());
                 DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss");
 
+                sysProject.setViewProjectId(mqMessage.getProjectId());
                 if (viewFqProject.getProjectTypeName() != null){
                     sysProject.setProjectType(viewFqProject.getProjectTypeName());
                 }
@@ -137,6 +141,12 @@ public class MqConsume {
                     String dateString = viewFqProject.getArriveTime().format(formatter);
                     sysProject.setDeliveryTime(dateString);
                 }
+
+                if (viewFqProject.getAfterTime() != null){
+                    String dateString = viewFqProject.getAfterTime().format(formatter);
+                    sysProject.setAfterTime(dateString);
+                }
+
                 if (viewFqProject.getArrangeProfit() != null){
                     BigDecimal bigDecimalValue = new BigDecimal(viewFqProject.getArrangeProfit());
                     sysProject.setProjectMoneyAlias(bigDecimalValue);
@@ -208,15 +218,26 @@ public class MqConsume {
                 }
 
                 if (mqMessage.getOpType().equals("DELETE") || mqMessage.getOpType().equals("PROJECT_INVALID") || mqMessage.getOpType().equals("PROJECT_HANG") || mqMessage.getOpType().equals("PROJECT_DELETE")){
-                    sysProjectService.deleteSysProjectByCode(viewFqProject.getProjectCode());
+                    if (sysProjectService.checkProjectKeyUniqueByViewProjectId(mqMessage.getProjectId()) != null) {
+                        sysProject.setProjectId(sysProjectService.checkProjectKeyUniqueByViewProjectId(mqMessage.getProjectId()).getProjectId());
+                    }
+                    sysProjectService.deleteSysProjectByCode(mqMessage.getProjectId());
                     projectGeoinfoService.deleteSysProjectGeoinfoByProjectId(sysProject.getProjectId());
                     sysProjectSelectmapTfinfoService.deleteSysProjectSelectmapTfinfoByProjectId(sysProject.getProjectId());
                     fqProjectProcessService.deleteFqProjectProcessById(sysProject.getProjectId());
                     sysProjectValueService.deleteSysProjectValueByProjectId(sysProject.getProjectId());
                 }else {
-                    if (sysProjectService.checkProjectKeyUnique(viewFqProject.getProjectCode()) != null) {
-                        sysProject.setProjectId(sysProjectService.checkProjectKeyUnique(viewFqProject.getProjectCode()).getProjectId());
+                    if (sysProjectService.checkProjectKeyUniqueByViewProjectId(mqMessage.getProjectId()) != null) {
+                        sysProject.setProjectId(sysProjectService.checkProjectKeyUniqueByViewProjectId(mqMessage.getProjectId()).getProjectId());
                         sysProjectService.updateSysProjectForMq(sysProject);
+                        SysReviewSub reviewSub = new SysReviewSub();
+                        reviewSub.setSerialNum(sysProject.getProjectNum());
+                        if (viewFqProject.getSubpackageType() != null){
+                            reviewSub.setSubpackageType(viewFqProject.getSubpackageType());
+                        }else {
+                            reviewSub.setSubpackageType((long)1);
+                        }
+                        sysReviewSubService.updateSubpackageTypeByProjectNum(reviewSub);
                     }else {
                         sysProjectService.insertSysProject(sysProject);
                     }
@@ -354,7 +375,7 @@ public class MqConsume {
                 if (mqMessage.getOpType().equals("RESOURCE_ARRANGE_CHANGE") || (mqMessage.getOpType().equals("SECOND_CHECK") && sysProject.getTwoCheck() != null && !sysProject.getTwoCheck().equals(""))){
                     // todo 需要同步人员安排
                     List<ViewFqProjectWorkResourceArrange>  resourceArrange = viewFqProjectWorkResourceArrangeService.selectViewFqProjectWorkResourceArrangeByProjectId(Long.parseLong(mqMessage.getProjectId()));
-                    SysProject project = sysProjectService.checkProjectKeyUnique(viewFqProject.getProjectCode());
+                    SysProject project = sysProjectService.checkProjectKeyUniqueByViewProjectId(mqMessage.getProjectId());
                     sysProjectValueService.deleteSysProjectValueByProjectId(project.getProjectId());
                     if (resourceArrange != null){
                         for (ViewFqProjectWorkResourceArrange resourceArrange1 : resourceArrange){

@@ -483,4 +483,10 @@
         AND rs.node = 4 and s.review_id = rs.review_id;
     </update>
 
+    <update id="updateSubpackageTypeByProjectNum" parameterType="SysReviewSub">
+        UPDATE sys_review_sub
+        SET subpackage_type = #{subpackageType}
+        WHERE serial_num = #{serialNum}
+    </update>
+
 </mapper>

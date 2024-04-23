@@ -50,6 +50,8 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
         <result property="geometryGauss2000" column="geometry_gauss2000"/>
         <result property="bufferGeometryGauss2000" column="buffer_geometry_gauss2000"/>
         <result property="mapScale" column="map_scale"/>
+        <result property="afterTime" column="after_time"/>
+        <result property="viewProjectId" column="view_project_id"/>
 
         <association property="projectValue" javaType="java.util.List" resultMap="SysProjectValueResult"/>
         <association property="projectCar" javaType="java.util.List" resultMap="SysProjectCarResult"/>
@@ -198,6 +200,8 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
             <if test="geometryGauss2000 != null">geometry_gauss2000,</if>
             <if test="bufferGeometryGauss2000 != null">buffer_geometry_gauss2000,</if>
             <if test="mapScale != null">map_scale,</if>
+            <if test="afterTime != null">after_time,</if>
+            <if test="viewProjectId != null">view_project_id,</if>
          </trim>
         <trim prefix="values (" suffix=")" suffixOverrides=",">
             <if test="projectNameAlias != null and projectNameAlias != ''">#{projectNameAlias},</if>
@@ -240,6 +244,8 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
             <if test="geometryGauss2000 != null">#{geometryGauss2000},</if>
             <if test="bufferGeometryGauss2000 != null">#{bufferGeometryGauss2000},</if>
             <if test="mapScale != null">#{mapScale},</if>
+            <if test="afterTime != null">#{afterTime},</if>
+            <if test="viewProjectId != null">#{viewProjectId},</if>
          </trim>
     </insert>
 
@@ -335,6 +341,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
             <if test="projectNum != null  and projectNum != ''"> and project_num like concat('%', #{projectNum}, '%')</if>
             <if test="operateUser == 1"> and operate != 0.00</if>
             <if test="operateUser == 2"> and operate = 0.00</if>
+            <if test="userNameAlias != null and userNameAlias != ''">user_name_alias like concat('%', #{userNameAlias}, '%')</if>
             <if test="params.beginTime != null and params.beginTime != ''"><!-- 开始时间检索 -->
                 and (date_format(two_check,'%y%m%d') &gt;= date_format(#{params.beginTime},'%y%m%d'))
             </if>
@@ -445,6 +452,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
         <trim prefix="SET" suffixOverrides=",">
             <if test="projectNameAlias != null and projectNameAlias != ''">project_name_alias = #{projectNameAlias},</if>
             <if test="projectType != null and projectType != ''">project_type = #{projectType},</if>
+            <if test="projectNum != null and projectNum != ''">project_num = #{projectNum},</if>
             <if test="registerTime != null and registerTime != ''">register_time = #{registerTime},</if>
             <if test="receptionist != null and receptionist != ''">receptionist = #{receptionist},</if>
             <if test="workloadAlias != null">workload_alias = #{workloadAlias},</if>
@@ -476,12 +484,14 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
             <if test="bufferGeometryGauss2000 != null">buffer_geometry_gauss2000 = #{bufferGeometryGauss2000},</if>
             <if test="mapScale != null">map_scale = #{mapScale},</if>
             <if test="fbMoney != null">fb_money = #{fbMoney},</if>
+            <if test="afterTime != null">after_time = #{afterTime},</if>
+            <if test="viewProjectId != null">view_project_id = #{viewProjectId},</if>
         </trim>
-        where project_num = #{projectNum}
+        where view_project_id = #{viewProjectId}
     </update>
 
     <delete id="deleteSysProjectByCode" parameterType="String">
-        delete from sys_project where project_num = #{projectCode}
+        delete from sys_project where view_project_id = #{projectCode}
     </delete>
 
     <update id="jsProjectLiRunCz" parameterType="String">
@@ -583,5 +593,10 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
             and status = 2
         </where>
         order by one_check desc
+    </select>
+
+    <select id="checkProjectKeyUniqueByViewProjectId" parameterType="String" resultMap="SysProjectResult">
+        <include refid="selectSysProjectVo"/>
+        where view_project_id = #{projectNum}
     </select>
 </mapper>

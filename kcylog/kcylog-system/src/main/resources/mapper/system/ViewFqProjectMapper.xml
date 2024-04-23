@@ -26,13 +26,14 @@
         <result property="subpackageType" column="subpackage_type"/>
         <result property="customerContractName" column="customer_contact_name"/>
         <result property="customerContractPhone" column="customer_contact_phone"/>
+        <result property="afterTime" column="after_time"/>
     </resultMap>
 
     <sql id="selectViewFqProjectVo">
         select project_name, project_code, project_type_name, create_time as register_time,
                create_user_name, charge_item, manager_user_name, customer_name, arrange_start_time,
                arrange_end_time, first_check_time, second_check_time, delivery_time, release_time,
-               arrive_time, arrange_profit, job_content, job_org_name, subpackage_type, customer_contact_name, customer_contact_phone
+               arrive_time, arrange_profit, job_content, job_org_name, subpackage_type, customer_contact_name, customer_contact_phone, after_time
         from view_fq_project_info
     </sql>
 

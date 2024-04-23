@@ -203,4 +203,10 @@ public class SysReviewSubServiceImpl implements ISysReviewSubService
     {
         return sysReviewSubMapper.setSysReviewSubGoBackByReviewId(sysReviewSub);
     }
+
+    @Override
+    public int updateSubpackageTypeByProjectNum(SysReviewSub sysReviewSub)
+    {
+        return sysReviewSubMapper.updateSubpackageTypeByProjectNum(sysReviewSub);
+    }
 }

@@ -470,6 +470,26 @@ public class SysProject extends BaseEntity
 
     private Long subpackageType;
 
+    private String afterTime;
+
+    private String viewProjectId;
+
+    public String getViewProjectId() {
+        return viewProjectId;
+    }
+
+    public void setViewProjectId(String viewProjectId) {
+        this.viewProjectId = viewProjectId;
+    }
+
+    public String getAfterTime() {
+        return afterTime;
+    }
+
+    public void setAfterTime(String afterTime) {
+        this.afterTime = afterTime;
+    }
+
     public SysReviewSub getReviewSubOne() {
         return reviewSubOne;
     }
