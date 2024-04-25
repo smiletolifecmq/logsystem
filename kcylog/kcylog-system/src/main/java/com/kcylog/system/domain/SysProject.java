@@ -198,6 +198,26 @@ public class SysProject extends BaseEntity
     //缓冲区坐标串，国家2000平面，福州
     private String bufferGeometryGauss2000;
 
+    private Date settleTime;
+
+    private Long settle;
+
+    public Date getSettleTime() {
+        return settleTime;
+    }
+
+    public void setSettleTime(Date settleTime) {
+        this.settleTime = settleTime;
+    }
+
+    public Long getSettle() {
+        return settle;
+    }
+
+    public void setSettle(Long settle) {
+        this.settle = settle;
+    }
+
     public Integer getOneCheckDays() {
         return oneCheckDays;
     }

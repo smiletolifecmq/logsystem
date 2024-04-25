@@ -52,6 +52,8 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
         <result property="mapScale" column="map_scale"/>
         <result property="afterTime" column="after_time"/>
         <result property="viewProjectId" column="view_project_id"/>
+        <result property="settleTime" column="settle_time"/>
+        <result property="settle" column="settle"/>
 
         <association property="projectValue" javaType="java.util.List" resultMap="SysProjectValueResult"/>
         <association property="projectCar" javaType="java.util.List" resultMap="SysProjectCarResult"/>
@@ -280,6 +282,8 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
             <if test="createTime != null">create_time = #{createTime},</if>
             <if test="updateTime != null">update_time = #{updateTime},</if>
             <if test="status != null">status = #{status},</if>
+            <if test="settle != null">settle = #{settle},</if>
+            <if test="settleTime != null">settle_time = #{settleTime},</if>
         </trim>
         where project_id = #{projectId}
     </update>
@@ -341,6 +345,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
             <if test="projectNum != null  and projectNum != ''"> and project_num like concat('%', #{projectNum}, '%')</if>
             <if test="operateUser == 1"> and operate != 0.00</if>
             <if test="operateUser == 2"> and operate = 0.00</if>
+            <if test="settle != null"> and settle = #{settle}</if>
             <if test="userNameAlias != null and userNameAlias != ''">user_name_alias like concat('%', #{userNameAlias}, '%')</if>
             <if test="params.beginTime != null and params.beginTime != ''"><!-- 开始时间检索 -->
                 and (date_format(two_check,'%y%m%d') &gt;= date_format(#{params.beginTime},'%y%m%d'))

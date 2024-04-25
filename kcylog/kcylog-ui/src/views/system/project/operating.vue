@@ -67,6 +67,21 @@
           </el-option>
         </el-select>
       </el-form-item>
+      <el-form-item label="办结状态" prop="settle">
+        <el-select
+          v-model="queryParams.settle"
+          placeholder="请选择是否已办结"
+          clearable
+        >
+          <el-option
+            v-for="item in settles"
+            :key="item.value"
+            :label="item.label"
+            :value="item.value"
+          >
+          </el-option>
+        </el-select>
+      </el-form-item>
       <el-form-item>
         <el-button
           type="primary"
@@ -102,11 +117,6 @@
       <el-table-column label="项目编号" align="center" prop="projectNum" />
       <el-table-column label="项目类型" align="center" prop="projectType" />
       <el-table-column label="工程负责人" align="center" prop="userNameAlias" />
-      <el-table-column label="登记时间" align="center" prop="registerTime">
-        <template slot-scope="scope">
-          {{ formatDate(scope.row.registerTime) }}
-        </template>
-      </el-table-column>
       <el-table-column label="二检时间" align="center" prop="twoCheck">
         <template slot-scope="scope">
           {{ formatDate(scope.row.twoCheck) }}
@@ -115,15 +125,30 @@
       <el-table-column label="接待人" align="center" prop="receptionist" />
       <el-table-column label="产值状态" align="center">
         <template slot-scope="scope">
-          <el-tag v-show="scope.row.operateStatus == 0" type="danger"
+          <el-tag
+            v-show="scope.row.operateStatus == 0 && scope.row.settle == 0"
+            type="danger"
             >未分配</el-tag
           >
-          <el-tag v-show="scope.row.operateStatus == 1" type="success"
+          <el-tag
+            v-show="scope.row.operateStatus == 1 && scope.row.settle == 0"
+            type="success"
             >已分配</el-tag
           >
+          <el-tag v-show="scope.row.settle == 1" type="success">已办结</el-tag>
         </template>
       </el-table-column>
       <el-table-column label="经营产值" align="center" prop="operate" />
+      <el-table-column
+        label="结算办结时间"
+        align="center"
+        prop="settleTime"
+        width="160"
+      >
+        <template slot-scope="scope">
+          <span>{{ scope.row.settleTime | formatDateObj }}</span>
+        </template>
+      </el-table-column>
       <el-table-column
         label="操作"
         align="center"
@@ -131,12 +156,22 @@
       >
         <template slot-scope="scope">
           <el-button
+            v-show="scope.row.operate == 0"
             size="mini"
             type="text"
             icon="el-icon-tickets"
             @click="handleDetail(scope.row)"
             v-hasPermi="['system:project:detail']"
             >经营产值</el-button
+          >
+          <el-button
+            v-show="scope.row.operate != 0 && scope.row.settle == 0"
+            size="mini"
+            type="text"
+            icon="el-icon-edit"
+            @click="handleSettle(scope.row)"
+            v-hasPermi="['system:project:settle']"
+            >结算办结</el-button
           >
           <el-button
             size="mini"
@@ -333,7 +368,35 @@
     >
       <el-collapse v-model="activeNames" @change="handleChange">
         <el-collapse-item title="详情" name="1">
-          <el-descriptions class="margin-top" :column="2" border>
+          <el-descriptions class="margin-top" :column="3" border>
+            <el-descriptions-item>
+              <template slot="label">
+                <i class="el-icon-s-home"></i>
+                委托单位
+              </template>
+              {{ formPeople.requesterAlias }}
+            </el-descriptions-item>
+            <el-descriptions-item>
+              <template slot="label">
+                <i class="el-icon-s-home"></i>
+                项目名称
+              </template>
+              {{ formPeople.projectNameAlias }}
+            </el-descriptions-item>
+            <el-descriptions-item>
+              <template slot="label">
+                <i class="el-icon-s-home"></i>
+                项目编号
+              </template>
+              {{ formPeople.projectNum }}
+            </el-descriptions-item>
+            <el-descriptions-item>
+              <template slot="label">
+                <i class="el-icon-s-home"></i>
+                负责人
+              </template>
+              {{ formPeople.userNameAlias }}
+            </el-descriptions-item>
             <el-descriptions-item>
               <template slot="label">
                 <i class="el-icon-s-home"></i>
@@ -403,6 +466,45 @@
         </el-collapse-item>
       </el-collapse>
     </el-dialog>
+
+    <el-dialog
+      :title="settleTitle"
+      :visible.sync="settleOpen"
+      width="1000px"
+      append-to-body
+      v-el-drag-dialog
+    >
+      <el-form
+        ref="settleForm"
+        :model="settleForm"
+        :rules="rulesSettleForm"
+        label-width="80px"
+      >
+        <el-form-item label="分包金额" prop="fbMoney">
+          <el-input-number
+            v-model="settleForm.fbMoney"
+            :precision="2"
+            :step="0.1"
+            :max="99999999"
+          ></el-input-number>
+        </el-form-item>
+        <el-form-item label="办结时间" prop="settleTime">
+          <el-date-picker
+            v-model="settleForm.settleTime"
+            type="date"
+            placeholder="选择日期"
+          >
+          </el-date-picker>
+        </el-form-item>
+      </el-form>
+      <div
+        class="dialog-footer"
+        style="display: flex; justify-content: flex-end"
+      >
+        <el-button type="primary" @click="submitSettle">结算办结</el-button>
+        <el-button @click="cancel">取 消</el-button>
+      </div>
+    </el-dialog>
   </div>
 </template>
 
@@ -415,14 +517,39 @@ import {
 import elDragDialog from "@/api/components/el-drag";
 
 export default {
+  filters: {
+    formatDateObj(value) {
+      if (value) {
+        const date = new Date(value);
+        const year = date.getFullYear();
+        const month = String(date.getMonth() + 1).padStart(2, "0");
+        const day = String(date.getDate()).padStart(2, "0");
+        return `${year}-${month}-${day}`;
+      }
+      return "";
+    },
+  },
   name: "Project",
   directives: {
     elDragDialog,
   },
   data() {
     return {
+      settleForm: {},
+      settleTitle: "",
+      settleOpen: false,
       formPeople: {},
       dateRange: [],
+      settles: [
+        {
+          value: "1",
+          label: "已办结",
+        },
+        {
+          value: "0",
+          label: "未办结",
+        },
+      ],
       operates: [
         {
           value: "1",
@@ -484,6 +611,11 @@ export default {
       rules: {
         operate: [
           { required: true, message: "请填写经营产值", trigger: "blur" },
+        ],
+      },
+      rulesSettleForm: {
+        settleTime: [
+          { required: true, message: "请选择结算日期", trigger: "blur" },
         ],
       },
       // 表单校验
@@ -674,6 +806,16 @@ export default {
       });
     },
 
+    handleSettle(row) {
+      const projectId = row.projectId || this.ids;
+      getProject(projectId).then((response) => {
+        this.settleForm.fbMoney = response.data.fbMoney;
+        this.settleForm.projectId = response.data.projectId;
+        this.settleTitle = "项目编号：" + response.data.projectNum;
+        this.settleOpen = true;
+      });
+    },
+
     submitForm() {
       this.$refs["form"].validate((valid) => {
         const tempForm = this.form;
@@ -693,6 +835,34 @@ export default {
             this.detailOpen = false;
             this.getList();
           });
+        }
+      });
+    },
+
+    submitSettle() {
+      this.$refs["settleForm"].validate((valid) => {
+        const tempForm = {};
+        tempForm.fbMoney = this.settleForm.fbMoney;
+        tempForm.projectId = this.settleForm.projectId;
+        tempForm.settleTime = this.settleForm.settleTime;
+        tempForm.settle = 1;
+        if (valid) {
+          this.$confirm("结算办结之后将无法再修改, 是否继续?", "提示", {
+            confirmButtonText: "确定",
+            cancelButtonText: "取消",
+            type: "warning",
+          })
+            .then(() => {
+              this.settleOpen = false;
+              updateProject(tempForm).then((response) => {
+                this.getList();
+                this.$message({
+                  type: "success",
+                  message: "结算办结成功!",
+                });
+              });
+            })
+            .catch(() => {});
         }
       });
     },
