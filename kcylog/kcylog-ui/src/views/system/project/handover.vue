@@ -110,6 +110,12 @@
           <el-tag v-show="scope.row.status == 1" type="success"
             >归档中项目数</el-tag
           >
+          <el-tag v-show="scope.row.status == -2" type="danger"
+            >收件将要超期项目数(2天内)</el-tag
+          >
+          <el-tag v-show="scope.row.status == -3" type="danger"
+            >归档将要超期项目数(2天内)</el-tag
+          >
           <el-tag v-show="scope.row.status == 0" type="danger"
             >收件超期项目数</el-tag
           >
@@ -137,6 +143,20 @@
             @click="handleOverTimeOpen('工程测绘部', -1)"
             >{{ scope.row.gcchbNumWork }}</el-tag
           >
+          <el-tag
+            v-show="scope.row.status == -2"
+            type="danger"
+            class="hover-effect"
+            @click="handleOverTimeOpen('工程测绘部', -2)"
+            >{{ scope.row.gcchbNumWork }}</el-tag
+          >
+          <el-tag
+            v-show="scope.row.status == -3"
+            type="danger"
+            class="hover-effect"
+            @click="handleOverTimeOpen('工程测绘部', -3)"
+            >{{ scope.row.gcchbNumWork }}</el-tag
+          >
         </template>
       </el-table-column>
       <el-table-column prop="bdcchbWork" label="不动产测绘部" align="center">
@@ -156,6 +176,20 @@
             type="danger"
             class="hover-effect"
             @click="handleOverTimeOpen('不动产测绘部', -1)"
+            >{{ scope.row.bdcchbWork }}</el-tag
+          >
+          <el-tag
+            v-show="scope.row.status == -2"
+            type="danger"
+            class="hover-effect"
+            @click="handleOverTimeOpen('不动产测绘部', -2)"
+            >{{ scope.row.bdcchbWork }}</el-tag
+          >
+          <el-tag
+            v-show="scope.row.status == -3"
+            type="danger"
+            class="hover-effect"
+            @click="handleOverTimeOpen('不动产测绘部', -3)"
             >{{ scope.row.bdcchbWork }}</el-tag
           >
         </template>
@@ -179,6 +213,20 @@
             @click="handleOverTimeOpen('管线工程部', -1)"
             >{{ scope.row.gxgcbWork }}</el-tag
           >
+          <el-tag
+            v-show="scope.row.status == -2"
+            type="danger"
+            class="hover-effect"
+            @click="handleOverTimeOpen('管线工程部', -2)"
+            >{{ scope.row.gxgcbWork }}</el-tag
+          >
+          <el-tag
+            v-show="scope.row.status == -3"
+            type="danger"
+            class="hover-effect"
+            @click="handleOverTimeOpen('管线工程部', -3)"
+            >{{ scope.row.gxgcbWork }}</el-tag
+          >
         </template>
       </el-table-column>
       <el-table-column prop="dlxxbWork" label="地理信息部" align="center">
@@ -198,6 +246,20 @@
             type="danger"
             class="hover-effect"
             @click="handleOverTimeOpen('地理信息部', -1)"
+            >{{ scope.row.dlxxbWork }}</el-tag
+          >
+          <el-tag
+            v-show="scope.row.status == -2"
+            type="danger"
+            class="hover-effect"
+            @click="handleOverTimeOpen('地理信息部', -2)"
+            >{{ scope.row.dlxxbWork }}</el-tag
+          >
+          <el-tag
+            v-show="scope.row.status == -3"
+            type="danger"
+            class="hover-effect"
+            @click="handleOverTimeOpen('地理信息部', -3)"
             >{{ scope.row.dlxxbWork }}</el-tag
           >
         </template>
@@ -1470,12 +1532,31 @@ export default {
               ) {
                 num.archiveDays++;
               }
+              if (
+                project[i].receiveStatus == 1 &&
+                project[i].isArchive == 1 &&
+                project[i].projectList.receiveDays > 0 &&
+                project[i].projectList.receiveDays <= 2
+              ) {
+                num.receiveDaysTq++;
+              }
+              if (
+                project[i].checkStatus != 2 &&
+                project[i].isArchive == 1 &&
+                project[i].projectList.archiveDays > 0 &&
+                project[i].projectList.archiveDays <= 2
+              ) {
+                num.archiveDaysTq++;
+              }
+
               myMap.set(key, num);
             } else {
               let num = {
                 workCount: 1,
                 receiveDays: 0,
                 archiveDays: 0,
+                receiveDaysTq: 0,
+                archiveDaysTq: 0,
               };
               if (
                 project[i].receiveStatus == 1 &&
@@ -1490,6 +1571,22 @@ export default {
                 project[i].projectList.archiveDays < 0
               ) {
                 num.archiveDays++;
+              }
+              if (
+                project[i].receiveStatus == 1 &&
+                project[i].isArchive == 1 &&
+                project[i].projectList.receiveDays > 0 &&
+                project[i].projectList.receiveDays <= 2
+              ) {
+                num.receiveDaysTq++;
+              }
+              if (
+                project[i].checkStatus != 2 &&
+                project[i].isArchive == 1 &&
+                project[i].projectList.archiveDays > 0 &&
+                project[i].projectList.archiveDays <= 2
+              ) {
+                num.archiveDaysTq++;
               }
               myMap.set(key, num);
             }
@@ -1513,6 +1610,50 @@ export default {
           }
           if (myMap.has("地理信息部")) {
             numData.dlxxbWork = myMap.get("地理信息部").workCount;
+          }
+          this.statisticsData.push(numData);
+
+          numData = {
+            status: -2,
+            gcchbNumWork: 0,
+            bdcchbWork: 0,
+            gxgcbWork: 0,
+            dlxxbWork: 0,
+          };
+
+          if (myMap.has("工程测绘部")) {
+            numData.gcchbNumWork = myMap.get("工程测绘部").receiveDaysTq;
+          }
+          if (myMap.has("不动产测绘部")) {
+            numData.bdcchbWork = myMap.get("不动产测绘部").receiveDaysTq;
+          }
+          if (myMap.has("管线工程部")) {
+            numData.gxgcbWork = myMap.get("管线工程部").receiveDaysTq;
+          }
+          if (myMap.has("地理信息部")) {
+            numData.dlxxbWork = myMap.get("地理信息部").receiveDaysTq;
+          }
+          this.statisticsData.push(numData);
+
+          numData = {
+            status: -3,
+            gcchbNumWork: 0,
+            bdcchbWork: 0,
+            gxgcbWork: 0,
+            dlxxbWork: 0,
+          };
+
+          if (myMap.has("工程测绘部")) {
+            numData.gcchbNumWork = myMap.get("工程测绘部").archiveDaysTq;
+          }
+          if (myMap.has("不动产测绘部")) {
+            numData.bdcchbWork = myMap.get("不动产测绘部").archiveDaysTq;
+          }
+          if (myMap.has("管线工程部")) {
+            numData.gxgcbWork = myMap.get("管线工程部").archiveDaysTq;
+          }
+          if (myMap.has("地理信息部")) {
+            numData.dlxxbWork = myMap.get("地理信息部").archiveDaysTq;
           }
           this.statisticsData.push(numData);
 
@@ -1559,14 +1700,20 @@ export default {
             numData.dlxxbWork = myMap.get("地理信息部").archiveDays;
           }
           this.statisticsData.push(numData);
+
+          console.log(this.statisticsData);
         }
       );
     },
     handleOverTimeOpen(value, status) {
       if (status == 0) {
         this.overTitle = "收件超期项目";
-      } else {
+      } else if (status == -1) {
         this.overTitle = "归档超期项目";
+      } else if (status == -2) {
+        this.overTitle = "收件将要超期项目数(2天内)";
+      } else if (status == -3) {
+        this.overTitle = "归档将要超期项目数(2天内)";
       }
       this.overTimeProjectList = [];
       this.queryParamsTj.department = value;
@@ -1588,10 +1735,28 @@ export default {
               this.overTimeProjectList.push(project[i]);
             }
             if (
+              project[i].receiveStatus == 1 &&
+              project[i].isArchive == 1 &&
+              project[i].projectList.receiveDays > 0 &&
+              project[i].projectList.receiveDays <= 2 &&
+              status == -2
+            ) {
+              this.overTimeProjectList.push(project[i]);
+            }
+            if (
               project[i].checkStatus != 2 &&
               project[i].isArchive == 1 &&
               project[i].projectList.archiveDays < 0 &&
               status == -1
+            ) {
+              this.overTimeProjectList.push(project[i]);
+            }
+            if (
+              project[i].checkStatus != 2 &&
+              project[i].isArchive == 1 &&
+              project[i].projectList.archiveDays > 0 &&
+              project[i].projectList.archiveDays <= 2 &&
+              status == -3
             ) {
               this.overTimeProjectList.push(project[i]);
             }
