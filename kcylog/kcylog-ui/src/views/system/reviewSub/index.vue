@@ -653,9 +653,9 @@
               <el-descriptions-item>
                 <template slot="label">
                   <i class="el-icon-money"></i>
-                  项目金额
+                  项目预估金额
                 </template>
-                {{ formInfo.project.projectMoneyAlias }}
+                {{ formInfo.porjectMoney }}
               </el-descriptions-item>
               <el-descriptions-item>
                 <template slot="label">
@@ -1909,6 +1909,7 @@ export default {
           this.endAmPm = response.data.endTime.substring(11);
           response.data.endTime = response.data.endTime.substring(0, 10);
         }
+        console.log(response.data);
         this.formInfo = response.data;
         if (this.formInfo.subcontract == 0) {
           this.formInfo.subcontract = null;

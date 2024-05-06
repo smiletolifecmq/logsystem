@@ -301,7 +301,7 @@
                         <i class="el-icon-money"></i>
                         项目预估金额
                       </template>
-                      {{ formInfo.project.projectMoneyAlias }}
+                      {{ formInfo.porjectMoney }}
                     </el-descriptions-item>
                   </el-descriptions>
                 </div>

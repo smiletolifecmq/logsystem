@@ -202,6 +202,26 @@ public class SysProject extends BaseEntity
 
     private Long settle;
 
+    private BigDecimal durationFactor;
+
+    private BigDecimal qualityCoefficient;
+
+    public BigDecimal getDurationFactor() {
+        return durationFactor;
+    }
+
+    public void setDurationFactor(BigDecimal durationFactor) {
+        this.durationFactor = durationFactor;
+    }
+
+    public BigDecimal getQualityCoefficient() {
+        return qualityCoefficient;
+    }
+
+    public void setQualityCoefficient(BigDecimal qualityCoefficient) {
+        this.qualityCoefficient = qualityCoefficient;
+    }
+
     public Date getSettleTime() {
         return settleTime;
     }

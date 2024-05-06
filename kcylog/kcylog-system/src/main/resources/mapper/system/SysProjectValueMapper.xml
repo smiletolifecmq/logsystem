@@ -11,6 +11,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
         <result property="proportion"    column="proportion"    />
         <result property="money"    column="money"    />
         <result property="profitMoney"    column="profit_money"    />
+        <result property="coefficientMoney"    column="coefficient_money"    />
     </resultMap>
 
     <sql id="selectSysProjectValueVo">

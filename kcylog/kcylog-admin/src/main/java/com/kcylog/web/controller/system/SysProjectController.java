@@ -183,6 +183,7 @@ public class SysProjectController extends BaseController {
      * 修改项目
      */
     @Log(title = "项目", businessType = BusinessType.UPDATE)
+    @Transactional
     @PutMapping
     public AjaxResult edit(@RequestBody SysProject sysProject) {
         sysProjectService.updateSysProject(sysProject);
@@ -190,6 +191,7 @@ public class SysProjectController extends BaseController {
         String[] stringArray = new String[1];
         stringArray[0] = String.valueOf(sysProject.getProjectId());
         sysProjectService.jsProjectCz(stringArray);
+        sysProjectService.jsProjectCzXs(stringArray);
         // 利润产值计算
         SysProject project = sysProjectService.selectSysProjectByProjectId(String.valueOf(sysProject.getProjectId()));
         SysProjectRelation projectRelation = sysProjectRelationService.selectSysProjectRelationByProjectId(project.getProjectId());

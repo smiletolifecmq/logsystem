@@ -156,7 +156,7 @@
       >
         <template slot-scope="scope">
           <el-button
-            v-show="scope.row.operate == 0"
+            v-show="scope.row.operateUser == ''"
             size="mini"
             type="text"
             icon="el-icon-tickets"
@@ -165,7 +165,7 @@
             >经营产值</el-button
           >
           <el-button
-            v-show="scope.row.operate != 0 && scope.row.settle == 0"
+            v-show="scope.row.settle == 0 && scope.row.operateUser != ''"
             size="mini"
             type="text"
             icon="el-icon-edit"
@@ -439,6 +439,20 @@
             </el-descriptions-item>
             <el-descriptions-item>
               <template slot="label">
+                <i class="el-icon-star-off"></i>
+                工期系数
+              </template>
+              {{ formPeople.durationFactor }}
+            </el-descriptions-item>
+            <el-descriptions-item>
+              <template slot="label">
+                <i class="el-icon-star-off"></i>
+                质量系数
+              </template>
+              {{ formPeople.qualityCoefficient }}
+            </el-descriptions-item>
+            <el-descriptions-item>
+              <template slot="label">
                 <i class="el-icon-user"></i>
                 雇工分包申请单
               </template>
@@ -451,9 +465,22 @@
             <el-table :data="formPeople.projectValue" style="width: 100%">
               <el-table-column prop="userName" label="用户名" align="center" />
               <el-table-column prop="proportion" label="占比" align="center" />
-              <el-table-column prop="money" label="经营产值" align="center">
+              <el-table-column
+                prop="money"
+                label="经营产值(系数不参与计算)"
+                align="center"
+              >
                 <template slot-scope="scope">
                   <el-tag> {{ scope.row.money }}</el-tag>
+                </template>
+              </el-table-column>
+              <el-table-column
+                prop="coefficientMoney"
+                label="经营产值(系数参与计算)"
+                align="center"
+              >
+                <template slot-scope="scope">
+                  <el-tag> {{ scope.row.coefficientMoney }}</el-tag>
                 </template>
               </el-table-column>
               <el-table-column prop="profitMoney" label="利润" align="center">
@@ -488,10 +515,26 @@
             :max="99999999"
           ></el-input-number>
         </el-form-item>
+        <el-form-item label="工期系数" prop="durationFactor">
+          <el-input-number
+            v-model="settleForm.durationFactor"
+            :precision="2"
+            :step="0.1"
+            :max="99999999"
+          ></el-input-number>
+        </el-form-item>
+        <el-form-item label="质量系数" prop="qualityCoefficient">
+          <el-input-number
+            v-model="settleForm.qualityCoefficient"
+            :precision="2"
+            :step="0.1"
+            :max="99999999"
+          ></el-input-number>
+        </el-form-item>
         <el-form-item label="办结时间" prop="settleTime">
           <el-date-picker
             v-model="settleForm.settleTime"
-            type="date"
+            type="month"
             placeholder="选择日期"
           >
           </el-date-picker>
@@ -810,6 +853,8 @@ export default {
       getProject(projectId).then((response) => {
         this.settleForm.fbMoney = response.data.fbMoney;
         this.settleForm.projectId = response.data.projectId;
+        this.settleForm.durationFactor = response.data.durationFactor;
+        this.settleForm.qualityCoefficient = response.data.qualityCoefficient;
         this.settleTitle = "项目编号：" + response.data.projectNum;
         this.settleOpen = true;
       });
@@ -844,6 +889,8 @@ export default {
         tempForm.fbMoney = this.settleForm.fbMoney;
         tempForm.projectId = this.settleForm.projectId;
         tempForm.settleTime = this.settleForm.settleTime;
+        tempForm.durationFactor = this.settleForm.durationFactor;
+        tempForm.qualityCoefficient = this.settleForm.qualityCoefficient;
         tempForm.settle = 1;
         if (valid) {
           this.$confirm("结算办结之后将无法再修改, 是否继续?", "提示", {

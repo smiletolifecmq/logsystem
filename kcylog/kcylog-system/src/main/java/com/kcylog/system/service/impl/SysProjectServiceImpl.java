@@ -140,6 +140,12 @@ public class SysProjectServiceImpl implements ISysProjectService
     }
 
     @Override
+    public int jsProjectCzXs(String[] projectIds)
+    {
+        return sysProjectMapper.jsProjectCzXs(projectIds);
+    }
+
+    @Override
     public int updateFbMoney(Map<String, Object> params)
     {
         return sysProjectMapper.updateFbMoney(params);

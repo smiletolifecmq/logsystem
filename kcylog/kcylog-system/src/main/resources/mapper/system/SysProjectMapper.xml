@@ -54,6 +54,8 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
         <result property="viewProjectId" column="view_project_id"/>
         <result property="settleTime" column="settle_time"/>
         <result property="settle" column="settle"/>
+        <result property="durationFactor" column="duration_factor"/>
+        <result property="qualityCoefficient" column="quality_coefficient"/>
 
         <association property="projectValue" javaType="java.util.List" resultMap="SysProjectValueResult"/>
         <association property="projectCar" javaType="java.util.List" resultMap="SysProjectCarResult"/>
@@ -118,6 +120,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
         <result property="proportion"    column="proportion"    />
         <result property="money"    column="money"    />
         <result property="profitMoney"    column="profit_money"    />
+        <result property="coefficientMoney"    column="coefficient_money"    />
     </resultMap>
 
     <sql id="selectSysProjectVo">
@@ -125,7 +128,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
     </sql>
 
     <sql id="selectSysProjectDetail">
-        select p.*, v.user_name, v.proportion, v.money, v.profit_money, c.project_name, c.car_num, c.car_type, c.number, c.car_expenses, c.record_time
+        select p.*, v.user_name, v.proportion, v.money, v.profit_money, v.coefficient_money, c.project_name, c.car_num, c.car_type, c.number, c.car_expenses, c.record_time
         from sys_project p left join sys_project_value v on p.project_id = v.project_id
                            left join sys_project_car c on p.project_id = c.project_id
     </sql>
@@ -171,7 +174,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
             <if test="workloadAlias != null">workload_alias,</if>
             <if test="workcontentAlias != null">workcontent_alias,</if>
             <if test="settlementTime != null and settlementTime != ''" >settlement_time,</if>
-            <if test="fbMoney != null" >fb_money,</if>
+<!--            <if test="fbMoney != null" >fb_money,</if>-->
             <if test="userNameAlias != null and userNameAlias != ''">user_name_alias,</if>
             <if test="requesterAlias != null and requesterAlias != ''">requester_alias,</if>
             <if test="projectStartAlias != null and projectStartAlias != ''">project_start_alias,</if>
@@ -284,6 +287,8 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
             <if test="status != null">status = #{status},</if>
             <if test="settle != null">settle = #{settle},</if>
             <if test="settleTime != null">settle_time = #{settleTime},</if>
+            <if test="durationFactor != null">duration_factor = #{durationFactor},</if>
+            <if test="qualityCoefficient != null">quality_coefficient = #{qualityCoefficient},</if>
         </trim>
         where project_id = #{projectId}
     </update>
@@ -343,8 +348,8 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
         <where>
             <if test="projectNameAlias != null  and projectNameAlias != ''"> and project_name like concat('%', #{projectNameAlias}, '%')</if>
             <if test="projectNum != null  and projectNum != ''"> and project_num like concat('%', #{projectNum}, '%')</if>
-            <if test="operateUser == 1"> and operate != 0.00</if>
-            <if test="operateUser == 2"> and operate = 0.00</if>
+            <if test="operateUser == 1"> and operate_user != ''</if>
+            <if test="operateUser == 2"> and operate_user = ''</if>
             <if test="settle != null"> and settle = #{settle}</if>
             <if test="userNameAlias != null and userNameAlias != ''">user_name_alias like concat('%', #{userNameAlias}, '%')</if>
             <if test="params.beginTime != null and params.beginTime != ''"><!-- 开始时间检索 -->
@@ -404,6 +409,16 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
         UPDATE sys_project_value AS spv
         JOIN sys_project AS sp ON spv.project_id = sp.project_id
         SET spv.money = sp.operate * (spv.proportion / 100),sp.output_status = 2,sp.settlement_time = CURRENT_TIMESTAMP()
+        WHERE spv.project_id IN
+        <foreach item="projectId" collection="array" open="(" separator="," close=")">
+            #{projectId}
+        </foreach>
+    </update>
+
+    <update id="jsProjectCzXs" parameterType="String">
+        UPDATE sys_project_value AS spv
+        JOIN sys_project AS sp ON spv.project_id = sp.project_id
+        SET spv.coefficient_money = sp.operate * (spv.proportion / 100) * (sp.duration_factor * 0.3 + sp.quality_coefficient * 0.7),sp.output_status = 2,sp.settlement_time = CURRENT_TIMESTAMP()
         WHERE spv.project_id IN
         <foreach item="projectId" collection="array" open="(" separator="," close=")">
             #{projectId}
@@ -488,7 +503,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
             <if test="geometryGauss2000 != null">geometry_gauss2000 = #{geometryGauss2000},</if>
             <if test="bufferGeometryGauss2000 != null">buffer_geometry_gauss2000 = #{bufferGeometryGauss2000},</if>
             <if test="mapScale != null">map_scale = #{mapScale},</if>
-            <if test="fbMoney != null">fb_money = #{fbMoney},</if>
+<!--            <if test="fbMoney != null">fb_money = #{fbMoney},</if>-->
             <if test="afterTime != null">after_time = #{afterTime},</if>
             <if test="viewProjectId != null">view_project_id = #{viewProjectId},</if>
         </trim>
