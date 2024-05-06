@@ -206,11 +206,11 @@ public class MqConsume {
                     sysProject.setDoTime(workDoneList.getDoTime().toString());
                 }
                 //分包金额
-                ViewFqChargeMoney chargeMoney = viewFqChargeMoneyService.selectViewFqChargeMoneyByProjectCode(viewFqProject.getProjectCode());
-                if (chargeMoney != null && chargeMoney.getSum() != null){
-                    BigDecimal bigDecimalValue = new BigDecimal((chargeMoney.getSum()/100));
-                    sysProject.setFbMoney(bigDecimalValue);
-                }
+//                ViewFqChargeMoney chargeMoney = viewFqChargeMoneyService.selectViewFqChargeMoneyByProjectCode(viewFqProject.getProjectCode());
+//                if (chargeMoney != null && chargeMoney.getSum() != null){
+//                    BigDecimal bigDecimalValue = new BigDecimal((chargeMoney.getSum()/100));
+//                    sysProject.setFbMoney(bigDecimalValue);
+//                }
                 //地图比例
                 ViewFqSalemapSelectmapBaseinfo mapBaseinfo = viewFqSalemapSelectmapBaseinfoService.selectViewFqSalemapSelectmapBaseinfoByProjectId(Long.parseLong(mqMessage.getProjectId()));
                 if (mapBaseinfo != null && mapBaseinfo.getMapScale() != null){

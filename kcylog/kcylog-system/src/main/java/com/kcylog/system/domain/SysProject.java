@@ -206,6 +206,26 @@ public class SysProject extends BaseEntity
 
     private BigDecimal qualityCoefficient;
 
+    private BigDecimal projectCoefficientMoney;
+
+    private BigDecimal projectCoefficient;
+
+    public BigDecimal getProjectCoefficientMoney() {
+        return projectCoefficientMoney;
+    }
+
+    public void setProjectCoefficientMoney(BigDecimal projectCoefficientMoney) {
+        this.projectCoefficientMoney = projectCoefficientMoney;
+    }
+
+    public BigDecimal getProjectCoefficient() {
+        return projectCoefficient;
+    }
+
+    public void setProjectCoefficient(BigDecimal projectCoefficient) {
+        this.projectCoefficient = projectCoefficient;
+    }
+
     public BigDecimal getDurationFactor() {
         return durationFactor;
     }
