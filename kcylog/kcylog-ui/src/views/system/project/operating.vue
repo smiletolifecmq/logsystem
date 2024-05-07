@@ -993,16 +993,16 @@ export default {
         };
 
         if (myMap.has("工程测绘部")) {
-          numData.gcchbNumWork = myMap.get("工程测绘部").operate;
+          numData.gcchbNumWork = myMap.get("工程测绘部").operate.toFixed(2);
         }
         if (myMap.has("不动产测绘部")) {
-          numData.bdcchbWork = myMap.get("不动产测绘部").operate;
+          numData.bdcchbWork = myMap.get("不动产测绘部").operate.toFixed(2);
         }
         if (myMap.has("管线工程部")) {
-          numData.gxgcbWork = myMap.get("管线工程部").operate;
+          numData.gxgcbWork = myMap.get("管线工程部").operate.toFixed(2);
         }
         if (myMap.has("地理信息部")) {
-          numData.dlxxbWork = myMap.get("地理信息部").operate;
+          numData.dlxxbWork = myMap.get("地理信息部").operate.toFixed(2);
         }
         this.statisticsData.push(numData);
 
@@ -1015,21 +1015,25 @@ export default {
         };
 
         if (myMap.has("工程测绘部")) {
-          numData.gcchbNumWork =
-            myMap.get("工程测绘部").operate - myMap.get("工程测绘部").fbMoney;
+          numData.gcchbNumWork = (
+            myMap.get("工程测绘部").operate - myMap.get("工程测绘部").fbMoney
+          ).toFixed(2);
         }
         if (myMap.has("不动产测绘部")) {
-          numData.bdcchbWork =
+          numData.bdcchbWork = (
             myMap.get("不动产测绘部").operate -
-            myMap.get("不动产测绘部").fbMoney;
+            myMap.get("不动产测绘部").fbMoney
+          ).toFixed(2);
         }
         if (myMap.has("管线工程部")) {
-          numData.gxgcbWork =
-            myMap.get("管线工程部").operate - myMap.get("管线工程部").fbMoney;
+          numData.gxgcbWork = (
+            myMap.get("管线工程部").operate - myMap.get("管线工程部").fbMoney
+          ).toFixed(2);
         }
         if (myMap.has("地理信息部")) {
-          numData.dlxxbWork =
-            myMap.get("地理信息部").operate - myMap.get("地理信息部").fbMoney;
+          numData.dlxxbWork = (
+            myMap.get("地理信息部").operate - myMap.get("地理信息部").fbMoney
+          ).toFixed(2);
         }
         this.statisticsData.push(numData);
       });
