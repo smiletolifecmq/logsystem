@@ -222,4 +222,10 @@ public class SysProjectServiceImpl implements ISysProjectService
     {
         return sysProjectMapper.listProjectOperateTJ(sysProject);
     }
+
+    @Override
+    public int updateSysProjectCqBz(SysProject sysProject)
+    {
+        return sysProjectMapper.updateSysProjectCqBz(sysProject);
+    }
 }

@@ -58,6 +58,9 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
         <result property="qualityCoefficient" column="quality_coefficient"/>
         <result property="projectCoefficientMoney" column="project_coefficient_money"/>
         <result property="projectCoefficient" column="project_coefficient"/>
+        <result property="completionNotes" column="completion_notes"/>
+        <result property="oneCheckNotes" column="one_check_notes"/>
+        <result property="twoCheckNotes" column="two_check_notes"/>
 
         <association property="projectValue" javaType="java.util.List" resultMap="SysProjectValueResult"/>
         <association property="projectCar" javaType="java.util.List" resultMap="SysProjectCarResult"/>
@@ -636,4 +639,14 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
         </where>
         order by p.project_id desc
     </select>
+
+    <update id="updateSysProjectCqBz" parameterType="SysProject">
+        update sys_project
+        <trim prefix="SET" suffixOverrides=",">
+            <if test="completionNotes != null and completionNotes != ''">completion_notes = #{completionNotes},</if>
+            <if test="oneCheckNotes != null and oneCheckNotes != ''">one_check_notes = #{oneCheckNotes},</if>
+            <if test="twoCheckNotes != null and twoCheckNotes != ''">two_check_notes = #{twoCheckNotes},</if>
+        </trim>
+        where project_id = #{projectId}
+    </update>
 </mapper>

@@ -102,4 +102,6 @@ public interface SysProjectMapper
     public SysProject checkProjectKeyUniqueByViewProjectId(String projectNum);
 
     public List<SysProject> listProjectOperateTJ(SysProject sysProject);
+
+    public int updateSysProjectCqBz(SysProject sysProject);
 }

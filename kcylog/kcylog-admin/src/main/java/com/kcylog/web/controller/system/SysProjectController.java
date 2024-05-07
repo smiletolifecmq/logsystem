@@ -496,4 +496,12 @@ public class SysProjectController extends BaseController {
 
         return getDataTable(list);
     }
+
+    @Log(title = "项目", businessType = BusinessType.UPDATE)
+    @PutMapping("/projectCqBz")
+    public AjaxResult editProjectCqBz(@RequestBody SysProject sysProject) {
+        sysProjectService.updateSysProjectCqBz(sysProject);
+        return toAjax(1);
+    }
+
 }

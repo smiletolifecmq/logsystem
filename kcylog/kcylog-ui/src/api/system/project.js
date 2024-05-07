@@ -114,3 +114,11 @@ export function listProjectStatisticsData(query) {
   })
 }
 
+export function updateProjectCqBz(data) {
+  return request({
+    url: '/system/project/projectCqBz',
+    method: 'put',
+    data: data
+  })
+}
+

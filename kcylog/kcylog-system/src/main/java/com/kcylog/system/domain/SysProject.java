@@ -210,6 +210,36 @@ public class SysProject extends BaseEntity
 
     private BigDecimal projectCoefficient;
 
+    private String completionNotes;
+
+    private String oneCheckNotes;
+
+    private String twoCheckNotes;
+
+    public String getCompletionNotes() {
+        return completionNotes;
+    }
+
+    public void setCompletionNotes(String completionNotes) {
+        this.completionNotes = completionNotes;
+    }
+
+    public String getOneCheckNotes() {
+        return oneCheckNotes;
+    }
+
+    public void setOneCheckNotes(String oneCheckNotes) {
+        this.oneCheckNotes = oneCheckNotes;
+    }
+
+    public String getTwoCheckNotes() {
+        return twoCheckNotes;
+    }
+
+    public void setTwoCheckNotes(String twoCheckNotes) {
+        this.twoCheckNotes = twoCheckNotes;
+    }
+
     public BigDecimal getProjectCoefficientMoney() {
         return projectCoefficientMoney;
     }
