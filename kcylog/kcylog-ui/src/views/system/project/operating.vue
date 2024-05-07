@@ -165,16 +165,14 @@
           >
         </template>
       </el-table-column>
-      <el-table-column
-        prop="cml1cq"
-        label="陈美玲1"
-        align="center"
-        @click="handleCqOpen('陈美玲1')"
-      >
+      <el-table-column prop="cml1cq" label="陈美玲1" align="center">
         <template slot-scope="scope">
-          <el-tag type="danger" class="hover-effect">{{
-            scope.row.cml1cq
-          }}</el-tag>
+          <el-tag
+            type="danger"
+            class="hover-effect"
+            @click="handleCqOpen('陈美玲1')"
+            >{{ scope.row.cml1cq }}</el-tag
+          >
         </template>
       </el-table-column>
       <el-table-column prop="hlcq" label="黄丽" align="center">
