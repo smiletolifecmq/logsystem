@@ -785,7 +785,7 @@
     <el-dialog
       title="超期项目"
       :visible.sync="overTimeOpen"
-      width="1260px"
+      width="1400px"
       append-to-body
       v-el-drag-dialog
     >
@@ -859,7 +859,50 @@
         <el-table-column label="工作状态" align="center" prop="status">
           <el-tag type="danger">待二检</el-tag>
         </el-table-column>
+        <el-table-column
+          label="二检超期备注"
+          align="center"
+          prop="twoCheckNotes"
+        ></el-table-column>
+        <el-table-column
+          fixed="right"
+          label="操作"
+          align="center"
+          class-name="small-padding fixed-width"
+        >
+          <template slot-scope="scope">
+            <el-button
+              size="mini"
+              type="text"
+              icon="el-icon-edit"
+              @click="updateCompletionNotes(scope.row)"
+              >填写超期备注</el-button
+            >
+          </template>
+        </el-table-column>
       </el-table>
+    </el-dialog>
+    <el-dialog
+      title="填写二检超期原因"
+      :visible.sync="cqOpen"
+      width="600px"
+      append-to-body
+      v-el-drag-dialog
+    >
+      <el-form ref="formReviewCq" :model="formReviewCq" label-width="80px">
+        <el-form-item label="超期备注" prop="twoCheckNotes">
+          <el-input
+            type="textarea"
+            :rows="2"
+            placeholder="请输入内容"
+            v-model="formReviewCq.twoCheckNotes"
+          >
+          </el-input>
+        </el-form-item>
+      </el-form>
+      <div slot="footer" class="dialog-footer">
+        <el-button type="primary" @click="submitFormCq">确 定</el-button>
+      </div>
     </el-dialog>
   </div>
 </template>
@@ -876,6 +919,7 @@ import {
   addProject,
   updateProject,
   listProjectSelected,
+  updateProjectCqBz,
 } from "@/api/system/project";
 import elDragDialog from "@/api/components/el-drag";
 import { listUnit } from "@/api/system/unit";
@@ -889,6 +933,8 @@ export default {
   },
   data() {
     return {
+      formReviewCq: {},
+      cqOpen: false,
       overTimeProjectList: [],
       overTimeOpen: false,
       statisticsData: [],
@@ -1106,6 +1152,21 @@ export default {
     this.getStatisticsData();
   },
   methods: {
+    submitFormCq() {
+      this.$refs["formReviewCq"].validate((valid) => {
+        updateProjectCqBz(this.formReviewCq).then((response) => {
+          this.$modal.msgSuccess("修改成功");
+          this.cqOpen = false;
+          this.handleOverTimeOpen(this.formReviewCq.department);
+          this.formReviewCq = {};
+        });
+      });
+    },
+    updateCompletionNotes(value) {
+      this.formReviewCq.projectId = value.projectId;
+      this.formReviewCq.department = value.department;
+      this.cqOpen = true;
+    },
     handleOverTimeOpen(value) {
       this.overTimeProjectList = [];
       this.queryStatisticsParams.department = value;
