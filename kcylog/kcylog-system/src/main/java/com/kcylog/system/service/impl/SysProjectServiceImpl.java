@@ -228,4 +228,10 @@ public class SysProjectServiceImpl implements ISysProjectService
     {
         return sysProjectMapper.updateSysProjectCqBz(sysProject);
     }
+
+    @Override
+    public List<SysProject> listProjectOperateCq(SysProject sysProject)
+    {
+        return sysProjectMapper.listProjectOperateCq(sysProject);
+    }
 }

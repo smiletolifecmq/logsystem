@@ -3,7 +3,7 @@
     <el-form
       :model="queryParams"
       ref="queryForm"
-      size="small"
+      size="mini"
       :inline="true"
       v-show="showSearch"
       label-width="68px"
@@ -96,13 +96,6 @@
       </el-form-item>
     </el-form>
 
-    <el-row :gutter="10" class="mb8">
-      <right-toolbar
-        :showSearch.sync="showSearch"
-        @queryTable="getList"
-      ></right-toolbar>
-    </el-row>
-
     <el-table :data="statisticsData" style="width: 100%">
       <el-table-column prop="status" :label="labelValue" align="center">
         <template slot-scope="scope">
@@ -132,6 +125,66 @@
       <el-table-column prop="dlxxbWork" label="地理信息部" align="center">
         <template slot-scope="scope">
           <el-tag type="success">{{ scope.row.dlxxbWork }}</el-tag>
+        </template>
+      </el-table-column>
+    </el-table>
+
+    <el-table :data="tiCqData" style="width: 100%">
+      <el-table-column label="类型" align="center">
+        <template slot-scope="scope">
+          <el-tag type="danger">未填写经营产值项目数</el-tag>
+        </template>
+      </el-table-column>
+      <el-table-column prop="cxycq" label="陈晓钰" align="center">
+        <template slot-scope="scope">
+          <el-tag
+            type="danger"
+            class="hover-effect"
+            @click="handleCqOpen('陈晓钰')"
+            >{{ scope.row.cxycq }}</el-tag
+          >
+        </template>
+      </el-table-column>
+      <el-table-column prop="wyycq" label="王媛媛" align="center">
+        <template slot-scope="scope">
+          <el-tag
+            type="danger"
+            class="hover-effect"
+            @click="handleCqOpen('王媛媛')"
+            >{{ scope.row.wyycq }}</el-tag
+          >
+        </template>
+      </el-table-column>
+      <el-table-column prop="cmlcq" label="陈美玲" align="center">
+        <template slot-scope="scope">
+          <el-tag
+            type="danger"
+            class="hover-effect"
+            @click="handleCqOpen('陈美玲')"
+            >{{ scope.row.cmlcq }}</el-tag
+          >
+        </template>
+      </el-table-column>
+      <el-table-column
+        prop="cml1cq"
+        label="陈美玲1"
+        align="center"
+        @click="handleCqOpen('陈美玲1')"
+      >
+        <template slot-scope="scope">
+          <el-tag type="danger" class="hover-effect">{{
+            scope.row.cml1cq
+          }}</el-tag>
+        </template>
+      </el-table-column>
+      <el-table-column prop="hlcq" label="黄丽" align="center">
+        <template slot-scope="scope">
+          <el-tag
+            type="danger"
+            class="hover-effect"
+            @click="handleCqOpen('黄丽')"
+            >{{ scope.row.hlcq }}</el-tag
+          >
         </template>
       </el-table-column>
     </el-table>
@@ -393,6 +446,106 @@
     </el-dialog>
 
     <el-dialog
+      title="经营产值未填写项目"
+      :visible.sync="overTimeOpen"
+      width="1400px"
+      append-to-body
+      v-el-drag-dialog
+    >
+      <el-table
+        v-loading="loading"
+        :data="overTimeProjectList"
+        size="mini"
+        height="500"
+      >
+        <el-table-column
+          label="委托单位"
+          align="center"
+          prop="requesterAlias"
+        />
+        <el-table-column
+          label="项目名称"
+          align="center"
+          prop="projectNameAlias"
+        />
+        <el-table-column label="项目编号" align="center" prop="projectNum" />
+        <el-table-column label="项目类型" align="center" prop="projectType" />
+        <el-table-column
+          label="工程负责人"
+          align="center"
+          prop="userNameAlias"
+        />
+        <el-table-column label="二检时间" align="center" prop="twoCheck">
+          <template slot-scope="scope">
+            {{ formatDate(scope.row.twoCheck) }}
+          </template>
+        </el-table-column>
+        <el-table-column label="接待人" align="center" prop="receptionist" />
+        <el-table-column label="产值状态" align="center">
+          <template slot-scope="scope">
+            <el-tag
+              v-show="scope.row.operateStatus == 0 && scope.row.settle == 0"
+              type="danger"
+              >未分配</el-tag
+            >
+            <el-tag
+              v-show="scope.row.operateStatus == 1 && scope.row.settle == 0"
+              type="success"
+              >已分配</el-tag
+            >
+            <el-tag v-show="scope.row.settle == 1" type="success"
+              >已办结</el-tag
+            >
+          </template>
+        </el-table-column>
+        <el-table-column label="经营产值" align="center" prop="operate" />
+        <el-table-column
+          label="结算办结时间"
+          align="center"
+          prop="settleTime"
+          width="160"
+        >
+          <template slot-scope="scope">
+            <span>{{ scope.row.settleTime | formatDateObj }}</span>
+          </template>
+        </el-table-column>
+        <el-table-column
+          label="操作"
+          align="center"
+          class-name="small-padding fixed-width"
+        >
+          <template slot-scope="scope">
+            <el-button
+              v-show="scope.row.operateUser == ''"
+              size="mini"
+              type="text"
+              icon="el-icon-tickets"
+              @click="handleDetail(scope.row)"
+              v-hasPermi="['system:project:detail']"
+              >经营产值</el-button
+            >
+            <el-button
+              v-show="scope.row.settle == 0 && scope.row.operateUser != ''"
+              size="mini"
+              type="text"
+              icon="el-icon-edit"
+              @click="handleSettle(scope.row)"
+              v-hasPermi="['system:project:settle']"
+              >结算办结</el-button
+            >
+            <el-button
+              size="mini"
+              type="text"
+              icon="el-icon-tickets"
+              @click="handlePeopleDetail(scope.row)"
+              >详情</el-button
+            >
+          </template>
+        </el-table-column>
+      </el-table>
+    </el-dialog>
+
+    <el-dialog
       title="项目"
       :visible.sync="detailPeopleOpen"
       width="1000px"
@@ -596,13 +749,18 @@
     </el-dialog>
   </div>
 </template>
-
+<style>
+.hover-effect:hover {
+  cursor: pointer;
+}
+</style>
 <script>
 import {
   listProjectOperate,
   getProject,
   updateProject,
   listProjectStatisticsData,
+  listProjectOperateCq,
 } from "@/api/system/project";
 import elDragDialog from "@/api/components/el-drag";
 
@@ -625,6 +783,9 @@ export default {
   },
   data() {
     return {
+      overTimeProjectList: [],
+      overTimeOpen: false,
+      tiCqData: [],
       labelValue: "类型-",
       statisticsData: [],
       settleForm: {},
@@ -698,6 +859,11 @@ export default {
         operateUser: null,
         operateTime: null,
       },
+      queryParamsCq: {
+        pageNum: 1,
+        pageSize: 9999,
+        receptionist: "",
+      },
       // 表单参数
       form: {},
       rules: {
@@ -716,6 +882,7 @@ export default {
   created() {
     this.getList();
     this.getStatisticsData();
+    this.getCqData();
     var currentDate = new Date();
     var currentMonth = currentDate.getMonth() + 1; // 月份从0开始，所以需要加1
 
@@ -727,12 +894,71 @@ export default {
     this.labelValue = this.labelValue + prevMonth + "月份-已办结";
   },
   methods: {
+    handleCqOpen(value) {
+      this.queryParamsCq.receptionist = value;
+      listProjectOperateCq(
+        this.addDateRange(this.queryParamsCq, this.dateRange)
+      ).then((response) => {
+        this.overTimeProjectList = response.rows;
+        this.overTimeOpen = true;
+      });
+    },
+    getCqData() {
+      listProjectStatisticsData(this.queryParamsCq).then((response) => {
+        const project = response.rows;
+        let myMap = new Map();
+        for (let i = 0; i < project.length; i++) {
+          let key = project[i].receptionist;
+          if (key == "" || key == null || key == undefined) {
+            continue;
+          }
+          if (myMap.has(key)) {
+            let num = myMap.get(key);
+            if (project[i].operateUser == "") {
+              num.cqNum++;
+            }
+            myMap.set(key, num);
+          } else {
+            let num = {
+              cqNum: 0,
+            };
+            if (project[i].operateUser == "") {
+              num.cqNum++;
+            }
+            myMap.set(key, num);
+          }
+        }
+        let numData = {
+          cxycq: 0,
+          wyycq: 0,
+          cml1cq: 0,
+          cmlcq: 0,
+          hlcq: 0,
+        };
+
+        if (myMap.has("陈晓钰")) {
+          numData.cxycq = myMap.get("陈晓钰").cqNum;
+        }
+        if (myMap.has("陈美玲")) {
+          numData.cmlcq = myMap.get("陈美玲").cqNum;
+        }
+        if (myMap.has("陈美玲1")) {
+          numData.cml1cq = myMap.get("陈美玲1").cqNum;
+        }
+        if (myMap.has("王媛媛")) {
+          numData.wyycq = myMap.get("王媛媛").cqNum;
+        }
+        if (myMap.has("黄丽")) {
+          numData.hlcq = myMap.get("黄丽").cqNum;
+        }
+        this.tiCqData.push(numData);
+      });
+    },
     getStatisticsData() {
       var range = getLastMonthRange();
       var dateRangeTemp = [];
       dateRangeTemp[0] = range.firstDay;
       dateRangeTemp[1] = range.lastDay;
-      console.log(dateRangeTemp);
       listProjectStatisticsData(
         this.addDateRange(this.queryParams, dateRangeTemp)
       ).then((response) => {
@@ -1019,6 +1245,7 @@ export default {
             this.$modal.msgSuccess("填写成功");
             this.detailOpen = false;
             this.getList();
+            this.handleCqOpen(this.form.receptionist);
           });
         }
       });

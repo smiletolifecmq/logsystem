@@ -122,3 +122,11 @@ export function updateProjectCqBz(data) {
   })
 }
 
+export function listProjectOperateCq(query) {
+  return request({
+    url: '/system/project/listProjectOperateCq',
+    method: 'get',
+    params: query
+  })
+}
+
