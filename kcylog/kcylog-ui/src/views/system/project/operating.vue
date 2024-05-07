@@ -103,6 +103,39 @@
       ></right-toolbar>
     </el-row>
 
+    <el-table :data="statisticsData" style="width: 100%">
+      <el-table-column prop="status" :label="labelValue" align="center">
+        <template slot-scope="scope">
+          <el-tag v-show="scope.row.status == 0" type="success"
+            >经营产值</el-tag
+          >
+          <el-tag v-show="scope.row.status == 1" type="success"
+            >净利润（经营减分包）</el-tag
+          >
+        </template>
+      </el-table-column>
+      <el-table-column prop="gcchbNumWork" label="工程测绘部" align="center">
+        <template slot-scope="scope">
+          <el-tag type="success">{{ scope.row.gcchbNumWork }}</el-tag>
+        </template>
+      </el-table-column>
+      <el-table-column prop="bdcchbWork" label="不动产测绘部" align="center">
+        <template slot-scope="scope">
+          <el-tag type="success">{{ scope.row.bdcchbWork }}</el-tag>
+        </template>
+      </el-table-column>
+      <el-table-column prop="gxgcbWork" label="管线工程部" align="center">
+        <template slot-scope="scope">
+          <el-tag type="success">{{ scope.row.gxgcbWork }}</el-tag>
+        </template>
+      </el-table-column>
+      <el-table-column prop="dlxxbWork" label="地理信息部" align="center">
+        <template slot-scope="scope">
+          <el-tag type="success">{{ scope.row.dlxxbWork }}</el-tag>
+        </template>
+      </el-table-column>
+    </el-table>
+
     <el-table
       v-loading="loading"
       :data="projectList"
@@ -569,6 +602,7 @@ import {
   listProjectOperate,
   getProject,
   updateProject,
+  listProjectStatisticsData,
 } from "@/api/system/project";
 import elDragDialog from "@/api/components/el-drag";
 
@@ -591,6 +625,8 @@ export default {
   },
   data() {
     return {
+      labelValue: "类型-",
+      statisticsData: [],
       settleForm: {},
       settleTitle: "",
       settleOpen: false,
@@ -679,8 +715,99 @@ export default {
   },
   created() {
     this.getList();
+    this.getStatisticsData();
+    var currentDate = new Date();
+    var currentMonth = currentDate.getMonth() + 1; // 月份从0开始，所以需要加1
+
+    // 计算上一个月的月份
+    var prevMonth = currentMonth - 1;
+    if (prevMonth === 0) {
+      prevMonth = 12;
+    }
+    this.labelValue = this.labelValue + prevMonth + "月份-已办结";
   },
   methods: {
+    getStatisticsData() {
+      var range = getLastMonthRange();
+      var dateRangeTemp = [];
+      dateRangeTemp[0] = range.firstDay;
+      dateRangeTemp[1] = range.lastDay;
+      console.log(dateRangeTemp);
+      listProjectStatisticsData(
+        this.addDateRange(this.queryParams, dateRangeTemp)
+      ).then((response) => {
+        const project = response.rows;
+        let myMap = new Map();
+        for (let i = 0; i < project.length; i++) {
+          let key = project[i].department;
+          if (key == "" || key == null || key == undefined) {
+            continue;
+          }
+          if (myMap.has(key)) {
+            let num = myMap.get(key);
+            num.operate = project[i].operate + num.operate;
+            num.fbMoney = project[i].fbMoney + num.fbMoney;
+            myMap.set(key, num);
+          } else {
+            let num = {
+              operate: 0,
+              fbMoney: 0,
+            };
+            num.operate = project[i].operate;
+            num.fbMoney = project[i].fbMoney;
+            myMap.set(key, num);
+          }
+        }
+        let numData = {
+          status: 0,
+          gcchbNumWork: 0,
+          bdcchbWork: 0,
+          gxgcbWork: 0,
+          dlxxbWork: 0,
+        };
+
+        if (myMap.has("工程测绘部")) {
+          numData.gcchbNumWork = myMap.get("工程测绘部").operate;
+        }
+        if (myMap.has("不动产测绘部")) {
+          numData.bdcchbWork = myMap.get("不动产测绘部").operate;
+        }
+        if (myMap.has("管线工程部")) {
+          numData.gxgcbWork = myMap.get("管线工程部").operate;
+        }
+        if (myMap.has("地理信息部")) {
+          numData.dlxxbWork = myMap.get("地理信息部").operate;
+        }
+        this.statisticsData.push(numData);
+
+        numData = {
+          status: 1,
+          gcchbNumWork: 0,
+          bdcchbWork: 0,
+          gxgcbWork: 0,
+          dlxxbWork: 0,
+        };
+
+        if (myMap.has("工程测绘部")) {
+          numData.gcchbNumWork =
+            myMap.get("工程测绘部").operate - myMap.get("工程测绘部").fbMoney;
+        }
+        if (myMap.has("不动产测绘部")) {
+          numData.bdcchbWork =
+            myMap.get("不动产测绘部").operate -
+            myMap.get("不动产测绘部").fbMoney;
+        }
+        if (myMap.has("管线工程部")) {
+          numData.gxgcbWork =
+            myMap.get("管线工程部").operate - myMap.get("管线工程部").fbMoney;
+        }
+        if (myMap.has("地理信息部")) {
+          numData.dlxxbWork =
+            myMap.get("地理信息部").operate - myMap.get("地理信息部").fbMoney;
+        }
+        this.statisticsData.push(numData);
+      });
+    },
     calculateLaborSub(value) {
       // 0无、1未开始、2驳回、3进行中（展示是谁审核中）、通过
       var status = "无审核单";
@@ -928,4 +1055,35 @@ export default {
     },
   },
 };
+
+function getLastMonthRange() {
+  // 获取当前日期的年份、月份和日期
+  var currentDate = new Date("2024-05-20");
+  var currentYear = currentDate.getFullYear();
+  var currentMonth = currentDate.getMonth() + 1; // 月份从0开始，所以需要加1
+
+  // 计算上一个月的年份和月份
+  var prevYear = currentYear;
+  var prevMonth = currentMonth - 1;
+  if (prevMonth === 0) {
+    prevYear -= 1;
+    prevMonth = 12;
+  }
+
+  // 获取上一个月的起始日期和结束日期
+  var startDate =
+    prevYear + "-" + (prevMonth < 10 ? "0" : "") + prevMonth + "-01";
+  var endDate =
+    prevYear +
+    "-" +
+    (prevMonth < 10 ? "0" : "") +
+    prevMonth +
+    "-" +
+    new Date(prevYear, prevMonth, 0).getDate();
+
+  return {
+    firstDay: startDate,
+    lastDay: endDate,
+  };
+}
 </script>

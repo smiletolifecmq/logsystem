@@ -100,4 +100,6 @@ public interface ISysProjectService
     public List<SysProject> selectSysProjectWaitTwoCheck(SysProject sysProject);
 
     public SysProject checkProjectKeyUniqueByViewProjectId(String projectNum);
+
+    public List<SysProject> listProjectOperateTJ(SysProject sysProject);
 }

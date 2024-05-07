@@ -622,4 +622,18 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
         <include refid="selectSysProjectVo"/>
         where view_project_id = #{projectNum}
     </select>
+
+    <select id="listProjectOperateTJ" parameterType="SysProject" resultMap="SysProjectResult">
+        <include refid="selectSysProjectVo"/>
+        <where>
+            <if test="params.beginTime != null and params.beginTime != ''"><!-- 开始时间检索 -->
+                and (date_format(settle_time,'%y%m%d') &gt;= date_format(#{params.beginTime},'%y%m%d'))
+            </if>
+            <if test="params.endTime != null and params.endTime != ''"><!-- 结束时间检索 -->
+                and (date_format(settle_time,'%y%m%d') &lt;= date_format(#{params.endTime},'%y%m%d'))
+            </if>
+            and is_two_check = 1
+        </where>
+        order by p.project_id desc
+    </select>
 </mapper>

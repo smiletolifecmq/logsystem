@@ -488,4 +488,12 @@ public class SysProjectController extends BaseController {
         }
         return success(projectGeoList);
     }
+
+
+    @GetMapping("/listProjectStatisticsData")
+    public TableDataInfo listProjectStatisticsData(SysProject sysProject) {
+        List<SysProject> list = sysProjectService.listProjectOperateTJ(sysProject);
+
+        return getDataTable(list);
+    }
 }

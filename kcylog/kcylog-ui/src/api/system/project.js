@@ -106,3 +106,11 @@ export function listProjectWaitTwoCheck(query) {
   })
 }
 
+export function listProjectStatisticsData(query) {
+  return request({
+    url: '/system/project/listProjectStatisticsData',
+    method: 'get',
+    params: query
+  })
+}
+
