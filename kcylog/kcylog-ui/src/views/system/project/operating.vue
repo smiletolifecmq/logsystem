@@ -885,7 +885,7 @@ export default {
     var currentMonth = currentDate.getMonth() + 1; // 月份从0开始，所以需要加1
 
     // 计算上一个月的月份
-    var prevMonth = currentMonth - 1;
+    var prevMonth = currentMonth;
     if (prevMonth === 0) {
       prevMonth = 12;
     }
@@ -1286,33 +1286,25 @@ export default {
 };
 
 function getLastMonthRange() {
-  // 获取当前日期的年份、月份和日期
-  var currentDate = new Date("2024-05-20");
-  var currentYear = currentDate.getFullYear();
-  var currentMonth = currentDate.getMonth() + 1; // 月份从0开始，所以需要加1
+  var currentDate = new Date();
+  var currentYear = currentDate.getFullYear(); // 获取当前年份
+  var currentMonth = currentDate.getMonth() + 1; // 获取当前月份，注意月份从 0 开始，所以要加 1
 
-  // 计算上一个月的年份和月份
-  var prevYear = currentYear;
-  var prevMonth = currentMonth - 1;
-  if (prevMonth === 0) {
-    prevYear -= 1;
-    prevMonth = 12;
-  }
-
-  // 获取上一个月的起始日期和结束日期
-  var startDate =
-    prevYear + "-" + (prevMonth < 10 ? "0" : "") + prevMonth + "-01";
-  var endDate =
-    prevYear +
-    "-" +
-    (prevMonth < 10 ? "0" : "") +
-    prevMonth +
-    "-" +
-    new Date(prevYear, prevMonth, 0).getDate();
+  // 确定当前月份的第一天和最后一天
+  var firstDay = new Date(currentYear, currentMonth - 1, 1); // 使用当前年份和月份的 1 号作为第一天
+  var lastDay = new Date(currentYear, currentMonth, 0); // 使用下个月的 0 号，即当前月的最后一天
 
   return {
-    firstDay: startDate,
-    lastDay: endDate,
+    firstDay: formatDateString(firstDay),
+    lastDay: formatDateString(lastDay),
   };
+}
+
+// 格式化日期为 'yy-mm-dd'
+function formatDateString(date) {
+  var year = date.getFullYear().toString(); // 仅保留年份的后两位
+  var month = (date.getMonth() + 1 < 10 ? "0" : "") + (date.getMonth() + 1); // 月份补零
+  var day = (date.getDate() < 10 ? "0" : "") + date.getDate(); // 日补零
+  return year + "-" + month + "-" + day;
 }
 </script>
