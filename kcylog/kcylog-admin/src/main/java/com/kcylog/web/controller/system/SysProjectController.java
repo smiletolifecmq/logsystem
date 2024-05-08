@@ -293,11 +293,21 @@ public class SysProjectController extends BaseController {
                     hashMap.put(value.getProjectId(), 1);
                 }
             }
+
+            List<FqProjectProcess> fqProjectProcess = fqProjectProcessService.selectFqProjectProcessByProjectIds(projectIds);
             for (SysProject project : list){
                 if (hashMap.containsKey(project.getProjectId())){
                     project.setOperateStatus(hashMap.get(project.getProjectId()));
                 }else {
                     project.setOperateStatus(0);
+                }
+                if (project.getFqProjectProcessList() == null){
+                    project.setFqProjectProcessList(new ArrayList<>());
+                }
+                for (FqProjectProcess fqProjectProcess1 : fqProjectProcess){
+                    if (fqProjectProcess1.getProjectId().equals(project.getProjectId())){
+                        project.getFqProjectProcessList().add(fqProjectProcess1);
+                    }
                 }
             }
         }

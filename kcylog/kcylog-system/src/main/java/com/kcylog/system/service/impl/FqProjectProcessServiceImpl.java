@@ -91,4 +91,10 @@ public class FqProjectProcessServiceImpl implements IFqProjectProcessService
     {
         return fqProjectProcessMapper.deleteFqProjectProcessById(id);
     }
+
+    @Override
+    public List<FqProjectProcess> selectFqProjectProcessByProjectIds(List<Long> projectIds)
+    {
+        return fqProjectProcessMapper.selectFqProjectProcessByProjectIds(projectIds);
+    }
 }

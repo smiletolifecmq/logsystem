@@ -59,4 +59,6 @@ public interface IFqProjectProcessService
      * @return 结果
      */
     public int deleteFqProjectProcessById(Long id);
+
+    public List<FqProjectProcess> selectFqProjectProcessByProjectIds(List<Long> projectIds);
 }

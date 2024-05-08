@@ -59,4 +59,6 @@ public interface FqProjectProcessMapper
      * @return 结果
      */
     public int deleteFqProjectProcessByIds(Long[] ids);
+
+    public List<FqProjectProcess> selectFqProjectProcessByProjectIds(List<Long> projectIds);
 }

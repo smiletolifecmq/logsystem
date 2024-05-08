@@ -132,7 +132,12 @@
     <el-table :data="tiCqData" style="width: 100%">
       <el-table-column label="类型" align="center">
         <template slot-scope="scope">
-          <el-tag type="danger">未填写经营产值项目数</el-tag>
+          <el-tag type="danger" v-show="scope.row.status == 0"
+            >需填写经营产值</el-tag
+          >
+          <el-tag type="danger" v-show="scope.row.status == 1"
+            >超一周未填写</el-tag
+          >
         </template>
       </el-table-column>
       <el-table-column prop="cxycq" label="陈晓钰" align="center">
@@ -140,7 +145,7 @@
           <el-tag
             type="danger"
             class="hover-effect"
-            @click="handleCqOpen('陈晓钰')"
+            @click="handleCqOpen('陈晓钰', scope.row.status)"
             >{{ scope.row.cxycq }}</el-tag
           >
         </template>
@@ -150,7 +155,7 @@
           <el-tag
             type="danger"
             class="hover-effect"
-            @click="handleCqOpen('王媛媛')"
+            @click="handleCqOpen('王媛媛', scope.row.status)"
             >{{ scope.row.wyycq }}</el-tag
           >
         </template>
@@ -160,7 +165,7 @@
           <el-tag
             type="danger"
             class="hover-effect"
-            @click="handleCqOpen('陈美玲')"
+            @click="handleCqOpen('陈美玲', scope.row.status)"
             >{{ scope.row.cmlcq }}</el-tag
           >
         </template>
@@ -170,7 +175,7 @@
           <el-tag
             type="danger"
             class="hover-effect"
-            @click="handleCqOpen('陈美玲1')"
+            @click="handleCqOpen('陈美玲1', scope.row.status)"
             >{{ scope.row.cml1cq }}</el-tag
           >
         </template>
@@ -180,7 +185,7 @@
           <el-tag
             type="danger"
             class="hover-effect"
-            @click="handleCqOpen('黄丽')"
+            @click="handleCqOpen('黄丽', scope.row.status)"
             >{{ scope.row.hlcq }}</el-tag
           >
         </template>
@@ -204,6 +209,17 @@
       <el-table-column label="二检时间" align="center" prop="twoCheck">
         <template slot-scope="scope">
           {{ formatDate(scope.row.twoCheck) }}
+        </template>
+      </el-table-column>
+      <el-table-column
+        label="盖章时间"
+        align="center"
+        prop="fqProjectProcessList"
+      >
+        <template slot-scope="scope">
+          <li v-for="item in scope.row.fqProjectProcessList">
+            {{ formatDate(item.stampTime) }}
+          </li>
         </template>
       </el-table-column>
       <el-table-column label="接待人" align="center" prop="receptionist" />
@@ -892,12 +908,25 @@ export default {
     this.labelValue = this.labelValue + prevMonth + "月份-已办结";
   },
   methods: {
-    handleCqOpen(value) {
+    handleCqOpen(value, status) {
       this.queryParamsCq.receptionist = value;
       listProjectOperateCq(
         this.addDateRange(this.queryParamsCq, this.dateRange)
       ).then((response) => {
-        this.overTimeProjectList = response.rows;
+        this.overTimeProjectList = [];
+        if (status == 0) {
+          this.overTimeProjectList = response.rows;
+        } else {
+          for (let i = 0; i < response.rows.length; i++) {
+            if (
+              response.rows[i].operateUser == "" &&
+              response.rows[i].twoCheck != "" &&
+              over7(response.rows[i].twoCheck)
+            ) {
+              this.overTimeProjectList.push(response.rows[i]);
+            }
+          }
+        }
         this.overTimeOpen = true;
       });
     },
@@ -915,18 +944,34 @@ export default {
             if (project[i].operateUser == "") {
               num.cqNum++;
             }
+            if (
+              project[i].operateUser == "" &&
+              project[i].twoCheck != "" &&
+              over7(project[i].twoCheck)
+            ) {
+              num.cqNum7++;
+            }
             myMap.set(key, num);
           } else {
             let num = {
               cqNum: 0,
+              cqNum7: 0,
             };
             if (project[i].operateUser == "") {
               num.cqNum++;
+            }
+            if (
+              project[i].operateUser == "" &&
+              project[i].twoCheck != "" &&
+              over7(project[i].twoCheck)
+            ) {
+              num.cqNum7++;
             }
             myMap.set(key, num);
           }
         }
         let numData = {
+          status: 0,
           cxycq: 0,
           wyycq: 0,
           cml1cq: 0,
@@ -948,6 +993,32 @@ export default {
         }
         if (myMap.has("黄丽")) {
           numData.hlcq = myMap.get("黄丽").cqNum;
+        }
+        this.tiCqData.push(numData);
+
+        numData = {
+          status: 1,
+          cxycq: 0,
+          wyycq: 0,
+          cml1cq: 0,
+          cmlcq: 0,
+          hlcq: 0,
+        };
+
+        if (myMap.has("陈晓钰")) {
+          numData.cxycq = myMap.get("陈晓钰").cqNum7;
+        }
+        if (myMap.has("陈美玲")) {
+          numData.cmlcq = myMap.get("陈美玲").cqNum7;
+        }
+        if (myMap.has("陈美玲1")) {
+          numData.cml1cq = myMap.get("陈美玲1").cqNum7;
+        }
+        if (myMap.has("王媛媛")) {
+          numData.wyycq = myMap.get("王媛媛").cqNum7;
+        }
+        if (myMap.has("黄丽")) {
+          numData.hlcq = myMap.get("黄丽").cqNum7;
         }
         this.tiCqData.push(numData);
       });
@@ -1306,5 +1377,26 @@ function formatDateString(date) {
   var month = (date.getMonth() + 1 < 10 ? "0" : "") + (date.getMonth() + 1); // 月份补零
   var day = (date.getDate() < 10 ? "0" : "") + date.getDate(); // 日补零
   return year + "-" + month + "-" + day;
+}
+
+function over7(value) {
+  // 给定的时间 '2022-01-07 00:00:00'
+  var givenTime = new Date(value).getTime();
+
+  // 当前时间
+  var currentTime = new Date().getTime();
+
+  // 计算时间差（毫秒数）
+  var timeDifference = currentTime - givenTime;
+
+  // 将时间差转换为天数
+  var daysDifference = timeDifference / (1000 * 60 * 60 * 24);
+
+  // 判断是否大于7天
+  if (daysDifference > 7) {
+    return true;
+  } else {
+    return false;
+  }
 }
 </script>

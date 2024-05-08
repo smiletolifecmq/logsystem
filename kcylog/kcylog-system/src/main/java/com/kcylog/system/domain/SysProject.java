@@ -95,6 +95,8 @@ public class SysProject extends BaseEntity
 
     private FqProjectProcess fqProjectProcess;
 
+    private List<FqProjectProcess> fqProjectProcessList;
+
     /** 通知出件时间 */
     @Excel(name = "通知出件时间", needMerge = true)
     private String noticeTime;
@@ -215,6 +217,14 @@ public class SysProject extends BaseEntity
     private String oneCheckNotes;
 
     private String twoCheckNotes;
+
+    public List<FqProjectProcess> getFqProjectProcessList() {
+        return fqProjectProcessList;
+    }
+
+    public void setFqProjectProcessList(List<FqProjectProcess> fqProjectProcessList) {
+        this.fqProjectProcessList = fqProjectProcessList;
+    }
 
     public String getCompletionNotes() {
         return completionNotes;

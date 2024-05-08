@@ -251,4 +251,12 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
             #{id}
         </foreach>
     </delete>
+
+    <select id="selectFqProjectProcessByProjectIds" parameterType="java.util.List" resultMap="FqProjectProcessResult">
+        <include refid="selectFqProjectProcessVo"/>
+        where project_id in
+        <foreach item="projectId" collection="list" open="(" separator="," close=")">
+            #{projectId}
+        </foreach>
+    </select>
 </mapper>
