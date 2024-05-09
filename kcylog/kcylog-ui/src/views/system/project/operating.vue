@@ -217,9 +217,9 @@
         prop="fqProjectProcessList"
       >
         <template slot-scope="scope">
-          <li v-for="item in scope.row.fqProjectProcessList">
-            {{ formatDate(item.stampTime) }}
-          </li>
+          <span v-for="item in scope.row.fqProjectProcessList">
+            {{ formatDate(item.stampTime) }}<br />
+          </span>
         </template>
       </el-table-column>
       <el-table-column label="接待人" align="center" prop="receptionist" />

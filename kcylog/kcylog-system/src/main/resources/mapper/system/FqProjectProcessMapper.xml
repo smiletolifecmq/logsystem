@@ -253,7 +253,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
     </delete>
 
     <select id="selectFqProjectProcessByProjectIds" parameterType="java.util.List" resultMap="FqProjectProcessResult">
-        <include refid="selectFqProjectProcessVo"/>
+        select version, stamp_time, project_id from fq_project_process
         where project_id in
         <foreach item="projectId" collection="list" open="(" separator="," close=")">
             #{projectId}
