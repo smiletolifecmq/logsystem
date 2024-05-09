@@ -927,7 +927,9 @@ export default {
             }
           }
         }
-        this.overTimeOpen = true;
+        if (status != -1) {
+          this.overTimeOpen = true;
+        }
       });
     },
     getCqData() {
@@ -1318,7 +1320,8 @@ export default {
             this.$modal.msgSuccess("填写成功");
             this.detailOpen = false;
             this.getList();
-            this.handleCqOpen(this.form.receptionist);
+            console.log(tempForm.receptionist);
+            this.handleCqOpen(tempForm.receptionist, -1);
           });
         }
       });
