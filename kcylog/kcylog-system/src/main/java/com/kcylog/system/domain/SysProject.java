@@ -218,6 +218,26 @@ public class SysProject extends BaseEntity
 
     private String twoCheckNotes;
 
+    private String contractNo;
+
+    private Long contractAmount;
+
+    public String getContractNo() {
+        return contractNo;
+    }
+
+    public void setContractNo(String contractNo) {
+        this.contractNo = contractNo;
+    }
+
+    public Long getContractAmount() {
+        return contractAmount;
+    }
+
+    public void setContractAmount(Long contractAmount) {
+        this.contractAmount = contractAmount;
+    }
+
     public List<FqProjectProcess> getFqProjectProcessList() {
         return fqProjectProcessList;
     }

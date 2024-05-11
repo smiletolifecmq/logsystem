@@ -49,6 +49,10 @@ public class ViewFqProject extends BaseEntity
 
     private LocalDateTime afterTime;
 
+    private String contractNo;
+
+    private Long contractAmount;
+
     //安排产值
     private Long arrangeProfit;
     //工作内容
@@ -62,6 +66,22 @@ public class ViewFqProject extends BaseEntity
     private String customerContractPhone;
 
     private Long subpackageType;
+
+    public String getContractNo() {
+        return contractNo;
+    }
+
+    public void setContractNo(String contractNo) {
+        this.contractNo = contractNo;
+    }
+
+    public Long getContractAmount() {
+        return contractAmount;
+    }
+
+    public void setContractAmount(Long contractAmount) {
+        this.contractAmount = contractAmount;
+    }
 
     public LocalDateTime getAfterTime() {
         return afterTime;

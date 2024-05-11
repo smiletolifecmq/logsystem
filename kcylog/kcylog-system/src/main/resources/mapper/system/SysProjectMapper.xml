@@ -61,6 +61,8 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
         <result property="completionNotes" column="completion_notes"/>
         <result property="oneCheckNotes" column="one_check_notes"/>
         <result property="twoCheckNotes" column="two_check_notes"/>
+        <result property="contractNo" column="contract_no"/>
+        <result property="contractAmount" column="contract_amount"/>
 
         <association property="projectValue" javaType="java.util.List" resultMap="SysProjectValueResult"/>
         <association property="projectCar" javaType="java.util.List" resultMap="SysProjectCarResult"/>
@@ -212,6 +214,8 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
             <if test="mapScale != null">map_scale,</if>
             <if test="afterTime != null">after_time,</if>
             <if test="viewProjectId != null">view_project_id,</if>
+            <if test="contractNo != null">contract_no,</if>
+            <if test="contractAmount != null">contract_amount,</if>
          </trim>
         <trim prefix="values (" suffix=")" suffixOverrides=",">
             <if test="projectNameAlias != null and projectNameAlias != ''">#{projectNameAlias},</if>
@@ -256,6 +260,8 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
             <if test="mapScale != null">#{mapScale},</if>
             <if test="afterTime != null">#{afterTime},</if>
             <if test="viewProjectId != null">#{viewProjectId},</if>
+            <if test="contractNo != null">#{contractNo},</if>
+            <if test="contractAmount != null">#{contractAmount},</if>
          </trim>
     </insert>
 
@@ -512,6 +518,8 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 <!--            <if test="fbMoney != null">fb_money = #{fbMoney},</if>-->
             <if test="afterTime != null">after_time = #{afterTime},</if>
             <if test="viewProjectId != null">view_project_id = #{viewProjectId},</if>
+            <if test="contractNo != null">contract_no = #{contractNo},</if>
+            <if test="contractAmount != null">contract_amount = #{contractAmount},</if>
         </trim>
         where view_project_id = #{viewProjectId}
     </update>
