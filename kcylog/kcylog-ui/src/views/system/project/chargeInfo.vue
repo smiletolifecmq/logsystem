@@ -142,6 +142,7 @@ import {
   addInfo,
   updateInfo,
 } from "@/api/system/chargeInfo";
+import { exportSubDocx } from "@/utils/doc.js";
 
 export default {
   name: "Info",
@@ -300,14 +301,97 @@ export default {
     },
     /** 导出按钮操作 */
     handleExport() {
-      this.download(
-        "system/chargeInfo/export",
-        {
-          ...this.queryParams,
-        },
-        `info_${new Date().getTime()}.xlsx`
-      );
+      if (this.dateRange.length == 0) {
+        this.$message({
+          type: "error",
+          message: "请选择申请时间～",
+        });
+        return;
+      }
+      listInfo(
+        this.addDateRange(
+          {
+            pageNum: 1,
+            pageSize: 9999,
+          },
+          this.dateRange
+        )
+      ).then((response) => {
+        const list = response.rows;
+        const data = {
+          form: {
+            createTime: getOtherDate(this.dateRange[0]),
+            exportTime: getNowDate(),
+            startTime: getNowDate(),
+            endTime: getTwoNowDate(),
+          },
+          list: [],
+        };
+        for (var i = 0; i < list.length; i++) {
+          data.list.push({
+            num: i + 1,
+            projectCode: list[i].projectCode,
+            projectName: list[i].projectName,
+            projectTypeName: list[i].projectTypeName,
+            subcontractNo: list[i].subcontractNo,
+          });
+        }
+        exportSubDocx(
+          "/sub_bc_template.docx",
+          data,
+          "福清分公司分包公示表.docx"
+        );
+      });
     },
   },
 };
+
+function getNowDate() {
+  // 获取当前日期
+  var date = new Date();
+
+  // 获取当前月份
+  var nowMonth = date.getMonth() + 1;
+
+  // 获取当前是几号
+  var strDate = date.getDate();
+
+  // 最后拼接字符串，得到一个格式为(yyyy-MM-dd)的日期
+  var nowDate = date.getFullYear() + "年" + nowMonth + "月" + strDate + "日";
+  return nowDate;
+}
+
+function getOtherDate(value) {
+  var inputDateStr = value;
+
+  // 将字符串转换为Date对象
+  var inputDate = new Date(inputDateStr);
+
+  // 获取年、月、日
+  var year = inputDate.getFullYear();
+  var month = inputDate.getMonth() + 1;
+  var day = inputDate.getDate();
+
+  // 格式化输出
+  var formattedDate = year + "年" + month + "月" + day + "日";
+  return formattedDate;
+}
+
+function getTwoNowDate() {
+  // 获取当前时间
+  var currentDate = new Date();
+
+  // 添加2天的时间
+  currentDate.setDate(currentDate.getDate() + 2);
+
+  // 获取年、月、日
+  var year = currentDate.getFullYear();
+  var month = currentDate.getMonth() + 1;
+  var day = currentDate.getDate();
+
+  // 格式化输出
+  var formattedDate = year + "年" + month + "月" + day + "日";
+
+  return formattedDate;
+}
 </script>
