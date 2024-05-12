@@ -97,6 +97,8 @@ public class SysProject extends BaseEntity
 
     private List<FqProjectProcess> fqProjectProcessList;
 
+    private List<ProjectChargeInfo> projectChargeInfo;
+
     /** 通知出件时间 */
     @Excel(name = "通知出件时间", needMerge = true)
     private String noticeTime;
@@ -224,6 +226,14 @@ public class SysProject extends BaseEntity
 
     public String getContractNo() {
         return contractNo;
+    }
+
+    public List<ProjectChargeInfo> getProjectChargeInfo() {
+        return projectChargeInfo;
+    }
+
+    public void setProjectChargeInfo(List<ProjectChargeInfo> projectChargeInfo) {
+        this.projectChargeInfo = projectChargeInfo;
     }
 
     public void setContractNo(String contractNo) {

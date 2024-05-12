@@ -68,6 +68,17 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
         <association property="projectCar" javaType="java.util.List" resultMap="SysProjectCarResult"/>
         <association property="reviewSub" javaType="java.util.List" resultMap="SysReviewSubResult"/>
         <association property="fqProjectProcess" javaType="FqProjectProcess" resultMap="FqProjectProcessResult"/>
+        <association property="projectChargeInfo" javaType="java.util.List" resultMap="ProjectChargeInfoResult"/>
+    </resultMap>
+
+    <resultMap type="ProjectChargeInfo" id="ProjectChargeInfoResult">
+        <result property="projectCode"    column="project_code"    />
+        <result property="settleMoney"    column="settle_money"    />
+        <result property="firmName"    column="firm_name"    />
+        <result property="subcontractNo"    column="subcontract_no"    />
+        <result property="createTime"    column="create_time"    />
+        <result property="projectName"    column="project_name"    />
+        <result property="projectTypeName"    column="project_type_name"    />
     </resultMap>
 
     <resultMap type="FqProjectProcess" id="FqProjectProcessResult">
@@ -369,12 +380,6 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
             <if test="params.endTime != null and params.endTime != ''"><!-- 结束时间检索 -->
                 and (date_format(settle_time,'%y%m%d') &lt;= date_format(#{params.endTime},'%y%m%d'))
             </if>
-            <if test=" createTime != null"><!-- 开始时间检索 -->
-                and (date_format(settle_time,'%y%m%d') &gt;= date_format(#{createTime},'%y%m%d'))
-            </if>
-            <if test="updateTime != null"><!-- 结束时间检索 -->
-                and (date_format(settle_time,'%y%m%d') &lt;= date_format(#{updateTime},'%y%m%d'))
-            </if>
             <if test="receptionist != null  and receptionist != ''"> and receptionist = #{receptionist}</if>
             and is_two_check = 1
         </where>
@@ -669,6 +674,25 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
         <where>
             <if test="receptionist != null  and receptionist != ''"> and receptionist = #{receptionist}</if>
             and is_two_check = 1 and operate_user = ''
+        </where>
+        order by p.project_id desc
+    </select>
+
+
+    <sql id="selectSysProjectExportVo">
+        select p.*, a.firm_name, a.subcontract_no, a.settle_money from sys_project p left join project_charge_info a on p.project_num = a.project_code
+    </sql>
+
+    <select id="listProjectOperateExport" parameterType="SysProject" resultMap="SysProjectResult">
+        <include refid="selectSysProjectExportVo"/>
+        <where>
+            <if test="createTime != null"><!-- 开始时间检索 -->
+                and (date_format(p.settle_time,'%y%m%d') &gt;= date_format(#{createTime},'%y%m%d'))
+            </if>
+            <if test="updateTime != null"><!-- 结束时间检索 -->
+                and (date_format(p.settle_time,'%y%m%d') &lt;= date_format(#{updateTime},'%y%m%d'))
+            </if>
+            and is_two_check = 1
         </where>
         order by p.project_id desc
     </select>

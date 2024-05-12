@@ -42,7 +42,7 @@ public class OperatingExport {
     private String contractNo;
 
     @Excel(name = "经营合同额", needMerge = true)
-    private String contractAmount;
+    private Long contractAmount;
 
     @Excel(name = "安排开始时间", needMerge = true)
     private String projectStartAlias;
@@ -60,7 +60,7 @@ public class OperatingExport {
     private String subcontractNo;
 
     @Excel(name = "分包金额", needMerge = true)
-    private String settleMoney;
+    private Long settleMoney;
 
     @Excel(name = "是否延期", needMerge = true)
     private String afterTime;
@@ -173,11 +173,11 @@ public class OperatingExport {
         this.contractNo = contractNo;
     }
 
-    public String getContractAmount() {
+    public Long getContractAmount() {
         return contractAmount;
     }
 
-    public void setContractAmount(String contractAmount) {
+    public void setContractAmount(Long contractAmount) {
         this.contractAmount = contractAmount;
     }
 
@@ -221,11 +221,11 @@ public class OperatingExport {
         this.subcontractNo = subcontractNo;
     }
 
-    public String getSettleMoney() {
+    public Long getSettleMoney() {
         return settleMoney;
     }
 
-    public void setSettleMoney(String settleMoney) {
+    public void setSettleMoney(Long settleMoney) {
         this.settleMoney = settleMoney;
     }
 

@@ -106,4 +106,6 @@ public interface SysProjectMapper
     public int updateSysProjectCqBz(SysProject sysProject);
 
     public List<SysProject> listProjectOperateCq(SysProject sysProject);
+
+    public List<SysProject> listProjectOperateExport(SysProject sysProject);
 }

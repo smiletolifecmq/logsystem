@@ -7,6 +7,7 @@ import com.kcylog.common.core.domain.AjaxResult;
 import com.kcylog.common.core.page.TableDataInfo;
 import com.kcylog.common.enums.BusinessType;
 import com.kcylog.common.utils.poi.ExcelMultUtil;
+import com.kcylog.common.utils.poi.ExcelUtil;
 import com.kcylog.system.common.*;
 import com.kcylog.system.domain.*;
 import com.kcylog.system.service.*;
@@ -541,9 +542,97 @@ public class SysProjectController extends BaseController {
     }
 
     @PostMapping("/exportOperating")
-    public void exportOperating(HttpServletResponse response, SysProject sysProject) {
-        List<SysProject> list = sysProjectService.listProjectOperate(sysProject);
-
-
+    public void exportOperating(HttpServletResponse response, SysProject sysProject) throws ParseException {
+        List<SysProject> list = sysProjectService.listProjectOperateExport(sysProject);
+        List<OperatingExport> operatingExportList = new ArrayList<>();
+        int num = 0;
+        for (SysProject project : list){
+            if (project.getSubpackageType() != null && project.getSubpackageType() != 0 && project.getSubpackageType() != 1){
+                //有分包
+                for (ProjectChargeInfo chargeInfo : project.getProjectChargeInfo()){
+                    OperatingExport operatingExport = new OperatingExport();
+                    num ++;
+                    operatingExport.setProjectNum(project.getProjectNum());
+                    operatingExport.setProjectNameAlias(project.getProjectNameAlias());
+                    operatingExport.setRequesterAlias(project.getRequesterAlias());
+                    operatingExport.setValueType("分院自联业务");
+                    operatingExport.setProjectType(project.getProjectType());
+                    operatingExport.setReceptionist(project.getReceptionist());
+                    operatingExport.setWorkloadAlias(project.getWorkloadAlias());
+                    operatingExport.setUserNameAlias(project.getUserNameAlias());
+                    operatingExport.setDepartment(project.getDepartment());
+                    operatingExport.setOperate(project.getOperate());
+                    operatingExport.setContractNo(project.getContractNo());
+                    operatingExport.setContractAmount(project.getContractAmount());
+                    operatingExport.setProjectStartAlias(project.getProjectStartAlias());
+                    operatingExport.setTwoCheck(project.getTwoCheck());
+                    operatingExport.setSubpackageType("是");
+                    if (project.getAfterTime() != null){
+                        operatingExport.setAfterTime("是");
+                    }else {
+                        operatingExport.setAfterTime("否");
+                    }
+                    SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd");
+                    Date startDate = dateFormat.parse(project.getProjectEndAlias());
+                    Date endDate = dateFormat.parse(project.getTwoCheck());
+                    long differenceInMilliseconds = endDate.getTime() - startDate.getTime();
+                    long differenceInDays = (long) Math.ceil((double) differenceInMilliseconds / (1000 * 3600 * 24));
+                    if (differenceInDays >= 0){
+                        operatingExport.setIsOverdue("否");
+                    }else {
+                        operatingExport.setIsOverdue("是");
+                        operatingExport.setOverDay((int) differenceInDays);
+                    }
+                    operatingExport.setDurationFactor(project.getDurationFactor());
+                    operatingExport.setProjectCoefficient(project.getProjectCoefficient());
+                    operatingExport.setNum(num);
+                    operatingExport.setFirmName(chargeInfo.getFirmName());
+                    operatingExport.setSubcontractNo(chargeInfo.getSubcontractNo());
+                    operatingExport.setSettleMoney(chargeInfo.getSettleMoney()/100);
+                    operatingExportList.add(operatingExport);
+                }
+            }else {
+                //无分包
+                OperatingExport operatingExport = new OperatingExport();
+                num ++;
+                operatingExport.setNum(num);
+                operatingExport.setProjectNum(project.getProjectNum());
+                operatingExport.setProjectNameAlias(project.getProjectNameAlias());
+                operatingExport.setRequesterAlias(project.getRequesterAlias());
+                operatingExport.setValueType("分院自联业务");
+                operatingExport.setProjectType(project.getProjectType());
+                operatingExport.setReceptionist(project.getReceptionist());
+                operatingExport.setWorkloadAlias(project.getWorkloadAlias());
+                operatingExport.setUserNameAlias(project.getUserNameAlias());
+                operatingExport.setDepartment(project.getDepartment());
+                operatingExport.setOperate(project.getOperate());
+                operatingExport.setContractNo(project.getContractNo());
+                operatingExport.setContractAmount(project.getContractAmount());
+                operatingExport.setProjectStartAlias(project.getProjectStartAlias());
+                operatingExport.setTwoCheck(project.getTwoCheck());
+                operatingExport.setSubpackageType("否");
+                if (project.getAfterTime() != null){
+                    operatingExport.setAfterTime("是");
+                }else {
+                    operatingExport.setAfterTime("否");
+                }
+                SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd");
+                Date startDate = dateFormat.parse(project.getProjectEndAlias());
+                Date endDate = dateFormat.parse(project.getTwoCheck());
+                long differenceInMilliseconds = endDate.getTime() - startDate.getTime();
+                long differenceInDays = (long) Math.ceil((double) differenceInMilliseconds / (1000 * 3600 * 24));
+                if (differenceInDays >= 0){
+                    operatingExport.setIsOverdue("否");
+                }else {
+                    operatingExport.setIsOverdue("是");
+                    operatingExport.setOverDay((int) differenceInDays);
+                }
+                operatingExport.setDurationFactor(project.getDurationFactor());
+                operatingExport.setProjectCoefficient(project.getProjectCoefficient());
+                operatingExportList.add(operatingExport);
+            }
+        }
+        ExcelUtil<OperatingExport> util = new ExcelUtil<OperatingExport>(OperatingExport.class);
+        util.exportExcel(response, operatingExportList, "项目结算单");
     }
 }

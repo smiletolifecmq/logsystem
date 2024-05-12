@@ -65,6 +65,12 @@ public class MqConsume {
 
     @Autowired
     private ISysReviewSubService sysReviewSubService;
+
+    @Autowired
+    private IViewFqChargeInfoService viewFqChargeInfoService;
+
+    @Autowired
+    private IProjectChargeInfoService projectChargeInfoService;
     /**
      * 监听一个简单的队列，队列不存在时候会创建
      */
@@ -195,6 +201,13 @@ public class MqConsume {
                     sysProject.setCustomerContractPhone(viewFqProject.getCustomerContractPhone());
                 }
 
+                if (viewFqProject.getContractNo() != null){
+                    sysProject.setContractNo(viewFqProject.getContractNo());
+                }
+
+                if (viewFqProject.getContractAmount() != null){
+                    sysProject.setContractAmount(viewFqProject.getContractAmount());
+                }
                 //作业状态
                 ViewFqProjectArchiveTransferTrack projectArchiveTransferTrack = viewFqProjectArchiveTransferTrackService.selectViewFqProjectArchiveTransferTrackByProjectId(Long.parseLong(mqMessage.getProjectId()));
                 if (projectArchiveTransferTrack != null && projectArchiveTransferTrack.getWorkStatus() != null){
@@ -369,6 +382,35 @@ public class MqConsume {
                             fqProjectProcessService.insertFqProjectProcess(fqProjectProcessObj);
                         }
                     }
+                    //同步分包合同
+                    List<ViewFqChargeInfo> chargeInfoList = viewFqChargeInfoService.selectViewFqChargeInfoByProjectCode(Long.parseLong(mqMessage.getProjectId()));
+                    projectChargeInfoService.deleteProjectChargeInfoById(mqMessage.getProjectId());
+                    if (chargeInfoList.size() != 0){
+                        for (ViewFqChargeInfo chargeInfo : chargeInfoList){
+                            ProjectChargeInfo projectChargeInfoObj = new ProjectChargeInfo();
+                            projectChargeInfoObj.setProjectId(mqMessage.getProjectId());
+                            projectChargeInfoObj.setProjectCode(chargeInfo.getProjectCode());
+                            if (chargeInfo.getSettleMoney() != null){
+                                projectChargeInfoObj.setSettleMoney(chargeInfo.getSettleMoney());
+                            }
+                            if (chargeInfo.getFirmName() != null){
+                                projectChargeInfoObj.setFirmName(chargeInfo.getFirmName());
+                            }
+                            if (chargeInfo.getSubcontractNo() != null){
+                                projectChargeInfoObj.setSubcontractNo(chargeInfo.getSubcontractNo());
+                            }
+                            if (chargeInfo.getCreateTime() != null){
+                                projectChargeInfoObj.setCreateTime(chargeInfo.getCreateTime());
+                            }
+                            if (chargeInfo.getProjectName() != null){
+                                projectChargeInfoObj.setProjectName(chargeInfo.getProjectName());
+                            }
+                            if (chargeInfo.getProjectTypeName() != null){
+                                projectChargeInfoObj.setProjectTypeName(chargeInfo.getProjectTypeName());
+                            }
+                            projectChargeInfoService.insertProjectChargeInfo(projectChargeInfoObj);
+                        }
+                    }
                 }
 
                 //同步人员安排配比
@@ -402,6 +444,7 @@ public class MqConsume {
                 sysProjectSelectmapTfinfoService.deleteSysProjectSelectmapTfinfoByProjectId(sysProject.getProjectId());
                 fqProjectProcessService.deleteFqProjectProcessById(sysProject.getProjectId());
                 sysProjectValueService.deleteSysProjectValueByProjectId(sysProject.getProjectId());
+                projectChargeInfoService.deleteProjectChargeInfoById(mqMessage.getProjectId());
             }
 
             System.out.println("通过Message:{}" + mqMessage.getOpType());
