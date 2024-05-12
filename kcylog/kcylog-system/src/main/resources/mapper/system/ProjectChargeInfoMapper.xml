@@ -30,7 +30,14 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
             <if test="subcontractNo != null  and subcontractNo != ''"> and subcontract_no = #{subcontractNo}</if>
             <if test="projectName != null  and projectName != ''"> and project_name like concat('%', #{projectName}, '%')</if>
             <if test="projectTypeName != null  and projectTypeName != ''"> and project_type_name like concat('%', #{projectTypeName}, '%')</if>
+            <if test="params.beginTime != null and params.beginTime != ''"><!-- 开始时间检索 -->
+                and (date_format(create_time,'%y%m%d') &gt;= date_format(#{params.beginTime},'%y%m%d'))
+            </if>
+            <if test="params.endTime != null and params.endTime != ''"><!-- 结束时间检索 -->
+                and (date_format(create_time,'%y%m%d') &lt;= date_format(#{params.endTime},'%y%m%d'))
+            </if>
         </where>
+        order by create_time desc
     </select>
     
     <select id="selectProjectChargeInfoById" parameterType="Long" resultMap="ProjectChargeInfoResult">
