@@ -1,0 +1,90 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.kcylog.system.mapper.ProjectChargeInfoMapper">
+    
+    <resultMap type="ProjectChargeInfo" id="ProjectChargeInfoResult">
+        <result property="id"    column="id"    />
+        <result property="projectId"    column="project_id"    />
+        <result property="projectCode"    column="project_code"    />
+        <result property="settleMoney"    column="settle_money"    />
+        <result property="firmName"    column="firm_name"    />
+        <result property="subcontractNo"    column="subcontract_no"    />
+        <result property="createTime"    column="create_time"    />
+        <result property="projectName"    column="project_name"    />
+        <result property="projectTypeName"    column="project_type_name"    />
+    </resultMap>
+
+    <sql id="selectProjectChargeInfoVo">
+        select id, project_id, project_code, settle_money, firm_name, subcontract_no, create_time, project_name, project_type_name from project_charge_info
+    </sql>
+
+    <select id="selectProjectChargeInfoList" parameterType="ProjectChargeInfo" resultMap="ProjectChargeInfoResult">
+        <include refid="selectProjectChargeInfoVo"/>
+        <where>  
+            <if test="projectId != null  and projectId != ''"> and project_id = #{projectId}</if>
+            <if test="projectCode != null  and projectCode != ''"> and project_code = #{projectCode}</if>
+            <if test="settleMoney != null "> and settle_money = #{settleMoney}</if>
+            <if test="firmName != null  and firmName != ''"> and firm_name like concat('%', #{firmName}, '%')</if>
+            <if test="subcontractNo != null  and subcontractNo != ''"> and subcontract_no = #{subcontractNo}</if>
+            <if test="projectName != null  and projectName != ''"> and project_name like concat('%', #{projectName}, '%')</if>
+            <if test="projectTypeName != null  and projectTypeName != ''"> and project_type_name like concat('%', #{projectTypeName}, '%')</if>
+        </where>
+    </select>
+    
+    <select id="selectProjectChargeInfoById" parameterType="Long" resultMap="ProjectChargeInfoResult">
+        <include refid="selectProjectChargeInfoVo"/>
+        where id = #{id}
+    </select>
+        
+    <insert id="insertProjectChargeInfo" parameterType="ProjectChargeInfo" useGeneratedKeys="true" keyProperty="id">
+        insert into project_charge_info
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="projectId != null">project_id,</if>
+            <if test="projectCode != null">project_code,</if>
+            <if test="settleMoney != null">settle_money,</if>
+            <if test="firmName != null">firm_name,</if>
+            <if test="subcontractNo != null">subcontract_no,</if>
+            <if test="createTime != null">create_time,</if>
+            <if test="projectName != null">project_name,</if>
+            <if test="projectTypeName != null">project_type_name,</if>
+         </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test="projectId != null">#{projectId},</if>
+            <if test="projectCode != null">#{projectCode},</if>
+            <if test="settleMoney != null">#{settleMoney},</if>
+            <if test="firmName != null">#{firmName},</if>
+            <if test="subcontractNo != null">#{subcontractNo},</if>
+            <if test="createTime != null">#{createTime},</if>
+            <if test="projectName != null">#{projectName},</if>
+            <if test="projectTypeName != null">#{projectTypeName},</if>
+         </trim>
+    </insert>
+
+    <update id="updateProjectChargeInfo" parameterType="ProjectChargeInfo">
+        update project_charge_info
+        <trim prefix="SET" suffixOverrides=",">
+            <if test="projectId != null">project_id = #{projectId},</if>
+            <if test="projectCode != null">project_code = #{projectCode},</if>
+            <if test="settleMoney != null">settle_money = #{settleMoney},</if>
+            <if test="firmName != null">firm_name = #{firmName},</if>
+            <if test="subcontractNo != null">subcontract_no = #{subcontractNo},</if>
+            <if test="createTime != null">create_time = #{createTime},</if>
+            <if test="projectName != null">project_name = #{projectName},</if>
+            <if test="projectTypeName != null">project_type_name = #{projectTypeName},</if>
+        </trim>
+        where id = #{id}
+    </update>
+
+    <delete id="deleteProjectChargeInfoById" parameterType="String">
+        delete from project_charge_info where project_id = #{id}
+    </delete>
+
+    <delete id="deleteProjectChargeInfoByIds" parameterType="String">
+        delete from project_charge_info where id in 
+        <foreach item="id" collection="array" open="(" separator="," close=")">
+            #{id}
+        </foreach>
+    </delete>
+</mapper>
