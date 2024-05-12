@@ -364,10 +364,16 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
             <if test="settle != null"> and settle = #{settle}</if>
             <if test="userNameAlias != null and userNameAlias != ''">user_name_alias like concat('%', #{userNameAlias}, '%')</if>
             <if test="params.beginTime != null and params.beginTime != ''"><!-- 开始时间检索 -->
-                and (date_format(two_check,'%y%m%d') &gt;= date_format(#{params.beginTime},'%y%m%d'))
+                and (date_format(settle_time,'%y%m%d') &gt;= date_format(#{params.beginTime},'%y%m%d'))
             </if>
             <if test="params.endTime != null and params.endTime != ''"><!-- 结束时间检索 -->
-                and (date_format(two_check,'%y%m%d') &lt;= date_format(#{params.endTime},'%y%m%d'))
+                and (date_format(settle_time,'%y%m%d') &lt;= date_format(#{params.endTime},'%y%m%d'))
+            </if>
+            <if test=" createTime != null"><!-- 开始时间检索 -->
+                and (date_format(settle_time,'%y%m%d') &gt;= date_format(#{createTime},'%y%m%d'))
+            </if>
+            <if test="updateTime != null"><!-- 结束时间检索 -->
+                and (date_format(settle_time,'%y%m%d') &lt;= date_format(#{updateTime},'%y%m%d'))
             </if>
             <if test="receptionist != null  and receptionist != ''"> and receptionist = #{receptionist}</if>
             and is_two_check = 1

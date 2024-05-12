@@ -539,4 +539,11 @@ public class SysProjectController extends BaseController {
         }
         return getDataTable(list);
     }
+
+    @PostMapping("/exportOperating")
+    public void exportOperating(HttpServletResponse response, SysProject sysProject) {
+        List<SysProject> list = sysProjectService.listProjectOperate(sysProject);
+
+
+    }
 }

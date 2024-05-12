@@ -40,11 +40,11 @@
           @keyup.enter.native="handleQuery"
         />
       </el-form-item>
-      <el-form-item label="二检时间">
+      <el-form-item label="办结时间">
         <el-date-picker
           v-model="dateRange"
           style="width: 240px"
-          type="daterange"
+          type="monthrange"
           value-format="yyyy-MM-dd"
           range-separator="至"
           start-placeholder="开始日期"
@@ -95,6 +95,19 @@
         >
       </el-form-item>
     </el-form>
+
+    <el-row :gutter="10" class="mb8">
+      <el-col :span="1.5">
+        <el-button
+          type="warning"
+          plain
+          icon="el-icon-download"
+          size="mini"
+          @click="handleExport"
+          >导出</el-button
+        >
+      </el-col>
+    </el-row>
 
     <el-table :data="statisticsData" style="width: 100%">
       <el-table-column prop="status" :label="labelValue" align="center">
@@ -1355,6 +1368,21 @@ export default {
             .catch(() => {});
         }
       });
+    },
+
+    handleExport() {
+      if (this.dateRange.length == 0) {
+        this.$message({
+          type: "error",
+          message: "请选择办结时间～",
+        });
+        return;
+      }
+      this.download(
+        "system/project/exportOperating",
+        { createTime: this.dateRange[0], updateTime: this.dateRange[1] },
+        `项目结算表` + `.xlsx`
+      );
     },
   },
 };
