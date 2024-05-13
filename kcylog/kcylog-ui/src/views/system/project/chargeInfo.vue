@@ -59,9 +59,8 @@
       <el-table-column label="项目名称" align="center" prop="projectName" />
       <el-table-column label="项目编号" align="center" prop="projectCode" />
       <el-table-column label="项目类型" align="center" prop="projectTypeName" />
-      <el-table-column label="分包合同号" align="center" prop="firmName" />
-      <el-table-column label="分包金额" align="center" prop="settleMoney" />
-      <el-table-column label="中签单位" align="center" prop="subcontractNo" />
+      <el-table-column label="分包合同号" align="center" prop="subcontractNo" />
+      <el-table-column label="中签单位" align="center" prop="firmName" />
       <el-table-column label="申请时间" align="center" prop="createTime">
         <template slot-scope="scope">{{
           formatDate(scope.row.createTime)
@@ -333,7 +332,7 @@ export default {
             projectCode: list[i].projectCode,
             projectName: list[i].projectName,
             projectTypeName: list[i].projectTypeName ?? "",
-            subcontractNo: list[i].subcontractNo,
+            subcontractNo: list[i].firmName,
           });
         }
         exportSubDocx(
