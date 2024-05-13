@@ -595,6 +595,7 @@ public class SysProjectController extends BaseController {
                     operatingExport.setFirmName(chargeInfo.getFirmName());
                     operatingExport.setSubcontractNo(chargeInfo.getSubcontractNo());
                     operatingExport.setSettleMoney(project.getFbMoney());
+                    operatingExport.setBjRemark(project.getBjRemark());
                     operatingExportList.add(operatingExport);
                 }
             }else {
@@ -641,6 +642,7 @@ public class SysProjectController extends BaseController {
                 operatingExport.setSettleMoney(project.getFbMoney());
                 operatingExport.setDurationFactor(project.getDurationFactor());
                 operatingExport.setProjectCoefficient(project.getProjectCoefficient());
+                operatingExport.setBjRemark(project.getBjRemark());
                 operatingExportList.add(operatingExport);
             }
         }

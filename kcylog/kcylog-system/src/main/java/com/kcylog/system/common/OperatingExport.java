@@ -77,6 +77,17 @@ public class OperatingExport {
     @Excel(name = "项目系数", needMerge = true)
     private BigDecimal projectCoefficient;
 
+    @Excel(name = "备注", needMerge = true)
+    private String bjRemark;
+
+    public String getBjRemark() {
+        return bjRemark;
+    }
+
+    public void setBjRemark(String bjRemark) {
+        this.bjRemark = bjRemark;
+    }
+
     public Integer getNum() {
         return num;
     }
