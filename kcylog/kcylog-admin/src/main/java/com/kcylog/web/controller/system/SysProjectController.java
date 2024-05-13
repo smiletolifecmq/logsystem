@@ -594,11 +594,7 @@ public class SysProjectController extends BaseController {
                     operatingExport.setNum(num);
                     operatingExport.setFirmName(chargeInfo.getFirmName());
                     operatingExport.setSubcontractNo(chargeInfo.getSubcontractNo());
-                    if (chargeInfo.getSettleMoney() != null){
-                        operatingExport.setSettleMoney(chargeInfo.getSettleMoney()/100);
-                    }else {
-                        operatingExport.setSettleMoney((long)0);
-                    }
+                    operatingExport.setSettleMoney(project.getFbMoney());
                     operatingExportList.add(operatingExport);
                 }
             }else {
@@ -642,7 +638,7 @@ public class SysProjectController extends BaseController {
                     operatingExport.setIsOverdue("安排结束时间缺失");
                     operatingExport.setOverDay(0);
                 }
-
+                operatingExport.setSettleMoney(project.getFbMoney());
                 operatingExport.setDurationFactor(project.getDurationFactor());
                 operatingExport.setProjectCoefficient(project.getProjectCoefficient());
                 operatingExportList.add(operatingExport);

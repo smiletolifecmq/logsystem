@@ -60,7 +60,7 @@ public class OperatingExport {
     private String subcontractNo;
 
     @Excel(name = "分包金额", needMerge = true)
-    private Long settleMoney;
+    private BigDecimal settleMoney;
 
     @Excel(name = "是否延期", needMerge = true)
     private String afterTime;
@@ -221,11 +221,11 @@ public class OperatingExport {
         this.subcontractNo = subcontractNo;
     }
 
-    public Long getSettleMoney() {
+    public BigDecimal getSettleMoney() {
         return settleMoney;
     }
 
-    public void setSettleMoney(Long settleMoney) {
+    public void setSettleMoney(BigDecimal settleMoney) {
         this.settleMoney = settleMoney;
     }
 
