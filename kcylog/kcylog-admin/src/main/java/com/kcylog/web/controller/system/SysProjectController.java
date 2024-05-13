@@ -572,17 +572,23 @@ public class SysProjectController extends BaseController {
                     }else {
                         operatingExport.setAfterTime("否");
                     }
-                    SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd");
-                    Date startDate = dateFormat.parse(project.getProjectEndAlias());
-                    Date endDate = dateFormat.parse(project.getTwoCheck());
-                    long differenceInMilliseconds = endDate.getTime() - startDate.getTime();
-                    long differenceInDays = (long) Math.ceil((double) differenceInMilliseconds / (1000 * 3600 * 24));
-                    if (differenceInDays >= 0){
-                        operatingExport.setIsOverdue("否");
+                    if (project.getProjectEndAlias() != null && project.getTwoCheck() != null && project.getProjectEndAlias().equals("") && project.getTwoCheck().equals("")){
+                        SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd");
+                        Date startDate = dateFormat.parse(project.getProjectEndAlias());
+                        Date endDate = dateFormat.parse(project.getTwoCheck());
+                        long differenceInMilliseconds = endDate.getTime() - startDate.getTime();
+                        long differenceInDays = (long) Math.ceil((double) differenceInMilliseconds / (1000 * 3600 * 24));
+                        if (differenceInDays >= 0){
+                            operatingExport.setIsOverdue("否");
+                        }else {
+                            operatingExport.setIsOverdue("是");
+                            operatingExport.setOverDay((int) differenceInDays);
+                        }
                     }else {
-                        operatingExport.setIsOverdue("是");
-                        operatingExport.setOverDay((int) differenceInDays);
+                        operatingExport.setIsOverdue("安排结束时间缺失");
+                        operatingExport.setOverDay(0);
                     }
+
                     operatingExport.setDurationFactor(project.getDurationFactor());
                     operatingExport.setProjectCoefficient(project.getProjectCoefficient());
                     operatingExport.setNum(num);
@@ -620,17 +626,23 @@ public class SysProjectController extends BaseController {
                 }else {
                     operatingExport.setAfterTime("否");
                 }
-                SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd");
-                Date startDate = dateFormat.parse(project.getProjectEndAlias());
-                Date endDate = dateFormat.parse(project.getTwoCheck());
-                long differenceInMilliseconds = endDate.getTime() - startDate.getTime();
-                long differenceInDays = (long) Math.ceil((double) differenceInMilliseconds / (1000 * 3600 * 24));
-                if (differenceInDays >= 0){
-                    operatingExport.setIsOverdue("否");
+                if (project.getProjectEndAlias() != null && project.getTwoCheck() != null && project.getProjectEndAlias().equals("") && project.getTwoCheck().equals("")) {
+                    SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd");
+                    Date startDate = dateFormat.parse(project.getProjectEndAlias());
+                    Date endDate = dateFormat.parse(project.getTwoCheck());
+                    long differenceInMilliseconds = endDate.getTime() - startDate.getTime();
+                    long differenceInDays = (long) Math.ceil((double) differenceInMilliseconds / (1000 * 3600 * 24));
+                    if (differenceInDays >= 0){
+                        operatingExport.setIsOverdue("否");
+                    }else {
+                        operatingExport.setIsOverdue("是");
+                        operatingExport.setOverDay((int) differenceInDays);
+                    }
                 }else {
-                    operatingExport.setIsOverdue("是");
-                    operatingExport.setOverDay((int) differenceInDays);
+                    operatingExport.setIsOverdue("安排结束时间缺失");
+                    operatingExport.setOverDay(0);
                 }
+
                 operatingExport.setDurationFactor(project.getDurationFactor());
                 operatingExport.setProjectCoefficient(project.getProjectCoefficient());
                 operatingExportList.add(operatingExport);
