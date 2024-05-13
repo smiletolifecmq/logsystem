@@ -332,7 +332,7 @@ export default {
             num: i + 1,
             projectCode: list[i].projectCode,
             projectName: list[i].projectName,
-            projectTypeName: list[i].projectTypeName,
+            projectTypeName: list[i].projectTypeName ?? "",
             subcontractNo: list[i].subcontractNo,
           });
         }

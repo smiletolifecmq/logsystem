@@ -262,6 +262,7 @@
           <span>{{ scope.row.settleTime | formatDateObj }}</span>
         </template>
       </el-table-column>
+      <el-table-column label="办结备注" align="center" prop="bjRemark" />
       <el-table-column
         label="操作"
         align="center"
@@ -757,6 +758,15 @@
             :step="0.1"
             :max="99999999"
           ></el-input-number>
+        </el-form-item>
+        <el-form-item label="办结备注" prop="bjRemark">
+          <el-input
+            type="textarea"
+            :rows="2"
+            placeholder="请输入内容"
+            v-model="settleForm.bjRemark"
+          >
+          </el-input>
         </el-form-item>
         <el-form-item label="办结时间" prop="settleTime">
           <el-date-picker
@@ -1348,6 +1358,7 @@ export default {
         tempForm.settleTime = this.settleForm.settleTime;
         tempForm.durationFactor = this.settleForm.durationFactor;
         tempForm.qualityCoefficient = this.settleForm.qualityCoefficient;
+        tempForm.bjRemark = this.settleForm.bjRemark;
         tempForm.settle = 1;
         if (valid) {
           this.$confirm("结算办结之后将无法再修改, 是否继续?", "提示", {

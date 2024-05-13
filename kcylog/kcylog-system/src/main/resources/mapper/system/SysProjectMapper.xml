@@ -63,6 +63,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
         <result property="twoCheckNotes" column="two_check_notes"/>
         <result property="contractNo" column="contract_no"/>
         <result property="contractAmount" column="contract_amount"/>
+        <result property="bjRemark" column="bj_remark"/>
 
         <association property="projectValue" javaType="java.util.List" resultMap="SysProjectValueResult"/>
         <association property="projectCar" javaType="java.util.List" resultMap="SysProjectCarResult"/>
@@ -311,6 +312,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
             <if test="settleTime != null">settle_time = #{settleTime},</if>
             <if test="durationFactor != null">duration_factor = #{durationFactor},</if>
             <if test="qualityCoefficient != null">quality_coefficient = #{qualityCoefficient},</if>
+            <if test="bjRemark != null">bj_remark = #{bjRemark},</if>
         </trim>
         where project_id = #{projectId}
     </update>

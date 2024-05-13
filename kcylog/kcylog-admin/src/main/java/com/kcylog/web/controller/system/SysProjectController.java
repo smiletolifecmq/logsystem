@@ -588,7 +588,11 @@ public class SysProjectController extends BaseController {
                     operatingExport.setNum(num);
                     operatingExport.setFirmName(chargeInfo.getFirmName());
                     operatingExport.setSubcontractNo(chargeInfo.getSubcontractNo());
-                    operatingExport.setSettleMoney(chargeInfo.getSettleMoney()/100);
+                    if (chargeInfo.getSettleMoney() != null){
+                        operatingExport.setSettleMoney(chargeInfo.getSettleMoney()/100);
+                    }else {
+                        operatingExport.setSettleMoney((long)0);
+                    }
                     operatingExportList.add(operatingExport);
                 }
             }else {

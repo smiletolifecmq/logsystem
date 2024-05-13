@@ -224,6 +224,16 @@ public class SysProject extends BaseEntity
 
     private Long contractAmount;
 
+    private String bjRemark;
+
+    public String getBjRemark() {
+        return bjRemark;
+    }
+
+    public void setBjRemark(String bjRemark) {
+        this.bjRemark = bjRemark;
+    }
+
     public String getContractNo() {
         return contractNo;
     }
