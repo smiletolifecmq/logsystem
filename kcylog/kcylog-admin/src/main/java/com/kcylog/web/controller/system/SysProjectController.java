@@ -567,12 +567,12 @@ public class SysProjectController extends BaseController {
                     operatingExport.setProjectStartAlias(project.getProjectStartAlias());
                     operatingExport.setTwoCheck(project.getTwoCheck());
                     operatingExport.setSubpackageType("是");
-                    if (project.getAfterTime() != null){
+                    if (project.getAfterTime() != null && !project.getAfterTime().equals("")){
                         operatingExport.setAfterTime("是");
                     }else {
                         operatingExport.setAfterTime("否");
                     }
-                    if (project.getProjectEndAlias() != null && project.getTwoCheck() != null && project.getProjectEndAlias().equals("") && project.getTwoCheck().equals("")){
+                    if (project.getProjectEndAlias() != null && project.getTwoCheck() != null && !project.getProjectEndAlias().equals("") && !project.getTwoCheck().equals("")){
                         SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd");
                         Date startDate = dateFormat.parse(project.getProjectEndAlias());
                         Date endDate = dateFormat.parse(project.getTwoCheck());
@@ -621,12 +621,12 @@ public class SysProjectController extends BaseController {
                 operatingExport.setProjectStartAlias(project.getProjectStartAlias());
                 operatingExport.setTwoCheck(project.getTwoCheck());
                 operatingExport.setSubpackageType("否");
-                if (project.getAfterTime() != null){
+                if (project.getAfterTime() != null && !project.getAfterTime().equals("")){
                     operatingExport.setAfterTime("是");
                 }else {
                     operatingExport.setAfterTime("否");
                 }
-                if (project.getProjectEndAlias() != null && project.getTwoCheck() != null && project.getProjectEndAlias().equals("") && project.getTwoCheck().equals("")) {
+                if (project.getProjectEndAlias() != null && project.getTwoCheck() != null && !project.getProjectEndAlias().equals("") && !project.getTwoCheck().equals("")) {
                     SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd");
                     Date startDate = dateFormat.parse(project.getProjectEndAlias());
                     Date endDate = dateFormat.parse(project.getTwoCheck());
