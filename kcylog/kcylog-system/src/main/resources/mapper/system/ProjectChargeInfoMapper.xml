@@ -17,22 +17,19 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
         <result property="fbTime"    column="fb_time"    />
         <result property="projectStartAlias"    column="project_start_alias"    />
         <result property="projectEndAlias"    column="project_end_alias"    />
+        <result property="userNameAlias"    column="user_name_alias"    />
+        <result property="department"    column="department"    />
     </resultMap>
 
     <sql id="selectProjectChargeInfoVo">
-        select id, project_id, project_code, settle_money, firm_name, subcontract_no, create_time, project_name, project_type_name, fb_time, project_start_alias, project_end_alias from project_charge_info
+        select id, project_id, project_code, settle_money, firm_name, subcontract_no, create_time, project_name, project_type_name, fb_time, project_start_alias, project_end_alias, user_name_alias, department from project_charge_info
     </sql>
 
     <select id="selectProjectChargeInfoList" parameterType="ProjectChargeInfo" resultMap="ProjectChargeInfoResult">
         <include refid="selectProjectChargeInfoVo"/>
         <where>  
-            <if test="projectId != null  and projectId != ''"> and project_id = #{projectId}</if>
-            <if test="projectCode != null  and projectCode != ''"> and project_code = #{projectCode}</if>
-            <if test="settleMoney != null "> and settle_money = #{settleMoney}</if>
-            <if test="firmName != null  and firmName != ''"> and firm_name like concat('%', #{firmName}, '%')</if>
-            <if test="subcontractNo != null  and subcontractNo != ''"> and subcontract_no = #{subcontractNo}</if>
-            <if test="projectName != null  and projectName != ''"> and project_name like concat('%', #{projectName}, '%')</if>
-            <if test="projectTypeName != null  and projectTypeName != ''"> and project_type_name like concat('%', #{projectTypeName}, '%')</if>
+            <if test="userNameAlias != null  and userNameAlias != ''"> and user_name_alias = #{userNameAlias}</if>
+            <if test="department != null  and department != ''"> and department = #{department}</if>
             <if test="params.beginTime != null and params.beginTime != ''"><!-- 开始时间检索 -->
                 and (date_format(fb_time,'%y%m%d') &gt;= date_format(#{params.beginTime},'%y%m%d'))
             </if>
@@ -40,7 +37,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
                 and (date_format(fb_time,'%y%m%d') &lt;= date_format(#{params.endTime},'%y%m%d'))
             </if>
         </where>
-        order by create_time desc
+        order by fb_time desc
     </select>
     
     <select id="selectProjectChargeInfoById" parameterType="Long" resultMap="ProjectChargeInfoResult">
@@ -62,6 +59,8 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
             <if test="fbTime != null">fb_time,</if>
             <if test="projectStartAlias != null">project_start_alias,</if>
             <if test="projectEndAlias != null">project_end_alias,</if>
+            <if test="userNameAlias != null">user_name_alias,</if>
+            <if test="department != null">department,</if>
          </trim>
         <trim prefix="values (" suffix=")" suffixOverrides=",">
             <if test="projectId != null">#{projectId},</if>
@@ -75,6 +74,8 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
             <if test="fbTime != null">#{fbTime},</if>
             <if test="projectStartAlias != null">#{projectStartAlias},</if>
             <if test="projectEndAlias != null">#{projectEndAlias},</if>
+            <if test="userNameAlias != null">#{userNameAlias},</if>
+            <if test="department != null">#{department},</if>
          </trim>
     </insert>
 

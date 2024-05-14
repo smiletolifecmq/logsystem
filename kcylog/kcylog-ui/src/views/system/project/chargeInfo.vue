@@ -8,6 +8,29 @@
       v-show="showSearch"
       label-width="68px"
     >
+      <el-form-item label="负责人" prop="userNameAlias">
+        <el-input
+          v-model="queryParams.userNameAlias"
+          placeholder="请输入项目负责人"
+          clearable
+          @keyup.enter.native="handleQuery"
+        />
+      </el-form-item>
+      <el-form-item label="作业部门" prop="department">
+        <el-select
+          v-model="queryParams.department"
+          placeholder="请选择部门"
+          clearable
+        >
+          <el-option
+            v-for="item in deptList"
+            :key="item.value"
+            :label="item.label"
+            :value="item.value"
+          >
+          </el-option>
+        </el-select>
+      </el-form-item>
       <el-form-item label="申请时间">
         <el-date-picker
           v-model="dateRange"
@@ -60,10 +83,12 @@
       <el-table-column label="项目编号" align="center" prop="projectCode" />
       <el-table-column label="项目类型" align="center" prop="projectTypeName" />
       <el-table-column label="分包合同号" align="center" prop="subcontractNo" />
+      <el-table-column label="负责人" align="center" prop="userNameAlias" />
+      <el-table-column label="部门" align="center" prop="department" />
       <el-table-column label="中签单位" align="center" prop="firmName" />
       <el-table-column label="申请时间" align="center" prop="fbTime">
         <template slot-scope="scope">{{
-          formatDate(scope.row.createTime)
+          formatDate(scope.row.fbTime)
         }}</template>
       </el-table-column>
       <el-table-column
@@ -165,6 +190,52 @@ export default {
   name: "Info",
   data() {
     return {
+      deptList: [
+        {
+          value: "地理信息部",
+          label: "地理信息部",
+        },
+        {
+          value: "工程测绘部",
+          label: "工程测绘部",
+        },
+        {
+          value: "管线工程部",
+          label: "管线工程部",
+        },
+        {
+          value: "不动产测绘部",
+          label: "不动产测绘部",
+        },
+        {
+          value: "测绘工程一部",
+          label: "测绘工程一部",
+        },
+        {
+          value: "测绘工程二部",
+          label: "测绘工程二部",
+        },
+        {
+          value: "测绘工程三部",
+          label: "测绘工程三部",
+        },
+        {
+          value: "测绘工程一部1组",
+          label: "测绘工程一部1组",
+        },
+        {
+          value: "测绘工程一部2组",
+          label: "测绘工程一部2组",
+        },
+        {
+          value: "测绘工程二部1组",
+          label: "测绘工程二部1组",
+        },
+        {
+          value: "测绘工程二部2组",
+          label: "测绘工程二部2组",
+        },
+      ],
       dateRange: [],
       // 遮罩层
       loading: true,

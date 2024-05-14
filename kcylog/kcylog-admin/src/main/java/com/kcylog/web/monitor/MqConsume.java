@@ -414,6 +414,12 @@ public class MqConsume {
                             if (sysProject.getProjectEndAlias() != null){
                                 projectChargeInfoObj.setProjectEndAlias(sysProject.getProjectEndAlias());
                             }
+                            if (sysProject.getUserNameAlias() != null){
+                                projectChargeInfoObj.setUserNameAlias(sysProject.getUserNameAlias());
+                            }
+                            if (sysProject.getDepartment() != null){
+                                projectChargeInfoObj.setDepartment(sysProject.getDepartment());
+                            }
                             projectChargeInfoService.insertProjectChargeInfo(projectChargeInfoObj);
                         }
                     }

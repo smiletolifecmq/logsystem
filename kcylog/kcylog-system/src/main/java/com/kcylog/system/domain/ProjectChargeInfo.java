@@ -54,6 +54,26 @@ public class ProjectChargeInfo extends BaseEntity
 
     private String projectEndAlias;
 
+    private String userNameAlias;
+
+    private String department;
+
+    public String getUserNameAlias() {
+        return userNameAlias;
+    }
+
+    public void setUserNameAlias(String userNameAlias) {
+        this.userNameAlias = userNameAlias;
+    }
+
+    public String getDepartment() {
+        return department;
+    }
+
+    public void setDepartment(String department) {
+        this.department = department;
+    }
+
     public Date getFbTime() {
         return fbTime;
     }
