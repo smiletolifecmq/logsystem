@@ -400,13 +400,19 @@ public class MqConsume {
                                 projectChargeInfoObj.setSubcontractNo(chargeInfo.getSubcontractNo());
                             }
                             if (chargeInfo.getCreateTime() != null){
-                                projectChargeInfoObj.setCreateTime(chargeInfo.getCreateTime());
+                                projectChargeInfoObj.setFbTime(chargeInfo.getCreateTime());
                             }
                             if (chargeInfo.getProjectName() != null){
                                 projectChargeInfoObj.setProjectName(chargeInfo.getProjectName());
                             }
                             if (chargeInfo.getProjectTypeName() != null){
                                 projectChargeInfoObj.setProjectTypeName(chargeInfo.getProjectTypeName());
+                            }
+                            if (sysProject.getProjectStartAlias() != null){
+                                projectChargeInfoObj.setProjectStartAlias(sysProject.getProjectStartAlias());
+                            }
+                            if (sysProject.getProjectEndAlias() != null){
+                                projectChargeInfoObj.setProjectEndAlias(sysProject.getProjectEndAlias());
                             }
                             projectChargeInfoService.insertProjectChargeInfo(projectChargeInfoObj);
                         }

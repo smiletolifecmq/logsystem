@@ -5,6 +5,8 @@ import org.apache.commons.lang3.builder.ToStringStyle;
 import com.kcylog.common.annotation.Excel;
 import com.kcylog.common.core.domain.BaseEntity;
 
+import java.util.Date;
+
 /**
  * 分包明细表对象 project_charge_info
  * 
@@ -46,7 +48,37 @@ public class ProjectChargeInfo extends BaseEntity
     @Excel(name = "项目类型")
     private String projectTypeName;
 
-    public void setId(Long id) 
+    private Date fbTime;
+
+    private String projectStartAlias;
+
+    private String projectEndAlias;
+
+    public Date getFbTime() {
+        return fbTime;
+    }
+
+    public void setFbTime(Date fbTime) {
+        this.fbTime = fbTime;
+    }
+
+    public String getProjectStartAlias() {
+        return projectStartAlias;
+    }
+
+    public void setProjectStartAlias(String projectStartAlias) {
+        this.projectStartAlias = projectStartAlias;
+    }
+
+    public String getProjectEndAlias() {
+        return projectEndAlias;
+    }
+
+    public void setProjectEndAlias(String projectEndAlias) {
+        this.projectEndAlias = projectEndAlias;
+    }
+
+    public void setId(Long id)
     {
         this.id = id;
     }

@@ -14,10 +14,13 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
         <result property="createTime"    column="create_time"    />
         <result property="projectName"    column="project_name"    />
         <result property="projectTypeName"    column="project_type_name"    />
+        <result property="fbTime"    column="fb_time"    />
+        <result property="projectStartAlias"    column="project_start_alias"    />
+        <result property="projectEndAlias"    column="project_end_alias"    />
     </resultMap>
 
     <sql id="selectProjectChargeInfoVo">
-        select id, project_id, project_code, settle_money, firm_name, subcontract_no, create_time, project_name, project_type_name from project_charge_info
+        select id, project_id, project_code, settle_money, firm_name, subcontract_no, create_time, project_name, project_type_name, fb_time, project_start_alias, project_end_alias from project_charge_info
     </sql>
 
     <select id="selectProjectChargeInfoList" parameterType="ProjectChargeInfo" resultMap="ProjectChargeInfoResult">
@@ -56,6 +59,9 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
             <if test="createTime != null">create_time,</if>
             <if test="projectName != null">project_name,</if>
             <if test="projectTypeName != null">project_type_name,</if>
+            <if test="fbTime != null">fb_time,</if>
+            <if test="projectStartAlias != null">project_start_alias,</if>
+            <if test="projectEndAlias != null">project_end_alias,</if>
          </trim>
         <trim prefix="values (" suffix=")" suffixOverrides=",">
             <if test="projectId != null">#{projectId},</if>
@@ -66,6 +72,9 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
             <if test="createTime != null">#{createTime},</if>
             <if test="projectName != null">#{projectName},</if>
             <if test="projectTypeName != null">#{projectTypeName},</if>
+            <if test="fbTime != null">#{fbTime},</if>
+            <if test="projectStartAlias != null">#{projectStartAlias},</if>
+            <if test="projectEndAlias != null">#{projectEndAlias},</if>
          </trim>
     </insert>
 
