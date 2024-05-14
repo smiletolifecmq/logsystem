@@ -61,9 +61,27 @@
       <el-table-column label="项目类型" align="center" prop="projectTypeName" />
       <el-table-column label="分包合同号" align="center" prop="subcontractNo" />
       <el-table-column label="中签单位" align="center" prop="firmName" />
-      <el-table-column label="申请时间" align="center" prop="createTime">
+      <el-table-column label="申请时间" align="center" prop="fbTime">
         <template slot-scope="scope">{{
           formatDate(scope.row.createTime)
+        }}</template>
+      </el-table-column>
+      <el-table-column
+        label="安排开始时间"
+        align="center"
+        prop="projectStartAlias"
+      >
+        <template slot-scope="scope">{{
+          formatDate(scope.row.projectStartAlias)
+        }}</template>
+      </el-table-column>
+      <el-table-column
+        label="安排结束时间"
+        align="center"
+        prop="projectEndAlias"
+      >
+        <template slot-scope="scope">{{
+          formatDate(scope.row.projectEndAlias)
         }}</template>
       </el-table-column>
       <!-- <el-table-column
