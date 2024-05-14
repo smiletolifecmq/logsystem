@@ -1517,7 +1517,9 @@ export default {
             }
             if (myMap.has(key)) {
               let num = myMap.get(key);
-              num.workCount++;
+              if (project[i].isArchive == 1) {
+                num.workCount++;
+              }
               if (
                 project[i].receiveStatus == 1 &&
                 project[i].isArchive == 1 &&
@@ -1552,12 +1554,15 @@ export default {
               myMap.set(key, num);
             } else {
               let num = {
-                workCount: 1,
+                workCount: 0,
                 receiveDays: 0,
                 archiveDays: 0,
                 receiveDaysTq: 0,
                 archiveDaysTq: 0,
               };
+              if (project[i].isArchive == 1) {
+                num.workCount++;
+              }
               if (
                 project[i].receiveStatus == 1 &&
                 project[i].isArchive == 1 &&

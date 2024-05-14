@@ -320,12 +320,13 @@ export default {
         const data = {
           form: {
             createTime: getOtherDate(this.dateRange[0]),
-            exportTime: getNowDate(),
-            startTime: getNowDate(),
-            endTime: getTwoNowDate(),
+            exportTime: getOtherDate(this.dateRange[0]),
+            startTime: getNowDate(this.dateRange[0]),
+            endTime: getTwoNowDate(this.dateRange[0]),
           },
           list: [],
         };
+        console.log(data);
         for (var i = 0; i < list.length; i++) {
           data.list.push({
             num: i + 1,
@@ -345,19 +346,21 @@ export default {
   },
 };
 
-function getNowDate() {
-  // 获取当前日期
-  var date = new Date();
+function getNowDate(value) {
+  var inputDateStr = value;
+  console.log(inputDateStr);
 
-  // 获取当前月份
-  var nowMonth = date.getMonth() + 1;
+  // 将字符串转换为Date对象
+  var inputDate = new Date(inputDateStr);
+  inputDate.setDate(inputDate.getDate() + 1);
+  // 获取年、月、日
+  var year = inputDate.getFullYear();
+  var month = inputDate.getMonth() + 1;
+  var day = inputDate.getDate();
 
-  // 获取当前是几号
-  var strDate = date.getDate();
-
-  // 最后拼接字符串，得到一个格式为(yyyy-MM-dd)的日期
-  var nowDate = date.getFullYear() + "年" + nowMonth + "月" + strDate + "日";
-  return nowDate;
+  // 格式化输出
+  var formattedDate = year + "年" + month + "月" + day + "日";
+  return formattedDate;
 }
 
 function getOtherDate(value) {
@@ -376,21 +379,19 @@ function getOtherDate(value) {
   return formattedDate;
 }
 
-function getTwoNowDate() {
-  // 获取当前时间
-  var currentDate = new Date();
+function getTwoNowDate(value) {
+  var inputDateStr = value;
 
-  // 添加2天的时间
-  currentDate.setDate(currentDate.getDate() + 2);
-
+  // 将字符串转换为Date对象
+  var inputDate = new Date(inputDateStr);
+  inputDate.setDate(inputDate.getDate() + 3);
   // 获取年、月、日
-  var year = currentDate.getFullYear();
-  var month = currentDate.getMonth() + 1;
-  var day = currentDate.getDate();
+  var year = inputDate.getFullYear();
+  var month = inputDate.getMonth() + 1;
+  var day = inputDate.getDate();
 
   // 格式化输出
   var formattedDate = year + "年" + month + "月" + day + "日";
-
   return formattedDate;
 }
 </script>
