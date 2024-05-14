@@ -1705,8 +1705,6 @@ export default {
             numData.dlxxbWork = myMap.get("地理信息部").archiveDays;
           }
           this.statisticsData.push(numData);
-
-          console.log(this.statisticsData);
         }
       );
     },

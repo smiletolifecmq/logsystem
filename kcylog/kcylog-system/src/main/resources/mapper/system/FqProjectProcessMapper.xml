@@ -116,7 +116,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
             <if test="status != null">and p.status = #{status}</if>
             <if test="department != null  and department != ''"> and p.department like concat('%', #{department}, '%')</if>
             <if test="checkStatus != null  and checkStatus != -1"> and f.check_status = #{checkStatus}</if>
-            <if test="checkStatus != null  and checkStatus == -1"> and (f.check_status != 2 or f.check_status is null )</if>
+            <if test="checkStatus != null  and checkStatus == -1"> and (f.check_status != 2 or f.check_status is null ) and f.is_archive = 1</if>
             <if test="receiveStatus != null  and receiveStatus == 2"> and f.receive_status = 2</if>
             <if test="receiveStatus != null  and receiveStatus != 2"> and (f.receive_status = 1 or f.receive_status is null)</if>
             <if test="projectNum != null  and projectNum != ''"> and p.project_num like concat('%', #{projectNum}, '%')</if>
