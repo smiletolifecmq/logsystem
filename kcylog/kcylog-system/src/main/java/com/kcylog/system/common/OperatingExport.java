@@ -54,10 +54,10 @@ public class OperatingExport {
     private String subpackageType;
 
     @Excel(name = "分包合同号", needMerge = true)
-    private String firmName;
+    private String subcontractNo;
 
     @Excel(name = "分包单位", needMerge = true)
-    private String subcontractNo;
+    private String firmName;
 
     @Excel(name = "分包金额", needMerge = true)
     private BigDecimal settleMoney;
