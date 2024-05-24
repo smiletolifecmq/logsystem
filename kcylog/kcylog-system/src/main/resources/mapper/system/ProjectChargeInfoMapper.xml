@@ -104,4 +104,9 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
             #{id}
         </foreach>
     </delete>
+
+    <select id="selectProjectChargeInfoByCode" parameterType="String" resultMap="ProjectChargeInfoResult">
+        <include refid="selectProjectChargeInfoVo"/>
+        where project_code = #{projectCode}
+    </select>
 </mapper>

@@ -93,4 +93,10 @@ public class ProjectChargeInfoServiceImpl implements IProjectChargeInfoService
     {
         return projectChargeInfoMapper.deleteProjectChargeInfoById(id);
     }
+
+    @Override
+    public ProjectChargeInfo selectProjectChargeInfoByCode(String projectCode)
+    {
+        return projectChargeInfoMapper.selectProjectChargeInfoByCode(projectCode);
+    }
 }

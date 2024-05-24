@@ -143,3 +143,10 @@ export function listReviewSubcontract(reviewId) {
     method: 'get'
   })
 }
+
+export function getReviewExport(reviewId) {
+  return request({
+    url: '/system/reviewSub/getReviewExport/' + reviewId,
+    method: 'get'
+  })
+}

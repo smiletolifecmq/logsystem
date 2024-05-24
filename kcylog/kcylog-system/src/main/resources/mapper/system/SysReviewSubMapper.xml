@@ -313,26 +313,14 @@
 
     <select id="selectCompletedReviewList" parameterType="SysReviewSub" resultMap="SysReviewSubResult">
         <include refid="selectSysReviewSubVo"/>
-        inner join sys_review_sub_process rsp on r.review_id = rsp.review_id
         <where>
             <if test="serialNum != null  and serialNum != ''">and r.serial_num = #{serialNum}</if>
             <if test="projectName != null  and projectName != ''">and r.project_name like concat('%', #{projectName},
                 '%')
             </if>
-            <if test="requester != null  and requester != ''">and r.requester = #{requester}</if>
-            <if test="status != null and status != -1">and (r.status = #{status} or (rsp.node = 4 and rsp.status = 1 and r.status != 4))</if>
-            <if test="status != null and status == -1">and (r.status = 2 or r.status = 4)</if>
-            <if test="deptId != null ">and r.dept_id = #{deptId}</if>
-            <if test="manType != null">and r.man_type = #{manType}</if>
-            <if test="subpackageType != null">and r.subpackage_type = #{subpackageType}</if>
-            <if test="params.beginTime != null and params.beginTime != ''"><!-- 开始时间检索 -->
-                AND date_format(r.create_time,'%y%m%d') &gt;= date_format(#{params.beginTime},'%y%m%d')
-            </if>
-            <if test="params.endTime != null and params.endTime != ''"><!-- 结束时间检索 -->
-                AND date_format(r.create_time,'%y%m%d') &lt;= date_format(#{params.endTime},'%y%m%d')
-            </if>
+            and (r.subpackage_type = 2 or r.subpackage_type = 3)
         </where>
-        order by r.review_id desc
+        order by r.lot_time desc
     </select>
 
     <select id="selectDoneReviewList" parameterType="SysReviewSub" resultMap="SysReviewSubResult">

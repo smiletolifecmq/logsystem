@@ -257,6 +257,18 @@
               >最终雇工信息</el-button
             >
           </div>
+          <div>
+            <el-button
+              size="mini"
+              type="text"
+              icon="el-icon-download"
+              @click="subcontractExport(scope.row)"
+              v-if="
+                scope.row.subpackageType === 2 || scope.row.subpackageType === 3
+              "
+              >分包确认抽签表导出</el-button
+            >
+          </div>
         </template>
       </el-table-column>
     </el-table>
@@ -1101,6 +1113,7 @@
 <script>
 import {
   listReview,
+  getReviewExport,
   getReview,
   delReview,
   addReview,
@@ -1114,6 +1127,7 @@ import { listUser } from "@/api/system/user";
 import { fetchProjectData } from "@/utils/otherItems";
 import { listUnit } from "@/api/system/unit";
 import { listEmployee } from "@/api/system/reviewEmployeeSub";
+import { exportSubDocx } from "@/utils/doc.js";
 
 export default {
   filters: {
@@ -1909,7 +1923,6 @@ export default {
           this.endAmPm = response.data.endTime.substring(11);
           response.data.endTime = response.data.endTime.substring(0, 10);
         }
-        console.log(response.data);
         this.formInfo = response.data;
         if (this.formInfo.subcontract == 0) {
           this.formInfo.subcontract = null;
@@ -1921,6 +1934,35 @@ export default {
       this.queryParamsEmployee.reviewId = reviewId;
       listEmployee(this.queryParamsEmployee).then((response) => {
         this.employeeList = response.rows;
+      });
+    },
+
+    subcontractExport(row) {
+      const reviewId = row.reviewId || this.ids;
+      getReviewExport(reviewId).then((response) => {
+        const review = response.data;
+        const data = {
+          form: {
+            serial_num: review.serialNum,
+            project_name: review.projectName,
+            win_unit: review.winUnit,
+            subcontract_no: review.subcontractNo,
+            lot_time: this.formatDateReviewSub(review.lotTime),
+            business_name: review.businessName,
+          },
+          list: [],
+        };
+        for (var i = 0; i < review.cooperationUnitJson.length; i++) {
+          data.list.push({
+            num: i + 1,
+            cooperation_unit: review.cooperationUnitJson[i],
+          });
+        }
+        exportSubDocx(
+          "/sub_table.docx",
+          data,
+          "福清分公司劳务分包确认表、抽签表.docx"
+        );
       });
     },
   },

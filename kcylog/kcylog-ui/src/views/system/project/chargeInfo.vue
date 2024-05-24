@@ -415,7 +415,6 @@ export default {
           },
           list: [],
         };
-        console.log(data);
         for (var i = 0; i < list.length; i++) {
           data.list.push({
             num: i + 1,

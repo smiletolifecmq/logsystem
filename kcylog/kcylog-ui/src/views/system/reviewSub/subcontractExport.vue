@@ -24,34 +24,6 @@
           @keyup.enter.native="handleQuery"
         />
       </el-form-item>
-      <el-form-item label="委托单位" prop="requester">
-        <el-input
-          v-model="queryParams.requester"
-          placeholder="请输入委托单位"
-          clearable
-          @keyup.enter.native="handleQuery"
-        />
-      </el-form-item>
-      <el-form-item label="部门" prop="deptId">
-        <el-cascader
-          v-model="queryParamsDeptId"
-          :options="deptOptions"
-          @change="handleChangeDept"
-          clearable
-        ></el-cascader>
-      </el-form-item>
-      <!-- <el-form-item label="创建时间">
-          <el-date-picker
-            v-model="dateRange"
-            style="width: 240px"
-            value-format="yyyy-MM-dd"
-            type="daterange"
-            range-separator="-"
-            start-placeholder="开始日期"
-            end-placeholder="结束日期"
-            @change="handleQuery"
-          ></el-date-picker>
-        </el-form-item> -->
       <el-form-item>
         <el-button
           type="primary"

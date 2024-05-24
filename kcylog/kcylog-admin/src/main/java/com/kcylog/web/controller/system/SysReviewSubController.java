@@ -72,6 +72,9 @@ public class SysReviewSubController extends BaseController
     @Autowired
     private ISysReviewSubEmployeeService sysReviewSubEmployeeService;
 
+    @Autowired
+    private IProjectChargeInfoService projectChargeInfoService;
+
     /**
      * 查询审核单列表
      */
@@ -1120,5 +1123,26 @@ public class SysReviewSubController extends BaseController
         } catch (IOException e) {
             e.printStackTrace();
         }
+    }
+
+    @GetMapping(value = "/getReviewExport/{reviewId}")
+    public AjaxResult getReviewExport(@PathVariable("reviewId") String reviewId) throws JsonProcessingException {
+        SysReviewSub review = sysReviewSubService.selectSysReviewSubByReviewId(reviewId);
+
+        if (review.getCooperationUnit() != null && review.getCooperationUnit() != ""){
+            ObjectMapper objectMapper = new ObjectMapper();
+            List<String> cooperationUnitJson = objectMapper.readValue(review.getCooperationUnit(), new TypeReference<List<String>>(){});
+            review.setCooperationUnitJson(cooperationUnitJson);
+        }
+
+        if (review.getProjectRelation() != null){
+            review.setProjectId(review.getProjectRelation().getProjectId());
+        }
+
+        ProjectChargeInfo projectChargeInfo = projectChargeInfoService.selectProjectChargeInfoByCode(review.getSerialNum());
+        if (projectChargeInfo != null){
+            review.setSubcontractNo(projectChargeInfo.getSubcontractNo());
+        }
+        return success(review);
     }
 }

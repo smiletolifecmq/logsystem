@@ -159,6 +159,16 @@ public class SysReviewSub extends BaseEntity
 
     private BigDecimal guGongMoney;
 
+    private String subcontractNo;
+
+    public String getSubcontractNo() {
+        return subcontractNo;
+    }
+
+    public void setSubcontractNo(String subcontractNo) {
+        this.subcontractNo = subcontractNo;
+    }
+
     public List<SysReviewSubProcess> getReviewSubProcess() {
         return reviewSubProcess;
     }

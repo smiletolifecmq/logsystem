@@ -59,4 +59,6 @@ public interface ProjectChargeInfoMapper
      * @return 结果
      */
     public int deleteProjectChargeInfoByIds(Long[] ids);
+
+    public ProjectChargeInfo selectProjectChargeInfoByCode(String projectCode);
 }

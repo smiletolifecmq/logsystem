@@ -59,4 +59,6 @@ public interface IProjectChargeInfoService
      * @return 结果
      */
     public int deleteProjectChargeInfoById(String id);
+
+    public ProjectChargeInfo selectProjectChargeInfoByCode(String projectCode);
 }
