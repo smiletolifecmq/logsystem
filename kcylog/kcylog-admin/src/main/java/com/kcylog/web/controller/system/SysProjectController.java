@@ -655,4 +655,10 @@ public class SysProjectController extends BaseController {
         ExcelUtil<OperatingExport> util = new ExcelUtil<OperatingExport>(OperatingExport.class);
         util.exportExcel(response, operatingExportList, "项目结算单");
     }
+
+    @GetMapping("/listProductionDetails")
+    public TableDataInfo listProductionDetails(SysProject sysProject) {
+        List<SysProjectValue> projectValue = sysProjectValueService.selectSysProjectValueListProductionDetails(sysProject);
+        return getDataTable(projectValue);
+    }
 }

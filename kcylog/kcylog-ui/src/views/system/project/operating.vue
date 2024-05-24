@@ -107,6 +107,16 @@
           >导出</el-button
         >
       </el-col>
+      <el-col :span="1.5">
+        <el-button
+          type="success"
+          plain
+          icon="el-icon-s-order"
+          size="mini"
+          @click="productionDetails"
+          >人员产值详情</el-button
+        >
+      </el-col>
     </el-row>
 
     <el-table :data="statisticsData" style="width: 100%">
@@ -311,6 +321,58 @@
     />
 
     <el-dialog
+      title="选择条件"
+      :visible.sync="conditionOpen"
+      width="500px"
+      append-to-body
+      v-el-drag-dialog
+    >
+      <el-form
+        ref="productionDetailsForm"
+        :model="productionDetailsForm"
+        label-width="80px"
+      >
+        <el-form-item label="办结时间">
+          <el-date-picker
+            v-model="dateRangeDetails"
+            style="width: 240px"
+            type="monthrange"
+            value-format="yyyy-MM-dd"
+            range-separator="至"
+            start-placeholder="开始日期"
+            end-placeholder="结束日期"
+          >
+          </el-date-picker>
+        </el-form-item>
+        <el-form-item label="作业部门" prop="department">
+          <el-select
+            v-model="productionDetailsForm.department"
+            placeholder="请选择部门"
+            clearable
+          >
+            <el-option
+              v-for="item in deptList"
+              :key="item.value"
+              :label="item.label"
+              :value="item.value"
+            >
+            </el-option>
+          </el-select>
+        </el-form-item>
+        <el-form-item label="用户名" prop="userName">
+          <el-input
+            v-model="productionDetailsForm.userName"
+            placeholder="用户名"
+          />
+        </el-form-item>
+      </el-form>
+      <div slot="footer" class="dialog-footer">
+        <el-button type="primary" @click="submitDetailsForm">确 定</el-button>
+        <el-button @click="cancelDetailsForm">取 消</el-button>
+      </div>
+    </el-dialog>
+
+    <el-dialog
       :title="detailTitle"
       :visible.sync="detailOpen"
       width="1000px"
@@ -475,6 +537,23 @@
           </div>
         </el-collapse-item>
       </el-collapse>
+    </el-dialog>
+
+    <el-dialog
+      title="产值详情"
+      :visible.sync="czOpen"
+      width="600px"
+      append-to-body
+      v-el-drag-dialog
+    >
+      <el-table v-loading="loading" :data="czDetailList" height="500px">
+        <el-table-column label="用户名" align="center" prop="userName" />
+        <el-table-column label="产值" align="center" prop="money">
+          <template slot-scope="scope">
+            <el-tag type="success">{{ scope.row.money }}</el-tag>
+          </template>
+        </el-table-column>
+      </el-table>
     </el-dialog>
 
     <el-dialog
@@ -797,6 +876,7 @@
 </style>
 <script>
 import {
+  listProductionDetails,
   listProjectOperate,
   getProject,
   updateProject,
@@ -824,6 +904,57 @@ export default {
   },
   data() {
     return {
+      czDetailList: [],
+      czOpen: false,
+      deptList: [
+        {
+          value: "地理信息部",
+          label: "地理信息部",
+        },
+        {
+          value: "工程测绘部",
+          label: "工程测绘部",
+        },
+        {
+          value: "管线工程部",
+          label: "管线工程部",
+        },
+        {
+          value: "不动产测绘部",
+          label: "不动产测绘部",
+        },
+        {
+          value: "测绘工程一部",
+          label: "测绘工程一部",
+        },
+        {
+          value: "测绘工程二部",
+          label: "测绘工程二部",
+        },
+        {
+          value: "测绘工程三部",
+          label: "测绘工程三部",
+        },
+        {
+          value: "测绘工程一部1组",
+          label: "测绘工程一部1组",
+        },
+        {
+          value: "测绘工程一部2组",
+          label: "测绘工程一部2组",
+        },
+        {
+          value: "测绘工程二部1组",
+          label: "测绘工程二部1组",
+        },
+        {
+          value: "测绘工程二部2组",
+          label: "测绘工程二部2组",
+        },
+      ],
+      dateRangeDetails: [],
+      productionDetailsForm: {},
+      conditionOpen: false,
       overTimeProjectList: [],
       overTimeOpen: false,
       tiCqData: [],
@@ -935,6 +1066,36 @@ export default {
     this.labelValue = this.labelValue + prevMonth + "月份-已办结";
   },
   methods: {
+    submitDetailsForm() {
+      if (
+        this.dateRangeDetails.length == 0 ||
+        this.productionDetailsForm.department == "" ||
+        this.productionDetailsForm.department == null
+      ) {
+        this.$message({
+          type: "error",
+          message: "办结时间和部门为必选条件～",
+        });
+        return;
+      }
+      listProductionDetails(
+        this.addDateRange(this.productionDetailsForm, this.dateRangeDetails)
+      ).then((response) => {
+        this.czDetailList = response.rows;
+        this.conditionOpen = false;
+        this.czOpen = true;
+      });
+    },
+    productionDetails() {
+      this.dateRangeDetails = [];
+      this.productionDetailsForm = {};
+      this.conditionOpen = true;
+    },
+    cancelDetailsForm() {
+      this.dateRangeDetails = [];
+      this.productionDetailsForm = {};
+      this.conditionOpen = false;
+    },
     handleCqOpen(value, status) {
       this.queryParamsCq.receptionist = value;
       listProjectOperateCq(
@@ -1282,8 +1443,6 @@ export default {
     },
     /** 搜索按钮操作 */
     handleQuery() {
-      this.statisticsData = [];
-      this.getStatisticsData();
       this.queryParams.pageNum = 1;
       this.getList();
     },

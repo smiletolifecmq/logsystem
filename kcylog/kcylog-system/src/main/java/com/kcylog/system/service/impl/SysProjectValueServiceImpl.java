@@ -1,5 +1,6 @@
 package com.kcylog.system.service.impl;
 
+import com.kcylog.system.domain.SysProject;
 import com.kcylog.system.domain.SysProjectValue;
 import com.kcylog.system.mapper.SysProjectValueMapper;
 import com.kcylog.system.service.ISysProjectValueService;
@@ -102,5 +103,11 @@ public class SysProjectValueServiceImpl implements ISysProjectValueService
     public List<SysProjectValue> selectSysProjectValueListByProjectIds(List<Long> projectIds)
     {
         return sysProjectValueMapper.selectSysProjectValueListByProjectIds(projectIds);
+    }
+
+    @Override
+    public List<SysProjectValue> selectSysProjectValueListProductionDetails(SysProject sysProject)
+    {
+        return sysProjectValueMapper.selectSysProjectValueListProductionDetails(sysProject);
     }
 }

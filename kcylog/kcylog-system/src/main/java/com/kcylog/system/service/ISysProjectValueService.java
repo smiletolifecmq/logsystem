@@ -1,5 +1,6 @@
 package com.kcylog.system.service;
 
+import com.kcylog.system.domain.SysProject;
 import com.kcylog.system.domain.SysProjectValue;
 
 import java.util.List;
@@ -64,4 +65,5 @@ public interface ISysProjectValueService
 
     public List<SysProjectValue> selectSysProjectValueListByProjectIds(List<Long> projectIds);
 
+    public List<SysProjectValue> selectSysProjectValueListProductionDetails(SysProject sysProject);
 }

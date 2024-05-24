@@ -1,5 +1,6 @@
 package com.kcylog.system.mapper;
 
+import com.kcylog.system.domain.SysProject;
 import com.kcylog.system.domain.SysProjectValue;
 
 import java.util.List;
@@ -63,4 +64,6 @@ public interface SysProjectValueMapper
     public int deleteSysProjectValueByProjectId(Long projectId);
 
     public List<SysProjectValue> selectSysProjectValueListByProjectIds(List<Long> projectIds);
+
+    public List<SysProjectValue> selectSysProjectValueListProductionDetails(SysProject sysProject);
 }

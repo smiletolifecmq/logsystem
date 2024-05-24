@@ -130,3 +130,11 @@ export function listProjectOperateCq(query) {
   })
 }
 
+export function listProductionDetails(query) {
+  return request({
+    url: '/system/project/listProductionDetails',
+    method: 'get',
+    params: query
+  })
+}
+
