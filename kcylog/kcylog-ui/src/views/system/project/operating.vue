@@ -279,7 +279,11 @@
             >经营产值</el-button
           >
           <el-button
-            v-show="scope.row.settle == 0 && scope.row.operateUser != ''"
+            v-show="
+              scope.row.settle == 0 &&
+              scope.row.operateUser != '' &&
+              scope.row.operateStatus == 1
+            "
             size="mini"
             type="text"
             icon="el-icon-edit"
@@ -1278,6 +1282,8 @@ export default {
     },
     /** 搜索按钮操作 */
     handleQuery() {
+      this.statisticsData = [];
+      this.getStatisticsData();
       this.queryParams.pageNum = 1;
       this.getList();
     },
