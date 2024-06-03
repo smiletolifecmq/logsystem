@@ -259,6 +259,12 @@
           >
         </template>
       </el-table-column>
+      <el-table-column label="抽签过程" align="center" prop="drawStatus">
+        <template slot-scope="scope">
+          <el-tag v-show="scope.row.drawStatus == 0" type="danger">无</el-tag>
+          <el-tag v-show="scope.row.drawStatus == 1" type="success">有</el-tag>
+        </template>
+      </el-table-column>
       <el-table-column label="雇工分包" align="center">
         <el-table-column label="状态" align="center" prop="subpackageType">
           <template slot-scope="scope">
@@ -319,6 +325,14 @@
             @click="handleDetail(scope.row)"
             v-hasPermi="['system:project:query']"
             >详情</el-button
+          >
+          <el-button
+            size="mini"
+            type="text"
+            icon="el-icon-edit"
+            @click="handleLotteryProcess(scope.row)"
+            v-hasPermi="['system:project:lotteryProcess']"
+            >抽签过程</el-button
           >
           <el-button
             size="mini"
@@ -1057,6 +1071,30 @@
         <el-button type="primary" @click="submitFormCq">确 定</el-button>
       </div>
     </el-dialog>
+
+    <el-dialog
+      title="抽签过程"
+      :visible.sync="cqgcOpen"
+      width="500px"
+      append-to-body
+    >
+      <el-form ref="cqgcForm" :model="cqgcForm" label-width="80px">
+        <el-form-item label="抽签状态" prop="drawStatus">
+          <el-select v-model="cqgcForm.drawStatus" placeholder="请选择">
+            <el-option
+              v-for="item in drawList"
+              :key="item.value"
+              :label="item.label"
+              :value="item.value"
+            >
+            </el-option>
+          </el-select>
+        </el-form-item>
+      </el-form>
+      <div slot="footer" class="dialog-footer">
+        <el-button type="primary" @click="submitCqgcForm">确 定</el-button>
+      </div>
+    </el-dialog>
   </div>
 </template>
 <style>
@@ -1074,6 +1112,7 @@ import {
   updateProject,
   listProjectSelected,
   updateProjectCqBz,
+  updateProjectDrawStatus,
 } from "@/api/system/project";
 import elDragDialog from "@/api/components/el-drag";
 import { listUnit } from "@/api/system/unit";
@@ -1087,6 +1126,18 @@ export default {
   },
   data() {
     return {
+      drawList: [
+        {
+          value: 0,
+          label: "无",
+        },
+        {
+          value: 1,
+          label: "有",
+        },
+      ],
+      cqgcOpen: false,
+      cqgcForm: {},
       formReviewCq: {},
       cqOpen: false,
       overTimeOpen: false,
@@ -1320,6 +1371,19 @@ export default {
     this.getStatisticsData();
   },
   methods: {
+    handleLotteryProcess(value) {
+      this.cqgcForm.projectId = value.projectId;
+      this.cqgcOpen = true;
+    },
+    submitCqgcForm() {
+      this.$refs["cqgcForm"].validate((valid) => {
+        updateProjectDrawStatus(this.cqgcForm).then((response) => {
+          this.$modal.msgSuccess("修改成功");
+          this.cqgcOpen = false;
+          this.cqgcForm = {};
+        });
+      });
+    },
     submitFormCq() {
       this.$refs["formReviewCq"].validate((valid) => {
         updateProjectCqBz(this.formReviewCq).then((response) => {

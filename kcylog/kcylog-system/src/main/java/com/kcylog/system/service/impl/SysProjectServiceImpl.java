@@ -240,4 +240,10 @@ public class SysProjectServiceImpl implements ISysProjectService
     {
         return sysProjectMapper.listProjectOperateExport(sysProject);
     }
+
+    @Override
+    public int updateSysProjectDrawStatus(SysProject sysProject)
+    {
+        return sysProjectMapper.updateSysProjectDrawStatus(sysProject);
+    }
 }

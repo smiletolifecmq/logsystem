@@ -108,4 +108,6 @@ public interface ISysProjectService
     public List<SysProject> listProjectOperateCq(SysProject sysProject);
 
     public List<SysProject> listProjectOperateExport(SysProject sysProject);
+
+    public int updateSysProjectDrawStatus(SysProject sysProject);
 }

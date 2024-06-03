@@ -661,4 +661,11 @@ public class SysProjectController extends BaseController {
         List<SysProjectValue> projectValue = sysProjectValueService.selectSysProjectValueListProductionDetails(sysProject);
         return getDataTable(projectValue);
     }
+
+    @Log(title = "抽签过程", businessType = BusinessType.UPDATE)
+    @PutMapping("/projectDrawStatus")
+    public AjaxResult editProjectDrawStatus(@RequestBody SysProject sysProject) {
+        sysProjectService.updateSysProjectDrawStatus(sysProject);
+        return toAjax(1);
+    }
 }

@@ -484,6 +484,21 @@
                           >
                         </el-descriptions-item>
                         <el-descriptions-item>
+                          <template slot="label"> 抽签过程 </template>
+                          <el-tag
+                            v-if="formInfo.project.drawStatus == 0"
+                            type="danger"
+                            size="mini"
+                            >无</el-tag
+                          >
+                          <el-tag
+                            v-if="formInfo.project.drawStatus == 1"
+                            type="success"
+                            size="mini"
+                            >有</el-tag
+                          >
+                        </el-descriptions-item>
+                        <el-descriptions-item>
                           <template slot="label"> 抽签时间 </template>
                           {{
                             parseTime(subcontractForm.lotTime, "{y}-{m}-{d}")

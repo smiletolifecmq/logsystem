@@ -64,6 +64,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
         <result property="contractNo" column="contract_no"/>
         <result property="contractAmount" column="contract_amount"/>
         <result property="bjRemark" column="bj_remark"/>
+        <result property="drawStatus" column="draw_status"/>
 
         <association property="projectValue" javaType="java.util.List" resultMap="SysProjectValueResult"/>
         <association property="projectCar" javaType="java.util.List" resultMap="SysProjectCarResult"/>
@@ -699,4 +700,12 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
         </where>
         order by p.project_id desc
     </select>
+
+    <update id="updateSysProjectDrawStatus" parameterType="SysProject">
+        update sys_project
+        <trim prefix="SET" suffixOverrides=",">
+            <if test="drawStatus != null">draw_status = #{drawStatus},</if>
+        </trim>
+        where project_id = #{projectId}
+    </update>
 </mapper>

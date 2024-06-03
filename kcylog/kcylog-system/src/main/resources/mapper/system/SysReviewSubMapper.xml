@@ -77,6 +77,7 @@
         <result property="operateTime" column="operate_time"/>
         <result property="department" column="department"/>
         <result property="fbWorkload" column="fb_workload"/>
+        <result property="drawStatus" column="draw_status"/>
     </resultMap>
 
     <resultMap type="SysProjectRelation" id="SysProjectRelationResult">

@@ -138,3 +138,11 @@ export function listProductionDetails(query) {
   })
 }
 
+export function updateProjectDrawStatus(data) {
+  return request({
+    url: '/system/project/projectDrawStatus',
+    method: 'put',
+    data: data
+  })
+}
+

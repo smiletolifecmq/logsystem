@@ -228,6 +228,16 @@ public class SysProject extends BaseEntity
 
     private String userName;
 
+    private Long drawStatus;
+
+    public Long getDrawStatus() {
+        return drawStatus;
+    }
+
+    public void setDrawStatus(Long drawStatus) {
+        this.drawStatus = drawStatus;
+    }
+
     public String getUserName() {
         return userName;
     }
