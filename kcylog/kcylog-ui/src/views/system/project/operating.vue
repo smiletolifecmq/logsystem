@@ -842,6 +842,14 @@
             :max="99999999"
           ></el-input-number>
         </el-form-item>
+        <el-form-item label="项目系数" prop="projectCoefficient">
+          <el-input-number
+            v-model="settleForm.projectCoefficient"
+            :precision="2"
+            :step="0.1"
+            :max="99999999"
+          ></el-input-number>
+        </el-form-item>
         <el-form-item label="办结备注" prop="bjRemark">
           <el-input
             type="textarea"
@@ -1485,6 +1493,7 @@ export default {
         this.settleForm.projectId = response.data.projectId;
         this.settleForm.durationFactor = response.data.durationFactor;
         this.settleForm.qualityCoefficient = response.data.qualityCoefficient;
+        this.settleForm.projectCoefficient = response.data.projectCoefficient;
         this.settleTitle = "项目编号：" + response.data.projectNum;
         this.settleOpen = true;
       });
@@ -1523,6 +1532,7 @@ export default {
         tempForm.settleTime = this.settleForm.settleTime;
         tempForm.durationFactor = this.settleForm.durationFactor;
         tempForm.qualityCoefficient = this.settleForm.qualityCoefficient;
+        tempForm.projectCoefficient = this.settleForm.projectCoefficient;
         tempForm.bjRemark = this.settleForm.bjRemark;
         tempForm.settle = 1;
         if (valid) {

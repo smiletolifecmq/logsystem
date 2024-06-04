@@ -313,6 +313,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
             <if test="settleTime != null">settle_time = #{settleTime},</if>
             <if test="durationFactor != null">duration_factor = #{durationFactor},</if>
             <if test="qualityCoefficient != null">quality_coefficient = #{qualityCoefficient},</if>
+            <if test="projectCoefficient != null">project_coefficient = #{projectCoefficient},</if>
             <if test="bjRemark != null">bj_remark = #{bjRemark},</if>
         </trim>
         where project_id = #{projectId}
@@ -443,8 +444,8 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
     <update id="jsProjectCzXs" parameterType="String">
         UPDATE sys_project_value AS spv
         JOIN sys_project AS sp ON spv.project_id = sp.project_id
-        SET spv.coefficient_money = sp.operate * (spv.proportion / 100) * (sp.duration_factor * 0.3 + sp.quality_coefficient * 0.7),sp.output_status = 2,sp.settlement_time = CURRENT_TIMESTAMP(),
-          sp.project_coefficient = sp.duration_factor * 0.3 + sp.quality_coefficient * 0.7, sp.project_coefficient_money = sp.operate * (sp.duration_factor * 0.3 + sp.quality_coefficient * 0.7)
+        SET spv.coefficient_money = sp.operate * (spv.proportion / 100) * sp.project_coefficient,sp.output_status = 2,sp.settlement_time = CURRENT_TIMESTAMP(),
+          sp.project_coefficient_money = sp.operate * sp.project_coefficient
         WHERE spv.project_id IN
         <foreach item="projectId" collection="array" open="(" separator="," close=")">
             #{projectId}
