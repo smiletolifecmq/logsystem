@@ -319,9 +319,10 @@
             <if test="projectName != null  and projectName != ''">and r.project_name like concat('%', #{projectName},
                 '%')
             </if>
-            and (r.subpackage_type = 2 or r.subpackage_type = 3)
+            <if test="deptId != null ">and r.dept_id = #{deptId}</if>
+            <if test="manType != null ">and r.man_type = #{manType}</if>
         </where>
-        order by r.lot_time desc
+        order by r.review_id desc
     </select>
 
     <select id="selectDoneReviewList" parameterType="SysReviewSub" resultMap="SysReviewSubResult">

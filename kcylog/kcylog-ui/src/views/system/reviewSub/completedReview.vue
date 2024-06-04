@@ -24,14 +24,6 @@
           @keyup.enter.native="handleQuery"
         />
       </el-form-item>
-      <el-form-item label="委托单位" prop="requester">
-        <el-input
-          v-model="queryParams.requester"
-          placeholder="请输入委托单位"
-          clearable
-          @keyup.enter.native="handleQuery"
-        />
-      </el-form-item>
       <el-form-item label="部门" prop="deptId">
         <el-cascader
           v-model="queryParamsDeptId"
@@ -56,17 +48,6 @@
         <el-select v-model="queryParams.manType" placeholder="请选择">
           <el-option
             v-for="item in manTypes"
-            :key="item.value"
-            :label="item.label"
-            :value="item.value"
-          >
-          </el-option>
-        </el-select>
-      </el-form-item>
-      <el-form-item label="分包状态" prop="subpackageType">
-        <el-select v-model="queryParams.subpackageType" placeholder="请选择">
-          <el-option
-            v-for="item in subpackageTypes"
             :key="item.value"
             :label="item.label"
             :value="item.value"
