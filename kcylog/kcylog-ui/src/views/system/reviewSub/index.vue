@@ -1961,7 +1961,7 @@ export default {
         exportSubDocx(
           "/sub_table.docx",
           data,
-          "福清分公司劳务分包确认表、抽签表.docx"
+          review.serialNum + "分包确认表、抽签表.docx"
         );
       });
     },

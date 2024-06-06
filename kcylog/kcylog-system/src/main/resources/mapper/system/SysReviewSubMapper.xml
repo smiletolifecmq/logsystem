@@ -321,6 +321,7 @@
             </if>
             <if test="deptId != null ">and r.dept_id = #{deptId}</if>
             <if test="manType != null ">and r.man_type = #{manType}</if>
+            <if test="status != null ">and r.status = #{status}</if>
         </where>
         order by r.review_id desc
     </select>
