@@ -114,6 +114,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
             <if test="projectNameAlias != null  and projectNameAlias != ''"> and p.project_name_alias like concat('%', #{projectNameAlias}, '%')</if>
             <if test="outputStatus != null">and p.output_status = #{outputStatus}</if>
             <if test="status != null">and p.status = #{status}</if>
+            <if test="requesterAlias != null and requesterAlias != ''">and p.requester_alias like concat('%', #{requesterAlias}, '%')</if>
             <if test="department != null  and department != ''"> and p.department like concat('%', #{department}, '%')</if>
             <if test="checkStatus != null  and checkStatus != -1"> and f.check_status = #{checkStatus}</if>
             <if test="checkStatus != null  and checkStatus == -1"> and (f.check_status != 2 or f.check_status is null ) and f.is_archive = 1</if>

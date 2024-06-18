@@ -161,6 +161,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
             <if test="projectNameAlias != null  and projectNameAlias != ''"> and project_name_alias like concat('%', #{projectNameAlias}, '%')</if>
             <if test="outputStatus != null">and output_status = #{outputStatus}</if>
             <if test="workStatus != null">and work_status = #{workStatus}</if>
+            <if test="requesterAlias != null and requesterAlias != ''">and requester_alias like concat('%', #{requesterAlias}, '%')</if>
             <if test="department != null  and department != ''"> and department like concat('%', #{department}, '%')</if>
             <if test="projectNum != null  and projectNum != ''"> and project_num like concat('%', #{projectNum}, '%')</if>
             <if test="isJqr != null">and user_name_alias != '机器人'</if>
@@ -372,12 +373,14 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
     <select id="listProjectOperate" parameterType="SysProject" resultMap="SysProjectResult">
         <include refid="selectSysProjectVo"/>
         <where>
-            <if test="projectNameAlias != null  and projectNameAlias != ''"> and project_name like concat('%', #{projectNameAlias}, '%')</if>
+            <if test="projectNameAlias != null  and projectNameAlias != ''"> and project_name_alias like concat('%', #{projectNameAlias}, '%')</if>
             <if test="projectNum != null  and projectNum != ''"> and project_num like concat('%', #{projectNum}, '%')</if>
             <if test="operateUser == 1"> and operate_user != ''</if>
             <if test="operateUser == 2"> and operate_user = ''</if>
             <if test="settle != null"> and settle = #{settle}</if>
-            <if test="userNameAlias != null and userNameAlias != ''">user_name_alias like concat('%', #{userNameAlias}, '%')</if>
+            <if test="department != null and department != ''"> and department = #{department}</if>
+            <if test="requesterAlias != null and requesterAlias != ''">and requester_alias like concat('%', #{requesterAlias}, '%')</if>
+            <if test="userNameAlias != null and userNameAlias != ''">and user_name_alias like concat('%', #{userNameAlias}, '%')</if>
             <if test="params.beginTime != null and params.beginTime != ''"><!-- 开始时间检索 -->
                 and (date_format(settle_time,'%y%m%d') &gt;= date_format(#{params.beginTime},'%y%m%d'))
             </if>
@@ -609,6 +612,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
             <if test="projectNameAlias != null  and projectNameAlias != ''"> and project_name_alias like concat('%', #{projectNameAlias}, '%')</if>
             <if test="outputStatus != null">and output_status = #{outputStatus}</if>
             <if test="status != null">and status = #{status}</if>
+            <if test="requesterAlias != null and requesterAlias != ''">and requester_alias like concat('%', #{requesterAlias}, '%')</if>
             <if test="department != null  and department != ''"> and department like concat('%', #{department}, '%')</if>
             <if test="projectNum != null  and projectNum != ''"> and project_num like concat('%', #{projectNum}, '%')</if>
             <if test="isJqr != null">and user_name_alias != '机器人'</if>
@@ -630,6 +634,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
             <if test="projectNameAlias != null  and projectNameAlias != ''"> and project_name_alias like concat('%', #{projectNameAlias}, '%')</if>
             <if test="outputStatus != null">and output_status = #{outputStatus}</if>
             <if test="status != null">and status = #{status}</if>
+            <if test="requesterAlias != null and requesterAlias != ''">and requester_alias like concat('%', #{requesterAlias}, '%')</if>
             <if test="department != null  and department != ''"> and department like concat('%', #{department}, '%')</if>
             <if test="projectNum != null  and projectNum != ''"> and project_num like concat('%', #{projectNum}, '%')</if>
             <if test="isJqr != null">and user_name_alias != '机器人'</if>

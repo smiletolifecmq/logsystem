@@ -8,6 +8,14 @@
       v-show="showSearch"
       label-width="68px"
     >
+      <el-form-item label="委托单位" prop="requesterAlias">
+        <el-input
+          v-model="queryParams.requesterAlias"
+          placeholder="请输入委托单位名称"
+          clearable
+          @keyup.enter.native="handleQuery"
+        />
+      </el-form-item>
       <el-form-item label="项目名称" prop="projectNameAlias">
         <el-input
           v-model="queryParams.projectNameAlias"
@@ -23,6 +31,21 @@
           clearable
           @keyup.enter.native="handleQuery"
         />
+      </el-form-item>
+      <el-form-item label="作业部门" prop="department">
+        <el-select
+          v-model="queryParams.department"
+          placeholder="请选择部门"
+          clearable
+        >
+          <el-option
+            v-for="item in deptList"
+            :key="item.value"
+            :label="item.label"
+            :value="item.value"
+          >
+          </el-option>
+        </el-select>
       </el-form-item>
       <el-form-item label="接待人" prop="receptionist">
         <el-input
@@ -229,6 +252,7 @@
       <el-table-column label="项目编号" align="center" prop="projectNum" />
       <el-table-column label="项目类型" align="center" prop="projectType" />
       <el-table-column label="工程负责人" align="center" prop="userNameAlias" />
+      <el-table-column label="作业部门" align="center" prop="department" />
       <el-table-column label="二检时间" align="center" prop="twoCheck">
         <template slot-scope="scope">
           {{ formatDate(scope.row.twoCheck) }}
@@ -307,6 +331,19 @@
             icon="el-icon-tickets"
             @click="handlePeopleDetail(scope.row)"
             >详情</el-button
+          >
+          <el-button
+            v-if="
+              ['图', '售', '数'].some((substring) =>
+                scope.row.projectNum.includes(substring)
+              )
+            "
+            size="mini"
+            type="text"
+            icon="el-icon-picture"
+            @click="handleGeo(scope.row)"
+            v-hasPermi="['system:project:geoInfo']"
+            >查看选图</el-button
           >
         </template>
       </el-table-column>
@@ -502,6 +539,14 @@
                 工程内容
               </template>
               {{ form.workcontentAlias }}
+              <el-button
+                v-if="showFetailXt(form)"
+                type="text"
+                icon="el-icon-picture"
+                @click="handleGeo(form)"
+                v-hasPermi="['system:project:geoInfo']"
+                >查看选图</el-button
+              >
             </el-descriptions-item>
             <el-descriptions-item>
               <template slot="label">
@@ -1074,6 +1119,22 @@ export default {
     this.labelValue = this.labelValue + prevMonth + "月份-已办结";
   },
   methods: {
+    showFetailXt(value) {
+      if (!value.projectNum) return false;
+      const substrings = ["图", "售", "数"];
+      return substrings.some((substring) =>
+        value.projectNum.includes(substring)
+      );
+    },
+    handleGeo(value) {
+      this.projectCode = value.projectNum;
+      // this.centerDialogVisible = true;
+      window.open(
+        "http://192.168.110.100/fqismap/?sysname=ViewMapInFQIS&salemapid=" +
+          value.projectId,
+        "_blank"
+      );
+    },
     submitDetailsForm() {
       if (
         this.dateRangeDetails.length == 0 ||

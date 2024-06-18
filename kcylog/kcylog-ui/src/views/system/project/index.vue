@@ -8,6 +8,14 @@
       v-show="showSearch"
       label-width="68px"
     >
+      <el-form-item label="委托单位" prop="requesterAlias">
+        <el-input
+          v-model="queryParams.requesterAlias"
+          placeholder="请输入委托单位名称"
+          clearable
+          @keyup.enter.native="handleQuery"
+        />
+      </el-form-item>
       <el-form-item label="项目名称" prop="projectNameAlias">
         <el-input
           v-model="queryParams.projectNameAlias"
@@ -595,6 +603,14 @@
                 工程内容
               </template>
               {{ form.workcontentAlias }}
+              <el-button
+                v-if="showFetailXt(form)"
+                type="text"
+                icon="el-icon-picture"
+                @click="handleGeo(form)"
+                v-hasPermi="['system:project:geoInfo']"
+                >查看选图</el-button
+              >
             </el-descriptions-item>
             <el-descriptions-item>
               <template slot="label">
@@ -1371,6 +1387,13 @@ export default {
     this.getStatisticsData();
   },
   methods: {
+    showFetailXt(value) {
+      if (!value.projectNum) return false;
+      const substrings = ["图", "售", "数"];
+      return substrings.some((substring) =>
+        value.projectNum.includes(substring)
+      );
+    },
     handleLotteryProcess(value) {
       this.cqgcForm.projectId = value.projectId;
       this.cqgcOpen = true;
