@@ -465,7 +465,7 @@
           <el-button
             v-if="
               ['图', '售', '数'].some((substring) =>
-                scope.row.projectNum.includes(substring)
+                scope.row.projectList.projectNameAlias.includes(substring)
               )
             "
             size="mini"
