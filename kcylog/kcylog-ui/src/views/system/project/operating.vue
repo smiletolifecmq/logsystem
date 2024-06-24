@@ -328,6 +328,14 @@
           <el-button
             size="mini"
             type="text"
+            icon="el-icon-edit"
+            @click="handleSettleBz(scope.row)"
+            v-hasPermi="['system:project:settle']"
+            >办结备注</el-button
+          >
+          <el-button
+            size="mini"
+            type="text"
             icon="el-icon-tickets"
             @click="handlePeopleDetail(scope.row)"
             >详情</el-button
@@ -920,6 +928,32 @@
         <el-button type="primary" @click="submitSettle">结算办结</el-button>
       </div>
     </el-dialog>
+
+    <el-dialog
+      title="备注"
+      :visible.sync="settleOpenBz"
+      width="1000px"
+      append-to-body
+      v-el-drag-dialog
+    >
+      <el-form ref="settleFormBz" :model="settleFormBz" label-width="80px">
+        <el-form-item label="办结备注" prop="bjRemark">
+          <el-input
+            type="textarea"
+            :rows="2"
+            placeholder="请输入内容"
+            v-model="settleFormBz.bjRemark"
+          >
+          </el-input>
+        </el-form-item>
+      </el-form>
+      <div
+        class="dialog-footer"
+        style="display: flex; justify-content: flex-end"
+      >
+        <el-button type="primary" @click="submitSettleBz">结算办结</el-button>
+      </div>
+    </el-dialog>
   </div>
 </template>
 <style>
@@ -957,6 +991,7 @@ export default {
   },
   data() {
     return {
+      settleOpenBz: false,
       czDetailList: [],
       czOpen: false,
       deptList: [
@@ -1014,6 +1049,7 @@ export default {
       labelValue: "类型-",
       statisticsData: [],
       settleForm: {},
+      settleFormBz: {},
       settleTitle: "",
       settleOpen: false,
       formPeople: {},
@@ -1560,6 +1596,12 @@ export default {
       });
     },
 
+    handleSettleBz(row) {
+      const projectId = row.projectId || this.ids;
+      this.settleFormBz.projectId = projectId;
+      this.settleOpenBz = true;
+    },
+
     submitForm() {
       this.$refs["form"].validate((valid) => {
         const tempForm = this.form;
@@ -1594,7 +1636,7 @@ export default {
         tempForm.durationFactor = this.settleForm.durationFactor;
         tempForm.qualityCoefficient = this.settleForm.qualityCoefficient;
         tempForm.projectCoefficient = this.settleForm.projectCoefficient;
-        tempForm.bjRemark = this.settleForm.bjRemark;
+        // tempForm.bjRemark = this.settleForm.bjRemark;
         tempForm.settle = 1;
         if (valid) {
           this.$confirm("结算办结之后将无法再修改, 是否继续?", "提示", {
@@ -1610,6 +1652,33 @@ export default {
                   type: "success",
                   message: "结算办结成功!",
                 });
+              });
+            })
+            .catch(() => {});
+        }
+      });
+    },
+
+    submitSettleBz() {
+      this.$refs["settleFormBz"].validate((valid) => {
+        const tempForm = {};
+        tempForm.projectId = this.settleFormBz.projectId;
+        tempForm.bjRemark = this.settleFormBz.bjRemark;
+        if (valid) {
+          this.$confirm("确认提交备注, 是否继续?", "提示", {
+            confirmButtonText: "确定",
+            cancelButtonText: "取消",
+            type: "warning",
+          })
+            .then(() => {
+              this.settleOpenBz = false;
+              updateProject(tempForm).then((response) => {
+                this.getList();
+                this.$message({
+                  type: "success",
+                  message: "修改成功!",
+                });
+                this.settleFormBz.bjRemark = "";
               });
             })
             .catch(() => {});
