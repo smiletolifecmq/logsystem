@@ -895,7 +895,7 @@
             :max="99999999"
           ></el-input-number>
         </el-form-item>
-        <el-form-item label="办结备注" prop="bjRemark">
+        <!-- <el-form-item label="办结备注" prop="bjRemark">
           <el-input
             type="textarea"
             :rows="2"
@@ -903,7 +903,7 @@
             v-model="settleForm.bjRemark"
           >
           </el-input>
-        </el-form-item>
+        </el-form-item> -->
         <el-form-item label="办结时间" prop="settleTime">
           <el-date-picker
             v-model="settleForm.settleTime"
