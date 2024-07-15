@@ -44,6 +44,7 @@
         <result property="realWorkload" column="real_workload"/>
         <result property="manType" column="man_type"/>
         <result property="subpackageType" column="subpackage_type"/>
+        <result property="subcontractNo" column="subcontract_no"/>
 
         <association property="dept" column="dept_name" javaType="SysDept" resultMap="SysReviewSubDeptResult"/>
         <association property="user" column="user_name" javaType="SysUser" resultMap="SysReviewSubUserResult"/>
@@ -164,6 +165,7 @@
             <if test="subcontract != null">subcontract,</if>
             <if test="manType != null">man_type,</if>
             <if test="subpackageType != null">subpackage_type,</if>
+            <if test="subcontractNo != null">subcontract_no,</if>
 
             <if test="lotTime != null">lot_time,</if>
             <if test="businessName != null">business_name,</if>
@@ -202,6 +204,7 @@
             <if test="subcontract != null">#{subcontract},</if>
             <if test="manType != null">#{manType},</if>
             <if test="subpackageType != null">#{subpackageType},</if>
+            <if test="subcontractNo != null">#{subcontractNo},</if>
 
             <if test="lotTime != null">#{lotTime},</if>
             <if test="businessName != null">#{businessName},</if>
@@ -257,6 +260,7 @@
             <if test="subCost != null">sub_cost = #{subCost},</if>
             <if test="subWorkload != null">sub_workload = #{subWorkload},</if>
             <if test="realWorkload != null">real_workload = #{realWorkload},</if>
+            <if test="subcontractNo != null">subcontract_no = #{subcontractNo},</if>
 
         </trim>
         where review_id = #{reviewId}

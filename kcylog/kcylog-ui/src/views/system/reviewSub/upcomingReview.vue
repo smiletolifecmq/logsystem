@@ -514,6 +514,10 @@
                             parseTime(subcontractForm.lotTime, "{y}-{m}-{d}")
                           }}
                         </el-descriptions-item>
+                        <el-descriptions-item>
+                          <template slot="label"> 抽签业务名称 </template>
+                          {{ subcontractForm.businessName }}
+                        </el-descriptions-item>
                       </el-descriptions>
                       <el-descriptions class="margin-top" :column="1">
                         <el-descriptions-item>
@@ -524,7 +528,7 @@
                             ) in subcontractForm.cooperationUnitJson"
                             :key="index"
                           >
-                            {{ unit }}
+                            {{ unit }};
                           </div>
                         </el-descriptions-item>
                         <el-descriptions-item>

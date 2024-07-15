@@ -1138,11 +1138,6 @@ public class SysReviewSubController extends BaseController
         if (review.getProjectRelation() != null){
             review.setProjectId(review.getProjectRelation().getProjectId());
         }
-
-        ProjectChargeInfo projectChargeInfo = projectChargeInfoService.selectProjectChargeInfoByCode(review.getSerialNum());
-        if (projectChargeInfo != null){
-            review.setSubcontractNo(projectChargeInfo.getSubcontractNo());
-        }
         return success(review);
     }
 }
