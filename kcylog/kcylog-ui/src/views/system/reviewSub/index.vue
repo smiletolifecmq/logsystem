@@ -1457,12 +1457,14 @@ export default {
   },
   methods: {
     handleChangeBusinessNameS(value) {
+      this.form.cooperationUnitJson = [];
       this.winUnits = [];
       for (let i = 0; i < this.businessNameMap.get(value).length; i++) {
         const unit = {};
         unit.value = this.businessNameMap.get(value)[i];
         unit.label = this.businessNameMap.get(value)[i];
         this.winUnits.push(unit);
+        this.form.cooperationUnitJson.push(this.businessNameMap.get(value)[i]);
       }
     },
     formatDateReviewSub(dateString) {
@@ -1935,7 +1937,14 @@ export default {
           return;
         }
       }
-      if (this.form.winUnit != "" && this.form.businessName != "") {
+      if (
+        this.form.winUnit != "" &&
+        this.form.businessName != "" &&
+        this.form.winUnit != undefined &&
+        this.form.businessName != undefined &&
+        this.form.winUnit != null &&
+        this.form.businessName != null
+      ) {
         let lastFiveChars = this.form.businessName.slice(-5);
         this.form.subcontractNo = this.subcontractNoMap.get(
           this.form.winUnit + lastFiveChars
