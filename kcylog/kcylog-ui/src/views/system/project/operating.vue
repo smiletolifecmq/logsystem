@@ -243,8 +243,14 @@
       :data="projectList"
       @selection-change="handleSelectionChange"
     >
-      <el-table-column label="委托单位" align="center" prop="requesterAlias" />
       <el-table-column
+        width="200px"
+        label="委托单位"
+        align="center"
+        prop="requesterAlias"
+      />
+      <el-table-column
+        width="200px"
         label="项目名称"
         align="center"
         prop="projectNameAlias"

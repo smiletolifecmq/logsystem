@@ -185,12 +185,14 @@
     >
       <el-table-column
         fixed
+        width="200px"
         label="委托单位"
         align="center"
         prop="requesterAlias"
       />
       <el-table-column
         fixed
+        width="200px"
         label="项目名称"
         align="center"
         prop="projectNameAlias"
@@ -198,7 +200,6 @@
       <el-table-column
         fixed
         label="项目编号"
-        width="200px"
         align="center"
         prop="projectNum"
       />
