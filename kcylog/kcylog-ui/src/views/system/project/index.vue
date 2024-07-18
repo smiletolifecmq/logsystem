@@ -728,12 +728,12 @@
                         disabled
                       />
                     </el-form-item>
-                    <el-form-item label="项目类型" prop="businessName">
+                    <!-- <el-form-item label="项目类型" prop="businessName">
                       <el-input
                         v-model="formReviewSub.businessName"
                         placeholder="请输入项目类型"
                       />
-                    </el-form-item>
+                    </el-form-item> -->
                     <el-form-item label="项目金额" prop="porjectMoney">
                       <el-input-number
                         v-model="formReviewSub.porjectMoney"
@@ -891,6 +891,22 @@
                         type="textarea"
                         placeholder="请输入预估分包工作量"
                       />
+                    </el-form-item>
+                    <el-form-item label="业务名称" prop="businessName">
+                      <el-select
+                        v-model="formReviewSub.businessName"
+                        placeholder="抽签业务名称"
+                        style="width: 260px"
+                        @change="handleChangeBusinessNameS"
+                      >
+                        <el-option
+                          v-for="item in businessNameS"
+                          :key="item.value"
+                          :label="item.label"
+                          :value="item.value"
+                        >
+                        </el-option>
+                      </el-select>
                     </el-form-item>
                     <el-form-item label="抽签单位" prop="cooperationUnitJson">
                       <el-select
@@ -1143,6 +1159,70 @@ export default {
   },
   data() {
     return {
+      businessNameS: [
+        {
+          value: "管线测量-2024",
+          label: "管线测量-2024",
+        },
+        {
+          value: "市政工程测量-2024",
+          label: "市政工程测量-2024",
+        },
+        {
+          value: "变形形变与精密测量-2024",
+          label: "变形形变与精密测量-2024",
+        },
+        {
+          value: "规划测量-2024",
+          label: "规划测量-2024",
+        },
+        {
+          value: "界线与不动产测绘-2024",
+          label: "界线与不动产测绘-2024",
+        },
+        {
+          value: "摄影测量与遥感-2024",
+          label: "摄影测量与遥感-2024",
+        },
+        {
+          value: "测绘航空摄影-2024",
+          label: "测绘航空摄影-2024",
+        },
+        {
+          value: "数据处理及地理信息系统工程-2024",
+          label: "数据处理及地理信息系统工程-2024",
+        },
+        {
+          value: "常规管线测量-2023",
+          label: "常规管线测量-2023",
+        },
+        {
+          value: "市政工程测量-2023",
+          label: "市政工程测量-2023",
+        },
+        {
+          value: "不动产测绘-2023",
+          label: "不动产测绘-2023",
+        },
+        {
+          value: "管道视频检测-2023",
+          label: "管道视频检测-2023",
+        },
+        {
+          value: "规划测量-2023",
+          label: "规划测量-2023",
+        },
+        {
+          value: "摄影测量与遥感-2023",
+          label: "摄影测量与遥感-2023",
+        },
+        {
+          value: "数据采集、处理及建库-2023",
+          label: "数据采集、处理及建库-2023",
+        },
+      ],
+      businessNameMap: {},
+      subcontractNoMap: {},
       drawList: [
         {
           value: 0,
@@ -1386,8 +1466,106 @@ export default {
     this.getList();
     this.loadAllUnits();
     this.getStatisticsData();
+    this.businessNameMap = new Map();
+    this.businessNameMap.set("管线测量-2024", [
+      "福建越扬信息科技有限公司",
+      "福建省易测工程勘测有限公司",
+    ]);
+    this.businessNameMap.set("市政工程测量-2024", [
+      "福建越扬信息科技有限公司",
+      "福建金地勘测规划有限公司",
+      "黑龙江省地星测绘科技股份有限公司",
+      "天津汇创测绘技术有限公司",
+    ]);
+    this.businessNameMap.set("变形形变与精密测量-2024", [
+      "福建越扬信息科技有限公司",
+      "福建金地勘测规划有限公司",
+      "黑龙江省地星测绘科技股份有限公司",
+      "天津汇创测绘技术有限公司",
+    ]);
+    this.businessNameMap.set("规划测量-2024", [
+      "黑龙江省地星测绘科技股份有限公司",
+      "天津汇创测绘技术有限公司",
+    ]);
+    this.businessNameMap.set("界线与不动产测绘-2024", [
+      "黑龙江省地星测绘科技股份有限公司",
+      "天津汇创测绘技术有限公司",
+    ]);
+    this.businessNameMap.set("摄影测量与遥感-2024", [
+      "黑龙江省地星测绘科技股份有限公司",
+      "福州翔飞航空科技有限公司",
+    ]);
+    this.businessNameMap.set("测绘航空摄影-2024", [
+      "黑龙江省地星测绘科技股份有限公司",
+      "福州翔飞航空科技有限公司",
+    ]);
+    this.businessNameMap.set("数据处理及地理信息系统工程-2024", [
+      "黑龙江省地星测绘科技股份有限公司",
+      "武汉大势智慧科技有限公司",
+    ]);
+    this.businessNameMap.set("常规管线测量-2023", [
+      "福建越扬信息科技有限公司",
+      "福建省易测工程勘测有限公司",
+    ]);
+    this.businessNameMap.set("市政工程测量-2023", [
+      "福建越扬信息科技有限公司",
+      "黑龙江省地星测绘科技股份有限公司",
+      "天津汇创测绘技术有限公司",
+    ]);
+    this.businessNameMap.set("不动产测绘-2023", [
+      "黑龙江省地星测绘科技股份有限公司",
+      "天津汇创测绘技术有限公司",
+    ]);
+    this.businessNameMap.set("管道视频检测-2023", [
+      "福建省易测工程勘测有限公司",
+    ]);
+    this.businessNameMap.set("规划测量-2023", ["天津汇创测绘技术有限公司"]);
+    this.businessNameMap.set("摄影测量与遥感-2023", [
+      "黑龙江省地星测绘科技股份有限公司",
+    ]);
+    this.businessNameMap.set("数据采集、处理及建库-2023", [
+      "黑龙江省地星测绘科技股份有限公司",
+    ]);
+
+    this.subcontractNoMap = new Map();
+    this.subcontractNoMap.set("福建越扬信息科技有限公司-2024", "2024-FQBK-001");
+    this.subcontractNoMap.set(
+      "福建省易测工程勘测有限公司-2024",
+      "2024-FQBK-002"
+    );
+    this.subcontractNoMap.set("福建金地勘测规划有限公司-2024", "2024-FQBK-003");
+    this.subcontractNoMap.set(
+      "黑龙江省地星测绘科技股份有限公司-2024",
+      "2024-FQBK-004"
+    );
+    this.subcontractNoMap.set("天津汇创测绘技术有限公司-2024", "2024-FQBK-005");
+    this.subcontractNoMap.set("福州翔飞航空科技有限公司-2024", "2024-FQBK-006");
+    this.subcontractNoMap.set("武汉大势智慧科技有限公司-2024", "2024-FQBK-007");
+    this.subcontractNoMap.set("天津汇创测绘技术有限公司-2023", "2023-FQBK-001");
+    this.subcontractNoMap.set("福建越扬信息科技有限公司-2023", "2023-FQBK-002");
+    this.subcontractNoMap.set(
+      "福建省易测工程勘测有限公司-2023",
+      "2023-FQBK-003"
+    );
+    this.subcontractNoMap.set(
+      "黑龙江省地星测绘科技股份有限公司-2023",
+      "2023-FQBK-004"
+    );
   },
   methods: {
+    handleChangeBusinessNameS(value) {
+      this.formReviewSub.cooperationUnitJson = [];
+      this.winUnits = [];
+      for (let i = 0; i < this.businessNameMap.get(value).length; i++) {
+        const unit = {};
+        unit.value = this.businessNameMap.get(value)[i];
+        unit.label = this.businessNameMap.get(value)[i];
+        this.winUnits.push(unit);
+        this.formReviewSub.cooperationUnitJson.push(
+          this.businessNameMap.get(value)[i]
+        );
+      }
+    },
     showFetailXt(value) {
       if (!value.projectNum) return false;
       const substrings = ["图", "售", "数"];
@@ -1577,6 +1755,21 @@ export default {
           return;
         }
       }
+      if (
+        this.formReviewSub.winUnit != "" &&
+        this.formReviewSub.businessName != "" &&
+        this.formReviewSub.winUnit != undefined &&
+        this.formReviewSub.businessName != undefined &&
+        this.formReviewSub.winUnit != null &&
+        this.formReviewSub.businessName != null
+      ) {
+        let lastFiveChars = this.formReviewSub.businessName.slice(-5);
+        this.formReviewSub.subcontractNo = this.subcontractNoMap.get(
+          this.formReviewSub.winUnit + lastFiveChars
+        );
+        const result = this.formReviewSub.businessName.slice(0, -5);
+        this.formReviewSub.businessName = result;
+      }
       this.$refs["formReviewSub"].validate((valid) => {
         if (valid) {
           if (
@@ -1667,7 +1860,7 @@ export default {
           const unit = {};
           unit.value = response.rows[i].unitName;
           unit.label = response.rows[i].unitName;
-          this.winUnits.push(unit);
+          // this.winUnits.push(unit);
         }
       });
     },
@@ -1751,9 +1944,9 @@ export default {
         );
       }
 
-      if (projectInfo.projectType != null && projectInfo.projectType != "") {
-        this.formReviewSub.businessName = projectInfo.projectType;
-      }
+      // if (projectInfo.projectType != null && projectInfo.projectType != "") {
+      //   this.formReviewSub.businessName = projectInfo.projectType;
+      // }
 
       this.formReviewSub.subpackageType = projectInfo.subpackageType;
 
