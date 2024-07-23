@@ -93,6 +93,21 @@
           </el-option>
         </el-select>
       </el-form-item>
+      <el-form-item label="审核状态" prop="status">
+        <el-select
+          v-model="queryParams.status"
+          placeholder="请选择"
+          @change="handleQuery"
+        >
+          <el-option
+            v-for="item in statusArr"
+            :key="item.value"
+            :label="item.label"
+            :value="item.value"
+          >
+          </el-option>
+        </el-select>
+      </el-form-item>
       <el-form-item>
         <el-button
           type="primary"
@@ -723,6 +738,16 @@ export default {
   },
   data() {
     return {
+      statusArr: [
+        {
+          value: -1,
+          label: "进行中",
+        },
+        {
+          value: 2,
+          label: "已通过",
+        },
+      ],
       manTypes: [
         { value: 0, label: "非雇工" },
         { value: 1, label: "雇工" },
