@@ -110,4 +110,6 @@ public interface SysProjectMapper
     public List<SysProject> listProjectOperateExport(SysProject sysProject);
 
     public int updateSysProjectDrawStatus(SysProject sysProject);
+
+    public List<SysProject> selectSysProjectListForFb(SysProject sysProject);
 }

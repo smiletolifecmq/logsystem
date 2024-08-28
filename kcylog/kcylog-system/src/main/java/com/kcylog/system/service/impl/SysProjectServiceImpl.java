@@ -246,4 +246,10 @@ public class SysProjectServiceImpl implements ISysProjectService
     {
         return sysProjectMapper.updateSysProjectDrawStatus(sysProject);
     }
+
+    @Override
+    public List<SysProject> selectSysProjectListForFb(SysProject sysProject)
+    {
+        return sysProjectMapper.selectSysProjectListForFb(sysProject);
+    }
 }

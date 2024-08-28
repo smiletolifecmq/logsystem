@@ -230,6 +230,16 @@ public class SysProject extends BaseEntity
 
     private Long drawStatus;
 
+    private String winUnit;
+
+    public String getWinUnit() {
+        return winUnit;
+    }
+
+    public void setWinUnit(String winUnit) {
+        this.winUnit = winUnit;
+    }
+
     public Long getDrawStatus() {
         return drawStatus;
     }

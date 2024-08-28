@@ -668,4 +668,41 @@ public class SysProjectController extends BaseController {
         sysProjectService.updateSysProjectDrawStatus(sysProject);
         return toAjax(1);
     }
+
+    /**
+     * 查询项目列表
+     */
+    @GetMapping("/listForFb")
+    public TableDataInfo listForFb(SysProject sysProject) throws ParseException {
+        startPage();
+        List<SysProject> list = sysProjectService.selectSysProjectListForFb(sysProject);
+        for (SysProject project : list) {
+            if (project.getWorkStatus() != null && project.getWorkStatus() == 4){
+                if (project.getProjectEndAlias() == null || project.getProjectEndAlias().isEmpty() || project.getDoTime() == null || project.getDoTime().isEmpty()) {
+                    project.setLeadTime(0);
+                }else {
+                    SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd");
+                    Date startDate = dateFormat.parse(project.getProjectEndAlias());
+                    Date endDate = dateFormat.parse(project.getDoTime());
+                    long differenceInMilliseconds = startDate.getTime() - endDate.getTime();
+                    long differenceInDays = (long) Math.ceil((double) differenceInMilliseconds / (1000 * 3600 * 24));
+                    project.setLeadTime((int)differenceInDays);
+                }
+            }else {
+                if (project.getProjectEndAlias() == null || project.getProjectEndAlias().isEmpty()) {
+                    project.setLeadTime(0);
+                }else {
+                    SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd");
+                    Date startDate = dateFormat.parse(project.getProjectEndAlias());
+                    Date currentDate = new Date();
+                    long timeDifference = startDate.getTime() - currentDate.getTime();
+                    long daysDifference = (long) Math.ceil((double) timeDifference / (1000 * 60 * 60 * 24));
+                    project.setLeadTime((int)daysDifference);
+                }
+            }
+        }
+
+        return getDataTable(list);
+    }
+
 }

@@ -146,3 +146,11 @@ export function updateProjectDrawStatus(data) {
   })
 }
 
+export function listProjectForFb(query) {
+  return request({
+    url: '/system/project/listForFb',
+    method: 'get',
+    params: query
+  })
+}
+
