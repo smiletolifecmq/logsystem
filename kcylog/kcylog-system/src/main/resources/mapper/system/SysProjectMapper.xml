@@ -108,6 +108,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 
     <resultMap type="SysReviewSub" id="SysReviewSubResult">
         <!--雇工信息-->
+        <result property="reviewId"    column="review_id"    />
         <result property="workload"    column="workload"    />
         <result property="porjectMoney"    column="porject_money"    />
         <result property="subcontract"    column="subcontract"    />
@@ -716,7 +717,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
     </update>
 
     <select id="selectSysProjectListForFb" parameterType="SysProject" resultMap="SysProjectResult">
-        select p.*, r.win_unit from sys_project p
+        select p.*, r.win_unit, r.review_id from sys_project p
         left join sys_project_relation n on n.project_id = p.project_id
         left join sys_review_sub r on r.review_id = n.review_id
         <where>
@@ -727,6 +728,8 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
             <if test="projectType != null and projectType != ''">and p.project_type like concat('%', #{projectType}, '%')</if>
             <if test="department != null  and department != ''"> and p.department like concat('%', #{department}, '%')</if>
             <if test="userNameAlias != null and userNameAlias != ''">and p.user_name_alias like concat('%', #{userNameAlias}, '%')</if>
+            <if test="workStatus != null">and p.work_status = #{workStatus}</if>
+            <if test="status != null">and p.status = #{status}</if>
             <if test="params.beginTime != null and params.beginTime != ''"><!-- 开始时间检索 -->
                 and (date_format(p.project_start_alias,'%y%m%d') &gt;= date_format(#{params.beginTime},'%y%m%d'))
             </if>

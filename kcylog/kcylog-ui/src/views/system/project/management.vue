@@ -9,12 +9,15 @@
       label-width="68px"
     >
       <el-form-item label="分包单位" prop="winUnit">
-        <el-input
-          v-model="queryParams.winUnit"
-          placeholder="请输入分包单位"
-          clearable
-          @keyup.enter.native="handleQuery"
-        />
+        <el-select v-model="queryParams.winUnit" placeholder="请选择">
+          <el-option
+            v-for="item in options"
+            :key="item.value"
+            :label="item.label"
+            :value="item.value"
+          >
+          </el-option>
+        </el-select>
       </el-form-item>
       <el-form-item label="委托单位" prop="requesterAlias">
         <el-input
@@ -36,14 +39,6 @@
         <el-input
           v-model="queryParams.projectNum"
           placeholder="请输入项目编号"
-          clearable
-          @keyup.enter.native="handleQuery"
-        />
-      </el-form-item>
-      <el-form-item label="项目类型" prop="projectType">
-        <el-input
-          v-model="queryParams.projectType"
-          placeholder="请输入项目类型"
           clearable
           @keyup.enter.native="handleQuery"
         />
@@ -72,6 +67,29 @@
           @keyup.enter.native="handleQuery"
         />
       </el-form-item>
+      <el-form-item label="作业状态" prop="workStatus">
+        <el-select v-model="queryParams.workStatus" placeholder="请选择">
+          <el-option
+            v-for="item in statusArr"
+            :key="item.value"
+            :label="item.label"
+            :value="item.value"
+          >
+          </el-option>
+        </el-select>
+      </el-form-item>
+      <el-form-item label="工作状态" prop="status">
+        <el-select v-model="queryParams.status" placeholder="请选择">
+          <el-option
+            v-for="item in statusList"
+            :key="item.value"
+            :label="item.label"
+            :value="item.value"
+          >
+          </el-option>
+        </el-select>
+      </el-form-item>
+
       <el-form-item label="安排时间">
         <el-date-picker
           v-model="dateRange"
@@ -111,7 +129,12 @@
       @selection-change="handleSelectionChange"
       size="mini"
     >
-      <el-table-column label="分包单位" align="center" prop="winUnit">
+      <el-table-column
+        label="分包单位"
+        align="center"
+        prop="winUnit"
+        width="200px"
+      >
         <template slot-scope="scope">
           {{
             scope.row.reviewSub && scope.row.reviewSub.length > 0
@@ -121,18 +144,19 @@
         </template>
       </el-table-column>
       <el-table-column label="作业部门" align="center" prop="department" />
-      <el-table-column label="委托单位" align="center" prop="requesterAlias" />
+      <el-table-column
+        label="委托单位"
+        align="center"
+        prop="requesterAlias"
+        width="200px"
+      />
       <el-table-column
         label="项目名称"
         align="center"
         prop="projectNameAlias"
-      />
-      <el-table-column
-        label="项目编号"
         width="200px"
-        align="center"
-        prop="projectNum"
       />
+      <el-table-column label="项目编号" align="center" prop="projectNum" />
       <el-table-column label="工程负责人" align="center" prop="userNameAlias" />
       <!-- <el-table-column label="项目类型" align="center" prop="projectType" />
           <el-table-column
@@ -178,6 +202,38 @@
           }}</el-tag>
         </template></el-table-column
       >
+      <el-table-column label="作业状态" align="center" prop="workStatus">
+        <template slot-scope="scope">
+          <el-tag v-show="scope.row.workStatus == 1" type="danger"
+            >新增作业</el-tag
+          >
+          <el-tag v-show="scope.row.workStatus == 2" type="warning"
+            >作业中</el-tag
+          >
+          <el-tag v-show="scope.row.workStatus == 3" type="success"
+            >作业完成</el-tag
+          >
+          <el-tag v-show="scope.row.workStatus == 4" type="success"
+            >作业办结</el-tag
+          >
+          <el-tag v-show="scope.row.workStatus == 0" type="danger"
+            >新增作业</el-tag
+          >
+        </template>
+      </el-table-column>
+      <el-table-column label="工作状态" align="center" prop="status">
+        <template slot-scope="scope">
+          <el-tag v-show="scope.row.status == 0" type="info">临时安排</el-tag>
+          <el-tag v-show="scope.row.status == 1">正式安排</el-tag>
+          <el-tag v-show="scope.row.status == 2" type="success"
+            >一检办结</el-tag
+          >
+          <el-tag v-show="scope.row.status == 3" type="success"
+            >二检办结</el-tag
+          >
+        </template>
+      </el-table-column>
+
       <el-table-column label="抽签过程" align="center" prop="drawStatus">
         <template slot-scope="scope">
           <el-tag v-show="scope.row.drawStatus == 0" type="danger">无</el-tag>
@@ -203,7 +259,11 @@
         </el-table-column>
         <el-table-column label="审核单状态" align="center">
           <template slot-scope="scope">
-            <el-tag v-show="scope.row.issq == 1" type="success"
+            <el-tag
+              v-show="scope.row.issq == 1"
+              type="success"
+              class="hover-effect"
+              @click="showReviewInfo(scope.row)"
               >已有审核单</el-tag
             >
             <el-tag v-show="showReviewStatus(scope.row.issq)" type="info"
@@ -476,106 +536,6 @@
     </el-dialog>
 
     <el-dialog
-      title="超期项目"
-      :visible.sync="overTimeOpen"
-      width="1400px"
-      append-to-body
-      v-el-drag-dialog
-    >
-      <el-table
-        v-loading="loading"
-        :data="overTimeProjectList"
-        size="mini"
-        height="500"
-      >
-        <el-table-column
-          label="委托单位"
-          align="center"
-          prop="requesterAlias"
-        />
-        <el-table-column
-          label="项目名称"
-          align="center"
-          prop="projectNameAlias"
-        />
-        <el-table-column
-          label="项目编号"
-          width="200px"
-          align="center"
-          prop="projectNum"
-        />
-        <el-table-column
-          label="工程负责人"
-          align="center"
-          prop="userNameAlias"
-        />
-        <el-table-column label="作业部门" align="center" prop="department" />
-        <el-table-column label="登记时间" align="center" prop="registerTime">
-          <template slot-scope="scope">
-            {{ formatDate(scope.row.registerTime) }}
-          </template>
-        </el-table-column>
-        <el-table-column
-          label="安排开始时间"
-          align="center"
-          prop="projectStartAlias"
-        >
-          <template slot-scope="scope">
-            {{ formatDate(scope.row.projectStartAlias) }}
-          </template></el-table-column
-        >
-        <el-table-column
-          label="安排结束时间"
-          align="center"
-          prop="projectEndAlias"
-        >
-          <template slot-scope="scope">
-            {{ formatDate(scope.row.projectEndAlias) }}
-          </template></el-table-column
-        >
-        <el-table-column label="作业办结时间" align="center" prop="doTime">
-          <template slot-scope="scope">
-            {{ homeworkCompleted(scope.row) }}
-          </template></el-table-column
-        >
-        <el-table-column label="提前工期" align="center">
-          <template slot-scope="scope">
-            <el-tag type="danger" v-show="scope.row.leadTime < 0">{{
-              scope.row.leadTime
-            }}</el-tag>
-            <el-tag type="success" v-show="scope.row.leadTime >= 0">{{
-              scope.row.leadTime
-            }}</el-tag>
-          </template></el-table-column
-        >
-        <el-table-column label="作业状态" align="center" prop="status">
-          <template slot-scope="scope">
-            <el-tag v-show="scope.row.workStatus == 1" type="danger"
-              >新增作业</el-tag
-            >
-            <el-tag v-show="scope.row.workStatus == 2" type="warning"
-              >作业中</el-tag
-            >
-            <el-tag v-show="scope.row.workStatus == 3" type="success"
-              >作业完成</el-tag
-            >
-            <el-tag v-show="scope.row.workStatus == 4" type="success"
-              >作业办结</el-tag
-            >
-            <el-tag v-show="scope.row.workStatus == 0" type="danger"
-              >新增作业</el-tag
-            >
-          </template>
-        </el-table-column>
-        <el-table-column
-          label="办结超期备注"
-          align="center"
-          prop="completionNotes"
-        ></el-table-column>
-      </el-table>
-    </el-dialog>
-
-    <el-dialog
       title="抽签过程"
       :visible.sync="cqgcOpen"
       width="500px"
@@ -598,6 +558,368 @@
         <el-button type="primary" @click="submitCqgcForm">确 定</el-button>
       </div>
     </el-dialog>
+
+    <el-dialog
+      :title="titleInfo"
+      :visible.sync="openInfo"
+      width="1260px"
+      append-to-body
+      v-el-drag-dialog
+      :close-on-click-modal="false"
+      :close-on-press-escape="false"
+    >
+      <el-collapse v-model="activeNamesInfo">
+        <div>
+          <el-row :gutter="10">
+            <el-col style="width: 50%">
+              <el-card class="box-card">
+                <div slot="header" class="clearfix">
+                  <span>项目详情</span>
+                </div>
+                <div
+                  v-if="!formInfo.project || !formInfo.project.projectNum"
+                  style="text-align: center"
+                >
+                  未找到关联项目数据～
+                </div>
+                <div v-if="formInfo.project && formInfo.project.projectNum">
+                  <el-descriptions class="margin-top" :column="2">
+                    <el-descriptions-item>
+                      <template slot="label">
+                        <i class="el-icon-s-home"></i>
+                        委托单位
+                      </template>
+                      {{ formInfo.project.requesterAlias }}
+                    </el-descriptions-item>
+                    <el-descriptions-item>
+                      <template slot="label">
+                        <i class="el-icon-tickets"></i>
+                        项目编号
+                      </template>
+                      {{ formInfo.project.projectNum }}
+                    </el-descriptions-item>
+                    <el-descriptions-item>
+                      <template slot="label">
+                        <i class="el-icon-office-building"></i>
+                        项目名称
+                      </template>
+                      {{ formInfo.project.projectNameAlias }}
+                    </el-descriptions-item>
+                    <el-descriptions-item>
+                      <template slot="label">
+                        <i class="el-icon-user"></i>
+                        工程负责人
+                      </template>
+                      {{ formInfo.project.userNameAlias }}
+                    </el-descriptions-item>
+                    <el-descriptions-item>
+                      <template slot="label">
+                        <i class="el-icon-notebook-2"></i>
+                        项目类型
+                      </template>
+                      {{ formInfo.project.projectType }}
+                    </el-descriptions-item>
+                    <el-descriptions-item>
+                      <template slot="label">
+                        <i class="el-icon-notebook-2"></i>
+                        作业部门
+                      </template>
+                      {{ formInfo.project.department }}
+                    </el-descriptions-item>
+                    <el-descriptions-item>
+                      <template slot="label">
+                        <i class="el-icon-time"></i>
+                        登记时间
+                      </template>
+                      {{ formatDateReviewSub(formInfo.project.registerTime) }}
+                    </el-descriptions-item>
+                    <el-descriptions-item>
+                      <template slot="label">
+                        <i class="el-icon-user"></i>
+                        接待人
+                      </template>
+                      {{ formInfo.project.receptionist }}
+                    </el-descriptions-item>
+                    <el-descriptions-item>
+                      <template slot="label">
+                        <i class="el-icon-time"></i>
+                        安排开始时间
+                      </template>
+                      {{
+                        formatDateReviewSub(formInfo.project.projectStartAlias)
+                      }}
+                    </el-descriptions-item>
+                    <el-descriptions-item>
+                      <template slot="label">
+                        <i class="el-icon-time"></i>
+                        安排结束时间
+                      </template>
+                      {{
+                        formatDateReviewSub(formInfo.project.projectEndAlias)
+                      }}
+                    </el-descriptions-item>
+                    <el-descriptions-item>
+                      <template slot="label">
+                        <i class="el-icon-time"></i>
+                        一检时间
+                      </template>
+                      {{ formatDateReviewSub(formInfo.project.oneCheck) }}
+                    </el-descriptions-item>
+                    <el-descriptions-item>
+                      <template slot="label">
+                        <i class="el-icon-time"></i>
+                        二检时间
+                      </template>
+                      {{ formatDateReviewSub(formInfo.project.twoCheck) }}
+                    </el-descriptions-item>
+                  </el-descriptions>
+                  <el-descriptions class="margin-top" :column="1">
+                    <el-descriptions-item>
+                      <template slot="label">
+                        <i class="el-icon-document"></i>
+                        工程内容
+                      </template>
+                      {{ formInfo.project.workcontentAlias }}
+                    </el-descriptions-item>
+                    <el-descriptions-item>
+                      <template slot="label">
+                        <i class="el-icon-document"></i>
+                        工作量
+                      </template>
+                      {{ formInfo.project.workloadAlias }}
+                    </el-descriptions-item>
+                    <el-descriptions-item>
+                      <template slot="label">
+                        <i class="el-icon-money"></i>
+                        项目预估金额
+                      </template>
+                      {{ formInfo.porjectMoney }}
+                    </el-descriptions-item>
+                  </el-descriptions>
+                </div>
+              </el-card>
+            </el-col>
+            <el-col style="width: 50%">
+              <el-card class="box-card">
+                <div slot="header" class="clearfix">
+                  <span>审核单详情</span>
+                </div>
+
+                <el-collapse-item name="5">
+                  <template slot="title">
+                    分包详情<i>
+                      <el-tag
+                        size="mini"
+                        v-if="formInfo.subpackageType == 0"
+                        type="danger"
+                        >未设置</el-tag
+                      >
+                      <el-tag
+                        size="mini"
+                        v-else-if="formInfo.subpackageType == 1"
+                        type="danger"
+                        >非分包</el-tag
+                      >
+                      <el-tag
+                        size="mini"
+                        v-else-if="formInfo.subpackageType == 2"
+                        type="success"
+                        >单一合同分包</el-tag
+                      >
+                      <el-tag
+                        size="mini"
+                        v-else-if="formInfo.subpackageType == 3"
+                        type="success"
+                        >框架协议分包</el-tag
+                      >
+                      <el-tag size="mini" v-else type="danger">其他状态</el-tag>
+                    </i>
+                  </template>
+                  <el-card>
+                    <div style="text-align: center">
+                      <el-descriptions class="margin-top" :column="2">
+                        <el-descriptions-item>
+                          <template slot="label"> 分包类型 </template>
+                          <span v-if="subcontractForm.subType == 1"
+                            >全部分包</span
+                          ><span v-if="subcontractForm.subType == 2"
+                            >局部分包</span
+                          >
+                        </el-descriptions-item>
+                        <el-descriptions-item>
+                          <template slot="label"> 抽签过程 </template>
+                          <el-tag
+                            v-if="formInfo.project.drawStatus == 0"
+                            type="danger"
+                            size="mini"
+                            >无</el-tag
+                          >
+                          <el-tag
+                            v-if="formInfo.project.drawStatus == 1"
+                            type="success"
+                            size="mini"
+                            >有</el-tag
+                          >
+                        </el-descriptions-item>
+                        <el-descriptions-item>
+                          <template slot="label"> 抽签时间 </template>
+                          {{
+                            parseTime(subcontractForm.lotTime, "{y}-{m}-{d}")
+                          }}
+                        </el-descriptions-item>
+                        <el-descriptions-item>
+                          <template slot="label"> 抽签业务名称 </template>
+                          {{ subcontractForm.businessName }}
+                        </el-descriptions-item>
+                      </el-descriptions>
+                      <el-descriptions class="margin-top" :column="1">
+                        <el-descriptions-item>
+                          <template slot="label"> 抽签单位 </template>
+                          <div
+                            v-for="(
+                              unit, index
+                            ) in subcontractForm.cooperationUnitJson"
+                            :key="index"
+                          >
+                            {{ unit }}
+                          </div>
+                        </el-descriptions-item>
+                        <el-descriptions-item>
+                          <template slot="label"> 中签单位 </template>
+                          {{ subcontractForm.winUnit }}
+                        </el-descriptions-item>
+                        <el-descriptions-item>
+                          <template slot="label"> 预估分包工作量 </template>
+                          {{ subcontractForm.subWorkload }}
+                        </el-descriptions-item>
+                      </el-descriptions>
+                    </div>
+                  </el-card>
+                </el-collapse-item>
+
+                <el-collapse-item name="6">
+                  <template slot="title">
+                    雇工详情<i>
+                      <el-tag
+                        size="mini"
+                        v-if="formInfo.manType == 0"
+                        type="danger"
+                        >非雇工</el-tag
+                      >
+
+                      <el-tag
+                        size="mini"
+                        v-else-if="formInfo.manType == 1"
+                        type="success"
+                        >雇工</el-tag
+                      >
+                      <el-tag
+                        size="mini"
+                        v-else-if="formInfo.manType == 2"
+                        type="success"
+                        >第三方雇工</el-tag
+                      >
+                    </i>
+                  </template>
+
+                  <el-card>
+                    <el-descriptions class="margin-top" :column="2">
+                      <el-descriptions-item>
+                        <template slot="label"> 雇工开始时间 </template>
+                        {{ formInfo.startTime
+                        }}<span v-if="startAmPm == '12:00:00'">上午</span
+                        ><span v-if="startAmPm == '23:59:59'">下午</span>
+                      </el-descriptions-item>
+                      <el-descriptions-item>
+                        <template slot="label"> 雇工结束时间 </template>
+                        {{ formInfo.endTime
+                        }}<span v-if="endAmPm == '12:00:00'">上午</span
+                        ><span v-if="endAmPm == '23:59:59'">下午</span>
+                      </el-descriptions-item>
+                      <el-descriptions-item>
+                        <template slot="label"> 雇工人数 </template>
+                        {{ formInfo.peopleNum }}
+                      </el-descriptions-item>
+                      <el-descriptions-item>
+                        <template slot="label"> 天数 </template>
+                        {{ formInfo.budgetDay }}
+                      </el-descriptions-item>
+                      <el-descriptions-item>
+                        <template slot="label"> 预算 </template>
+                        {{ formInfo.budgetMoney }}
+                      </el-descriptions-item>
+                      <el-descriptions-item>
+                        <template slot="label"> 雇工方式 </template>
+                        <span v-if="formInfo.manType === 0"
+                          ><el-tag type="danger" size="mini">非雇工</el-tag>
+                        </span>
+                        <span v-if="formInfo.manType === 1"
+                          ><el-tag type="success" size="mini"
+                            >雇工</el-tag
+                          ></span
+                        >
+                        <span v-if="formInfo.manType === 2"
+                          ><el-tag type="success" size="mini"
+                            >第三方雇工</el-tag
+                          ></span
+                        >
+                      </el-descriptions-item>
+                    </el-descriptions>
+                    <el-descriptions class="margin-top" :column="1">
+                      <el-descriptions-item>
+                        <template slot="label"> 雇工内容 </template>
+                        {{ formInfo.employmentReason }}
+                      </el-descriptions-item>
+                    </el-descriptions>
+                  </el-card>
+                </el-collapse-item>
+              </el-card>
+            </el-col>
+          </el-row>
+        </div>
+
+        <el-collapse-item title="雇工信息详情" name="1">
+          <div>
+            <el-row :gutter="10">
+              <el-col style="width: 100%">
+                <el-card>
+                  <div slot="header">
+                    <span>雇工信息详情</span>
+                    <el-button
+                      style="float: right; padding: 3px 0"
+                      type="text"
+                    ></el-button>
+                  </div>
+                  <el-table
+                    highlight-current-row
+                    style="width: 100%"
+                    :data="employeeList"
+                  >
+                    <el-table-column label="姓名" align="center" prop="name" />
+                    <el-table-column
+                      label="身份证"
+                      align="center"
+                      prop="idCard"
+                    />
+                    <el-table-column
+                      label="作业时间"
+                      align="center"
+                      prop="workTime"
+                    />
+                    <el-table-column
+                      label="天数"
+                      align="center"
+                      prop="workDay"
+                    />
+                    <el-table-column label="费用" align="center" prop="cost" />
+                  </el-table>
+                </el-card>
+              </el-col>
+            </el-row>
+          </div>
+        </el-collapse-item>
+      </el-collapse>
+    </el-dialog>
   </div>
 </template>
 <style>
@@ -613,6 +935,8 @@ import {
   listProjectSelected,
   updateProjectDrawStatus,
 } from "@/api/system/project";
+import { listEmployee } from "@/api/system/reviewEmployeeSub";
+import { getReview } from "@/api/system/reviewSub";
 import elDragDialog from "@/api/components/el-drag";
 import { listUnit } from "@/api/system/unit";
 import userInfo from "@/store/modules/user";
@@ -624,6 +948,76 @@ export default {
   },
   data() {
     return {
+      employeeList: [],
+      queryParamsEmployee: {
+        pageNum: 1,
+        pageSize: 9999,
+        reviewId: null,
+      },
+      subcontractForm: {
+        user: {
+          userName: "",
+        },
+      },
+      activeNamesInfo: ["1", "2", "3"],
+      openInfo: false,
+      titleInfo: "",
+      formInfo: {
+        user: {
+          userName: "",
+        },
+        project: {
+          projectNameAlias: "",
+          projectNum: "",
+          projectType: "",
+          registerTime: "",
+          receptionist: "",
+          workloadAlias: "",
+          userNameAlias: "",
+          requesterAlias: "",
+          projectStartAlias: null,
+          projectEndAlias: null,
+          oneCheck: "",
+          twoCheck: "",
+          noticeTime: "",
+          projectTime: "",
+          deliveryTime: "",
+          projectMoneyAlias: null,
+          operate: null,
+          operateUser: "",
+          operateTime: "",
+        },
+      },
+      options: [
+        {
+          value: "天津汇创测绘技术有限公司",
+          label: "天津汇创测绘技术有限公司",
+        },
+        {
+          value: "福建越扬信息科技有限公司",
+          label: "福建越扬信息科技有限公司",
+        },
+        {
+          value: "福建省易测工程勘测有限公司",
+          label: "福建省易测工程勘测有限公司",
+        },
+        {
+          value: "黑龙江省地星测绘科技股份有限公司",
+          label: "黑龙江省地星测绘科技股份有限公司",
+        },
+        {
+          value: "武汉大势智慧科技有限公司",
+          label: "武汉大势智慧科技有限公司",
+        },
+        {
+          value: "福州翔飞航空科技有限公司",
+          label: "福州翔飞航空科技有限公司",
+        },
+        {
+          value: "福建金地勘测规划有限公司",
+          label: "福建金地勘测规划有限公司",
+        },
+      ],
       drawList: [
         {
           value: 0,
@@ -680,6 +1074,28 @@ export default {
         {
           value: 3,
           label: "作业完成",
+        },
+        {
+          value: 4,
+          label: "作业办结",
+        },
+      ],
+      statusList: [
+        {
+          value: 0,
+          label: "临时安排",
+        },
+        {
+          value: 1,
+          label: "正式安排",
+        },
+        {
+          value: 2,
+          label: "一检办结",
+        },
+        {
+          value: 3,
+          label: "二检办结",
         },
       ],
       outputStatusList: [
@@ -799,7 +1215,6 @@ export default {
         operateTime: null,
         department: "",
         outputStatus: null,
-        status: -1,
       },
       // 表单参数
       form: {},
@@ -869,6 +1284,53 @@ export default {
     this.loadAllUnits();
   },
   methods: {
+    formatDateReviewSub(dateString) {
+      if (dateString == "") {
+        return "";
+      }
+      const dateObject = new Date(dateString);
+      const year = dateObject.getFullYear();
+      const month = dateObject.getMonth() + 1;
+      const day = dateObject.getDate();
+      return `${year}-${(month < 10 ? "0" : "") + month}-${
+        (day < 10 ? "0" : "") + day
+      }`;
+    },
+    showReviewInfo(row) {
+      const reviewId = row.reviewSub[0].reviewId;
+      getReview(reviewId).then((response) => {
+        if (response.data.startTime != null && response.data.startTime != "") {
+          this.startAmPm = response.data.startTime.substring(11);
+          response.data.startTime = response.data.startTime.substring(0, 10);
+        }
+        if (response.data.endTime != null && response.data.endTime != "") {
+          this.endAmPm = response.data.endTime.substring(11);
+          response.data.endTime = response.data.endTime.substring(0, 10);
+        }
+        this.formInfo = response.data;
+        this.activeNamesInfo = ["2", "3", "4"];
+        if (
+          this.formInfo.subpackageType != 0 &&
+          this.formInfo.subpackageType != 1
+        ) {
+          this.activeNamesInfo.push("5");
+        }
+        if (this.formInfo.manType != 0) {
+          this.activeNamesInfo.push("1");
+          this.activeNamesInfo.push("6");
+        }
+        if (this.formInfo.subcontract == 0) {
+          this.formInfo.subcontract = null;
+        }
+        this.subcontractForm = response.data;
+        this.openInfo = true;
+        this.titleInfo = "详情";
+      });
+      this.queryParamsEmployee.reviewId = reviewId;
+      listEmployee(this.queryParamsEmployee).then((response) => {
+        this.employeeList = response.rows;
+      });
+    },
     showFetailXt(value) {
       if (!value.projectNum) return false;
       const substrings = ["图", "售", "数"];
