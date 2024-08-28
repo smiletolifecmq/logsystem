@@ -215,12 +215,7 @@
       <el-table-column label="工作状态" align="center" prop="status">
         <el-tag type="danger">待二检</el-tag>
       </el-table-column>
-      <el-table-column
-        fixed="right"
-        label="操作"
-        align="center"
-        class-name="small-padding fixed-width"
-      >
+      <el-table-column label="操作" align="center">
         <template slot-scope="scope">
           <el-button
             size="mini"
