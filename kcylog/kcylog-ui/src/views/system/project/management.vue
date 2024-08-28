@@ -116,12 +116,88 @@
       </el-form-item>
     </el-form>
 
-    <el-row v-show="false" :gutter="10" class="mb8">
-      <right-toolbar
-        :showSearch.sync="showSearch"
-        @queryTable="getList"
-      ></right-toolbar>
-    </el-row>
+    <el-table :data="statisticsData" style="width: 100%">
+      <el-table-column prop="status" label="类型" align="center">
+        <template slot-scope="scope">
+          <el-tag type="success">分包项目数｜审核单数｜抽签数</el-tag>
+        </template>
+      </el-table-column>
+      <el-table-column label="工程测绘部" align="center">
+        <template slot-scope="scope">
+          <el-tag type="success"
+            >{{ scope.row.gcxms }} | {{ scope.row.gcsps }} |
+            {{ scope.row.gccqs }}</el-tag
+          >
+        </template>
+      </el-table-column>
+      <el-table-column label="不动产测绘部" align="center">
+        <template slot-scope="scope">
+          <el-tag type="success"
+            >{{ scope.row.bdxms }} | {{ scope.row.bdsps }} |
+            {{ scope.row.bdcqs }}</el-tag
+          >
+        </template>
+      </el-table-column>
+      <el-table-column label="管线工程部" align="center">
+        <template slot-scope="scope">
+          <el-tag type="success"
+            >{{ scope.row.gxxms }} | {{ scope.row.gxsps }} |
+            {{ scope.row.gxcqs }}</el-tag
+          >
+        </template>
+      </el-table-column>
+      <el-table-column label="地理信息部" align="center">
+        <template slot-scope="scope">
+          <el-tag type="success"
+            >{{ scope.row.dlxms }} | {{ scope.row.dlsps }} |
+            {{ scope.row.dlcqs }}</el-tag
+          >
+        </template>
+      </el-table-column>
+    </el-table>
+
+    <el-table :data="statisticsWinUnit" style="width: 100%">
+      <el-table-column prop="status" label="类型" align="center">
+        <template slot-scope="scope">
+          <el-tag type="success">项目数</el-tag>
+        </template>
+      </el-table-column>
+      <el-table-column label="天津汇创" align="center">
+        <template slot-scope="scope">
+          <el-tag type="success">{{ scope.row.tjnum }}</el-tag>
+        </template>
+      </el-table-column>
+      <el-table-column label="福建越扬" align="center">
+        <template slot-scope="scope">
+          <el-tag type="success">{{ scope.row.yynum }}</el-tag>
+        </template>
+      </el-table-column>
+      <el-table-column label="易测工程" align="center">
+        <template slot-scope="scope">
+          <el-tag type="success">{{ scope.row.ycnum }}</el-tag>
+        </template>
+      </el-table-column>
+      <el-table-column label="地星测绘" align="center">
+        <template slot-scope="scope">
+          <el-tag type="success">{{ scope.row.dxnum }}</el-tag>
+        </template>
+      </el-table-column>
+      <el-table-column label="大势智慧" align="center">
+        <template slot-scope="scope">
+          <el-tag type="success">{{ scope.row.dsnum }}</el-tag>
+        </template>
+      </el-table-column>
+      <el-table-column label="翔飞航空" align="center">
+        <template slot-scope="scope">
+          <el-tag type="success">{{ scope.row.xfnum }}</el-tag>
+        </template>
+      </el-table-column>
+      <el-table-column label="金地勘测" align="center">
+        <template slot-scope="scope">
+          <el-tag type="success">{{ scope.row.jdnum }}</el-tag>
+        </template>
+      </el-table-column>
+    </el-table>
 
     <el-table
       v-loading="loading"
@@ -948,6 +1024,7 @@ export default {
   },
   data() {
     return {
+      statisticsWinUnit: [],
       employeeList: [],
       queryParamsEmployee: {
         pageNum: 1,
@@ -1177,6 +1254,7 @@ export default {
       total: 0,
       // 项目表格数据
       projectList: [],
+      projectListTj: [],
       overTimeProjectList: [],
       // 弹出层标题
       title: "",
@@ -1282,8 +1360,118 @@ export default {
     this.getReviewProject();
     this.getList();
     this.loadAllUnits();
+    this.getListToTj();
   },
   methods: {
+    getListToTj() {
+      this.getReviewProject();
+      this.loading = true;
+      listProjectForFb(this.queryStatisticsParams).then((response) => {
+        this.$nextTick(() => {
+          this.projectListTj = [];
+          this.projectListTj = response.rows;
+          this.listProjectLocalMap = new Map();
+          for (var i = 0; i < response.rows.length; i++) {
+            this.listProjectLocalMap.set(
+              response.rows[i].projectId,
+              response.rows[i]
+            );
+          }
+          let data = {
+            gcxms: 0,
+            gcsps: 0,
+            gccqs: 0,
+            bdxms: 0,
+            bdsps: 0,
+            bdcqs: 0,
+            gxxms: 0,
+            gxsps: 0,
+            gxcqs: 0,
+            dlxms: 0,
+            dlsps: 0,
+            dlcqs: 0,
+            tjnum: 0,
+            yynum: 0,
+            ycnum: 0,
+            dxnum: 0,
+            dsnum: 0,
+            xfnum: 0,
+            jdnum: 0,
+          };
+          for (var j = 0; j < this.projectListTj.length; j++) {
+            switch (this.projectListTj[j].department) {
+              case "工程测绘部":
+                data.gcxms++;
+                if (this.projectListTj[j].drawStatus == 1) {
+                  data.gxcqs++;
+                }
+                if (this.projectIdMap.has(this.projectListTj[j].projectId)) {
+                  data.gxsps++;
+                }
+                break;
+              case "不动产测绘部":
+                data.bdxms++;
+                if (this.projectListTj[j].drawStatus == 1) {
+                  data.bdcqs++;
+                }
+                if (this.projectIdMap.has(this.projectListTj[j].projectId)) {
+                  data.bdsps++;
+                }
+                break;
+              case "管线工程部":
+                data.gxxms++;
+                if (this.projectListTj[j].drawStatus == 1) {
+                  data.gxcqs++;
+                }
+                if (this.projectIdMap.has(this.projectListTj[j].projectId)) {
+                  data.gxsps++;
+                }
+                break;
+              case "地理信息部":
+                data.dlxms++;
+                if (this.projectListTj[j].drawStatus == 1) {
+                  data.dlcqs++;
+                }
+                if (this.projectIdMap.has(this.projectListTj[j].projectId)) {
+                  data.dlsps++;
+                }
+                break;
+            }
+
+            if (this.projectIdMap.has(this.projectListTj[j].projectId)) {
+              switch (this.projectListTj[j].reviewSub[0].winUnit) {
+                case "天津汇创测绘技术有限公司":
+                  data.tjnum++;
+                  break;
+                case "福建越扬信息科技有限公司":
+                  data.yynum++;
+                  break;
+                case "福建省易测工程勘测有限公司":
+                  data.ycnum++;
+                  break;
+                case "黑龙江省地星测绘科技股份有限公司":
+                  data.dxnum++;
+                  break;
+
+                case "武汉大势智慧科技有限公司":
+                  data.dxnum++;
+                  break;
+
+                case "福州翔飞航空科技有限公司":
+                  data.xfnum++;
+                  break;
+
+                case "福建金地勘测规划有限公司":
+                  data.jdnum++;
+                  break;
+              }
+            }
+          }
+          this.statisticsData.push(data);
+          this.statisticsWinUnit.push(data);
+        });
+      });
+    },
     formatDateReviewSub(dateString) {
       if (dateString == "") {
         return "";
