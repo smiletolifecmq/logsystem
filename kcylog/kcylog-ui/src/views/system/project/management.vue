@@ -1403,10 +1403,10 @@ export default {
               case "工程测绘部":
                 data.gcxms++;
                 if (this.projectListTj[j].drawStatus == 1) {
-                  data.gxcqs++;
+                  data.gccqs++;
                 }
                 if (this.projectIdMap.has(this.projectListTj[j].projectId)) {
-                  data.gxsps++;
+                  data.gcsps++;
                 }
                 break;
               case "不动产测绘部":
