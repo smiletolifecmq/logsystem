@@ -85,7 +85,7 @@
             >待二检项目数</el-tag
           >
           <el-tag v-show="scope.row.status == 0" type="danger"
-            >超期项目数</el-tag
+            >超期项目数｜未备注数</el-tag
           >
         </template>
       </el-table-column>
@@ -99,7 +99,7 @@
             type="danger"
             class="hover-effect"
             @click="handleOverTimeOpen('工程测绘部')"
-            >{{ scope.row.gcchbNumWork }}</el-tag
+            >{{ scope.row.gcchbNumWork }} | {{ scope.row.gcwbzs }}</el-tag
           >
         </template>
       </el-table-column>
@@ -113,7 +113,7 @@
             type="danger"
             class="hover-effect"
             @click="handleOverTimeOpen('不动产测绘部')"
-            >{{ scope.row.bdcchbWork }}</el-tag
+            >{{ scope.row.bdcchbWork }} | {{ scope.row.bdwbzs }}</el-tag
           >
         </template>
       </el-table-column>
@@ -127,7 +127,7 @@
             type="danger"
             class="hover-effect"
             @click="handleOverTimeOpen('管线工程部')"
-            >{{ scope.row.gxgcbWork }}</el-tag
+            >{{ scope.row.gxgcbWork }} | {{ scope.row.gxwbzs }}</el-tag
           >
         </template>
       </el-table-column>
@@ -141,7 +141,7 @@
             type="danger"
             class="hover-effect"
             @click="handleOverTimeOpen('地理信息部')"
-            >{{ scope.row.dlxxbWork }}</el-tag
+            >{{ scope.row.dlxxbWork }} | {{ scope.row.dlwbzs }}</el-tag
           >
         </template>
       </el-table-column>
@@ -1199,6 +1199,10 @@ export default {
       );
     },
     submitFormCq() {
+      if (!this.formReviewCq.twoCheckNotes) {
+        this.$modal.msgError("内容不能为空～");
+        return;
+      }
       this.$refs["formReviewCq"].validate((valid) => {
         updateProjectCqBz(this.formReviewCq).then((response) => {
           this.$modal.msgSuccess("修改成功");
@@ -1250,12 +1254,27 @@ export default {
             if (project[i].twoCheckDays < 0) {
               num.twoCheckDays++;
             }
+            if (
+              project[i].twoCheckNotes == "" ||
+              project[i].twoCheckNotes == null ||
+              project[i].twoCheckNotes == undefined
+            ) {
+              num.wbznum++;
+            }
             myMap.set(key, num);
           } else {
             let num = {
               workCount: 1,
               twoCheckDays: 0,
+              wbznum: 0,
             };
+            if (
+              project[i].twoCheckNotes == "" ||
+              project[i].twoCheckNotes == null ||
+              project[i].twoCheckNotes == undefined
+            ) {
+              num.wbznum++;
+            }
             if (project[i].twoCheckDays < 0) {
               num.twoCheckDays++;
             }
@@ -1291,19 +1310,27 @@ export default {
           bdcchbWork: 0,
           gxgcbWork: 0,
           dlxxbWork: 0,
+          gcwbzs: 0,
+          bdwbzs: 0,
+          gxwbzs: 0,
+          dlwbzs: 0,
         };
 
         if (myMap.has("工程测绘部")) {
           numData.gcchbNumWork = myMap.get("工程测绘部").twoCheckDays;
+          numData.gcwbzs = myMap.get("工程测绘部").wbznum;
         }
         if (myMap.has("不动产测绘部")) {
           numData.bdcchbWork = myMap.get("不动产测绘部").twoCheckDays;
+          numData.bdwbzs = myMap.get("不动产测绘部").wbznum;
         }
         if (myMap.has("管线工程部")) {
           numData.gxgcbWork = myMap.get("管线工程部").twoCheckDays;
+          numData.gxwbzs = myMap.get("管线工程部").wbznum;
         }
         if (myMap.has("地理信息部")) {
           numData.dlxxbWork = myMap.get("地理信息部").twoCheckDays;
+          numData.dlwbzs = myMap.get("地理信息部").wbznum;
         }
         this.statisticsData.push(numData);
       });
