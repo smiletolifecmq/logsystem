@@ -210,6 +210,7 @@
         align="center"
         prop="winUnit"
         width="200px"
+        fixed
       >
         <template slot-scope="scope">
           {{
@@ -219,7 +220,12 @@
           }}
         </template>
       </el-table-column>
-      <el-table-column label="作业部门" align="center" prop="department" />
+      <el-table-column
+        label="作业部门"
+        align="center"
+        prop="department"
+        width="100px"
+      />
       <el-table-column
         label="委托单位"
         align="center"
@@ -233,14 +239,19 @@
         width="200px"
       />
       <el-table-column label="项目编号" align="center" prop="projectNum" />
-      <el-table-column label="工程负责人" align="center" prop="userNameAlias" />
+      <el-table-column label="负责人" align="center" prop="userNameAlias" />
       <!-- <el-table-column label="项目类型" align="center" prop="projectType" />
           <el-table-column
             label="工程内容"
             align="center"
             prop="workcontentAlias"
           /> -->
-      <el-table-column label="登记时间" align="center" prop="registerTime">
+      <el-table-column
+        label="登记时间"
+        align="center"
+        prop="registerTime"
+        width="100px"
+      >
         <template slot-scope="scope">
           {{ formatDate(scope.row.registerTime) }}
         </template>
@@ -249,6 +260,7 @@
         label="安排开始时间"
         align="center"
         prop="projectStartAlias"
+        width="100px"
       >
         <template slot-scope="scope">
           {{ formatDate(scope.row.projectStartAlias) }}
@@ -258,12 +270,18 @@
         label="安排结束时间"
         align="center"
         prop="projectEndAlias"
+        width="100px"
       >
         <template slot-scope="scope">
           {{ formatDate(scope.row.projectEndAlias) }}
         </template></el-table-column
       >
-      <el-table-column label="作业办结时间" align="center" prop="doTime">
+      <el-table-column
+        label="作业办结时间"
+        align="center"
+        prop="doTime"
+        width="100px"
+      >
         <template slot-scope="scope">
           {{ homeworkCompleted(scope.row) }}
         </template></el-table-column
@@ -278,7 +296,12 @@
           }}</el-tag>
         </template></el-table-column
       >
-      <el-table-column label="作业状态" align="center" prop="workStatus">
+      <el-table-column
+        label="作业状态"
+        align="center"
+        prop="workStatus"
+        width="100px"
+      >
         <template slot-scope="scope">
           <el-tag v-show="scope.row.workStatus == 1" type="danger"
             >新增作业</el-tag
@@ -297,7 +320,12 @@
           >
         </template>
       </el-table-column>
-      <el-table-column label="工作状态" align="center" prop="status">
+      <el-table-column
+        label="工作状态"
+        align="center"
+        prop="status"
+        width="100px"
+      >
         <template slot-scope="scope">
           <el-tag v-show="scope.row.status == 0" type="info">临时安排</el-tag>
           <el-tag v-show="scope.row.status == 1">正式安排</el-tag>
@@ -317,7 +345,12 @@
         </template>
       </el-table-column>
       <el-table-column label="雇工分包" align="center">
-        <el-table-column label="状态" align="center" prop="subpackageType">
+        <el-table-column
+          label="状态"
+          align="center"
+          prop="subpackageType"
+          width="120px"
+        >
           <template slot-scope="scope">
             <el-tag v-show="scope.row.subpackageType == 0" type="danger"
               >未设置</el-tag
@@ -333,7 +366,7 @@
             >
           </template>
         </el-table-column>
-        <el-table-column label="审核单状态" align="center">
+        <el-table-column label="审核单状态" align="center" width="110px">
           <template slot-scope="scope">
             <el-tag
               v-show="scope.row.issq == 1"
