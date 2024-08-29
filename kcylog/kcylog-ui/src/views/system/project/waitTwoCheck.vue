@@ -1253,13 +1253,13 @@ export default {
             num.workCount++;
             if (project[i].twoCheckDays < 0) {
               num.twoCheckDays++;
-            }
-            if (
-              project[i].twoCheckNotes == "" ||
-              project[i].twoCheckNotes == null ||
-              project[i].twoCheckNotes == undefined
-            ) {
-              num.wbznum++;
+              if (
+                project[i].twoCheckNotes == "" ||
+                project[i].twoCheckNotes == null ||
+                project[i].twoCheckNotes == undefined
+              ) {
+                num.wbznum++;
+              }
             }
             myMap.set(key, num);
           } else {
@@ -1268,15 +1268,15 @@ export default {
               twoCheckDays: 0,
               wbznum: 0,
             };
-            if (
-              project[i].twoCheckNotes == "" ||
-              project[i].twoCheckNotes == null ||
-              project[i].twoCheckNotes == undefined
-            ) {
-              num.wbznum++;
-            }
             if (project[i].twoCheckDays < 0) {
               num.twoCheckDays++;
+              if (
+                project[i].twoCheckNotes == "" ||
+                project[i].twoCheckNotes == null ||
+                project[i].twoCheckNotes == undefined
+              ) {
+                num.wbznum++;
+              }
             }
             myMap.set(key, num);
           }

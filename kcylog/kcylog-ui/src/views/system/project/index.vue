@@ -1641,13 +1641,13 @@ export default {
               num.workCount++;
               if (project[i].leadTime < 0) {
                 num.overdueNum++;
-              }
-              if (
-                project[i].completionNotes == "" ||
-                project[i].completionNotes == null ||
-                project[i].completionNotes == undefined
-              ) {
-                num.wbznum++;
+                if (
+                  project[i].completionNotes == "" ||
+                  project[i].completionNotes == null ||
+                  project[i].completionNotes == undefined
+                ) {
+                  num.wbznum++;
+                }
               }
               if (
                 project[i].subpackageType == 2 ||
@@ -1667,13 +1667,6 @@ export default {
                 fbnum: 0,
                 cqnum: 0,
               };
-              if (
-                project[i].completionNotes == "" ||
-                project[i].completionNotes == null ||
-                project[i].completionNotes == undefined
-              ) {
-                num.wbznum++;
-              }
 
               if (
                 project[i].subpackageType == 2 ||
@@ -1688,6 +1681,13 @@ export default {
 
               if (project[i].leadTime < 0) {
                 num.overdueNum++;
+                if (
+                  project[i].completionNotes == "" ||
+                  project[i].completionNotes == null ||
+                  project[i].completionNotes == undefined
+                ) {
+                  num.wbznum++;
+                }
               }
               myMap.set(key, num);
             }
