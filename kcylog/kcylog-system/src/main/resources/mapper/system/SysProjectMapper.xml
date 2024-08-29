@@ -142,6 +142,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
         <result property="money"    column="money"    />
         <result property="profitMoney"    column="profit_money"    />
         <result property="coefficientMoney"    column="coefficient_money"    />
+        <result property="coefficientProfitMoney"    column="coefficient_profit_money"    />
     </resultMap>
 
     <sql id="selectSysProjectVo">
@@ -149,7 +150,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
     </sql>
 
     <sql id="selectSysProjectDetail">
-        select p.*, v.user_name, v.proportion, v.money, v.profit_money, v.coefficient_money, c.project_name, c.car_num, c.car_type, c.number, c.car_expenses, c.record_time
+        select p.*, v.user_name, v.proportion, v.money, v.profit_money, v.coefficient_money, v.coefficient_profit_money, c.project_name, c.car_num, c.car_type, c.number, c.car_expenses, c.record_time
         from sys_project p left join sys_project_value v on p.project_id = v.project_id
                            left join sys_project_car c on p.project_id = c.project_id
     </sql>
@@ -550,7 +551,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
     <update id="jsProjectLiRunCz" parameterType="String">
         UPDATE sys_project_value AS spv
         JOIN sys_project AS sp ON spv.project_id = sp.project_id
-        SET spv.profit_money = (sp.operate - sp.fb_money) * (spv.proportion / 100),sp.output_status = 2,sp.settlement_time = CURRENT_TIMESTAMP()
+        SET spv.profit_money = (sp.operate - sp.fb_money) * (spv.proportion / 100),spv.coefficient_profit_money = (sp.operate - sp.fb_money) * (spv.proportion / 100) * sp.project_coefficient,sp.output_status = 2,sp.settlement_time = CURRENT_TIMESTAMP()
         WHERE spv.project_id IN
         <foreach item="projectId" collection="array" open="(" separator="," close=")">
             #{projectId}
@@ -560,7 +561,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
     <update id="jsProjectLiRunCzForReview" parameterType="SysProject">
         UPDATE sys_project_value AS spv
         JOIN sys_project AS sp ON spv.project_id = sp.project_id
-        SET spv.profit_money = (sp.operate - sp.fb_money - #{guGongMoney}) * (spv.proportion / 100),sp.output_status = 2,sp.settlement_time = CURRENT_TIMESTAMP()
+        SET spv.profit_money = (sp.operate - sp.fb_money - #{guGongMoney}) * (spv.proportion / 100),spv.coefficient_profit_money = (sp.operate - sp.fb_money - #{guGongMoney}) * (spv.proportion / 100) * sp.project_coefficient,sp.output_status = 2,sp.settlement_time = CURRENT_TIMESTAMP()
         WHERE spv.project_id = #{projectId}
     </update>
 

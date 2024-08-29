@@ -718,7 +718,7 @@
     <el-dialog
       title="项目"
       :visible.sync="detailPeopleOpen"
-      width="1000px"
+      width="1200px"
       append-to-body
       v-el-drag-dialog
     >
@@ -853,9 +853,24 @@
                   <el-tag> {{ scope.row.coefficientMoney }}</el-tag>
                 </template>
               </el-table-column>
-              <el-table-column prop="profitMoney" label="利润" align="center">
+              <el-table-column
+                prop="profitMoney"
+                label="利润(系数不参与计算)"
+                align="center"
+              >
                 <template slot-scope="scope">
                   <el-tag type="success"> {{ scope.row.profitMoney }}</el-tag>
+                </template>
+              </el-table-column>
+              <el-table-column
+                prop="profitMoney"
+                label="利润(参与计算)"
+                align="center"
+              >
+                <template slot-scope="scope">
+                  <el-tag type="success">
+                    {{ scope.row.coefficientProfitMoney }}</el-tag
+                  >
                 </template>
               </el-table-column>
             </el-table>

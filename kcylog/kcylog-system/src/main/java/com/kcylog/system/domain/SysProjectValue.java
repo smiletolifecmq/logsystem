@@ -39,6 +39,16 @@ public class SysProjectValue extends BaseEntity
 
     private BigDecimal coefficientMoney;
 
+    private BigDecimal coefficientProfitMoney;
+
+    public BigDecimal getCoefficientProfitMoney() {
+        return coefficientProfitMoney;
+    }
+
+    public void setCoefficientProfitMoney(BigDecimal coefficientProfitMoney) {
+        this.coefficientProfitMoney = coefficientProfitMoney;
+    }
+
     public BigDecimal getCoefficientMoney() {
         return coefficientMoney;
     }
