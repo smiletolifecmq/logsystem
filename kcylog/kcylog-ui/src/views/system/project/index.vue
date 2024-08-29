@@ -112,7 +112,7 @@
       <el-table-column prop="status" label="类型" align="center">
         <template slot-scope="scope">
           <el-tag v-show="scope.row.status == 1" type="success"
-            >作业中项目数</el-tag
+            >作业中项目数｜分包数｜抽签数</el-tag
           >
           <el-tag v-show="scope.row.status == 0" type="danger"
             >超期项目数｜未备注数</el-tag
@@ -121,9 +121,10 @@
       </el-table-column>
       <el-table-column prop="gcchbNumWork" label="工程测绘部" align="center">
         <template slot-scope="scope">
-          <el-tag v-show="scope.row.status == 1" type="success">{{
-            scope.row.gcchbNumWork
-          }}</el-tag>
+          <el-tag v-show="scope.row.status == 1" type="success"
+            >{{ scope.row.gcchbNumWork }} | {{ scope.row.gcfbnum }} |
+            {{ scope.row.gccqnum }}</el-tag
+          >
           <el-tag
             v-show="scope.row.status == 0"
             type="danger"
@@ -135,9 +136,10 @@
       </el-table-column>
       <el-table-column prop="bdcchbWork" label="不动产测绘部" align="center">
         <template slot-scope="scope">
-          <el-tag v-show="scope.row.status == 1" type="success">{{
-            scope.row.bdcchbWork
-          }}</el-tag>
+          <el-tag v-show="scope.row.status == 1" type="success"
+            >{{ scope.row.bdcchbWork }} | {{ scope.row.bdfbnum }} |
+            {{ scope.row.bdcqnum }}</el-tag
+          >
           <el-tag
             v-show="scope.row.status == 0"
             type="danger"
@@ -149,9 +151,10 @@
       </el-table-column>
       <el-table-column prop="gxgcbWork" label="管线工程部" align="center">
         <template slot-scope="scope">
-          <el-tag v-show="scope.row.status == 1" type="success">{{
-            scope.row.gxgcbWork
-          }}</el-tag>
+          <el-tag v-show="scope.row.status == 1" type="success"
+            >{{ scope.row.gxgcbWork }} | {{ scope.row.gxfbnum }} |
+            {{ scope.row.gxcqnum }}</el-tag
+          >
           <el-tag
             v-show="scope.row.status == 0"
             type="danger"
@@ -163,9 +166,10 @@
       </el-table-column>
       <el-table-column prop="dlxxbWork" label="地理信息部" align="center">
         <template slot-scope="scope">
-          <el-tag v-show="scope.row.status == 1" type="success">{{
-            scope.row.dlxxbWork
-          }}</el-tag>
+          <el-tag v-show="scope.row.status == 1" type="success"
+            >{{ scope.row.dlxxbWork }} | {{ scope.row.dlfbnum }} |
+            {{ scope.row.dlcqnum }}</el-tag
+          >
           <el-tag
             v-show="scope.row.status == 0"
             type="danger"
@@ -1645,12 +1649,23 @@ export default {
               ) {
                 num.wbznum++;
               }
+              if (
+                project[i].subpackageType == 2 ||
+                project[i].subpackageType == 3
+              ) {
+                num.fbnum++;
+              }
+              if (project[i].drawStatus == 1) {
+                num.cqnum++;
+              }
               myMap.set(key, num);
             } else {
               let num = {
                 workCount: 1,
                 overdueNum: 0,
                 wbznum: 0,
+                fbnum: 0,
+                cqnum: 0,
               };
               if (
                 project[i].completionNotes == "" ||
@@ -1659,6 +1674,18 @@ export default {
               ) {
                 num.wbznum++;
               }
+
+              if (
+                project[i].subpackageType == 2 ||
+                project[i].subpackageType == 3
+              ) {
+                num.fbnum++;
+              }
+
+              if (project[i].drawStatus == 1) {
+                num.cqnum++;
+              }
+
               if (project[i].leadTime < 0) {
                 num.overdueNum++;
               }
@@ -1672,19 +1699,35 @@ export default {
             bdcchbWork: 0,
             gxgcbWork: 0,
             dlxxbWork: 0,
+            gcfbnum: 0,
+            gccqnum: 0,
+            bdfbnum: 0,
+            bdcqnum: 0,
+            gxfbnum: 0,
+            gxcqnum: 0,
+            dlfbnum: 0,
+            dlcqnum: 0,
           };
 
           if (myMap.has("工程测绘部")) {
             numData.gcchbNumWork = myMap.get("工程测绘部").workCount;
+            numData.gcfbnum = myMap.get("工程测绘部").fbnum;
+            numData.gccqnum = myMap.get("工程测绘部").cqnum;
           }
           if (myMap.has("不动产测绘部")) {
             numData.bdcchbWork = myMap.get("不动产测绘部").workCount;
+            numData.bdfbnum = myMap.get("不动产测绘部").fbnum;
+            numData.bdcqnum = myMap.get("不动产测绘部").cqnum;
           }
           if (myMap.has("管线工程部")) {
             numData.gxgcbWork = myMap.get("管线工程部").workCount;
+            numData.gxfbnum = myMap.get("管线工程部").fbnum;
+            numData.gxcqnum = myMap.get("管线工程部").cqnum;
           }
           if (myMap.has("地理信息部")) {
             numData.dlxxbWork = myMap.get("地理信息部").workCount;
+            numData.dlfbnum = myMap.get("地理信息部").fbnum;
+            numData.dlcqnum = myMap.get("地理信息部").cqnum;
           }
           this.statisticsData.push(numData);
 
