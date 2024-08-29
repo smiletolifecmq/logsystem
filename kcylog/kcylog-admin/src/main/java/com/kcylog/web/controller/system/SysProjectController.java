@@ -568,6 +568,7 @@ public class SysProjectController extends BaseController {
                     operatingExport.setUserNameAlias(project.getUserNameAlias());
                     operatingExport.setDepartment(project.getDepartment());
                     operatingExport.setOperate(project.getOperate());
+                    operatingExport.setProjectCoefficientMoney(project.getProjectCoefficientMoney());
                     operatingExport.setContractNo(project.getContractNo());
                     operatingExport.setContractAmount(project.getContractAmount());
                     operatingExport.setProjectStartAlias(project.getProjectStartAlias());
@@ -597,6 +598,7 @@ public class SysProjectController extends BaseController {
 
                     operatingExport.setDurationFactor(project.getDurationFactor());
                     operatingExport.setProjectCoefficient(project.getProjectCoefficient());
+                    operatingExport.setQualityCoefficient(project.getQualityCoefficient());
                     operatingExport.setNum(num);
                     operatingExport.setFirmName(chargeInfo.getFirmName());
                     operatingExport.setSubcontractNo(chargeInfo.getSubcontractNo());
@@ -619,6 +621,7 @@ public class SysProjectController extends BaseController {
                 operatingExport.setUserNameAlias(project.getUserNameAlias());
                 operatingExport.setDepartment(project.getDepartment());
                 operatingExport.setOperate(project.getOperate());
+                operatingExport.setProjectCoefficientMoney(project.getProjectCoefficientMoney());
                 operatingExport.setContractNo(project.getContractNo());
                 operatingExport.setContractAmount(project.getContractAmount());
                 operatingExport.setProjectStartAlias(project.getProjectStartAlias());
@@ -648,6 +651,7 @@ public class SysProjectController extends BaseController {
                 operatingExport.setSettleMoney(project.getFbMoney());
                 operatingExport.setDurationFactor(project.getDurationFactor());
                 operatingExport.setProjectCoefficient(project.getProjectCoefficient());
+                operatingExport.setQualityCoefficient(project.getQualityCoefficient());
                 operatingExport.setBjRemark(project.getBjRemark());
                 operatingExportList.add(operatingExport);
             }
