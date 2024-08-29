@@ -38,6 +38,9 @@ public class OperatingExport {
     @Excel(name = "经营金额", needMerge = true)
     private BigDecimal operate;
 
+    @Excel(name = "实际经营产值", needMerge = true)
+    private BigDecimal projectCoefficientMoney;
+
     @Excel(name = "经营合同号", needMerge = true)
     private String contractNo;
 
@@ -71,6 +74,9 @@ public class OperatingExport {
     @Excel(name = "超期天数", needMerge = true)
     private Integer overDay;
 
+    @Excel(name = "质量系数", needMerge = true)
+    private BigDecimal qualityCoefficient;
+
     @Excel(name = "工期系数", needMerge = true)
     private BigDecimal durationFactor;
 
@@ -79,6 +85,22 @@ public class OperatingExport {
 
     @Excel(name = "备注", needMerge = true)
     private String bjRemark;
+
+    public BigDecimal getProjectCoefficientMoney() {
+        return projectCoefficientMoney;
+    }
+
+    public void setProjectCoefficientMoney(BigDecimal projectCoefficientMoney) {
+        this.projectCoefficientMoney = projectCoefficientMoney;
+    }
+
+    public BigDecimal getQualityCoefficient() {
+        return qualityCoefficient;
+    }
+
+    public void setQualityCoefficient(BigDecimal qualityCoefficient) {
+        this.qualityCoefficient = qualityCoefficient;
+    }
 
     public String getBjRemark() {
         return bjRemark;
