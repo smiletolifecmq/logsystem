@@ -127,7 +127,17 @@
           icon="el-icon-download"
           size="mini"
           @click="handleExport"
-          >导出</el-button
+          >导出（不含分配人员）</el-button
+        >
+      </el-col>
+      <el-col :span="1.5">
+        <el-button
+          plain
+          icon="el-icon-download"
+          size="mini"
+          @click="handleExportAssignPersonnel"
+          type="danger"
+          >导出（含分配人员）</el-button
         >
       </el-col>
       <el-col :span="1.5">
@@ -1719,6 +1729,22 @@ export default {
         "system/project/exportOperating",
         { createTime: this.dateRange[0], updateTime: this.dateRange[1] },
         `项目结算表` + `.xlsx`
+      );
+    },
+
+    handleExportAssignPersonnel() {
+      if (this.dateRange.length == 0) {
+        this.$message({
+          type: "error",
+          message: "请选择办结时间～",
+        });
+        return;
+      }
+      this.download(
+        "system/project/exportOperatingAssignPersonnel",
+        { createTime: this.dateRange[0], updateTime: this.dateRange[1] },
+        `项目结算表` + `.xlsx`,
+        { timeout: 600000 }
       );
     },
   },

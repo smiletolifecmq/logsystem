@@ -692,7 +692,9 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 
 
     <sql id="selectSysProjectExportVo">
-        select p.*, a.firm_name, a.subcontract_no, a.settle_money from sys_project p left join project_charge_info a on p.project_num = a.project_code
+        select p.*, a.firm_name, a.subcontract_no, a.settle_money, v.user_name, v.proportion, v.money, v.profit_money, v.coefficient_money, v.coefficient_profit_money  from sys_project p
+            left join project_charge_info a on p.project_num = a.project_code
+            left join sys_project_value v on p.project_id = v.project_id
     </sql>
 
     <select id="listProjectOperateExport" parameterType="SysProject" resultMap="SysProjectResult">

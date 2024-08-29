@@ -1,8 +1,11 @@
 package com.kcylog.system.common;
 
 import com.kcylog.common.annotation.Excel;
+import com.kcylog.system.domain.SysProjectValue;
+import org.apache.poi.ss.usermodel.IndexedColors;
 
 import java.math.BigDecimal;
+import java.util.List;
 
 public class OperatingExport {
     @Excel(name = "序号", needMerge = true)
@@ -85,6 +88,85 @@ public class OperatingExport {
 
     @Excel(name = "备注", needMerge = true)
     private String bjRemark;
+
+//    @Excel(name = "人员分配", isIngoreSubList = true, subIndex = 0, headerBackgroundColor = IndexedColors.GREEN)
+    private List<SysProjectValue> projectValue;
+
+
+    @Excel(name = "人员名称", headerBackgroundColor = IndexedColors.GREEN)
+    private String userName;
+
+    /** 占比 */
+    @Excel(name = "占比(%)", headerBackgroundColor = IndexedColors.GREEN)
+    private BigDecimal proportion;
+
+    @Excel(name = "产值金额", headerBackgroundColor = IndexedColors.GREEN)
+    private BigDecimal money;
+
+    @Excel(name = "利润金额", headerBackgroundColor = IndexedColors.GREEN)
+    private BigDecimal profitMoney;
+
+    @Excel(name = "产值金额-系数", headerBackgroundColor = IndexedColors.GREEN)
+    private BigDecimal coefficientMoney;
+
+    @Excel(name = "利润金额-系数", headerBackgroundColor = IndexedColors.GREEN)
+    private BigDecimal coefficientProfitMoney;
+
+    public String getUserName() {
+        return userName;
+    }
+
+    public void setUserName(String userName) {
+        this.userName = userName;
+    }
+
+    public BigDecimal getProportion() {
+        return proportion;
+    }
+
+    public void setProportion(BigDecimal proportion) {
+        this.proportion = proportion;
+    }
+
+    public BigDecimal getMoney() {
+        return money;
+    }
+
+    public void setMoney(BigDecimal money) {
+        this.money = money;
+    }
+
+    public BigDecimal getProfitMoney() {
+        return profitMoney;
+    }
+
+    public void setProfitMoney(BigDecimal profitMoney) {
+        this.profitMoney = profitMoney;
+    }
+
+    public BigDecimal getCoefficientMoney() {
+        return coefficientMoney;
+    }
+
+    public void setCoefficientMoney(BigDecimal coefficientMoney) {
+        this.coefficientMoney = coefficientMoney;
+    }
+
+    public BigDecimal getCoefficientProfitMoney() {
+        return coefficientProfitMoney;
+    }
+
+    public void setCoefficientProfitMoney(BigDecimal coefficientProfitMoney) {
+        this.coefficientProfitMoney = coefficientProfitMoney;
+    }
+
+    public List<SysProjectValue> getProjectValue() {
+        return projectValue;
+    }
+
+    public void setProjectValue(List<SysProjectValue> projectValue) {
+        this.projectValue = projectValue;
+    }
 
     public BigDecimal getProjectCoefficientMoney() {
         return projectCoefficientMoney;
