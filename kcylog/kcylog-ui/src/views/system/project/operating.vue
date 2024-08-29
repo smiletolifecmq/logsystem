@@ -874,7 +874,7 @@
               </el-table-column>
               <el-table-column
                 prop="profitMoney"
-                label="利润(参与计算)"
+                label="利润(系数参与计算)"
                 align="center"
               >
                 <template slot-scope="scope">
