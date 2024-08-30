@@ -112,4 +112,6 @@ public interface SysProjectMapper
     public int updateSysProjectDrawStatus(SysProject sysProject);
 
     public List<SysProject> selectSysProjectListForFb(SysProject sysProject);
+
+    public List<SysProject> selectSysProjectListForFbTwoCheck(SysProject sysProject);
 }

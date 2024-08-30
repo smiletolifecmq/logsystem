@@ -67,17 +67,6 @@
           @keyup.enter.native="handleQuery"
         />
       </el-form-item>
-      <el-form-item label="作业状态" prop="workStatus">
-        <el-select v-model="queryParams.workStatus" placeholder="请选择">
-          <el-option
-            v-for="item in statusArr"
-            :key="item.value"
-            :label="item.label"
-            :value="item.value"
-          >
-          </el-option>
-        </el-select>
-      </el-form-item>
       <el-form-item label="工作状态" prop="status">
         <el-select v-model="queryParams.status" placeholder="请选择">
           <el-option
@@ -117,7 +106,7 @@
     </el-form>
 
     <el-table :data="statisticsData" style="width: 100%">
-      <el-table-column prop="status" label="类型" align="center">
+      <el-table-column prop="status" label="类型（二检办结前）" align="center">
         <template slot-scope="scope">
           <el-tag type="success">分包项目数｜审核单数｜抽签数</el-tag>
         </template>
@@ -157,44 +146,49 @@
     </el-table>
 
     <el-table :data="statisticsWinUnit" style="width: 100%">
-      <el-table-column prop="status" label="类型" align="center">
+      <el-table-column prop="status" label="项目数" align="center">
         <template slot-scope="scope">
-          <el-tag type="success">项目数</el-tag>
+          <el-tag type="success">作业中｜待一检｜待二检</el-tag>
         </template>
       </el-table-column>
       <el-table-column label="天津汇创" align="center">
         <template slot-scope="scope">
-          <el-tag type="success">{{ scope.row.tjnum }}</el-tag>
+          <el-tag type="success"
+            >{{ scope.row.tjnum }} | {{ scope.row.tjnumone }} |
+            {{ scope.row.tjnumtwo }}</el-tag
+          >
         </template>
       </el-table-column>
       <el-table-column label="福建越扬" align="center">
         <template slot-scope="scope">
-          <el-tag type="success">{{ scope.row.yynum }}</el-tag>
+          <el-tag type="success"
+            >{{ scope.row.yynum }} | {{ scope.row.yynumone }} |
+            {{ scope.row.yynumtwo }}</el-tag
+          >
         </template>
       </el-table-column>
       <el-table-column label="易测工程" align="center">
         <template slot-scope="scope">
-          <el-tag type="success">{{ scope.row.ycnum }}</el-tag>
+          <el-tag type="success"
+            >{{ scope.row.ycnum }} | {{ scope.row.ycnumone }} |
+            {{ scope.row.ycnumtwo }}</el-tag
+          >
         </template>
       </el-table-column>
       <el-table-column label="地星测绘" align="center">
         <template slot-scope="scope">
-          <el-tag type="success">{{ scope.row.dxnum }}</el-tag>
-        </template>
-      </el-table-column>
-      <el-table-column label="大势智慧" align="center">
-        <template slot-scope="scope">
-          <el-tag type="success">{{ scope.row.dsnum }}</el-tag>
-        </template>
-      </el-table-column>
-      <el-table-column label="翔飞航空" align="center">
-        <template slot-scope="scope">
-          <el-tag type="success">{{ scope.row.xfnum }}</el-tag>
+          <el-tag type="success"
+            >{{ scope.row.dxnum }} | {{ scope.row.dxnumone }} |
+            {{ scope.row.dxnumtwo }}</el-tag
+          >
         </template>
       </el-table-column>
       <el-table-column label="金地勘测" align="center">
         <template slot-scope="scope">
-          <el-tag type="success">{{ scope.row.jdnum }}</el-tag>
+          <el-tag type="success"
+            >{{ scope.row.jdnum }} | {{ scope.row.jdnumone }} |
+            {{ scope.row.jdnumtwo }}</el-tag
+          >
         </template>
       </el-table-column>
     </el-table>
@@ -247,16 +241,6 @@
             prop="workcontentAlias"
           /> -->
       <el-table-column
-        label="登记时间"
-        align="center"
-        prop="registerTime"
-        width="100px"
-      >
-        <template slot-scope="scope">
-          {{ formatDate(scope.row.registerTime) }}
-        </template>
-      </el-table-column>
-      <el-table-column
         label="安排开始时间"
         align="center"
         prop="projectStartAlias"
@@ -296,30 +280,6 @@
           }}</el-tag>
         </template></el-table-column
       >
-      <el-table-column
-        label="作业状态"
-        align="center"
-        prop="workStatus"
-        width="100px"
-      >
-        <template slot-scope="scope">
-          <el-tag v-show="scope.row.workStatus == 1" type="danger"
-            >新增作业</el-tag
-          >
-          <el-tag v-show="scope.row.workStatus == 2" type="warning"
-            >作业中</el-tag
-          >
-          <el-tag v-show="scope.row.workStatus == 3" type="success"
-            >作业完成</el-tag
-          >
-          <el-tag v-show="scope.row.workStatus == 4" type="success"
-            >作业办结</el-tag
-          >
-          <el-tag v-show="scope.row.workStatus == 0" type="danger"
-            >新增作业</el-tag
-          >
-        </template>
-      </el-table-column>
       <el-table-column
         label="工作状态"
         align="center"
@@ -1040,6 +1000,7 @@
 <script>
 import {
   listProjectForFb,
+  listProjectForFbTwoCheck,
   getProject,
   listProjectSelected,
   updateProjectDrawStatus,
@@ -1399,7 +1360,7 @@ export default {
     getListToTj() {
       this.getReviewProject();
       this.loading = true;
-      listProjectForFb(this.queryStatisticsParams).then((response) => {
+      listProjectForFbTwoCheck(this.queryStatisticsParams).then((response) => {
         this.$nextTick(() => {
           this.projectListTj = [];
           this.projectListTj = response.rows;
@@ -1430,6 +1391,22 @@ export default {
             dsnum: 0,
             xfnum: 0,
             jdnum: 0,
+
+            tjnumone: 0,
+            yynumone: 0,
+            ycnumone: 0,
+            dxnumone: 0,
+            dsnumone: 0,
+            xfnumone: 0,
+            jdnumone: 0,
+
+            tjnumtwo: 0,
+            yynumtwo: 0,
+            ycnumtwo: 0,
+            dxnumtwo: 0,
+            dsnumtwo: 0,
+            xfnumtwo: 0,
+            jdnumtwo: 0,
           };
           for (var j = 0; j < this.projectListTj.length; j++) {
             switch (this.projectListTj[j].department) {
@@ -1474,28 +1451,105 @@ export default {
             if (this.projectIdMap.has(this.projectListTj[j].projectId)) {
               switch (this.projectListTj[j].reviewSub[0].winUnit) {
                 case "天津汇创测绘技术有限公司":
-                  data.tjnum++;
+                  if (this.projectListTj[j].workStatus == 2) {
+                    data.tjnum++;
+                  }
+                  if (
+                    this.projectListTj[j].workStatus == 4 &&
+                    this.projectListTj[j].status == 1
+                  ) {
+                    data.tjnumone++;
+                  }
+                  if (this.projectListTj[j].status == 2) {
+                    data.tjnumtwo++;
+                  }
                   break;
                 case "福建越扬信息科技有限公司":
-                  data.yynum++;
+                  if (this.projectListTj[j].workStatus == 2) {
+                    data.yynum++;
+                  }
+                  if (
+                    this.projectListTj[j].workStatus == 4 &&
+                    this.projectListTj[j].status == 1
+                  ) {
+                    data.yynumone++;
+                  }
+                  if (this.projectListTj[j].status == 2) {
+                    data.yynumtwo++;
+                  }
                   break;
                 case "福建省易测工程勘测有限公司":
-                  data.ycnum++;
+                  if (this.projectListTj[j].workStatus == 2) {
+                    data.ycnum++;
+                  }
+                  if (
+                    this.projectListTj[j].workStatus == 4 &&
+                    this.projectListTj[j].status == 1
+                  ) {
+                    data.ycnumone++;
+                  }
+                  if (this.projectListTj[j].status == 2) {
+                    data.ycnumtwo++;
+                  }
                   break;
                 case "黑龙江省地星测绘科技股份有限公司":
-                  data.dxnum++;
+                  if (this.projectListTj[j].workStatus == 2) {
+                    data.dxnum++;
+                  }
+                  if (
+                    this.projectListTj[j].workStatus == 4 &&
+                    this.projectListTj[j].status == 1
+                  ) {
+                    data.dxnumone++;
+                  }
+                  if (this.projectListTj[j].status == 2) {
+                    data.dxnumtwo++;
+                  }
                   break;
 
                 case "武汉大势智慧科技有限公司":
-                  data.dxnum++;
+                  if (this.projectListTj[j].workStatus == 2) {
+                    data.dsnum++;
+                  }
+                  if (
+                    this.projectListTj[j].workStatus == 4 &&
+                    this.projectListTj[j].status == 1
+                  ) {
+                    data.dsnumone++;
+                  }
+                  if (this.projectListTj[j].status == 2) {
+                    data.dsnumtwo++;
+                  }
                   break;
 
                 case "福州翔飞航空科技有限公司":
-                  data.xfnum++;
+                  if (this.projectListTj[j].workStatus == 2) {
+                    data.xfnum++;
+                  }
+                  if (
+                    this.projectListTj[j].workStatus == 4 &&
+                    this.projectListTj[j].status == 1
+                  ) {
+                    data.xfnumone++;
+                  }
+                  if (this.projectListTj[j].status == 2) {
+                    data.xfnumtwo++;
+                  }
                   break;
 
                 case "福建金地勘测规划有限公司":
-                  data.jdnum++;
+                  if (this.projectListTj[j].workStatus == 2) {
+                    data.jdnum++;
+                  }
+                  if (
+                    this.projectListTj[j].workStatus == 4 &&
+                    this.projectListTj[j].status == 1
+                  ) {
+                    data.jdnumone++;
+                  }
+                  if (this.projectListTj[j].status == 2) {
+                    data.jdnumtwo++;
+                  }
                   break;
               }
             }

@@ -154,3 +154,11 @@ export function listProjectForFb(query) {
   })
 }
 
+export function listProjectForFbTwoCheck(query) {
+  return request({
+    url: '/system/project/listForFbTwoCheck',
+    method: 'get',
+    params: query
+  })
+}
+
