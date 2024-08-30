@@ -117,30 +117,48 @@ public class SysGeoLogController extends BaseController {
     public TableDataInfo export(SysGeoLog sysGeoLog) {
         Long userId = SecurityUtils.getUserId();
         List<SysGeoUser> geoUsers = sysGeoUserService.selectSysAssessUserByGeoUser(userId);
+        SysGeoUser userInfo = sysGeoUserService.selectSysGeoUserByUserId(userId);
         List<Long> longIdsList = new ArrayList<>();
+        Map<String, Long> userMap = new HashMap<>();
+        Map<Long, Long> userIdMap = new HashMap<>();
         sysGeoLog.setLookUserIds(longIdsList);
         sysGeoLog.getLookUserIds().add(userId);
+        userMap.put(userInfo.getUserName(), userInfo.getIsCheck());
+        userIdMap.put(userInfo.getUserId(), userInfo.getIsCheck());
         for (SysGeoUser sysGeoUser : geoUsers) {
+            userMap.put(sysGeoUser.getUserName(), sysGeoUser.getIsCheck());
+            userIdMap.put(sysGeoUser.getUserId(), sysGeoUser.getIsCheck());
             sysGeoLog.getLookUserIds().add(sysGeoUser.getUserId());
         }
         //获取符合日期以及权限的用户数据
         List<SysGeoLog> list = sysGeoLogService.selectSysGeoLogListExport(sysGeoLog);
         //获取符合日期的所有包含项目的用户日志
         List<SysGeoLog> listForDate = sysGeoLogService.selectSysGeoLogListExportByDate(sysGeoLog);
-        //获取所有项目
-        List<SysGeoProject> projects = sysGeoProjectService.selectSysGeoProjectAll();
-        List<SysGeoUser> geoUser = sysGeoUserService.selectSysAllGeoUser();
+        //获取符合日期所有项目
+        List<SysGeoProject> projects = sysGeoProjectService.selectSysGeoProjectAll(sysGeoLog);
 
         //获取请假信息
         List<SysGeoHoliday> sysGeoHoliday = sysGeoHolidayService.selectSysGeoHolidayListForLog(sysGeoLog);
 
-        Map<Long, String> geoUserMap = new HashMap<>();
         Map<String, List<SysGeoLog>> geoLogMap = new HashMap<>();
-        Map<Long, BigDecimal> projectMoneyMap = new HashMap<>();
-        Map<String, List<Long>> projectsMap = new HashMap<>();
-        Map<String, List<Long>> projectsOneCheckMap = new HashMap<>();
-        Map<String, List<Long>> projectsTwoCheckMap = new HashMap<>();
+        Map<String, BigDecimal> projectsMap = new HashMap<>();
         Map<String, BigDecimal> geoHolidayMap = new HashMap<>();
+
+        BigDecimal otherMoney = BigDecimal.ZERO;
+        BigDecimal projectMoney = BigDecimal.ZERO;
+        for (SysGeoProject obj : projects){
+            if(userIdMap.containsKey(obj.getUserId()) && userIdMap.get(obj.getUserId()) == 0){
+                projectMoney = projectMoney.add(obj.getMoney());
+            }
+        }
+        // 计算非一、二检所有金额
+        for (SysGeoLog geoLog : listForDate) {
+            if(userMap.containsKey(geoLog.getUserName()) && userMap.get(geoLog.getUserName()) == 0){
+                for (SysGeoLogInfo geoLogInfo : geoLog.getGeoLogInfo()) {
+                    otherMoney = otherMoney.add(geoLogInfo.getTotalMoney());
+                }
+            }
+        }
 
         for (SysGeoHoliday holidayV : sysGeoHoliday){
             if (geoHolidayMap.containsKey(holidayV.getUserName())){
@@ -150,53 +168,8 @@ public class SysGeoLogController extends BaseController {
             }
         }
 
-        for (SysGeoUser userValue : geoUser){
-            geoUserMap.put(userValue.getUserId(), userValue.getUserName());
-        }
-
         for (SysGeoProject geoProject : projects) {
-            //负责人对应的项目ID
-            if (projectsMap.containsKey(geoProject.getUserName())) {
-                List<Long> projectIdArr = projectsMap.get(geoProject.getUserName());
-                projectIdArr.add(geoProject.getProjectId());
-                projectsMap.put(geoProject.getUserName(),projectIdArr);
-            } else {
-                List<Long> projectIdArr = new ArrayList<>();
-                projectIdArr.add(geoProject.getProjectId());
-                projectsMap.put(geoProject.getUserName(), projectIdArr);
-            }
-            //一检对应的项目ID
-            if (geoProject.getOneCheck() != null && !Objects.equals(geoProject.getOneCheck(), "null")){
-                Gson gson = new Gson();
-                Long[] oneArray = gson.fromJson(geoProject.getOneCheck(), Long[].class);
-                for (Long one : oneArray){
-                    if (projectsOneCheckMap.containsKey(geoUserMap.get(one))){
-                        List<Long> projectIdArr = projectsOneCheckMap.get(geoUserMap.get(one));
-                        projectIdArr.add(geoProject.getProjectId());
-                        projectsOneCheckMap.put(geoUserMap.get(one),projectIdArr);
-                    }else {
-                        List<Long> projectIdArr = new ArrayList<>();
-                        projectIdArr.add(geoProject.getProjectId());
-                        projectsOneCheckMap.put(geoUserMap.get(one),projectIdArr);
-                    }
-                }
-            }
-            //二检对应的项目ID
-            if (geoProject.getTwoCheck() != null && !Objects.equals(geoProject.getTwoCheck(), "null")){
-                Gson gson = new Gson();
-                Long[] twoArray = gson.fromJson(geoProject.getTwoCheck(), Long[].class);
-                for (Long two : twoArray){
-                    if (projectsTwoCheckMap.containsKey(geoUserMap.get(two))){
-                        List<Long> projectIdArr = projectsTwoCheckMap.get(geoUserMap.get(two));
-                        projectIdArr.add(geoProject.getProjectId());
-                        projectsTwoCheckMap.put(geoUserMap.get(two),projectIdArr);
-                    }else {
-                        List<Long> projectIdArr = new ArrayList<>();
-                        projectIdArr.add(geoProject.getProjectId());
-                        projectsTwoCheckMap.put(geoUserMap.get(two),projectIdArr);
-                    }
-                }
-            }
+            projectsMap.put(geoProject.getUserName(), geoProject.getMoney());
         }
 
         for (SysGeoLog geoLog : list) {
@@ -210,18 +183,7 @@ public class SysGeoLogController extends BaseController {
                 geoLogMap.put(geoLog.getUserName(), gl);
             }
         }
-        for (SysGeoLog geoLog : listForDate) {
-            for (SysGeoLogInfo geoLogInfo : geoLog.getGeoLogInfo()) {
-                BigDecimal difficultyDegree = BigDecimal.valueOf(geoLogInfo.getDifficultyDegree());
-                BigDecimal workload = BigDecimal.valueOf(geoLogInfo.getWorkload());
-                BigDecimal jinEr = difficultyDegree.multiply(workload).multiply(geoLogInfo.getTypeMoney());
-                if (projectMoneyMap.containsKey(geoLogInfo.getProjectId())){
-                    projectMoneyMap.put(geoLogInfo.getProjectId(),projectMoneyMap.get(geoLogInfo.getProjectId()).add(jinEr));
-                }else {
-                    projectMoneyMap.put(geoLogInfo.getProjectId(),jinEr);
-                }
-            }
-        }
+
         // 遍历值
         List<LogExport> exportList = new ArrayList<>();
         for (Map.Entry<String, List<SysGeoLog>> entry : geoLogMap.entrySet()) {
@@ -231,63 +193,21 @@ public class SysGeoLogController extends BaseController {
             //负责人
             BigDecimal allUserMoney = BigDecimal.ZERO;
             if (projectsMap.containsKey(userName)){
-                for (Long pid : projectsMap.get(userName)){
-                    if(projectMoneyMap.containsKey(pid)){
-                        if (logExport.getProjectAllMoneyMap().containsKey(pid)){
-                            BigDecimal tempMoney = projectMoneyMap.get(pid).subtract(logExport.getProjectAllMoneyMap().get(pid));
-                            if (tempMoney.compareTo(BigDecimal.ZERO) > 0) {
-                                allUserMoney = allUserMoney.add(tempMoney);
-                            }
-                        }else {
-                            allUserMoney = allUserMoney.add(projectMoneyMap.get(pid));
-                        }
-                    }
-                }
+                allUserMoney = projectsMap.get(userName);
             }
             BigDecimal multiplier = new BigDecimal("0.03");
             allUserMoney = allUserMoney.multiply(multiplier);
             logExport.setType51_jr(allUserMoney);
             logExport.setTotal_money(logExport.getTotal_money().add(allUserMoney));
 
-            //一检
-            BigDecimal allUserOneMoney = BigDecimal.ZERO;
-            if (projectsOneCheckMap.containsKey(userName)) {
-                for (Long pid : projectsOneCheckMap.get(userName)){
-                    if(projectMoneyMap.containsKey(pid)){
-                        if (logExport.getProjectAllMoneyMap().containsKey(pid)){
-                            BigDecimal tempMoney = projectMoneyMap.get(pid).subtract(logExport.getProjectAllMoneyMap().get(pid));
-                            if (tempMoney.compareTo(BigDecimal.ZERO) > 0) {
-                                allUserOneMoney = allUserOneMoney.add(tempMoney);
-                            }
-                        }else {
-                            allUserOneMoney = allUserOneMoney.add(projectMoneyMap.get(pid));
-                        }
-                    }
-                }
+            BigDecimal projectMoneyJs = BigDecimal.ZERO;
+            BigDecimal otherMoneyJs = BigDecimal.ZERO;
+            if (userMap.containsKey(userName) && userMap.get(userName) == 1){
+                projectMoneyJs = projectMoney.multiply(multiplier);
+                otherMoneyJs = projectMoneyJs.add(otherMoney).multiply(new BigDecimal("0.01"));
             }
-            BigDecimal multiplierCheck = new BigDecimal("0.05");
-            allUserOneMoney = allUserOneMoney.multiply(multiplierCheck);
-            logExport.setTotal_money(logExport.getTotal_money().add(allUserOneMoney));
-
-            //二检
-            BigDecimal allUserTwoMoney = BigDecimal.ZERO;
-            if (projectsTwoCheckMap.containsKey(userName)) {
-                for (Long pid : projectsTwoCheckMap.get(userName)){
-                    if(projectMoneyMap.containsKey(pid)){
-                        if (logExport.getProjectAllMoneyMap().containsKey(pid)){
-                            BigDecimal tempMoney = projectMoneyMap.get(pid).subtract(logExport.getProjectAllMoneyMap().get(pid));
-                            if (tempMoney.compareTo(BigDecimal.ZERO) > 0) {
-                                allUserTwoMoney = allUserTwoMoney.add(tempMoney);
-                            }
-                        }else {
-                            allUserTwoMoney = allUserTwoMoney.add(projectMoneyMap.get(pid));
-                        }
-                    }
-                }
-            }
-            allUserTwoMoney = allUserTwoMoney.multiply(multiplierCheck);
-            logExport.setType52_jr(allUserOneMoney.add(allUserTwoMoney));
-            logExport.setTotal_money(logExport.getTotal_money().add(allUserTwoMoney));
+            logExport.setType52_jr(otherMoneyJs);
+            logExport.setTotal_money(logExport.getTotal_money().add(otherMoneyJs));
             //计算请假金额
             BigDecimal totalMoney = logExport.getTotal_money();
             if (geoHolidayMap.containsKey(userName)){
@@ -781,7 +701,7 @@ public class SysGeoLogController extends BaseController {
         //获取符合日期的所有包含项目的用户日志
         List<SysGeoLog> listForDate = sysGeoLogService.selectSysGeoLogListExportByDate(sysGeoLog);
         //获取所有项目
-        List<SysGeoProject> projects = sysGeoProjectService.selectSysGeoProjectAll();
+        List<SysGeoProject> projects = sysGeoProjectService.selectSysGeoProjectAll(sysGeoLog);
         List<SysGeoUser> geoUser = sysGeoUserService.selectSysAllGeoUser();
 
         //获取请假信息

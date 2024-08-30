@@ -12,10 +12,12 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
         <result property="userName"    column="user_name"    />
         <result property="oneCheck"    column="one_check"    />
         <result property="twoCheck"    column="two_check"    />
+        <result property="money"    column="money"    />
+        <result property="czDate"    column="cz_date"    />
     </resultMap>
 
     <sql id="selectSysGeoProjectVo">
-        select project_id, project_num, project_name, user_id, user_name, one_check, two_check from sys_geo_project
+        select project_id, project_num, project_name, user_id, user_name, one_check, two_check, money, cz_date from sys_geo_project
     </sql>
 
     <select id="selectSysGeoProjectList" parameterType="SysGeoProject" resultMap="SysGeoProjectResult">
@@ -26,6 +28,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
             <if test="userId != null "> and user_id = #{userId}</if>
             <if test="userName != null  and userName != ''"> and user_name like concat('%', #{userName}, '%')</if>
         </where>
+        order by project_id desc 
     </select>
     
     <select id="selectSysGeoProjectByProjectId" parameterType="Long" resultMap="SysGeoProjectResult">
@@ -42,6 +45,8 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
             <if test="oneCheck != null">one_check,</if>
             <if test="twoCheck != null">two_check,</if>
             <if test="userName != null and userName != ''">user_name,</if>
+            <if test="money != null">money,</if>
+            <if test="czDate != null">cz_date,</if>
          </trim>
         <trim prefix="values (" suffix=")" suffixOverrides=",">
             <if test="projectNum != null and projectNum != ''">#{projectNum},</if>
@@ -50,6 +55,8 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
             <if test="oneCheck != null">#{oneCheck},</if>
             <if test="twoCheck != null">#{twoCheck},</if>
             <if test="userName != null and userName != ''">#{userName},</if>
+            <if test="money != null">#{money},</if>
+            <if test="czDate != null">#{czDate},</if>
          </trim>
     </insert>
 
@@ -62,6 +69,8 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
             <if test="oneCheck != null">one_check = #{oneCheck},</if>
             <if test="twoCheck != null">two_check = #{twoCheck},</if>
             <if test="userName != null and userName != ''">user_name = #{userName},</if>
+            <if test="money != null">money = #{money},</if>
+            <if test="czDate != null">cz_date = #{czDate},</if>
         </trim>
         where project_id = #{projectId}
     </update>
@@ -77,8 +86,16 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
         </foreach>
     </delete>
 
-    <select id="selectSysGeoProjectAll" resultMap="SysGeoProjectResult">
+    <select id="selectSysGeoProjectAll" parameterType="SysGeoLog" resultMap="SysGeoProjectResult">
         <include refid="selectSysGeoProjectVo"/>
+        <where>
+            <if test="params.beginTime != null and params.beginTime != ''"><!-- 开始时间检索 -->
+                AND date_format(cz_date,'%y%m%d') &gt;= date_format(#{params.beginTime},'%y%m%d')
+            </if>
+            <if test="params.endTime != null and params.endTime != ''"><!-- 结束时间检索 -->
+                AND date_format(cz_date,'%y%m%d') &lt;= date_format(#{params.endTime},'%y%m%d')
+            </if>
+        </where>
     </select>
 
     <select id="selectSysGeoProjectByProjectNum" parameterType="SysGeoProject" resultMap="SysGeoProjectResult">

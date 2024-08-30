@@ -71,6 +71,12 @@
       <el-table-column label="项目编号" align="center" prop="projectNum" />
       <el-table-column label="项目名称" align="center" prop="projectName" />
       <el-table-column label="负责人名称" align="center" prop="userName" />
+      <el-table-column label="产值" align="center" prop="money" />
+      <el-table-column label="产值计算日期" align="center" prop="czDate">
+        <template slot-scope="scope">
+          <span>{{ parseTime(scope.row.czDate, "{y}-{m}-{d}") }}</span>
+        </template>
+      </el-table-column>
       <el-table-column
         label="操作"
         align="center"
@@ -111,6 +117,21 @@
         </el-form-item>
         <el-form-item label="项目名称" prop="projectName">
           <el-input v-model="form.projectName" placeholder="请输入项目名称" />
+        </el-form-item>
+        <el-form-item label="项目产值" prop="money">
+          <el-input-number
+            v-model="form.money"
+            :precision="2"
+            :step="0.1"
+          ></el-input-number>
+        </el-form-item>
+        <el-form-item label="日期" prop="czDate">
+          <el-date-picker
+            v-model="form.czDate"
+            type="date"
+            placeholder="选择日期"
+          >
+          </el-date-picker>
         </el-form-item>
         <el-form-item label="负责人" prop="userId">
           <el-select

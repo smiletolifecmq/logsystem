@@ -1,5 +1,6 @@
 package com.kcylog.system.service;
 
+import com.kcylog.system.domain.SysGeoLog;
 import com.kcylog.system.domain.SysGeoProject;
 
 import java.util.List;
@@ -60,7 +61,7 @@ public interface ISysGeoProjectService
      */
     public int deleteSysGeoProjectByProjectId(Long projectId);
 
-    public List<SysGeoProject> selectSysGeoProjectAll();
+    public List<SysGeoProject> selectSysGeoProjectAll(SysGeoLog sysGeoLog);
 
     public SysGeoProject selectSysGeoProjectByProjectNum(SysGeoProject sysGeoProject);
 

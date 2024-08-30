@@ -1,5 +1,6 @@
 package com.kcylog.system.service.impl;
 
+import com.kcylog.system.domain.SysGeoLog;
 import com.kcylog.system.domain.SysGeoProject;
 import com.kcylog.system.mapper.SysGeoProjectMapper;
 import com.kcylog.system.service.ISysGeoProjectService;
@@ -93,9 +94,9 @@ public class SysGeoProjectServiceImpl implements ISysGeoProjectService
     }
 
     @Override
-    public List<SysGeoProject> selectSysGeoProjectAll()
+    public List<SysGeoProject> selectSysGeoProjectAll(SysGeoLog sysGeoLog)
     {
-        return sysGeoProjectMapper.selectSysGeoProjectAll();
+        return sysGeoProjectMapper.selectSysGeoProjectAll(sysGeoLog);
     }
 
     @Override

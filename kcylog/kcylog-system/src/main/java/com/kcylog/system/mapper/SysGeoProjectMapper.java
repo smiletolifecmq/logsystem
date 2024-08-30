@@ -1,5 +1,6 @@
 package com.kcylog.system.mapper;
 
+import com.kcylog.system.domain.SysGeoLog;
 import com.kcylog.system.domain.SysGeoProject;
 
 import java.util.List;
@@ -60,7 +61,7 @@ public interface SysGeoProjectMapper
      */
     public int deleteSysGeoProjectByProjectIds(Long[] projectIds);
 
-    public List<SysGeoProject> selectSysGeoProjectAll();
+    public List<SysGeoProject> selectSysGeoProjectAll(SysGeoLog sysGeoLog);
 
     public SysGeoProject selectSysGeoProjectByProjectNum(SysGeoProject sysGeoProject);
 

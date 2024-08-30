@@ -5,6 +5,9 @@ import com.kcylog.common.core.domain.BaseEntity;
 import org.apache.commons.lang3.builder.ToStringBuilder;
 import org.apache.commons.lang3.builder.ToStringStyle;
 
+import java.math.BigDecimal;
+import java.util.Date;
+
 /**
  * 地理项目对象 sys_geo_project
  *
@@ -43,6 +46,26 @@ public class SysGeoProject extends BaseEntity
     private String oneCheck;
 
     private String twoCheck;
+
+    private Date czDate;
+
+    private BigDecimal money;
+
+    public Date getCzDate() {
+        return czDate;
+    }
+
+    public void setCzDate(Date czDate) {
+        this.czDate = czDate;
+    }
+
+    public BigDecimal getMoney() {
+        return money;
+    }
+
+    public void setMoney(BigDecimal money) {
+        this.money = money;
+    }
 
     public Long[] getOneCheckJson() {
         return oneCheckJson;
