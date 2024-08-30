@@ -31,6 +31,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
         <result property="typeMoney"    column="type_money"    />
         <result property="projectId"    column="project_id"    />
         <result property="degree"    column="degree"    />
+        <result property="totalMoney"    column="total_money"    />
         <association property="geoType" javaType="SysGeoType" resultMap="SysGeoTypeResult"/>
     </resultMap>
 

@@ -69,6 +69,16 @@ public class SysGeoLogInfo extends BaseEntity
 
     private SysGeoType geoType;
 
+    private BigDecimal totalMoney;
+
+    public BigDecimal getTotalMoney() {
+        return totalMoney;
+    }
+
+    public void setTotalMoney(BigDecimal totalMoney) {
+        this.totalMoney = totalMoney;
+    }
+
     public SysGeoType getGeoType() {
         return geoType;
     }

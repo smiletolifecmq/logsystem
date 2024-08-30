@@ -694,6 +694,45 @@ export default {
     /** 提交按钮 */
     submitForm() {
       this.$refs["form"].validate((valid) => {
+        let totalMoney = 0;
+        for (var i = 0; i < this.form.geoLogInfo.length; i++) {
+          var difficulty = 1;
+          switch (this.form.geoLogInfo[i].difficulty) {
+            case 0:
+              difficulty = 0.5;
+              break;
+            case 1:
+              difficulty = 0.8;
+              break;
+            case 2:
+              difficulty = 1;
+              break;
+            case 3:
+              difficulty = 1.2;
+              break;
+            case 4:
+              difficulty = 1.5;
+              break;
+          }
+          var typeMoney =
+            this.form.geoLogInfo[i].workload *
+            this.form.geoLogInfo[i].typeMoney *
+            difficulty;
+          if (
+            this.form.geoLogInfo[i].typeId === 4 ||
+            this.form.geoLogInfo[i].typeId === 5
+          ) {
+            if (typeMoney < 115) {
+              typeMoney = 115;
+            }
+          }
+          this.form.geoLogInfo[i].totalMoney = typeMoney;
+          totalMoney = totalMoney + typeMoney;
+        }
+        if (totalMoney > 460) {
+          this.$modal.msgError("当天产值为:" + totalMoney + "，大于460~");
+          return;
+        }
         if (valid) {
           if (this.form.logId != null) {
             updateLog(this.form).then((response) => {
