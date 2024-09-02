@@ -9,7 +9,11 @@
       label-width="68px"
     >
       <el-form-item label="分包单位" prop="winUnit">
-        <el-select v-model="queryParams.winUnit" placeholder="请选择">
+        <el-select
+          v-model="queryParams.winUnit"
+          placeholder="请选择"
+          style="width: 115px"
+        >
           <el-option
             v-for="item in options"
             :key="item.value"
@@ -19,20 +23,13 @@
           </el-option>
         </el-select>
       </el-form-item>
-      <el-form-item label="委托单位" prop="requesterAlias">
-        <el-input
-          v-model="queryParams.requesterAlias"
-          placeholder="请输入委托单位名称"
-          clearable
-          @keyup.enter.native="handleQuery"
-        />
-      </el-form-item>
       <el-form-item label="项目名称" prop="projectNameAlias">
         <el-input
           v-model="queryParams.projectNameAlias"
           placeholder="请输入项目名称"
           clearable
           @keyup.enter.native="handleQuery"
+          style="width: 115px"
         />
       </el-form-item>
       <el-form-item label="项目编号" prop="projectNum">
@@ -41,6 +38,7 @@
           placeholder="请输入项目编号"
           clearable
           @keyup.enter.native="handleQuery"
+          style="width: 115px"
         />
       </el-form-item>
 
@@ -49,6 +47,7 @@
           v-model="queryParams.department"
           placeholder="请选择部门"
           clearable
+          style="width: 115px"
         >
           <el-option
             v-for="item in deptList"
@@ -65,10 +64,15 @@
           placeholder="请输入项目负责人"
           clearable
           @keyup.enter.native="handleQuery"
+          style="width: 115px"
         />
       </el-form-item>
       <el-form-item label="工作状态" prop="status">
-        <el-select v-model="queryParams.status" placeholder="请选择">
+        <el-select
+          v-model="queryParams.status"
+          placeholder="请选择"
+          style="width: 115px"
+        >
           <el-option
             v-for="item in statusList"
             :key="item.value"
@@ -82,7 +86,7 @@
       <el-form-item label="安排时间">
         <el-date-picker
           v-model="dateRange"
-          style="width: 240px"
+          style="width: 200px"
           value-format="yyyy-MM-dd"
           type="daterange"
           range-separator="-"
@@ -108,38 +112,63 @@
     <el-table :data="statisticsData" style="width: 100%">
       <el-table-column prop="status" label="类型（二检办结前）" align="center">
         <template slot-scope="scope">
-          <el-tag type="success">分包项目数｜审核单数｜抽签数</el-tag>
+          <el-tag type="success" v-show="scope.row.status == 0"
+            >分包项目数｜审核单数｜抽签数</el-tag
+          >
+          <el-tag v-show="scope.row.status == 1" type="success"
+            >汇创｜越扬｜易测｜地星｜金地</el-tag
+          >
         </template>
       </el-table-column>
       <el-table-column label="工程测绘部" align="center">
         <template slot-scope="scope">
-          <el-tag type="success"
+          <el-tag type="success" v-show="scope.row.status == 0"
             >{{ scope.row.gcxms }} | {{ scope.row.gcsps }} |
             {{ scope.row.gccqs }}</el-tag
+          >
+          <el-tag type="success" v-show="scope.row.status == 1"
+            >{{ scope.row.gctjnum }} | {{ scope.row.gcyynum }} |
+            {{ scope.row.gcycnum }} | {{ scope.row.gcdxnum }} |
+            {{ scope.row.gcjdnum }}</el-tag
           >
         </template>
       </el-table-column>
       <el-table-column label="不动产测绘部" align="center">
         <template slot-scope="scope">
-          <el-tag type="success"
+          <el-tag type="success" v-show="scope.row.status == 0"
             >{{ scope.row.bdxms }} | {{ scope.row.bdsps }} |
             {{ scope.row.bdcqs }}</el-tag
+          >
+          <el-tag type="success" v-show="scope.row.status == 1"
+            >{{ scope.row.bdtjnum }} | {{ scope.row.bdyynum }} |
+            {{ scope.row.bdycnum }} | {{ scope.row.bddxnum }} |
+            {{ scope.row.bdjdnum }}</el-tag
           >
         </template>
       </el-table-column>
       <el-table-column label="管线工程部" align="center">
         <template slot-scope="scope">
-          <el-tag type="success"
+          <el-tag type="success" v-show="scope.row.status == 0"
             >{{ scope.row.gxxms }} | {{ scope.row.gxsps }} |
             {{ scope.row.gxcqs }}</el-tag
+          >
+          <el-tag type="success" v-show="scope.row.status == 1"
+            >{{ scope.row.gxtjnum }} | {{ scope.row.gxyynum }} |
+            {{ scope.row.gxycnum }} | {{ scope.row.gxdxnum }} |
+            {{ scope.row.gxjdnum }}</el-tag
           >
         </template>
       </el-table-column>
       <el-table-column label="地理信息部" align="center">
         <template slot-scope="scope">
-          <el-tag type="success"
+          <el-tag type="success" v-show="scope.row.status == 0"
             >{{ scope.row.dlxms }} | {{ scope.row.dlsps }} |
             {{ scope.row.dlcqs }}</el-tag
+          >
+          <el-tag type="success" v-show="scope.row.status == 1"
+            >{{ scope.row.dltjnum }} | {{ scope.row.dlyynum }} |
+            {{ scope.row.dlycnum }} | {{ scope.row.dldxnum }} |
+            {{ scope.row.dljdnum }}</el-tag
           >
         </template>
       </el-table-column>
@@ -203,7 +232,7 @@
         label="分包单位"
         align="center"
         prop="winUnit"
-        width="200px"
+        width="130px"
         fixed
       >
         <template slot-scope="scope">
@@ -232,7 +261,12 @@
         prop="projectNameAlias"
         width="200px"
       />
-      <el-table-column label="项目编号" align="center" prop="projectNum" />
+      <el-table-column
+        label="项目编号"
+        align="center"
+        prop="projectNum"
+        width="100px"
+      />
       <el-table-column label="负责人" align="center" prop="userNameAlias" />
       <!-- <el-table-column label="项目类型" align="center" prop="projectType" />
           <el-table-column
@@ -244,7 +278,7 @@
         label="安排开始时间"
         align="center"
         prop="projectStartAlias"
-        width="100px"
+        width="85px"
       >
         <template slot-scope="scope">
           {{ formatDate(scope.row.projectStartAlias) }}
@@ -254,7 +288,7 @@
         label="安排结束时间"
         align="center"
         prop="projectEndAlias"
-        width="100px"
+        width="85px"
       >
         <template slot-scope="scope">
           {{ formatDate(scope.row.projectEndAlias) }}
@@ -264,13 +298,13 @@
         label="作业办结时间"
         align="center"
         prop="doTime"
-        width="100px"
+        width="85px"
       >
         <template slot-scope="scope">
           {{ homeworkCompleted(scope.row) }}
         </template></el-table-column
       >
-      <el-table-column label="提前工期" align="center">
+      <el-table-column label="提前工期" align="center" width="57px">
         <template slot-scope="scope">
           <el-tag type="danger" v-show="scope.row.leadTime < 0">{{
             scope.row.leadTime
@@ -298,7 +332,12 @@
         </template>
       </el-table-column>
 
-      <el-table-column label="抽签过程" align="center" prop="drawStatus">
+      <el-table-column
+        label="抽签过程"
+        align="center"
+        prop="drawStatus"
+        width="57px"
+      >
         <template slot-scope="scope">
           <el-tag v-show="scope.row.drawStatus == 0" type="danger">无</el-tag>
           <el-tag v-show="scope.row.drawStatus == 1" type="success">有</el-tag>
@@ -1372,6 +1411,7 @@ export default {
             );
           }
           let data = {
+            status: 0,
             gcxms: 0,
             gcsps: 0,
             gccqs: 0,
@@ -1408,6 +1448,33 @@ export default {
             xfnumtwo: 0,
             jdnumtwo: 0,
           };
+
+          let data1 = {
+            status: 1,
+            gctjnum: 0,
+            gcyynum: 0,
+            gcycnum: 0,
+            gcdxnum: 0,
+            gcjdnum: 0,
+
+            bdtjnum: 0,
+            bdyynum: 0,
+            bdycnum: 0,
+            bddxnum: 0,
+            bdjdnum: 0,
+
+            gxtjnum: 0,
+            gxyynum: 0,
+            gxycnum: 0,
+            gxdxnum: 0,
+            gxjdnum: 0,
+
+            dltjnum: 0,
+            dlyynum: 0,
+            dlycnum: 0,
+            dldxnum: 0,
+            dljdnum: 0,
+          };
           for (var j = 0; j < this.projectListTj.length; j++) {
             switch (this.projectListTj[j].department) {
               case "工程测绘部":
@@ -1418,6 +1485,30 @@ export default {
                 if (this.projectIdMap.has(this.projectListTj[j].projectId)) {
                   data.gcsps++;
                 }
+
+                if (
+                  this.projectListTj[j].reviewSub[0] &&
+                  this.projectListTj[j].reviewSub[0].winUnit
+                ) {
+                  switch (this.projectListTj[j].reviewSub[0].winUnit) {
+                    case "天津汇创测绘技术有限公司":
+                      data1.gctjnum++;
+                      break;
+                    case "福建越扬信息科技有限公司":
+                      data1.gcyynum++;
+                      break;
+                    case "福建省易测工程勘测有限公司":
+                      data1.gcycnum++;
+                      break;
+                    case "黑龙江省地星测绘科技股份有限公司":
+                      data1.gcdxnum++;
+                      break;
+                    case "福建金地勘测规划有限公司":
+                      data1.gcjdnum++;
+                      break;
+                  }
+                }
+
                 break;
               case "不动产测绘部":
                 data.bdxms++;
@@ -1426,6 +1517,29 @@ export default {
                 }
                 if (this.projectIdMap.has(this.projectListTj[j].projectId)) {
                   data.bdsps++;
+                }
+
+                if (
+                  this.projectListTj[j].reviewSub[0] &&
+                  this.projectListTj[j].reviewSub[0].winUnit
+                ) {
+                  switch (this.projectListTj[j].reviewSub[0].winUnit) {
+                    case "天津汇创测绘技术有限公司":
+                      data1.bdtjnum++;
+                      break;
+                    case "福建越扬信息科技有限公司":
+                      data1.bdyynum++;
+                      break;
+                    case "福建省易测工程勘测有限公司":
+                      data1.bdycnum++;
+                      break;
+                    case "黑龙江省地星测绘科技股份有限公司":
+                      data1.bddxnum++;
+                      break;
+                    case "福建金地勘测规划有限公司":
+                      data1.bdjdnum++;
+                      break;
+                  }
                 }
                 break;
               case "管线工程部":
@@ -1436,6 +1550,29 @@ export default {
                 if (this.projectIdMap.has(this.projectListTj[j].projectId)) {
                   data.gxsps++;
                 }
+
+                if (
+                  this.projectListTj[j].reviewSub[0] &&
+                  this.projectListTj[j].reviewSub[0].winUnit
+                ) {
+                  switch (this.projectListTj[j].reviewSub[0].winUnit) {
+                    case "天津汇创测绘技术有限公司":
+                      data1.gxtjnum++;
+                      break;
+                    case "福建越扬信息科技有限公司":
+                      data1.gxyynum++;
+                      break;
+                    case "福建省易测工程勘测有限公司":
+                      data1.gxycnum++;
+                      break;
+                    case "黑龙江省地星测绘科技股份有限公司":
+                      data1.gxdxnum++;
+                      break;
+                    case "福建金地勘测规划有限公司":
+                      data1.gxjdnum++;
+                      break;
+                  }
+                }
                 break;
               case "地理信息部":
                 data.dlxms++;
@@ -1444,6 +1581,28 @@ export default {
                 }
                 if (this.projectIdMap.has(this.projectListTj[j].projectId)) {
                   data.dlsps++;
+                }
+                if (
+                  this.projectListTj[j].reviewSub[0] &&
+                  this.projectListTj[j].reviewSub[0].winUnit
+                ) {
+                  switch (this.projectListTj[j].reviewSub[0].winUnit) {
+                    case "天津汇创测绘技术有限公司":
+                      data1.dltjnum++;
+                      break;
+                    case "福建越扬信息科技有限公司":
+                      data1.dlyynum++;
+                      break;
+                    case "福建省易测工程勘测有限公司":
+                      data1.dlycnum++;
+                      break;
+                    case "黑龙江省地星测绘科技股份有限公司":
+                      data1.dldxnum++;
+                      break;
+                    case "福建金地勘测规划有限公司":
+                      data1.dljdnum++;
+                      break;
+                  }
                 }
                 break;
             }
@@ -1555,6 +1714,7 @@ export default {
             }
           }
           this.statisticsData.push(data);
+          this.statisticsData.push(data1);
           this.statisticsWinUnit.push(data);
         });
       });
