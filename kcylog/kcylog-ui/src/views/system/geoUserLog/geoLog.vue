@@ -192,7 +192,9 @@
             type="date"
             value-format="yyyy-MM-dd"
             placeholder="请选择日志日期"
+            :picker-options="pickerOptions"
           >
+            >
           </el-date-picker>
         </el-form-item>
         <el-collapse v-model="activeNames">
@@ -469,6 +471,34 @@ export default {
   name: "Log",
   data() {
     return {
+      pickerOptions: {
+        disabledDate(time) {
+          const today = new Date();
+          const day = today.getDay(); // 获取星期几，0 是星期日
+          let lastWorkingDay = new Date(today);
+
+          // 计算前一个工作日
+          if (day === 1) {
+            // 如果今天是星期一，前一个工作日是上周五
+            lastWorkingDay.setDate(today.getDate() - 3);
+          } else if (day === 0) {
+            // 如果今天是星期日，前一个工作日是星期五
+            lastWorkingDay.setDate(today.getDate() - 2);
+          } else {
+            // 其他情况下，前一个工作日是昨天
+            lastWorkingDay.setDate(today.getDate() - 1);
+          }
+
+          // 获取当前时间和前一个工作日的时间戳，去掉时间部分
+          const todayTime = today.setHours(0, 0, 0, 0);
+          const lastWorkingDayTime = lastWorkingDay.setHours(0, 0, 0, 0);
+
+          // 只允许选择当前日期和前一个工作日
+          return (
+            time.getTime() < lastWorkingDayTime || time.getTime() > todayTime
+          );
+        },
+      },
       projectList: [],
       queryProjectParams: {
         pageNum: 1,
