@@ -741,7 +741,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
             </if>
             and (p.subpackage_type = 2 or p.subpackage_type = 3)
         </where>
-        order by p.status asc , p.project_start_alias asc 
+        order by p.status asc , p.project_start_alias asc
     </select>
 
     <select id="selectSysProjectListForFbTwoCheck" parameterType="SysProject" resultMap="SysProjectResult">
