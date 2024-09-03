@@ -1564,18 +1564,18 @@ export default {
             }
             if (myMap.has(key)) {
               let num = myMap.get(key);
-              if (project[i].isArchive == 1) {
+              if (project[i].isArchive == 1 && project[i].checkStatus != 2) {
                 num.workCount++;
               }
               if (
-                project[i].receiveStatus == 1 &&
+                (project[i].receiveStatus == 1 ||
+                  project[i].receiveStatus == 2) &&
                 project[i].isArchive == 1 &&
                 project[i].projectList.receiveDays < 0
               ) {
                 num.receiveDays++;
               }
               if (
-                project[i].checkStatus != 2 &&
                 project[i].isArchive == 1 &&
                 project[i].projectList.archiveDays < 0
               ) {
@@ -1607,18 +1607,18 @@ export default {
                 receiveDaysTq: 0,
                 archiveDaysTq: 0,
               };
-              if (project[i].isArchive == 1) {
+              if (project[i].isArchive == 1 && project[i].checkStatus != 2) {
                 num.workCount++;
               }
               if (
-                project[i].receiveStatus == 1 &&
+                (project[i].receiveStatus == 1 ||
+                  project[i].receiveStatus == 2) &&
                 project[i].isArchive == 1 &&
                 project[i].projectList.receiveDays < 0
               ) {
                 num.receiveDays++;
               }
               if (
-                project[i].checkStatus != 2 &&
                 project[i].isArchive == 1 &&
                 project[i].projectList.archiveDays < 0
               ) {
@@ -1777,7 +1777,8 @@ export default {
             }
 
             if (
-              project[i].receiveStatus == 1 &&
+              (project[i].receiveStatus == 1 ||
+                project[i].receiveStatus == 2) &&
               project[i].isArchive == 1 &&
               project[i].projectList.receiveDays < 0 &&
               status == 0
@@ -1794,7 +1795,6 @@ export default {
               this.overTimeProjectList.push(project[i]);
             }
             if (
-              project[i].checkStatus != 2 &&
               project[i].isArchive == 1 &&
               project[i].projectList.archiveDays < 0 &&
               status == -1

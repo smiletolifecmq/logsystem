@@ -494,6 +494,13 @@
               </template>
               {{ form.workloadAlias }}
             </el-descriptions-item>
+            <el-descriptions-item>
+              <template slot="label">
+                <i class="el-icon-document"></i>
+                二检超期备注
+              </template>
+              {{ form.twoCheckNotes }}
+            </el-descriptions-item>
           </el-descriptions>
         </el-collapse-item>
         <el-collapse-item title="经营产值" name="2">
