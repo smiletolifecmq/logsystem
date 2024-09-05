@@ -1845,7 +1845,7 @@ export default {
           this.formReviewSub.winUnit + lastFiveChars
         );
         const result = this.formReviewSub.businessName.slice(0, -5);
-        this.formReviewSub.businessName = result;
+        // this.formReviewSub.businessName = result;
       }
       this.$refs["formReviewSub"].validate((valid) => {
         if (valid) {

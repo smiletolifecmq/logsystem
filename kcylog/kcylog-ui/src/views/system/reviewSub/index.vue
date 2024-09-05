@@ -1950,7 +1950,7 @@ export default {
           this.form.winUnit + lastFiveChars
         );
         const result = this.form.businessName.slice(0, -5);
-        this.form.businessName = result;
+        // this.form.businessName = result;
       }
       this.$refs["form"].validate((valid) => {
         if (valid) {
@@ -2124,6 +2124,11 @@ export default {
       const reviewId = row.reviewId || this.ids;
       getReviewExport(reviewId).then((response) => {
         const review = response.data;
+        const year = review.businessName.slice(-4);
+        let businessName = review.businessName;
+        if (year == "2023" || year == "2024") {
+          businessName = review.businessName.slice(0, -5);
+        }
         const data = {
           form: {
             serial_num: review.serialNum,
@@ -2131,7 +2136,7 @@ export default {
             win_unit: review.winUnit,
             subcontract_no: review.subcontractNo,
             lot_time: this.formatDateReviewSub(review.lotTime),
-            business_name: review.businessName,
+            business_name: businessName,
           },
           list: [],
         };
