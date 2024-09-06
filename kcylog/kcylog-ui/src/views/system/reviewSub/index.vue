@@ -1924,6 +1924,34 @@ export default {
     },
     /** 提交按钮 */
     submitForm() {
+      if (this.form.manType == 1 || this.form.manType == 2) {
+        if (
+          this.form.employmentReason == "" ||
+          this.form.employmentReason == null ||
+          this.form.employmentReason == undefined
+        ) {
+          this.$message({
+            showClose: true,
+            message: "请填写雇工内容～",
+            type: "error",
+          });
+          return;
+        }
+      }
+      if (this.form.subpackageType == 2 || this.form.subpackageType == 3) {
+        if (
+          this.form.subWorkload == "" ||
+          this.form.subWorkload == null ||
+          this.form.subWorkload == undefined
+        ) {
+          this.$message({
+            showClose: true,
+            message: "请填写分包工作量～",
+            type: "error",
+          });
+          return;
+        }
+      }
       if (
         (this.form.budgetMoney != 0 && this.form.budgetMoney != null) ||
         this.form.budgetMoney != undefined

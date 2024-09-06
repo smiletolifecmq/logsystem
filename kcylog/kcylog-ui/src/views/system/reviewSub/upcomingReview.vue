@@ -201,6 +201,29 @@
       <el-table-column label="雇工金额" align="center" prop="budgetMoney" /> -->
       <el-table-column label="负责人" align="center" prop="user.userName" />
       <el-table-column label="部门" align="center" prop="dept.deptName" />
+      <el-table-column
+        prop="projectStartAlias"
+        label="安排开始时间"
+        align="center"
+      >
+        <template slot-scope="scope">
+          {{ formatDateWork(scope.row.project.projectStartAlias) }}
+        </template>
+      </el-table-column>
+      <el-table-column
+        prop="projectEndAlias"
+        label="安排结束时间"
+        align="center"
+      >
+        <template slot-scope="scope">
+          {{ formatDateWork(scope.row.project.projectEndAlias) }}
+        </template>
+      </el-table-column>
+      <el-table-column prop="doTime" label="作业办结时间" align="center">
+        <template slot-scope="scope">
+          {{ formatDateWork(scope.row.project.doTime) }}
+        </template>
+      </el-table-column>
       <el-table-column label="雇工方式" align="center" prop="manType">
         <template slot-scope="scope">
           <span v-if="scope.row.manType === 0"
@@ -897,6 +920,18 @@ export default {
     this.ggtj();
   },
   methods: {
+    formatDateWork(dateString) {
+      if (dateString == "" || dateString == null || dateString == undefined) {
+        return "";
+      }
+      const dateObject = new Date(dateString);
+      const year = dateObject.getFullYear();
+      const month = dateObject.getMonth() + 1;
+      const day = dateObject.getDate();
+      return `${year}-${(month < 10 ? "0" : "") + month}-${
+        (day < 10 ? "0" : "") + day
+      }`;
+    },
     handleGeo(value) {
       this.projectCode = value.projectNum;
       // this.centerDialogVisible = true;

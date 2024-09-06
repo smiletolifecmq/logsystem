@@ -1818,6 +1818,38 @@ export default {
       }`;
     },
     submitFormReviewSub(status) {
+      if (this.formReviewSub.manType == 1 || this.formReviewSub.manType == 2) {
+        if (
+          this.formReviewSub.employmentReason == "" ||
+          this.formReviewSub.employmentReason == null ||
+          this.formReviewSub.employmentReason == undefined
+        ) {
+          this.$message({
+            showClose: true,
+            message: "请填写雇工内容～",
+            type: "error",
+          });
+          return;
+        }
+      }
+      if (
+        this.formReviewSub.subpackageType == 2 ||
+        this.formReviewSub.subpackageType == 3
+      ) {
+        if (
+          this.formReviewSub.subWorkload == "" ||
+          this.formReviewSub.subWorkload == null ||
+          this.formReviewSub.subWorkload == undefined
+        ) {
+          this.$message({
+            showClose: true,
+            message: "请填写分包工作量～",
+            type: "error",
+          });
+          return;
+        }
+      }
+
       if (
         (this.formReviewSub.budgetMoney != 0 &&
           this.formReviewSub.budgetMoney != null) ||
