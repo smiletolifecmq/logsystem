@@ -5,7 +5,7 @@ spring:
         druid:
             # 主库数据源
             master:
-                url: jdbc:mysql://127.0.0.1:3306/kyc_log_system
+                url: jdbc:mysql://127.0.0.1:3306/kcy_log_system
                 username: root
                 password: mysql@kcy
             # 从库数据源
