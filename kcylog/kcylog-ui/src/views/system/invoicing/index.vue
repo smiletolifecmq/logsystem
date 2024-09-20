@@ -150,6 +150,13 @@
             v-hasPermi="['system:invoicing:edit']"
             >修改</el-button
           >
+          <el-button
+            size="mini"
+            type="text"
+            icon="el-icon-info"
+            @click="handleDz(scope.row)"
+            >到账详情</el-button
+          >
         </template>
       </el-table-column>
     </el-table>
@@ -238,6 +245,7 @@
             v-model="form.kpKpje"
             :precision="2"
             :step="0.1"
+            :disabled="kpKpjeStatus"
           ></el-input-number>
         </el-form-item>
         <el-form-item label="发票号" prop="kpFph" label-width="260px">
@@ -318,6 +326,63 @@
         <el-button @click="cancel">取 消</el-button>
       </div>
     </el-dialog>
+
+    <!-- 查看对应的开票详情 -->
+    <el-dialog
+      :title="dztitle"
+      :visible.sync="dzopen"
+      width="1000px"
+      append-to-body
+    >
+      <el-descriptions
+        v-for="(item, index) in dzForm"
+        :key="index"
+        :title="`到账记录${index + 1}`"
+      >
+        <el-descriptions-item label="客户名称">{{
+          item.dzKhmc
+        }}</el-descriptions-item>
+        <el-descriptions-item label="合同编号/工程编号">{{
+          item.dzHtbh
+        }}</el-descriptions-item>
+        <el-descriptions-item label="合同金额">{{
+          item.dzHtje
+        }}</el-descriptions-item>
+        <el-descriptions-item label="业务性质">{{
+          item.dzYwxz
+        }}</el-descriptions-item>
+        <el-descriptions-item label="责任人">{{
+          item.dzFzr
+        }}</el-descriptions-item>
+        <el-descriptions-item label="开票日期">{{
+          parseTime(item.dzKprq, "{y}-{m}-{d}")
+        }}</el-descriptions-item>
+        <el-descriptions-item label="开票金额">{{
+          item.dzKpje
+        }}</el-descriptions-item>
+        <el-descriptions-item label="发票号">{{
+          item.dzFph
+        }}</el-descriptions-item>
+        <el-descriptions-item label="到账金额">{{
+          item.dzMoney
+        }}</el-descriptions-item>
+        <el-descriptions-item label="到账日期">{{
+          item.dzRq
+        }}</el-descriptions-item>
+        <el-descriptions-item label="到账类型">{{
+          item.dzType
+        }}</el-descriptions-item>
+        <el-descriptions-item label="是否专项债资金">{{
+          item.dzIsZx
+        }}</el-descriptions-item>
+        <el-descriptions-item label="销售方">{{
+          item.dzXsf
+        }}</el-descriptions-item>
+        <el-descriptions-item label="备注">{{
+          item.dzBz
+        }}</el-descriptions-item>
+      </el-descriptions>
+    </el-dialog>
   </div>
 </template>
 
@@ -327,12 +392,17 @@ import {
   getInvoicing,
   addInvoicing,
   updateInvoicing,
+  getArrivalList,
 } from "@/api/system/invoicing";
 
 export default {
   name: "Invoicing",
   data() {
     return {
+      dzForm: [],
+      dztitle: "到账详情",
+      dzopen: false,
+      kpKpjeStatus: false,
       kpHcphStatus: false,
       kpFphStatus: false,
       kpTypeStatus: false,
@@ -424,6 +494,16 @@ export default {
     this.getList();
   },
   methods: {
+    handleDz(value) {
+      getArrivalList(value.kpFph).then((response) => {
+        if (response.rows.length == 0) {
+          this.$modal.msgError(`无到账记录～`);
+          return;
+        }
+        this.dzForm = response.rows;
+        this.dzopen = true;
+      });
+    },
     /** 查询经营开票统计列表 */
     getList() {
       this.loading = true;
@@ -474,6 +554,7 @@ export default {
     },
     /** 重置按钮操作 */
     resetQuery() {
+      this.dateRange = [];
       this.resetForm("queryForm");
       this.handleQuery();
     },
@@ -489,6 +570,7 @@ export default {
       this.kpHcphStatus = false;
       this.kpFphStatus = false;
       this.kpTypeStatus = false;
+      this.kpKpjeStatus = false;
       this.open = true;
       this.title = "添加开票记录";
     },
@@ -501,6 +583,7 @@ export default {
         this.kpHcphStatus = true;
         this.kpFphStatus = true;
         this.kpTypeStatus = true;
+        this.kpKpjeStatus = true;
         this.open = true;
         this.title = "修改开票记录";
       });
@@ -518,8 +601,8 @@ export default {
           } else {
             this.$confirm(
               `<p>请仔细核定填写的信息，新增的开票数据是<span style="color: red;">无法删除</span>的，特别核对下
-              <span style="color: red;">开票类型</span>、
-              <span style="color: red;">发票号</span>、<span style="color: red;">被红冲票号</span>，这三个字段内容在之后是<span style="color: red;">不允许修改</span>的，
+              <span style="color: red;">开票类型</span>、<span style="color: red;">开票金额</span>、
+              <span style="color: red;">发票号</span>、<span style="color: red;">被红冲票号</span>，这四个字段内容在之后是<span style="color: red;">不允许修改</span>的，
               确认信息后再点击确认！！</p>`,
               "提示",
               {
@@ -553,7 +636,7 @@ export default {
         {
           ...this.queryParams,
         },
-        `invoicing_${new Date().getTime()}.xlsx`
+        `开票记录_${new Date().getTime()}.xlsx`
       );
     },
   },

@@ -112,4 +112,10 @@ public class SysManagementInvoicingController extends BaseController
     {
         return toAjax(sysManagementInvoicingService.deleteSysManagementInvoicingByKpIds(kpIds));
     }
+
+    @GetMapping(value = "/getByKpFph/{kpFph}")
+    public AjaxResult getByKpFph(@PathVariable("kpFph") String kpFph)
+    {
+        return success(sysManagementInvoicingService.selectSysManagementInvoicingByKpFPH(kpFph));
+    }
 }

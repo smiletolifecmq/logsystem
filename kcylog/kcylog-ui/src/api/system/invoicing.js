@@ -42,3 +42,10 @@ export function delInvoicing(kpId) {
     method: 'delete'
   })
 }
+
+export function getArrivalList(dzFph) {
+  return request({
+    url: '/system/arrival/getArrivalByDzFph/' + dzFph,
+    method: 'get'
+  })
+}
