@@ -1,0 +1,146 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.kcylog.system.mapper.SysManagementInvoicingMapper">
+    
+    <resultMap type="SysManagementInvoicing" id="SysManagementInvoicingResult">
+        <result property="kpId"    column="kp_id"    />
+        <result property="kpHtmc"    column="kp_htmc"    />
+        <result property="kpHtbh"    column="kp_htbh"    />
+        <result property="kpFzbm"    column="kp_fzbm"    />
+        <result property="kpFzr"    column="kp_fzr"    />
+        <result property="kpKhmc"    column="kp_khmc"    />
+        <result property="kpKhfl"    column="kp_khfl"    />
+        <result property="kpYwxz"    column="kp_ywxz"    />
+        <result property="kpHtje"    column="kp_htje"    />
+        <result property="kpKprq"    column="kp_kprq"    />
+        <result property="kpKpje"    column="kp_kpje"    />
+        <result property="kpFph"    column="kp_fph"    />
+        <result property="kpFplx"    column="kp_fplx"    />
+        <result property="kpHcph"    column="kp_hcph"    />
+        <result property="kpYfpsj"    column="kp_yfpsj"    />
+        <result property="kpIsZqd"    column="kp_is_zqd"    />
+        <result property="kpZqdMoney"    column="kp_zqd_money"    />
+        <result property="kpDzsj"    column="kp_dzsj"    />
+        <result property="kpXsf"    column="kp_xsf"    />
+        <result property="kpBz"    column="kp_bz"    />
+        <result property="kpType"    column="kp_type"    />
+    </resultMap>
+
+    <sql id="selectSysManagementInvoicingVo">
+        select kp_id, kp_htmc, kp_htbh, kp_fzbm, kp_fzr, kp_khmc, kp_khfl, kp_ywxz, kp_htje, kp_kprq, kp_kpje, kp_fph, kp_fplx, kp_hcph, kp_yfpsj, kp_is_zqd, kp_zqd_money, kp_dzsj, kp_xsf, kp_bz, kp_type from sys_management_invoicing
+    </sql>
+
+    <select id="selectSysManagementInvoicingList" parameterType="SysManagementInvoicing" resultMap="SysManagementInvoicingResult">
+        <include refid="selectSysManagementInvoicingVo"/>
+        <where>
+            <if test="params.beginTime != null and params.beginTime != ''"><!-- 开始时间检索 -->
+                AND date_format(kp_kprq,'%y%m%d') &gt;= date_format(#{params.beginTime},'%y%m%d')
+            </if>
+            <if test="params.endTime != null and params.endTime != ''"><!-- 结束时间检索 -->
+                AND date_format(kp_kprq,'%y%m%d') &lt;= date_format(#{params.endTime},'%y%m%d')
+            </if>
+            <if test="kpFph != null  and kpFph != ''"> and kp_fph = #{kpFph}</if>
+            <if test="kpType != null "> and kp_type = #{kpType}</if>
+            <if test="kpFzr != null "> and kp_fzr= #{kpFzr}</if>
+        </where>
+        order by kp_id desc
+    </select>
+    
+    <select id="selectSysManagementInvoicingByKpId" parameterType="Long" resultMap="SysManagementInvoicingResult">
+        <include refid="selectSysManagementInvoicingVo"/>
+        where kp_id = #{kpId}
+    </select>
+        
+    <insert id="insertSysManagementInvoicing" parameterType="SysManagementInvoicing" useGeneratedKeys="true" keyProperty="kpId">
+        insert into sys_management_invoicing
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="kpHtmc != null">kp_htmc,</if>
+            <if test="kpHtbh != null">kp_htbh,</if>
+            <if test="kpFzbm != null">kp_fzbm,</if>
+            <if test="kpFzr != null and kpFzr != ''">kp_fzr,</if>
+            <if test="kpKhmc != null">kp_khmc,</if>
+            <if test="kpKhfl != null">kp_khfl,</if>
+            <if test="kpYwxz != null and kpYwxz != ''">kp_ywxz,</if>
+            <if test="kpHtje != null">kp_htje,</if>
+            <if test="kpKprq != null">kp_kprq,</if>
+            <if test="kpKpje != null">kp_kpje,</if>
+            <if test="kpFph != null and kpFph != ''">kp_fph,</if>
+            <if test="kpFplx != null and kpFplx != ''">kp_fplx,</if>
+            <if test="kpHcph != null">kp_hcph,</if>
+            <if test="kpYfpsj != null">kp_yfpsj,</if>
+            <if test="kpIsZqd != null">kp_is_zqd,</if>
+            <if test="kpZqdMoney != null">kp_zqd_money,</if>
+            <if test="kpDzsj != null">kp_dzsj,</if>
+            <if test="kpXsf != null">kp_xsf,</if>
+            <if test="kpBz != null">kp_bz,</if>
+            <if test="kpType != null">kp_type,</if>
+         </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test="kpHtmc != null">#{kpHtmc},</if>
+            <if test="kpHtbh != null">#{kpHtbh},</if>
+            <if test="kpFzbm != null">#{kpFzbm},</if>
+            <if test="kpFzr != null and kpFzr != ''">#{kpFzr},</if>
+            <if test="kpKhmc != null">#{kpKhmc},</if>
+            <if test="kpKhfl != null">#{kpKhfl},</if>
+            <if test="kpYwxz != null and kpYwxz != ''">#{kpYwxz},</if>
+            <if test="kpHtje != null">#{kpHtje},</if>
+            <if test="kpKprq != null">#{kpKprq},</if>
+            <if test="kpKpje != null">#{kpKpje},</if>
+            <if test="kpFph != null and kpFph != ''">#{kpFph},</if>
+            <if test="kpFplx != null and kpFplx != ''">#{kpFplx},</if>
+            <if test="kpHcph != null">#{kpHcph},</if>
+            <if test="kpYfpsj != null">#{kpYfpsj},</if>
+            <if test="kpIsZqd != null">#{kpIsZqd},</if>
+            <if test="kpZqdMoney != null">#{kpZqdMoney},</if>
+            <if test="kpDzsj != null">#{kpDzsj},</if>
+            <if test="kpXsf != null">#{kpXsf},</if>
+            <if test="kpBz != null">#{kpBz},</if>
+            <if test="kpType != null">#{kpType},</if>
+         </trim>
+    </insert>
+
+    <update id="updateSysManagementInvoicing" parameterType="SysManagementInvoicing">
+        update sys_management_invoicing
+        <trim prefix="SET" suffixOverrides=",">
+            <if test="kpHtmc != null">kp_htmc = #{kpHtmc},</if>
+            <if test="kpHtbh != null">kp_htbh = #{kpHtbh},</if>
+            <if test="kpFzbm != null">kp_fzbm = #{kpFzbm},</if>
+            <if test="kpFzr != null and kpFzr != ''">kp_fzr = #{kpFzr},</if>
+            <if test="kpKhmc != null">kp_khmc = #{kpKhmc},</if>
+            <if test="kpKhfl != null">kp_khfl = #{kpKhfl},</if>
+            <if test="kpYwxz != null and kpYwxz != ''">kp_ywxz = #{kpYwxz},</if>
+            <if test="kpHtje != null">kp_htje = #{kpHtje},</if>
+            <if test="kpKprq != null">kp_kprq = #{kpKprq},</if>
+            <if test="kpKpje != null">kp_kpje = #{kpKpje},</if>
+            <if test="kpFph != null and kpFph != ''">kp_fph = #{kpFph},</if>
+            <if test="kpFplx != null and kpFplx != ''">kp_fplx = #{kpFplx},</if>
+            <if test="kpHcph != null">kp_hcph = #{kpHcph},</if>
+            <if test="kpYfpsj != null">kp_yfpsj = #{kpYfpsj},</if>
+            <if test="kpIsZqd != null">kp_is_zqd = #{kpIsZqd},</if>
+            <if test="kpZqdMoney != null">kp_zqd_money = #{kpZqdMoney},</if>
+            <if test="kpDzsj != null">kp_dzsj = #{kpDzsj},</if>
+            <if test="kpXsf != null">kp_xsf = #{kpXsf},</if>
+            <if test="kpBz != null">kp_bz = #{kpBz},</if>
+            <if test="kpType != null">kp_type = #{kpType},</if>
+        </trim>
+        where kp_id = #{kpId}
+    </update>
+
+    <delete id="deleteSysManagementInvoicingByKpId" parameterType="Long">
+        delete from sys_management_invoicing where kp_id = #{kpId}
+    </delete>
+
+    <delete id="deleteSysManagementInvoicingByKpIds" parameterType="String">
+        delete from sys_management_invoicing where kp_id in 
+        <foreach item="kpId" collection="array" open="(" separator="," close=")">
+            #{kpId}
+        </foreach>
+    </delete>
+
+    <select id="selectSysManagementInvoicingByKpFPH" parameterType="String" resultMap="SysManagementInvoicingResult">
+        <include refid="selectSysManagementInvoicingVo"/>
+        where kp_fph = #{kpFph}
+    </select>
+</mapper>
