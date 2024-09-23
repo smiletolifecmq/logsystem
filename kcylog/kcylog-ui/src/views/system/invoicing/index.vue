@@ -327,61 +327,24 @@
       </div>
     </el-dialog>
 
-    <!-- 查看对应的开票详情 -->
+    <!-- 查看对应的到账详情 -->
     <el-dialog
       :title="dztitle"
       :visible.sync="dzopen"
       width="1000px"
       append-to-body
     >
-      <el-descriptions
-        v-for="(item, index) in dzForm"
-        :key="index"
-        :title="`到账记录${index + 1}`"
-      >
-        <el-descriptions-item label="客户名称">{{
-          item.dzKhmc
-        }}</el-descriptions-item>
-        <el-descriptions-item label="合同编号/工程编号">{{
-          item.dzHtbh
-        }}</el-descriptions-item>
-        <el-descriptions-item label="合同金额">{{
-          item.dzHtje
-        }}</el-descriptions-item>
-        <el-descriptions-item label="业务性质">{{
-          item.dzYwxz
-        }}</el-descriptions-item>
-        <el-descriptions-item label="责任人">{{
-          item.dzFzr
-        }}</el-descriptions-item>
-        <el-descriptions-item label="开票日期">{{
-          parseTime(item.dzKprq, "{y}-{m}-{d}")
-        }}</el-descriptions-item>
-        <el-descriptions-item label="开票金额">{{
-          item.dzKpje
-        }}</el-descriptions-item>
-        <el-descriptions-item label="发票号">{{
-          item.dzFph
-        }}</el-descriptions-item>
-        <el-descriptions-item label="到账金额">{{
-          item.dzMoney
-        }}</el-descriptions-item>
-        <el-descriptions-item label="到账日期">{{
-          item.dzRq
-        }}</el-descriptions-item>
-        <el-descriptions-item label="到账类型">{{
-          item.dzType
-        }}</el-descriptions-item>
-        <el-descriptions-item label="是否专项债资金">{{
-          item.dzIsZx
-        }}</el-descriptions-item>
-        <el-descriptions-item label="销售方">{{
-          item.dzXsf
-        }}</el-descriptions-item>
-        <el-descriptions-item label="备注">{{
-          item.dzBz
-        }}</el-descriptions-item>
-      </el-descriptions>
+      <el-table :data="dzForm" size="mini" show-summary>
+        <el-table-column label="发票号" align="center" prop="dzFph" />
+        <el-table-column label="到账金额" align="center" prop="dzMoney" />
+        <el-table-column label="到账日期" align="center" prop="dzRq">
+          <template slot-scope="scope">
+            <span>{{ parseTime(scope.row.dzRq, "{y}-{m}-{d}") }}</span>
+          </template>
+        </el-table-column>
+        <el-table-column label="到账类型" align="center" prop="dzType" />
+        <el-table-column label="是否专项债资金" align="center" prop="dzIsZx" />
+      </el-table>
     </el-dialog>
   </div>
 </template>
