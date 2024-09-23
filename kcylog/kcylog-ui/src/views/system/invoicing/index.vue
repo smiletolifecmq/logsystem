@@ -430,6 +430,21 @@ export default {
       form: {},
       // 表单校验
       rules: {
+        kpHtmc: [
+          { required: true, message: "请输入合同名称", trigger: "blur" },
+        ],
+        kpHtbh: [
+          { required: true, message: "请输入合同编号", trigger: "blur" },
+        ],
+        kpFzbm: [
+          { required: true, message: "请输入负责部门", trigger: "blur" },
+        ],
+        kpKhmc: [
+          { required: true, message: "请输入客户名称", trigger: "blur" },
+        ],
+        kpKhfl: [
+          { required: true, message: "请输入客户分类", trigger: "blur" },
+        ],
         kpYwxz: [
           { required: true, message: "业务性质不能为空", trigger: "blur" },
         ],
@@ -555,6 +570,15 @@ export default {
     submitForm() {
       this.$refs["form"].validate((valid) => {
         if (valid) {
+          if (
+            this.form.kpType == 2 &&
+            (this.form.kpHcph == "" ||
+              this.form.kpHcph == null ||
+              this.form.kpHcph == undefined)
+          ) {
+            this.$modal.msgError(`请输入被红冲票号`);
+            return;
+          }
           if (this.form.kpId != null) {
             updateInvoicing(this.form).then((response) => {
               this.$modal.msgSuccess("修改成功");

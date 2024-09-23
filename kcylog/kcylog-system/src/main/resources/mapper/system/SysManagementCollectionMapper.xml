@@ -1,0 +1,133 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.kcylog.system.mapper.SysManagementCollectionMapper">
+    
+    <resultMap type="SysManagementCollection" id="SysManagementCollectionResult">
+        <result property="ysId"    column="ys_id"    />
+        <result property="ysHtmc"    column="ys_htmc"    />
+        <result property="ysHtbh"    column="ys_htbh"    />
+        <result property="ysFzbm"    column="ys_fzbm"    />
+        <result property="ysFzr"    column="ys_fzr"    />
+        <result property="ysKhmc"    column="ys_khmc"    />
+        <result property="ysKhfl"    column="ys_khfl"    />
+        <result property="ysHtje"    column="ys_htje"    />
+        <result property="ysKprq"    column="ys_kprq"    />
+        <result property="ysKpje"    column="ys_kpje"    />
+        <result property="ysYdzje"    column="ys_ydzje"    />
+        <result property="ysWdzje"    column="ys_wdzje"    />
+        <result property="ysFhlx"    column="ys_fhlx"    />
+        <result property="ysFhsj"    column="ys_fhsj"    />
+        <result property="ysCs"    column="ys_cs"    />
+        <result property="ysBz"    column="ys_bz"    />
+        <result property="ysZjly"    column="ys_zjly"    />
+        <result property="ysFph"    column="ys_fph"    />
+        <result property="ysGzqk"    column="ys_gzqk"    />
+        <result property="ysZxqk"    column="ys_zxqk"    />
+        <result property="ysHtrq"    column="ys_htrq"    />
+        <result property="ysSsdqsj"    column="ys_ssdqsj"    />
+        <result property="ysIssq"    column="ys_issq"    />
+        <result property="ysStatus"    column="ys_status"    />
+    </resultMap>
+
+    <sql id="selectSysManagementCollectionVo">
+        select ys_id, ys_htmc, ys_htbh, ys_fzbm, ys_fzr, ys_khmc, ys_khfl, ys_htje, ys_kprq, ys_kpje, ys_ydzje, ys_wdzje, ys_fhlx, ys_fhsj, ys_cs, ys_bz, ys_zjly, ys_fph, ys_gzqk, ys_zxqk, ys_htrq, ys_ssdqsj, ys_issq, ys_status from sys_management_collection
+    </sql>
+
+    <select id="selectSysManagementCollectionList" parameterType="SysManagementCollection" resultMap="SysManagementCollectionResult">
+        <include refid="selectSysManagementCollectionVo"/>
+        <where>
+            <if test="ysFzr != null  and ysFzr != ''"> and ys_fzr = #{ysFzr}</if>
+            <if test="ysFph != null  and ysFph != ''"> and ys_fph = #{ysFph}</if>
+            and ys_status = 1
+        </where>
+    </select>
+    
+    <select id="selectSysManagementCollectionByYsId" parameterType="Long" resultMap="SysManagementCollectionResult">
+        <include refid="selectSysManagementCollectionVo"/>
+        where ys_id = #{ysId}
+    </select>
+        
+    <insert id="insertSysManagementCollection" parameterType="SysManagementCollection" useGeneratedKeys="true" keyProperty="ysId">
+        insert into sys_management_collection
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="ysHtmc != null">ys_htmc,</if>
+            <if test="ysHtbh != null">ys_htbh,</if>
+            <if test="ysFzbm != null">ys_fzbm,</if>
+            <if test="ysFzr != null and ysFzr != ''">ys_fzr,</if>
+            <if test="ysKhmc != null">ys_khmc,</if>
+            <if test="ysKhfl != null">ys_khfl,</if>
+            <if test="ysHtje != null">ys_htje,</if>
+            <if test="ysKprq != null">ys_kprq,</if>
+            <if test="ysKpje != null">ys_kpje,</if>
+            <if test="ysYdzje != null">ys_ydzje,</if>
+            <if test="ysWdzje != null">ys_wdzje,</if>
+            <if test="ysFhlx != null">ys_fhlx,</if>
+            <if test="ysFhsj != null">ys_fhsj,</if>
+            <if test="ysCs != null">ys_cs,</if>
+            <if test="ysBz != null">ys_bz,</if>
+            <if test="ysZjly != null">ys_zjly,</if>
+            <if test="ysFph != null and ysFph != ''">ys_fph,</if>
+            <if test="ysGzqk != null">ys_gzqk,</if>
+            <if test="ysZxqk != null">ys_zxqk,</if>
+            <if test="ysHtrq != null">ys_htrq,</if>
+            <if test="ysSsdqsj != null">ys_ssdqsj,</if>
+            <if test="ysIssq != null">ys_issq,</if>
+            <if test="ysStatus != null">ys_status,</if>
+         </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test="ysHtmc != null">#{ysHtmc},</if>
+            <if test="ysHtbh != null">#{ysHtbh},</if>
+            <if test="ysFzbm != null">#{ysFzbm},</if>
+            <if test="ysFzr != null and ysFzr != ''">#{ysFzr},</if>
+            <if test="ysKhmc != null">#{ysKhmc},</if>
+            <if test="ysKhfl != null">#{ysKhfl},</if>
+            <if test="ysHtje != null">#{ysHtje},</if>
+            <if test="ysKprq != null">#{ysKprq},</if>
+            <if test="ysKpje != null">#{ysKpje},</if>
+            <if test="ysYdzje != null">#{ysYdzje},</if>
+            <if test="ysWdzje != null">#{ysWdzje},</if>
+            <if test="ysFhlx != null">#{ysFhlx},</if>
+            <if test="ysFhsj != null">#{ysFhsj},</if>
+            <if test="ysCs != null">#{ysCs},</if>
+            <if test="ysBz != null">#{ysBz},</if>
+            <if test="ysZjly != null">#{ysZjly},</if>
+            <if test="ysFph != null and ysFph != ''">#{ysFph},</if>
+            <if test="ysGzqk != null">#{ysGzqk},</if>
+            <if test="ysZxqk != null">#{ysZxqk},</if>
+            <if test="ysHtrq != null">#{ysHtrq},</if>
+            <if test="ysSsdqsj != null">#{ysSsdqsj},</if>
+            <if test="ysIssq != null">#{ysIssq},</if>
+            <if test="ysStatus != null">#{ysStatus},</if>
+         </trim>
+    </insert>
+
+    <update id="updateSysManagementCollection" parameterType="SysManagementCollection">
+        update sys_management_collection
+        <trim prefix="SET" suffixOverrides=",">
+            <if test="ysFhlx != null">ys_fhlx = #{ysFhlx},</if>
+            <if test="ysFhsj != null">ys_fhsj = #{ysFhsj},</if>
+            <if test="ysCs != null">ys_cs = #{ysCs},</if>
+            <if test="ysBz != null">ys_bz = #{ysBz},</if>
+            <if test="ysZjly != null">ys_zjly = #{ysZjly},</if>
+            <if test="ysGzqk != null">ys_gzqk = #{ysGzqk},</if>
+            <if test="ysZxqk != null">ys_zxqk = #{ysZxqk},</if>
+            <if test="ysHtrq != null">ys_htrq = #{ysHtrq},</if>
+            <if test="ysSsdqsj != null">ys_ssdqsj = #{ysSsdqsj},</if>
+            <if test="ysIssq != null">ys_issq = #{ysIssq},</if>
+        </trim>
+        where ys_id = #{ysId}
+    </update>
+
+    <delete id="deleteSysManagementCollectionByYsId" parameterType="Long">
+        delete from sys_management_collection where ys_id = #{ysId}
+    </delete>
+
+    <delete id="deleteSysManagementCollectionByYsIds" parameterType="String">
+        delete from sys_management_collection where ys_id in 
+        <foreach item="ysId" collection="array" open="(" separator="," close=")">
+            #{ysId}
+        </foreach>
+    </delete>
+</mapper>
