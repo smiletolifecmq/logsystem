@@ -103,4 +103,10 @@ public class SysManagementCollectionServiceImpl implements ISysManagementCollect
     {
         return sysManagementCollectionMapper.updateCollectionDzInfo(sysManagementCollection);
     }
+
+    @Override
+    public List<SysManagementCollection> selectSysManagementCollectionListYdz(SysManagementCollection sysManagementCollection)
+    {
+        return sysManagementCollectionMapper.selectSysManagementCollectionListYdz(sysManagementCollection);
+    }
 }

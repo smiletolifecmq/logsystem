@@ -145,4 +145,13 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
         </trim>
         where ys_id = #{ysId}
     </update>
+
+    <select id="selectSysManagementCollectionListYdz" parameterType="SysManagementCollection" resultMap="SysManagementCollectionResult">
+        <include refid="selectSysManagementCollectionVo"/>
+        <where>
+            <if test="ysFzr != null  and ysFzr != ''"> and ys_fzr = #{ysFzr}</if>
+            <if test="ysFph != null  and ysFph != ''"> and ys_fph = #{ysFph}</if>
+            and ys_status = 2
+        </where>
+    </select>
 </mapper>

@@ -137,4 +137,32 @@ public class SysManagementCollectionController extends BaseController
     {
         return toAjax(sysManagementCollectionService.deleteSysManagementCollectionByYsIds(ysIds));
     }
+
+    @PreAuthorize("@ss.hasPermi('system:collection:list')")
+    @GetMapping("/ydz")
+    public TableDataInfo listYdz(SysManagementCollection sysManagementCollection)
+    {
+        startPage();
+        List<SysManagementCollection> list = sysManagementCollectionService.selectSysManagementCollectionListYdz(sysManagementCollection);
+        for (SysManagementCollection obj : list){
+            Date ysKprq = obj.getYsKprq();
+            // 将 Date 转换为 LocalDate
+            LocalDate ysKprqLocalDate = ysKprq.toInstant().atZone(ZoneId.systemDefault()).toLocalDate();
+            // 获取当前日期
+            LocalDate currentDate = LocalDate.now();
+            // 计算两个日期之间的差异
+            Period period = Period.between(ysKprqLocalDate, currentDate);
+            // 获取年份差异
+            int years = period.getYears();
+            // 判断时间段
+            if (years < 1) {
+                obj.setYsZl("1年以内");
+            } else if (years >= 1 && years < 3) {
+                obj.setYsZl("1-3年");
+            } else {
+                obj.setYsZl("3年以上");
+            }
+        }
+        return getDataTable(list);
+    }
 }

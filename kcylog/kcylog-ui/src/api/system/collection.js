@@ -42,3 +42,11 @@ export function delCollection(ysId) {
     method: 'delete'
   })
 }
+
+export function listCollectionYdz(query) {
+  return request({
+    url: '/system/collection/ydz',
+    method: 'get',
+    params: query
+  })
+}

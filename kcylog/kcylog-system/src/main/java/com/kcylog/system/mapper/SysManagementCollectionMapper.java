@@ -63,4 +63,6 @@ public interface SysManagementCollectionMapper
     public SysManagementCollection selectSysManagementCollectionByYsFph(String ysFph);
 
     public int updateCollectionDzInfo(SysManagementCollection sysManagementCollection);
+
+    public List<SysManagementCollection> selectSysManagementCollectionListYdz(SysManagementCollection sysManagementCollection);
 }
