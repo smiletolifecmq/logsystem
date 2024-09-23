@@ -56,7 +56,7 @@ public class SysManagementInvoicing extends BaseEntity
 
     /** 合同金额 */
     @Excel(name = "合同金额")
-    private BigDecimal kpHtje;
+    private String kpHtje;
 
     /** 开票日期 */
     @JsonFormat(pattern = "yyyy-MM-dd")
@@ -187,12 +187,12 @@ public class SysManagementInvoicing extends BaseEntity
     {
         return kpYwxz;
     }
-    public void setKpHtje(BigDecimal kpHtje) 
+    public void setKpHtje(String kpHtje)
     {
         this.kpHtje = kpHtje;
     }
 
-    public BigDecimal getKpHtje() 
+    public String getKpHtje()
     {
         return kpHtje;
     }

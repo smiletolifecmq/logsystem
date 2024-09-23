@@ -224,11 +224,7 @@
           </el-select>
         </el-form-item>
         <el-form-item label="合同金额" prop="kpHtje" label-width="260px">
-          <el-input-number
-            v-model="form.kpHtje"
-            :precision="2"
-            :step="0.1"
-          ></el-input-number>
+          <el-input v-model="form.kpHtje" placeholder="请输入合同金额" />
         </el-form-item>
         <el-form-item label="开票日期" prop="kpKprq" label-width="260px">
           <el-date-picker
@@ -430,6 +426,9 @@ export default {
       form: {},
       // 表单校验
       rules: {
+        kpHtje: [
+          { required: true, message: "请输入合同金额", trigger: "blur" },
+        ],
         kpHtmc: [
           { required: true, message: "请输入合同名称", trigger: "blur" },
         ],

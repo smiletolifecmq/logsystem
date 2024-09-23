@@ -156,11 +156,7 @@
           <el-input v-model="form.dzHtbh" placeholder="请输入合同编号" />
         </el-form-item>
         <el-form-item label="合同金额" prop="dzHtje" label-width="150px">
-          <el-input-number
-            v-model="form.dzHtje"
-            :precision="2"
-            :step="0.1"
-          ></el-input-number>
+          <el-input v-model="form.dzHtje" placeholder="请输入合同金额" />
         </el-form-item>
         <el-form-item label="业务性质" prop="dzYwxz" label-width="150px">
           <el-select v-model="form.dzYwxz" placeholder="请选择">
@@ -387,6 +383,21 @@ export default {
       form: {},
       // 表单校验
       rules: {
+        dzKhmc: [
+          { required: true, message: "请输入客户名称", trigger: "blur" },
+        ],
+        dzHtbh: [
+          { required: true, message: "请输入合同名称", trigger: "blur" },
+        ],
+        dzHtje: [
+          { required: true, message: "请输入合同金额", trigger: "blur" },
+        ],
+        dzKpje: [
+          { required: true, message: "请输入开票金额", trigger: "blur" },
+        ],
+        dzKprq: [
+          { required: true, message: "请输入开票日期", trigger: "blur" },
+        ],
         dzYwxz: [
           { required: true, message: "业务性质不能为空", trigger: "blur" },
         ],

@@ -36,7 +36,7 @@ public class SysManagementArrival extends BaseEntity
 
     /** 合同金额 */
     @Excel(name = "合同金额")
-    private BigDecimal dzHtje;
+    private String dzHtje;
 
     /** 业务性质 */
     @Excel(name = "业务性质")
@@ -119,12 +119,12 @@ public class SysManagementArrival extends BaseEntity
     {
         return dzHtbh;
     }
-    public void setDzHtje(BigDecimal dzHtje) 
+    public void setDzHtje(String dzHtje)
     {
         this.dzHtje = dzHtje;
     }
 
-    public BigDecimal getDzHtje() 
+    public String getDzHtje()
     {
         return dzHtje;
     }
