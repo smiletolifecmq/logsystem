@@ -17,6 +17,15 @@
         />
       </el-form-item>
 
+      <el-form-item label="被红冲票号" prop="kpHcph" label-width="100px">
+        <el-input
+          v-model="queryParams.kpHcph"
+          placeholder="请输入被红冲票号"
+          clearable
+          @keyup.enter.native="handleQuery"
+        />
+      </el-form-item>
+
       <el-form-item label="开票日期">
         <el-date-picker
           v-model="dateRange"
@@ -576,6 +585,10 @@ export default {
               this.form.kpHcph == undefined)
           ) {
             this.$modal.msgError(`请输入被红冲票号`);
+            return;
+          }
+          if (this.form.kpType == 2 && this.form.kpKpje > 0) {
+            this.$modal.msgError(`红冲开票金额不能为正数～`);
             return;
           }
           if (this.form.kpId != null) {

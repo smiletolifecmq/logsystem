@@ -91,4 +91,16 @@ public class SysManagementCollectionServiceImpl implements ISysManagementCollect
     {
         return sysManagementCollectionMapper.deleteSysManagementCollectionByYsId(ysId);
     }
+
+    @Override
+    public SysManagementCollection selectSysManagementCollectionByYsFph(String ysFph)
+    {
+        return sysManagementCollectionMapper.selectSysManagementCollectionByYsFph(ysFph);
+    }
+
+    @Override
+    public int updateCollectionDzInfo(SysManagementCollection sysManagementCollection)
+    {
+        return sysManagementCollectionMapper.updateCollectionDzInfo(sysManagementCollection);
+    }
 }

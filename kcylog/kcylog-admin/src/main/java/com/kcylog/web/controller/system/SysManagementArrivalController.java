@@ -8,14 +8,17 @@ import com.kcylog.common.enums.BusinessType;
 import com.kcylog.common.utils.SecurityUtils;
 import com.kcylog.common.utils.poi.ExcelUtil;
 import com.kcylog.system.domain.SysManagementArrival;
+import com.kcylog.system.domain.SysManagementCollection;
 import com.kcylog.system.domain.SysManagementInvoicing;
 import com.kcylog.system.service.ISysManagementArrivalService;
+import com.kcylog.system.service.ISysManagementCollectionService;
 import com.kcylog.system.service.ISysManagementInvoicingService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
 import javax.servlet.http.HttpServletResponse;
+import java.math.BigDecimal;
 import java.util.List;
 
 /**
@@ -33,6 +36,9 @@ public class SysManagementArrivalController extends BaseController
 
     @Autowired
     private ISysManagementInvoicingService sysManagementInvoicingService;
+
+    @Autowired
+    private ISysManagementCollectionService sysManagementCollectionService;
 
     /**
      * 查询经营到账统计列表
@@ -88,6 +94,22 @@ public class SysManagementArrivalController extends BaseController
         SysManagementInvoicing invoicing = sysManagementInvoicingService.selectSysManagementInvoicingByKpFPH(sysManagementArrival.getDzFph().trim());
         if(invoicing == null){
             return error("新增失败，发票号:" + sysManagementArrival.getDzFph().trim() +"在开票模块中不存在，请现在开票模块中补充该票号开票记录～");
+        }
+        SysManagementCollection sysCollection = sysManagementCollectionService.selectSysManagementCollectionByYsFph(sysManagementArrival.getDzFph().trim());
+        if (sysCollection != null){
+            if (sysCollection.getYsWdzje().abs().compareTo(sysManagementArrival.getDzMoney().abs()) < 0){
+                return error("到账金额大于该票号对应开票记录的未到账金额~");
+            }
+            SysManagementCollection newCollection = new SysManagementCollection();
+            newCollection.setYsId(sysCollection.getYsId());
+            newCollection.setYsYdzje(sysCollection.getYsYdzje().add(sysManagementArrival.getDzMoney().abs()));
+            newCollection.setYsWdzje(sysCollection.getYsWdzje().subtract(sysManagementArrival.getDzMoney().abs()));
+            if (newCollection.getYsWdzje().compareTo(BigDecimal.ZERO) == 0){
+                newCollection.setYsStatus((long)2);
+            }else {
+                newCollection.setYsStatus((long)1);
+            }
+            sysManagementCollectionService.updateCollectionDzInfo(newCollection);
         }
         sysManagementArrival.setDzFph(sysManagementArrival.getDzFph().trim());
         return toAjax(sysManagementArrivalService.insertSysManagementArrival(sysManagementArrival));

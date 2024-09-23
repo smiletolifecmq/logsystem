@@ -115,6 +115,7 @@
             icon="el-icon-edit"
             @click="handleUpdate(scope.row)"
             v-hasPermi="['system:collection:edit']"
+            v-if="showButton(scope.row.ysFzr)"
             >编辑</el-button
           >
           <el-button
@@ -329,6 +330,7 @@ import {
   getCollection,
   updateCollection,
 } from "@/api/system/collection";
+import userInfo from "@/store/modules/user";
 
 export default {
   name: "Collection",
@@ -403,6 +405,9 @@ export default {
     this.getList();
   },
   methods: {
+    showButton(userName) {
+      return userName == userInfo.state.name;
+    },
     /** 查询应收账款列表 */
     getList() {
       this.loading = true;

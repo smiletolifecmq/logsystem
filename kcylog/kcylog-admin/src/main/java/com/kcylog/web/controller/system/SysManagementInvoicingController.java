@@ -7,13 +7,17 @@ import com.kcylog.common.core.page.TableDataInfo;
 import com.kcylog.common.enums.BusinessType;
 import com.kcylog.common.utils.SecurityUtils;
 import com.kcylog.common.utils.poi.ExcelUtil;
+import com.kcylog.system.domain.SysManagementCollection;
 import com.kcylog.system.domain.SysManagementInvoicing;
+import com.kcylog.system.service.ISysManagementCollectionService;
 import com.kcylog.system.service.ISysManagementInvoicingService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.access.prepost.PreAuthorize;
+import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.bind.annotation.*;
 
 import javax.servlet.http.HttpServletResponse;
+import java.math.BigDecimal;
 import java.util.List;
 
 /**
@@ -29,6 +33,8 @@ public class SysManagementInvoicingController extends BaseController
     @Autowired
     private ISysManagementInvoicingService sysManagementInvoicingService;
 
+    @Autowired
+    private ISysManagementCollectionService sysManagementCollectionService;
     /**
      * 查询经营开票统计列表
      */
@@ -77,6 +83,7 @@ public class SysManagementInvoicingController extends BaseController
     @PreAuthorize("@ss.hasPermi('system:invoicing:add')")
     @Log(title = "经营开票统计", businessType = BusinessType.INSERT)
     @PostMapping
+    @Transactional
     public AjaxResult add(@RequestBody SysManagementInvoicing sysManagementInvoicing)
     {
         sysManagementInvoicing.setKpFzr(SecurityUtils.getUsername());
@@ -87,6 +94,46 @@ public class SysManagementInvoicingController extends BaseController
         SysManagementInvoicing invoicing = sysManagementInvoicingService.selectSysManagementInvoicingByKpFPH(sysManagementInvoicing.getKpFph());
         if(invoicing != null){
             return error("新增失败，发票号:" + sysManagementInvoicing.getKpFph() +"已存在");
+        }
+        if (sysManagementInvoicing.getKpType() == 2){
+            SysManagementInvoicing invoicingHc = sysManagementInvoicingService.selectSysManagementInvoicingByKpFPH(sysManagementInvoicing.getKpHcph());
+            if(invoicingHc == null){
+                return error("新增失败，被红冲发票号:" + sysManagementInvoicing.getKpHcph() +"在开票记录中不存在，请先补充该开票信息~");
+            }
+        }
+        SysManagementCollection sysManagementCollection = sysManagementCollectionService.selectSysManagementCollectionByYsFph(sysManagementInvoicing.getKpFph());
+        if (sysManagementCollection == null && sysManagementInvoicing.getKpType() == 1){
+            // 开正常票逻辑
+            SysManagementCollection newCollection = new SysManagementCollection();
+            newCollection.setYsHtmc(sysManagementInvoicing.getKpHtmc());
+            newCollection.setYsHtbh(sysManagementInvoicing.getKpHtbh());
+            newCollection.setYsFzbm(sysManagementInvoicing.getKpFzbm());
+            newCollection.setYsFzr(sysManagementInvoicing.getKpFzr());
+            newCollection.setYsKhmc(sysManagementInvoicing.getKpKhmc());
+            newCollection.setYsKhfl(sysManagementInvoicing.getKpKhfl());
+            newCollection.setYsHtje(sysManagementInvoicing.getKpHtje());
+            newCollection.setYsKprq(sysManagementInvoicing.getKpKprq());
+            newCollection.setYsKpje(sysManagementInvoicing.getKpKpje());
+            newCollection.setYsYdzje(BigDecimal.ZERO);
+            newCollection.setYsWdzje(sysManagementInvoicing.getKpKpje());
+            newCollection.setYsFph(sysManagementInvoicing.getKpFph());
+            sysManagementCollectionService.insertSysManagementCollection(newCollection);
+        }
+
+        if (sysManagementInvoicing.getKpType() == 2){
+            SysManagementCollection sysCollection = sysManagementCollectionService.selectSysManagementCollectionByYsFph(sysManagementInvoicing.getKpHcph());
+            if (sysCollection != null){
+                if (sysCollection.getYsKpje().abs().compareTo(sysManagementInvoicing.getKpKpje().abs()) != 0){
+                    return error("红冲金额绝对值不等于被红冲的金额~");
+                }
+                // 开红冲票逻辑
+                SysManagementCollection newCollection = new SysManagementCollection();
+                newCollection.setYsId(sysCollection.getYsId());
+                newCollection.setYsYdzje(sysManagementInvoicing.getKpKpje().abs());
+                newCollection.setYsWdzje(BigDecimal.ZERO);
+                newCollection.setYsStatus((long)2);
+                sysManagementCollectionService.updateCollectionDzInfo(newCollection);
+            }
         }
         return toAjax(sysManagementInvoicingService.insertSysManagementInvoicing(sysManagementInvoicing));
     }

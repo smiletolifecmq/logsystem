@@ -44,6 +44,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
             <if test="kpFph != null  and kpFph != ''"> and kp_fph = #{kpFph}</if>
             <if test="kpType != null "> and kp_type = #{kpType}</if>
             <if test="kpFzr != null "> and kp_fzr= #{kpFzr}</if>
+            <if test="kpHcph != null "> and kp_hcph= #{kpHcph}</if>
         </where>
         order by kp_id desc
     </select>

@@ -59,4 +59,8 @@ public interface ISysManagementCollectionService
      * @return 结果
      */
     public int deleteSysManagementCollectionByYsId(Long ysId);
+
+    public SysManagementCollection selectSysManagementCollectionByYsFph(String ysFph);
+
+    public int updateCollectionDzInfo(SysManagementCollection sysManagementCollection);
 }

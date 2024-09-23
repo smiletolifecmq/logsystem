@@ -130,4 +130,19 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
             #{ysId}
         </foreach>
     </delete>
+
+    <select id="selectSysManagementCollectionByYsFph" parameterType="String" resultMap="SysManagementCollectionResult">
+        <include refid="selectSysManagementCollectionVo"/>
+        where ys_fph = #{ysFph}
+    </select>
+
+    <update id="updateCollectionDzInfo" parameterType="SysManagementCollection">
+        update sys_management_collection
+        <trim prefix="SET" suffixOverrides=",">
+            <if test="ysYdzje != null">ys_ydzje = #{ysYdzje},</if>
+            <if test="ysWdzje != null">ys_wdzje = #{ysWdzje},</if>
+            <if test="ysStatus != null">ys_status = #{ysStatus},</if>
+        </trim>
+        where ys_id = #{ysId}
+    </update>
 </mapper>
