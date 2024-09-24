@@ -142,4 +142,28 @@ public class SysManagementArrivalController extends BaseController
     {
         return getDataTable(sysManagementArrivalService.selectSysManagementArrivalByDzFph(dzFph));
     }
+
+    @PreAuthorize("@ss.hasPermi('system:arrival:list')")
+    @GetMapping("/listAll")
+    public TableDataInfo listAll(SysManagementArrival sysManagementArrival)
+    {
+        startPage();
+        List<SysManagementArrival> list = sysManagementArrivalService.selectSysManagementArrivalList(sysManagementArrival);
+        return getDataTable(list);
+    }
+
+    @PreAuthorize("@ss.hasPermi('system:arrival:export')")
+    @Log(title = "经营到账统计", businessType = BusinessType.EXPORT)
+    @PostMapping("/exportAll")
+    public void exportAll(HttpServletResponse response, SysManagementArrival sysManagementArrival)
+    {
+        List<SysManagementArrival> list = sysManagementArrivalService.selectSysManagementArrivalList(sysManagementArrival);
+        int num = 0;
+        for (SysManagementArrival obj : list){
+            num ++;
+            obj.setNum(num);
+        }
+        ExcelUtil<SysManagementArrival> util = new ExcelUtil<SysManagementArrival>(SysManagementArrival.class);
+        util.exportExcel(response, list, "经营到账统计数据");
+    }
 }

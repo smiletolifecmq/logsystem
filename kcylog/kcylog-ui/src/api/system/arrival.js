@@ -49,3 +49,11 @@ export function getInvoicingByFPH(kpFph) {
     method: 'get'
   })
 }
+
+export function listArrivalAll(query) {
+  return request({
+    url: '/system/arrival/listAll',
+    method: 'get',
+    params: query
+  })
+}

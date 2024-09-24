@@ -49,3 +49,11 @@ export function getArrivalList(dzFph) {
     method: 'get'
   })
 }
+
+export function listInvoicingAll(query) {
+  return request({
+    url: '/system/invoicing/listAll',
+    method: 'get',
+    params: query
+  })
+}

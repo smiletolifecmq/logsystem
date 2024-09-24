@@ -86,7 +86,9 @@ public class SysManagementInvoicingController extends BaseController
     @Transactional
     public AjaxResult add(@RequestBody SysManagementInvoicing sysManagementInvoicing)
     {
-        sysManagementInvoicing.setKpFzr(SecurityUtils.getUsername());
+        if (sysManagementInvoicing.getKpFzr() == null){
+            sysManagementInvoicing.setKpFzr(SecurityUtils.getUsername());
+        }
         sysManagementInvoicing.setKpFph(sysManagementInvoicing.getKpFph().trim());
         if (sysManagementInvoicing.getKpHcph() != null){
             sysManagementInvoicing.setKpHcph(sysManagementInvoicing.getKpHcph().trim());
@@ -146,6 +148,9 @@ public class SysManagementInvoicingController extends BaseController
     @PutMapping
     public AjaxResult edit(@RequestBody SysManagementInvoicing sysManagementInvoicing)
     {
+        if (sysManagementInvoicing.getKpFzr() == null){
+            sysManagementInvoicing.setKpFzr(SecurityUtils.getUsername());
+        }
         return toAjax(sysManagementInvoicingService.updateSysManagementInvoicing(sysManagementInvoicing));
     }
 
@@ -164,5 +169,29 @@ public class SysManagementInvoicingController extends BaseController
     public AjaxResult getByKpFph(@PathVariable("kpFph") String kpFph)
     {
         return success(sysManagementInvoicingService.selectSysManagementInvoicingByKpFPH(kpFph));
+    }
+
+    @PreAuthorize("@ss.hasPermi('system:invoicing:list')")
+    @GetMapping("/listAll")
+    public TableDataInfo listAll(SysManagementInvoicing sysManagementInvoicing)
+    {
+        startPage();
+        List<SysManagementInvoicing> list = sysManagementInvoicingService.selectSysManagementInvoicingList(sysManagementInvoicing);
+        return getDataTable(list);
+    }
+
+    @PreAuthorize("@ss.hasPermi('system:invoicing:export')")
+    @Log(title = "经营开票统计", businessType = BusinessType.EXPORT)
+    @PostMapping("/exportAll")
+    public void exportAll(HttpServletResponse response, SysManagementInvoicing sysManagementInvoicing)
+    {
+        List<SysManagementInvoicing> list = sysManagementInvoicingService.selectSysManagementInvoicingList(sysManagementInvoicing);
+        int num = 0;
+        for (SysManagementInvoicing obj : list){
+            num ++;
+            obj.setNum(num);
+        }
+        ExcelUtil<SysManagementInvoicing> util = new ExcelUtil<SysManagementInvoicing>(SysManagementInvoicing.class);
+        util.exportExcel(response, list, "经营开票统计数据");
     }
 }
