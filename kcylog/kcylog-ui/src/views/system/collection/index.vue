@@ -24,15 +24,6 @@
           @keyup.enter.native="handleQuery"
         />
       </el-form-item>
-      <el-form-item label="截止日期" prop="ysKprqCs" label-width="100px">
-        <el-date-picker
-          v-model="queryParams.ysKprqCs"
-          type="date"
-          placeholder="选择日期"
-          @change="handleQuery"
-        >
-        </el-date-picker>
-      </el-form-item>
       <el-form-item>
         <el-button
           type="primary"
@@ -330,6 +321,46 @@
         >
       </el-descriptions>
     </el-dialog>
+
+    <!-- 上报时间选择 -->
+    <el-dialog
+      title="时间选择"
+      :visible.sync="timeOpen"
+      width="500px"
+      append-to-body
+    >
+      <el-form
+        ref="timeForm"
+        :model="timeForm"
+        :rules="timeRules"
+        label-width="80px"
+      >
+        <el-form-item
+          label="上次次上报时间"
+          prop="ysKprqLast"
+          label-width="200px"
+        >
+          <el-date-picker
+            v-model="timeForm.ysKprqLast"
+            type="date"
+            placeholder="选择日期"
+          >
+          </el-date-picker>
+        </el-form-item>
+        <el-form-item label="本次上报时间" prop="ysKprqCs" label-width="200px">
+          <el-date-picker
+            v-model="timeForm.ysKprqCs"
+            type="date"
+            placeholder="选择日期"
+          >
+          </el-date-picker>
+        </el-form-item>
+      </el-form>
+      <div slot="footer" class="dialog-footer">
+        <el-button type="primary" @click="submitFormTime">确 定</el-button>
+        <el-button @click="cancel">取 消</el-button>
+      </div>
+    </el-dialog>
   </div>
 </template>
 
@@ -345,6 +376,8 @@ export default {
   name: "Collection",
   data() {
     return {
+      timeOpen: false,
+      timeForm: {},
       ysopen: false,
       // 遮罩层
       loading: true,
@@ -374,6 +407,15 @@ export default {
       },
       // 表单参数
       form: {},
+      timeRules: {
+        ysKprqCs: [
+          { required: true, message: "请选择本次上报时间", trigger: "blur" },
+          { validator: this.validateDate, trigger: "change" },
+        ],
+        ysKprqLast: [
+          { required: true, message: "请选择上次上报时间", trigger: "blur" },
+        ],
+      },
       // 表单校验
       rules: {
         ysFzr: [{ required: true, message: "负责人不能为空", trigger: "blur" }],
@@ -394,20 +436,24 @@ export default {
     this.getList();
   },
   methods: {
+    validateDate(rule, value, callback) {
+      if (!value) {
+        return callback(new Error("请选择本次上报时间"));
+      }
+      const lastDate = new Date(this.timeForm.ysKprqLast);
+      const currentDate = new Date(value);
+      if (currentDate <= lastDate) {
+        callback(new Error("本次上报时间必须大于上次上报时间"));
+      } else {
+        callback();
+      }
+    },
     showButton(userName) {
       return userName == userInfo.state.name;
     },
     /** 查询应收账款列表 */
     getList() {
       this.loading = true;
-      if (this.queryParams.ysKprqCs) {
-        // 将日期对象转换为 yyyy-mm 格式的字符串
-        const date = new Date(this.queryParams.ysKprqCs);
-        const year = date.getFullYear();
-        const month = String(date.getMonth() + 1).padStart(2, "0"); // 月份从 0 开始
-        const day = String(date.getDate()).padStart(2, "0"); //
-        this.queryParams.ysKprqCs = `${year}-${month}-${day}`;
-      }
       listCollection(this.queryParams).then((response) => {
         this.collectionList = response.rows;
         this.total = response.total;
@@ -417,10 +463,15 @@ export default {
     // 取消按钮
     cancel() {
       this.open = false;
+      this.timeOpen = false;
       this.reset();
     },
     // 表单重置
     reset() {
+      this.timeForm = {
+        ysKprqCs: null,
+        ysKprqLast: null,
+      };
       this.form = {
         ysId: null,
         ysHtmc: null,
@@ -503,19 +554,44 @@ export default {
         }
       });
     },
+    submitFormTime() {
+      this.$refs["timeForm"].validate((valid) => {
+        if (valid) {
+          if (this.timeForm.ysKprqCs) {
+            // 将日期对象转换为 yyyy-mm 格式的字符串
+            const date = new Date(this.timeForm.ysKprqCs);
+            const year = date.getFullYear();
+            const month = String(date.getMonth() + 1).padStart(2, "0"); // 月份从 0 开始
+            const day = String(date.getDate()).padStart(2, "0"); //
+            this.queryParams.ysKprqCs = `${year}-${month}-${day}`;
+          }
+          if (this.timeForm.ysKprqLast) {
+            // 将日期对象转换为 yyyy-mm 格式的字符串
+            const date = new Date(this.timeForm.ysKprqLast);
+            const year = date.getFullYear();
+            const month = String(date.getMonth() + 1).padStart(2, "0"); // 月份从 0 开始
+            const day = String(date.getDate()).padStart(2, "0"); //
+            this.queryParams.ysKprqLast = `${year}-${month}-${day}`;
+          }
+          this.download(
+            "system/collection/export",
+            {
+              ...this.queryParams,
+            },
+            "应收账款清单_" + this.queryParams.ysKprqCs + ".xlsx"
+          );
+          this.cancel();
+        }
+      });
+    },
     /** 导出按钮操作 */
     handleExport() {
-      if (!this.queryParams.ysKprqCs) {
-        this.$modal.msgError(`请选择截止日期`);
-        return;
-      }
-      this.download(
-        "system/collection/export",
-        {
-          ...this.queryParams,
-        },
-        "应收账款清单_" + this.queryParams.ysKprqCs + ".xlsx"
-      );
+      this.timeOpen = true;
+      this.timeForm = {};
+      // if (!this.queryParams.ysKprqCs) {
+      //   this.$modal.msgError(`请选择截止日期`);
+      //   return;
+      // }
     },
   },
 };

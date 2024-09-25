@@ -118,6 +118,16 @@ public class SysManagementCollection extends BaseEntity
 
     private String ysKprqCs;
 
+    private String ysKprqLast;
+
+    public String getYsKprqLast() {
+        return ysKprqLast;
+    }
+
+    public void setYsKprqLast(String ysKprqLast) {
+        this.ysKprqLast = ysKprqLast;
+    }
+
     public String getYsKprqCs() {
         return ysKprqCs;
     }

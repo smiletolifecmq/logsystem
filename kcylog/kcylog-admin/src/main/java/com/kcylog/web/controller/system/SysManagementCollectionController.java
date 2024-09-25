@@ -17,7 +17,6 @@ import java.time.LocalDate;
 import java.time.Period;
 import java.time.ZoneId;
 import java.time.format.DateTimeFormatter;
-import java.time.temporal.TemporalAdjusters;
 import java.util.*;
 
 /**
@@ -79,10 +78,8 @@ public class SysManagementCollectionController extends BaseController
         if (sysManagementCollection.getYsKprqCs() == null){
             return error("未选择截止日期");
         }
-        LocalDate lastDate = LocalDate.parse(sysManagementCollection.getYsKprqCs());
-        // 获取上个月最后一天
-        LocalDate lastDayOfLastMonth = lastDate.minusMonths(1)
-                .with(TemporalAdjusters.lastDayOfMonth());
+        // 获取上次上报时间
+        LocalDate lastDayOfLastMonth = LocalDate.parse(sysManagementCollection.getYsKprqLast());
 
         List<SysManagementCollection> list = sysManagementCollectionService.selectSysManagementCollectionList(sysManagementCollection);
         List<SysManagementCollection> withinOneYearList = new ArrayList<>();
