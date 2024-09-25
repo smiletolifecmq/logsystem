@@ -24,11 +24,11 @@
           @keyup.enter.native="handleQuery"
         />
       </el-form-item>
-      <el-form-item label="开票截止月份" prop="ysKprqCs" label-width="100px">
+      <el-form-item label="截止日期" prop="ysKprqCs" label-width="100px">
         <el-date-picker
           v-model="queryParams.ysKprqCs"
-          type="month"
-          placeholder="选择月"
+          type="date"
+          placeholder="选择日期"
           @change="handleQuery"
         >
         </el-date-picker>
@@ -56,7 +56,7 @@
           size="mini"
           @click="handleExport"
           v-hasPermi="['system:collection:export']"
-          >导出</el-button
+          >导出总表、1年内、1-3年、3年以上清单</el-button
         >
       </el-col>
       <right-toolbar
@@ -405,7 +405,8 @@ export default {
         const date = new Date(this.queryParams.ysKprqCs);
         const year = date.getFullYear();
         const month = String(date.getMonth() + 1).padStart(2, "0"); // 月份从 0 开始
-        this.queryParams.ysKprqCs = `${year}-${month}-01`;
+        const day = String(date.getDate()).padStart(2, "0"); //
+        this.queryParams.ysKprqCs = `${year}-${month}-${day}`;
       }
       listCollection(this.queryParams).then((response) => {
         this.collectionList = response.rows;
@@ -505,7 +506,7 @@ export default {
     /** 导出按钮操作 */
     handleExport() {
       if (!this.queryParams.ysKprqCs) {
-        this.$modal.msgError(`请选择开票截止月份`);
+        this.$modal.msgError(`请选择截止日期`);
         return;
       }
       this.download(
@@ -513,7 +514,7 @@ export default {
         {
           ...this.queryParams,
         },
-        `应收账款_${new Date().getTime()}.xlsx`
+        "应收账款清单_" + this.queryParams.ysKprqCs + ".xlsx"
       );
     },
   },

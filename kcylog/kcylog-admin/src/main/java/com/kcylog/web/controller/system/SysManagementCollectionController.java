@@ -5,9 +5,9 @@ import com.kcylog.common.core.controller.BaseController;
 import com.kcylog.common.core.domain.AjaxResult;
 import com.kcylog.common.core.page.TableDataInfo;
 import com.kcylog.common.enums.BusinessType;
-import com.kcylog.common.utils.poi.ExcelUtil;
 import com.kcylog.system.domain.SysManagementCollection;
 import com.kcylog.system.service.ISysManagementCollectionService;
+import com.kcylog.web.controller.common.ExcelManySheetUtil;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
@@ -16,8 +16,8 @@ import javax.servlet.http.HttpServletResponse;
 import java.time.LocalDate;
 import java.time.Period;
 import java.time.ZoneId;
-import java.util.Date;
-import java.util.List;
+import java.time.format.DateTimeFormatter;
+import java.util.*;
 
 /**
  * 应收账款Controller
@@ -47,6 +47,9 @@ public class SysManagementCollectionController extends BaseController
             LocalDate ysKprqLocalDate = ysKprq.toInstant().atZone(ZoneId.systemDefault()).toLocalDate();
             // 获取当前日期
             LocalDate currentDate = LocalDate.now();
+            if (sysManagementCollection.getYsKprqCs() != null){
+                currentDate = LocalDate.parse(sysManagementCollection.getYsKprqCs());
+            }
             // 计算两个日期之间的差异
             Period period = Period.between(ysKprqLocalDate, currentDate);
             // 获取年份差异
@@ -72,27 +75,45 @@ public class SysManagementCollectionController extends BaseController
     public void export(HttpServletResponse response, SysManagementCollection sysManagementCollection)
     {
         List<SysManagementCollection> list = sysManagementCollectionService.selectSysManagementCollectionList(sysManagementCollection);
-        for (SysManagementCollection obj : list){
+        List<SysManagementCollection> withinOneYearList = new ArrayList<>();
+        List<SysManagementCollection> oneToThreeYearList = new ArrayList<>();
+        List<SysManagementCollection> overThreeYearList = new ArrayList<>();
+
+        for (SysManagementCollection obj : list) {
             Date ysKprq = obj.getYsKprq();
-            // 将 Date 转换为 LocalDate
             LocalDate ysKprqLocalDate = ysKprq.toInstant().atZone(ZoneId.systemDefault()).toLocalDate();
-            // 获取当前日期
             LocalDate currentDate = LocalDate.now();
-            // 计算两个日期之间的差异
+            if (sysManagementCollection.getYsKprqCs() != null){
+                currentDate = LocalDate.parse(sysManagementCollection.getYsKprqCs());
+            }
             Period period = Period.between(ysKprqLocalDate, currentDate);
-            // 获取年份差异
             int years = period.getYears();
-            // 判断时间段
+
             if (years < 1) {
                 obj.setYsZl("1年以内");
+                withinOneYearList.add(obj);
             } else if (years >= 1 && years < 3) {
                 obj.setYsZl("1-3年");
+                oneToThreeYearList.add(obj);
             } else {
                 obj.setYsZl("3年以上");
+                overThreeYearList.add(obj);
             }
         }
-        ExcelUtil<SysManagementCollection> util = new ExcelUtil<SysManagementCollection>(SysManagementCollection.class);
-        util.exportExcel(response, list, "总表");
+        // 定义输出格式
+        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy年M月d日");
+        // 格式化为指定字符串
+        LocalDate currentDate = LocalDate.parse(sysManagementCollection.getYsKprqCs());
+        String formattedDate = currentDate.format(formatter);
+
+        Map<String, List<SysManagementCollection>> map = new LinkedHashMap<>();
+        map.put("总表", list);
+        map.put("1年内清单", withinOneYearList);
+        map.put("1年至3年清单", oneToThreeYearList);
+        map.put("3年以上清单", overThreeYearList);
+
+        ExcelManySheetUtil<SysManagementCollection> util = new ExcelManySheetUtil<>(SysManagementCollection.class);
+        util.exportExcel(response, map,"截止"+formattedDate+"应收账款");
     }
 
     /**
@@ -150,6 +171,9 @@ public class SysManagementCollectionController extends BaseController
             LocalDate ysKprqLocalDate = ysKprq.toInstant().atZone(ZoneId.systemDefault()).toLocalDate();
             // 获取当前日期
             LocalDate currentDate = LocalDate.now();
+            if (sysManagementCollection.getYsKprqCs() != null){
+                currentDate = LocalDate.parse(sysManagementCollection.getYsKprqCs());
+            }
             // 计算两个日期之间的差异
             Period period = Period.between(ysKprqLocalDate, currentDate);
             // 获取年份差异
