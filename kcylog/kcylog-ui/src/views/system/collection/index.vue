@@ -56,7 +56,7 @@
           size="mini"
           @click="handleExport"
           v-hasPermi="['system:collection:export']"
-          >导出总表、1年内、1-3年、3年以上清单</el-button
+          >导出总表、1年内、1-3年、3年以上、本上报周期新增三年以上清单</el-button
         >
       </el-col>
       <right-toolbar

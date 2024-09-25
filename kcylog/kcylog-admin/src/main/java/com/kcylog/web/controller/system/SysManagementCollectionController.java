@@ -17,6 +17,7 @@ import java.time.LocalDate;
 import java.time.Period;
 import java.time.ZoneId;
 import java.time.format.DateTimeFormatter;
+import java.time.temporal.TemporalAdjusters;
 import java.util.*;
 
 /**
@@ -68,27 +69,33 @@ public class SysManagementCollectionController extends BaseController
 
     /**
      * 导出应收账款列表
+     * @return
      */
     @PreAuthorize("@ss.hasPermi('system:collection:export')")
     @Log(title = "应收账款", businessType = BusinessType.EXPORT)
     @PostMapping("/export")
-    public void export(HttpServletResponse response, SysManagementCollection sysManagementCollection)
+    public AjaxResult export(HttpServletResponse response, SysManagementCollection sysManagementCollection)
     {
+        if (sysManagementCollection.getYsKprqCs() == null){
+            return error("未选择截止日期");
+        }
+        LocalDate lastDate = LocalDate.parse(sysManagementCollection.getYsKprqCs());
+        // 获取上个月最后一天
+        LocalDate lastDayOfLastMonth = lastDate.minusMonths(1)
+                .with(TemporalAdjusters.lastDayOfMonth());
+
         List<SysManagementCollection> list = sysManagementCollectionService.selectSysManagementCollectionList(sysManagementCollection);
         List<SysManagementCollection> withinOneYearList = new ArrayList<>();
         List<SysManagementCollection> oneToThreeYearList = new ArrayList<>();
         List<SysManagementCollection> overThreeYearList = new ArrayList<>();
+        List<SysManagementCollection> toThreeYearList = new ArrayList<>();
 
         for (SysManagementCollection obj : list) {
             Date ysKprq = obj.getYsKprq();
             LocalDate ysKprqLocalDate = ysKprq.toInstant().atZone(ZoneId.systemDefault()).toLocalDate();
-            LocalDate currentDate = LocalDate.now();
-            if (sysManagementCollection.getYsKprqCs() != null){
-                currentDate = LocalDate.parse(sysManagementCollection.getYsKprqCs());
-            }
+            LocalDate currentDate = LocalDate.parse(sysManagementCollection.getYsKprqCs());
             Period period = Period.between(ysKprqLocalDate, currentDate);
             int years = period.getYears();
-
             if (years < 1) {
                 obj.setYsZl("1年以内");
                 withinOneYearList.add(obj);
@@ -99,6 +106,13 @@ public class SysManagementCollectionController extends BaseController
                 obj.setYsZl("3年以上");
                 overThreeYearList.add(obj);
             }
+            Period lastPeriod = Period.between(ysKprqLocalDate, lastDayOfLastMonth);
+            int lastYears = lastPeriod.getYears();
+
+            if (years >= 3 && lastYears < 3){
+                toThreeYearList.add(obj);
+            }
+
         }
         // 定义输出格式
         DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy年M月d日");
@@ -111,9 +125,11 @@ public class SysManagementCollectionController extends BaseController
         map.put("1年内清单", withinOneYearList);
         map.put("1年至3年清单", oneToThreeYearList);
         map.put("3年以上清单", overThreeYearList);
+        map.put("本上报周期新增的3年期以上清单", toThreeYearList);
 
         ExcelManySheetUtil<SysManagementCollection> util = new ExcelManySheetUtil<>(SysManagementCollection.class);
-        util.exportExcel(response, map,"截止"+formattedDate+"应收账款");
+        util.exportExcel(response, map,"截止"+formattedDate+"应收账款（单位：元）");
+        return null;
     }
 
     /**
