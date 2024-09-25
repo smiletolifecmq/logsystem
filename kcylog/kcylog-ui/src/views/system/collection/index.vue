@@ -24,6 +24,15 @@
           @keyup.enter.native="handleQuery"
         />
       </el-form-item>
+      <el-form-item label="开票截止月份" prop="ysKprqCs" label-width="100px">
+        <el-date-picker
+          v-model="queryParams.ysKprqCs"
+          type="month"
+          placeholder="选择月"
+          @change="handleQuery"
+        >
+        </el-date-picker>
+      </el-form-item>
       <el-form-item>
         <el-button
           type="primary"
@@ -359,29 +368,9 @@ export default {
       queryParams: {
         pageNum: 1,
         pageSize: 10,
-        ysHtmc: null,
-        ysHtbh: null,
-        ysFzbm: null,
         ysFzr: null,
-        ysKhmc: null,
-        ysKhfl: null,
-        ysHtje: null,
-        ysKprq: null,
-        ysKpje: null,
-        ysYdzje: null,
-        ysWdzje: null,
-        ysFhlx: null,
-        ysFhsj: null,
-        ysCs: null,
-        ysBz: null,
-        ysZjly: null,
+        ysKprqCs: null,
         ysFph: null,
-        ysGzqk: null,
-        ysZxqk: null,
-        ysHtrq: null,
-        ysSsdqsj: null,
-        ysIssq: null,
-        ysStatus: null,
       },
       // 表单参数
       form: {},
@@ -411,6 +400,13 @@ export default {
     /** 查询应收账款列表 */
     getList() {
       this.loading = true;
+      if (this.queryParams.ysKprqCs) {
+        // 将日期对象转换为 yyyy-mm 格式的字符串
+        const date = new Date(this.queryParams.ysKprqCs);
+        const year = date.getFullYear();
+        const month = String(date.getMonth() + 1).padStart(2, "0"); // 月份从 0 开始
+        this.queryParams.ysKprqCs = `${year}-${month}-01`;
+      }
       listCollection(this.queryParams).then((response) => {
         this.collectionList = response.rows;
         this.total = response.total;
@@ -508,6 +504,10 @@ export default {
     },
     /** 导出按钮操作 */
     handleExport() {
+      if (!this.queryParams.ysKprqCs) {
+        this.$modal.msgError(`请选择开票截止月份`);
+        return;
+      }
       this.download(
         "system/collection/export",
         {

@@ -92,7 +92,7 @@ public class SysManagementCollectionController extends BaseController
             }
         }
         ExcelUtil<SysManagementCollection> util = new ExcelUtil<SysManagementCollection>(SysManagementCollection.class);
-        util.exportExcel(response, list, "应收账款数据");
+        util.exportExcel(response, list, "总表");
     }
 
     /**

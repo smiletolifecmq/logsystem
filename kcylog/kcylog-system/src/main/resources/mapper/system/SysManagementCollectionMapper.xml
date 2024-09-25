@@ -38,6 +38,9 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
     <select id="selectSysManagementCollectionList" parameterType="SysManagementCollection" resultMap="SysManagementCollectionResult">
         <include refid="selectSysManagementCollectionVo"/>
         <where>
+            <if test="ysKprqCs != null and ysKprqCs != ''"><!-- 开始时间检索 -->
+                AND date_format(ys_kprq,'%y%m') &lt;= date_format(#{ysKprqCs},'%y%m')
+            </if>
             <if test="ysFzr != null  and ysFzr != ''"> and ys_fzr = #{ysFzr}</if>
             <if test="ysFph != null  and ysFph != ''"> and ys_fph = #{ysFph}</if>
             and ys_status = 1
