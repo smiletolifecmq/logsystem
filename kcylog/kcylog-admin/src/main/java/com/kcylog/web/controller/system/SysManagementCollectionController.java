@@ -5,6 +5,7 @@ import com.kcylog.common.core.controller.BaseController;
 import com.kcylog.common.core.domain.AjaxResult;
 import com.kcylog.common.core.page.TableDataInfo;
 import com.kcylog.common.enums.BusinessType;
+import com.kcylog.system.common.Fhtj;
 import com.kcylog.system.domain.SysManagementCollection;
 import com.kcylog.system.service.ISysManagementCollectionService;
 import com.kcylog.web.controller.common.ExcelManySheetUtil;
@@ -201,5 +202,83 @@ public class SysManagementCollectionController extends BaseController
             }
         }
         return getDataTable(list);
+    }
+
+    @GetMapping(value = "/exportCs")
+    public AjaxResult exportCs(SysManagementCollection sysManagementCollection)
+    {
+        if (sysManagementCollection.getYsKprqCs() == null){
+            return error("未选择上报日期");
+        }
+        // 获取本月
+        LocalDate currentDate = LocalDate.parse(sysManagementCollection.getYsKprqCs());
+        LocalDate firstDayOfMonth = currentDate.withDayOfMonth(1);
+        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd");
+        String formattedDate = firstDayOfMonth.format(formatter);
+        sysManagementCollection.setYsKprqLast(formattedDate);
+        Fhtj fhtj = new Fhtj();
+        int bycsh = 0;
+        int bylsh = 0;
+        int byqs = 0;
+        int zgcsh = 0;
+        int zglsh = 0;
+        int gzqs = 0;
+        int snys = 0;
+        int snqs = 0;
+        List<SysManagementCollection> listForThisMonth = sysManagementCollectionService.selectSysManagementCollectionThisMonth(sysManagementCollection);
+        for (SysManagementCollection obj : listForThisMonth){
+            if (obj.getYsFhlx() != null){
+                int count1 = countOccurrences(obj.getYsFhlx(), "催款函");
+                int count2 = countOccurrences(obj.getYsFhlx(), "律师函");
+                int count3 = countOccurrences(obj.getYsFhlx(), "起诉");
+                bycsh = bycsh + count1;
+                bylsh = bylsh + count2;
+                byqs = byqs + count3;
+            }
+        }
+        fhtj.setBycsh(bycsh);
+        fhtj.setBylsh(bylsh);
+        fhtj.setByqs(byqs);
+        // 获取全部
+        List<SysManagementCollection> list = sysManagementCollectionService.selectSysManagementCollectionList(sysManagementCollection);
+        for (SysManagementCollection obj : list) {
+            Date ysKprq = obj.getYsKprq();
+            LocalDate ysKprqLocalDate = ysKprq.toInstant().atZone(ZoneId.systemDefault()).toLocalDate();
+            Period period = Period.between(ysKprqLocalDate, currentDate);
+            int years = period.getYears();
+            if (obj.getYsFhlx() != null){
+                int count1 = countOccurrences(obj.getYsFhlx(), "催款函");
+                int count2 = countOccurrences(obj.getYsFhlx(), "律师函");
+                int count3 = countOccurrences(obj.getYsFhlx(), "起诉");
+                zgcsh = zgcsh + count1;
+                zglsh = zglsh + count2;
+                gzqs = gzqs + count3;
+            }
+            if (years >= 3) {
+                snys ++;
+                if (obj.getYsFhlx() != null && !Objects.equals(obj.getYsFhlx(), "")){
+                    snqs ++;
+                }
+            }
+
+        }
+        fhtj.setZgcsh(zgcsh);
+        fhtj.setZglsh(zglsh);
+        fhtj.setGzqs(gzqs);
+        fhtj.setSnys(snys);
+        fhtj.setSnqs(snqs);
+        return success(fhtj);
+    }
+
+    public static int countOccurrences(String text, String substring) {
+        int count = 0;
+        int index = 0;
+
+        while ((index = text.indexOf(substring, index)) != -1) {
+            count++;
+            index += substring.length(); // 移动到下一个位置
+        }
+
+        return count;
     }
 }

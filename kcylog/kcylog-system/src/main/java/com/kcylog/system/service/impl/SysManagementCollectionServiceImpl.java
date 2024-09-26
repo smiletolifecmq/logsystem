@@ -109,4 +109,10 @@ public class SysManagementCollectionServiceImpl implements ISysManagementCollect
     {
         return sysManagementCollectionMapper.selectSysManagementCollectionListYdz(sysManagementCollection);
     }
+
+    @Override
+    public List<SysManagementCollection> selectSysManagementCollectionThisMonth(SysManagementCollection sysManagementCollection)
+    {
+        return sysManagementCollectionMapper.selectSysManagementCollectionThisMonth(sysManagementCollection);
+    }
 }

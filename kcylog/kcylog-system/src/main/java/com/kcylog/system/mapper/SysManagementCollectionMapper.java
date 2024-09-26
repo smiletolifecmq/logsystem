@@ -65,4 +65,6 @@ public interface SysManagementCollectionMapper
     public int updateCollectionDzInfo(SysManagementCollection sysManagementCollection);
 
     public List<SysManagementCollection> selectSysManagementCollectionListYdz(SysManagementCollection sysManagementCollection);
+
+    public List<SysManagementCollection> selectSysManagementCollectionThisMonth(SysManagementCollection sysManagementCollection);
 }

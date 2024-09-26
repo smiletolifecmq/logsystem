@@ -50,3 +50,11 @@ export function listCollectionYdz(query) {
     params: query
   })
 }
+
+export function exportCs(query) {
+  return request({
+    url: '/system/collection/exportCs',
+    method: 'get',
+    params: query
+  })
+}

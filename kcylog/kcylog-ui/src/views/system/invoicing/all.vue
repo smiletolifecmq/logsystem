@@ -593,6 +593,15 @@ export default {
             this.$modal.msgError(`请输入被红冲票号`);
             return;
           }
+          if (
+            this.form.kpType == 2 &&
+            (this.form.kpYfpsj == "" ||
+              this.form.kpYfpsj == null ||
+              this.form.kpYfpsj == undefined)
+          ) {
+            this.$modal.msgError(`请输入原发票开票时间`);
+            return;
+          }
           if (this.form.kpType == 2 && this.form.kpKpje > 0) {
             this.$modal.msgError(`红冲开票金额不能为正数～`);
             return;

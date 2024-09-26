@@ -50,6 +50,17 @@
           >导出总表、1年内、1-3年、3年以上、本上报周期新增三年以上清单</el-button
         >
       </el-col>
+      <el-col :span="1.5">
+        <el-button
+          type="primary"
+          plain
+          icon="el-icon-download"
+          size="mini"
+          @click="handleExportCstj"
+          v-hasPermi="['system:collection:cstj']"
+          >导出催收发函统计表</el-button
+        >
+      </el-col>
       <right-toolbar
         :showSearch.sync="showSearch"
         @queryTable="getList"
@@ -336,7 +347,7 @@
         label-width="80px"
       >
         <el-form-item
-          label="上次次上报时间"
+          label="上次上报时间"
           prop="ysKprqLast"
           label-width="200px"
         >
@@ -361,6 +372,33 @@
         <el-button @click="cancel">取 消</el-button>
       </div>
     </el-dialog>
+
+    <el-dialog
+      title="时间选择"
+      :visible.sync="csTimeOpen"
+      width="500px"
+      append-to-body
+    >
+      <el-form
+        ref="csTimeForm"
+        :model="csTimeForm"
+        :rules="csTimeRules"
+        label-width="80px"
+      >
+        <el-form-item label="本次上报时间" prop="ysKprqCs" label-width="200px">
+          <el-date-picker
+            v-model="csTimeForm.ysKprqCs"
+            type="date"
+            placeholder="选择日期"
+          >
+          </el-date-picker>
+        </el-form-item>
+      </el-form>
+      <div slot="footer" class="dialog-footer">
+        <el-button type="primary" @click="submitFormCS">确 定</el-button>
+        <el-button @click="cancel">取 消</el-button>
+      </div>
+    </el-dialog>
   </div>
 </template>
 
@@ -369,13 +407,17 @@ import {
   listCollection,
   getCollection,
   updateCollection,
+  exportCs,
 } from "@/api/system/collection";
 import userInfo from "@/store/modules/user";
+import ExcelJS from "exceljs";
 
 export default {
   name: "Collection",
   data() {
     return {
+      csTimeForm: {},
+      csTimeOpen: false,
       timeOpen: false,
       timeForm: {},
       ysopen: false,
@@ -414,6 +456,11 @@ export default {
         ],
         ysKprqLast: [
           { required: true, message: "请选择上次上报时间", trigger: "blur" },
+        ],
+      },
+      csTimeRules: {
+        ysKprqCs: [
+          { required: true, message: "请选择本次上报时间", trigger: "blur" },
         ],
       },
       // 表单校验
@@ -464,10 +511,14 @@ export default {
     cancel() {
       this.open = false;
       this.timeOpen = false;
+      this.csTimeOpen = false;
       this.reset();
     },
     // 表单重置
     reset() {
+      this.csTimeForm = {
+        ysKprqCs: null,
+      };
       this.timeForm = {
         ysKprqCs: null,
         ysKprqLast: null,
@@ -592,6 +643,78 @@ export default {
       //   this.$modal.msgError(`请选择截止日期`);
       //   return;
       // }
+    },
+    handleExportCstj() {
+      this.csTimeOpen = true;
+      this.csTimeForm = {};
+    },
+    submitFormCS() {
+      this.$refs["csTimeForm"].validate((valid) => {
+        if (valid) {
+          var dateRq = "";
+          if (this.csTimeForm.ysKprqCs) {
+            // 将日期对象转换为 yyyy-mm 格式的字符串
+            const date = new Date(this.csTimeForm.ysKprqCs);
+            const year = date.getFullYear();
+            const month = String(date.getMonth() + 1).padStart(2, "0"); // 月份从 0 开始
+            const day = String(date.getDate()).padStart(2, "0"); //
+            this.queryParams.ysKprqCs = `${year}-${month}-${day}`;
+            dateRq = `${year}年${month}月${day}日`;
+          }
+
+          exportCs(this.queryParams).then((responseData) => {
+            fetch("/csfh.xlsx")
+              .then((response) => {
+                if (!response.ok)
+                  throw new Error("Network response was not ok");
+                return response.arrayBuffer();
+              })
+              .then((data) => {
+                const workbook = new ExcelJS.Workbook();
+                return workbook.xlsx.load(data);
+              })
+              .then((workbook) => {
+                const sheet = workbook.getWorksheet("催收发函统计表");
+
+                // 替换的对象
+                responseData.data.tjrq = dateRq;
+                const dataToReplace = responseData.data;
+
+                // 替换占位符
+                sheet.eachRow((row) => {
+                  row.eachCell((cell) => {
+                    if (typeof cell.value === "string") {
+                      for (const key in dataToReplace) {
+                        cell.value = cell.value.replace(
+                          new RegExp(`{${key}}`, "g"),
+                          dataToReplace[key]
+                        );
+                      }
+                    }
+                  });
+                });
+
+                // 导出修改后的文件
+                return workbook.xlsx.writeBuffer();
+              })
+              .then((buffer) => {
+                const blob = new Blob([buffer], {
+                  type: "application/octet-stream",
+                });
+                const url = window.URL.createObjectURL(blob);
+                const a = document.createElement("a");
+                a.href = url;
+                a.download = "催收发函统计表_" + dateRq + ".xlsx";
+                document.body.appendChild(a);
+                a.click();
+                a.remove();
+              })
+              .catch((error) => {
+                console.error("Error loading the Excel file:", error);
+              });
+          });
+        }
+      });
     },
   },
 };
