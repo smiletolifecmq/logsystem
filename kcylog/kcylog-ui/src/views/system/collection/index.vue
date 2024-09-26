@@ -156,6 +156,17 @@
       append-to-body
     >
       <el-form ref="form" :model="form" :rules="rules" label-width="80px">
+        <el-form-item label="是否坏账" prop="ysIshz" label-width="200px">
+          <el-select v-model="form.ysIshz" placeholder="请选择">
+            <el-option
+              v-for="item in ysIshzs"
+              :key="item.value"
+              :label="item.label"
+              :value="item.value"
+            >
+            </el-option>
+          </el-select>
+        </el-form-item>
         <el-form-item
           label="已发送催款函/请款函"
           prop="ysFhlx"
@@ -355,6 +366,7 @@
             v-model="timeForm.ysKprqLast"
             type="date"
             placeholder="选择日期"
+            :picker-options="pickerOptions"
           >
           </el-date-picker>
         </el-form-item>
@@ -390,6 +402,7 @@
             v-model="csTimeForm.ysKprqCs"
             type="date"
             placeholder="选择日期"
+            :picker-options="pickerOptionsCs"
           >
           </el-date-picker>
         </el-form-item>
@@ -416,6 +429,54 @@ export default {
   name: "Collection",
   data() {
     return {
+      pickerOptionsCs: {
+        disabledDate: (date) => {
+          const currentDate = new Date();
+          const startOfThisMonth = new Date(
+            currentDate.getFullYear(),
+            currentDate.getMonth(),
+            1
+          ); // 本月第一天
+          const endOfThisMonth = new Date(
+            currentDate.getFullYear(),
+            currentDate.getMonth() + 1,
+            0
+          ); // 本月最后一天
+
+          // 禁用不在本月和上个月范围内的日期
+          return date < startOfThisMonth || date > endOfThisMonth;
+        },
+      },
+      pickerOptions: {
+        disabledDate: (date) => {
+          const currentDate = new Date();
+
+          const endOfThisMonth = new Date(
+            currentDate.getFullYear(),
+            currentDate.getMonth() + 1,
+            0
+          );
+
+          const startOfLastMonth = new Date(
+            currentDate.getFullYear(),
+            currentDate.getMonth() - 1,
+            1
+          );
+
+          // 禁用不在本月和上个月范围内的日期
+          return date < startOfLastMonth || date > endOfThisMonth;
+        },
+      },
+      ysIshzs: [
+        {
+          value: 0,
+          label: "否",
+        },
+        {
+          value: 1,
+          label: "是",
+        },
+      ],
       csTimeForm: {},
       csTimeOpen: false,
       timeOpen: false,

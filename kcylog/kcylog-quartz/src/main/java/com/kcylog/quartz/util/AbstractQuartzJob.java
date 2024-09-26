@@ -1,11 +1,5 @@
 package com.kcylog.quartz.util;
 
-import java.util.Date;
-import org.quartz.Job;
-import org.quartz.JobExecutionContext;
-import org.quartz.JobExecutionException;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 import com.kcylog.common.constant.Constants;
 import com.kcylog.common.constant.ScheduleConstants;
 import com.kcylog.common.utils.ExceptionUtil;
@@ -15,6 +9,13 @@ import com.kcylog.common.utils.spring.SpringUtils;
 import com.kcylog.quartz.domain.SysJob;
 import com.kcylog.quartz.domain.SysJobLog;
 import com.kcylog.quartz.service.ISysJobLogService;
+import org.quartz.Job;
+import org.quartz.JobExecutionContext;
+import org.quartz.JobExecutionException;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
+import java.util.Date;
 
 /**
  * 抽象quartz调用
@@ -77,10 +78,10 @@ public abstract class AbstractQuartzJob implements Job
         sysJobLog.setJobName(sysJob.getJobName());
         sysJobLog.setJobGroup(sysJob.getJobGroup());
         sysJobLog.setInvokeTarget(sysJob.getInvokeTarget());
-        sysJobLog.setStartTime(startTime);
+//        sysJobLog.setStartTime(startTime);
         sysJobLog.setStopTime(new Date());
-        long runMs = sysJobLog.getStopTime().getTime() - sysJobLog.getStartTime().getTime();
-        sysJobLog.setJobMessage(sysJobLog.getJobName() + " 总共耗时：" + runMs + "毫秒");
+//        long runMs = sysJobLog.getStopTime().getTime() - sysJobLog.getStartTime().getTime();
+//        sysJobLog.setJobMessage(sysJobLog.getJobName() + " 总共耗时：" + runMs + "毫秒");
         if (e != null)
         {
             sysJobLog.setStatus(Constants.FAIL);
