@@ -1,0 +1,121 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.kcylog.system.mapper.SysManagementWkparrivalMapper">
+    
+    <resultMap type="SysManagementWkparrival" id="SysManagementWkparrivalResult">
+        <result property="dzId"    column="dz_id"    />
+        <result property="dzKhmc"    column="dz_khmc"    />
+        <result property="dzHtbh"    column="dz_htbh"    />
+        <result property="dzHtje"    column="dz_htje"    />
+        <result property="dzYwxz"    column="dz_ywxz"    />
+        <result property="dzFzr"    column="dz_fzr"    />
+        <result property="dzKprq"    column="dz_kprq"    />
+        <result property="dzKpje"    column="dz_kpje"    />
+        <result property="dzFph"    column="dz_fph"    />
+        <result property="dzMoney"    column="dz_money"    />
+        <result property="dzRq"    column="dz_rq"    />
+        <result property="dzType"    column="dz_type"    />
+        <result property="dzIsZx"    column="dz_is_zx"    />
+        <result property="dzXsf"    column="dz_xsf"    />
+        <result property="dzBz"    column="dz_bz"    />
+    </resultMap>
+
+    <sql id="selectSysManagementWkparrivalVo">
+        select dz_id, dz_khmc, dz_htbh, dz_htje, dz_ywxz, dz_fzr, dz_kprq, dz_kpje, dz_fph, dz_money, dz_rq, dz_type, dz_is_zx, dz_xsf, dz_bz from sys_management_wkparrival
+    </sql>
+
+    <select id="selectSysManagementWkparrivalList" parameterType="SysManagementWkparrival" resultMap="SysManagementWkparrivalResult">
+        <include refid="selectSysManagementWkparrivalVo"/>
+        <where>  
+            <if test="dzKhmc != null  and dzKhmc != ''"> and dz_khmc = #{dzKhmc}</if>
+            <if test="dzHtbh != null  and dzHtbh != ''"> and dz_htbh = #{dzHtbh}</if>
+            <if test="dzHtje != null  and dzHtje != ''"> and dz_htje = #{dzHtje}</if>
+            <if test="dzYwxz != null  and dzYwxz != ''"> and dz_ywxz = #{dzYwxz}</if>
+            <if test="dzFzr != null  and dzFzr != ''"> and dz_fzr = #{dzFzr}</if>
+            <if test="dzKprq != null "> and dz_kprq = #{dzKprq}</if>
+            <if test="dzKpje != null "> and dz_kpje = #{dzKpje}</if>
+            <if test="dzFph != null  and dzFph != ''"> and dz_fph = #{dzFph}</if>
+            <if test="dzMoney != null "> and dz_money = #{dzMoney}</if>
+            <if test="dzRq != null "> and dz_rq = #{dzRq}</if>
+            <if test="dzType != null  and dzType != ''"> and dz_type = #{dzType}</if>
+            <if test="dzIsZx != null  and dzIsZx != ''"> and dz_is_zx = #{dzIsZx}</if>
+            <if test="dzXsf != null  and dzXsf != ''"> and dz_xsf = #{dzXsf}</if>
+            <if test="dzBz != null  and dzBz != ''"> and dz_bz = #{dzBz}</if>
+        </where>
+    </select>
+    
+    <select id="selectSysManagementWkparrivalByDzId" parameterType="Long" resultMap="SysManagementWkparrivalResult">
+        <include refid="selectSysManagementWkparrivalVo"/>
+        where dz_id = #{dzId}
+    </select>
+        
+    <insert id="insertSysManagementWkparrival" parameterType="SysManagementWkparrival" useGeneratedKeys="true" keyProperty="dzId">
+        insert into sys_management_wkparrival
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="dzKhmc != null">dz_khmc,</if>
+            <if test="dzHtbh != null">dz_htbh,</if>
+            <if test="dzHtje != null">dz_htje,</if>
+            <if test="dzYwxz != null and dzYwxz != ''">dz_ywxz,</if>
+            <if test="dzFzr != null and dzFzr != ''">dz_fzr,</if>
+            <if test="dzKprq != null">dz_kprq,</if>
+            <if test="dzKpje != null">dz_kpje,</if>
+            <if test="dzFph != null and dzFph != ''">dz_fph,</if>
+            <if test="dzMoney != null">dz_money,</if>
+            <if test="dzRq != null">dz_rq,</if>
+            <if test="dzType != null">dz_type,</if>
+            <if test="dzIsZx != null">dz_is_zx,</if>
+            <if test="dzXsf != null">dz_xsf,</if>
+            <if test="dzBz != null">dz_bz,</if>
+         </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test="dzKhmc != null">#{dzKhmc},</if>
+            <if test="dzHtbh != null">#{dzHtbh},</if>
+            <if test="dzHtje != null">#{dzHtje},</if>
+            <if test="dzYwxz != null and dzYwxz != ''">#{dzYwxz},</if>
+            <if test="dzFzr != null and dzFzr != ''">#{dzFzr},</if>
+            <if test="dzKprq != null">#{dzKprq},</if>
+            <if test="dzKpje != null">#{dzKpje},</if>
+            <if test="dzFph != null and dzFph != ''">#{dzFph},</if>
+            <if test="dzMoney != null">#{dzMoney},</if>
+            <if test="dzRq != null">#{dzRq},</if>
+            <if test="dzType != null">#{dzType},</if>
+            <if test="dzIsZx != null">#{dzIsZx},</if>
+            <if test="dzXsf != null">#{dzXsf},</if>
+            <if test="dzBz != null">#{dzBz},</if>
+         </trim>
+    </insert>
+
+    <update id="updateSysManagementWkparrival" parameterType="SysManagementWkparrival">
+        update sys_management_wkparrival
+        <trim prefix="SET" suffixOverrides=",">
+            <if test="dzKhmc != null">dz_khmc = #{dzKhmc},</if>
+            <if test="dzHtbh != null">dz_htbh = #{dzHtbh},</if>
+            <if test="dzHtje != null">dz_htje = #{dzHtje},</if>
+            <if test="dzYwxz != null and dzYwxz != ''">dz_ywxz = #{dzYwxz},</if>
+            <if test="dzFzr != null and dzFzr != ''">dz_fzr = #{dzFzr},</if>
+            <if test="dzKprq != null">dz_kprq = #{dzKprq},</if>
+            <if test="dzKpje != null">dz_kpje = #{dzKpje},</if>
+            <if test="dzFph != null and dzFph != ''">dz_fph = #{dzFph},</if>
+            <if test="dzMoney != null">dz_money = #{dzMoney},</if>
+            <if test="dzRq != null">dz_rq = #{dzRq},</if>
+            <if test="dzType != null">dz_type = #{dzType},</if>
+            <if test="dzIsZx != null">dz_is_zx = #{dzIsZx},</if>
+            <if test="dzXsf != null">dz_xsf = #{dzXsf},</if>
+            <if test="dzBz != null">dz_bz = #{dzBz},</if>
+        </trim>
+        where dz_id = #{dzId}
+    </update>
+
+    <delete id="deleteSysManagementWkparrivalByDzId" parameterType="Long">
+        delete from sys_management_wkparrival where dz_id = #{dzId}
+    </delete>
+
+    <delete id="deleteSysManagementWkparrivalByDzIds" parameterType="String">
+        delete from sys_management_wkparrival where dz_id in 
+        <foreach item="dzId" collection="array" open="(" separator="," close=")">
+            #{dzId}
+        </foreach>
+    </delete>
+</mapper>
