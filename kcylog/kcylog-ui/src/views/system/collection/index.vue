@@ -405,6 +405,7 @@
             type="date"
             placeholder="选择日期"
             :picker-options="pickerOptionsCs"
+            disabled
           >
           </el-date-picker>
         </el-form-item>
@@ -434,6 +435,7 @@
             type="date"
             placeholder="选择日期"
             :picker-options="pickerOptionsCs"
+            disabled
           >
           </el-date-picker>
         </el-form-item>
@@ -474,6 +476,7 @@
             v-model="ysTimeForm.ysKprqCs"
             type="date"
             placeholder="选择日期"
+            disabled
           >
           </el-date-picker>
         </el-form-item>
@@ -672,14 +675,14 @@ export default {
     // 表单重置
     reset() {
       this.csTimeForm = {
-        ysKprqCs: null,
+        ysKprqCs: new Date(),
       };
       this.ysTimeForm = {
-        ysKprqCs: null,
+        ysKprqCs: new Date(),
         ysKprqLast: null,
       };
       this.timeForm = {
-        ysKprqCs: null,
+        ysKprqCs: new Date(),
         ysKprqLast: null,
       };
       this.form = {
@@ -797,7 +800,7 @@ export default {
     /** 导出按钮操作 */
     handleExport() {
       this.timeOpen = true;
-      this.timeForm = {};
+      this.timeForm = { ysKprqCs: new Date() };
       // if (!this.queryParams.ysKprqCs) {
       //   this.$modal.msgError(`请选择截止日期`);
       //   return;
@@ -805,11 +808,13 @@ export default {
     },
     handleExportCstj() {
       this.csTimeOpen = true;
-      this.csTimeForm = {};
+      this.csTimeForm = {
+        ysKprqCs: new Date(),
+      };
     },
     handleExportYstj() {
       this.ysTimeOpen = true;
-      this.ysTimeForm = {};
+      this.ysTimeForm = { ysKprqCs: new Date() };
     },
     submitFormCS() {
       this.$refs["csTimeForm"].validate((valid) => {
