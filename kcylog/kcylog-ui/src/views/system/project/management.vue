@@ -580,6 +580,28 @@
               </template>
               {{ form.workloadAlias }}
             </el-descriptions-item>
+
+            <el-descriptions-item>
+              <template slot="label">
+                <i class="el-icon-document"></i>
+                办结超期备注
+              </template>
+              {{ form.completionNotes }}
+            </el-descriptions-item>
+            <el-descriptions-item>
+              <template slot="label">
+                <i class="el-icon-document"></i>
+                一检超期备注
+              </template>
+              {{ form.oneCheckNotes }}
+            </el-descriptions-item>
+            <el-descriptions-item>
+              <template slot="label">
+                <i class="el-icon-document"></i>
+                二检超期备注
+              </template>
+              {{ form.twoCheckNotes }}
+            </el-descriptions-item>
           </el-descriptions>
         </el-collapse-item>
         <el-collapse-item title="经营产值" name="2">
@@ -1198,6 +1220,10 @@ export default {
         {
           value: 1,
           label: "正式安排",
+        },
+        {
+          value: -1,
+          label: "作业办结",
         },
         {
           value: 2,

@@ -732,7 +732,8 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
             <if test="department != null  and department != ''"> and p.department like concat('%', #{department}, '%')</if>
             <if test="userNameAlias != null and userNameAlias != ''">and p.user_name_alias like concat('%', #{userNameAlias}, '%')</if>
             <if test="workStatus != null">and p.work_status = #{workStatus}</if>
-            <if test="status != null">and p.status = #{status}</if>
+            <if test="status != null and status != -1">and p.status = #{status}</if>
+            <if test="status != null and status == -1">and (p.do_time is not null and p.do_time != '')</if>
             <if test="params.beginTime != null and params.beginTime != ''"><!-- 开始时间检索 -->
                 and (date_format(p.project_start_alias,'%y%m%d') &gt;= date_format(#{params.beginTime},'%y%m%d'))
             </if>

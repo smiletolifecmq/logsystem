@@ -417,7 +417,7 @@
     </el-dialog>
 
     <!-- 催收发函时间选择 -->
-    <el-dialog
+    <!-- <el-dialog
       title="时间选择"
       :visible.sync="csTimeOpen"
       width="500px"
@@ -444,7 +444,7 @@
         <el-button type="primary" @click="submitFormCS">确 定</el-button>
         <el-button @click="cancel">取 消</el-button>
       </div>
-    </el-dialog>
+    </el-dialog> -->
 
     <!-- 应收账款时间选择 -->
     <el-dialog
