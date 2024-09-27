@@ -53,7 +53,6 @@
       :data="archiveList"
       @selection-change="handleSelectionChange"
     >
-      <el-table-column label="用户名称" align="center" prop="userName" />
       <el-table-column label="标题" align="center" prop="title" />
       <el-table-column label="简介" align="center" prop="introduction" />
       <el-table-column label="归档人" align="center" prop="userName" />
