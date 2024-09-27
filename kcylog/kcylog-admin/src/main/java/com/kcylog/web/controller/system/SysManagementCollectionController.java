@@ -5,15 +5,21 @@ import com.kcylog.common.core.controller.BaseController;
 import com.kcylog.common.core.domain.AjaxResult;
 import com.kcylog.common.core.page.TableDataInfo;
 import com.kcylog.common.enums.BusinessType;
+import com.kcylog.system.common.Cstj;
 import com.kcylog.system.common.Fhtj;
+import com.kcylog.system.domain.SysManagementArrival;
 import com.kcylog.system.domain.SysManagementCollection;
+import com.kcylog.system.domain.SysManagementInvoicing;
 import com.kcylog.system.service.ISysManagementCollectionService;
+import com.kcylog.system.service.ISysManagementInvoicingService;
+import com.kcylog.system.service.ISysManagementArrivalService;
 import com.kcylog.web.controller.common.ExcelManySheetUtil;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
 import javax.servlet.http.HttpServletResponse;
+import java.math.BigDecimal;
 import java.time.LocalDate;
 import java.time.Period;
 import java.time.ZoneId;
@@ -32,6 +38,12 @@ public class SysManagementCollectionController extends BaseController
 {
     @Autowired
     private ISysManagementCollectionService sysManagementCollectionService;
+
+    @Autowired
+    private ISysManagementInvoicingService sysManagementInvoicingService;
+
+    @Autowired
+    private ISysManagementArrivalService sysManagementArrivalService;
 
     /**
      * 查询应收账款列表
@@ -270,6 +282,193 @@ public class SysManagementCollectionController extends BaseController
         return success(fhtj);
     }
 
+    @GetMapping(value = "/exportYs")
+    public AjaxResult exportYs(SysManagementCollection sysManagementCollection)
+    {
+        if (sysManagementCollection.getYsKprqCs() == null){
+            return error("未选择上报日期");
+        }
+        // 获取上次上报时间
+        LocalDate lastDayOfLastMonth = LocalDate.parse(sysManagementCollection.getYsKprqLast());
+        LocalDate currentDate = LocalDate.parse(sysManagementCollection.getYsKprqCs());
+        Cstj cstj = new Cstj();
+        BigDecimal total = BigDecimal.ZERO;
+        BigDecimal syclOne = BigDecimal.ZERO;
+        BigDecimal byxzOne = BigDecimal.ZERO;
+        BigDecimal byhkOne = BigDecimal.ZERO;
+        BigDecimal hcOne = BigDecimal.ZERO;
+        BigDecimal oneTwo = BigDecimal.ZERO;
+        BigDecimal totalOne = BigDecimal.ZERO;
+        BigDecimal syclTwo = BigDecimal.ZERO;
+        BigDecimal byxzTwo = BigDecimal.ZERO;
+        BigDecimal byhkTwo = BigDecimal.ZERO;
+        BigDecimal hcTwo = BigDecimal.ZERO;
+        BigDecimal twoThree = BigDecimal.ZERO;
+        BigDecimal totalTwo = BigDecimal.ZERO;
+        BigDecimal syclThree = BigDecimal.ZERO;
+        BigDecimal byxzThree = BigDecimal.ZERO;
+        BigDecimal byhkThree = BigDecimal.ZERO;
+        BigDecimal hcThree = BigDecimal.ZERO;
+        BigDecimal hzThree = BigDecimal.ZERO;
+        BigDecimal totalThree = BigDecimal.ZERO;
+
+        //获取本次统计日期上月最后一天
+        LocalDate lastMonthLastDay = currentDate.minusMonths(1).withDayOfMonth(currentDate.minusMonths(1).lengthOfMonth());
+        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd");
+        SysManagementCollection collectionMonthLastDay = new SysManagementCollection();
+        collectionMonthLastDay.setYsKprqCs(lastMonthLastDay.format(formatter));
+        //获取上个月数据
+        List<SysManagementCollection> lastMonthLastDayList = sysManagementCollectionService.selectSysManagementCollectionList(collectionMonthLastDay);
+        for (SysManagementCollection temp : lastMonthLastDayList){
+            Date ysKprq = temp.getYsKprq();
+            LocalDate ysKprqLocalDate = ysKprq.toInstant().atZone(ZoneId.systemDefault()).toLocalDate();
+            Period period = Period.between(ysKprqLocalDate, lastMonthLastDay);
+            int years = period.getYears();
+            // 判断时间段
+            if (years < 1) {
+                //红冲1年内
+                syclOne = syclOne.add(temp.getYsWdzje());
+            } else if (years >= 1 && years < 3) {
+                //红冲1-3年
+                syclTwo = syclTwo.add(temp.getYsWdzje());
+            } else {
+                //红冲3年以上
+                syclThree = syclThree.add(temp.getYsWdzje());
+            }
+        }
+
+        // 获取全部
+        List<SysManagementCollection> list = sysManagementCollectionService.selectSysManagementCollectionList(sysManagementCollection);
+        for (SysManagementCollection obj : list) {
+            Date ysKprq = obj.getYsKprq();
+            LocalDate ysKprqLocalDate = ysKprq.toInstant().atZone(ZoneId.systemDefault()).toLocalDate();
+            Period period = Period.between(ysKprqLocalDate, currentDate);
+            int years = period.getYears();
+
+            //应收账款总计
+            total = total.add(obj.getYsWdzje());
+            // 判断时间段
+            Period lastPeriod = Period.between(ysKprqLocalDate, lastDayOfLastMonth);
+            int lastYears = lastPeriod.getYears();
+
+            //一年期内-移至1-3年  1-3年期内本月新增
+            if (years >= 1 && years < 3 && lastYears < 1 && (lastDayOfLastMonth.isAfter(ysKprqLocalDate) || lastDayOfLastMonth.isEqual(ysKprqLocalDate))){
+                oneTwo = oneTwo.add(obj.getYsWdzje());
+                byxzTwo = byxzTwo.add(obj.getYsWdzje());
+            }
+
+            //1-3年期内移至3年期以上  3年期以上本月新增
+            if (years >= 3 && lastYears < 3 && (lastDayOfLastMonth.isAfter(ysKprqLocalDate) || lastDayOfLastMonth.isEqual(ysKprqLocalDate))){
+                twoThree = twoThree.add(obj.getYsWdzje());
+                byxzThree = byxzThree.add(obj.getYsWdzje());
+            }
+
+            //坏账
+            if(obj.getYsIshz() == 1){
+                hzThree = hzThree.add(obj.getYsWdzje());
+            }
+        }
+
+        //获取本次月份开票
+        SysManagementInvoicing sysManagementInvoicing = new SysManagementInvoicing();
+        sysManagementInvoicing.setMonthString(sysManagementCollection.getYsKprqCs());
+        List<SysManagementInvoicing> invoicing = sysManagementInvoicingService.selectInvoicingListHcMonth(sysManagementInvoicing);
+
+        //获取本月到账
+        SysManagementArrival sysManagementArrival = new SysManagementArrival();
+        sysManagementArrival.setMonthString(sysManagementCollection.getYsKprqCs());
+        List<SysManagementArrival> arrival = sysManagementArrivalService.selectSysManagementArrivalList(sysManagementArrival);
+        Map<String, Boolean> arrivalMap = new HashMap<>();
+        for (SysManagementArrival obj : arrival){
+            arrivalMap.put(obj.getDzFph(), true);
+        }
+
+        for (SysManagementInvoicing obj1 : invoicing){
+            if (obj1.getKpType() == 2 && obj1.getKpYfpsj() != null){
+                Date yfpsj = obj1.getKpYfpsj();
+                LocalDate ysKprqLocalDate = yfpsj.toInstant().atZone(ZoneId.systemDefault()).toLocalDate();
+                Period period = Period.between(ysKprqLocalDate, currentDate);
+                int years = period.getYears();
+                // 判断时间段
+                if (years < 1) {
+                    //红冲1年内
+                    hcOne = hcOne.add(obj1.getKpKpje().abs());
+                } else if (years >= 1 && years < 3) {
+                    //红冲1-3年
+                    hcTwo = hcTwo.add(obj1.getKpKpje().abs());
+                } else {
+                    //红冲3年以上
+                    hcThree = hcThree.add(obj1.getKpKpje().abs());
+                }
+            }
+            //一年期内 本月新增且不回款
+            if (!arrivalMap.containsKey(obj1.getKpFph())){
+                byxzOne = byxzOne.add(obj1.getKpKpje());
+            }
+        }
+
+        for (SysManagementArrival obj2 : arrival){
+            // 本月回款
+            Date dzKprq = obj2.getDzKprq();
+            LocalDate ysDzKprqLocalDate = dzKprq.toInstant().atZone(ZoneId.systemDefault()).toLocalDate();
+            Period period = Period.between(ysDzKprqLocalDate, currentDate);
+            int years = period.getYears();
+            // 判断时间段
+            if (!isSameYearAndMonth(obj2.getDzKprq(),obj2.getDzRq())){
+                if (years < 1) {
+                    //1年内
+                    byhkOne = byhkOne.add(obj2.getDzMoney());
+                } else if (years >= 1 && years < 3) {
+                    //1-3年
+                    byhkTwo = byhkTwo.add(obj2.getDzMoney());
+                } else {
+                    //3年以上
+                    byhkThree = byhkThree.add(obj2.getDzMoney().abs());
+                }
+            }
+            Period period1 = Period.between(ysDzKprqLocalDate, lastMonthLastDay);
+            int years1 = period1.getYears();
+            // 判断时间段
+            if (years1 < 1 && (lastMonthLastDay.isAfter(ysDzKprqLocalDate) || lastMonthLastDay.isEqual(ysDzKprqLocalDate))) {
+                //1年内
+                syclOne = syclOne.add(obj2.getDzMoney());
+            } else if (years1 >= 1 && years1 < 3 && lastMonthLastDay.isAfter(ysDzKprqLocalDate) || lastMonthLastDay.isEqual(ysDzKprqLocalDate)) {
+                //1-3年
+                syclTwo = syclTwo.add(obj2.getDzMoney());
+            } else if(lastMonthLastDay.isAfter(ysDzKprqLocalDate) || lastMonthLastDay.isEqual(ysDzKprqLocalDate)){
+                //3年以上
+                syclThree = syclThree.add(obj2.getDzMoney().abs());
+            }
+        }
+
+        totalOne = syclOne.add(byxzOne).subtract(byhkOne).subtract(hcOne).subtract(oneTwo);
+        totalTwo = syclTwo.add(byxzTwo).subtract(byhkTwo).subtract(hcTwo).subtract(twoThree);
+        totalThree = syclThree.add(byxzThree).subtract(byhkThree).subtract(hcThree).subtract(hzThree);
+
+        cstj.setTotal(total);
+        cstj.setSyclOne(syclOne);
+        cstj.setByxzOne(byxzOne);
+        cstj.setByhkOne(byhkOne);
+        cstj.setHcOne(hcOne);
+        cstj.setOneTwo(oneTwo);
+        cstj.setTotalOne(totalOne);
+
+        cstj.setSyclTwo(syclTwo);
+        cstj.setByxzTwo(byxzTwo);
+        cstj.setByhkTwo(byhkTwo);
+        cstj.setHcTwo(hcTwo);
+        cstj.setTwoThree(twoThree);
+        cstj.setTotalTwo(totalTwo);
+
+        cstj.setSyclThree(syclThree);
+        cstj.setByxzThree(byxzThree);
+        cstj.setByhkThree(byhkThree);
+        cstj.setHcThree(hcThree);
+        cstj.setHzThree(hzThree);
+        cstj.setTotalThree(totalThree);
+        return success(cstj);
+    }
+
     public static int countOccurrences(String text, String substring) {
         int count = 0;
         int index = 0;
@@ -280,5 +479,16 @@ public class SysManagementCollectionController extends BaseController
         }
 
         return count;
+    }
+
+    public static boolean isSameYearAndMonth(Date date1, Date date2) {
+        Calendar cal1 = Calendar.getInstance();
+        Calendar cal2 = Calendar.getInstance();
+
+        cal1.setTime(date1);
+        cal2.setTime(date2);
+
+        return cal1.get(Calendar.YEAR) == cal2.get(Calendar.YEAR) &&
+                cal1.get(Calendar.MONTH) == cal2.get(Calendar.MONTH);
     }
 }

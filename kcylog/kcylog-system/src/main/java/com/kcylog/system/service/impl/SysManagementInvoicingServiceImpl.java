@@ -97,4 +97,10 @@ public class SysManagementInvoicingServiceImpl implements ISysManagementInvoicin
     {
         return sysManagementInvoicingMapper.selectSysManagementInvoicingByKpFPH(kpFph);
     }
+
+    @Override
+    public List<SysManagementInvoicing> selectInvoicingListHcMonth(SysManagementInvoicing sysManagementInvoicing)
+    {
+        return sysManagementInvoicingMapper.selectInvoicingListHcMonth(sysManagementInvoicing);
+    }
 }

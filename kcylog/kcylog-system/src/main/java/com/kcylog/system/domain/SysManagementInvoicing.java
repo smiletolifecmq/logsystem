@@ -107,6 +107,16 @@ public class SysManagementInvoicing extends BaseEntity
     /** 开票类型1正常2红冲 */
     private Long kpType;
 
+    private String MonthString;
+
+    public String getMonthString() {
+        return MonthString;
+    }
+
+    public void setMonthString(String monthString) {
+        MonthString = monthString;
+    }
+
     public int getNum() {
         return num;
     }

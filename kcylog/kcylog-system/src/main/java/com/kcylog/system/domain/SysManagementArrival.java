@@ -84,6 +84,16 @@ public class SysManagementArrival extends BaseEntity
     @Excel(name = "备注")
     private String dzBz;
 
+    private String monthString;
+
+    public String getMonthString() {
+        return monthString;
+    }
+
+    public void setMonthString(String monthString) {
+        this.monthString = monthString;
+    }
+
     public int getNum() {
         return num;
     }

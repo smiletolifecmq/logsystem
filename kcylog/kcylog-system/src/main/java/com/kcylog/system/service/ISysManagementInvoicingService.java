@@ -61,4 +61,6 @@ public interface ISysManagementInvoicingService
     public int deleteSysManagementInvoicingByKpId(Long kpId);
 
     public SysManagementInvoicing selectSysManagementInvoicingByKpFPH(String kpFph);
+
+    public List<SysManagementInvoicing> selectInvoicingListHcMonth(SysManagementInvoicing sysManagementInvoicing);
 }

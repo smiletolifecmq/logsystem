@@ -44,6 +44,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
             </if>
             <if test="ysFzr != null  and ysFzr != ''"> and ys_fzr = #{ysFzr}</if>
             <if test="ysFph != null  and ysFph != ''"> and ys_fph = #{ysFph}</if>
+            <if test="ysIshz != null"> and ys_ishz = #{ysIshz}</if>
             and ys_status = 1
         </where>
     </select>
