@@ -807,84 +807,77 @@ export default {
       // }
     },
     handleExportCstj() {
-      this.csTimeOpen = true;
       this.csTimeForm = {
         ysKprqCs: new Date(),
       };
+      var dateRq = "";
+      if (this.csTimeForm.ysKprqCs) {
+        // 将日期对象转换为 yyyy-mm 格式的字符串
+        const date = new Date(this.csTimeForm.ysKprqCs);
+        const year = date.getFullYear();
+        const month = String(date.getMonth() + 1).padStart(2, "0"); // 月份从 0 开始
+        const day = String(date.getDate()).padStart(2, "0"); //
+        this.queryParams.ysKprqCs = `${year}-${month}-${day}`;
+        dateRq = `${year}年${month}月${day}日`;
+      }
+
+      exportCs(this.queryParams).then((responseData) => {
+        fetch("/csfh.xlsx")
+          .then((response) => {
+            if (!response.ok) throw new Error("Network response was not ok");
+            return response.arrayBuffer();
+          })
+          .then((data) => {
+            const workbook = new ExcelJS.Workbook();
+            return workbook.xlsx.load(data);
+          })
+          .then((workbook) => {
+            const sheet = workbook.getWorksheet("催收发函统计表");
+
+            // 替换的对象
+            responseData.data.tjrq = dateRq;
+            const dataToReplace = responseData.data;
+
+            // 替换占位符
+            sheet.eachRow((row) => {
+              row.eachCell((cell) => {
+                if (typeof cell.value === "string") {
+                  for (const key in dataToReplace) {
+                    cell.value = cell.value.replace(
+                      new RegExp(`{${key}}`, "g"),
+                      dataToReplace[key]
+                    );
+                  }
+                }
+              });
+            });
+
+            // 导出修改后的文件
+            return workbook.xlsx.writeBuffer();
+          })
+          .then((buffer) => {
+            const blob = new Blob([buffer], {
+              type: "application/octet-stream",
+            });
+            const url = window.URL.createObjectURL(blob);
+            const a = document.createElement("a");
+            a.href = url;
+            a.download = "催收发函统计表_" + dateRq + ".xlsx";
+            document.body.appendChild(a);
+            a.click();
+            a.remove();
+            this.cancel();
+          })
+          .catch((error) => {
+            console.error("Error loading the Excel file:", error);
+          });
+      });
     },
     handleExportYstj() {
       this.ysTimeOpen = true;
       this.ysTimeForm = { ysKprqCs: new Date() };
     },
-    submitFormCS() {
-      this.$refs["csTimeForm"].validate((valid) => {
-        if (valid) {
-          var dateRq = "";
-          if (this.csTimeForm.ysKprqCs) {
-            // 将日期对象转换为 yyyy-mm 格式的字符串
-            const date = new Date(this.csTimeForm.ysKprqCs);
-            const year = date.getFullYear();
-            const month = String(date.getMonth() + 1).padStart(2, "0"); // 月份从 0 开始
-            const day = String(date.getDate()).padStart(2, "0"); //
-            this.queryParams.ysKprqCs = `${year}-${month}-${day}`;
-            dateRq = `${year}年${month}月${day}日`;
-          }
 
-          exportCs(this.queryParams).then((responseData) => {
-            fetch("/csfh.xlsx")
-              .then((response) => {
-                if (!response.ok)
-                  throw new Error("Network response was not ok");
-                return response.arrayBuffer();
-              })
-              .then((data) => {
-                const workbook = new ExcelJS.Workbook();
-                return workbook.xlsx.load(data);
-              })
-              .then((workbook) => {
-                const sheet = workbook.getWorksheet("催收发函统计表");
-
-                // 替换的对象
-                responseData.data.tjrq = dateRq;
-                const dataToReplace = responseData.data;
-
-                // 替换占位符
-                sheet.eachRow((row) => {
-                  row.eachCell((cell) => {
-                    if (typeof cell.value === "string") {
-                      for (const key in dataToReplace) {
-                        cell.value = cell.value.replace(
-                          new RegExp(`{${key}}`, "g"),
-                          dataToReplace[key]
-                        );
-                      }
-                    }
-                  });
-                });
-
-                // 导出修改后的文件
-                return workbook.xlsx.writeBuffer();
-              })
-              .then((buffer) => {
-                const blob = new Blob([buffer], {
-                  type: "application/octet-stream",
-                });
-                const url = window.URL.createObjectURL(blob);
-                const a = document.createElement("a");
-                a.href = url;
-                a.download = "催收发函统计表_" + dateRq + ".xlsx";
-                document.body.appendChild(a);
-                a.click();
-                a.remove();
-                this.cancel();
-              })
-              .catch((error) => {
-                console.error("Error loading the Excel file:", error);
-              });
-          });
-        }
-      });
-    },
     submitFormYS() {
       this.$refs["ysTimeForm"].validate((valid) => {
         if (valid) {
