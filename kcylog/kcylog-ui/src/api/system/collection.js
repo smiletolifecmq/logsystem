@@ -58,3 +58,11 @@ export function exportCs(query) {
     params: query
   })
 }
+
+export function exportYs(query) {
+  return request({
+    url: '/system/collection/exportYs',
+    method: 'get',
+    params: query
+  })
+}

@@ -24,6 +24,17 @@
           @keyup.enter.native="handleQuery"
         />
       </el-form-item>
+      <el-form-item label="是否坏账" prop="ysIshz">
+        <el-select v-model="queryParams.ysIshz" placeholder="请选择">
+          <el-option
+            v-for="item in ysIshzs"
+            :key="item.value"
+            :label="item.label"
+            :value="item.value"
+          >
+          </el-option>
+        </el-select>
+      </el-form-item>
       <el-form-item>
         <el-button
           type="primary"
@@ -59,6 +70,17 @@
           @click="handleExportCstj"
           v-hasPermi="['system:collection:cstj']"
           >导出催收发函统计表</el-button
+        >
+      </el-col>
+      <el-col :span="1.5">
+        <el-button
+          type="success"
+          plain
+          icon="el-icon-download"
+          size="mini"
+          @click="handleExportYstj"
+          v-hasPermi="['system:collection:yszktj']"
+          >导出应收账款统计表</el-button
         >
       </el-col>
       <right-toolbar
@@ -113,6 +135,13 @@
       <el-table-column label="发函类型" align="center" prop="ysFhlx" />
       <el-table-column label="发函时间" align="center" prop="ysFhsj" />
       <el-table-column label="账龄" align="center" prop="ysZl" />
+      <el-table-column label="是否坏账" align="center" prop="ysIshz">
+        <template slot-scope="scope">
+          <el-tag v-if="scope.row.ysIshz === 0" type="success">否</el-tag>
+          <el-tag v-else-if="scope.row.ysIshz === 1" type="warning">是</el-tag>
+          <el-tag v-else type="warning">未知</el-tag>
+        </template>
+      </el-table-column>
       <el-table-column
         label="操作"
         align="center"
@@ -375,6 +404,7 @@
             v-model="timeForm.ysKprqCs"
             type="date"
             placeholder="选择日期"
+            :picker-options="pickerOptionsCs"
           >
           </el-date-picker>
         </el-form-item>
@@ -385,6 +415,7 @@
       </div>
     </el-dialog>
 
+    <!-- 催收发函时间选择 -->
     <el-dialog
       title="时间选择"
       :visible.sync="csTimeOpen"
@@ -412,6 +443,46 @@
         <el-button @click="cancel">取 消</el-button>
       </div>
     </el-dialog>
+
+    <!-- 应收账款时间选择 -->
+    <el-dialog
+      title="时间选择"
+      :visible.sync="ysTimeOpen"
+      width="500px"
+      append-to-body
+    >
+      <el-form
+        ref="ysTimeForm"
+        :model="ysTimeForm"
+        :rules="ysTimeRules"
+        label-width="80px"
+      >
+        <el-form-item
+          label="上次上报时间"
+          prop="ysKprqLast"
+          label-width="200px"
+        >
+          <el-date-picker
+            v-model="ysTimeForm.ysKprqLast"
+            type="date"
+            placeholder="选择日期"
+          >
+          </el-date-picker>
+        </el-form-item>
+        <el-form-item label="本次上报时间" prop="ysKprqCs" label-width="200px">
+          <el-date-picker
+            v-model="ysTimeForm.ysKprqCs"
+            type="date"
+            placeholder="选择日期"
+          >
+          </el-date-picker>
+        </el-form-item>
+      </el-form>
+      <div slot="footer" class="dialog-footer">
+        <el-button type="primary" @click="submitFormYS">确 定</el-button>
+        <el-button @click="cancel">取 消</el-button>
+      </div>
+    </el-dialog>
   </div>
 </template>
 
@@ -421,6 +492,7 @@ import {
   getCollection,
   updateCollection,
   exportCs,
+  exportYs,
 } from "@/api/system/collection";
 import userInfo from "@/store/modules/user";
 import ExcelJS from "exceljs";
@@ -429,6 +501,16 @@ export default {
   name: "Collection",
   data() {
     return {
+      ysIshzs: [
+        {
+          value: 0,
+          label: "否",
+        },
+        {
+          value: 1,
+          label: "是",
+        },
+      ],
       pickerOptionsCs: {
         disabledDate: (date) => {
           const currentDate = new Date();
@@ -478,6 +560,8 @@ export default {
         },
       ],
       csTimeForm: {},
+      ysTimeForm: {},
+      ysTimeOpen: false,
       csTimeOpen: false,
       timeOpen: false,
       timeForm: {},
@@ -511,6 +595,15 @@ export default {
       // 表单参数
       form: {},
       timeRules: {
+        ysKprqCs: [
+          { required: true, message: "请选择本次上报时间", trigger: "blur" },
+          { validator: this.validateDate, trigger: "change" },
+        ],
+        ysKprqLast: [
+          { required: true, message: "请选择上次上报时间", trigger: "blur" },
+        ],
+      },
+      ysTimeRules: {
         ysKprqCs: [
           { required: true, message: "请选择本次上报时间", trigger: "blur" },
           { validator: this.validateDate, trigger: "change" },
@@ -573,12 +666,17 @@ export default {
       this.open = false;
       this.timeOpen = false;
       this.csTimeOpen = false;
+      this.ysTimeOpen = false;
       this.reset();
     },
     // 表单重置
     reset() {
       this.csTimeForm = {
         ysKprqCs: null,
+      };
+      this.ysTimeForm = {
+        ysKprqCs: null,
+        ysKprqLast: null,
       };
       this.timeForm = {
         ysKprqCs: null,
@@ -709,6 +807,10 @@ export default {
       this.csTimeOpen = true;
       this.csTimeForm = {};
     },
+    handleExportYstj() {
+      this.ysTimeOpen = true;
+      this.ysTimeForm = {};
+    },
     submitFormCS() {
       this.$refs["csTimeForm"].validate((valid) => {
         if (valid) {
@@ -769,6 +871,83 @@ export default {
                 document.body.appendChild(a);
                 a.click();
                 a.remove();
+                this.cancel();
+              })
+              .catch((error) => {
+                console.error("Error loading the Excel file:", error);
+              });
+          });
+        }
+      });
+    },
+    submitFormYS() {
+      this.$refs["ysTimeForm"].validate((valid) => {
+        if (valid) {
+          var dateRq = "";
+          if (this.ysTimeForm.ysKprqCs) {
+            // 将日期对象转换为 yyyy-mm 格式的字符串
+            const date = new Date(this.ysTimeForm.ysKprqCs);
+            const year = date.getFullYear();
+            const month = String(date.getMonth() + 1).padStart(2, "0"); // 月份从 0 开始
+            const day = String(date.getDate()).padStart(2, "0"); //
+            this.queryParams.ysKprqCs = `${year}-${month}-${day}`;
+            dateRq = `${year}年${month}月${day}日`;
+          }
+          if (this.ysTimeForm.ysKprqLast) {
+            // 将日期对象转换为 yyyy-mm 格式的字符串
+            const date = new Date(this.ysTimeForm.ysKprqLast);
+            const year = date.getFullYear();
+            const month = String(date.getMonth() + 1).padStart(2, "0"); // 月份从 0 开始
+            const day = String(date.getDate()).padStart(2, "0"); //
+            this.queryParams.ysKprqLast = `${year}-${month}-${day}`;
+          }
+          exportYs(this.queryParams).then((responseData) => {
+            fetch("/yszktj.xlsx")
+              .then((response) => {
+                if (!response.ok)
+                  throw new Error("Network response was not ok");
+                return response.arrayBuffer();
+              })
+              .then((data) => {
+                const workbook = new ExcelJS.Workbook();
+                return workbook.xlsx.load(data);
+              })
+              .then((workbook) => {
+                const sheet = workbook.getWorksheet("应收账款统计表");
+
+                // 替换的对象
+                responseData.data.tjrq = dateRq;
+                const dataToReplace = responseData.data;
+
+                // 替换占位符
+                sheet.eachRow((row) => {
+                  row.eachCell((cell) => {
+                    if (typeof cell.value === "string") {
+                      for (const key in dataToReplace) {
+                        cell.value = cell.value.replace(
+                          new RegExp(`{${key}}`, "g"),
+                          dataToReplace[key]
+                        );
+                      }
+                    }
+                  });
+                });
+
+                // 导出修改后的文件
+                return workbook.xlsx.writeBuffer();
+              })
+              .then((buffer) => {
+                const blob = new Blob([buffer], {
+                  type: "application/octet-stream",
+                });
+                const url = window.URL.createObjectURL(blob);
+                const a = document.createElement("a");
+                a.href = url;
+                a.download = "应收账款统计表_" + dateRq + ".xlsx";
+                document.body.appendChild(a);
+                a.click();
+                a.remove();
+                this.cancel();
               })
               .catch((error) => {
                 console.error("Error loading the Excel file:", error);
