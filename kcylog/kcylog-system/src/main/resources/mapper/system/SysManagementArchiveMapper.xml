@@ -1,0 +1,87 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.kcylog.system.mapper.SysManagementArchiveMapper">
+    
+    <resultMap type="SysManagementArchive" id="SysManagementArchiveResult">
+        <result property="technicalId"    column="technical_id"    />
+        <result property="userName"    column="user_name"    />
+        <result property="title"    column="title"    />
+        <result property="introduction"    column="introduction"    />
+        <result property="createTime"    column="create_time"    />
+        <result property="updateTime"    column="update_time"    />
+        <collection property="manageFile" javaType="java.util.List" resultMap="manageFileResult"/>
+    </resultMap>
+
+    <resultMap type="SysManageFile" id="manageFileResult">
+        <result property="fileId" column="file_id"/>
+        <result property="newFileName" column="new_file_name"/>
+        <result property="oldFileName" column="old_file_name"/>
+        <result property="url" column="url"/>
+        <result property="fileName" column="file_name"/>
+        <result property="moduleId" column="module_id"/>
+        <result property="moduleType" column="module_type"/>
+    </resultMap>
+
+    <sql id="selectSysManagementArchiveVo">
+        select k.*, f.new_file_name, f.old_file_name, f.url, f.file_name
+        from sys_management_archive k
+                 inner join sys_manage_file f on k.technical_id = f.module_id and f.module_type = 5
+    </sql>
+
+    <select id="selectSysManagementArchiveList" parameterType="SysManagementArchive" resultMap="SysManagementArchiveResult">
+        <include refid="selectSysManagementArchiveVo"/>
+        <where>  
+            <if test="userName != null  and userName != ''"> and user_name like concat('%', #{userName}, '%')</if>
+            <if test="title != null  and title != ''"> and title = #{title}</if>
+            <if test="introduction != null  and introduction != ''"> and introduction = #{introduction}</if>
+        </where>
+    </select>
+    
+    <select id="selectSysManagementArchiveByTechnicalId" parameterType="Long" resultMap="SysManagementArchiveResult">
+        <include refid="selectSysManagementArchiveVo"/>
+        where technical_id = #{technicalId}
+    </select>
+        
+    <insert id="insertSysManagementArchive" parameterType="SysManagementArchive" useGeneratedKeys="true" keyProperty="technicalId">
+        insert into sys_management_archive
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="userName != null and userName != ''">user_name,</if>
+            <if test="title != null and title != ''">title,</if>
+            <if test="introduction != null">introduction,</if>
+            <if test="createTime != null">create_time,</if>
+            <if test="updateTime != null">update_time,</if>
+         </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test="userName != null and userName != ''">#{userName},</if>
+            <if test="title != null and title != ''">#{title},</if>
+            <if test="introduction != null">#{introduction},</if>
+            <if test="createTime != null">#{createTime},</if>
+            <if test="updateTime != null">#{updateTime},</if>
+         </trim>
+    </insert>
+
+    <update id="updateSysManagementArchive" parameterType="SysManagementArchive">
+        update sys_management_archive
+        <trim prefix="SET" suffixOverrides=",">
+            <if test="userName != null and userName != ''">user_name = #{userName},</if>
+            <if test="title != null and title != ''">title = #{title},</if>
+            <if test="introduction != null">introduction = #{introduction},</if>
+            <if test="createTime != null">create_time = #{createTime},</if>
+            <if test="updateTime != null">update_time = #{updateTime},</if>
+        </trim>
+        where technical_id = #{technicalId}
+    </update>
+
+    <delete id="deleteSysManagementArchiveByTechnicalId" parameterType="Long">
+        delete from sys_management_archive where technical_id = #{technicalId}
+    </delete>
+
+    <delete id="deleteSysManagementArchiveByTechnicalIds" parameterType="String">
+        delete from sys_management_archive where technical_id in 
+        <foreach item="technicalId" collection="array" open="(" separator="," close=")">
+            #{technicalId}
+        </foreach>
+    </delete>
+</mapper>
