@@ -211,7 +211,7 @@
           >
           </el-date-picker>
         </el-form-item>
-        <el-form-item label="到账类型" prop="dzType" label-width="150px">
+        <!-- <el-form-item label="到账类型" prop="dzType" label-width="150px">
           <el-select v-model="form.dzType" placeholder="请选择">
             <el-option
               v-for="item in dzTypes"
@@ -221,7 +221,7 @@
             >
             </el-option>
           </el-select>
-        </el-form-item>
+        </el-form-item> -->
         <el-form-item label="是否专项债资金" prop="dzIsZx" label-width="150px">
           <el-input v-model="form.dzIsZx" placeholder="请输入是否专项债资金" />
         </el-form-item>

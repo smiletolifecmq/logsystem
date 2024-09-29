@@ -19,6 +19,7 @@ import org.springframework.web.bind.annotation.*;
 
 import javax.servlet.http.HttpServletResponse;
 import java.math.BigDecimal;
+import java.util.Calendar;
 import java.util.List;
 
 /**
@@ -90,7 +91,21 @@ public class SysManagementArrivalController extends BaseController
     @PostMapping
     public AjaxResult add(@RequestBody SysManagementArrival sysManagementArrival)
     {
-        sysManagementArrival.setDzFzr(SecurityUtils.getUsername());
+        if (sysManagementArrival.getDzFzr() == null){
+            sysManagementArrival.setDzFzr(SecurityUtils.getUsername());
+        }
+
+        Calendar cal1 = Calendar.getInstance();
+        cal1.setTime(sysManagementArrival.getDzKprq());
+        Calendar cal2 = Calendar.getInstance();
+        cal2.setTime(sysManagementArrival.getDzRq());
+        boolean isSameYear = cal1.get(Calendar.YEAR) == cal2.get(Calendar.YEAR);
+        if (isSameYear){
+            sysManagementArrival.setDzType("本年度开票本年度到账");
+        }else {
+            sysManagementArrival.setDzType("非本年度开票到账");
+        }
+
         SysManagementInvoicing invoicing = sysManagementInvoicingService.selectSysManagementInvoicingByKpFPH(sysManagementArrival.getDzFph().trim());
         if(invoicing == null){
             return error("新增失败，发票号:" + sysManagementArrival.getDzFph().trim() +"在开票模块中不存在，请现在开票模块中补充该票号开票记录～");
@@ -123,6 +138,19 @@ public class SysManagementArrivalController extends BaseController
     @PutMapping
     public AjaxResult edit(@RequestBody SysManagementArrival sysManagementArrival)
     {
+        if (sysManagementArrival.getDzFzr() == null){
+            sysManagementArrival.setDzFzr(SecurityUtils.getUsername());
+        }
+        Calendar cal1 = Calendar.getInstance();
+        cal1.setTime(sysManagementArrival.getDzKprq());
+        Calendar cal2 = Calendar.getInstance();
+        cal2.setTime(sysManagementArrival.getDzRq());
+        boolean isSameYear = cal1.get(Calendar.YEAR) == cal2.get(Calendar.YEAR);
+        if (isSameYear){
+            sysManagementArrival.setDzType("本年度开票本年度到账");
+        }else {
+            sysManagementArrival.setDzType("非本年度开票到账");
+        }
         return toAjax(sysManagementArrivalService.updateSysManagementArrival(sysManagementArrival));
     }
 
