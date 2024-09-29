@@ -23,6 +23,97 @@ public class Cstj {
     private BigDecimal hzThree;
     private BigDecimal totalThree;
 
+    private BigDecimal gyOne;
+    private BigDecimal myOne;
+    private BigDecimal gymyOne;
+    private BigDecimal gyTwo;
+    private BigDecimal myTwo;
+    private BigDecimal gymyTwo;
+    private BigDecimal gyThree;
+    private BigDecimal myThree;
+    private BigDecimal gymyThree;
+    private BigDecimal all;
+
+    public BigDecimal getGyOne() {
+        return gyOne;
+    }
+
+    public void setGyOne(BigDecimal gyOne) {
+        this.gyOne = gyOne;
+    }
+
+    public BigDecimal getMyOne() {
+        return myOne;
+    }
+
+    public void setMyOne(BigDecimal myOne) {
+        this.myOne = myOne;
+    }
+
+    public BigDecimal getGymyOne() {
+        return gymyOne;
+    }
+
+    public void setGymyOne(BigDecimal gymyOne) {
+        this.gymyOne = gymyOne;
+    }
+
+    public BigDecimal getGyTwo() {
+        return gyTwo;
+    }
+
+    public void setGyTwo(BigDecimal gyTwo) {
+        this.gyTwo = gyTwo;
+    }
+
+    public BigDecimal getMyTwo() {
+        return myTwo;
+    }
+
+    public void setMyTwo(BigDecimal myTwo) {
+        this.myTwo = myTwo;
+    }
+
+    public BigDecimal getGymyTwo() {
+        return gymyTwo;
+    }
+
+    public void setGymyTwo(BigDecimal gymyTwo) {
+        this.gymyTwo = gymyTwo;
+    }
+
+    public BigDecimal getGyThree() {
+        return gyThree;
+    }
+
+    public void setGyThree(BigDecimal gyThree) {
+        this.gyThree = gyThree;
+    }
+
+    public BigDecimal getMyThree() {
+        return myThree;
+    }
+
+    public void setMyThree(BigDecimal myThree) {
+        this.myThree = myThree;
+    }
+
+    public BigDecimal getGymyThree() {
+        return gymyThree;
+    }
+
+    public void setGymyThree(BigDecimal gymyThree) {
+        this.gymyThree = gymyThree;
+    }
+
+    public BigDecimal getAll() {
+        return all;
+    }
+
+    public void setAll(BigDecimal all) {
+        this.all = all;
+    }
+
     public BigDecimal getTotal() {
         return total;
     }

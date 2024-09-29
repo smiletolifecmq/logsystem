@@ -74,3 +74,11 @@ export function exportJyyb(query) {
     params: query
   })
 }
+
+export function getExport(data) {
+  return request({
+    url: '/system/collection/getExport',
+    method: 'post',
+    data: data
+  })
+}

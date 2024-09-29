@@ -313,6 +313,18 @@ public class SysManagementCollectionController extends BaseController
         BigDecimal hcThree = BigDecimal.ZERO;
         BigDecimal hzThree = BigDecimal.ZERO;
         BigDecimal totalThree = BigDecimal.ZERO;
+        BigDecimal wy = new BigDecimal("10000");
+
+        BigDecimal gyOne = BigDecimal.ZERO;
+        BigDecimal myOne = BigDecimal.ZERO;
+        BigDecimal gymyOne = BigDecimal.ZERO;
+        BigDecimal gyTwo = BigDecimal.ZERO;
+        BigDecimal myTwo = BigDecimal.ZERO;
+        BigDecimal gymyTwo = BigDecimal.ZERO;
+        BigDecimal gyThree = BigDecimal.ZERO;
+        BigDecimal myThree = BigDecimal.ZERO;
+        BigDecimal gymyThree = BigDecimal.ZERO;
+        BigDecimal all = BigDecimal.ZERO;
 
         //获取本次统计日期上月最后一天
         LocalDate lastMonthLastDay = currentDate.minusMonths(1).withDayOfMonth(currentDate.minusMonths(1).lengthOfMonth());
@@ -369,6 +381,30 @@ public class SysManagementCollectionController extends BaseController
             if(obj.getYsIshz() == 1){
                 hzThree = hzThree.add(obj.getYsWdzje());
             }
+
+            if (years < 1) {
+                if (obj.getYsKhfl().contains("事业单位") || obj.getYsKhfl().contains("国有企业")){
+                    gyOne = gyOne.add(obj.getYsWdzje());
+                }else {
+                    myOne = myOne.add(obj.getYsWdzje());
+                }
+                gymyOne = gymyOne.add(obj.getYsWdzje());
+            } else if (years >= 1 && years < 3) {
+                if (obj.getYsKhfl().contains("事业单位") || obj.getYsKhfl().contains("国有企业")){
+                    gyTwo = gyTwo.add(obj.getYsWdzje());
+                }else {
+                    myTwo = myTwo.add(obj.getYsWdzje());
+                }
+                gymyTwo = gymyTwo.add(obj.getYsWdzje());
+            } else {
+                if (obj.getYsKhfl().contains("事业单位") || obj.getYsKhfl().contains("国有企业")){
+                    gyThree = gyThree.add(obj.getYsWdzje());
+                }else {
+                    myThree = myThree.add(obj.getYsWdzje());
+                }
+                gymyThree = gymyThree.add(obj.getYsWdzje());
+            }
+            all = all.add(obj.getYsWdzje());
         }
 
         //获取本次月份开票
@@ -447,27 +483,40 @@ public class SysManagementCollectionController extends BaseController
         totalTwo = syclTwo.add(byxzTwo).subtract(byhkTwo).subtract(hcTwo).subtract(twoThree);
         totalThree = syclThree.add(byxzThree).subtract(byhkThree).subtract(hcThree).subtract(hzThree);
 
-        cstj.setTotal(total);
-        cstj.setSyclOne(syclOne);
-        cstj.setByxzOne(byxzOne);
-        cstj.setByhkOne(byhkOne);
-        cstj.setHcOne(hcOne);
-        cstj.setOneTwo(oneTwo);
-        cstj.setTotalOne(totalOne);
+        cstj.setTotal(total.divide(wy, 4, RoundingMode.HALF_UP));
+        cstj.setSyclOne(syclOne.divide(wy, 4, RoundingMode.HALF_UP));
+        cstj.setByxzOne(byxzOne.divide(wy, 4, RoundingMode.HALF_UP));
+        cstj.setByhkOne(byhkOne.divide(wy, 4, RoundingMode.HALF_UP));
+        cstj.setHcOne(hcOne.divide(wy, 4, RoundingMode.HALF_UP));
+        cstj.setOneTwo(oneTwo.divide(wy, 4, RoundingMode.HALF_UP));
+        cstj.setTotalOne(totalOne.divide(wy, 4, RoundingMode.HALF_UP));
 
-        cstj.setSyclTwo(syclTwo);
-        cstj.setByxzTwo(byxzTwo);
-        cstj.setByhkTwo(byhkTwo);
-        cstj.setHcTwo(hcTwo);
-        cstj.setTwoThree(twoThree);
-        cstj.setTotalTwo(totalTwo);
+        cstj.setSyclTwo(syclTwo.divide(wy, 4, RoundingMode.HALF_UP));
+        cstj.setByxzTwo(byxzTwo.divide(wy, 4, RoundingMode.HALF_UP));
+        cstj.setByhkTwo(byhkTwo.divide(wy, 4, RoundingMode.HALF_UP));
+        cstj.setHcTwo(hcTwo.divide(wy, 4, RoundingMode.HALF_UP));
+        cstj.setTwoThree(twoThree.divide(wy, 4, RoundingMode.HALF_UP));
+        cstj.setTotalTwo(totalTwo.divide(wy, 4, RoundingMode.HALF_UP));
 
-        cstj.setSyclThree(syclThree);
-        cstj.setByxzThree(byxzThree);
-        cstj.setByhkThree(byhkThree);
-        cstj.setHcThree(hcThree);
-        cstj.setHzThree(hzThree);
-        cstj.setTotalThree(totalThree);
+        cstj.setSyclThree(syclThree.divide(wy, 4, RoundingMode.HALF_UP));
+        cstj.setByxzThree(byxzThree.divide(wy, 4, RoundingMode.HALF_UP));
+        cstj.setByhkThree(byhkThree.divide(wy, 4, RoundingMode.HALF_UP));
+        cstj.setHcThree(hcThree.divide(wy, 4, RoundingMode.HALF_UP));
+        cstj.setHzThree(hzThree.divide(wy, 4, RoundingMode.HALF_UP));
+        cstj.setTotalThree(totalThree.divide(wy, 4, RoundingMode.HALF_UP));
+
+        cstj.setGyOne(gyOne.divide(wy, 4, RoundingMode.HALF_UP));
+        cstj.setMyOne(myOne.divide(wy, 4, RoundingMode.HALF_UP));
+        cstj.setGymyOne(gymyOne.divide(wy, 4, RoundingMode.HALF_UP));
+        cstj.setGyTwo(gyTwo.divide(wy, 4, RoundingMode.HALF_UP));
+        cstj.setMyTwo(myTwo.divide(wy, 4, RoundingMode.HALF_UP));
+        cstj.setGymyTwo(gymyTwo.divide(wy, 4, RoundingMode.HALF_UP));
+
+        cstj.setGyThree(gyThree.divide(wy, 4, RoundingMode.HALF_UP));
+        cstj.setMyThree(myThree.divide(wy, 4, RoundingMode.HALF_UP));
+        cstj.setGymyThree(gymyThree.divide(wy, 4, RoundingMode.HALF_UP));
+        cstj.setAll(all.divide(wy, 4, RoundingMode.HALF_UP));
+
         return success(cstj);
     }
 
@@ -575,6 +624,59 @@ public class SysManagementCollectionController extends BaseController
         jyybtj.setZjl(xzzk.divide(snjdyszk, 4, RoundingMode.HALF_UP).multiply(bfs));
 
         return success(jyybtj);
+    }
+
+    @PostMapping("/getExport")
+    public AjaxResult getExport(@RequestBody SysManagementCollection sysManagementCollection)
+    {
+        if (sysManagementCollection.getYsKprqCs() == null){
+            return error("未选择截止日期");
+        }
+        // 获取上次上报时间
+        LocalDate lastDayOfLastMonth = LocalDate.parse(sysManagementCollection.getYsKprqLast());
+
+        List<SysManagementCollection> list = sysManagementCollectionService.selectSysManagementCollectionList(sysManagementCollection);
+
+        BigDecimal zb = BigDecimal.ZERO;
+        BigDecimal yn = BigDecimal.ZERO;
+        BigDecimal ysn = BigDecimal.ZERO;
+        BigDecimal sn = BigDecimal.ZERO;
+        BigDecimal xzsn = BigDecimal.ZERO;
+        BigDecimal wy = new BigDecimal("10000");
+
+        for (SysManagementCollection obj : list) {
+            zb = zb.add(obj.getYsWdzje());
+            Date ysKprq = obj.getYsKprq();
+            LocalDate ysKprqLocalDate = ysKprq.toInstant().atZone(ZoneId.systemDefault()).toLocalDate();
+            LocalDate currentDate = LocalDate.parse(sysManagementCollection.getYsKprqCs());
+            Period period = Period.between(ysKprqLocalDate, currentDate);
+            int years = period.getYears();
+            if (years < 1) {
+                obj.setYsZl("1年以内");
+                yn = yn.add(obj.getYsWdzje());
+            } else if (years >= 1 && years < 3) {
+                obj.setYsZl("1-3年");
+                ysn = ysn.add(obj.getYsWdzje());
+            } else {
+                obj.setYsZl("3年以上");
+                sn = sn.add(obj.getYsWdzje());
+            }
+            Period lastPeriod = Period.between(ysKprqLocalDate, lastDayOfLastMonth);
+            int lastYears = lastPeriod.getYears();
+
+            if (years >= 3 && lastYears < 3){
+                xzsn = xzsn.add(obj.getYsWdzje());
+            }
+
+        }
+
+        Map<String, BigDecimal> map = new LinkedHashMap<>();
+        map.put("zb", zb.divide(wy, 4, RoundingMode.HALF_UP));
+        map.put("yn", yn.divide(wy, 4, RoundingMode.HALF_UP));
+        map.put("ysn", ysn.divide(wy, 4, RoundingMode.HALF_UP));
+        map.put("sn", sn.divide(wy, 4, RoundingMode.HALF_UP));
+        map.put("xzsn", xzsn.divide(wy, 4, RoundingMode.HALF_UP));
+        return success(map);
     }
 
     public static int countOccurrences(String text, String substring) {
