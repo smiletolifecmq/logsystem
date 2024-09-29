@@ -66,3 +66,11 @@ export function exportYs(query) {
     params: query
   })
 }
+
+export function exportJyyb(query) {
+  return request({
+    url: '/system/collection/exportJyyb',
+    method: 'get',
+    params: query
+  })
+}

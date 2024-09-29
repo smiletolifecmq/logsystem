@@ -38,6 +38,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
             </if>
             <if test="dzFzr != null "> and dz_fzr= #{dzFzr}</if>
             <if test="monthString != null  and monthString != ''"> and date_format(dz_rq,'%y%m') = date_format(#{monthString},'%y%m')</if>
+            <if test="yearString != null  and yearString != ''"> and date_format(dz_rq,'%y') = date_format(#{yearString},'%y')</if>
         </where>
         order by dz_id desc
     </select>

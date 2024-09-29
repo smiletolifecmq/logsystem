@@ -86,6 +86,16 @@ public class SysManagementArrival extends BaseEntity
 
     private String monthString;
 
+    private String yearString;
+
+    public String getYearString() {
+        return yearString;
+    }
+
+    public void setYearString(String yearString) {
+        this.yearString = yearString;
+    }
+
     public String getMonthString() {
         return monthString;
     }

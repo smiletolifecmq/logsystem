@@ -83,6 +83,17 @@
           >导出应收账款统计表</el-button
         >
       </el-col>
+      <el-col :span="1.5">
+        <el-button
+          type="danger"
+          plain
+          icon="el-icon-download"
+          size="mini"
+          @click="handleExportJyyb"
+          v-hasPermi="['system:collection:jyyb']"
+          >导出经营月报总表</el-button
+        >
+      </el-col>
       <right-toolbar
         :showSearch.sync="showSearch"
         @queryTable="getList"
@@ -496,6 +507,7 @@ import {
   updateCollection,
   exportCs,
   exportYs,
+  exportJyyb,
 } from "@/api/system/collection";
 import userInfo from "@/store/modules/user";
 import ExcelJS from "exceljs";
@@ -952,6 +964,74 @@ export default {
               });
           });
         }
+      });
+    },
+
+    handleExportJyyb() {
+      this.csTimeForm = {
+        ysKprqCs: new Date(),
+      };
+      var dateRq = "";
+      if (this.csTimeForm.ysKprqCs) {
+        // 将日期对象转换为 yyyy-mm 格式的字符串
+        const date = new Date(this.csTimeForm.ysKprqCs);
+        const year = date.getFullYear();
+        const month = String(date.getMonth() + 1).padStart(2, "0"); // 月份从 0 开始
+        const day = String(date.getDate()).padStart(2, "0"); //
+        this.queryParams.ysKprqCs = `${year}-${month}-${day}`;
+        dateRq = `${year}年${month}月${day}日`;
+      }
+
+      exportJyyb(this.queryParams).then((responseData) => {
+        fetch("/jyyb.xlsx")
+          .then((response) => {
+            if (!response.ok) throw new Error("Network response was not ok");
+            return response.arrayBuffer();
+          })
+          .then((data) => {
+            const workbook = new ExcelJS.Workbook();
+            return workbook.xlsx.load(data);
+          })
+          .then((workbook) => {
+            const sheet = workbook.getWorksheet("经营月报总表");
+
+            // 替换的对象
+            responseData.data.tjrq = dateRq;
+            const dataToReplace = responseData.data;
+
+            // 替换占位符
+            sheet.eachRow((row) => {
+              row.eachCell((cell) => {
+                if (typeof cell.value === "string") {
+                  for (const key in dataToReplace) {
+                    cell.value = cell.value.replace(
+                      new RegExp(`{${key}}`, "g"),
+                      dataToReplace[key]
+                    );
+                  }
+                }
+              });
+            });
+
+            // 导出修改后的文件
+            return workbook.xlsx.writeBuffer();
+          })
+          .then((buffer) => {
+            const blob = new Blob([buffer], {
+              type: "application/octet-stream",
+            });
+            const url = window.URL.createObjectURL(blob);
+            const a = document.createElement("a");
+            a.href = url;
+            a.download = "经营月报总表_" + dateRq + ".xlsx";
+            document.body.appendChild(a);
+            a.click();
+            a.remove();
+            this.cancel();
+          })
+          .catch((error) => {
+            console.error("Error loading the Excel file:", error);
+          });
       });
     },
   },

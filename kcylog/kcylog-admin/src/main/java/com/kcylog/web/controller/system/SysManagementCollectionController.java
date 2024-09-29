@@ -7,12 +7,13 @@ import com.kcylog.common.core.page.TableDataInfo;
 import com.kcylog.common.enums.BusinessType;
 import com.kcylog.system.common.Cstj;
 import com.kcylog.system.common.Fhtj;
+import com.kcylog.system.common.Jyybtj;
 import com.kcylog.system.domain.SysManagementArrival;
 import com.kcylog.system.domain.SysManagementCollection;
 import com.kcylog.system.domain.SysManagementInvoicing;
+import com.kcylog.system.service.ISysManagementArrivalService;
 import com.kcylog.system.service.ISysManagementCollectionService;
 import com.kcylog.system.service.ISysManagementInvoicingService;
-import com.kcylog.system.service.ISysManagementArrivalService;
 import com.kcylog.web.controller.common.ExcelManySheetUtil;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.access.prepost.PreAuthorize;
@@ -20,6 +21,7 @@ import org.springframework.web.bind.annotation.*;
 
 import javax.servlet.http.HttpServletResponse;
 import java.math.BigDecimal;
+import java.math.RoundingMode;
 import java.time.LocalDate;
 import java.time.Period;
 import java.time.ZoneId;
@@ -467,6 +469,112 @@ public class SysManagementCollectionController extends BaseController
         cstj.setHzThree(hzThree);
         cstj.setTotalThree(totalThree);
         return success(cstj);
+    }
+
+    @GetMapping(value = "/exportJyyb")
+    public AjaxResult exportJyyb(SysManagementCollection sysManagementCollection)
+    {
+        if (sysManagementCollection.getYsKprqCs() == null){
+            return error("未选择上报日期");
+        }
+
+        BigDecimal kpmb1 = new BigDecimal("50920000");
+        BigDecimal kpmb2 = new BigDecimal("43920000");
+        BigDecimal dzmb1 = new BigDecimal("43710000");
+        BigDecimal dzmb2 = new BigDecimal("37700000");
+        BigDecimal bfs = new BigDecimal("100");
+        BigDecimal wy = new BigDecimal("10000");
+        int qtkp = 0;
+        int qtdz = 0;
+        int htkp = 0;
+        int htdz = 0;
+        BigDecimal qtkpje = BigDecimal.ZERO;
+        BigDecimal qtdzje = BigDecimal.ZERO;
+        BigDecimal htkpje = BigDecimal.ZERO;
+        BigDecimal htdzje = BigDecimal.ZERO;
+        BigDecimal kpzbOne = BigDecimal.ZERO;
+        BigDecimal kpzbTwo = BigDecimal.ZERO;
+        BigDecimal htzbOne = BigDecimal.ZERO;
+        BigDecimal htzbTwo = BigDecimal.ZERO;
+        BigDecimal snjdyszk = BigDecimal.ZERO;
+        BigDecimal lshk = BigDecimal.ZERO;
+        BigDecimal bndxz = BigDecimal.ZERO;
+        BigDecimal xzzk = BigDecimal.ZERO;
+        BigDecimal qbyszk = BigDecimal.ZERO;
+        BigDecimal zjl = BigDecimal.ZERO;
+
+        BigDecimal bndkpdz = BigDecimal.ZERO;
+
+        Jyybtj jyybtj = new Jyybtj();
+
+        //获取本年开票
+        SysManagementInvoicing sysManagementInvoicing = new SysManagementInvoicing();
+        sysManagementInvoicing.setYearString(sysManagementCollection.getYsKprqCs());
+        List<SysManagementInvoicing> invoicing = sysManagementInvoicingService.selectInvoicingListHcMonth(sysManagementInvoicing);
+        for (SysManagementInvoicing obj1 : invoicing){
+            if (Objects.equals(obj1.getKpYwxz(), "行政性")){
+                qtkp ++;
+                qtkpje = qtkpje.add(obj1.getKpKpje());
+            }else if (Objects.equals(obj1.getKpYwxz(), "合同")){
+                htkp ++;
+                htkpje = htkpje.add(obj1.getKpKpje());
+            }
+        }
+
+        //获取本年到账
+        SysManagementArrival sysManagementArrival = new SysManagementArrival();
+        sysManagementArrival.setYearString(sysManagementCollection.getYsKprqCs());
+        List<SysManagementArrival> arrival = sysManagementArrivalService.selectSysManagementArrivalList(sysManagementArrival);
+        for (SysManagementArrival obj2 : arrival){
+            if (Objects.equals(obj2.getDzYwxz(), "行政性")){
+                qtdz ++;
+                qtdzje = qtdzje.add(obj2.getDzMoney());
+            }else if (Objects.equals(obj2.getDzYwxz(), "合同")){
+                htdz ++;
+                htdzje = htdzje.add(obj2.getDzMoney());
+            }
+            if (Objects.equals(obj2.getDzType(), "本年度开票本年度到账")){
+                bndkpdz = bndkpdz.add(obj2.getDzMoney());
+            }
+            if (Objects.equals(obj2.getDzType(), "非本年度开票到账")){
+                lshk = lshk.add(obj2.getDzMoney());
+            }
+        }
+
+        kpzbOne = qtkpje.add(htkpje).divide(kpmb1, 4, RoundingMode.HALF_UP).multiply(bfs);
+        kpzbTwo = qtkpje.add(htkpje).divide(kpmb2, 4, RoundingMode.HALF_UP).multiply(bfs);
+        htzbOne = qtdzje.add(htdzje).divide(dzmb1, 4, RoundingMode.HALF_UP).multiply(bfs);
+        htzbTwo = qtdzje.add(htdzje).divide(dzmb2, 4, RoundingMode.HALF_UP).multiply(bfs);
+
+        //获取全部应收账款
+        List<SysManagementCollection> collection = sysManagementCollectionService.selectSysManagementCollectionList(sysManagementCollection);
+        for (SysManagementCollection obj3 : collection){
+            qbyszk = qbyszk.add(obj3.getYsWdzje());
+        }
+
+        bndxz = qtkpje.add(htkpje).subtract(bndkpdz);
+        snjdyszk = qbyszk.subtract(bndxz).add(lshk);
+        xzzk = qtkpje.add(htkpje).subtract(qtdzje).subtract(htdzje);
+        jyybtj.setQtkp(qtkp);
+        jyybtj.setQtkpje(qtkpje.divide(wy, 4, RoundingMode.HALF_UP));
+        jyybtj.setHtkp(htkp);
+        jyybtj.setHtkpje(htkpje.divide(wy, 4, RoundingMode.HALF_UP));
+        jyybtj.setKpzbOne(kpzbOne);
+        jyybtj.setKpzbTwo(kpzbTwo);
+        jyybtj.setQtdz(qtdz);
+        jyybtj.setQtdzje(qtdzje.divide(wy, 4, RoundingMode.HALF_UP));
+        jyybtj.setHtdz(htdz);
+        jyybtj.setHtdzje(htdzje.divide(wy, 4, RoundingMode.HALF_UP));
+        jyybtj.setHtzbOne(htzbOne);
+        jyybtj.setHtzbTwo(htzbTwo);
+        jyybtj.setQbyszk(qbyszk.divide(wy, 4, RoundingMode.HALF_UP));
+        jyybtj.setXzzk(xzzk.divide(wy, 4, RoundingMode.HALF_UP));
+        jyybtj.setBndxz(bndxz.divide(wy, 4, RoundingMode.HALF_UP));
+        jyybtj.setLshk(lshk.divide(wy, 4, RoundingMode.HALF_UP));
+        jyybtj.setSnjdyszk(snjdyszk.divide(wy, 4, RoundingMode.HALF_UP));
+        jyybtj.setZjl(xzzk.divide(snjdyszk, 4, RoundingMode.HALF_UP).multiply(bfs));
+
+        return success(jyybtj);
     }
 
     public static int countOccurrences(String text, String substring) {
