@@ -304,8 +304,8 @@ export default {
     const year1 = date1.getFullYear();
     const month1 = String(date1.getMonth() + 1).padStart(2, "0");
     const day1 = String(date1.getDate()).padStart(2, "0");
-    this.queryParams.ysKprqLast = `${year}-${month}-${day}`;
-    this.queryParams.ysKprqCs = `${year1}-${month1}-${day1}`;
+    this.queryParams.ysKprqLast = `${year1}-${month1}-${day1}`;
+    this.queryParams.ysKprqCs = `${year}-${month}-${day}`;
     this.tjTitle =
       `统计截止时间为：${this.queryParams.ysKprqLast}，上次上报时间为：` +
       `${this.queryParams.ysKprqCs}  单位（万元）`;
