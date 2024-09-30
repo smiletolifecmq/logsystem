@@ -89,6 +89,7 @@ public class SysManagementInvoicingController extends BaseController
         if (sysManagementInvoicing.getKpFzr() == null){
             sysManagementInvoicing.setKpFzr(SecurityUtils.getUsername());
         }
+        sysManagementInvoicing.setKpFzr(sysManagementInvoicing.getKpFzr().trim());
         sysManagementInvoicing.setKpFph(sysManagementInvoicing.getKpFph().trim());
         if (sysManagementInvoicing.getKpHcph() != null){
             sysManagementInvoicing.setKpHcph(sysManagementInvoicing.getKpHcph().trim());
@@ -151,6 +152,7 @@ public class SysManagementInvoicingController extends BaseController
         if (sysManagementInvoicing.getKpFzr() == null){
             sysManagementInvoicing.setKpFzr(SecurityUtils.getUsername());
         }
+        sysManagementInvoicing.setKpFzr(sysManagementInvoicing.getKpFzr().trim());
         return toAjax(sysManagementInvoicingService.updateSysManagementInvoicing(sysManagementInvoicing));
     }
 

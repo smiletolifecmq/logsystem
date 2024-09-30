@@ -94,7 +94,7 @@ public class SysManagementArrivalController extends BaseController
         if (sysManagementArrival.getDzFzr() == null){
             sysManagementArrival.setDzFzr(SecurityUtils.getUsername());
         }
-
+        sysManagementArrival.setDzFzr(sysManagementArrival.getDzFzr().trim());
         Calendar cal1 = Calendar.getInstance();
         cal1.setTime(sysManagementArrival.getDzKprq());
         Calendar cal2 = Calendar.getInstance();
@@ -141,6 +141,7 @@ public class SysManagementArrivalController extends BaseController
         if (sysManagementArrival.getDzFzr() == null){
             sysManagementArrival.setDzFzr(SecurityUtils.getUsername());
         }
+        sysManagementArrival.setDzFzr(sysManagementArrival.getDzFzr().trim());
         Calendar cal1 = Calendar.getInstance();
         cal1.setTime(sysManagementArrival.getDzKprq());
         Calendar cal2 = Calendar.getInstance();

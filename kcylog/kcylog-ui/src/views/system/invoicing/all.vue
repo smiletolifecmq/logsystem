@@ -222,7 +222,15 @@
           <el-input v-model="form.kpKhmc" placeholder="请输入客户名称" />
         </el-form-item>
         <el-form-item label="客户分类" prop="kpKhfl" label-width="260px">
-          <el-input v-model="form.kpKhfl" placeholder="请输入客户分类" />
+          <el-select v-model="form.kpKhfl" placeholder="请选择">
+            <el-option
+              v-for="item in kpKhfls"
+              :key="item.value"
+              :label="item.label"
+              :value="item.value"
+            >
+            </el-option>
+          </el-select>
         </el-form-item>
         <el-form-item label="业务性质" prop="kpYwxz" label-width="260px">
           <el-select v-model="form.kpYwxz" placeholder="请选择">
@@ -370,6 +378,20 @@ export default {
   name: "Invoicing",
   data() {
     return {
+      kpKhfls: [
+        {
+          value: "事业单位",
+          label: "事业单位",
+        },
+        {
+          value: "民营企业",
+          label: "民营企业",
+        },
+        {
+          value: "国企",
+          label: "国企",
+        },
+      ],
       dzForm: [],
       dztitle: "到账详情",
       dzopen: false,
