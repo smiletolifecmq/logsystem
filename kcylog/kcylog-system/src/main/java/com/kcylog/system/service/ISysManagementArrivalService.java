@@ -61,4 +61,6 @@ public interface ISysManagementArrivalService
     public int deleteSysManagementArrivalByDzId(Long dzId);
 
     public List<SysManagementArrival> selectSysManagementArrivalByDzFph(String dzFph);
+
+    public List<SysManagementArrival> selectSysManagementArrivalListForFphs(List<String> fphs);
 }

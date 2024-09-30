@@ -367,7 +367,7 @@ export default {
         item.bndxz = responseData.data.bndxz;
         item.xzzk = responseData.data.xzzk;
         item.qbyszk = responseData.data.qbyszk;
-        item.zjl = responseData.data.zjl;
+        item.zjl = responseData.data.zjl + "%";
         this.tableDataTj.push(item);
       });
     },

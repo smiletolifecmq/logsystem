@@ -120,4 +120,12 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
         <include refid="selectSysManagementArrivalVo"/>
         where dz_fph = #{dzFph}
     </select>
+
+    <select id="selectSysManagementArrivalListForFphs" parameterType="java.util.List" resultMap="SysManagementArrivalResult">
+        select * from sys_management_arrival
+        where dz_fph in
+        <foreach item="fph" collection="list" open="(" separator="," close=")">
+            #{fph}
+        </foreach>
+    </select>
 </mapper>

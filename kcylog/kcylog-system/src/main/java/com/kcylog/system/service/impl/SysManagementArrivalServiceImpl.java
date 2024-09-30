@@ -1,11 +1,12 @@
 package com.kcylog.system.service.impl;
 
-import java.util.List;
+import com.kcylog.system.domain.SysManagementArrival;
+import com.kcylog.system.mapper.SysManagementArrivalMapper;
+import com.kcylog.system.service.ISysManagementArrivalService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-import com.kcylog.system.mapper.SysManagementArrivalMapper;
-import com.kcylog.system.domain.SysManagementArrival;
-import com.kcylog.system.service.ISysManagementArrivalService;
+
+import java.util.List;
 
 /**
  * 经营到账统计Service业务层处理
@@ -95,5 +96,11 @@ public class SysManagementArrivalServiceImpl implements ISysManagementArrivalSer
     public List<SysManagementArrival> selectSysManagementArrivalByDzFph(String dzFph)
     {
         return sysManagementArrivalMapper.selectSysManagementArrivalByDzFph(dzFph);
+    }
+
+    @Override
+    public List<SysManagementArrival> selectSysManagementArrivalListForFphs(List<String> fphs)
+    {
+        return sysManagementArrivalMapper.selectSysManagementArrivalListForFphs(fphs);
     }
 }

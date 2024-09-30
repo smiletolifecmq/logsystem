@@ -336,19 +336,6 @@ public class SysManagementCollectionController extends BaseController
         for (SysManagementCollection temp : lastMonthLastDayList){
             Date ysKprq = temp.getYsKprq();
             LocalDate ysKprqLocalDate = ysKprq.toInstant().atZone(ZoneId.systemDefault()).toLocalDate();
-            Period period = Period.between(ysKprqLocalDate, lastMonthLastDay);
-            int years = period.getYears();
-            // 判断时间段
-            if (years < 1) {
-                //红冲1年内
-                syclOne = syclOne.add(temp.getYsWdzje());
-            } else if (years >= 1 && years < 3) {
-                //红冲1-3年
-                syclTwo = syclTwo.add(temp.getYsWdzje());
-            } else {
-                //红冲3年以上
-                syclThree = syclThree.add(temp.getYsWdzje());
-            }
         }
 
         // 获取全部
@@ -411,15 +398,21 @@ public class SysManagementCollectionController extends BaseController
         SysManagementInvoicing sysManagementInvoicing = new SysManagementInvoicing();
         sysManagementInvoicing.setMonthString(sysManagementCollection.getYsKprqCs());
         List<SysManagementInvoicing> invoicing = sysManagementInvoicingService.selectInvoicingListHcMonth(sysManagementInvoicing);
+        List<String> fph = new ArrayList<>();
+        for (SysManagementInvoicing obj : invoicing){
+            fph.add(obj.getKpFph());
+        }
+        //查找本月开票是否有到账数据
+        List<SysManagementArrival> arrivalForInvoicing = sysManagementArrivalService.selectSysManagementArrivalListForFphs(fph);
+        Map<String, SysManagementArrival> arrivalMap = new HashMap<>();
+        for (SysManagementArrival obj : arrivalForInvoicing){
+            arrivalMap.put(obj.getDzFph(), obj);
+        }
 
         //获取本月到账
         SysManagementArrival sysManagementArrival = new SysManagementArrival();
         sysManagementArrival.setMonthString(sysManagementCollection.getYsKprqCs());
         List<SysManagementArrival> arrival = sysManagementArrivalService.selectSysManagementArrivalList(sysManagementArrival);
-        Map<String, Boolean> arrivalMap = new HashMap<>();
-        for (SysManagementArrival obj : arrival){
-            arrivalMap.put(obj.getDzFph(), true);
-        }
 
         for (SysManagementInvoicing obj1 : invoicing){
             if (obj1.getKpType() == 2 && obj1.getKpYfpsj() != null){
@@ -464,24 +457,15 @@ public class SysManagementCollectionController extends BaseController
                     byhkThree = byhkThree.add(obj2.getDzMoney().abs());
                 }
             }
-            Period period1 = Period.between(ysDzKprqLocalDate, lastMonthLastDay);
-            int years1 = period1.getYears();
-            // 判断时间段
-            if (years1 < 1 && (lastMonthLastDay.isAfter(ysDzKprqLocalDate) || lastMonthLastDay.isEqual(ysDzKprqLocalDate))) {
-                //1年内
-                syclOne = syclOne.add(obj2.getDzMoney());
-            } else if (years1 >= 1 && years1 < 3 && lastMonthLastDay.isAfter(ysDzKprqLocalDate) || lastMonthLastDay.isEqual(ysDzKprqLocalDate)) {
-                //1-3年
-                syclTwo = syclTwo.add(obj2.getDzMoney());
-            } else if(lastMonthLastDay.isAfter(ysDzKprqLocalDate) || lastMonthLastDay.isEqual(ysDzKprqLocalDate)){
-                //3年以上
-                syclThree = syclThree.add(obj2.getDzMoney().abs());
-            }
         }
 
-        totalOne = syclOne.add(byxzOne).subtract(byhkOne).subtract(hcOne).subtract(oneTwo);
-        totalTwo = syclTwo.add(byxzTwo).subtract(byhkTwo).subtract(hcTwo).subtract(twoThree);
-        totalThree = syclThree.add(byxzThree).subtract(byhkThree).subtract(hcThree).subtract(hzThree);
+        syclOne = gymyOne.add(oneTwo).add(hcOne).add(byhkOne).subtract(byxzOne);
+        syclTwo = gymyTwo.add(twoThree).add(hcTwo).add(byhkTwo).subtract(byxzTwo);
+        syclThree = gymyThree.add(hzThree).add(hcThree).add(byhkThree).subtract(byxzThree);
+
+        totalOne = gymyOne.divide(wy, 4, RoundingMode.HALF_UP);
+        totalTwo = gymyTwo.divide(wy, 4, RoundingMode.HALF_UP);
+        totalThree = gymyThree.divide(wy, 4, RoundingMode.HALF_UP);
 
         cstj.setTotal(total.divide(wy, 4, RoundingMode.HALF_UP));
         cstj.setSyclOne(syclOne.divide(wy, 4, RoundingMode.HALF_UP));
@@ -489,21 +473,21 @@ public class SysManagementCollectionController extends BaseController
         cstj.setByhkOne(byhkOne.divide(wy, 4, RoundingMode.HALF_UP));
         cstj.setHcOne(hcOne.divide(wy, 4, RoundingMode.HALF_UP));
         cstj.setOneTwo(oneTwo.divide(wy, 4, RoundingMode.HALF_UP));
-        cstj.setTotalOne(totalOne.divide(wy, 4, RoundingMode.HALF_UP));
+        cstj.setTotalOne(totalOne);
 
         cstj.setSyclTwo(syclTwo.divide(wy, 4, RoundingMode.HALF_UP));
         cstj.setByxzTwo(byxzTwo.divide(wy, 4, RoundingMode.HALF_UP));
         cstj.setByhkTwo(byhkTwo.divide(wy, 4, RoundingMode.HALF_UP));
         cstj.setHcTwo(hcTwo.divide(wy, 4, RoundingMode.HALF_UP));
         cstj.setTwoThree(twoThree.divide(wy, 4, RoundingMode.HALF_UP));
-        cstj.setTotalTwo(totalTwo.divide(wy, 4, RoundingMode.HALF_UP));
+        cstj.setTotalTwo(totalTwo);
 
         cstj.setSyclThree(syclThree.divide(wy, 4, RoundingMode.HALF_UP));
         cstj.setByxzThree(byxzThree.divide(wy, 4, RoundingMode.HALF_UP));
         cstj.setByhkThree(byhkThree.divide(wy, 4, RoundingMode.HALF_UP));
         cstj.setHcThree(hcThree.divide(wy, 4, RoundingMode.HALF_UP));
         cstj.setHzThree(hzThree.divide(wy, 4, RoundingMode.HALF_UP));
-        cstj.setTotalThree(totalThree.divide(wy, 4, RoundingMode.HALF_UP));
+        cstj.setTotalThree(totalThree);
 
         cstj.setGyOne(gyOne.divide(wy, 4, RoundingMode.HALF_UP));
         cstj.setMyOne(myOne.divide(wy, 4, RoundingMode.HALF_UP));
@@ -700,5 +684,16 @@ public class SysManagementCollectionController extends BaseController
 
         return cal1.get(Calendar.YEAR) == cal2.get(Calendar.YEAR) &&
                 cal1.get(Calendar.MONTH) == cal2.get(Calendar.MONTH);
+    }
+
+    public static boolean isSameYearNotMonth(Date date1, Date date2) {
+        Calendar cal1 = Calendar.getInstance();
+        Calendar cal2 = Calendar.getInstance();
+
+        cal1.setTime(date1);
+        cal2.setTime(date2);
+
+        return cal1.get(Calendar.YEAR) == cal2.get(Calendar.YEAR) &&
+                cal1.get(Calendar.MONTH) < cal2.get(Calendar.MONTH);
     }
 }
