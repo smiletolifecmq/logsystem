@@ -23,6 +23,7 @@ import javax.servlet.http.HttpServletResponse;
 import java.math.BigDecimal;
 import java.math.RoundingMode;
 import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.time.Period;
 import java.time.ZoneId;
 import java.time.format.DateTimeFormatter;
@@ -402,8 +403,11 @@ public class SysManagementCollectionController extends BaseController
         for (SysManagementInvoicing obj : invoicing){
             fph.add(obj.getKpFph());
         }
+        List<SysManagementArrival> arrivalForInvoicing = new ArrayList<>();
         //查找本月开票是否有到账数据
-        List<SysManagementArrival> arrivalForInvoicing = sysManagementArrivalService.selectSysManagementArrivalListForFphs(fph);
+        if (fph.size() != 0){
+            arrivalForInvoicing = sysManagementArrivalService.selectSysManagementArrivalListForFphs(fph);
+        }
         Map<String, SysManagementArrival> arrivalMap = new HashMap<>();
         for (SysManagementArrival obj : arrivalForInvoicing){
             arrivalMap.put(obj.getDzFph(), obj);
@@ -419,17 +423,22 @@ public class SysManagementCollectionController extends BaseController
                 Date yfpsj = obj1.getKpYfpsj();
                 LocalDate ysKprqLocalDate = yfpsj.toInstant().atZone(ZoneId.systemDefault()).toLocalDate();
                 Period period = Period.between(ysKprqLocalDate, currentDate);
+                LocalDateTime localDateTime = currentDate.atStartOfDay(); // 将 LocalDate 转换为 LocalDateTime
+                Date currentDateTemp = Date.from(localDateTime.atZone(ZoneId.systemDefault()).toInstant()); // 转换为 Date
                 int years = period.getYears();
                 // 判断时间段
-                if (years < 1) {
+                if (years < 1 && !isSameYearAndMonth(yfpsj, currentDateTemp)) {
                     //红冲1年内
                     hcOne = hcOne.add(obj1.getKpKpje().abs());
-                } else if (years >= 1 && years < 3) {
+                } else if (years >= 1 && years < 3 && !isSameYearAndMonth(yfpsj, currentDateTemp)) {
                     //红冲1-3年
                     hcTwo = hcTwo.add(obj1.getKpKpje().abs());
                 } else {
-                    //红冲3年以上
-                    hcThree = hcThree.add(obj1.getKpKpje().abs());
+                    if (!isSameYearAndMonth(yfpsj, currentDateTemp)){
+                        //红冲3年以上
+                        hcThree = hcThree.add(obj1.getKpKpje().abs());
+                    }
+
                 }
             }
             //一年期内 本月新增且不回款

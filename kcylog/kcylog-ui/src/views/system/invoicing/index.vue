@@ -141,7 +141,7 @@
         align="center"
         prop="kpZqdMoney"
       />
-      <el-table-column label="到账时间" align="center" prop="kpDzsj" />
+      <!-- <el-table-column label="到账时间" align="center" prop="kpDzsj" /> -->
       <el-table-column label="销售方" align="center" prop="kpXsf" />
       <el-table-column label="备注" align="center" prop="kpBz" />
       <el-table-column
@@ -317,12 +317,12 @@
             :step="0.1"
           ></el-input-number>
         </el-form-item>
-        <el-form-item label="到账时间" prop="kpDzsj" label-width="260px">
+        <!-- <el-form-item label="到账时间" prop="kpDzsj" label-width="260px">
           <el-input
             v-model="form.kpDzsj"
             placeholder="请输入开票对应的到账时间"
           />
-        </el-form-item>
+        </el-form-item> -->
         <el-form-item label="销售方" prop="kpXsf" label-width="260px">
           <el-input v-model="form.kpXsf" placeholder="请输入销售方" />
         </el-form-item>
