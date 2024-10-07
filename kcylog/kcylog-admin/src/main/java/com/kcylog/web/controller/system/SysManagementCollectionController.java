@@ -103,7 +103,15 @@ public class SysManagementCollectionController extends BaseController
         List<SysManagementCollection> overThreeYearList = new ArrayList<>();
         List<SysManagementCollection> toThreeYearList = new ArrayList<>();
 
+        int num = 0;
+        int num1 = 0;
+        int num2 = 0;
+        int num3 = 0;
+        int num4 = 0;
+
         for (SysManagementCollection obj : list) {
+            num ++;
+            obj.setNum(num);
             Date ysKprq = obj.getYsKprq();
             LocalDate ysKprqLocalDate = ysKprq.toInstant().atZone(ZoneId.systemDefault()).toLocalDate();
             LocalDate currentDate = LocalDate.parse(sysManagementCollection.getYsKprqCs());
@@ -134,6 +142,22 @@ public class SysManagementCollectionController extends BaseController
         String formattedDate = currentDate.format(formatter);
 
         Map<String, List<SysManagementCollection>> map = new LinkedHashMap<>();
+        for (SysManagementCollection obj : withinOneYearList){
+            num1 ++;
+            obj.setNum(num1);
+        }
+        for (SysManagementCollection obj : oneToThreeYearList){
+            num2 ++;
+            obj.setNum(num2);
+        }
+        for (SysManagementCollection obj : overThreeYearList){
+            num3 ++;
+            obj.setNum(num3);
+        }
+        for (SysManagementCollection obj : toThreeYearList){
+            num4 ++;
+            obj.setNum(num4);
+        }
         map.put("总表", list);
         map.put("1年内清单", withinOneYearList);
         map.put("1年至3年清单", oneToThreeYearList);

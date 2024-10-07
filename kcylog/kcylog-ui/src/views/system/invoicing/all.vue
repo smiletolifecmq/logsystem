@@ -466,9 +466,9 @@ export default {
         kpHtje: [
           { required: true, message: "请输入合同金额", trigger: "blur" },
         ],
-        kpHtmc: [
-          { required: true, message: "请输入合同名称", trigger: "blur" },
-        ],
+        // kpHtmc: [
+        //   { required: true, message: "请输入合同名称", trigger: "blur" },
+        // ],
         kpHtbh: [
           { required: true, message: "请输入合同编号", trigger: "blur" },
         ],
@@ -478,12 +478,12 @@ export default {
         kpKhmc: [
           { required: true, message: "请输入客户名称", trigger: "blur" },
         ],
-        kpKhfl: [
-          { required: true, message: "请输入客户分类", trigger: "blur" },
-        ],
-        kpYwxz: [
-          { required: true, message: "业务性质不能为空", trigger: "blur" },
-        ],
+        // kpKhfl: [
+        //   { required: true, message: "请输入客户分类", trigger: "blur" },
+        // ],
+        // kpYwxz: [
+        //   { required: true, message: "业务性质不能为空", trigger: "blur" },
+        // ],
         kpKpje: [
           { required: true, message: "开票金额不能为空", trigger: "blur" },
         ],

@@ -22,6 +22,9 @@ public class SysManagementCollection extends BaseEntity
     /** 应收账款ID */
     private Long ysId;
 
+    @Excel(name = "序号")
+    private int num;
+
     /** 合同名称 */
     @Excel(name = "合同名称")
     private String ysHtmc;
@@ -123,6 +126,14 @@ public class SysManagementCollection extends BaseEntity
     private String ysKprqLast;
 
     private String ysSzqu;
+
+    public int getNum() {
+        return num;
+    }
+
+    public void setNum(int num) {
+        this.num = num;
+    }
 
     public String getYsSzqu() {
         return ysSzqu;

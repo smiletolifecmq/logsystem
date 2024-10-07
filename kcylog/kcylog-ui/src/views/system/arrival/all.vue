@@ -402,14 +402,14 @@ export default {
         dzKprq: [
           { required: true, message: "请输入开票日期", trigger: "blur" },
         ],
-        dzYwxz: [
-          { required: true, message: "业务性质不能为空", trigger: "blur" },
-        ],
+        // dzYwxz: [
+        //   { required: true, message: "业务性质不能为空", trigger: "blur" },
+        // ],
         dzFph: [{ required: true, message: "发票号不能为空", trigger: "blur" }],
         dzRq: [{ required: true, message: "请选择到账日期", trigger: "blur" }],
-        dzType: [
-          { required: true, message: "请选择到账类型", trigger: "blur" },
-        ],
+        // dzType: [
+        //   { required: true, message: "请选择到账类型", trigger: "blur" },
+        // ],
         dzMoney: [
           { required: true, message: "到账金额不能为空", trigger: "blur" },
         ],
