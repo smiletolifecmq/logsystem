@@ -30,10 +30,11 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
         <result property="ysIssq"    column="ys_issq"    />
         <result property="ysStatus"    column="ys_status"    />
         <result property="ysIshz"    column="ys_ishz"    />
+        <result property="ysSzqu"    column="ys_szqu"    />
     </resultMap>
 
     <sql id="selectSysManagementCollectionVo">
-        select ys_id, ys_htmc, ys_htbh, ys_fzbm, ys_fzr, ys_khmc, ys_khfl, ys_htje, ys_kprq, ys_kpje, ys_ydzje, ys_wdzje, ys_fhlx, ys_fhsj, ys_cs, ys_bz, ys_zjly, ys_fph, ys_gzqk, ys_zxqk, ys_htrq, ys_ssdqsj, ys_issq, ys_status, ys_ishz from sys_management_collection
+        select ys_id, ys_htmc, ys_htbh, ys_fzbm, ys_fzr, ys_khmc, ys_khfl, ys_htje, ys_kprq, ys_kpje, ys_ydzje, ys_wdzje, ys_fhlx, ys_fhsj, ys_cs, ys_bz, ys_zjly, ys_fph, ys_gzqk, ys_zxqk, ys_htrq, ys_ssdqsj, ys_issq, ys_status, ys_ishz, ys_szqu from sys_management_collection
     </sql>
 
     <select id="selectSysManagementCollectionList" parameterType="SysManagementCollection" resultMap="SysManagementCollectionResult">
@@ -122,6 +123,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
             <if test="ysSsdqsj != null">ys_ssdqsj = #{ysSsdqsj},</if>
             <if test="ysIssq != null">ys_issq = #{ysIssq},</if>
             <if test="ysIshz != null">ys_ishz = #{ysIshz},</if>
+            <if test="ysSzqu != null">ys_szqu = #{ysSzqu},</if>
         </trim>
         where ys_id = #{ysId}
     </update>

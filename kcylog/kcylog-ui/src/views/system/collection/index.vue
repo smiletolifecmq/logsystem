@@ -146,6 +146,7 @@
       <el-table-column label="发函类型" align="center" prop="ysFhlx" />
       <el-table-column label="发函时间" align="center" prop="ysFhsj" />
       <el-table-column label="账龄" align="center" prop="ysZl" />
+      <el-table-column label="所在区域" align="center" prop="ysSzqu" />
       <el-table-column label="是否坏账" align="center" prop="ysIshz">
         <template slot-scope="scope">
           <el-tag v-if="scope.row.ysIshz === 0" type="success">否</el-tag>
@@ -275,6 +276,9 @@
         <el-form-item label="诉讼到期时间" prop="ysSsdqsj" label-width="200px">
           <el-input v-model="form.ysSsdqsj" placeholder="请输入诉讼到期时间" />
         </el-form-item>
+        <el-form-item label="所在区域" prop="ysSzqu" label-width="200px">
+          <el-input v-model="form.ysSzqu" placeholder="请输入所在区域" />
+        </el-form-item>
         <el-form-item
           label="业主所在地是否为四城区"
           prop="ysIssq"
@@ -376,6 +380,9 @@
           label-class-name="bold-label"
           >{{ form.ysSsdqsj }}</el-descriptions-item
         >
+        <el-descriptions-item label="所在区域" label-class-name="bold-label">{{
+          form.ysSzqu
+        }}</el-descriptions-item>
         <el-descriptions-item
           label="业主所在地区是否为四城区"
           label-class-name="bold-label"

@@ -122,6 +122,16 @@ public class SysManagementCollection extends BaseEntity
 
     private String ysKprqLast;
 
+    private String ysSzqu;
+
+    public String getYsSzqu() {
+        return ysSzqu;
+    }
+
+    public void setYsSzqu(String ysSzqu) {
+        this.ysSzqu = ysSzqu;
+    }
+
     public Long getYsIshz() {
         return ysIshz;
     }
