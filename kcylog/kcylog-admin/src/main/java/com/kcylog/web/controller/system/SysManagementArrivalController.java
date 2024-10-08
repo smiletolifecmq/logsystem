@@ -15,6 +15,7 @@ import com.kcylog.system.service.ISysManagementCollectionService;
 import com.kcylog.system.service.ISysManagementInvoicingService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.access.prepost.PreAuthorize;
+import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.bind.annotation.*;
 
 import javax.servlet.http.HttpServletResponse;
@@ -89,6 +90,7 @@ public class SysManagementArrivalController extends BaseController
     @PreAuthorize("@ss.hasPermi('system:arrival:add')")
     @Log(title = "经营到账统计", businessType = BusinessType.INSERT)
     @PostMapping
+    @Transactional
     public AjaxResult add(@RequestBody SysManagementArrival sysManagementArrival)
     {
         if (sysManagementArrival.getDzFzr() == null){
