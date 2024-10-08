@@ -24,6 +24,17 @@
           @keyup.enter.native="handleQuery"
         />
       </el-form-item>
+      <el-form-item label="开票日期" prop="ysKprq">
+        <el-date-picker
+          v-model="dateRange"
+          value-format="yyyy-MM-dd"
+          type="daterange"
+          range-separator="-"
+          start-placeholder="开始日期"
+          end-placeholder="结束日期"
+          @change="handleQuery"
+        ></el-date-picker>
+      </el-form-item>
       <el-form-item label="是否坏账" prop="ysIshz">
         <el-select v-model="queryParams.ysIshz" placeholder="请选择">
           <el-option
@@ -523,6 +534,7 @@ export default {
   name: "Collection",
   data() {
     return {
+      dateRange: [],
       ysIshzs: [
         {
           value: 0,
@@ -677,11 +689,13 @@ export default {
     /** 查询应收账款列表 */
     getList() {
       this.loading = true;
-      listCollection(this.queryParams).then((response) => {
-        this.collectionList = response.rows;
-        this.total = response.total;
-        this.loading = false;
-      });
+      listCollection(this.addDateRange(this.queryParams, this.dateRange)).then(
+        (response) => {
+          this.collectionList = response.rows;
+          this.total = response.total;
+          this.loading = false;
+        }
+      );
     },
     // 取消按钮
     cancel() {
@@ -739,6 +753,7 @@ export default {
     },
     /** 重置按钮操作 */
     resetQuery() {
+      this.dateRange = [];
       this.resetForm("queryForm");
       this.handleQuery();
     },
