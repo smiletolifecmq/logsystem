@@ -115,4 +115,10 @@ public class SysManagementCollectionServiceImpl implements ISysManagementCollect
     {
         return sysManagementCollectionMapper.selectSysManagementCollectionThisMonth(sysManagementCollection);
     }
+
+    @Override
+    public int updateSysManagementCollectionForFph(SysManagementCollection sysManagementCollection)
+    {
+        return sysManagementCollectionMapper.updateSysManagementCollectionForFph(sysManagementCollection);
+    }
 }

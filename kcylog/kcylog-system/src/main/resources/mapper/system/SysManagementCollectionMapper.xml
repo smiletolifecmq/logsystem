@@ -174,4 +174,19 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
             </if>
         </where>
     </select>
+
+    <update id="updateSysManagementCollectionForFph" parameterType="SysManagementCollection">
+        update sys_management_collection
+        <trim prefix="SET" suffixOverrides=",">
+            <if test="ysHtmc != null">ys_htmc = #{ysHtmc},</if>
+            <if test="ysHtbh != null">ys_htbh = #{ysHtbh},</if>
+            <if test="ysFzbm != null">ys_fzbm = #{ysFzbm},</if>
+            <if test="ysFzr != null">ys_fzr = #{ysFzr},</if>
+            <if test="ysKhmc != null">ys_khmc = #{ysKhmc},</if>
+            <if test="ysKhfl != null">ys_khfl = #{ysKhfl},</if>
+            <if test="ysHtje != null">ys_htje = #{ysHtje},</if>
+            <if test="ysKprq != null">ys_kprq = #{ysKprq},</if>
+        </trim>
+        where ys_fph = #{ysFph}
+    </update>
 </mapper>

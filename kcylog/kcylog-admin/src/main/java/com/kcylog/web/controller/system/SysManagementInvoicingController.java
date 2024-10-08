@@ -147,11 +147,23 @@ public class SysManagementInvoicingController extends BaseController
     @PreAuthorize("@ss.hasPermi('system:invoicing:edit')")
     @Log(title = "经营开票统计", businessType = BusinessType.UPDATE)
     @PutMapping
+    @Transactional
     public AjaxResult edit(@RequestBody SysManagementInvoicing sysManagementInvoicing)
     {
         if (sysManagementInvoicing.getKpFzr() == null){
             sysManagementInvoicing.setKpFzr(SecurityUtils.getUsername());
         }
+        SysManagementCollection newCollection = new SysManagementCollection();
+        newCollection.setYsHtmc(sysManagementInvoicing.getKpHtmc());
+        newCollection.setYsHtbh(sysManagementInvoicing.getKpHtbh());
+        newCollection.setYsFzbm(sysManagementInvoicing.getKpFzbm());
+        newCollection.setYsFzr(sysManagementInvoicing.getKpFzr().trim());
+        newCollection.setYsKhmc(sysManagementInvoicing.getKpKhmc());
+        newCollection.setYsKhfl(sysManagementInvoicing.getKpKhfl());
+        newCollection.setYsHtje(sysManagementInvoicing.getKpHtje());
+        newCollection.setYsKprq(sysManagementInvoicing.getKpKprq());
+        newCollection.setYsFph(sysManagementInvoicing.getKpFph());
+        sysManagementCollectionService.updateSysManagementCollectionForFph(newCollection);
         sysManagementInvoicing.setKpFzr(sysManagementInvoicing.getKpFzr().trim());
         return toAjax(sysManagementInvoicingService.updateSysManagementInvoicing(sysManagementInvoicing));
     }

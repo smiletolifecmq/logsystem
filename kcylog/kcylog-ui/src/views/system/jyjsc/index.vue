@@ -307,8 +307,8 @@ export default {
     this.queryParams.ysKprqLast = `${year1}-${month1}-${day1}`;
     this.queryParams.ysKprqCs = `${year}-${month}-${day}`;
     this.tjTitle =
-      `统计截止时间为：${this.queryParams.ysKprqLast}，上次上报时间为：` +
-      `${this.queryParams.ysKprqCs}  单位（万元）`;
+      `统计截止时间为：${this.queryParams.ysKprqCs}，上次上报时间为：` +
+      `${this.queryParams.ysKprqLast}  单位（万元）`;
     this.yszktj();
     this.handleExportCstj();
     this.handleExportYstj();

@@ -67,4 +67,6 @@ public interface ISysManagementCollectionService
     public List<SysManagementCollection> selectSysManagementCollectionListYdz(SysManagementCollection sysManagementCollection);
 
     public List<SysManagementCollection> selectSysManagementCollectionThisMonth(SysManagementCollection sysManagementCollection);
+
+    public int updateSysManagementCollectionForFph(SysManagementCollection sysManagementCollection);
 }
