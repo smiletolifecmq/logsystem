@@ -7,6 +7,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
     <resultMap type="SysManagementArrival" id="SysManagementArrivalResult">
         <result property="dzId"    column="dz_id"    />
         <result property="dzKhmc"    column="dz_khmc"    />
+        <result property="dzFkdwmc"    column="dz_fkdwmc"    />
         <result property="dzHtbh"    column="dz_htbh"    />
         <result property="dzHtje"    column="dz_htje"    />
         <result property="dzYwxz"    column="dz_ywxz"    />
@@ -23,7 +24,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
     </resultMap>
 
     <sql id="selectSysManagementArrivalVo">
-        select dz_id, dz_khmc, dz_htbh, dz_htje, dz_ywxz, dz_fzr, dz_kprq, dz_kpje, dz_fph, dz_money, dz_rq, dz_type, dz_is_zx, dz_xsf, dz_bz from sys_management_arrival
+        select dz_id, dz_khmc, dz_htbh, dz_htje, dz_ywxz, dz_fzr, dz_kprq, dz_kpje, dz_fph, dz_money, dz_rq, dz_type, dz_is_zx, dz_xsf, dz_bz, dz_fkdwmc from sys_management_arrival
     </sql>
 
     <select id="selectSysManagementArrivalList" parameterType="SysManagementArrival" resultMap="SysManagementArrivalResult">
@@ -52,6 +53,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
         insert into sys_management_arrival
         <trim prefix="(" suffix=")" suffixOverrides=",">
             <if test="dzKhmc != null">dz_khmc,</if>
+            <if test="dzFkdwmc != null">dz_fkdwmc,</if>
             <if test="dzHtbh != null">dz_htbh,</if>
             <if test="dzHtje != null">dz_htje,</if>
             <if test="dzYwxz != null and dzYwxz != ''">dz_ywxz,</if>
@@ -67,7 +69,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
             <if test="dzBz != null">dz_bz,</if>
          </trim>
         <trim prefix="values (" suffix=")" suffixOverrides=",">
-            <if test="dzKhmc != null">#{dzKhmc},</if>
+            <if test="dzFkdwmc != null">#{dzFkdwmc},</if>
             <if test="dzHtbh != null">#{dzHtbh},</if>
             <if test="dzHtje != null">#{dzHtje},</if>
             <if test="dzYwxz != null and dzYwxz != ''">#{dzYwxz},</if>
@@ -88,6 +90,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
         update sys_management_arrival
         <trim prefix="SET" suffixOverrides=",">
             <if test="dzKhmc != null">dz_khmc = #{dzKhmc},</if>
+            <if test="dzFkdwmc != null">dz_fkdwmc = #{dzFkdwmc},</if>
             <if test="dzHtbh != null">dz_htbh = #{dzHtbh},</if>
             <if test="dzHtje != null">dz_htje = #{dzHtje},</if>
             <if test="dzYwxz != null and dzYwxz != ''">dz_ywxz = #{dzYwxz},</if>

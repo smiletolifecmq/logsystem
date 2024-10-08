@@ -49,7 +49,7 @@
           icon="el-icon-plus"
           size="mini"
           @click="handleAdd"
-          v-hasPermi="['system:arrival:add']"
+          v-hasPermi="['system:arrivalall:add']"
           >新增</el-button
         >
       </el-col>
@@ -75,7 +75,8 @@
       :data="arrivalList"
       @selection-change="handleSelectionChange"
     >
-      <el-table-column label="客户名称" align="center" prop="dzKhmc" />
+      <el-table-column label="付款单位名称" align="center" prop="dzKhmc" />
+      <el-table-column label="客户名称" align="center" prop="dzFkdwmc" />
       <el-table-column label="合同编号" align="center" prop="dzHtbh" />
       <el-table-column label="合同金额" align="center" prop="dzHtje" />
       <el-table-column label="业务性质" align="center" prop="dzYwxz" />
@@ -114,7 +115,7 @@
             type="text"
             icon="el-icon-edit"
             @click="handleUpdate(scope.row)"
-            v-hasPermi="['system:arrival:edit']"
+            v-hasPermi="['system:arrivalall:edit']"
             >修改</el-button
           >
           <el-button
@@ -145,8 +146,11 @@
       :close-on-click-modal="false"
     >
       <el-form ref="form" :model="form" :rules="rules" label-width="80px">
-        <el-form-item label="客户名称" prop="dzKhmc" label-width="150px">
-          <el-input v-model="form.dzKhmc" placeholder="请输入客户名称" />
+        <el-form-item label="付款单位名称" prop="dzKhmc" label-width="150px">
+          <el-input v-model="form.dzKhmc" placeholder="请输入付款单位名称" />
+        </el-form-item>
+        <el-form-item label="客户名称" prop="dzFkdwmc" label-width="150px">
+          <el-input v-model="form.dzFkdwmc" placeholder="请输入客户名称" />
         </el-form-item>
         <el-form-item
           label="合同编号/工程编号"
@@ -265,8 +269,11 @@
         <el-descriptions-item label="责任人">
           {{ dzForm.kpFzr }}
         </el-descriptions-item>
-        <el-descriptions-item label="客户名称">
+        <el-descriptions-item label="付款单位名称">
           {{ dzForm.kpKhmc }}
+        </el-descriptions-item>
+        <el-descriptions-item label="客户名称">
+          {{ dzForm.dzFkdwmc }}
         </el-descriptions-item>
         <el-descriptions-item label="客户分类">
           {{ dzForm.kpKhfl }}
@@ -388,6 +395,9 @@ export default {
       rules: {
         dzFzr: [{ required: true, message: "请输入负责人", trigger: "blur" }],
         dzKhmc: [
+          { required: true, message: "请输入付款单位名称", trigger: "blur" },
+        ],
+        dzFkdwmc: [
           { required: true, message: "请输入客户名称", trigger: "blur" },
         ],
         dzHtbh: [

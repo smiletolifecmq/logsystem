@@ -27,8 +27,11 @@ public class SysManagementArrival extends BaseEntity
     private int num;
 
     /** 客户名称 */
-    @Excel(name = "客户名称")
+    @Excel(name = "付款单位名称")
     private String dzKhmc;
+
+    @Excel(name = "客户名称")
+    private String dzFkdwmc;
 
     /** 合同编号 */
     @Excel(name = "合同编号/工程编号")
@@ -87,6 +90,14 @@ public class SysManagementArrival extends BaseEntity
     private String monthString;
 
     private String yearString;
+
+    public String getDzFkdwmc() {
+        return dzFkdwmc;
+    }
+
+    public void setDzFkdwmc(String dzFkdwmc) {
+        this.dzFkdwmc = dzFkdwmc;
+    }
 
     public String getYearString() {
         return yearString;

@@ -72,7 +72,7 @@
           icon="el-icon-plus"
           size="mini"
           @click="handleAdd"
-          v-hasPermi="['system:invoicing:add']"
+          v-hasPermi="['system:invoicingall:add']"
           >新增</el-button
         >
       </el-col>
@@ -156,7 +156,7 @@
             type="text"
             icon="el-icon-edit"
             @click="handleUpdate(scope.row)"
-            v-hasPermi="['system:invoicing:edit']"
+            v-hasPermi="['system:invoicingall:edit']"
             >修改</el-button
           >
           <el-button
