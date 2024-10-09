@@ -69,6 +69,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
             <if test="dzBz != null">dz_bz,</if>
          </trim>
         <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test="dzKhmc != null">#{dzKhmc},</if>
             <if test="dzFkdwmc != null">#{dzFkdwmc},</if>
             <if test="dzHtbh != null">#{dzHtbh},</if>
             <if test="dzHtje != null">#{dzHtje},</if>
