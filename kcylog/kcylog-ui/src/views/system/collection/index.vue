@@ -63,6 +63,17 @@
     <el-row :gutter="10" class="mb8">
       <el-col :span="1.5">
         <el-button
+          plain
+          icon="el-icon-edit"
+          size="mini"
+          @click="handleMoreEdit"
+          :disabled="multiple"
+          v-hasPermi="['system:collection:plxg']"
+          >批量修改</el-button
+        >
+      </el-col>
+      <el-col :span="1.5">
+        <el-button
           type="warning"
           plain
           icon="el-icon-download"
@@ -116,6 +127,12 @@
       :data="collectionList"
       @selection-change="handleSelectionChange"
     >
+      <el-table-column
+        type="selection"
+        width="50"
+        align="center"
+        :selectable="checkSelectable"
+      />
       <el-table-column label="发票号" align="center" prop="ysFph" />
       <el-table-column label="合同名称" align="center">
         <template #default="scope">
@@ -254,7 +271,15 @@
           />
         </el-form-item>
         <el-form-item label="资金来源" prop="ysZjly" label-width="200px">
-          <el-input v-model="form.ysZjly" placeholder="请输入资金来源" />
+          <el-select v-model="form.ysZjly" placeholder="请选择">
+            <el-option
+              v-for="item in yszjlys"
+              :key="item.value"
+              :label="item.label"
+              :value="item.value"
+            >
+            </el-option>
+          </el-select>
         </el-form-item>
         <el-form-item label="跟踪情况" prop="ysGzqk" label-width="200px">
           <el-input
@@ -515,6 +540,124 @@
         <el-button @click="cancel">取 消</el-button>
       </div>
     </el-dialog>
+
+    <!-- 批量修改 -->
+    <el-dialog
+      :title="pltitle"
+      :visible.sync="plopen"
+      width="1000px"
+      append-to-body
+    >
+      <el-form ref="form" :model="plform" label-width="80px">
+        <el-form-item label="是否坏账" prop="ysIshz" label-width="200px">
+          <el-select v-model="plform.ysIshz" placeholder="请选择">
+            <el-option
+              v-for="item in ysIshzs"
+              :key="item.value"
+              :label="item.label"
+              :value="item.value"
+            >
+            </el-option>
+          </el-select>
+        </el-form-item>
+        <el-form-item
+          label="已发送催款函/请款函"
+          prop="ysFhlx"
+          label-width="200px"
+        >
+          <el-input
+            v-model="plform.ysFhlx"
+            placeholder="请输入已发送催款函/请款函"
+          />
+        </el-form-item>
+        <el-form-item
+          label="发函时间（发几份写几条）"
+          prop="ysFhsj"
+          label-width="200px"
+        >
+          <el-input
+            v-model="plform.ysFhsj"
+            placeholder="发函时间（发几份写几条"
+          />
+        </el-form-item>
+        <el-form-item label="措施、未收回原因" prop="ysCs" label-width="200px">
+          <el-input
+            v-model="plform.ysCs"
+            type="textarea"
+            placeholder="请输入内容"
+          />
+        </el-form-item>
+        <el-form-item label="备注" prop="ysBz" label-width="200px">
+          <el-input
+            v-model="plform.ysBz"
+            type="textarea"
+            placeholder="请输入内容"
+          />
+        </el-form-item>
+        <el-form-item label="资金来源" prop="ysZjly" label-width="200px">
+          <el-select v-model="plform.ysZjly" placeholder="请选择">
+            <el-option
+              v-for="item in yszjlys"
+              :key="item.value"
+              :label="item.label"
+              :value="item.value"
+            >
+            </el-option>
+          </el-select>
+        </el-form-item>
+        <el-form-item label="跟踪情况" prop="ysGzqk" label-width="200px">
+          <el-input
+            v-model="plform.ysGzqk"
+            type="textarea"
+            placeholder="请输入内容"
+          />
+        </el-form-item>
+        <el-form-item
+          label="最新一次进展情况"
+          prop="ysZxqk"
+          label-width="200px"
+        >
+          <el-input
+            v-model="plform.ysZxqk"
+            type="textarea"
+            placeholder="请输入内容"
+          />
+        </el-form-item>
+        <el-form-item
+          label="合同约定支付时间"
+          prop="ysHtrq"
+          label-width="200px"
+        >
+          <el-input
+            v-model="plform.ysHtrq"
+            placeholder="请输入合同约定支付时间"
+          />
+        </el-form-item>
+        <el-form-item label="诉讼到期时间" prop="ysSsdqsj" label-width="200px">
+          <el-input
+            v-model="plform.ysSsdqsj"
+            placeholder="请输入诉讼到期时间"
+          />
+        </el-form-item>
+        <el-form-item label="所在区域" prop="ysSzqu" label-width="200px">
+          <el-input v-model="plform.ysSzqu" placeholder="请输入所在区域" />
+        </el-form-item>
+        <el-form-item
+          label="业主所在地是否为四城区"
+          prop="ysIssq"
+          label-width="200px"
+        >
+          <el-input
+            v-model="plform.ysIssq"
+            placeholder="请输入业主所在地是否为四城区"
+          />
+        </el-form-item>
+      </el-form>
+      <div slot="footer" class="dialog-footer">
+        <el-button type="primary" @click="submitFormPl">确 定</el-button>
+        <el-button @click="cancelpl">取 消</el-button>
+      </div>
+    </el-dialog>
   </div>
 </template>
 
@@ -526,6 +669,7 @@ import {
   exportCs,
   exportYs,
   exportJyyb,
+  updateCollectionPl,
 } from "@/api/system/collection";
 import userInfo from "@/store/modules/user";
 import ExcelJS from "exceljs";
@@ -534,6 +678,56 @@ export default {
   name: "Collection",
   data() {
     return {
+      yszjlys: [
+        {
+          value: "财政资金（政府部门）",
+          label: "财政资金（政府部门）",
+        },
+        {
+          value: "财政资金（事业单位）",
+          label: "财政资金（事业单位）",
+        },
+        {
+          value: "财政资金（国有独资企业）",
+          label: "财政资金（国有独资企业）",
+        },
+        {
+          value: "财政资金（国有控股企业）",
+          label: "财政资金（国有控股企业）",
+        },
+        {
+          value: "财政资金（社会团体（财政拨款））",
+          label: "财政资金（社会团体（财政拨款））",
+        },
+        {
+          value: "自有资金（社会团体（非财政拨款）",
+          label: "自有资金（社会团体（非财政拨款）",
+        },
+        {
+          value: "自有资金（居民（村民）委员会）",
+          label: "自有资金（居民（村民）委员会）",
+        },
+        {
+          value: "自有资金（集体企业）",
+          label: "自有资金（集体企业）",
+        },
+        {
+          value: "自有资金（非公有制企业）",
+          label: "自有资金（非公有制企业）",
+        },
+        {
+          value: "自有资金（个体工商户）",
+          label: "自有资金（个体工商户）",
+        },
+        {
+          value: "自有资金（个人）",
+          label: "自有资金（个人）",
+        },
+      ],
+      pltitle: "",
+      plopen: false,
+      plform: {},
+      multiple: true,
       dateRange: [],
       ysIshzs: [
         {
@@ -671,6 +865,9 @@ export default {
     this.getList();
   },
   methods: {
+    checkSelectable(row) {
+      return row.ysFzr === userInfo.state.name;
+    },
     validateDate(rule, value, callback) {
       if (!value) {
         return callback(new Error("请选择本次上报时间"));
@@ -705,6 +902,10 @@ export default {
       this.ysTimeOpen = false;
       this.reset();
     },
+    cancelpl() {
+      this.plopen = false;
+      this.reset();
+    },
     // 表单重置
     reset() {
       this.csTimeForm = {
@@ -717,6 +918,32 @@ export default {
       this.timeForm = {
         ysKprqCs: new Date(),
         ysKprqLast: null,
+      };
+      this.plform = {
+        ysIds: null,
+        ysHtmc: null,
+        ysHtbh: null,
+        ysFzbm: null,
+        ysFzr: null,
+        ysKhmc: null,
+        ysKhfl: null,
+        ysHtje: null,
+        ysKprq: null,
+        ysKpje: null,
+        ysYdzje: null,
+        ysWdzje: null,
+        ysFhlx: null,
+        ysFhsj: null,
+        ysCs: null,
+        ysBz: null,
+        ysZjly: null,
+        ysFph: null,
+        ysGzqk: null,
+        ysZxqk: null,
+        ysHtrq: null,
+        ysSsdqsj: null,
+        ysIssq: null,
+        ysStatus: null,
       };
       this.form = {
         ysId: null,
@@ -772,7 +999,7 @@ export default {
     /** 修改按钮操作 */
     handleUpdate(row) {
       this.reset();
-      const ysId = row.ysId || this.ids;
+      const ysId = row.ysId;
       getCollection(ysId).then((response) => {
         this.form = response.data;
         this.open = true;
@@ -780,10 +1007,19 @@ export default {
       });
     },
     handleDetail(row) {
-      const ysId = row.ysId || this.ids;
+      const ysId = row.ysId;
       getCollection(ysId).then((response) => {
         this.form = response.data;
         this.ysopen = true;
+      });
+    },
+
+    submitFormPl() {
+      this.plform.ysIds = this.ids;
+      updateCollectionPl(this.plform).then((response) => {
+        this.$modal.msgSuccess("修改成功");
+        this.plopen = false;
+        this.getList();
       });
     },
     /** 提交按钮 */
@@ -1055,6 +1291,12 @@ export default {
             console.error("Error loading the Excel file:", error);
           });
       });
+    },
+
+    handleMoreEdit() {
+      this.reset();
+      this.plopen = true;
+      this.pltitle = "批量修改";
     },
   },
 };

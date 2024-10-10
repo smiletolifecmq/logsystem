@@ -82,3 +82,11 @@ export function getExport(data) {
     data: data
   })
 }
+
+export function updateCollectionPl(data) {
+  return request({
+    url: '/system/collection/plxg',
+    method: 'put',
+    data: data
+  })
+}

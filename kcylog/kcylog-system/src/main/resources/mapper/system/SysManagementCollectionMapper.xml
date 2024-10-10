@@ -201,4 +201,26 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
         </trim>
         where ys_fph = #{ysFph}
     </update>
+
+    <update id="updateSysManagementCollectionPlxg" parameterType="SysManagementCollection">
+        update sys_management_collection
+        <trim prefix="SET" suffixOverrides=",">
+            <if test="ysFhlx != null">ys_fhlx = #{ysFhlx},</if>
+            <if test="ysFhsj != null">ys_fhsj = #{ysFhsj},</if>
+            <if test="ysCs != null">ys_cs = #{ysCs},</if>
+            <if test="ysBz != null">ys_bz = #{ysBz},</if>
+            <if test="ysZjly != null">ys_zjly = #{ysZjly},</if>
+            <if test="ysGzqk != null">ys_gzqk = #{ysGzqk},</if>
+            <if test="ysZxqk != null">ys_zxqk = #{ysZxqk},</if>
+            <if test="ysHtrq != null">ys_htrq = #{ysHtrq},</if>
+            <if test="ysSsdqsj != null">ys_ssdqsj = #{ysSsdqsj},</if>
+            <if test="ysIssq != null">ys_issq = #{ysIssq},</if>
+            <if test="ysIshz != null">ys_ishz = #{ysIshz},</if>
+            <if test="ysSzqu != null">ys_szqu = #{ysSzqu},</if>
+        </trim>
+        where ys_id in
+        <foreach collection="ysIds" item="ysId" open="(" separator="," close=")">
+            #{ysId}
+        </foreach>
+    </update>
 </mapper>

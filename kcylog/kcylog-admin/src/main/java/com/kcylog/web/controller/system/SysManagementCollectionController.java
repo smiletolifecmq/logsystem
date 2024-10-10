@@ -729,4 +729,15 @@ public class SysManagementCollectionController extends BaseController
         return cal1.get(Calendar.YEAR) == cal2.get(Calendar.YEAR) &&
                 cal1.get(Calendar.MONTH) < cal2.get(Calendar.MONTH);
     }
+
+    /**
+     * 修改应收账款
+     */
+    @PreAuthorize("@ss.hasPermi('system:collection:plxg')")
+    @Log(title = "应收账款--批量修改", businessType = BusinessType.UPDATE)
+    @PutMapping("/plxg")
+    public AjaxResult editPlxg(@RequestBody SysManagementCollection sysManagementCollection)
+    {
+        return toAjax(sysManagementCollectionService.updateSysManagementCollectionPlxg(sysManagementCollection));
+    }
 }

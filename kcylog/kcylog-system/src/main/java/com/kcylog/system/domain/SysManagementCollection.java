@@ -8,6 +8,7 @@ import org.apache.commons.lang3.builder.ToStringStyle;
 
 import java.math.BigDecimal;
 import java.util.Date;
+import java.util.List;
 
 /**
  * 应收账款对象 sys_management_collection
@@ -18,6 +19,8 @@ import java.util.Date;
 public class SysManagementCollection extends BaseEntity
 {
     private static final long serialVersionUID = 1L;
+
+    private List<Long> ysIds;
 
     /** 应收账款ID */
     private Long ysId;
@@ -126,6 +129,14 @@ public class SysManagementCollection extends BaseEntity
     private String ysKprqLast;
 
     private String ysSzqu;
+
+    public List<Long> getYsIds() {
+        return ysIds;
+    }
+
+    public void setYsIds(List<Long> ysIds) {
+        this.ysIds = ysIds;
+    }
 
     public int getNum() {
         return num;
