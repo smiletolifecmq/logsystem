@@ -1,0 +1,137 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.kcylog.system.mapper.SysManagementResponsibilitiesMapper">
+    
+    <resultMap type="SysManagementResponsibilities" id="SysManagementResponsibilitiesResult">
+        <result property="zqId"    column="zq_id"    />
+        <result property="zqXmmc"    column="zq_xmmc"    />
+        <result property="zqHtbh"    column="zq_htbh"    />
+        <result property="zqJfdw"    column="zq_jfdw"    />
+        <result property="zqQdhtje"    column="zq_qdhtje"    />
+        <result property="zqSjhtje"    column="zq_sjhtje"    />
+        <result property="zqHtlb"    column="zq_htlb"    />
+        <result property="zqHtjd"    column="zq_htjd"    />
+        <result property="zqHtqkbl"    column="zq_htqkbl"    />
+        <result property="zqHtkkpje"    column="zq_htkkpje"    />
+        <result property="zqYkpje"    column="zq_ykpje"    />
+        <result property="zqYjkje"    column="zq_yjkje"    />
+        <result property="zqWjkje"    column="zq_wjkje"    />
+        <result property="zqKkpje"    column="zq_kkpje"    />
+        <result property="zqJdsm"    column="zq_jdsm"    />
+        <result property="zqBz"    column="zq_bz"    />
+        <result property="zqBzje"    column="zq_bzje"    />
+        <result property="zqZrr"    column="zq_zrr"    />
+        <result property="zqTime"    column="zq_time"    />
+        <result property="isDelete"    column="is_delete"    />
+    </resultMap>
+
+    <sql id="selectSysManagementResponsibilitiesVo">
+        select zq_id, zq_xmmc, zq_htbh, zq_jfdw, zq_qdhtje, zq_sjhtje, zq_htlb, zq_htjd, zq_htqkbl, zq_htkkpje, zq_ykpje, zq_yjkje, zq_wjkje, zq_kkpje, zq_jdsm, zq_bz, zq_zrr, zq_time, is_delete, zq_bzje from sys_management_responsibilities
+    </sql>
+
+    <select id="selectSysManagementResponsibilitiesList" parameterType="SysManagementResponsibilities" resultMap="SysManagementResponsibilitiesResult">
+        <include refid="selectSysManagementResponsibilitiesVo"/>
+        <where>
+            <if test="params.beginTime != null and params.beginTime != ''"><!-- 开始时间检索 -->
+                AND date_format(zq_time,'%y%m%d') &gt;= date_format(#{params.beginTime},'%y%m%d')
+            </if>
+            <if test="params.endTime != null and params.endTime != ''"><!-- 结束时间检索 -->
+                AND date_format(zq_time,'%y%m%d') &lt;= date_format(#{params.endTime},'%y%m%d')
+            </if>
+            <if test="zqXmmc != null  and zqXmmc != ''"> and zq_xmmc = #{zqXmmc}</if>
+            <if test="zqHtbh != null  and zqHtbh != ''"> and zq_htbh = #{zqHtbh}</if>
+            <if test="zqJfdw != null  and zqJfdw != ''"> and zq_jfdw = #{zqJfdw}</if>
+            <if test="zqZrr != null  and zqZrr != ''"> and zq_zrr = #{zqZrr}</if>
+            and is_delete = 0
+        </where>
+    </select>
+    
+    <select id="selectSysManagementResponsibilitiesByZqId" parameterType="Long" resultMap="SysManagementResponsibilitiesResult">
+        <include refid="selectSysManagementResponsibilitiesVo"/>
+        where zq_id = #{zqId}
+    </select>
+        
+    <insert id="insertSysManagementResponsibilities" parameterType="SysManagementResponsibilities" useGeneratedKeys="true" keyProperty="zqId">
+        insert into sys_management_responsibilities
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="zqXmmc != null">zq_xmmc,</if>
+            <if test="zqHtbh != null">zq_htbh,</if>
+            <if test="zqJfdw != null">zq_jfdw,</if>
+            <if test="zqQdhtje != null">zq_qdhtje,</if>
+            <if test="zqSjhtje != null">zq_sjhtje,</if>
+            <if test="zqHtlb != null">zq_htlb,</if>
+            <if test="zqHtjd != null">zq_htjd,</if>
+            <if test="zqHtqkbl != null">zq_htqkbl,</if>
+            <if test="zqHtkkpje != null">zq_htkkpje,</if>
+            <if test="zqYkpje != null">zq_ykpje,</if>
+            <if test="zqYjkje != null">zq_yjkje,</if>
+            <if test="zqWjkje != null">zq_wjkje,</if>
+            <if test="zqKkpje != null">zq_kkpje,</if>
+            <if test="zqJdsm != null">zq_jdsm,</if>
+            <if test="zqBz != null">zq_bz,</if>
+            <if test="zqBzje != null">zq_bzje,</if>
+            <if test="zqZrr != null">zq_zrr,</if>
+            <if test="zqTime != null">zq_time,</if>
+            <if test="isDelete != null">is_delete,</if>
+         </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test="zqXmmc != null">#{zqXmmc},</if>
+            <if test="zqHtbh != null">#{zqHtbh},</if>
+            <if test="zqJfdw != null">#{zqJfdw},</if>
+            <if test="zqQdhtje != null">#{zqQdhtje},</if>
+            <if test="zqSjhtje != null">#{zqSjhtje},</if>
+            <if test="zqHtlb != null">#{zqHtlb},</if>
+            <if test="zqHtjd != null">#{zqHtjd},</if>
+            <if test="zqHtqkbl != null">#{zqHtqkbl},</if>
+            <if test="zqHtkkpje != null">#{zqHtkkpje},</if>
+            <if test="zqYkpje != null">#{zqYkpje},</if>
+            <if test="zqYjkje != null">#{zqYjkje},</if>
+            <if test="zqWjkje != null">#{zqWjkje},</if>
+            <if test="zqKkpje != null">#{zqKkpje},</if>
+            <if test="zqJdsm != null">#{zqJdsm},</if>
+            <if test="zqBz != null">#{zqBz},</if>
+            <if test="zqBzje != null">#{zqBzje},</if>
+            <if test="zqZrr != null">#{zqZrr},</if>
+            <if test="zqTime != null">#{zqTime},</if>
+            <if test="isDelete != null">#{isDelete},</if>
+         </trim>
+    </insert>
+
+    <update id="updateSysManagementResponsibilities" parameterType="SysManagementResponsibilities">
+        update sys_management_responsibilities
+        <trim prefix="SET" suffixOverrides=",">
+            <if test="zqXmmc != null">zq_xmmc = #{zqXmmc},</if>
+            <if test="zqHtbh != null">zq_htbh = #{zqHtbh},</if>
+            <if test="zqJfdw != null">zq_jfdw = #{zqJfdw},</if>
+            <if test="zqQdhtje != null">zq_qdhtje = #{zqQdhtje},</if>
+            <if test="zqSjhtje != null">zq_sjhtje = #{zqSjhtje},</if>
+            <if test="zqHtlb != null">zq_htlb = #{zqHtlb},</if>
+            <if test="zqHtjd != null">zq_htjd = #{zqHtjd},</if>
+            <if test="zqHtqkbl != null">zq_htqkbl = #{zqHtqkbl},</if>
+            <if test="zqHtkkpje != null">zq_htkkpje = #{zqHtkkpje},</if>
+            <if test="zqYkpje != null">zq_ykpje = #{zqYkpje},</if>
+            <if test="zqYjkje != null">zq_yjkje = #{zqYjkje},</if>
+            <if test="zqWjkje != null">zq_wjkje = #{zqWjkje},</if>
+            <if test="zqKkpje != null">zq_kkpje = #{zqKkpje},</if>
+            <if test="zqJdsm != null">zq_jdsm = #{zqJdsm},</if>
+            <if test="zqBz != null">zq_bz = #{zqBz},</if>
+            <if test="zqBzje != null">zq_bzje = #{zqBzje},</if>
+            <if test="zqZrr != null">zq_zrr = #{zqZrr},</if>
+            <if test="zqTime != null">zq_time = #{zqTime},</if>
+        </trim>
+        where zq_id = #{zqId}
+    </update>
+
+    <delete id="deleteSysManagementResponsibilitiesByZqId" parameterType="Long">
+        update sys_management_responsibilities set  is_delete = 1 where zq_id = #{zqId}
+    </delete>
+
+    <delete id="deleteSysManagementResponsibilitiesByZqIds" parameterType="String">
+        update sys_management_responsibilities set  is_delete = 1 where zq_id in
+        <foreach item="zqId" collection="array" open="(" separator="," close=")">
+            #{zqId}
+        </foreach>
+    </delete>
+</mapper>
