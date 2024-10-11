@@ -9,6 +9,7 @@ import com.kcylog.common.utils.SecurityUtils;
 import com.kcylog.common.utils.poi.ExcelUtil;
 import com.kcylog.system.domain.SysManagementResponsibilities;
 import com.kcylog.system.service.ISysManagementResponsibilitiesService;
+import com.kcylog.system.service.ISysManagementResponsibilitiesInfoService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
@@ -29,6 +30,8 @@ public class SysManagementResponsibilitiesController extends BaseController
     @Autowired
     private ISysManagementResponsibilitiesService sysManagementResponsibilitiesService;
 
+    @Autowired
+    private ISysManagementResponsibilitiesInfoService sysManagementResponsibilitiesInfoService;
     /**
      * 查询责权发生制列表
      */
@@ -50,6 +53,11 @@ public class SysManagementResponsibilitiesController extends BaseController
     public void export(HttpServletResponse response, SysManagementResponsibilities sysManagementResponsibilities)
     {
         List<SysManagementResponsibilities> list = sysManagementResponsibilitiesService.selectSysManagementResponsibilitiesList(sysManagementResponsibilities);
+        int num = 0;
+        for (SysManagementResponsibilities obj : list){
+            num ++;
+            obj.setNum(num);
+        }
         ExcelUtil<SysManagementResponsibilities> util = new ExcelUtil<SysManagementResponsibilities>(SysManagementResponsibilities.class);
         util.exportExcel(response, list, "责权发生制数据");
     }
@@ -96,5 +104,11 @@ public class SysManagementResponsibilitiesController extends BaseController
     public AjaxResult remove(@PathVariable Long[] zqIds)
     {
         return toAjax(sysManagementResponsibilitiesService.deleteSysManagementResponsibilitiesByZqIds(zqIds));
+    }
+
+    @GetMapping(value = "/info/{zqId}")
+    public AjaxResult getResponsibilitiesInfo(@PathVariable("zqId") Long zqId)
+    {
+        return success(sysManagementResponsibilitiesInfoService.selectSysManagementResponsibilitiesInfoByZqId(zqId));
     }
 }

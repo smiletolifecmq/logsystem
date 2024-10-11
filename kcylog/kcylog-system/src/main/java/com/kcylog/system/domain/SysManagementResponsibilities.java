@@ -22,6 +22,9 @@ public class SysManagementResponsibilities extends BaseEntity
     /** 自增ID */
     private Long zqId;
 
+    @Excel(name = "序号")
+    private int num;
+
     /** 项目名称 */
     @Excel(name = "项目名称")
     private String zqXmmc;
@@ -96,6 +99,14 @@ public class SysManagementResponsibilities extends BaseEntity
 
     /** 是否删除，0否 1是 */
     private Long isDelete;
+
+    public int getNum() {
+        return num;
+    }
+
+    public void setNum(int num) {
+        this.num = num;
+    }
 
     public String getZqBzje() {
         return zqBzje;

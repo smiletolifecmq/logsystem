@@ -197,6 +197,13 @@
             v-if="showButton(scope.row.zqZrr)"
             >删除</el-button
           >
+          <el-button
+            size="mini"
+            type="text"
+            icon="el-icon-info"
+            @click="handleKpList(scope.row)"
+            >开票记录</el-button
+          >
         </template>
       </el-table-column>
     </el-table>
@@ -370,6 +377,34 @@
         <el-button @click="cancel">取 消</el-button>
       </div>
     </el-dialog>
+
+    <!-- 开票列表信息 -->
+    <el-dialog
+      title="开票记录"
+      :visible.sync="kpjlopen"
+      width="1000px"
+      append-to-body
+    >
+      <el-table :data="infoList">
+        <el-table-column label="项目名称" align="center" prop="infoXmmc" />
+        <el-table-column label="合同编号" align="center" prop="infoHtbh" />
+        <el-table-column label="甲方单位" align="center" prop="infoJfdw" />
+        <el-table-column label="签订合同额" align="center" prop="infoQdhtje" />
+        <el-table-column
+          label="开票时间"
+          align="center"
+          prop="infoTime"
+          width="180"
+        >
+          <template slot-scope="scope">
+            <span>{{ parseTime(scope.row.infoTime, "{y}-{m}-{d}") }}</span>
+          </template>
+        </el-table-column>
+        <el-table-column label="责权ID" align="center" prop="zqId" />
+        <el-table-column label="开票金额" align="center" prop="infoMoney" />
+        <el-table-column label="市场专员" align="center" prop="infoZrr" />
+      </el-table>
+    </el-dialog>
   </div>
 </template>
 
@@ -380,13 +415,17 @@ import {
   delResponsibilities,
   addResponsibilities,
   updateResponsibilities,
+  getResponsibilitiesInfo,
 } from "@/api/system/responsibilities";
+import { addInfo } from "@/api/system/responsibilitiesInfo";
 import userInfo from "@/store/modules/user";
 
 export default {
   name: "Responsibilities",
   data() {
     return {
+      infoList: [],
+      kpjlopen: false,
       kpform: {},
       kpopen: false,
       dateRange: [],
@@ -450,8 +489,19 @@ export default {
     this.getList();
   },
   methods: {
+    handleKpList(value) {
+      getResponsibilitiesInfo(value.zqId).then((response) => {
+        this.infoList = response.data;
+        this.kpjlopen = true;
+      });
+    },
     handleJiKp(value) {
       this.kpform.zqId = value.zqId;
+      this.kpform.infoXmmc = value.zqXmmc;
+      this.kpform.infoHtbh = value.zqHtbh;
+      this.kpform.infoJfdw = value.zqJfdw;
+      this.kpform.infoQdhtje = value.zqQdhtje;
+      this.kpform.infoZrr = value.zqZrr;
       this.kpopen = true;
     },
     showButton(userName) {
@@ -542,12 +592,11 @@ export default {
     submitFormKp() {
       this.$refs["kpform"].validate((valid) => {
         if (valid) {
-          // addResponsibilitiesInfo(this.form).then((response) => {
-          //     this.$modal.msgSuccess("新增成功");
-          //     this.open = false;
-          //     this.getList();
-          //   });
-          // console.log(this.kpform);
+          addInfo(this.kpform).then((response) => {
+            this.$modal.msgSuccess("新增成功");
+            this.kpopen = false;
+            this.getList();
+          });
         }
       });
     },

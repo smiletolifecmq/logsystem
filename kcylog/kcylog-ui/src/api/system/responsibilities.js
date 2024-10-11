@@ -42,3 +42,10 @@ export function delResponsibilities(zqId) {
     method: 'delete'
   })
 }
+
+export function getResponsibilitiesInfo(zqId) {
+  return request({
+    url: '/system/responsibilities/info/' + zqId,
+    method: 'get'
+  })
+}

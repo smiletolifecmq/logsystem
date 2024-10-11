@@ -1,0 +1,97 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.kcylog.system.mapper.SysManagementResponsibilitiesInfoMapper">
+    
+    <resultMap type="SysManagementResponsibilitiesInfo" id="SysManagementResponsibilitiesInfoResult">
+        <result property="infoId"    column="info_id"    />
+        <result property="infoXmmc"    column="info_xmmc"    />
+        <result property="infoHtbh"    column="info_htbh"    />
+        <result property="infoJfdw"    column="info_jfdw"    />
+        <result property="infoQdhtje"    column="info_qdhtje"    />
+        <result property="infoTime"    column="info_time"    />
+        <result property="zqId"    column="zq_id"    />
+        <result property="infoMoney"    column="info_money"    />
+        <result property="infoZrr"    column="info_zrr"    />
+    </resultMap>
+
+    <sql id="selectSysManagementResponsibilitiesInfoVo">
+        select info_id, info_xmmc, info_htbh, info_jfdw, info_qdhtje, info_time, zq_id, info_money, info_zrr from sys_management_responsibilities_info
+    </sql>
+
+    <select id="selectSysManagementResponsibilitiesInfoList" parameterType="SysManagementResponsibilitiesInfo" resultMap="SysManagementResponsibilitiesInfoResult">
+        <include refid="selectSysManagementResponsibilitiesInfoVo"/>
+        <where>
+            <if test="params.beginTime != null and params.beginTime != ''"><!-- 开始时间检索 -->
+                AND date_format(info_time,'%y%m%d') &gt;= date_format(#{params.beginTime},'%y%m%d')
+            </if>
+            <if test="params.endTime != null and params.endTime != ''"><!-- 结束时间检索 -->
+                AND date_format(info_time,'%y%m%d') &lt;= date_format(#{params.endTime},'%y%m%d')
+            </if>
+            <if test="infoXmmc != null  and infoXmmc != ''"> and info_xmmc = #{infoXmmc}</if>
+            <if test="infoHtbh != null  and infoHtbh != ''"> and info_htbh = #{infoHtbh}</if>
+            <if test="infoJfdw != null  and infoJfdw != ''"> and info_jfdw = #{infoJfdw}</if>
+            <if test="infoZrr != null "> and info_zrr = #{infoZrr}</if>
+        </where>
+    </select>
+    
+    <select id="selectSysManagementResponsibilitiesInfoByInfoId" parameterType="Long" resultMap="SysManagementResponsibilitiesInfoResult">
+        <include refid="selectSysManagementResponsibilitiesInfoVo"/>
+        where info_id = #{infoId}
+    </select>
+        
+    <insert id="insertSysManagementResponsibilitiesInfo" parameterType="SysManagementResponsibilitiesInfo" useGeneratedKeys="true" keyProperty="infoId">
+        insert into sys_management_responsibilities_info
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="infoXmmc != null">info_xmmc,</if>
+            <if test="infoHtbh != null">info_htbh,</if>
+            <if test="infoJfdw != null">info_jfdw,</if>
+            <if test="infoQdhtje != null">info_qdhtje,</if>
+            <if test="infoTime != null">info_time,</if>
+            <if test="zqId != null">zq_id,</if>
+            <if test="infoMoney != null">info_money,</if>
+            <if test="infoZrr != null">info_zrr,</if>
+         </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test="infoXmmc != null">#{infoXmmc},</if>
+            <if test="infoHtbh != null">#{infoHtbh},</if>
+            <if test="infoJfdw != null">#{infoJfdw},</if>
+            <if test="infoQdhtje != null">#{infoQdhtje},</if>
+            <if test="infoTime != null">#{infoTime},</if>
+            <if test="zqId != null">#{zqId},</if>
+            <if test="infoMoney != null">#{infoMoney},</if>
+            <if test="infoZrr != null">#{infoZrr},</if>
+         </trim>
+    </insert>
+
+    <update id="updateSysManagementResponsibilitiesInfo" parameterType="SysManagementResponsibilitiesInfo">
+        update sys_management_responsibilities_info
+        <trim prefix="SET" suffixOverrides=",">
+            <if test="infoXmmc != null">info_xmmc = #{infoXmmc},</if>
+            <if test="infoHtbh != null">info_htbh = #{infoHtbh},</if>
+            <if test="infoJfdw != null">info_jfdw = #{infoJfdw},</if>
+            <if test="infoQdhtje != null">info_qdhtje = #{infoQdhtje},</if>
+            <if test="infoTime != null">info_time = #{infoTime},</if>
+            <if test="zqId != null">zq_id = #{zqId},</if>
+            <if test="infoMoney != null">info_money = #{infoMoney},</if>
+        </trim>
+        where info_id = #{infoId}
+    </update>
+
+    <delete id="deleteSysManagementResponsibilitiesInfoByInfoId" parameterType="Long">
+        delete from sys_management_responsibilities_info where info_id = #{infoId}
+    </delete>
+
+    <delete id="deleteSysManagementResponsibilitiesInfoByInfoIds" parameterType="String">
+        delete from sys_management_responsibilities_info where info_id in 
+        <foreach item="infoId" collection="array" open="(" separator="," close=")">
+            #{infoId}
+        </foreach>
+    </delete>
+
+    <select id="selectSysManagementResponsibilitiesInfoByZqId" parameterType="Long" resultMap="SysManagementResponsibilitiesInfoResult">
+        <include refid="selectSysManagementResponsibilitiesInfoVo"/>
+        where zq_id = #{zqId}
+    </select>
+</mapper>
