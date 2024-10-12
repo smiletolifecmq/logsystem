@@ -11,7 +11,7 @@
               <span>经营报表</span>
             </div>
             <div>
-              <el-table :data="tableData">
+              <el-table :data="tableData" :span-method="objectSpanMethod">
                 <el-table-column
                   prop="ht"
                   label="类型"
@@ -79,6 +79,13 @@
                     prop="hjje"
                   >
                   </el-table-column>
+                </el-table-column>
+                <el-table-column
+                  label="经营收入"
+                  header-align="center"
+                  prop="jysr"
+                  align="center"
+                >
                 </el-table-column>
                 <el-table-column
                   label="完成比例"
@@ -337,6 +344,25 @@ export default {
     this.handleExportJyyb();
   },
   methods: {
+    objectSpanMethod({ row, column, rowIndex, columnIndex }) {
+      // 判断是否为第9列 (columnIndex === 8)
+      if (columnIndex === 8) {
+        // 如果是第一行（rowIndex === 0），合并第一行和第二行
+        if (rowIndex === 0) {
+          return {
+            rowspan: 2,
+            colspan: 1,
+          };
+        }
+        // 如果是第二行（rowIndex === 1），隐藏单元格
+        else if (rowIndex === 1) {
+          return {
+            rowspan: 0,
+            colspan: 0,
+          };
+        }
+      }
+    },
     yszktj() {
       getExport(this.queryParams).then((response) => {
         this.yszkqdData = response.data;
@@ -368,6 +394,10 @@ export default {
         item.hjxs = responseData.data.qtkp + responseData.data.htkp;
         item.hjje = responseData.data.qtkpje + responseData.data.htkpje;
         item.wcbl = `${responseData.data.kpzbOne}%(${responseData.data.kpzbTwo}%)`;
+        item.jysr =
+          responseData.data.qtkpje +
+          responseData.data.htkpje +
+          responseData.data.qzje;
         this.tableData.push(item);
 
         var item = {};
@@ -379,7 +409,7 @@ export default {
         item.htje = "/";
         item.hjxs = responseData.data.qzxs;
         item.hjje = responseData.data.qzje;
-        item.wcbl = "/";
+        item.wcbl = `${responseData.data.qzzbOne}%(${responseData.data.qzzbTwo}%)`;
         this.tableData.push(item);
 
         var item = {};
