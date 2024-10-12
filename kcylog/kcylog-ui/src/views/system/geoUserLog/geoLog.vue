@@ -473,6 +473,9 @@ export default {
     return {
       pickerOptions: {
         disabledDate(time) {
+          if (userInfo.state.logStatus != 1) {
+            return false;
+          }
           const today = new Date();
           const day = today.getDay(); // 获取星期几，0 是星期日
           let lastWorkingDay = new Date(today);

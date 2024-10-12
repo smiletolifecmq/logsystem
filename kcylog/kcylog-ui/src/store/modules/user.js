@@ -9,7 +9,8 @@ const user = {
     roles: [],
     permissions: [],
     userId : 0,
-    deptId :0
+    deptId :0,
+    logStatus:1,
   },
 
   mutations: {
@@ -33,6 +34,9 @@ const user = {
     },
     SET_DEPTIF: (state, deptId) => {
       state.deptId = deptId
+    },
+    SET_LOGSTATUS: (state, logStatus) => {
+      state.logStatus = logStatus
     },
   },
 
@@ -69,6 +73,7 @@ const user = {
           commit('SET_NAME', user.userName)
           commit('SET_USERID', user.userId)
           commit('SET_DEPTIF', user.deptId)
+          commit('SET_LOGSTATUS', user.logStatus)
           commit('SET_AVATAR', avatar)
           resolve(res)
         }).catch(error => {

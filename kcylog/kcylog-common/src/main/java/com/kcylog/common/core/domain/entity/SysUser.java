@@ -1,16 +1,19 @@
 package com.kcylog.common.core.domain.entity;
 
-import java.util.Date;
-import java.util.List;
-import javax.validation.constraints.*;
-import org.apache.commons.lang3.builder.ToStringBuilder;
-import org.apache.commons.lang3.builder.ToStringStyle;
 import com.kcylog.common.annotation.Excel;
 import com.kcylog.common.annotation.Excel.ColumnType;
 import com.kcylog.common.annotation.Excel.Type;
 import com.kcylog.common.annotation.Excels;
 import com.kcylog.common.core.domain.BaseEntity;
 import com.kcylog.common.xss.Xss;
+import org.apache.commons.lang3.builder.ToStringBuilder;
+import org.apache.commons.lang3.builder.ToStringStyle;
+
+import javax.validation.constraints.Email;
+import javax.validation.constraints.NotBlank;
+import javax.validation.constraints.Size;
+import java.util.Date;
+import java.util.List;
 
 /**
  * 用户对象 sys_user
@@ -70,6 +73,8 @@ public class SysUser extends BaseEntity
     @Excel(name = "最后登录时间", width = 30, dateFormat = "yyyy-MM-dd HH:mm:ss", type = Type.EXPORT)
     private Date loginDate;
 
+    private Long logStatus;
+
     /** 部门对象 */
     @Excels({
         @Excel(name = "部门名称", targetAttr = "deptName", type = Type.EXPORT),
@@ -88,6 +93,14 @@ public class SysUser extends BaseEntity
 
     /** 角色ID */
     private Long roleId;
+
+    public Long getLogStatus() {
+        return logStatus;
+    }
+
+    public void setLogStatus(Long logStatus) {
+        this.logStatus = logStatus;
+    }
 
     public SysUser()
     {
