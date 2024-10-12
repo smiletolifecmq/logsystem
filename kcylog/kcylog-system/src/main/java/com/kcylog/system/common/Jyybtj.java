@@ -7,6 +7,7 @@ public class Jyybtj {
     private int qtdz;
     private int htkp;
     private int htdz;
+    private int qzxs;
     private BigDecimal qtkpje;
     private BigDecimal qtdzje;
     private BigDecimal htkpje;
@@ -15,12 +16,47 @@ public class Jyybtj {
     private BigDecimal kpzbTwo;
     private BigDecimal htzbOne;
     private BigDecimal htzbTwo;
+    private BigDecimal qzzbOne;
+    private BigDecimal qzzbTwo;
     private BigDecimal snjdyszk;
     private BigDecimal lshk;
     private BigDecimal bndxz;
     private BigDecimal xzzk;
     private BigDecimal qbyszk;
     private BigDecimal zjl;
+    private BigDecimal qzje;
+
+    public BigDecimal getQzzbOne() {
+        return qzzbOne;
+    }
+
+    public void setQzzbOne(BigDecimal qzzbOne) {
+        this.qzzbOne = qzzbOne;
+    }
+
+    public BigDecimal getQzzbTwo() {
+        return qzzbTwo;
+    }
+
+    public void setQzzbTwo(BigDecimal qzzbTwo) {
+        this.qzzbTwo = qzzbTwo;
+    }
+
+    public int getQzxs() {
+        return qzxs;
+    }
+
+    public void setQzxs(int qzxs) {
+        this.qzxs = qzxs;
+    }
+
+    public BigDecimal getQzje() {
+        return qzje;
+    }
+
+    public void setQzje(BigDecimal qzje) {
+        this.qzje = qzje;
+    }
 
     public int getQtkp() {
         return qtkp;

@@ -315,7 +315,7 @@ export default {
         {
           ...this.queryParams,
         },
-        `责权发生制开票详情_${new Date().getTime()}.xlsx`
+        `权责发生制开票详情_${new Date().getTime()}.xlsx`
       );
     },
   },

@@ -474,7 +474,48 @@ export default {
       // 表单参数
       form: {},
       // 表单校验
-      rules: {},
+      rules: {
+        zqXmmc: [
+          { required: true, message: "请填写项目名称", trigger: "blur" },
+        ],
+        zqHtbh: [
+          { required: true, message: "请填写合同编号", trigger: "blur" },
+        ],
+        zqJfdw: [
+          { required: true, message: "请填写甲方单位", trigger: "blur" },
+        ],
+        zqQdhtje: [
+          { required: true, message: "请填写签订合同额", trigger: "blur" },
+        ],
+        zqSjhtje: [
+          { required: true, message: "请填写审结后合同金额", trigger: "blur" },
+        ],
+        zqHtlb: [
+          { required: true, message: "请填写合同专业类别", trigger: "blur" },
+        ],
+        zqHtjd: [
+          { required: true, message: "请填写合同付款阶段", trigger: "blur" },
+        ],
+        zqHtqkbl: [
+          { required: true, message: "请填写合同可请款比例", trigger: "blur" },
+        ],
+        zqHtkkpje: [
+          { required: true, message: "请填写合同可开票金额", trigger: "blur" },
+        ],
+        zqKkpje: [
+          {
+            required: true,
+            message: "请填写合同本次可开票金额",
+            trigger: "blur",
+          },
+        ],
+        zqJdsm: [
+          { required: true, message: "请填写进度说明", trigger: "blur" },
+        ],
+        zqTime: [
+          { required: true, message: "请选择上报时间", trigger: "blur" },
+        ],
+      },
       kprules: {
         infoMoney: [
           { required: true, message: "请填写开票金额", trigger: "blur" },
@@ -641,7 +682,7 @@ export default {
         {
           ...this.queryParams,
         },
-        `责权发生制清单_${new Date().getTime()}.xlsx`
+        `权责发生制清单_${new Date().getTime()}.xlsx`
       );
     },
   },

@@ -8,13 +8,13 @@
         <el-col>
           <el-card class="box-card">
             <div slot="header" class="clearfix">
-              <span>经营月报总表</span>
+              <span>经营报表</span>
             </div>
             <div>
               <el-table :data="tableData">
                 <el-table-column
                   prop="ht"
-                  label="合同"
+                  label="类型"
                   header-align="center"
                   align="center"
                 >
@@ -61,55 +61,29 @@
                   </el-table-column>
                 </el-table-column>
                 <el-table-column
+                  label="合计"
+                  header-align="center"
+                  align="center"
+                >
+                  <el-table-column
+                    label="项数"
+                    header-align="center"
+                    align="center"
+                    prop="hjxs"
+                  >
+                  </el-table-column>
+                  <el-table-column
+                    label="金额"
+                    header-align="center"
+                    align="center"
+                    prop="hjje"
+                  >
+                  </el-table-column>
+                </el-table-column>
+                <el-table-column
                   label="完成比例"
                   header-align="center"
                   prop="wcbl"
-                  align="center"
-                >
-                </el-table-column>
-              </el-table>
-            </div>
-            <div>
-              <el-table :data="tableDataTj">
-                <el-table-column
-                  prop="snjdyszk"
-                  label="上一年度应收账款"
-                  header-align="center"
-                  align="center"
-                >
-                </el-table-column>
-                <el-table-column
-                  prop="lshk"
-                  label="历史回款"
-                  header-align="center"
-                  align="center"
-                >
-                </el-table-column>
-                <el-table-column
-                  prop="bndxz"
-                  label="本年度新增"
-                  header-align="center"
-                  align="center"
-                >
-                </el-table-column>
-                <el-table-column
-                  prop="xzzk"
-                  label="账款新增情况"
-                  header-align="center"
-                  align="center"
-                >
-                </el-table-column>
-                <el-table-column
-                  prop="qbyszk"
-                  label="全部应收账款"
-                  header-align="center"
-                  align="center"
-                >
-                </el-table-column>
-                <el-table-column
-                  prop="zjl"
-                  label="增加率"
-                  header-align="center"
                   align="center"
                 >
                 </el-table-column>
@@ -123,6 +97,54 @@
               <span>应收账款月统计</span>
             </div>
             <el-row>
+              <el-col :span="24">
+                <div>
+                  <el-table :data="tableDataTj">
+                    <el-table-column
+                      prop="snjdyszk"
+                      label="上一年度应收账款"
+                      header-align="center"
+                      align="center"
+                    >
+                    </el-table-column>
+                    <el-table-column
+                      prop="lshk"
+                      label="历史回款"
+                      header-align="center"
+                      align="center"
+                    >
+                    </el-table-column>
+                    <el-table-column
+                      prop="bndxz"
+                      label="本年度新增"
+                      header-align="center"
+                      align="center"
+                    >
+                    </el-table-column>
+                    <el-table-column
+                      prop="xzzk"
+                      label="账款新增情况"
+                      header-align="center"
+                      align="center"
+                    >
+                    </el-table-column>
+                    <el-table-column
+                      prop="qbyszk"
+                      label="全部应收账款"
+                      header-align="center"
+                      align="center"
+                    >
+                    </el-table-column>
+                    <el-table-column
+                      prop="zjl"
+                      label="增加率"
+                      header-align="center"
+                      align="center"
+                    >
+                    </el-table-column>
+                  </el-table>
+                </div>
+              </el-col>
               <el-col :span="8">
                 <el-card class="box-card">
                   <div slot="header" class="clearfix">
@@ -337,21 +359,38 @@ export default {
 
       exportJyyb(this.jyTimeForm).then((responseData) => {
         var item = {};
-        item.ht = "合同开票";
+        item.ht = "开票";
         item.ndmb = "5092(4392)";
         item.qtxs = responseData.data.qtkp;
         item.qtje = responseData.data.qtkpje;
         item.htxs = responseData.data.htkp;
         item.htje = responseData.data.htkpje;
+        item.hjxs = responseData.data.qtkp + responseData.data.htkp;
+        item.hjje = responseData.data.qtkpje + responseData.data.htkpje;
         item.wcbl = `${responseData.data.kpzbOne}%(${responseData.data.kpzbTwo}%)`;
         this.tableData.push(item);
+
         var item = {};
-        item.ht = "合同到账";
+        item.ht = "权责制";
+        item.ndmb = "/";
+        item.qtxs = "/";
+        item.qtje = "/";
+        item.htxs = "/";
+        item.htje = "/";
+        item.hjxs = responseData.data.qzxs;
+        item.hjje = responseData.data.qzje;
+        item.wcbl = "/";
+        this.tableData.push(item);
+
+        var item = {};
+        item.ht = "到账";
         item.ndmb = "4371(3770)";
         item.qtxs = responseData.data.qtdz;
         item.qtje = responseData.data.qtdzje;
         item.htxs = responseData.data.htdz;
         item.htje = responseData.data.htdzje;
+        item.hjxs = responseData.data.qtdz + responseData.data.htdz;
+        item.hjje = responseData.data.qtdzje + responseData.data.htdzje;
         item.wcbl = `${responseData.data.htzbOne}%(${responseData.data.htzbTwo}%)`;
         this.tableData.push(item);
         var item = {

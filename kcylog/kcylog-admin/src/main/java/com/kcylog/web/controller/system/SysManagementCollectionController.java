@@ -11,9 +11,11 @@ import com.kcylog.system.common.Jyybtj;
 import com.kcylog.system.domain.SysManagementArrival;
 import com.kcylog.system.domain.SysManagementCollection;
 import com.kcylog.system.domain.SysManagementInvoicing;
+import com.kcylog.system.domain.SysManagementResponsibilities;
 import com.kcylog.system.service.ISysManagementArrivalService;
 import com.kcylog.system.service.ISysManagementCollectionService;
 import com.kcylog.system.service.ISysManagementInvoicingService;
+import com.kcylog.system.service.ISysManagementResponsibilitiesService;
 import com.kcylog.web.controller.common.ExcelManySheetUtil;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.access.prepost.PreAuthorize;
@@ -47,6 +49,9 @@ public class SysManagementCollectionController extends BaseController
 
     @Autowired
     private ISysManagementArrivalService sysManagementArrivalService;
+
+    @Autowired
+    private ISysManagementResponsibilitiesService sysManagementResponsibilitiesService;
 
     /**
      * 查询应收账款列表
@@ -562,6 +567,8 @@ public class SysManagementCollectionController extends BaseController
         BigDecimal kpzbTwo = BigDecimal.ZERO;
         BigDecimal htzbOne = BigDecimal.ZERO;
         BigDecimal htzbTwo = BigDecimal.ZERO;
+        BigDecimal qzzbOne = BigDecimal.ZERO;
+        BigDecimal qzzbTwo = BigDecimal.ZERO;
         BigDecimal snjdyszk = BigDecimal.ZERO;
         BigDecimal lshk = BigDecimal.ZERO;
         BigDecimal bndxz = BigDecimal.ZERO;
@@ -618,6 +625,19 @@ public class SysManagementCollectionController extends BaseController
             qbyszk = qbyszk.add(obj3.getYsWdzje());
         }
 
+        //获取全部责权信息
+        SysManagementResponsibilities param = new SysManagementResponsibilities();
+        List<SysManagementResponsibilities> sysManagementResponsibilities = sysManagementResponsibilitiesService.selectSysManagementResponsibilitiesList(param);
+        int qzxs = 0;
+        BigDecimal qzje = BigDecimal.ZERO;
+        for (SysManagementResponsibilities objTemp : sysManagementResponsibilities){
+            qzxs ++;
+            qzje = qzje.add(objTemp.getZqKkpje());
+        }
+        
+        qzzbOne = qtkpje.add(htkpje).add(qzje).divide(kpmb1, 4, RoundingMode.HALF_UP).multiply(bfs);
+        qzzbTwo = qtkpje.add(htkpje).add(qzje).divide(kpmb2, 4, RoundingMode.HALF_UP).multiply(bfs);
+
         bndxz = qtkpje.add(htkpje).subtract(bndkpdz);
         snjdyszk = qbyszk.subtract(bndxz).add(lshk);
         xzzk = qtkpje.add(htkpje).subtract(qtdzje).subtract(htdzje);
@@ -639,6 +659,10 @@ public class SysManagementCollectionController extends BaseController
         jyybtj.setLshk(lshk.divide(wy, 4, RoundingMode.HALF_UP));
         jyybtj.setSnjdyszk(snjdyszk.divide(wy, 4, RoundingMode.HALF_UP));
         jyybtj.setZjl(xzzk.divide(snjdyszk, 4, RoundingMode.HALF_UP).multiply(bfs));
+        jyybtj.setQzxs(qzxs);
+        jyybtj.setQzje(qzje.divide(wy, 4, RoundingMode.HALF_UP));
+        jyybtj.setQzzbOne(qzzbOne);
+        jyybtj.setQzzbTwo(qzzbTwo);
 
         return success(jyybtj);
     }
