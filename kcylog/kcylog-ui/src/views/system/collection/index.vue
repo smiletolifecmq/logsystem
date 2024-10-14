@@ -24,6 +24,22 @@
           @keyup.enter.native="handleQuery"
         />
       </el-form-item>
+      <el-form-item label="合同名称" prop="ysHtmc">
+        <el-input
+          v-model="queryParams.ysHtmc"
+          placeholder="请输入合同名称"
+          clearable
+          @keyup.enter.native="handleQuery"
+        />
+      </el-form-item>
+      <el-form-item label="客户名称" prop="ysKhmc">
+        <el-input
+          v-model="queryParams.ysKhmc"
+          placeholder="请输入客户名称"
+          clearable
+          @keyup.enter.native="handleQuery"
+        />
+      </el-form-item>
       <el-form-item label="发票号" prop="ysFph">
         <el-input
           v-model="queryParams.ysFph"

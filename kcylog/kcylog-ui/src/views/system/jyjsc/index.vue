@@ -13,11 +13,24 @@
             <div>
               <el-table :data="tableData" :span-method="objectSpanMethod">
                 <el-table-column
+                  prop="jy"
+                  label="/"
+                  header-align="center"
+                  align="center"
+                >
+                  <template slot-scope="scope">
+                    <b>{{ scope.row.jy }}</b>
+                  </template>
+                </el-table-column>
+                <el-table-column
                   prop="ht"
                   label="类型"
                   header-align="center"
                   align="center"
                 >
+                  <template slot-scope="scope">
+                    <b>{{ scope.row.ht }}</b>
+                  </template>
                 </el-table-column>
                 <el-table-column
                   prop="ndmb"
@@ -25,6 +38,9 @@
                   header-align="center"
                   align="center"
                 >
+                  <template slot-scope="scope">
+                    <b><div v-html="scope.row.ndmb"></div></b>
+                  </template>
                 </el-table-column>
                 <el-table-column label="完成情况" header-align="center">
                   <el-table-column label="前台" header-align="center">
@@ -78,6 +94,9 @@
                     align="center"
                     prop="hjje"
                   >
+                    <template slot-scope="scope">
+                      <b>{{ scope.row.hjje }}</b>
+                    </template>
                   </el-table-column>
                 </el-table-column>
                 <el-table-column
@@ -86,6 +105,9 @@
                   prop="jysr"
                   align="center"
                 >
+                  <template slot-scope="scope">
+                    <b>{{ scope.row.jysr }}</b>
+                  </template>
                 </el-table-column>
                 <el-table-column
                   label="完成比例"
@@ -93,6 +115,9 @@
                   prop="wcbl"
                   align="center"
                 >
+                  <template slot-scope="scope">
+                    <div v-html="scope.row.wcbl"></div>
+                  </template>
                 </el-table-column>
               </el-table>
             </div>
@@ -345,8 +370,26 @@ export default {
   },
   methods: {
     objectSpanMethod({ row, column, rowIndex, columnIndex }) {
-      // 判断是否为第9列 (columnIndex === 8)
-      if (columnIndex === 8) {
+      // 判断是否为第9列 (columnIndex === 9)
+      if (columnIndex === 9) {
+        // 如果是第一行（rowIndex === 0），合并第一行和第二行
+        if (rowIndex === 0) {
+          return {
+            rowspan: 2,
+            colspan: 1,
+          };
+        }
+        // 如果是第二行（rowIndex === 1），隐藏单元格
+        else if (rowIndex === 1) {
+          return {
+            rowspan: 0,
+            colspan: 0,
+          };
+        }
+      }
+
+      // 判断是否为第一列 (columnIndex === 0)
+      if (columnIndex === 0) {
         // 如果是第一行（rowIndex === 0），合并第一行和第二行
         if (rowIndex === 0) {
           return {
@@ -386,14 +429,15 @@ export default {
       exportJyyb(this.jyTimeForm).then((responseData) => {
         var item = {};
         item.ht = "开票";
-        item.ndmb = "5092(4392)";
+        item.ndmb = `5092<br>(4392)`;
+        item.jy = "收入";
         item.qtxs = responseData.data.qtkp;
         item.qtje = responseData.data.qtkpje;
         item.htxs = responseData.data.htkp;
         item.htje = responseData.data.htkpje;
         item.hjxs = responseData.data.qtkp + responseData.data.htkp;
         item.hjje = responseData.data.qtkpje + responseData.data.htkpje;
-        item.wcbl = `${responseData.data.kpzbOne}%(${responseData.data.kpzbTwo}%)`;
+        item.wcbl = `<b>${responseData.data.kpzbOne}%<br>(${responseData.data.kpzbTwo}%)</b>`;
         item.jysr =
           responseData.data.qtkpje +
           responseData.data.htkpje +
@@ -402,6 +446,7 @@ export default {
 
         var item = {};
         item.ht = "权责制";
+        item.jy = "收入";
         item.ndmb = "/";
         item.qtxs = "/";
         item.qtje = "/";
@@ -409,19 +454,21 @@ export default {
         item.htje = "/";
         item.hjxs = responseData.data.qzxs;
         item.hjje = responseData.data.qzje;
-        item.wcbl = `${responseData.data.qzzbOne}%(${responseData.data.qzzbTwo}%)`;
+        item.wcbl = `<b>${responseData.data.qzzbOne}%<br>(${responseData.data.qzzbTwo}%)</b>`;
         this.tableData.push(item);
 
         var item = {};
         item.ht = "到账";
-        item.ndmb = "4371(3770)";
+        item.jy = "/";
+        item.ndmb = `4371<br>(3770)`;
         item.qtxs = responseData.data.qtdz;
         item.qtje = responseData.data.qtdzje;
         item.htxs = responseData.data.htdz;
         item.htje = responseData.data.htdzje;
         item.hjxs = responseData.data.qtdz + responseData.data.htdz;
         item.hjje = responseData.data.qtdzje + responseData.data.htdzje;
-        item.wcbl = `${responseData.data.htzbOne}%(${responseData.data.htzbTwo}%)`;
+        item.wcbl = `<b>${responseData.data.htzbOne}%<br>(${responseData.data.htzbTwo}%)</b>`;
+        item.jysr = "/";
         this.tableData.push(item);
         var item = {
           snjdyszk: 0,

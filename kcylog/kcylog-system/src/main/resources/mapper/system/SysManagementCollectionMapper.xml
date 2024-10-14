@@ -53,6 +53,8 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
             <if test="ysFph != null  and ysFph != ''"> and ys_fph = #{ysFph}</if>
             <if test="ysIshz != null"> and ys_ishz = #{ysIshz}</if>
             <if test="ysHtbh != null"> and ys_htbh like concat('%', #{ysHtbh}, '%')</if>
+            <if test="ysHtmc != null"> and ys_htmc like concat('%', #{ysHtmc}, '%')</if>
+            <if test="ysKhmc != null"> and ys_khmc like concat('%', #{ysKhmc}, '%')</if>
             and ys_status = 1
         </where>
     </select>
