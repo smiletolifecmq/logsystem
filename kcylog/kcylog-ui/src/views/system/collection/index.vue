@@ -16,6 +16,14 @@
           @keyup.enter.native="handleQuery"
         />
       </el-form-item>
+      <el-form-item label="合同编号" prop="ysHtbh">
+        <el-input
+          v-model="queryParams.ysHtbh"
+          placeholder="请输入合同编号"
+          clearable
+          @keyup.enter.native="handleQuery"
+        />
+      </el-form-item>
       <el-form-item label="发票号" prop="ysFph">
         <el-input
           v-model="queryParams.ysFph"
