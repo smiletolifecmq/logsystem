@@ -400,6 +400,10 @@ public class SysReviewSubController extends BaseController
                 //审核到终审的前一个
                 review.setFinalSecondStatus(1);
                 sysReviewSubService.setSysReviewSubFinalSecondStatusByReviewId(review);
+                //判断该审核单有没有雇工
+                if (reviewSub.getManType() == 0){
+                    sysReviewSubProcessService.updateStatusByUserIdReviewId(sysReviewSubProcess.getReviewId());
+                }
                 sysReviewSubProcessService.setNextStatusByReviewId(sysReviewSubProcess.getReviewId());
             } else {
                 //审核单流程没有全部通过，进入下一个流程审核
