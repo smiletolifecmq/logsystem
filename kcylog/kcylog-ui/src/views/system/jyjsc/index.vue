@@ -14,7 +14,7 @@
               <el-table :data="tableData" :span-method="objectSpanMethod">
                 <el-table-column
                   prop="jy"
-                  label="/"
+                  label="类型"
                   header-align="center"
                   align="center"
                 >
@@ -458,8 +458,8 @@ export default {
         this.tableData.push(item);
 
         var item = {};
-        item.ht = "到账";
-        item.jy = "/";
+        item.ht = "/";
+        item.jy = "到账";
         item.ndmb = `4371<br>(3770)`;
         item.qtxs = responseData.data.qtdz;
         item.qtje = responseData.data.qtdzje;
