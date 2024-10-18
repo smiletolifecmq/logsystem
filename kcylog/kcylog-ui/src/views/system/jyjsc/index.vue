@@ -436,12 +436,15 @@ export default {
         item.htxs = responseData.data.htkp;
         item.htje = responseData.data.htkpje;
         item.hjxs = responseData.data.qtkp + responseData.data.htkp;
-        item.hjje = responseData.data.qtkpje + responseData.data.htkpje;
+        item.hjje = (
+          responseData.data.qtkpje + responseData.data.htkpje
+        ).toFixed(2);
         item.wcbl = `<b>${responseData.data.kpzbOne}%<br>(${responseData.data.kpzbTwo}%)</b>`;
-        item.jysr =
+        item.jysr = (
           responseData.data.qtkpje +
           responseData.data.htkpje +
-          responseData.data.qzje;
+          responseData.data.qzje
+        ).toFixed(2);
         this.tableData.push(item);
 
         var item = {};
@@ -466,7 +469,9 @@ export default {
         item.htxs = responseData.data.htdz;
         item.htje = responseData.data.htdzje;
         item.hjxs = responseData.data.qtdz + responseData.data.htdz;
-        item.hjje = responseData.data.qtdzje + responseData.data.htdzje;
+        item.hjje = (
+          responseData.data.qtdzje + responseData.data.htdzje
+        ).toFixed(2);
         item.wcbl = `<b>${responseData.data.htzbOne}%<br>(${responseData.data.htzbTwo}%)</b>`;
         item.jysr = "/";
         this.tableData.push(item);
