@@ -6,11 +6,11 @@ import com.kcylog.common.core.domain.AjaxResult;
 import com.kcylog.common.core.page.TableDataInfo;
 import com.kcylog.common.enums.BusinessType;
 import com.kcylog.common.utils.SecurityUtils;
-import com.kcylog.common.utils.poi.ExcelUtil;
 import com.kcylog.system.domain.SysManagementCollection;
 import com.kcylog.system.domain.SysManagementInvoicing;
 import com.kcylog.system.service.ISysManagementCollectionService;
 import com.kcylog.system.service.ISysManagementInvoicingService;
+import com.kcylog.web.controller.common.ExcelUtilNum;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.transaction.annotation.Transactional;
@@ -63,7 +63,7 @@ public class SysManagementInvoicingController extends BaseController
             num ++;
             obj.setNum(num);
         }
-        ExcelUtil<SysManagementInvoicing> util = new ExcelUtil<SysManagementInvoicing>(SysManagementInvoicing.class);
+        ExcelUtilNum<SysManagementInvoicing> util = new ExcelUtilNum<SysManagementInvoicing>(SysManagementInvoicing.class);
         util.exportExcel(response, list, "经营开票统计数据");
     }
 
@@ -205,7 +205,7 @@ public class SysManagementInvoicingController extends BaseController
             num ++;
             obj.setNum(num);
         }
-        ExcelUtil<SysManagementInvoicing> util = new ExcelUtil<SysManagementInvoicing>(SysManagementInvoicing.class);
+        ExcelUtilNum<SysManagementInvoicing> util = new ExcelUtilNum<SysManagementInvoicing>(SysManagementInvoicing.class);
         util.exportExcel(response, list, "经营开票统计数据");
     }
 }

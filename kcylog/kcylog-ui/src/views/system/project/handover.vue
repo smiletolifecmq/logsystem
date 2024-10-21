@@ -1584,16 +1584,20 @@ export default {
               if (
                 project[i].receiveStatus == 1 &&
                 project[i].isArchive == 1 &&
-                project[i].projectList.receiveDays > 0 &&
-                project[i].projectList.receiveDays <= 2
+                project[i].projectList.receiveDays >= 0 &&
+                project[i].projectList.receiveDays <= 2 &&
+                project[i].receiveCutoffTime != null &&
+                project[i].receiveCutoffTime != ""
               ) {
                 num.receiveDaysTq++;
               }
               if (
                 project[i].checkStatus != 2 &&
                 project[i].isArchive == 1 &&
-                project[i].projectList.archiveDays > 0 &&
-                project[i].projectList.archiveDays <= 2
+                project[i].projectList.archiveDays >= 0 &&
+                project[i].projectList.archiveDays <= 2 &&
+                project[i].rectifyCutoffTime != null &&
+                project[i].rectifyCutoffTime != ""
               ) {
                 num.archiveDaysTq++;
               }
@@ -1627,16 +1631,20 @@ export default {
               if (
                 project[i].receiveStatus == 1 &&
                 project[i].isArchive == 1 &&
-                project[i].projectList.receiveDays > 0 &&
-                project[i].projectList.receiveDays <= 2
+                project[i].projectList.receiveDays >= 0 &&
+                project[i].projectList.receiveDays <= 2 &&
+                project[i].receiveCutoffTime != null &&
+                project[i].receiveCutoffTime != ""
               ) {
                 num.receiveDaysTq++;
               }
               if (
                 project[i].checkStatus != 2 &&
                 project[i].isArchive == 1 &&
-                project[i].projectList.archiveDays > 0 &&
-                project[i].projectList.archiveDays <= 2
+                project[i].projectList.archiveDays >= 0 &&
+                project[i].projectList.archiveDays <= 2 &&
+                project[i].rectifyCutoffTime != null &&
+                project[i].rectifyCutoffTime != ""
               ) {
                 num.archiveDaysTq++;
               }
@@ -1788,8 +1796,10 @@ export default {
             if (
               project[i].receiveStatus == 1 &&
               project[i].isArchive == 1 &&
-              project[i].projectList.receiveDays > 0 &&
+              project[i].projectList.receiveDays >= 0 &&
               project[i].projectList.receiveDays <= 2 &&
+              project[i].receiveCutoffTime != null &&
+              project[i].receiveCutoffTime != "" &&
               status == -2
             ) {
               this.overTimeProjectList.push(project[i]);
@@ -1804,9 +1814,11 @@ export default {
             if (
               project[i].checkStatus != 2 &&
               project[i].isArchive == 1 &&
-              project[i].projectList.archiveDays > 0 &&
+              project[i].projectList.archiveDays >= 0 &&
               project[i].projectList.archiveDays <= 2 &&
-              status == -3
+              status == -3 &&
+              project[i].rectifyCutoffTime != null &&
+              project[i].rectifyCutoffTime != ""
             ) {
               this.overTimeProjectList.push(project[i]);
             }
