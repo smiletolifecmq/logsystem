@@ -26,6 +26,33 @@
         />
       </el-form-item>
 
+      <el-form-item label="合同名称" prop="kpHtmc">
+        <el-input
+          v-model="queryParams.kpHtmc"
+          placeholder="请输入合同名称"
+          clearable
+          @keyup.enter.native="handleQuery"
+        />
+      </el-form-item>
+
+      <el-form-item label="合同编号" prop="kpHtbh">
+        <el-input
+          v-model="queryParams.kpHtbh"
+          placeholder="请输入合同编号/项目编号"
+          clearable
+          @keyup.enter.native="handleQuery"
+        />
+      </el-form-item>
+
+      <el-form-item label="客户名称" prop="kpKhmc">
+        <el-input
+          v-model="queryParams.kpKhmc"
+          placeholder="请输入客户名称"
+          clearable
+          @keyup.enter.native="handleQuery"
+        />
+      </el-form-item>
+
       <el-form-item label="开票日期">
         <el-date-picker
           v-model="dateRange"
@@ -455,6 +482,9 @@ export default {
         pageSize: 10,
         kpFph: null,
         kpType: null,
+        kpHtmc: null,
+        kpHtbh: null,
+        kpKhmc: null,
       },
       // 表单参数
       form: {},

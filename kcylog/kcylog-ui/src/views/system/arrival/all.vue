@@ -8,6 +8,30 @@
       v-show="showSearch"
       label-width="68px"
     >
+      <el-form-item label="付款单位" prop="dzKhmc">
+        <el-input
+          v-model="queryParams.dzKhmc"
+          placeholder="请输入付款单位"
+          clearable
+          @keyup.enter.native="handleQuery"
+        />
+      </el-form-item>
+      <el-form-item label="客户名称" prop="dzFkdwmc">
+        <el-input
+          v-model="queryParams.dzFkdwmc"
+          placeholder="请输入客户名称"
+          clearable
+          @keyup.enter.native="handleQuery"
+        />
+      </el-form-item>
+      <el-form-item label="合同编号" prop="dzHtbh">
+        <el-input
+          v-model="queryParams.dzHtbh"
+          placeholder="请输入合同编号"
+          clearable
+          @keyup.enter.native="handleQuery"
+        />
+      </el-form-item>
       <el-form-item label="发票号" prop="dzFph">
         <el-input
           v-model="queryParams.dzFph"

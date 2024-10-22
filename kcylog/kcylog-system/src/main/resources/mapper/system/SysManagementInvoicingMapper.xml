@@ -45,6 +45,15 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
             <if test="kpType != null "> and kp_type = #{kpType}</if>
             <if test="kpFzr != null "> and kp_fzr= #{kpFzr}</if>
             <if test="kpHcph != null "> and kp_hcph= #{kpHcph}</if>
+            <if test="kpHtmc != null and kpHtmc != ''">
+                and kp_htmc like concat('%', #{kpHtmc}, '%')
+            </if>
+            <if test="kpHtbh != null and kpHtbh != ''">
+                and kp_htbh like concat('%', #{kpHtbh}, '%')
+            </if>
+            <if test="kpKhmc != null and kpKhmc != ''">
+                and kp_khmc like concat('%', #{kpKhmc}, '%')
+            </if>
         </where>
         order by kp_id desc
     </select>

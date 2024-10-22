@@ -40,6 +40,15 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
             <if test="dzFzr != null "> and dz_fzr= #{dzFzr}</if>
             <if test="monthString != null  and monthString != ''"> and date_format(dz_rq,'%y%m') = date_format(#{monthString},'%y%m')</if>
             <if test="yearString != null  and yearString != ''"> and date_format(dz_rq,'%y') = date_format(#{yearString},'%y')</if>
+            <if test="dzFkdwmc != null and dzFkdwmc != ''">
+                and dz_fkdwmc like concat('%', #{dzFkdwmc}, '%')
+            </if>
+            <if test="dzKhmc != null and dzKhmc != ''">
+                and dz_khmc like concat('%', #{dzKhmc}, '%')
+            </if>
+            <if test="dzHtbh != null and dzHtbh != ''">
+                and dz_htbh like concat('%', #{dzHtbh}, '%')
+            </if>
         </where>
         order by dz_id desc
     </select>

@@ -91,6 +91,7 @@ public class SysManagementResponsibilitiesInfoController extends BaseController
         SysManagementResponsibilities newObj = new SysManagementResponsibilities();
         newObj.setZqId(sysManagementResponsibilitiesInfo.getZqId());
         newObj.setZqKkpje(money);
+        newObj.setZqYkpje(responsibilities.getZqYkpje().add(sysManagementResponsibilitiesInfo.getInfoMoney()));
         sysManagementResponsibilitiesService.updateSysManagementResponsibilities(newObj);
         return toAjax(sysManagementResponsibilitiesInfoService.insertSysManagementResponsibilitiesInfo(sysManagementResponsibilitiesInfo));
     }
