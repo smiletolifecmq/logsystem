@@ -32,7 +32,7 @@ public class SysGeoNofundingProjectController extends BaseController
     /**
      * 查询无经费服务项目统计列表
      */
-    @PreAuthorize("@ss.hasPermi('system:project:list')")
+    @PreAuthorize("@ss.hasPermi('system:geoNofundingProject:list')")
     @GetMapping("/list")
     public TableDataInfo list(SysGeoNofundingProject sysGeoNofundingProject)
     {
@@ -44,7 +44,7 @@ public class SysGeoNofundingProjectController extends BaseController
     /**
      * 导出无经费服务项目统计列表
      */
-    @PreAuthorize("@ss.hasPermi('system:project:export')")
+    @PreAuthorize("@ss.hasPermi('system:geoNofundingProject:export')")
     @Log(title = "无经费服务项目统计", businessType = BusinessType.EXPORT)
     @PostMapping("/export")
     public void export(HttpServletResponse response, SysGeoNofundingProject sysGeoNofundingProject)
@@ -62,7 +62,7 @@ public class SysGeoNofundingProjectController extends BaseController
     /**
      * 获取无经费服务项目统计详细信息
      */
-    @PreAuthorize("@ss.hasPermi('system:project:query')")
+    @PreAuthorize("@ss.hasPermi('system:geoNofundingProject:query')")
     @GetMapping(value = "/{id}")
     public AjaxResult getInfo(@PathVariable("id") Long id)
     {
@@ -72,7 +72,7 @@ public class SysGeoNofundingProjectController extends BaseController
     /**
      * 新增无经费服务项目统计
      */
-    @PreAuthorize("@ss.hasPermi('system:project:add')")
+    @PreAuthorize("@ss.hasPermi('system:geoNofundingProject:add')")
     @Log(title = "无经费服务项目统计", businessType = BusinessType.INSERT)
     @PostMapping
     public AjaxResult add(@RequestBody SysGeoNofundingProject sysGeoNofundingProject)
@@ -84,7 +84,7 @@ public class SysGeoNofundingProjectController extends BaseController
     /**
      * 修改无经费服务项目统计
      */
-    @PreAuthorize("@ss.hasPermi('system:project:edit')")
+    @PreAuthorize("@ss.hasPermi('system:geoNofundingProject:edit')")
     @Log(title = "无经费服务项目统计", businessType = BusinessType.UPDATE)
     @PutMapping
     public AjaxResult edit(@RequestBody SysGeoNofundingProject sysGeoNofundingProject)
@@ -95,7 +95,7 @@ public class SysGeoNofundingProjectController extends BaseController
     /**
      * 删除无经费服务项目统计
      */
-    @PreAuthorize("@ss.hasPermi('system:project:remove')")
+    @PreAuthorize("@ss.hasPermi('system:geoNofundingProject:remove')")
     @Log(title = "无经费服务项目统计", businessType = BusinessType.DELETE)
 	@DeleteMapping("/{ids}")
     public AjaxResult remove(@PathVariable Long[] ids)

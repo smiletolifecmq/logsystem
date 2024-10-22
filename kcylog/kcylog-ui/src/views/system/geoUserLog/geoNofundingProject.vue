@@ -46,7 +46,7 @@
           icon="el-icon-plus"
           size="mini"
           @click="handleAdd"
-          v-hasPermi="['system:project:add']"
+          v-hasPermi="['system:geoNofundingProject:add']"
           >新增</el-button
         >
       </el-col>
@@ -57,7 +57,7 @@
           icon="el-icon-download"
           size="mini"
           @click="handleExport"
-          v-hasPermi="['system:project:export']"
+          v-hasPermi="['system:geoNofundingProject:export']"
           >导出</el-button
         >
       </el-col>
@@ -93,7 +93,7 @@
             type="text"
             icon="el-icon-edit"
             @click="handleUpdate(scope.row)"
-            v-hasPermi="['system:project:edit']"
+            v-hasPermi="['system:geoNofundingProject:edit']"
             v-if="showButton(scope.row.fzr)"
             >修改</el-button
           >
@@ -102,7 +102,7 @@
             type="text"
             icon="el-icon-delete"
             @click="handleDelete(scope.row)"
-            v-hasPermi="['system:project:remove']"
+            v-hasPermi="['system:geoNofundingProject:remove']"
             v-if="showButton(scope.row.fzr)"
             >删除</el-button
           >
