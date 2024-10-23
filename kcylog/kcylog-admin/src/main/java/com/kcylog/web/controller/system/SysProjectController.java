@@ -717,6 +717,30 @@ public class SysProjectController extends BaseController {
     public void exportOperatingAssignPersonnel(HttpServletResponse response, SysProject sysProject) throws ParseException {
         List<SysProject> list = sysProjectService.listProjectOperateExport(sysProject);
         List<OperatingExport> operatingExportList = new ArrayList<>();
+
+        SysUser user = new SysUser();
+        List<SysUser> userList = sysUserService.selectUserList(user);
+        Map<String, String> userMap = new HashMap<>();
+        for (SysUser obj : userList){
+            userMap.put(obj.getUserName(),obj.getDept().getDeptName());
+        }
+        String[] dl = {"蔡龙洲1", "蔡龙洲2", "蔡龙洲3", "蔡龙洲4", "蔡龙洲5", "蔡龙洲6", "蔡龙洲7", "蔡龙洲8", "蔡龙洲9", "蔡龙洲10"};
+        String[] gc = {"张功锋1", "张功锋2", "张功锋3", "张功锋4", "张功锋5", "张功锋6", "张功锋7", "张功锋8", "张功锋9", "张功锋10"};
+        String[] bd = {"简煊祥1", "简煊祥2", "简煊祥3", "简煊祥4", "简煊祥5", "简煊祥6", "简煊祥7", "简煊祥8", "简煊祥9", "简煊祥10"};
+        String[] gx = {"朱化弟1", "朱化弟2", "朱化弟3", "朱化弟4", "朱化弟5", "朱化弟6", "朱化弟7", "朱化弟8", "朱化弟9", "朱化弟10"};
+        for (String obj1 : dl){
+            userMap.put(obj1, "地理信息部");
+        }
+        for (String obj2 : gc){
+            userMap.put(obj2, "工程测绘部");
+        }
+        for (String obj3 : bd){
+            userMap.put(obj3, "不动产测绘部");
+        }
+        for (String obj4 : gx){
+            userMap.put(obj4, "管线工程部");
+        }
+
         int num = 0;
         for (SysProject project : list){
             if (project.getSubpackageType() != null && project.getSubpackageType() != 0 && project.getSubpackageType() != 1){
@@ -773,6 +797,9 @@ public class SysProjectController extends BaseController {
                         operatingExport.setBjRemark(project.getBjRemark());
                         // 人员安排信息
                         operatingExport.setUserName(obj1.getUserName());
+                        if (userMap.containsKey(obj1.getUserName())){
+                            operatingExport.setDept(userMap.get(obj1.getUserName()));
+                        }
                         operatingExport.setProportion(obj1.getProportion());
                         operatingExport.setMoney(obj1.getMoney());
                         operatingExport.setProfitMoney(obj1.getProfitMoney());
@@ -831,6 +858,9 @@ public class SysProjectController extends BaseController {
                     operatingExport.setBjRemark(project.getBjRemark());
                     // 人员安排信息
                     operatingExport.setUserName(obj1.getUserName());
+                    if (userMap.containsKey(obj1.getUserName())){
+                        operatingExport.setDept(userMap.get(obj1.getUserName()));
+                    }
                     operatingExport.setProportion(obj1.getProportion());
                     operatingExport.setMoney(obj1.getMoney());
                     operatingExport.setProfitMoney(obj1.getProfitMoney());

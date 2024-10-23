@@ -96,6 +96,9 @@ public class OperatingExport {
     @Excel(name = "人员名称", headerBackgroundColor = IndexedColors.GREEN)
     private String userName;
 
+    @Excel(name = "部门", headerBackgroundColor = IndexedColors.GREEN)
+    private String dept;
+
     /** 占比 */
     @Excel(name = "占比(%)", headerBackgroundColor = IndexedColors.GREEN)
     private BigDecimal proportion;
@@ -111,6 +114,14 @@ public class OperatingExport {
 
     @Excel(name = "利润金额-系数", headerBackgroundColor = IndexedColors.GREEN)
     private BigDecimal coefficientProfitMoney;
+
+    public String getDept() {
+        return dept;
+    }
+
+    public void setDept(String dept) {
+        this.dept = dept;
+    }
 
     public String getUserName() {
         return userName;
