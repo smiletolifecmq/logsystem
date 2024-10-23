@@ -1000,6 +1000,7 @@ import {
   updateProject,
   listProjectStatisticsData,
   listProjectOperateCq,
+  listProjectStatisticsDataForDept,
 } from "@/api/system/project";
 import elDragDialog from "@/api/components/el-drag";
 
@@ -1354,31 +1355,15 @@ export default {
       var dateRangeTemp = [];
       dateRangeTemp[0] = range.firstDay;
       dateRangeTemp[1] = range.lastDay;
-      listProjectStatisticsData(
+      listProjectStatisticsDataForDept(
         this.addDateRange(this.queryParams, dateRangeTemp)
       ).then((response) => {
-        const project = response.rows;
         let myMap = new Map();
-        for (let i = 0; i < project.length; i++) {
-          let key = project[i].department;
-          if (key == "" || key == null || key == undefined) {
-            continue;
-          }
-          if (myMap.has(key)) {
-            let num = myMap.get(key);
-            num.operate = project[i].operate + num.operate;
-            num.fbMoney = project[i].fbMoney + num.fbMoney;
-            myMap.set(key, num);
-          } else {
-            let num = {
-              operate: 0,
-              fbMoney: 0,
-            };
-            num.operate = project[i].operate;
-            num.fbMoney = project[i].fbMoney;
-            myMap.set(key, num);
-          }
-        }
+        Object.keys(response.data).forEach((projectKey) => {
+          const projectValue = response.data[projectKey];
+          myMap.set(projectKey, projectValue);
+        });
+
         let numData = {
           status: 0,
           gcchbNumWork: 0,
@@ -1388,16 +1373,16 @@ export default {
         };
 
         if (myMap.has("工程测绘部")) {
-          numData.gcchbNumWork = myMap.get("工程测绘部").operate.toFixed(2);
+          numData.gcchbNumWork = myMap.get("工程测绘部").money.toFixed(2);
         }
         if (myMap.has("不动产测绘部")) {
-          numData.bdcchbWork = myMap.get("不动产测绘部").operate.toFixed(2);
+          numData.bdcchbWork = myMap.get("不动产测绘部").money.toFixed(2);
         }
         if (myMap.has("管线工程部")) {
-          numData.gxgcbWork = myMap.get("管线工程部").operate.toFixed(2);
+          numData.gxgcbWork = myMap.get("管线工程部").money.toFixed(2);
         }
         if (myMap.has("地理信息部")) {
-          numData.dlxxbWork = myMap.get("地理信息部").operate.toFixed(2);
+          numData.dlxxbWork = myMap.get("地理信息部").money.toFixed(2);
         }
         this.statisticsData.push(numData);
 
@@ -1410,27 +1395,19 @@ export default {
         };
 
         if (myMap.has("工程测绘部")) {
-          numData.gcchbNumWork = (
-            myMap.get("工程测绘部").operate - myMap.get("工程测绘部").fbMoney
-          ).toFixed(2);
+          numData.gcchbNumWork = myMap.get("工程测绘部").profitMoney.toFixed(2);
         }
         if (myMap.has("不动产测绘部")) {
-          numData.bdcchbWork = (
-            myMap.get("不动产测绘部").operate -
-            myMap.get("不动产测绘部").fbMoney
-          ).toFixed(2);
+          numData.bdcchbWork = myMap.get("不动产测绘部").profitMoney.toFixed(2);
         }
         if (myMap.has("管线工程部")) {
-          numData.gxgcbWork = (
-            myMap.get("管线工程部").operate - myMap.get("管线工程部").fbMoney
-          ).toFixed(2);
+          numData.gxgcbWork = myMap.get("管线工程部").profitMoney.toFixed(2);
         }
         if (myMap.has("地理信息部")) {
-          numData.dlxxbWork = (
-            myMap.get("地理信息部").operate - myMap.get("地理信息部").fbMoney
-          ).toFixed(2);
+          numData.dlxxbWork = myMap.get("地理信息部").profitMoney.toFixed(2);
         }
         this.statisticsData.push(numData);
+        console.log(this.statisticsData);
       });
     },
     calculateLaborSub(value) {

@@ -162,3 +162,10 @@ export function listProjectForFbTwoCheck(query) {
   })
 }
 
+export function listProjectStatisticsDataForDept(query) {
+  return request({
+    url: '/system/project/listProjectStatisticsDataForDept',
+    method: 'get',
+    params: query
+  })
+}

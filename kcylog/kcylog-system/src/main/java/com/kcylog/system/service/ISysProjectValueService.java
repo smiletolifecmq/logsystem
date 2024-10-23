@@ -66,4 +66,6 @@ public interface ISysProjectValueService
     public List<SysProjectValue> selectSysProjectValueListByProjectIds(List<Long> projectIds);
 
     public List<SysProjectValue> selectSysProjectValueListProductionDetails(SysProject sysProject);
+
+    public List<SysProjectValue> listProjectOperateTJ(SysProject sysProject);
 }
