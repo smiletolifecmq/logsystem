@@ -89,6 +89,9 @@ public class SysManagementCollection extends BaseEntity
     @Excel(name = "备注")
     private String ysBz;
 
+    @Excel(name = "所在区域")
+    private String ysSzqu;
+
     /** 资金来源 */
     @Excel(name = "资金来源")
     private String ysZjly;
@@ -127,8 +130,6 @@ public class SysManagementCollection extends BaseEntity
     private String ysKprqCs;
 
     private String ysKprqLast;
-
-    private String ysSzqu;
 
     public List<Long> getYsIds() {
         return ysIds;
