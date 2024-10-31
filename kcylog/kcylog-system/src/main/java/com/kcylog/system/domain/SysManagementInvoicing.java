@@ -59,8 +59,8 @@ public class SysManagementInvoicing extends BaseEntity
     private String kpHtje;
 
     /** 开票日期 */
-    @JsonFormat(pattern = "yyyy-MM-dd")
-    @Excel(name = "开票日期", width = 30, dateFormat = "yyyy-MM-dd")
+    @JsonFormat(pattern = "yyyy年MM月dd日")
+    @Excel(name = "开票日期", width = 30, dateFormat = "yyyy年MM月dd日")
     private Date kpKprq;
 
     /** 开票金额 */

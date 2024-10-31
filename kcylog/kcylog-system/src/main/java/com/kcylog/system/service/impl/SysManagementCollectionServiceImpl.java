@@ -127,4 +127,10 @@ public class SysManagementCollectionServiceImpl implements ISysManagementCollect
     {
         return sysManagementCollectionMapper.updateSysManagementCollectionPlxg(sysManagementCollection);
     }
+
+    @Override
+    public List<SysManagementCollection> selectSysManagementCollectionListForAll(SysManagementCollection sysManagementCollection)
+    {
+        return sysManagementCollectionMapper.selectSysManagementCollectionListForAll(sysManagementCollection);
+    }
 }

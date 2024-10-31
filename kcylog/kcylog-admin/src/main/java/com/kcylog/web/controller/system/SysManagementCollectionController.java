@@ -122,23 +122,76 @@ public class SysManagementCollectionController extends BaseController
             LocalDate currentDate = LocalDate.parse(sysManagementCollection.getYsKprqCs());
             Period period = Period.between(ysKprqLocalDate, currentDate);
             int years = period.getYears();
+
+            SysManagementCollection newObj = new SysManagementCollection();
+            newObj.setYsHtmc(obj.getYsHtmc());
+            newObj.setYsHtbh(obj.getYsHtbh());
+            newObj.setYsFzbm(obj.getYsFzbm());
+            newObj.setYsFzr(obj.getYsFzr());
+            newObj.setYsKhmc(obj.getYsKhmc());
+            newObj.setYsKhfl(obj.getYsKhfl());
+            newObj.setYsHtje(obj.getYsHtje());
+            newObj.setYsKprq(obj.getYsKprq());
+            newObj.setYsKpje(obj.getYsKpje());
+            newObj.setYsYdzje(obj.getYsYdzje());
+            newObj.setYsWdzje(obj.getYsWdzje());
+            newObj.setYsFhlx(obj.getYsFhlx());
+            newObj.setYsFhsj(obj.getYsFhsj());
+            newObj.setYsCs(obj.getYsCs());
+            newObj.setYsBz(obj.getYsBz());
+            newObj.setYsZjly(obj.getYsZjly());
+            newObj.setYsFph(obj.getYsFph());
+            newObj.setYsGzqk(obj.getYsGzqk());
+            newObj.setYsZxqk(obj.getYsZxqk());
+            newObj.setYsHtrq(obj.getYsHtrq());
+            newObj.setYsSsdqsj(obj.getYsSsdqsj());
+            newObj.setYsIssq(obj.getYsIssq());
+            newObj.setYsStatus(obj.getYsStatus());
+            newObj.setYsIshz(obj.getYsIshz());
+            newObj.setYsSzqu(obj.getYsSzqu());
+
             if (years < 1) {
-                obj.setYsZl("1年以内");
-                withinOneYearList.add(obj);
+                newObj.setYsZl("1年以内");
+                withinOneYearList.add(newObj);
             } else if (years >= 1 && years < 3) {
-                obj.setYsZl("1-3年");
-                oneToThreeYearList.add(obj);
+                newObj.setYsZl("1-3年");
+                oneToThreeYearList.add(newObj);
             } else {
-                obj.setYsZl("3年以上");
-                overThreeYearList.add(obj);
+                newObj.setYsZl("3年以上");
+                overThreeYearList.add(newObj);
             }
             Period lastPeriod = Period.between(ysKprqLocalDate, lastDayOfLastMonth);
             int lastYears = lastPeriod.getYears();
 
+            SysManagementCollection newObj1 = new SysManagementCollection();
+            newObj1.setYsHtmc(obj.getYsHtmc());
+            newObj1.setYsHtbh(obj.getYsHtbh());
+            newObj1.setYsFzbm(obj.getYsFzbm());
+            newObj1.setYsFzr(obj.getYsFzr());
+            newObj1.setYsKhmc(obj.getYsKhmc());
+            newObj1.setYsKhfl(obj.getYsKhfl());
+            newObj1.setYsHtje(obj.getYsHtje());
+            newObj1.setYsKprq(obj.getYsKprq());
+            newObj1.setYsKpje(obj.getYsKpje());
+            newObj1.setYsYdzje(obj.getYsYdzje());
+            newObj1.setYsWdzje(obj.getYsWdzje());
+            newObj1.setYsFhlx(obj.getYsFhlx());
+            newObj1.setYsFhsj(obj.getYsFhsj());
+            newObj1.setYsCs(obj.getYsCs());
+            newObj1.setYsBz(obj.getYsBz());
+            newObj1.setYsZjly(obj.getYsZjly());
+            newObj1.setYsFph(obj.getYsFph());
+            newObj1.setYsGzqk(obj.getYsGzqk());
+            newObj1.setYsZxqk(obj.getYsZxqk());
+            newObj1.setYsHtrq(obj.getYsHtrq());
+            newObj1.setYsSsdqsj(obj.getYsSsdqsj());
+            newObj1.setYsIssq(obj.getYsIssq());
+            newObj1.setYsStatus(obj.getYsStatus());
+            newObj1.setYsIshz(obj.getYsIshz());
+            newObj1.setYsSzqu(obj.getYsSzqu());
             if (years >= 3 && lastYears < 3){
-                toThreeYearList.add(obj);
+                toThreeYearList.add(newObj1);
             }
-
         }
         // 定义输出格式
         DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy年M月d日");
@@ -147,21 +200,21 @@ public class SysManagementCollectionController extends BaseController
         String formattedDate = currentDate.format(formatter);
 
         Map<String, List<SysManagementCollection>> map = new LinkedHashMap<>();
-        for (SysManagementCollection obj : withinOneYearList){
+        for (SysManagementCollection obj1 : withinOneYearList){
             num1 ++;
-            obj.setNum(num1);
+            obj1.setNum(num1);
         }
-        for (SysManagementCollection obj : oneToThreeYearList){
+        for (SysManagementCollection obj2 : oneToThreeYearList){
             num2 ++;
-            obj.setNum(num2);
+            obj2.setNum(num2);
         }
-        for (SysManagementCollection obj : overThreeYearList){
+        for (SysManagementCollection obj3 : overThreeYearList){
             num3 ++;
-            obj.setNum(num3);
+            obj3.setNum(num3);
         }
-        for (SysManagementCollection obj : toThreeYearList){
+        for (SysManagementCollection obj4 : toThreeYearList){
             num4 ++;
-            obj.setNum(num4);
+            obj4.setNum(num4);
         }
         map.put("总表", list);
         map.put("1年内清单", withinOneYearList);
@@ -284,7 +337,7 @@ public class SysManagementCollectionController extends BaseController
         fhtj.setBylsh(bylsh);
         fhtj.setByqs(byqs);
         // 获取全部
-        List<SysManagementCollection> list = sysManagementCollectionService.selectSysManagementCollectionList(sysManagementCollection);
+        List<SysManagementCollection> list = sysManagementCollectionService.selectSysManagementCollectionListForAll(sysManagementCollection);
         for (SysManagementCollection obj : list) {
             Date ysKprq = obj.getYsKprq();
             LocalDate ysKprqLocalDate = ysKprq.toInstant().atZone(ZoneId.systemDefault()).toLocalDate();

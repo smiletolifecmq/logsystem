@@ -71,4 +71,6 @@ public interface ISysManagementCollectionService
     public int updateSysManagementCollectionForFph(SysManagementCollection sysManagementCollection);
 
     public int updateSysManagementCollectionPlxg(SysManagementCollection sysManagementCollection);
+
+    public List<SysManagementCollection> selectSysManagementCollectionListForAll(SysManagementCollection sysManagementCollection);
 }
