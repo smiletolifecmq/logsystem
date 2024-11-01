@@ -139,11 +139,7 @@
         align="center"
         prop="kpKprq"
         width="180"
-      >
-        <template slot-scope="scope">
-          <span>{{ parseTime(scope.row.kpKprq, "{y}-{m}-{d}") }}</span>
-        </template>
-      </el-table-column>
+      />
       <el-table-column label="开票金额" align="center" prop="kpKpje" />
       <el-table-column label="发票号" align="center" prop="kpFph" />
       <el-table-column label="发票类型" align="center" prop="kpFplx" />

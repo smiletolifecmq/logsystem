@@ -84,11 +84,7 @@
         align="center"
         prop="ysKprq"
         width="180"
-      >
-        <template slot-scope="scope">
-          <span>{{ parseTime(scope.row.ysKprq, "{y}-{m}-{d}") }}</span>
-        </template>
-      </el-table-column>
+      />
       <el-table-column label="开票金额" align="center" prop="ysKpje" />
       <el-table-column label="已到账金额" align="center" prop="ysYdzje" />
       <el-table-column label="未到账金额" align="center" prop="ysWdzje" />

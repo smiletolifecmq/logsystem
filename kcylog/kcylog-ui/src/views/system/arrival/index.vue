@@ -111,19 +111,16 @@
         align="center"
         prop="dzKprq"
         width="180"
-      >
-        <template slot-scope="scope">
-          <span>{{ parseTime(scope.row.dzKprq, "{y}-{m}-{d}") }}</span>
-        </template>
-      </el-table-column>
+      />
       <el-table-column label="开票金额" align="center" prop="dzKpje" />
       <el-table-column label="发票号" align="center" prop="dzFph" />
       <el-table-column label="到账金额" align="center" prop="dzMoney" />
-      <el-table-column label="到账日期" align="center" prop="dzRq" width="180">
-        <template slot-scope="scope">
-          <span>{{ parseTime(scope.row.dzRq, "{y}-{m}-{d}") }}</span>
-        </template>
-      </el-table-column>
+      <el-table-column
+        label="到账日期"
+        align="center"
+        prop="dzRq"
+        width="180"
+      />
       <el-table-column label="到账类型" align="center" prop="dzType" />
       <el-table-column label="是否专项债资金" align="center" prop="dzIsZx" />
       <el-table-column label="销售方" align="center" prop="dzXsf" />

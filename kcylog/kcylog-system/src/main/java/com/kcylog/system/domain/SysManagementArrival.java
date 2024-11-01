@@ -50,7 +50,7 @@ public class SysManagementArrival extends BaseEntity
     private String dzFzr;
 
     /** 开票日期 */
-    @JsonFormat(pattern = "yyyy年MM月dd日")
+    @JsonFormat(pattern = "yyyy-MM-dd")
     @Excel(name = "开票日期", width = 30, dateFormat = "yyyy年MM月dd日")
     private Date dzKprq;
 
@@ -67,7 +67,7 @@ public class SysManagementArrival extends BaseEntity
     private BigDecimal dzMoney;
 
     /** 到账日期 */
-    @JsonFormat(pattern = "yyyy年MM月dd日")
+    @JsonFormat(pattern = "yyyy-MM-dd")
     @Excel(name = "到账日期", width = 30, dateFormat = "yyyy年MM月dd日")
     private Date dzRq;
 

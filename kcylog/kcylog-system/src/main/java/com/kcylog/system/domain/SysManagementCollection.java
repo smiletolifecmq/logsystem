@@ -57,7 +57,7 @@ public class SysManagementCollection extends BaseEntity
     private String ysHtje;
 
     /** 开票日期 */
-    @JsonFormat(pattern = "yyyy年MM月dd日")
+    @JsonFormat(pattern = "yyyy-MM-dd")
     @Excel(name = "开票日期", width = 30, dateFormat = "yyyy年MM月dd日")
     private Date ysKprq;
 
