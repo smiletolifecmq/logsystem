@@ -8,6 +8,8 @@ import com.kcylog.common.core.page.TableDataInfo;
 import com.kcylog.common.core.redis.RedisCache;
 import com.kcylog.common.enums.BusinessType;
 import com.kcylog.common.utils.SecurityUtils;
+import com.kcylog.common.utils.poi.ExcelUtil;
+import com.kcylog.system.common.GeoLogInfo;
 import com.kcylog.system.common.LogExport;
 import com.kcylog.system.common.MqMessage;
 import com.kcylog.system.domain.*;
@@ -18,9 +20,13 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.bind.annotation.*;
 
+import javax.servlet.http.HttpServletResponse;
 import java.math.BigDecimal;
 import java.math.RoundingMode;
-import java.util.*;
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 
 /**
  * 地理部门日志Controller
@@ -851,5 +857,66 @@ public class SysGeoLogController extends BaseController {
         String json = gson.toJson(mqMessage);
         rabbitTemplate.convertAndSend("FQ_INVOKE_QUEUE", json);
         return "OK";
+    }
+
+    @Log(title = "地理员工日志详情导出", businessType = BusinessType.EXPORT)
+    @PostMapping("/gzlDetail")
+    public void gzlDetail(HttpServletResponse response, SysGeoLog sysGeoLog)
+    {
+        //查找登录用户可以查看的用户日志权限
+        Long userId = SecurityUtils.getUserId();
+        List<SysGeoUser> geoUsers = sysGeoUserService.selectSysAssessUserByGeoUser(userId);
+        List<Long> userIdsList = new ArrayList<>();
+        sysGeoLog.setLookUserIds(userIdsList);
+        sysGeoLog.getLookUserIds().add(userId);
+        for (SysGeoUser sysGeoUser : geoUsers) {
+            sysGeoLog.getLookUserIds().add(sysGeoUser.getUserId());
+        }
+        //查找拥有查看日志的记录
+        List<SysGeoLog> list = sysGeoLogService.selectSysGeoLogList(sysGeoLog);
+        //获取日志详细信息
+        List<Long> longIdsList = new ArrayList<>();
+        for (SysGeoLog log : list){
+            longIdsList.add(log.getLogId());
+        }
+        if (longIdsList.size() != 0){
+            List<SysGeoLogInfo> sysGeoLogInfo = sysGeoLogInfoService.selectSysGeoLogInfoByLogIds(longIdsList);
+            Map<Long, List<SysGeoLogInfo>> geoLogInfoMap = new HashMap<>();
+            for (SysGeoLogInfo v : sysGeoLogInfo){
+                if (geoLogInfoMap.containsKey(v.getLogId())){
+                    List<SysGeoLogInfo> gli = geoLogInfoMap.get(v.getLogId());
+                    gli.add(v);
+                    geoLogInfoMap.put(v.getLogId(), gli);
+                }else {
+                    List<SysGeoLogInfo> gli = new ArrayList<>();
+                    gli.add(v);
+                    geoLogInfoMap.put(v.getLogId(), gli);
+                }
+            }
+
+            for (SysGeoLog geoLog : list){
+                geoLog.setGeoLogInfo(geoLogInfoMap.get(geoLog.getLogId()));
+            }
+        }
+
+        List<GeoLogInfo> geoLogInfoList = new ArrayList<>();
+
+        for (SysGeoLog obj : list){
+            GeoLogInfo newGeoLogInfo = new GeoLogInfo();
+            newGeoLogInfo.setLogDate(obj.getLogDate());
+            newGeoLogInfo.setUserName(obj.getUserName());
+            String gznr = "";
+            String workdetail = "";
+            for (SysGeoLogInfo obj1 : obj.getGeoLogInfo()){
+                gznr = (gznr + obj1.getGeoType().getTypeName() + ":" + obj1.getWorkload() + obj1.getGeoType().getUnit() + ";");
+                workdetail = (workdetail + obj1.getGeoType().getTypeName() + ":" + obj1.getWorkdetail() + ";");
+            }
+            newGeoLogInfo.setGznr(gznr);
+            newGeoLogInfo.setSm(workdetail);
+            geoLogInfoList.add(newGeoLogInfo);
+        }
+
+        ExcelUtil<GeoLogInfo> util = new ExcelUtil<GeoLogInfo>(GeoLogInfo.class);
+        util.exportExcel(response, geoLogInfoList, "日志详情");
     }
 }

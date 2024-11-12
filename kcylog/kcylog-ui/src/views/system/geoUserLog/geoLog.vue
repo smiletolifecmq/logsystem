@@ -89,6 +89,17 @@
           >excel导出</el-button
         >
       </el-col>
+      <el-col :span="1.5">
+        <el-button
+          type="warning"
+          plain
+          icon="el-icon-download"
+          size="mini"
+          @click="handleExportGzlDetail"
+          v-hasPermi="['system:geoLog:exportGzlDetailExcel']"
+          >工作量详情导出</el-button
+        >
+      </el-col>
       <right-toolbar
         :showSearch.sync="showSearch"
         @queryTable="getList"
@@ -591,6 +602,16 @@ export default {
     this.getListProject();
   },
   methods: {
+    handleExportGzlDetail() {
+      this.download(
+        "system/geoLog/gzlDetail",
+        {
+          ...this.addDateRange(this.queryParams, this.dateRange),
+        },
+        `工作日志详情_${new Date().getTime()}.xlsx`
+      );
+    },
+
     getListProject() {
       listProject(this.queryProjectParams).then((response) => {
         this.projectList = response.rows;

@@ -91,7 +91,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
                 #{userId}
             </foreach>
         </where>
-        order by a.log_id desc
+        order by a.log_date desc
     </select>
 
     <select id="selectSysGeoLogByLogId" parameterType="Long" resultMap="SysGeoLogResult">
