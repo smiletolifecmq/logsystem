@@ -132,7 +132,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
             <if test="params.endTime != null"><!-- 结束时间检索 -->
                 and (date_format(b.settle_time,'%y%m%d') &lt;= date_format(#{params.endTime},'%y%m%d'))
             </if>
-            and a.user_name in ('谢小建','张众','梅接文')
+            and a.user_name in ('谢小建','张众','梅接文', '黄延')
         </where>
     </select>
 </mapper>
