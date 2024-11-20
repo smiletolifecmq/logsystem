@@ -68,4 +68,6 @@ public interface SysProjectValueMapper
     public List<SysProjectValue> selectSysProjectValueListProductionDetails(SysProject sysProject);
 
     public List<SysProjectValue> listProjectOperateTJ(SysProject sysProject);
+
+    public List<SysProjectValue> listProjectOperateTJForSpecialPersonnel(SysProject sysProject);
 }

@@ -13,6 +13,11 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
         <result property="profitMoney"    column="profit_money"    />
         <result property="coefficientMoney"    column="coefficient_money"    />
         <result property="coefficientProfitMoney"    column="coefficient_profit_money"    />
+        <association property="fqSysProject" javaType="SysProject" resultMap="SysProjectResult"/>
+    </resultMap>
+
+    <resultMap type="SysProject" id="SysProjectResult">
+        <result property="department"    column="department"    />
     </resultMap>
 
     <sql id="selectSysProjectValueVo">
@@ -116,5 +121,18 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
             </if>
         </where>
         group by a.user_name order by money desc
+    </select>
+
+    <select id="listProjectOperateTJForSpecialPersonnel" parameterType="SysProject" resultMap="SysProjectValueResult">
+        select a.*, b.department from sys_project_value a inner join sys_project b on a.project_id = b.project_id
+        <where>
+            <if test="params.beginTime != null"><!-- 开始时间检索 -->
+                and (date_format(b.settle_time,'%y%m%d') &gt;= date_format(#{params.beginTime},'%y%m%d'))
+            </if>
+            <if test="params.endTime != null"><!-- 结束时间检索 -->
+                and (date_format(b.settle_time,'%y%m%d') &lt;= date_format(#{params.endTime},'%y%m%d'))
+            </if>
+            and a.user_name in ('谢小建','张众','梅接文')
+        </where>
     </select>
 </mapper>

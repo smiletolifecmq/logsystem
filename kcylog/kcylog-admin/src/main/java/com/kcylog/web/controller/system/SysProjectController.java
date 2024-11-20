@@ -911,6 +911,21 @@ public class SysProjectController extends BaseController {
     @GetMapping("/listProjectStatisticsDataForDept")
     public AjaxResult listProjectStatisticsDataForDept(SysProject sysProject) {
         List<SysProjectValue> list = sysProjectValueService.listProjectOperateTJ(sysProject);
+        List<SysProjectValue> listSpecial = sysProjectValueService.listProjectOperateTJForSpecialPersonnel(sysProject);
+        Map<String, SysProjectValue> listSpecialMap = new HashMap<>();
+        for (SysProjectValue value1 : listSpecial){
+            if (listSpecialMap.containsKey(value1.getFqSysProject().getDepartment())){
+                SysProjectValue newSysProjectValue = new SysProjectValue();
+                newSysProjectValue.setMoney(listSpecialMap.get(value1.getFqSysProject().getDepartment()).getMoney().add(value1.getMoney()));
+                newSysProjectValue.setProfitMoney(listSpecialMap.get(value1.getFqSysProject().getDepartment()).getProfitMoney().add(value1.getProfitMoney()));
+                listSpecialMap.put(value1.getFqSysProject().getDepartment(), newSysProjectValue);
+            }else {
+                SysProjectValue newSysProjectValue = new SysProjectValue();
+                newSysProjectValue.setMoney(value1.getMoney());
+                newSysProjectValue.setProfitMoney(value1.getProfitMoney());
+                listSpecialMap.put(value1.getFqSysProject().getDepartment(),newSysProjectValue);
+            }
+        }
         SysUser user = new SysUser();
         List<SysUser> userList = sysUserService.selectUserList(user);
         Map<String, String> userMap = new HashMap<>();
@@ -949,6 +964,20 @@ public class SysProjectController extends BaseController {
                     newSysProjectValue.setProfitMoney(objTemp.getProfitMoney());
                     moneyMap.put(dept, newSysProjectValue);
                 }
+            }
+        }
+
+        for (Map.Entry<String, SysProjectValue> entry : listSpecialMap.entrySet()) {
+            if (moneyMap.containsKey(entry.getKey())){
+                SysProjectValue newSysProjectValue = new SysProjectValue();
+                newSysProjectValue.setMoney(moneyMap.get(entry.getKey()).getMoney().add(entry.getValue().getMoney()));
+                newSysProjectValue.setProfitMoney(moneyMap.get(entry.getKey()).getProfitMoney().add(entry.getValue().getProfitMoney()));
+                moneyMap.put(entry.getKey(), newSysProjectValue);
+            }else {
+                SysProjectValue newSysProjectValue = new SysProjectValue();
+                newSysProjectValue.setMoney(entry.getValue().getMoney());
+                newSysProjectValue.setProfitMoney(entry.getValue().getProfitMoney());
+                moneyMap.put(entry.getKey(), newSysProjectValue);
             }
         }
 

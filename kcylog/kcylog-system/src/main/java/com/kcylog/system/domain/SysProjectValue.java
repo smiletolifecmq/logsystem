@@ -44,6 +44,16 @@ public class SysProjectValue extends BaseEntity
     @Excel(name = "利润金额-系数", headerBackgroundColor = IndexedColors.GREEN)
     private BigDecimal coefficientProfitMoney;
 
+    private SysProject fqSysProject;
+
+    public SysProject getFqSysProject() {
+        return fqSysProject;
+    }
+
+    public void setFqSysProject(SysProject fqSysProject) {
+        this.fqSysProject = fqSysProject;
+    }
+
     public BigDecimal getCoefficientProfitMoney() {
         return coefficientProfitMoney;
     }
