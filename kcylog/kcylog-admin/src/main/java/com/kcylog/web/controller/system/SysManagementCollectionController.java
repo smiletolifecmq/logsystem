@@ -452,6 +452,12 @@ public class SysManagementCollectionController extends BaseController
                 hzThree = hzThree.add(obj.getYsWdzje());
             }
 
+            if (years < 1 && isSameYearAndMonth(java.sql.Date.valueOf(currentDate), obj.getYsKprq())) {
+                //一年期内 本月新增且不回款
+                byxzOne = byxzOne.add(obj.getYsWdzje());
+            }
+
+
             if (years < 1) {
                 if (obj.getYsKhfl() != null && (obj.getYsKhfl().contains("事业单位") || obj.getYsKhfl().contains("国企"))){
                     gyOne = gyOne.add(obj.getYsWdzje());
@@ -522,10 +528,6 @@ public class SysManagementCollectionController extends BaseController
                     }
 
                 }
-            }
-            //一年期内 本月新增且不回款
-            if (!arrivalMap.containsKey(obj1.getKpFph())){
-                byxzOne = byxzOne.add(obj1.getKpKpje());
             }
         }
 
