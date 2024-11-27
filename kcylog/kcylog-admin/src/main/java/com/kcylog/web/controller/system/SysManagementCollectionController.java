@@ -459,21 +459,21 @@ public class SysManagementCollectionController extends BaseController
 
 
             if (years < 1) {
-                if (obj.getYsKhfl() != null && (obj.getYsKhfl().contains("事业单位") || obj.getYsKhfl().contains("国企"))){
+                if (obj.getYsKhfl() != null && (obj.getYsKhfl().contains("事业单位") || obj.getYsKhfl().contains("国有企业"))){
                     gyOne = gyOne.add(obj.getYsWdzje());
                 }else {
                     myOne = myOne.add(obj.getYsWdzje());
                 }
                 gymyOne = gymyOne.add(obj.getYsWdzje());
             } else if (years >= 1 && years < 3) {
-                if (obj.getYsKhfl() != null && (obj.getYsKhfl().contains("事业单位") || obj.getYsKhfl().contains("国企"))){
+                if (obj.getYsKhfl() != null && (obj.getYsKhfl().contains("事业单位") || obj.getYsKhfl().contains("国有企业"))){
                     gyTwo = gyTwo.add(obj.getYsWdzje());
                 }else {
                     myTwo = myTwo.add(obj.getYsWdzje());
                 }
                 gymyTwo = gymyTwo.add(obj.getYsWdzje());
             } else {
-                if (obj.getYsKhfl() != null && (obj.getYsKhfl().contains("事业单位") || obj.getYsKhfl().contains("国企"))){
+                if (obj.getYsKhfl() != null && (obj.getYsKhfl().contains("事业单位") || obj.getYsKhfl().contains("国有企业"))){
                     gyThree = gyThree.add(obj.getYsWdzje());
                 }else {
                     myThree = myThree.add(obj.getYsWdzje());

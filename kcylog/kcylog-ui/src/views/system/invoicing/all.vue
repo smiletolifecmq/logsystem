@@ -411,8 +411,8 @@ export default {
           label: "民营企业",
         },
         {
-          value: "国企",
-          label: "国企",
+          value: "国有企业",
+          label: "国有企业",
         },
       ],
       dzForm: [],
