@@ -169,3 +169,11 @@ export function listProjectStatisticsDataForDept(query) {
     params: query
   })
 }
+
+export function getReviewProcessListForProjectId(query) {
+  return request({
+    url: '/system/process/subListForProject',
+    method: 'get',
+    params: query
+  })
+}

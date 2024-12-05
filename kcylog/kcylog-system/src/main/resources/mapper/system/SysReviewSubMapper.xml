@@ -292,11 +292,11 @@
         <include refid="selectSysReviewSubVo"/>
         inner join sys_review_sub_process rp on r.review_id = rp.review_id
         <where>
-            <if test="serialNum != null  and serialNum != ''">and r.serial_num = #{serialNum}</if>
+            <if test="serialNum != null  and serialNum != ''">and r.serial_num like concat('%', #{serialNum}, '%')</if>
             <if test="projectName != null  and projectName != ''">and r.project_name like concat('%', #{projectName},
                 '%')
             </if>
-            <if test="requester != null  and requester != ''">and r.requester = #{requester}</if>
+            <if test="requester != null  and requester != ''">and r.requester like concat('%', #{requester}, '%')</if>
             <if test="deptId != null  and deptId != ''">and r.dept_id = #{deptId}</if>
             <if test="manType != null">and r.man_type = #{manType}</if>
             <if test="subpackageType != null">and r.subpackage_type = #{subpackageType}</if>
@@ -319,9 +319,8 @@
     <select id="selectCompletedReviewList" parameterType="SysReviewSub" resultMap="SysReviewSubResult">
         <include refid="selectSysReviewSubVo"/>
         <where>
-            <if test="serialNum != null  and serialNum != ''">and r.serial_num = #{serialNum}</if>
-            <if test="projectName != null  and projectName != ''">and r.project_name like concat('%', #{projectName},
-                '%')
+            <if test="serialNum != null  and serialNum != ''">and r.serial_num like concat('%', #{serialNum},'%')</if>
+            <if test="projectName != null  and projectName != ''">and r.project_name like concat('%', #{projectName},'%')
             </if>
             <if test="deptId != null ">and r.dept_id = #{deptId}</if>
             <if test="manType != null ">and r.man_type = #{manType}</if>
@@ -334,11 +333,10 @@
         <include refid="selectSysReviewSubVo"/>
         inner join sys_review_sub_process rp on r.review_id = rp.review_id
         <where>
-            <if test="serialNum != null  and serialNum != ''">and r.serial_num = #{serialNum}</if>
-            <if test="projectName != null  and projectName != ''">and r.project_name like concat('%', #{projectName},
-                '%')
+            <if test="serialNum != null  and serialNum != ''">and r.serial_num like concat('%', #{serialNum},'%')</if>
+            <if test="projectName != null  and projectName != ''">and r.project_name like concat('%', #{projectName},'%')
             </if>
-            <if test="requester != null  and requester != ''">and r.requester = #{requester}</if>
+            <if test="requester != null  and requester != ''">and r.requester like concat('%', #{requester},'%')</if>
             <if test="deptId != null  and deptId != ''">and r.dept_id = #{deptId}</if>
             <if test="manType != null">and r.man_type = #{manType}</if>
             <if test="subpackageType != null">and r.subpackage_type = #{subpackageType}</if>

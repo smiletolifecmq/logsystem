@@ -32,14 +32,14 @@
           @keyup.enter.native="handleQuery"
         />
       </el-form-item>
-      <el-form-item label="项目类型" prop="projectType">
+      <!-- <el-form-item label="项目类型" prop="projectType">
         <el-input
           v-model="queryParams.projectType"
           placeholder="请输入项目类型"
           clearable
           @keyup.enter.native="handleQuery"
         />
-      </el-form-item>
+      </el-form-item> -->
 
       <el-form-item label="作业部门" prop="department">
         <el-select

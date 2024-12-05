@@ -668,24 +668,62 @@
     <el-dialog
       title="抽签过程"
       :visible.sync="cqgcOpen"
-      width="500px"
+      width="1000px"
       append-to-body
     >
-      <el-form ref="cqgcForm" :model="cqgcForm" label-width="80px">
-        <el-form-item label="抽签状态" prop="drawStatus">
-          <el-select v-model="cqgcForm.drawStatus" placeholder="请选择">
-            <el-option
-              v-for="item in drawList"
-              :key="item.value"
-              :label="item.label"
-              :value="item.value"
-            >
-            </el-option>
-          </el-select>
-        </el-form-item>
-      </el-form>
-      <div slot="footer" class="dialog-footer">
-        <el-button type="primary" @click="submitCqgcForm">确 定</el-button>
+      <div>
+        <el-row :gutter="10">
+          <el-col style="width: 50%">
+            <el-card class="box-card">
+              <div slot="header" class="clearfix">
+                <span>流程详情</span>
+              </div>
+              <el-steps direction="vertical" :active="reviewProcessActive">
+                <el-step
+                  v-for="reviewProcess in reviewProcessList"
+                  :key="reviewProcess.reviewProcessId"
+                  :title="
+                    reviewProcess.userId === 1 &&
+                    (reviewProcess.status != 2 || reviewProcess.status != 4)
+                      ? '填写最终雇工信息中～'
+                      : reviewProcess.user.userName
+                  "
+                  :status="reviewProcessStatus(reviewProcess)"
+                  :description="
+                    reviewProcess.userId === 1 && reviewProcess.status === 2
+                      ? ''
+                      : reviewProcessDescription(reviewProcess)
+                  "
+                ></el-step>
+              </el-steps>
+            </el-card>
+          </el-col>
+          <el-col style="width: 50%">
+            <el-card class="box-card">
+              <div slot="header" class="clearfix">
+                <span>操作</span>
+              </div>
+              <el-form ref="cqgcForm" :model="cqgcForm" label-width="80px">
+                <el-form-item label="抽签状态" prop="drawStatus">
+                  <el-select v-model="cqgcForm.drawStatus" placeholder="请选择">
+                    <el-option
+                      v-for="item in drawList"
+                      :key="item.value"
+                      :label="item.label"
+                      :value="item.value"
+                    >
+                    </el-option>
+                  </el-select>
+                </el-form-item>
+              </el-form>
+              <div>
+                <el-button type="primary" @click="submitCqgcForm"
+                  >确 定</el-button
+                >
+              </div>
+            </el-card>
+          </el-col>
+        </el-row>
       </div>
     </el-dialog>
 
@@ -1065,6 +1103,7 @@ import {
   getProject,
   listProjectSelected,
   updateProjectDrawStatus,
+  getReviewProcessListForProjectId,
 } from "@/api/system/project";
 import { listEmployee } from "@/api/system/reviewEmployeeSub";
 import { getReview } from "@/api/system/reviewSub";
@@ -1079,6 +1118,8 @@ export default {
   },
   data() {
     return {
+      reviewProcessActive: -1,
+      reviewProcessList: [],
       statisticsWinUnit: [],
       employeeList: [],
       queryParamsEmployee: {
@@ -1422,6 +1463,27 @@ export default {
     this.getListToTj();
   },
   methods: {
+    reviewProcessDescription(reviewProcess) {
+      if (reviewProcess.status === 0) {
+        return "审核状态:未开始";
+      } else if (reviewProcess.status === 1) {
+        return "审核状态:进行中";
+      } else if (reviewProcess.status === 2) {
+        let description = "审核状态:通过；";
+        if (reviewProcess.reason != "" && reviewProcess.reason != null) {
+          description = description + "理由:" + reviewProcess.reason + "；";
+        }
+        description = description + "审核时间:" + reviewProcess.reviewTime;
+        return description;
+      } else if (reviewProcess.status === 3) {
+        let description = "审核状态:驳回；";
+        if (reviewProcess.reason != "" && reviewProcess.reason != null) {
+          description = description + "理由:" + reviewProcess.reason + "；";
+        }
+        description = description + "审核时间:" + reviewProcess.reviewTime;
+        return description;
+      }
+    },
     getListToTj() {
       this.getReviewProject();
       this.loading = true;
@@ -1745,6 +1807,17 @@ export default {
         });
       });
     },
+    reviewProcessStatus(reviewProcess) {
+      if (reviewProcess.status === 0) {
+        return "";
+      } else if (reviewProcess.status === 1) {
+        return "finish";
+      } else if (reviewProcess.status === 2) {
+        return "success";
+      } else if (reviewProcess.status === 3) {
+        return "error";
+      }
+    },
     formatDateReviewSub(dateString) {
       if (dateString == "") {
         return "";
@@ -1801,7 +1874,35 @@ export default {
     },
     handleLotteryProcess(value) {
       this.cqgcForm.projectId = value.projectId;
-      this.cqgcOpen = true;
+      let formObj = {};
+      formObj.projectId = value.projectId;
+      getReviewProcessListForProjectId(formObj).then((response) => {
+        this.reviewProcessList = response.rows;
+        if (response.rows.length == 0) {
+          this.cqgcOpen = true;
+          return;
+        }
+        this.reviewProcessActive = -1;
+        for (let i = 0; i < response.rows.length; i++) {
+          if (response.rows[i].status != 0) {
+            this.reviewProcessActive = this.reviewProcessActive + 1;
+          }
+        }
+        if (
+          this.reviewProcessList[2].userId === 1 &&
+          this.reviewProcessList[2].status === 2
+        ) {
+          let reviewProcessListTemp = [];
+          reviewProcessListTemp[1] = this.reviewProcessList[0];
+          reviewProcessListTemp[0] = this.reviewProcessList[2];
+          reviewProcessListTemp[0].user.userName = "填写最终雇工";
+          reviewProcessListTemp[0].userId = -1;
+          reviewProcessListTemp[2] = this.reviewProcessList[1];
+          reviewProcessListTemp[3] = this.reviewProcessList[3];
+          this.reviewProcessList = reviewProcessListTemp;
+        }
+        this.cqgcOpen = true;
+      });
     },
     submitCqgcForm() {
       this.$refs["cqgcForm"].validate((valid) => {
