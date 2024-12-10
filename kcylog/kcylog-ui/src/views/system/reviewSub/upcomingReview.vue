@@ -78,6 +78,17 @@
           </el-option>
         </el-select>
       </el-form-item>
+      <el-form-item label="审核阶段" prop="stage">
+        <el-select v-model="queryParams.stage" placeholder="请选择">
+          <el-option
+            v-for="item in stages"
+            :key="item.value"
+            :label="item.label"
+            :value="item.value"
+          >
+          </el-option>
+        </el-select>
+      </el-form-item>
       <el-form-item>
         <el-button
           type="primary"
@@ -252,6 +263,12 @@
             >框架协议分包</el-tag
           >
           <el-tag v-else type="danger">其他状态</el-tag>
+        </template>
+      </el-table-column>
+      <el-table-column label="审核阶段" align="center" prop="stage">
+        <template slot-scope="scope">
+          <el-tag v-if="scope.row.stage === 0">初审</el-tag>
+          <el-tag v-else-if="scope.row.stage === 1" type="success">复审</el-tag>
         </template>
       </el-table-column>
       <el-table-column
@@ -832,6 +849,10 @@ export default {
         { value: 1, label: "非分包" },
         { value: 2, label: "单一合同分包" },
         { value: 3, label: "框架协议分包" },
+      ],
+      stages: [
+        { value: 0, label: "初审" },
+        { value: 1, label: "复审" },
       ],
       activeNames: ["1", "2", "3", "4"],
       employeeList: [],

@@ -134,9 +134,13 @@
       </el-table-column>
       <el-table-column prop="gcchbNumWork" label="工程测绘部" align="center">
         <template slot-scope="scope">
-          <el-tag v-show="scope.row.status == 1" type="success">{{
-            scope.row.gcchbNumWork
-          }}</el-tag>
+          <el-tag
+            v-show="scope.row.status == 1"
+            type="success"
+            class="hover-effect"
+            @click="handleArchiving('工程测绘部', 1)"
+            >{{ scope.row.gcchbNumWork }}</el-tag
+          >
           <el-tag
             v-show="scope.row.status == 0"
             type="danger"
@@ -169,9 +173,13 @@
       </el-table-column>
       <el-table-column prop="bdcchbWork" label="不动产测绘部" align="center">
         <template slot-scope="scope">
-          <el-tag v-show="scope.row.status == 1" type="success">{{
-            scope.row.bdcchbWork
-          }}</el-tag>
+          <el-tag
+            v-show="scope.row.status == 1"
+            type="success"
+            class="hover-effect"
+            @click="handleArchiving('不动产测绘部', 1)"
+            >{{ scope.row.bdcchbWork }}</el-tag
+          >
           <el-tag
             v-show="scope.row.status == 0"
             type="danger"
@@ -204,9 +212,13 @@
       </el-table-column>
       <el-table-column prop="gxgcbWork" label="管线工程部" align="center">
         <template slot-scope="scope">
-          <el-tag v-show="scope.row.status == 1" type="success">{{
-            scope.row.gxgcbWork
-          }}</el-tag>
+          <el-tag
+            v-show="scope.row.status == 1"
+            type="success"
+            class="hover-effect"
+            @click="handleArchiving('管线工程部', 1)"
+            >{{ scope.row.gxgcbWork }}</el-tag
+          >
           <el-tag
             v-show="scope.row.status == 0"
             type="danger"
@@ -239,9 +251,13 @@
       </el-table-column>
       <el-table-column prop="dlxxbWork" label="地理信息部" align="center">
         <template slot-scope="scope">
-          <el-tag v-show="scope.row.status == 1" type="success">{{
-            scope.row.dlxxbWork
-          }}</el-tag>
+          <el-tag
+            v-show="scope.row.status == 1"
+            type="success"
+            class="hover-effect"
+            @click="handleArchiving('地理信息部', 1)"
+            >{{ scope.row.dlxxbWork }}</el-tag
+          >
           <el-tag
             v-show="scope.row.status == 0"
             type="danger"
@@ -1820,6 +1836,29 @@ export default {
               project[i].rectifyCutoffTime != null &&
               project[i].rectifyCutoffTime != ""
             ) {
+              this.overTimeProjectList.push(project[i]);
+            }
+          }
+          this.queryParamsTj.department = null;
+          this.overTimeOpen = true;
+        }
+      );
+    },
+    handleArchiving(value, status) {
+      if (status == 1) {
+        this.overTitle = "归档中项目";
+      }
+      this.overTimeProjectList = [];
+      this.queryParamsTj.department = value;
+      listProjectHandover(this.addDateRange(this.queryParamsTj)).then(
+        (response) => {
+          const project = response.rows;
+          for (let i = 0; i < project.length; i++) {
+            let key = project[i].projectList.department;
+            if (key == "" || key == null || key == undefined) {
+              continue;
+            }
+            if (project[i].isArchive == 1 && project[i].checkStatus != 2) {
               this.overTimeProjectList.push(project[i]);
             }
           }
