@@ -1101,6 +1101,18 @@
       append-to-body
       v-el-drag-dialog
     >
+      <el-row :gutter="10" class="mb8">
+        <el-col :span="1.5">
+          <el-button
+            type="primary"
+            plain
+            icon="el-icon-download"
+            size="mini"
+            @click="overTimeOpenExport"
+            >导出</el-button
+          >
+        </el-col>
+      </el-row>
       <el-table
         v-loading="loading"
         :data="overTimeProjectList"
@@ -1295,6 +1307,7 @@ import {
 import elDragDialog from "@/api/components/el-drag";
 import { listUnit } from "@/api/system/unit";
 import { addReview, setReviewStatus } from "@/api/system/reviewSub";
+import { excelJsExport } from "@/api/system/excelJsExport";
 import userInfo from "@/store/modules/user";
 
 export default {
@@ -1304,6 +1317,8 @@ export default {
   },
   data() {
     return {
+      exportStatus: 0,
+      deptName: "",
       overTitle: "",
       overTimeOpen: false,
       overTimeProjectList: [],
@@ -1552,6 +1567,133 @@ export default {
     this.getStatisticsData();
   },
   methods: {
+    overTimeOpenExport() {
+      var status = this.exportStatus;
+      var value = this.deptName;
+      var overTimeProjectList = [];
+      this.queryParamsTj.department = value;
+      listProjectHandover(this.addDateRange(this.queryParamsTj)).then(
+        (response) => {
+          const project = response.rows;
+          for (let i = 0; i < project.length; i++) {
+            let key = project[i].projectList.department;
+            if (key == "" || key == null || key == undefined) {
+              continue;
+            }
+
+            if (
+              (project[i].receiveStatus == 1 ||
+                project[i].receiveStatus == 2) &&
+              project[i].isArchive == 1 &&
+              project[i].projectList.receiveDays < 0 &&
+              status == 0
+            ) {
+              overTimeProjectList.push(project[i]);
+            }
+            if (
+              project[i].receiveStatus == 1 &&
+              project[i].isArchive == 1 &&
+              project[i].projectList.receiveDays >= 0 &&
+              project[i].projectList.receiveDays <= 2 &&
+              project[i].receiveCutoffTime != null &&
+              project[i].receiveCutoffTime != "" &&
+              status == -2
+            ) {
+              overTimeProjectList.push(project[i]);
+            }
+            if (
+              project[i].isArchive == 1 &&
+              project[i].projectList.archiveDays < 0 &&
+              status == -1
+            ) {
+              overTimeProjectList.push(project[i]);
+            }
+            if (
+              project[i].checkStatus != 2 &&
+              project[i].isArchive == 1 &&
+              project[i].projectList.archiveDays >= 0 &&
+              project[i].projectList.archiveDays <= 2 &&
+              status == -3 &&
+              project[i].rectifyCutoffTime != null &&
+              project[i].rectifyCutoffTime != ""
+            ) {
+              overTimeProjectList.push(project[i]);
+            }
+          }
+          const userExcelHeader = [
+            {
+              title: "委托单位",
+              dataIndex: "projectList.requesterAlias",
+            },
+            {
+              title: "项目名称",
+              dataIndex: "projectList.projectNameAlias",
+            },
+            {
+              title: "项目编号",
+              dataIndex: "projectList.projectNum",
+            },
+            {
+              title: "版本",
+              dataIndex: "version",
+            },
+            {
+              title: "工程负责人",
+              dataIndex: "projectList.userNameAlias",
+            },
+            {
+              title: "作业部门",
+              dataIndex: "projectList.department",
+            },
+            {
+              title: "二检时间",
+              dataIndex: "projectList.twoCheck",
+            },
+            {
+              title: "移交时间",
+              dataIndex: "transferTime",
+            },
+            {
+              title: "收件时间",
+              dataIndex: "receiveTime",
+            },
+            {
+              title: "收件截止时间",
+              dataIndex: "receiveCutoffTime",
+            },
+            {
+              title: "收件提前天数",
+              dataIndex: "projectList.receiveDays",
+            },
+            {
+              title: "盖章时间",
+              dataIndex: "stampTime",
+            },
+            {
+              title: "验收时间",
+              dataIndex: "checkTime",
+            },
+            {
+              title: "盖章确认时间",
+              dataIndex: "marketingTime",
+            },
+            {
+              title: "归档时间",
+              dataIndex: "archiveTime",
+            },
+            {
+              title: "归档截止时间",
+              dataIndex: "rectifyCutoffTime",
+            },
+            {
+              title: "归档提前天数",
+              dataIndex: "projectList.archiveDays",
+            },
+          ];
+          excelJsExport("项目移交信息", userExcelHeader, overTimeProjectList);
+        }
+      );
+    },
     showFetailXt(value) {
       if (!value.projectNum) return false;
       const substrings = ["图", "售", "数"];
@@ -1780,6 +1922,8 @@ export default {
       );
     },
     handleOverTimeOpen(value, status) {
+      this.exportStatus = status;
+      this.deptName = value;
       if (status == 0) {
         this.overTitle = "收件超期项目";
       } else if (status == -1) {
