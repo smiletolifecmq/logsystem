@@ -697,7 +697,7 @@
             </el-col>
           </el-row>
         </div>
-        <el-collapse-item title="流程详情" name="1">
+        <el-collapse-item title="流程详情" name="7">
           <el-steps :active="reviewProcessActiveInfo">
             <el-step
               v-for="reviewProcess in reviewProcessListInfo"
@@ -717,7 +717,7 @@
             ></el-step>
           </el-steps>
         </el-collapse-item>
-        <el-collapse-item title="审核操作" name="2">
+        <el-collapse-item title="审核操作" name="1">
           <div>
             <el-row :gutter="10">
               <el-col style="width: 100%">
@@ -762,7 +762,7 @@
           </div>
         </el-collapse-item>
 
-        <el-collapse-item title="雇工信息详情" name="3">
+        <el-collapse-item title="雇工信息详情" name="2">
           <div>
             <el-row :gutter="10">
               <el-col style="width: 100%">
@@ -899,7 +899,7 @@ export default {
         { value: 0, label: "初审" },
         { value: 1, label: "复审" },
       ],
-      activeNames: ["1", "2", "3", "4"],
+      activeNames: ["1", "2", "3", "4", "7"],
       employeeList: [],
       openInfo: false,
       formInfo: {
@@ -1270,7 +1270,7 @@ export default {
           response.data.endTime = response.data.endTime.substring(0, 10);
         }
         this.formInfo = response.data;
-        this.activeNames = ["1", "3", "4"];
+        this.activeNames = ["1", "3", "4", "7"];
         if (
           this.formInfo.subpackageType != 0 &&
           this.formInfo.subpackageType != 1
