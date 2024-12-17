@@ -89,6 +89,17 @@
           </el-option>
         </el-select>
       </el-form-item>
+      <el-form-item label="抽签过程" prop="drawStatus">
+        <el-select v-model="queryParams.drawStatus" placeholder="请选择">
+          <el-option
+            v-for="item in drawStatuss"
+            :key="item.value"
+            :label="item.label"
+            :value="item.value"
+          >
+          </el-option>
+        </el-select>
+      </el-form-item>
       <el-form-item>
         <el-button
           type="primary"
@@ -269,6 +280,16 @@
         <template slot-scope="scope">
           <el-tag v-if="scope.row.stage === 0">初审</el-tag>
           <el-tag v-else-if="scope.row.stage === 1" type="success">复审</el-tag>
+        </template>
+      </el-table-column>
+      <el-table-column label="抽签过程" align="center" prop="drawStatus">
+        <template slot-scope="scope">
+          <el-tag v-if="scope.row.project.drawStatus === 0" type="danger"
+            >无</el-tag
+          >
+          <el-tag v-else-if="scope.row.project.drawStatus === 1" type="success"
+            >有</el-tag
+          >
         </template>
       </el-table-column>
       <el-table-column
@@ -676,7 +697,27 @@
             </el-col>
           </el-row>
         </div>
-        <el-collapse-item title="审核操作" name="1">
+        <el-collapse-item title="流程详情" name="1">
+          <el-steps :active="reviewProcessActiveInfo">
+            <el-step
+              v-for="reviewProcess in reviewProcessListInfo"
+              :key="reviewProcess.reviewProcessId"
+              :title="
+                reviewProcess.userId === 1 &&
+                (reviewProcess.status != 2 || reviewProcess.status != 4)
+                  ? '填写最终雇工信息中～'
+                  : reviewProcess.user.userName
+              "
+              :status="reviewProcessStatus(reviewProcess)"
+              :description="
+                reviewProcess.userId === 1 && reviewProcess.status === 2
+                  ? ''
+                  : reviewProcessDescription(reviewProcess)
+              "
+            ></el-step>
+          </el-steps>
+        </el-collapse-item>
+        <el-collapse-item title="审核操作" name="2">
           <div>
             <el-row :gutter="10">
               <el-col style="width: 100%">
@@ -721,7 +762,7 @@
           </div>
         </el-collapse-item>
 
-        <el-collapse-item title="雇工信息详情" name="2">
+        <el-collapse-item title="雇工信息详情" name="3">
           <div>
             <el-row :gutter="10">
               <el-col style="width: 100%">
@@ -839,6 +880,10 @@ export default {
         { value: "同意", label: "同意" },
         { value: "不同意", label: "不同意" },
       ],
+      drawStatuss: [
+        { value: 0, label: "无" },
+        { value: 1, label: "有" },
+      ],
       manTypes: [
         { value: 0, label: "非雇工" },
         { value: 1, label: "雇工" },
@@ -893,7 +938,9 @@ export default {
       endAmPm: "23:59:59",
       reviewProcessOpen: false,
       reviewProcessActive: -1,
+      reviewProcessActiveInfo: -1,
       reviewProcessList: [],
+      reviewProcessListInfo: [],
       // 日期范围
       dateRange: [],
       // 选中数组
@@ -1245,6 +1292,31 @@ export default {
       this.queryParamsEmployee.reviewId = reviewId;
       listEmployee(this.queryParamsEmployee).then((response) => {
         this.employeeList = response.rows;
+        let formObj = {};
+        formObj.reviewId = row.reviewId;
+        getReviewProcessList(formObj).then((response) => {
+          this.reviewProcessListInfo = response.rows;
+          this.reviewProcessActiveInfo = -1;
+          for (let i = 0; i < response.rows.length; i++) {
+            if (response.rows[i].status != 0) {
+              this.reviewProcessActiveInfo = this.reviewProcessActiveInfo + 1;
+            }
+          }
+          if (
+            this.reviewProcessListInfo[2].userId === 1 &&
+            this.reviewProcessListInfo[2].status === 2
+          ) {
+            let reviewProcessListTemp = [];
+            reviewProcessListTemp[1] = this.reviewProcessListInfo[0];
+            reviewProcessListTemp[0] = this.reviewProcessListInfo[2];
+            reviewProcessListTemp[0].user.userName = "填写最终雇工";
+            reviewProcessListTemp[0].userId = -1;
+            reviewProcessListTemp[2] = this.reviewProcessListInfo[1];
+            reviewProcessListTemp[3] = this.reviewProcessListInfo[3];
+            this.reviewProcessListInfo = reviewProcessListTemp;
+          }
+          this.openInfo = true;
+        });
       });
     },
   },

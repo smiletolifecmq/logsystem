@@ -147,6 +147,8 @@ public class SysReviewSub extends BaseEntity
 
     private Long stage;
 
+    private Long drawStatus;
+
     private String subWorkload;
 
     private BigDecimal subCost;
@@ -162,6 +164,14 @@ public class SysReviewSub extends BaseEntity
     private BigDecimal guGongMoney;
 
     private String subcontractNo;
+
+    public Long getDrawStatus() {
+        return drawStatus;
+    }
+
+    public void setDrawStatus(Long drawStatus) {
+        this.drawStatus = drawStatus;
+    }
 
     public Long getStage() {
         return stage;

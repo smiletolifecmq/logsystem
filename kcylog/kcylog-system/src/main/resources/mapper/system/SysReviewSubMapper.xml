@@ -302,6 +302,7 @@
             <if test="manType != null">and r.man_type = #{manType}</if>
             <if test="subpackageType != null">and r.subpackage_type = #{subpackageType}</if>
             <if test="stage != null">and r.stage = #{stage}</if>
+            <if test="drawStatus != null">and pp.draw_status = #{drawStatus}</if>
             <if test="fzrUserId != null  and fzrUserId != ''">and r.user_id = #{fzrUserId}</if>
             <if test="params.beginTime != null and params.beginTime != ''"><!-- 开始时间检索 -->
                 AND date_format(r.create_time,'%y%m%d') &gt;= date_format(#{params.beginTime},'%y%m%d')
