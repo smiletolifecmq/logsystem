@@ -173,7 +173,9 @@ export default {
             .dispatch("Login", this.loginForm)
             .then(() => {
               this.$router
-                .push({ path: this.redirect || "/user/log" })
+                .push({
+                  path: this.redirect || "/user/fq_project/fq_project_list",
+                })
                 .catch(() => {});
             })
             .catch(() => {
