@@ -199,26 +199,24 @@
       size="mini"
     >
       <el-table-column
-        fixed
-        width="200px"
+        width="160px"
         label="委托单位"
         align="center"
         prop="requesterAlias"
       />
       <el-table-column
-        fixed
-        width="200px"
+        width="160px"
         label="项目名称"
         align="center"
         prop="projectNameAlias"
       />
       <el-table-column
-        fixed
+        width="90px"
         label="项目编号"
         align="center"
         prop="projectNum"
       />
-      <el-table-column label="工程负责人" align="center" prop="userNameAlias" />
+      <el-table-column label="负责人" align="center" prop="userNameAlias" />
       <el-table-column label="作业部门" align="center" prop="department" />
       <!-- <el-table-column label="项目类型" align="center" prop="projectType" />
         <el-table-column
@@ -226,12 +224,18 @@
           align="center"
           prop="workcontentAlias"
         /> -->
-      <el-table-column label="登记时间" align="center" prop="registerTime">
+      <el-table-column
+        label="登记时间"
+        align="center"
+        prop="registerTime"
+        width="70px"
+      >
         <template slot-scope="scope">
           {{ formatDate(scope.row.registerTime) }}
         </template>
       </el-table-column>
       <el-table-column
+        width="70px"
         label="安排开始时间"
         align="center"
         prop="projectStartAlias"
@@ -241,6 +245,7 @@
         </template></el-table-column
       >
       <el-table-column
+        width="70px"
         label="安排结束时间"
         align="center"
         prop="projectEndAlias"
@@ -249,7 +254,7 @@
           {{ formatDate(scope.row.projectEndAlias) }}
         </template></el-table-column
       >
-      <el-table-column label="提前工期" align="center">
+      <el-table-column label="提前工期" align="center" width="70px">
         <template slot-scope="scope">
           <el-tag type="danger" v-show="scope.row.leadTime < 0">{{
             scope.row.leadTime
@@ -259,7 +264,12 @@
           }}</el-tag>
         </template></el-table-column
       >
-      <el-table-column label="作业办结时间" align="center" prop="doTime">
+      <el-table-column
+        label="作业办结时间"
+        align="center"
+        prop="doTime"
+        width="70px"
+      >
         <template slot-scope="scope">
           {{ homeworkCompleted(scope.row) }}
         </template></el-table-column
@@ -288,18 +298,33 @@
           >
         </template>
       </el-table-column>
-      <el-table-column label="一检时间" align="center" prop="oneCheck">
+      <el-table-column
+        label="一检时间"
+        align="center"
+        prop="oneCheck"
+        width="70px"
+      >
         <template slot-scope="scope">
           {{ formatDate(scope.row.oneCheck) }}
         </template></el-table-column
       >
-      <el-table-column label="二检时间" align="center" prop="twoCheck">
+      <el-table-column
+        label="二检时间"
+        align="center"
+        prop="twoCheck"
+        width="70px"
+      >
         <template slot-scope="scope">
           {{ formatDate(scope.row.twoCheck) }}
         </template></el-table-column
       >
 
-      <el-table-column label="抽签过程" align="center" prop="drawStatus">
+      <el-table-column
+        label="抽签过程"
+        align="center"
+        prop="drawStatus"
+        width="70px"
+      >
         <template slot-scope="scope">
           <el-tag v-show="scope.row.drawStatus == 0" type="danger">无</el-tag>
           <el-tag v-show="scope.row.drawStatus == 1" type="success">有</el-tag>
@@ -307,27 +332,29 @@
       </el-table-column>
       <el-table-column label="雇工分包" align="center">
         <el-table-column
-          label="状态"
+          label="分包"
           align="center"
           prop="subpackageType"
-          width="120"
+          width="70"
         >
           <template slot-scope="scope">
-            <el-tag v-show="scope.row.subpackageType == 0" type="danger"
-              >未设置</el-tag
+            <el-tag
+              v-show="
+                scope.row.subpackageType == 0 || scope.row.subpackageType == 1
+              "
+              type="danger"
+              >无</el-tag
             >
-            <el-tag v-show="scope.row.subpackageType == 1" type="info"
-              >非分包</el-tag
-            >
+
             <el-tag v-show="scope.row.subpackageType == 2" type="success"
-              >单一合同分包</el-tag
+              >单一</el-tag
             >
             <el-tag v-show="scope.row.subpackageType == 3" type="success"
-              >框架协议分包</el-tag
+              >框架</el-tag
             >
           </template>
         </el-table-column>
-        <el-table-column label="操作" align="center" width="120">
+        <el-table-column label="审核单" align="center" width="100">
           <template slot-scope="scope">
             <el-button
               v-show="scope.row.issq == 0"
@@ -337,13 +364,11 @@
               @click="applyReviewSub(scope.row)"
               v-hasPermi="['system:project:applyReviewSub']"
               style="color: red"
-              >申请雇工分包</el-button
+              >申请</el-button
             >
-            <el-tag v-show="scope.row.issq == 1" type="success"
-              >已有审核单</el-tag
-            >
+            <el-tag v-show="scope.row.issq == 1" type="success">有</el-tag>
             <el-tag v-show="showReviewStatus(scope.row.issq)" type="info"
-              >未有审核单</el-tag
+              >无</el-tag
             >
           </template>
         </el-table-column>
