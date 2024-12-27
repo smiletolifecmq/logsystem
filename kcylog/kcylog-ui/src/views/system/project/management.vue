@@ -8,6 +8,15 @@
       v-show="showSearch"
       label-width="68px"
     >
+      <el-form-item label="项目编号" prop="projectNum">
+        <el-input
+          v-model="queryParams.projectNum"
+          placeholder="请输入项目编号"
+          clearable
+          @keyup.enter.native="handleQuery"
+          style="width: 115px"
+        />
+      </el-form-item>
       <el-form-item label="分包单位" prop="winUnit">
         <el-select
           v-model="queryParams.winUnit"
@@ -27,15 +36,6 @@
         <el-input
           v-model="queryParams.projectNameAlias"
           placeholder="请输入项目名称"
-          clearable
-          @keyup.enter.native="handleQuery"
-          style="width: 115px"
-        />
-      </el-form-item>
-      <el-form-item label="项目编号" prop="projectNum">
-        <el-input
-          v-model="queryParams.projectNum"
-          placeholder="请输入项目编号"
           clearable
           @keyup.enter.native="handleQuery"
           style="width: 115px"

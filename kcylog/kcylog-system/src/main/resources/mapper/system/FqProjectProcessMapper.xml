@@ -130,7 +130,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
             </if>
             and p.status = 3
         </where>
-        order by p.project_num desc, f.version asc
+        order by f.transfer_time desc, p.project_num desc, f.version asc
     </select>
     
     <select id="selectFqProjectProcessById" parameterType="Long" resultMap="FqProjectProcessResult">

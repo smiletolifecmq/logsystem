@@ -8,6 +8,14 @@
       v-show="showSearch"
       label-width="68px"
     >
+      <el-form-item label="项目编号" prop="projectNum">
+        <el-input
+          v-model="queryParams.projectNum"
+          placeholder="请输入项目编号"
+          clearable
+          @keyup.enter.native="handleQuery"
+        />
+      </el-form-item>
       <el-form-item label="委托单位" prop="requesterAlias">
         <el-input
           v-model="queryParams.requesterAlias"
@@ -20,14 +28,6 @@
         <el-input
           v-model="queryParams.projectNameAlias"
           placeholder="请输入项目名称"
-          clearable
-          @keyup.enter.native="handleQuery"
-        />
-      </el-form-item>
-      <el-form-item label="项目编号" prop="projectNum">
-        <el-input
-          v-model="queryParams.projectNum"
-          placeholder="请输入项目编号"
           clearable
           @keyup.enter.native="handleQuery"
         />

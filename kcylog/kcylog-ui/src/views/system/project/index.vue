@@ -8,6 +8,14 @@
       v-show="showSearch"
       label-width="68px"
     >
+      <el-form-item label="项目编号" prop="projectNum">
+        <el-input
+          v-model="queryParams.projectNum"
+          placeholder="请输入项目编号"
+          clearable
+          @keyup.enter.native="handleQuery"
+        />
+      </el-form-item>
       <el-form-item label="委托单位" prop="requesterAlias">
         <el-input
           v-model="queryParams.requesterAlias"
@@ -24,18 +32,21 @@
           @keyup.enter.native="handleQuery"
         />
       </el-form-item>
-      <el-form-item label="项目编号" prop="projectNum">
-        <el-input
-          v-model="queryParams.projectNum"
-          placeholder="请输入项目编号"
-          clearable
-          @keyup.enter.native="handleQuery"
-        />
-      </el-form-item>
       <el-form-item label="作业状态" prop="workStatus">
         <el-select v-model="queryParams.workStatus" placeholder="请选择">
           <el-option
             v-for="item in statusArr"
+            :key="item.value"
+            :label="item.label"
+            :value="item.value"
+          >
+          </el-option>
+        </el-select>
+      </el-form-item>
+      <el-form-item label="工作状态" prop="gzStatus">
+        <el-select v-model="queryParams.gzStatus" placeholder="请选择">
+          <el-option
+            v-for="item in gzStatuss"
             :key="item.value"
             :label="item.label"
             :value="item.value"
@@ -238,11 +249,6 @@
           {{ formatDate(scope.row.projectEndAlias) }}
         </template></el-table-column
       >
-      <el-table-column label="作业办结时间" align="center" prop="doTime">
-        <template slot-scope="scope">
-          {{ homeworkCompleted(scope.row) }}
-        </template></el-table-column
-      >
       <el-table-column label="提前工期" align="center">
         <template slot-scope="scope">
           <el-tag type="danger" v-show="scope.row.leadTime < 0">{{
@@ -253,7 +259,17 @@
           }}</el-tag>
         </template></el-table-column
       >
-      <el-table-column label="作业状态" align="center" prop="status">
+      <el-table-column label="作业办结时间" align="center" prop="doTime">
+        <template slot-scope="scope">
+          {{ homeworkCompleted(scope.row) }}
+        </template></el-table-column
+      >
+      <el-table-column
+        label="作业状态"
+        align="center"
+        prop="status"
+        width="100"
+      >
         <template slot-scope="scope">
           <el-tag v-show="scope.row.workStatus == 1" type="danger"
             >新增作业</el-tag
@@ -272,6 +288,17 @@
           >
         </template>
       </el-table-column>
+      <el-table-column label="一检时间" align="center" prop="oneCheck">
+        <template slot-scope="scope">
+          {{ formatDate(scope.row.oneCheck) }}
+        </template></el-table-column
+      >
+      <el-table-column label="二检时间" align="center" prop="twoCheck">
+        <template slot-scope="scope">
+          {{ formatDate(scope.row.twoCheck) }}
+        </template></el-table-column
+      >
+
       <el-table-column label="抽签过程" align="center" prop="drawStatus">
         <template slot-scope="scope">
           <el-tag v-show="scope.row.drawStatus == 0" type="danger">无</el-tag>
@@ -279,7 +306,12 @@
         </template>
       </el-table-column>
       <el-table-column label="雇工分包" align="center">
-        <el-table-column label="状态" align="center" prop="subpackageType">
+        <el-table-column
+          label="状态"
+          align="center"
+          prop="subpackageType"
+          width="120"
+        >
           <template slot-scope="scope">
             <el-tag v-show="scope.row.subpackageType == 0" type="danger"
               >未设置</el-tag
@@ -295,7 +327,7 @@
             >
           </template>
         </el-table-column>
-        <el-table-column label="操作" align="center">
+        <el-table-column label="操作" align="center" width="120">
           <template slot-scope="scope">
             <el-button
               v-show="scope.row.issq == 0"
@@ -321,6 +353,7 @@
         label="操作"
         align="center"
         class-name="small-padding fixed-width"
+        width="120"
       >
         <template slot-scope="scope">
           <el-button
@@ -1290,6 +1323,24 @@ export default {
         {
           value: 3,
           label: "作业完成",
+        },
+        {
+          value: 4,
+          label: "作业办结",
+        },
+      ],
+      gzStatuss: [
+        {
+          value: 1,
+          label: "待一检",
+        },
+        {
+          value: 2,
+          label: "待二检",
+        },
+        {
+          value: 3,
+          label: "已完成",
         },
       ],
       outputStatusList: [

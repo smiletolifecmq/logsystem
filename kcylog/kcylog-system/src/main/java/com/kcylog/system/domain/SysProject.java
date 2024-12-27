@@ -232,6 +232,16 @@ public class SysProject extends BaseEntity
 
     private String winUnit;
 
+    private Long gzStatus;
+
+    public Long getGzStatus() {
+        return gzStatus;
+    }
+
+    public void setGzStatus(Long gzStatus) {
+        this.gzStatus = gzStatus;
+    }
+
     public String getWinUnit() {
         return winUnit;
     }
