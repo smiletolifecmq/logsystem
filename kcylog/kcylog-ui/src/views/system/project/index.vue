@@ -198,7 +198,12 @@
       @selection-change="handleSelectionChange"
       size="mini"
     >
-      <el-table-column label="委托单位" align="center" prop="requesterAlias" />
+      <el-table-column
+        label="委托单位"
+        align="center"
+        prop="requesterAlias"
+        fixed
+      />
       <el-table-column
         fixed
         label="项目名称"
@@ -379,13 +384,7 @@
           </template>
         </el-table-column>
       </el-table-column>
-      <el-table-column
-        fixed="right"
-        label="操作"
-        align="center"
-        width="100"
-        class-name="small-padding fixed-width"
-      >
+      <el-table-column label="操作" align="center" width="100" fixed="right">
         <template slot-scope="scope">
           <el-button
             size="mini"

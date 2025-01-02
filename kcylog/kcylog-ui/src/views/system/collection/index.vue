@@ -469,7 +469,6 @@
             v-model="timeForm.ysKprqLast"
             type="date"
             placeholder="选择日期"
-            :picker-options="pickerOptions"
           >
           </el-date-picker>
         </el-form-item>
