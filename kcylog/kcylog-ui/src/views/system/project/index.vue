@@ -200,11 +200,13 @@
     >
       <el-table-column label="委托单位" align="center" prop="requesterAlias" />
       <el-table-column
+        fixed
         label="项目名称"
         align="center"
         prop="projectNameAlias"
       />
       <el-table-column
+        fixed
         width="90"
         label="项目编号"
         align="center"
@@ -1460,10 +1462,12 @@ export default {
       queryStatisticsParams: {
         pageNum: 1,
         pageSize: 9999,
+        gzStatus: -1,
       },
       queryOverTimeParams: {
         pageNum: 1,
         pageSize: 9999,
+        gzStatus: -1,
       },
       queryParams: {
         pageNum: 1,
