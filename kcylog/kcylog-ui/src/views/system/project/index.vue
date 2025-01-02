@@ -198,26 +198,30 @@
       @selection-change="handleSelectionChange"
       size="mini"
     >
+      <el-table-column label="委托单位" align="center" prop="requesterAlias" />
       <el-table-column
-        width="160px"
-        label="委托单位"
-        align="center"
-        prop="requesterAlias"
-      />
-      <el-table-column
-        width="160px"
         label="项目名称"
         align="center"
         prop="projectNameAlias"
       />
       <el-table-column
-        width="90px"
+        width="90"
         label="项目编号"
         align="center"
         prop="projectNum"
       />
-      <el-table-column label="负责人" align="center" prop="userNameAlias" />
-      <el-table-column label="作业部门" align="center" prop="department" />
+      <el-table-column
+        label="负责人"
+        align="center"
+        prop="userNameAlias"
+        width="70"
+      />
+      <el-table-column
+        label="作业部门"
+        align="center"
+        prop="department"
+        width="100"
+      />
       <!-- <el-table-column label="项目类型" align="center" prop="projectType" />
         <el-table-column
           label="工程内容"
@@ -228,14 +232,14 @@
         label="登记时间"
         align="center"
         prop="registerTime"
-        width="70px"
+        width="70"
       >
         <template slot-scope="scope">
           {{ formatDate(scope.row.registerTime) }}
         </template>
       </el-table-column>
       <el-table-column
-        width="70px"
+        width="70"
         label="安排开始时间"
         align="center"
         prop="projectStartAlias"
@@ -245,7 +249,7 @@
         </template></el-table-column
       >
       <el-table-column
-        width="70px"
+        width="70"
         label="安排结束时间"
         align="center"
         prop="projectEndAlias"
@@ -268,7 +272,7 @@
         label="作业办结时间"
         align="center"
         prop="doTime"
-        width="70px"
+        width="70"
       >
         <template slot-scope="scope">
           {{ homeworkCompleted(scope.row) }}
@@ -302,7 +306,7 @@
         label="一检时间"
         align="center"
         prop="oneCheck"
-        width="70px"
+        width="70"
       >
         <template slot-scope="scope">
           {{ formatDate(scope.row.oneCheck) }}
@@ -312,7 +316,7 @@
         label="二检时间"
         align="center"
         prop="twoCheck"
-        width="70px"
+        width="70"
       >
         <template slot-scope="scope">
           {{ formatDate(scope.row.twoCheck) }}
@@ -323,7 +327,7 @@
         label="抽签过程"
         align="center"
         prop="drawStatus"
-        width="70px"
+        width="100"
       >
         <template slot-scope="scope">
           <el-tag v-show="scope.row.drawStatus == 0" type="danger">无</el-tag>
@@ -377,8 +381,8 @@
         fixed="right"
         label="操作"
         align="center"
+        width="100"
         class-name="small-padding fixed-width"
-        width="120"
       >
         <template slot-scope="scope">
           <el-button
