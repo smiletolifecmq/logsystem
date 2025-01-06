@@ -2,6 +2,121 @@
   <div class="app-container">
     <el-card class="box-card">
       <div slot="header" class="clearfix">
+        <span style="color: red">{{ lastTjTitle }}</span>
+      </div>
+      <el-row>
+        <el-col>
+          <el-card class="box-card">
+            <div slot="header" class="clearfix">
+              <span>经营报表</span>
+            </div>
+            <div>
+              <el-table :data="lastTableData" :span-method="objectSpanMethod">
+                <el-table-column
+                  prop="jy"
+                  label="类型"
+                  header-align="center"
+                  align="center"
+                >
+                  <template slot-scope="scope">
+                    <b>{{ scope.row.jy }}</b>
+                  </template>
+                </el-table-column>
+                <el-table-column
+                  prop="ht"
+                  label="类型"
+                  header-align="center"
+                  align="center"
+                >
+                  <template slot-scope="scope">
+                    <b>{{ scope.row.ht }}</b>
+                  </template>
+                </el-table-column>
+                <el-table-column
+                  prop="ndmb"
+                  label="年度目标"
+                  header-align="center"
+                  align="center"
+                >
+                  <template slot-scope="scope">
+                    <b><div v-html="scope.row.ndmb"></div></b>
+                  </template>
+                </el-table-column>
+                <el-table-column label="完成情况" header-align="center">
+                  <el-table-column label="前台" header-align="center">
+                    <el-table-column
+                      label="项数"
+                      header-align="center"
+                      prop="qtxs"
+                      align="center"
+                    >
+                    </el-table-column>
+                    <el-table-column
+                      label="金额"
+                      header-align="center"
+                      prop="qtje"
+                      align="center"
+                    >
+                    </el-table-column>
+                  </el-table-column>
+                  <el-table-column label="合同" header-align="center">
+                    <el-table-column
+                      label="项数"
+                      header-align="center"
+                      align="center"
+                      prop="htxs"
+                    >
+                    </el-table-column>
+                    <el-table-column
+                      label="金额"
+                      header-align="center"
+                      align="center"
+                      prop="htje"
+                    >
+                    </el-table-column>
+                  </el-table-column>
+                </el-table-column>
+                <el-table-column
+                  label="合计"
+                  header-align="center"
+                  align="center"
+                >
+                  <el-table-column
+                    label="项数"
+                    header-align="center"
+                    align="center"
+                    prop="hjxs"
+                  >
+                  </el-table-column>
+                  <el-table-column
+                    label="金额"
+                    header-align="center"
+                    align="center"
+                    prop="hjje"
+                  >
+                    <template slot-scope="scope">
+                      <b>{{ scope.row.hjje }}</b>
+                    </template>
+                  </el-table-column>
+                </el-table-column>
+                <el-table-column
+                  label="经营收入"
+                  header-align="center"
+                  prop="jysr"
+                  align="center"
+                >
+                  <template slot-scope="scope">
+                    <b>{{ scope.row.jysr }}</b>
+                  </template>
+                </el-table-column>
+              </el-table>
+            </div>
+          </el-card>
+        </el-col>
+      </el-row>
+    </el-card>
+    <el-card class="box-card">
+      <div slot="header" class="clearfix">
         <span style="color: red">{{ tjTitle }}</span>
       </div>
       <el-row>
@@ -334,6 +449,7 @@ export default {
   name: "jyjsc",
   data() {
     return {
+      lastTjTitle: "",
       tjTitle: "",
       dayStart: "",
       dayEnd: "",
@@ -343,7 +459,9 @@ export default {
       cstjData: {},
       yszkyData: {},
       tableData: [],
+      lastTableData: [],
       jyTimeForm: {},
+      lastJyTimeForm: {},
       tableDataTj: [],
     };
   },
@@ -363,10 +481,14 @@ export default {
     this.tjTitle =
       `统计截止时间为：${this.queryParams.ysKprqCs}，上次上报时间为：` +
       `${this.queryParams.ysKprqLast}  单位（万元）`;
+    const currentYear = new Date().getFullYear(); // 获取当前年份
+    const lastYear = currentYear - 1; // 获取上一年
+    this.lastTjTitle = "统计年份：" + lastYear + "年";
     this.yszktj();
     this.handleExportCstj();
     this.handleExportYstj();
     this.handleExportJyyb();
+    this.handleExportLastJyyb();
   },
   methods: {
     objectSpanMethod({ row, column, rowIndex, columnIndex }) {
@@ -490,6 +612,66 @@ export default {
         item.qbyszk = responseData.data.qbyszk;
         item.zjl = responseData.data.zjl + "%";
         this.tableDataTj.push(item);
+      });
+    },
+    handleExportLastJyyb() {
+      const currentYear = new Date().getFullYear(); // 获取当前年份
+      const lastYear = currentYear - 1; // 获取上一年份
+      const lastDayOfLastYear = new Date(lastYear, 11, 31);
+      const year = lastDayOfLastYear.getFullYear();
+      const month = String(lastDayOfLastYear.getMonth() + 1).padStart(2, "0"); // 月份 +1，补零
+      const day = String(lastDayOfLastYear.getDate()).padStart(2, "0"); // 补零
+      const formattedDate = `${year}-${month}-${day}`;
+      console.log(formattedDate);
+      exportJyyb({ ysKprqCs: formattedDate }).then((responseData) => {
+        var item = {};
+        item.ht = "开票";
+        item.ndmb = `5092<br>(4392)`;
+        item.jy = "收入";
+        item.qtxs = responseData.data.qtkp;
+        item.qtje = responseData.data.qtkpje;
+        item.htxs = responseData.data.htkp;
+        item.htje = responseData.data.htkpje;
+        item.hjxs = responseData.data.qtkp + responseData.data.htkp;
+        item.hjje = (
+          responseData.data.qtkpje + responseData.data.htkpje
+        ).toFixed(4);
+        item.wcbl = `<b>${responseData.data.kpzbOne}%<br>(${responseData.data.kpzbTwo}%)</b>`;
+        item.jysr = (
+          responseData.data.qtkpje +
+          responseData.data.htkpje +
+          responseData.data.qzje
+        ).toFixed(4);
+        this.lastTableData.push(item);
+
+        var item = {};
+        item.ht = "权责制";
+        item.jy = "收入";
+        item.ndmb = "/";
+        item.qtxs = "/";
+        item.qtje = "/";
+        item.htxs = "/";
+        item.htje = "/";
+        item.hjxs = responseData.data.qzxs;
+        item.hjje = responseData.data.qzje;
+        item.wcbl = `<b>${responseData.data.qzzbOne}%<br>(${responseData.data.qzzbTwo}%)</b>`;
+        this.lastTableData.push(item);
+
+        var item = {};
+        item.ht = "/";
+        item.jy = "到账";
+        item.ndmb = `4371<br>(3770)`;
+        item.qtxs = responseData.data.qtdz;
+        item.qtje = responseData.data.qtdzje;
+        item.htxs = responseData.data.htdz;
+        item.htje = responseData.data.htdzje;
+        item.hjxs = responseData.data.qtdz + responseData.data.htdz;
+        item.hjje = (
+          responseData.data.qtdzje + responseData.data.htdzje
+        ).toFixed(4);
+        item.wcbl = `<b>${responseData.data.htzbOne}%<br>(${responseData.data.htzbTwo}%)</b>`;
+        item.jysr = "/";
+        this.lastTableData.push(item);
       });
     },
   },
