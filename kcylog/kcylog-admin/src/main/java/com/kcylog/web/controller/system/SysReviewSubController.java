@@ -403,6 +403,7 @@ public class SysReviewSubController extends BaseController
                 //判断该审核单有没有雇工
                 if (reviewSub.getManType() == 0){
                     sysReviewSubProcessService.updateStatusByUserIdReviewId(sysReviewSubProcess.getReviewId());
+                    sysReviewSubService.updateFinalHire(sysReviewSubProcess);
                 }
                 sysReviewSubProcessService.setNextStatusByReviewId(sysReviewSubProcess.getReviewId());
             } else {

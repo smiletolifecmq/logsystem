@@ -487,4 +487,10 @@
         WHERE serial_num = #{serialNum}
     </update>
 
+    <update id="updateFinalHire" parameterType="SysReviewSubProcess">
+        update sys_review_sub
+        set final_hire = 1
+        where review_id = #{reviewId}
+    </update>
+
 </mapper>

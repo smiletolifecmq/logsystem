@@ -100,4 +100,6 @@ public interface ISysReviewSubService
     public int setSysReviewSubGoBackByReviewId(SysReviewSub sysReviewSub);
 
     public int updateSubpackageTypeByProjectNum(SysReviewSub sysReviewSub);
+
+    public int updateFinalHire(SysReviewSubProcess sysReviewSubProcess);
 }
