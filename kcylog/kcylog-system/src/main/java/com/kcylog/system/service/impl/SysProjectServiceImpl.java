@@ -258,4 +258,10 @@ public class SysProjectServiceImpl implements ISysProjectService
     {
         return sysProjectMapper.selectSysProjectListForFbTwoCheck(sysProject);
     }
+
+    @Override
+    public List<SysProject> listProjectOperateValue(SysProject sysProject)
+    {
+        return sysProjectMapper.listProjectOperateValue(sysProject);
+    }
 }

@@ -46,6 +46,26 @@ public class SysProjectValue extends BaseEntity
 
     private SysProject fqSysProject;
 
+    private Long projectNum;
+
+    private Long fbNum;
+
+    public Long getProjectNum() {
+        return projectNum;
+    }
+
+    public void setProjectNum(Long projectNum) {
+        this.projectNum = projectNum;
+    }
+
+    public Long getFbNum() {
+        return fbNum;
+    }
+
+    public void setFbNum(Long fbNum) {
+        this.fbNum = fbNum;
+    }
+
     public SysProject getFqSysProject() {
         return fqSysProject;
     }

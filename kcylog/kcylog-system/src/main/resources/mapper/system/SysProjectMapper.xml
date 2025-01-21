@@ -778,4 +778,14 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
         </where>
         order by p.work_status asc , p.project_id desc
     </select>
+
+    <select id="listProjectOperateValue" parameterType="SysProject" resultMap="SysProjectResult">
+        select * from sys_project
+        <where>
+            and (date_format(settle_time,'%y%m') = date_format(curdate(),'%y%m'))
+            <if test="department != null and department != ''"><!-- 开始时间检索 -->
+                and department = #{department}
+            </if>
+        </where>
+    </select>
 </mapper>

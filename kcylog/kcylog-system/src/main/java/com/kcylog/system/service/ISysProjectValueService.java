@@ -70,4 +70,6 @@ public interface ISysProjectValueService
     public List<SysProjectValue> listProjectOperateTJ(SysProject sysProject);
 
     public List<SysProjectValue> listProjectOperateTJForSpecialPersonnel(SysProject sysProject);
+
+    public List<SysProjectValue> listProjectOperateValue(SysProject sysProject);
 }

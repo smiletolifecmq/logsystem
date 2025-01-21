@@ -177,3 +177,11 @@ export function getReviewProcessListForProjectId(query) {
     params: query
   })
 }
+
+export function listProjectOperateValue(query) {
+  return request({
+    url: '/system/project/listProjectOperateValue',
+    method: 'get',
+    params: query
+  })
+}

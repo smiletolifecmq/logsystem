@@ -122,4 +122,10 @@ public class SysProjectValueServiceImpl implements ISysProjectValueService
     {
         return sysProjectValueMapper.listProjectOperateTJForSpecialPersonnel(sysProject);
     }
+
+    @Override
+    public List<SysProjectValue> listProjectOperateValue(SysProject sysProject)
+    {
+        return sysProjectValueMapper.listProjectOperateValue(sysProject);
+    }
 }

@@ -135,4 +135,18 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
             and a.user_name in ('谢小建','张众','梅接文', '黄延')
         </where>
     </select>
+
+    <select id="listProjectOperateValue" parameterType="SysProject" resultMap="SysProjectValueResult">
+        select a.user_name, sum(a.money) as money, sum(a.profit_money) as profit_money, sum(a.coefficient_money) as coefficient_money, sum(a.coefficient_profit_money) as coefficient_profit_money from sys_project_value a inner join sys_project b on a.project_id = b.project_id
+        <where>
+                and (date_format(b.settle_time,'%y%m') = date_format(curdate(),'%y%m'))
+            <if test="department != null and department != ''"><!-- 开始时间检索 -->
+                and b.department = #{department}
+            </if>
+            <if test="userName != null and userName != ''"><!-- 开始时间检索 -->
+                and a.user_name = #{userName}
+            </if>
+        </where>
+        group by a.user_name
+    </select>
 </mapper>

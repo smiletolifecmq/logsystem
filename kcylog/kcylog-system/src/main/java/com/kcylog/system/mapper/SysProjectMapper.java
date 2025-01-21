@@ -114,4 +114,6 @@ public interface SysProjectMapper
     public List<SysProject> selectSysProjectListForFb(SysProject sysProject);
 
     public List<SysProject> selectSysProjectListForFbTwoCheck(SysProject sysProject);
+
+    public List<SysProject> listProjectOperateValue(SysProject sysProject);
 }

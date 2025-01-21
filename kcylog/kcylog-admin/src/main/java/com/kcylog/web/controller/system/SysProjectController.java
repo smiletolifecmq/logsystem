@@ -984,4 +984,25 @@ public class SysProjectController extends BaseController {
         return success(moneyMap);
     }
 
+    @GetMapping("/listProjectOperateValue")
+    public TableDataInfo listProjectOperateValue(SysProject sysProject) {
+        List<SysProjectValue> list = sysProjectValueService.listProjectOperateValue(sysProject);
+        for(SysProjectValue obj : list){
+            obj.setProjectNum((long)0);
+            obj.setFbNum((long)0);
+        }
+        List<SysProject> projectList = sysProjectService.listProjectOperateValue(sysProject);
+        for(SysProjectValue obj1 : list){
+            for(SysProject obj2 : projectList){
+                if (Objects.equals(obj1.getUserName(), obj2.getUserNameAlias())){
+                    obj1.setProjectNum(obj1.getProjectNum() + 1);
+                    if (obj2.getSubpackageType() == 2 || obj2.getSubpackageType() == 3){
+                        obj1.setFbNum(obj1.getFbNum() + 1);
+                    }
+                }
+            }
+        }
+        return getDataTable(list);
+    }
+
 }
