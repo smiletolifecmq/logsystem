@@ -1,0 +1,109 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.kcylog.system.mapper.SysClienteleMapper">
+    
+    <resultMap type="SysClientele" id="SysClienteleResult">
+        <result property="id"    column="id"    />
+        <result property="img"    column="img"    />
+        <result property="name"    column="name"    />
+        <result property="expertise"    column="expertise"    />
+        <result property="hobbies"    column="hobbies"    />
+        <result property="born"    column="born"    />
+        <result property="smoke"    column="smoke"    />
+        <result property="capacity"    column="capacity"    />
+        <result property="school"    column="school"    />
+        <result property="education"    column="education"    />
+        <result property="height"    column="height"    />
+        <result property="jobtitle"    column="jobtitle"    />
+        <result property="unit"    column="unit"    />
+        <result property="position"    column="position"    />
+        <result property="address"    column="address"    />
+    </resultMap>
+
+    <sql id="selectSysClienteleVo">
+        select id, img, name, expertise, hobbies, born, smoke, capacity, school, education, height, jobtitle, unit, position, address from sys_clientele
+    </sql>
+
+    <select id="selectSysClienteleList" parameterType="SysClientele" resultMap="SysClienteleResult">
+        <include refid="selectSysClienteleVo"/>
+        <where>
+            <if test="name != null  and name != ''"> and name like concat('%', #{name}, '%')</if>
+            <if test="unit != null  and unit != ''"> and unit like concat('%', #{unit}, '%')</if>
+        </where>
+    </select>
+    
+    <select id="selectSysClienteleById" parameterType="Long" resultMap="SysClienteleResult">
+        <include refid="selectSysClienteleVo"/>
+        where id = #{id}
+    </select>
+        
+    <insert id="insertSysClientele" parameterType="SysClientele" useGeneratedKeys="true" keyProperty="id">
+        insert into sys_clientele
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="img != null">img,</if>
+            <if test="name != null">name,</if>
+            <if test="expertise != null">expertise,</if>
+            <if test="hobbies != null">hobbies,</if>
+            <if test="born != null">born,</if>
+            <if test="smoke != null">smoke,</if>
+            <if test="capacity != null">capacity,</if>
+            <if test="school != null">school,</if>
+            <if test="education != null">education,</if>
+            <if test="height != null">height,</if>
+            <if test="jobtitle != null">jobtitle,</if>
+            <if test="unit != null">unit,</if>
+            <if test="position != null">position,</if>
+            <if test="address != null">address,</if>
+         </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test="img != null">#{img},</if>
+            <if test="name != null">#{name},</if>
+            <if test="expertise != null">#{expertise},</if>
+            <if test="hobbies != null">#{hobbies},</if>
+            <if test="born != null">#{born},</if>
+            <if test="smoke != null">#{smoke},</if>
+            <if test="capacity != null">#{capacity},</if>
+            <if test="school != null">#{school},</if>
+            <if test="education != null">#{education},</if>
+            <if test="height != null">#{height},</if>
+            <if test="jobtitle != null">#{jobtitle},</if>
+            <if test="unit != null">#{unit},</if>
+            <if test="position != null">#{position},</if>
+            <if test="address != null">#{address},</if>
+         </trim>
+    </insert>
+
+    <update id="updateSysClientele" parameterType="SysClientele">
+        update sys_clientele
+        <trim prefix="SET" suffixOverrides=",">
+            <if test="img != null">img = #{img},</if>
+            <if test="name != null">name = #{name},</if>
+            <if test="expertise != null">expertise = #{expertise},</if>
+            <if test="hobbies != null">hobbies = #{hobbies},</if>
+            <if test="born != null">born = #{born},</if>
+            <if test="smoke != null">smoke = #{smoke},</if>
+            <if test="capacity != null">capacity = #{capacity},</if>
+            <if test="school != null">school = #{school},</if>
+            <if test="education != null">education = #{education},</if>
+            <if test="height != null">height = #{height},</if>
+            <if test="jobtitle != null">jobtitle = #{jobtitle},</if>
+            <if test="unit != null">unit = #{unit},</if>
+            <if test="position != null">position = #{position},</if>
+            <if test="address != null">address = #{address},</if>
+        </trim>
+        where id = #{id}
+    </update>
+
+    <delete id="deleteSysClienteleById" parameterType="Long">
+        delete from sys_clientele where id = #{id}
+    </delete>
+
+    <delete id="deleteSysClienteleByIds" parameterType="String">
+        delete from sys_clientele where id in 
+        <foreach item="id" collection="array" open="(" separator="," close=")">
+            #{id}
+        </foreach>
+    </delete>
+</mapper>
