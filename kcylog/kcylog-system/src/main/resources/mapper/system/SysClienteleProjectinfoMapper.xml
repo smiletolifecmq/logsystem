@@ -1,0 +1,71 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.kcylog.system.mapper.SysClienteleProjectinfoMapper">
+    
+    <resultMap type="SysClienteleProjectinfo" id="SysClienteleProjectinfoResult">
+        <result property="id"    column="id"    />
+        <result property="clienteleId"    column="clientele_id"    />
+        <result property="num"    column="num"    />
+        <result property="xmname"    column="xmname"    />
+        <result property="content"    column="content"    />
+    </resultMap>
+
+    <sql id="selectSysClienteleProjectinfoVo">
+        select id, clientele_id, num, xmname, content from sys_clientele_projectInfo
+    </sql>
+
+    <select id="selectSysClienteleProjectinfoList" parameterType="SysClienteleProjectinfo" resultMap="SysClienteleProjectinfoResult">
+        <include refid="selectSysClienteleProjectinfoVo"/>
+        <where>  
+            <if test="clienteleId != null "> and clientele_id = #{clienteleId}</if>
+            <if test="num != null  and num != ''"> and num = #{num}</if>
+            <if test="xmname != null  and xmname != ''"> and xmname like concat('%', #{xmname}, '%')</if>
+            <if test="content != null  and content != ''"> and content = #{content}</if>
+        </where>
+    </select>
+    
+    <select id="selectSysClienteleProjectinfoById" parameterType="Long" resultMap="SysClienteleProjectinfoResult">
+        <include refid="selectSysClienteleProjectinfoVo"/>
+        where id = #{id}
+    </select>
+        
+    <insert id="insertSysClienteleProjectinfo" parameterType="SysClienteleProjectinfo" useGeneratedKeys="true" keyProperty="id">
+        insert into sys_clientele_projectInfo
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="clienteleId != null">clientele_id,</if>
+            <if test="num != null">num,</if>
+            <if test="xmname != null">xmname,</if>
+            <if test="content != null">content,</if>
+         </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test="clienteleId != null">#{clienteleId},</if>
+            <if test="num != null">#{num},</if>
+            <if test="xmname != null">#{xmname},</if>
+            <if test="content != null">#{content},</if>
+         </trim>
+    </insert>
+
+    <update id="updateSysClienteleProjectinfo" parameterType="SysClienteleProjectinfo">
+        update sys_clientele_projectInfo
+        <trim prefix="SET" suffixOverrides=",">
+            <if test="clienteleId != null">clientele_id = #{clienteleId},</if>
+            <if test="num != null">num = #{num},</if>
+            <if test="xmname != null">xmname = #{xmname},</if>
+            <if test="content != null">content = #{content},</if>
+        </trim>
+        where id = #{id}
+    </update>
+
+    <delete id="deleteSysClienteleProjectinfoById" parameterType="Long">
+        delete from sys_clientele_projectInfo where clientele_id = #{id}
+    </delete>
+
+    <delete id="deleteSysClienteleProjectinfoByIds" parameterType="String">
+        delete from sys_clientele_projectInfo where id in 
+        <foreach item="id" collection="array" open="(" separator="," close=")">
+            #{id}
+        </foreach>
+    </delete>
+</mapper>

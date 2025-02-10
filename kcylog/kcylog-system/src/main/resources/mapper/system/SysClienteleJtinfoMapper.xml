@@ -1,0 +1,66 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.kcylog.system.mapper.SysClienteleJtinfoMapper">
+    
+    <resultMap type="SysClienteleJtinfo" id="SysClienteleJtinfoResult">
+        <result property="id"    column="id"    />
+        <result property="relation"    column="relation"    />
+        <result property="jtname"    column="jtname"    />
+        <result property="clienteleId"    column="clientele_id"    />
+    </resultMap>
+
+    <sql id="selectSysClienteleJtinfoVo">
+        select id, relation, jtname, clientele_id from sys_clientele_jtInfo
+    </sql>
+
+    <select id="selectSysClienteleJtinfoList" parameterType="SysClienteleJtinfo" resultMap="SysClienteleJtinfoResult">
+        <include refid="selectSysClienteleJtinfoVo"/>
+        <where>  
+            <if test="relation != null  and relation != ''"> and relation = #{relation}</if>
+            <if test="jtname != null  and jtname != ''"> and jtname like concat('%', #{jtname}, '%')</if>
+            <if test="clienteleId != null "> and clientele_id = #{clienteleId}</if>
+        </where>
+    </select>
+    
+    <select id="selectSysClienteleJtinfoById" parameterType="Long" resultMap="SysClienteleJtinfoResult">
+        <include refid="selectSysClienteleJtinfoVo"/>
+        where id = #{id}
+    </select>
+        
+    <insert id="insertSysClienteleJtinfo" parameterType="SysClienteleJtinfo" useGeneratedKeys="true" keyProperty="id">
+        insert into sys_clientele_jtInfo
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="relation != null">relation,</if>
+            <if test="jtname != null">jtname,</if>
+            <if test="clienteleId != null">clientele_id,</if>
+         </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test="relation != null">#{relation},</if>
+            <if test="jtname != null">#{jtname},</if>
+            <if test="clienteleId != null">#{clienteleId},</if>
+         </trim>
+    </insert>
+
+    <update id="updateSysClienteleJtinfo" parameterType="SysClienteleJtinfo">
+        update sys_clientele_jtInfo
+        <trim prefix="SET" suffixOverrides=",">
+            <if test="relation != null">relation = #{relation},</if>
+            <if test="jtname != null">jtname = #{jtname},</if>
+            <if test="clienteleId != null">clientele_id = #{clienteleId},</if>
+        </trim>
+        where id = #{id}
+    </update>
+
+    <delete id="deleteSysClienteleJtinfoById" parameterType="Long">
+        delete from sys_clientele_jtInfo where clientele_id = #{id}
+    </delete>
+
+    <delete id="deleteSysClienteleJtinfoByIds" parameterType="String">
+        delete from sys_clientele_jtInfo where id in 
+        <foreach item="id" collection="array" open="(" separator="," close=")">
+            #{id}
+        </foreach>
+    </delete>
+</mapper>

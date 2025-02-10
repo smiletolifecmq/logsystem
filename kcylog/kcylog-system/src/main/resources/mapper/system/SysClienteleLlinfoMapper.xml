@@ -1,0 +1,71 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.kcylog.system.mapper.SysClienteleLlinfoMapper">
+    
+    <resultMap type="SysClienteleLlinfo" id="SysClienteleLlinfoResult">
+        <result property="id"    column="id"    />
+        <result property="clienteleId"    column="clientele_id"    />
+        <result property="dw"    column="dw"    />
+        <result property="zw"    column="zw"    />
+        <result property="sjd"    column="sjd"    />
+    </resultMap>
+
+    <sql id="selectSysClienteleLlinfoVo">
+        select id, clientele_id, dw, zw, sjd from sys_clientele_llInfo
+    </sql>
+
+    <select id="selectSysClienteleLlinfoList" parameterType="SysClienteleLlinfo" resultMap="SysClienteleLlinfoResult">
+        <include refid="selectSysClienteleLlinfoVo"/>
+        <where>  
+            <if test="clienteleId != null "> and clientele_id = #{clienteleId}</if>
+            <if test="dw != null  and dw != ''"> and dw = #{dw}</if>
+            <if test="zw != null  and zw != ''"> and zw = #{zw}</if>
+            <if test="sjd != null  and sjd != ''"> and sjd = #{sjd}</if>
+        </where>
+    </select>
+    
+    <select id="selectSysClienteleLlinfoById" parameterType="Long" resultMap="SysClienteleLlinfoResult">
+        <include refid="selectSysClienteleLlinfoVo"/>
+        where id = #{id}
+    </select>
+        
+    <insert id="insertSysClienteleLlinfo" parameterType="SysClienteleLlinfo" useGeneratedKeys="true" keyProperty="id">
+        insert into sys_clientele_llInfo
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="clienteleId != null">clientele_id,</if>
+            <if test="dw != null">dw,</if>
+            <if test="zw != null">zw,</if>
+            <if test="sjd != null">sjd,</if>
+         </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test="clienteleId != null">#{clienteleId},</if>
+            <if test="dw != null">#{dw},</if>
+            <if test="zw != null">#{zw},</if>
+            <if test="sjd != null">#{sjd},</if>
+         </trim>
+    </insert>
+
+    <update id="updateSysClienteleLlinfo" parameterType="SysClienteleLlinfo">
+        update sys_clientele_llInfo
+        <trim prefix="SET" suffixOverrides=",">
+            <if test="clienteleId != null">clientele_id = #{clienteleId},</if>
+            <if test="dw != null">dw = #{dw},</if>
+            <if test="zw != null">zw = #{zw},</if>
+            <if test="sjd != null">sjd = #{sjd},</if>
+        </trim>
+        where id = #{id}
+    </update>
+
+    <delete id="deleteSysClienteleLlinfoById" parameterType="Long">
+        delete from sys_clientele_llInfo where clientele_id = #{id}
+    </delete>
+
+    <delete id="deleteSysClienteleLlinfoByIds" parameterType="String">
+        delete from sys_clientele_llInfo where id in 
+        <foreach item="id" collection="array" open="(" separator="," close=")">
+            #{id}
+        </foreach>
+    </delete>
+</mapper>

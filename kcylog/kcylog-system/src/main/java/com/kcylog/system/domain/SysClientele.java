@@ -5,6 +5,8 @@ import org.apache.commons.lang3.builder.ToStringStyle;
 import com.kcylog.common.annotation.Excel;
 import com.kcylog.common.core.domain.BaseEntity;
 
+import java.util.List;
+
 /**
  * 客户信息对象 sys_clientele
  * 
@@ -74,7 +76,57 @@ public class SysClientele extends BaseEntity
     @Excel(name = "家庭住址")
     private String address;
 
-    public void setId(Long id) 
+    private String createname;
+
+    private Long createid;
+
+    private List<SysClienteleJtinfo> jtInfo;
+
+    private List<SysClienteleLlinfo> llInfo;
+
+    private List<SysClienteleProjectinfo> projectInfo;
+
+    public String getCreatename() {
+        return createname;
+    }
+
+    public void setCreatename(String createname) {
+        this.createname = createname;
+    }
+
+    public Long getCreateid() {
+        return createid;
+    }
+
+    public void setCreateid(Long createid) {
+        this.createid = createid;
+    }
+
+    public List<SysClienteleJtinfo> getJtInfo() {
+        return jtInfo;
+    }
+
+    public void setJtInfo(List<SysClienteleJtinfo> jtInfo) {
+        this.jtInfo = jtInfo;
+    }
+
+    public List<SysClienteleLlinfo> getLlInfo() {
+        return llInfo;
+    }
+
+    public void setLlInfo(List<SysClienteleLlinfo> llInfo) {
+        this.llInfo = llInfo;
+    }
+
+    public List<SysClienteleProjectinfo> getProjectInfo() {
+        return projectInfo;
+    }
+
+    public void setProjectInfo(List<SysClienteleProjectinfo> projectInfo) {
+        this.projectInfo = projectInfo;
+    }
+
+    public void setId(Long id)
     {
         this.id = id;
     }

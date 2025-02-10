@@ -20,23 +20,49 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
         <result property="unit"    column="unit"    />
         <result property="position"    column="position"    />
         <result property="address"    column="address"    />
+        <result property="createname"    column="createname"    />
+        <result property="createid"    column="createid"    />
+        <association property="jtInfo" javaType="java.util.List" resultMap="SysClienteleJtinfoResult"/>
+        <association property="llInfo" javaType="java.util.List" resultMap="SysClienteleLlinfoResult"/>
+        <association property="projectInfo" javaType="java.util.List" resultMap="SysClienteleProjectinfoResult"/>
+
+    </resultMap>
+
+    <resultMap type="SysClienteleProjectinfo" id="SysClienteleProjectinfoResult">
+        <result property="num"    column="num"    />
+        <result property="xmname"    column="xmname"    />
+        <result property="content"    column="content"    />
+    </resultMap>
+
+    <resultMap type="SysClienteleLlinfo" id="SysClienteleLlinfoResult">
+        <result property="dw"    column="dw"    />
+        <result property="zw"    column="zw"    />
+        <result property="sjd"    column="sjd"    />
+    </resultMap>
+
+    <resultMap type="SysClienteleJtinfo" id="SysClienteleJtinfoResult">
+        <result property="relation"    column="relation"    />
+        <result property="jtname"    column="jtname"    />
     </resultMap>
 
     <sql id="selectSysClienteleVo">
-        select id, img, name, expertise, hobbies, born, smoke, capacity, school, education, height, jobtitle, unit, position, address from sys_clientele
+        select a.*, b.relation, b.jtname, c.dw, c.zw, c.sjd, d.num, d.xmname, d.content  from sys_clientele a
+            left join sys_clientele_jtInfo b on a.id = b.clientele_id
+            left join sys_clientele_llInfo c on a.id = c.clientele_id
+            left join sys_clientele_projectInfo d on a.id = d.clientele_id
     </sql>
 
     <select id="selectSysClienteleList" parameterType="SysClientele" resultMap="SysClienteleResult">
         <include refid="selectSysClienteleVo"/>
         <where>
-            <if test="name != null  and name != ''"> and name like concat('%', #{name}, '%')</if>
-            <if test="unit != null  and unit != ''"> and unit like concat('%', #{unit}, '%')</if>
+            <if test="name != null  and name != ''"> and a.name like concat('%', #{name}, '%')</if>
+            <if test="unit != null  and unit != ''"> and a.unit like concat('%', #{unit}, '%')</if>
         </where>
     </select>
     
     <select id="selectSysClienteleById" parameterType="Long" resultMap="SysClienteleResult">
         <include refid="selectSysClienteleVo"/>
-        where id = #{id}
+        where a.id = #{id}
     </select>
         
     <insert id="insertSysClientele" parameterType="SysClientele" useGeneratedKeys="true" keyProperty="id">
@@ -56,6 +82,8 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
             <if test="unit != null">unit,</if>
             <if test="position != null">position,</if>
             <if test="address != null">address,</if>
+            <if test="createname != null">createname,</if>
+            <if test="createid != null">createid,</if>
          </trim>
         <trim prefix="values (" suffix=")" suffixOverrides=",">
             <if test="img != null">#{img},</if>
@@ -72,6 +100,8 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
             <if test="unit != null">#{unit},</if>
             <if test="position != null">#{position},</if>
             <if test="address != null">#{address},</if>
+            <if test="createname != null">#{createname},</if>
+            <if test="createid != null">#{createid},</if>
          </trim>
     </insert>
 

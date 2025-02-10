@@ -74,9 +74,7 @@
       <el-table-column label="毕业学校" align="center" prop="school" />
       <el-table-column label="学历" align="center" prop="education" />
       <el-table-column label="身高(米)" align="center" prop="height" />
-      <el-table-column label="职称" align="center" prop="jobtitle" />
-      <el-table-column label="单位" align="center" prop="unit" />
-      <el-table-column label="职位" align="center" prop="position" />
+      <el-table-column label="录入人" align="center" prop="createname" />
       <el-table-column
         label="操作"
         align="center"
@@ -86,8 +84,17 @@
           <el-button
             size="mini"
             type="text"
+            icon="el-icon-info"
+            @click="handleDetail(scope.row)"
+            v-hasPermi="['system:clientele:query']"
+            >详情</el-button
+          >
+          <el-button
+            size="mini"
+            type="text"
             icon="el-icon-edit"
             @click="handleUpdate(scope.row)"
+            v-if="showButton(scope.row.createid)"
             v-hasPermi="['system:clientele:edit']"
             >修改</el-button
           >
@@ -96,6 +103,7 @@
             type="text"
             icon="el-icon-delete"
             @click="handleDelete(scope.row)"
+            v-if="showButton(scope.row.createid)"
             v-hasPermi="['system:clientele:remove']"
             >删除</el-button
           >
@@ -179,8 +187,10 @@
                   <el-row>
                     <el-col :span="12">
                       <el-form-item label="是否吸烟" prop="smoke">
-                        <el-radio v-model="form.smoke" label="1">是</el-radio>
-                        <el-radio v-model="form.smoke" label="0">否</el-radio>
+                        <el-radio-group v-model="form.smoke">
+                          <el-radio :label="1">是</el-radio>
+                          <el-radio :label="0">否</el-radio>
+                        </el-radio-group>
                       </el-form-item>
                     </el-col>
                     <el-col :span="12">
@@ -364,7 +374,7 @@
                       </el-col>
                       <el-col :span="4">
                         <el-button
-                          v-if="index != 0 || form.jtInfo.length == 1"
+                          v-if="index != 0 || form.llInfo.length == 1"
                           type="text"
                           icon="el-icon-circle-plus"
                           size="medium"
@@ -426,6 +436,8 @@
                       <el-col :span="6">
                         <el-form-item label="对接情况" prop="content">
                           <el-input
+                            type="textarea"
+                            :rows="1"
                             v-model="info.content"
                             placeholder="请输入对接情况"
                           />
@@ -433,7 +445,7 @@
                       </el-col>
                       <el-col :span="4">
                         <el-button
-                          v-if="index != 0 || form.jtInfo.length == 1"
+                          v-if="index != 0 || form.projectInfo.length == 1"
                           type="text"
                           icon="el-icon-circle-plus"
                           size="medium"
@@ -461,9 +473,148 @@
         </div>
       </el-collapse>
     </el-dialog>
+
+    <el-dialog
+      :title="titleDetail"
+      :visible.sync="openDetail"
+      width="1000px"
+      append-to-body
+      :close-on-click-modal="false"
+    >
+      <el-collapse v-model="activeNames">
+        <el-collapse-item title="基本信息" name="1">
+          <el-row>
+            <el-col :span="12">
+              <el-descriptions size="mini" :column="1">
+                <el-descriptions-item label="照片">
+                  <img
+                    :src="`${uploadFileUrl}${formDetail.img}`"
+                    class="avatar"
+                    @click="openPreview"
+                  />
+                </el-descriptions-item>
+              </el-descriptions>
+            </el-col>
+            <el-col :span="12">
+              <el-descriptions size="mini" :column="2">
+                <el-descriptions-item label="姓名">{{
+                  formDetail.name
+                }}</el-descriptions-item>
+                <el-descriptions-item label="个人专长">{{
+                  formDetail.expertise
+                }}</el-descriptions-item>
+                <el-descriptions-item label="兴趣爱好">{{
+                  formDetail.hobbies
+                }}</el-descriptions-item>
+                <el-descriptions-item label="出生">{{
+                  formDetail.born
+                }}</el-descriptions-item>
+                <el-descriptions-item label="是否吸烟">
+                  {{ formDetail.smoke === 1 ? "是" : "否" }}
+                </el-descriptions-item>
+                <el-descriptions-item label="酒量">{{
+                  formDetail.capacity
+                }}</el-descriptions-item>
+
+                <el-descriptions-item label="毕业学校">{{
+                  formDetail.school
+                }}</el-descriptions-item>
+                <el-descriptions-item label="学历">{{
+                  formDetail.education
+                }}</el-descriptions-item>
+                <el-descriptions-item label="身高(米)">{{
+                  formDetail.height
+                }}</el-descriptions-item>
+                <el-descriptions-item label="职称">{{
+                  formDetail.jobtitle
+                }}</el-descriptions-item>
+                <el-descriptions-item label="单位">{{
+                  formDetail.unit
+                }}</el-descriptions-item>
+                <el-descriptions-item label="职位">{{
+                  formDetail.position
+                }}</el-descriptions-item>
+                <el-descriptions-item label="家庭地址">{{
+                  formDetail.address
+                }}</el-descriptions-item>
+              </el-descriptions>
+            </el-col>
+          </el-row>
+        </el-collapse-item>
+        <el-collapse-item title="履历与家庭信息" name="2">
+          <el-row>
+            <el-col :span="12">
+              <el-table :data="formDetail.llInfo" style="width: 100%" border>
+                <el-table-column prop="dw" label="单位"> </el-table-column>
+                <el-table-column prop="zw" label="职位"> </el-table-column>
+                <el-table-column prop="sjd" label="时间段"> </el-table-column>
+              </el-table>
+            </el-col>
+
+            <el-col :span="11" style="margin-left: 6px">
+              <el-table :data="formDetail.jtInfo" style="width: 100%" border>
+                <el-table-column prop="relation" label="关系">
+                </el-table-column>
+                <el-table-column prop="jtname" label="姓名"> </el-table-column>
+              </el-table>
+            </el-col>
+          </el-row>
+        </el-collapse-item>
+        <el-collapse-item title="重点项目对接情况" name="3">
+          <el-row>
+            <el-col :span="24">
+              <el-table
+                :data="formDetail.projectInfo"
+                style="width: 100%"
+                border
+              >
+                <el-table-column prop="num" label="项目编号"> </el-table-column>
+                <el-table-column prop="xmname" label="项目名称">
+                </el-table-column>
+                <el-table-column prop="content" label="对接情况">
+                </el-table-column>
+              </el-table>
+            </el-col>
+          </el-row>
+        </el-collapse-item>
+      </el-collapse>
+    </el-dialog>
+
+    <!-- 弹出大图的对话框 -->
+    <el-dialog :visible.sync="previewVisible" width="70%" @close="closePreview">
+      <img
+        :src="`${uploadFileUrl}${formDetail.img}`"
+        alt="预览图片"
+        style="width: 70%"
+      />
+    </el-dialog>
   </div>
 </template>
-
+<style>
+.avatar-uploader .el-upload {
+  border: 1px dashed #d9d9d9;
+  border-radius: 6px;
+  cursor: pointer;
+  position: relative;
+  overflow: hidden;
+}
+.avatar-uploader .el-upload:hover {
+  border-color: #409eff;
+}
+.avatar-uploader-icon {
+  font-size: 28px;
+  color: #8c939d;
+  width: 178px;
+  height: 178px;
+  line-height: 178px;
+  text-align: center;
+}
+.avatar {
+  width: 178px;
+  height: 178px;
+  display: block;
+}
+</style>
 <script>
 import {
   listClientele,
@@ -473,6 +624,7 @@ import {
   updateClientele,
 } from "@/api/system/clientele";
 import FileUpload from "@/components/FileUpload";
+import userInfo from "@/store/modules/user";
 
 export default {
   name: "Clientele",
@@ -487,6 +639,7 @@ export default {
   },
   data() {
     return {
+      previewVisible: false,
       uploadFileUrl: process.env.VUE_APP_BASE_API, // 上传文件服务器地址
       activeNames: ["1", "2", "3", "4"],
       // 遮罩层
@@ -526,6 +679,9 @@ export default {
         position: null,
         address: null,
       },
+      formDetail: {},
+      openDetail: false,
+      titleDetail: "",
       // 表单参数
       form: {
         smoke: 0,
@@ -546,6 +702,17 @@ export default {
     this.getList();
   },
   methods: {
+    // 打开预览框
+    openPreview() {
+      this.previewVisible = true;
+    },
+    // 关闭预览框
+    closePreview() {
+      this.previewVisible = false;
+    },
+    showButton(userId) {
+      return userId == userInfo.state.userId;
+    },
     removeProjectInfo(index) {
       this.form.projectInfo.splice(index, 1);
       this.$forceUpdate();
@@ -650,8 +817,17 @@ export default {
       const id = row.id || this.ids;
       getClientele(id).then((response) => {
         this.form = response.data;
+
         this.open = true;
         this.title = "修改客户信息";
+      });
+    },
+    handleDetail(row) {
+      const id = row.id || this.ids;
+      getClientele(id).then((response) => {
+        this.formDetail = response.data;
+        this.openDetail = true;
+        this.titleDetail = "详情";
       });
     },
     /** 提交按钮 */
