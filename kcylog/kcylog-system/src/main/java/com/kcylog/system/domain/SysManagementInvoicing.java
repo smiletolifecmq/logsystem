@@ -111,6 +111,16 @@ public class SysManagementInvoicing extends BaseEntity
 
     private String yearString;
 
+    private String ysSzqu;
+
+    public String getYsSzqu() {
+        return ysSzqu;
+    }
+
+    public void setYsSzqu(String ysSzqu) {
+        this.ysSzqu = ysSzqu;
+    }
+
     public String getYearString() {
         return yearString;
     }

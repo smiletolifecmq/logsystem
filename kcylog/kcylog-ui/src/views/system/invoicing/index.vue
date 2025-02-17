@@ -266,6 +266,9 @@
         <el-form-item label="合同金额" prop="kpHtje" label-width="260px">
           <el-input v-model="form.kpHtje" placeholder="请输入合同金额" />
         </el-form-item>
+        <el-form-item label="所在区域" prop="ysSzqu" label-width="260px">
+          <el-input v-model="form.ysSzqu" placeholder="请输入所在区域" />
+        </el-form-item>
         <el-form-item label="开票日期" prop="kpKprq" label-width="260px">
           <el-date-picker
             clearable
@@ -483,6 +486,9 @@ export default {
       form: {},
       // 表单校验
       rules: {
+        ysSzqu: [
+          { required: true, message: "请输入所在区域", trigger: "blur" },
+        ],
         kpHtje: [
           { required: true, message: "请输入合同金额", trigger: "blur" },
         ],

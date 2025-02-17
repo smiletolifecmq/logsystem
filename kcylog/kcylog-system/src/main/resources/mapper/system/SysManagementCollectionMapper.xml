@@ -90,6 +90,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
             <if test="ysSsdqsj != null">ys_ssdqsj,</if>
             <if test="ysIssq != null">ys_issq,</if>
             <if test="ysStatus != null">ys_status,</if>
+            <if test="ysSzqu != null">ys_szqu,</if>
          </trim>
         <trim prefix="values (" suffix=")" suffixOverrides=",">
             <if test="ysHtmc != null">#{ysHtmc},</if>
@@ -115,6 +116,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
             <if test="ysSsdqsj != null">#{ysSsdqsj},</if>
             <if test="ysIssq != null">#{ysIssq},</if>
             <if test="ysStatus != null">#{ysStatus},</if>
+            <if test="ysSzqu != null">#{ysSzqu},</if>
          </trim>
     </insert>
 

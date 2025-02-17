@@ -1009,6 +1009,10 @@ public class ExcelManySheetUtil<T>
                 {
                     cell.setCellValue((((BigDecimal) value).setScale(attr.scale(), attr.roundingMode())).doubleValue());
                 }
+                else if (value instanceof BigDecimal)
+                {
+                    cell.setCellValue(((BigDecimal) value).doubleValue()); // 转换为 double
+                }
                 else if (!attr.handler().equals(ExcelHandlerAdapter.class))
                 {
                     cell.setCellValue(dataFormatHandlerAdapter(value, attr));

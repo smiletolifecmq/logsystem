@@ -115,6 +115,10 @@ public class SysManagementCollectionController extends BaseController
         int num4 = 0;
 
         for (SysManagementCollection obj : list) {
+            System.out.println(obj.getYsHtje());
+            if(Objects.equals(obj.getYsHtje(), "框架")){
+                obj.setYsHtje("0");
+            }
             num ++;
             obj.setNum(num);
             Date ysKprq = obj.getYsKprq();

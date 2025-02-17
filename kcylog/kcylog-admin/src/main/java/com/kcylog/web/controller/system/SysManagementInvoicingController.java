@@ -120,6 +120,7 @@ public class SysManagementInvoicingController extends BaseController
             newCollection.setYsYdzje(BigDecimal.ZERO);
             newCollection.setYsWdzje(sysManagementInvoicing.getKpKpje());
             newCollection.setYsFph(sysManagementInvoicing.getKpFph());
+            newCollection.setYsSzqu(sysManagementInvoicing.getYsSzqu());
             sysManagementCollectionService.insertSysManagementCollection(newCollection);
         }
 
