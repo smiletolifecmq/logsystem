@@ -538,8 +538,10 @@ public class SysManagementCollectionController extends BaseController
         for (SysManagementArrival obj2 : arrival){
             // 本月回款
             Date dzKprq = obj2.getDzKprq();
+            Date dzRq = obj2.getDzRq();
             LocalDate ysDzKprqLocalDate = dzKprq.toInstant().atZone(ZoneId.systemDefault()).toLocalDate();
-            Period period = Period.between(ysDzKprqLocalDate, currentDate);
+            LocalDate ysDzrqLocalDate = dzRq.toInstant().atZone(ZoneId.systemDefault()).toLocalDate();
+            Period period = Period.between(ysDzKprqLocalDate, ysDzrqLocalDate);
             int years = period.getYears();
             // 判断时间段
             if (!isSameYearAndMonth(obj2.getDzKprq(),obj2.getDzRq())){
