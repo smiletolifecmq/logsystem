@@ -1216,6 +1216,11 @@ export default {
                           dataToReplace[key]
                         );
                       }
+                      // 在替换完成后，尝试将字符串转换为数值
+                      const numericValue = Number(cell.value);
+                      if (!isNaN(numericValue)) {
+                        cell.value = numericValue; // 如果转换成功，赋值为数值类型
+                      }
                     }
                   });
                 });
