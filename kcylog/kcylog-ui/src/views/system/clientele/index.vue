@@ -1,123 +1,147 @@
 <template>
   <div class="app-container">
-    <el-form
-      :model="queryParams"
-      ref="queryForm"
-      size="small"
-      :inline="true"
-      v-show="showSearch"
-      label-width="68px"
-    >
-      <el-form-item label="姓名" prop="name">
-        <el-input
-          v-model="queryParams.name"
-          placeholder="请输入姓名"
-          clearable
-          @keyup.enter.native="handleQuery"
-        />
-      </el-form-item>
-      <el-form-item label="单位" prop="unit">
-        <el-input
-          v-model="queryParams.unit"
-          placeholder="请输入单位"
-          clearable
-          @keyup.enter.native="handleQuery"
-        />
-      </el-form-item>
-      <el-form-item>
-        <el-button
-          type="primary"
-          icon="el-icon-search"
-          size="mini"
-          @click="handleQuery"
-          >搜索</el-button
-        >
-        <el-button icon="el-icon-refresh" size="mini" @click="resetQuery"
-          >重置</el-button
-        >
-      </el-form-item>
-    </el-form>
-
-    <el-row :gutter="10" class="mb8">
-      <el-col :span="1.5">
-        <el-button
-          type="primary"
-          plain
-          icon="el-icon-plus"
-          size="mini"
-          @click="handleAdd"
-          v-hasPermi="['system:clientele:add']"
-          >录入</el-button
-        >
+    <el-row :gutter="20">
+      <!--部门数据-->
+      <el-col :span="4" :xs="24">
+        <div class="head-container">
+          <el-input
+            v-model="unit"
+            placeholder="请输入单位名称"
+            clearable
+            size="small"
+            prefix-icon="el-icon-search"
+            style="margin-bottom: 20px"
+          />
+        </div>
+        <div class="head-container">
+          <el-tree
+            :data="deptOptions"
+            :props="defaultProps"
+            :expand-on-click-node="false"
+            :filter-node-method="filterNode"
+            ref="tree"
+            node-key="id"
+            default-expand-all
+            highlight-current
+            @node-click="handleNodeClick"
+          />
+        </div>
       </el-col>
-      <right-toolbar
-        :showSearch.sync="showSearch"
-        @queryTable="getList"
-      ></right-toolbar>
+      <el-col :span="20" :xs="24">
+        <el-form
+          :model="queryParams"
+          ref="queryForm"
+          size="small"
+          :inline="true"
+          v-show="showSearch"
+          label-width="68px"
+        >
+          <el-form-item label="姓名" prop="name">
+            <el-input
+              v-model="queryParams.name"
+              placeholder="请输入姓名"
+              clearable
+              @keyup.enter.native="handleQuery"
+            />
+          </el-form-item>
+
+          <el-form-item>
+            <el-button
+              type="primary"
+              icon="el-icon-search"
+              size="mini"
+              @click="handleQuery"
+              >搜索</el-button
+            >
+            <el-button icon="el-icon-refresh" size="mini" @click="resetQuery"
+              >重置</el-button
+            >
+          </el-form-item>
+        </el-form>
+
+        <el-row :gutter="10" class="mb8">
+          <el-col :span="1.5">
+            <el-button
+              type="primary"
+              plain
+              icon="el-icon-plus"
+              size="mini"
+              @click="handleAdd"
+              v-hasPermi="['system:clientele:add']"
+              >录入</el-button
+            >
+          </el-col>
+
+          <right-toolbar
+            :showSearch.sync="showSearch"
+            @queryTable="getList"
+          ></right-toolbar>
+        </el-row>
+
+        <el-table
+          v-loading="loading"
+          :data="clienteleList"
+          @selection-change="handleSelectionChange"
+        >
+          <el-table-column label="姓名" align="center" prop="name" />
+          <el-table-column label="个人专长" align="center" prop="expertise" />
+          <el-table-column label="兴趣爱好" align="center" prop="hobbies" />
+          <el-table-column label="出生" align="center" prop="born" />
+          <el-table-column label="是否吸烟" align="center" prop="smoke">
+            <template slot-scope="{ row }">
+              {{ row.smoke === 1 ? "是" : "否" }}
+            </template>
+          </el-table-column>
+          <el-table-column label="酒量" align="center" prop="capacity" />
+          <el-table-column label="毕业学校" align="center" prop="school" />
+          <el-table-column label="学历" align="center" prop="education" />
+          <el-table-column label="身高(米)" align="center" prop="height" />
+          <el-table-column label="录入人" align="center" prop="createname" />
+          <el-table-column
+            label="操作"
+            align="center"
+            class-name="small-padding fixed-width"
+          >
+            <template slot-scope="scope">
+              <el-button
+                size="mini"
+                type="text"
+                icon="el-icon-info"
+                @click="handleDetail(scope.row)"
+                v-hasPermi="['system:clientele:query']"
+                >详情</el-button
+              >
+              <el-button
+                size="mini"
+                type="text"
+                icon="el-icon-edit"
+                @click="handleUpdate(scope.row)"
+                v-if="showButton(scope.row.createid)"
+                v-hasPermi="['system:clientele:edit']"
+                >修改</el-button
+              >
+              <el-button
+                size="mini"
+                type="text"
+                icon="el-icon-delete"
+                @click="handleDelete(scope.row)"
+                v-if="showButton(scope.row.createid)"
+                v-hasPermi="['system:clientele:remove']"
+                >删除</el-button
+              >
+            </template>
+          </el-table-column>
+        </el-table>
+
+        <pagination
+          v-show="total > 0"
+          :total="total"
+          :page.sync="queryParams.pageNum"
+          :limit.sync="queryParams.pageSize"
+          @pagination="getList"
+        />
+      </el-col>
     </el-row>
-
-    <el-table
-      v-loading="loading"
-      :data="clienteleList"
-      @selection-change="handleSelectionChange"
-    >
-      <el-table-column label="姓名" align="center" prop="name" />
-      <el-table-column label="个人专长" align="center" prop="expertise" />
-      <el-table-column label="兴趣爱好" align="center" prop="hobbies" />
-      <el-table-column label="出生" align="center" prop="born" />
-      <el-table-column label="是否吸烟" align="center" prop="smoke">
-        <template slot-scope="{ row }">
-          {{ row.smoke === 1 ? "是" : "否" }}
-        </template>
-      </el-table-column>
-      <el-table-column label="酒量" align="center" prop="capacity" />
-      <el-table-column label="毕业学校" align="center" prop="school" />
-      <el-table-column label="学历" align="center" prop="education" />
-      <el-table-column label="身高(米)" align="center" prop="height" />
-      <el-table-column label="录入人" align="center" prop="createname" />
-      <el-table-column
-        label="操作"
-        align="center"
-        class-name="small-padding fixed-width"
-      >
-        <template slot-scope="scope">
-          <el-button
-            size="mini"
-            type="text"
-            icon="el-icon-info"
-            @click="handleDetail(scope.row)"
-            v-hasPermi="['system:clientele:query']"
-            >详情</el-button
-          >
-          <el-button
-            size="mini"
-            type="text"
-            icon="el-icon-edit"
-            @click="handleUpdate(scope.row)"
-            v-if="showButton(scope.row.createid)"
-            v-hasPermi="['system:clientele:edit']"
-            >修改</el-button
-          >
-          <el-button
-            size="mini"
-            type="text"
-            icon="el-icon-delete"
-            @click="handleDelete(scope.row)"
-            v-if="showButton(scope.row.createid)"
-            v-hasPermi="['system:clientele:remove']"
-            >删除</el-button
-          >
-        </template>
-      </el-table-column>
-    </el-table>
-
-    <pagination
-      v-show="total > 0"
-      :total="total"
-      :page.sync="queryParams.pageNum"
-      :limit.sync="queryParams.pageSize"
-      @pagination="getList"
-    />
 
     <!-- 添加或修改客户信息对话框 -->
     <el-dialog
@@ -622,6 +646,7 @@ import {
   delClientele,
   addClientele,
   updateClientele,
+  deptTreeSelect,
 } from "@/api/system/clientele";
 import FileUpload from "@/components/FileUpload";
 import userInfo from "@/store/modules/user";
@@ -639,6 +664,13 @@ export default {
   },
   data() {
     return {
+      // 部门树选项
+      deptOptions: undefined,
+      defaultProps: {
+        children: "children",
+        label: "label",
+      },
+      unit: undefined,
       previewVisible: false,
       uploadFileUrl: process.env.VUE_APP_BASE_API, // 上传文件服务器地址
       activeNames: ["1", "2", "3", "4"],
@@ -698,10 +730,38 @@ export default {
       },
     };
   },
+  watch: {
+    // 根据名称筛选部门树
+    unit(val) {
+      this.$refs.tree.filter(val);
+    },
+  },
   created() {
     this.getList();
+    this.getUnitTree();
   },
   methods: {
+    getUnitTree() {
+      deptTreeSelect().then((response) => {
+        this.deptOptions = [
+          {
+            children: [],
+            id: "全部单位",
+            label: "全部单位",
+          },
+        ];
+        for (var i = 0; i < response.rows.length; i++) {
+          this.deptOptions[0].children.push({
+            id: response.rows[i].unit,
+            label: response.rows[i].unit,
+          });
+        }
+      });
+    },
+    filterNode(value, data) {
+      if (!value) return true;
+      return data.label.indexOf(value) !== -1;
+    },
     // 打开预览框
     openPreview() {
       this.previewVisible = true;
@@ -747,6 +807,10 @@ export default {
         this.$message.error("上传头像图片只能是 JPG 格式!");
       }
       return isImage;
+    },
+    handleNodeClick(data) {
+      this.queryParams.unit = data.id;
+      this.handleQuery();
     },
     /** 查询客户信息列表 */
     getList() {
@@ -796,6 +860,7 @@ export default {
     /** 重置按钮操作 */
     resetQuery() {
       this.resetForm("queryForm");
+      this.queryParams.unit = null;
       this.handleQuery();
     },
     // 多选框选中数据

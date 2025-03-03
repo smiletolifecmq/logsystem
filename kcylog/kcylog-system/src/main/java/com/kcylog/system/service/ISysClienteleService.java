@@ -59,4 +59,6 @@ public interface ISysClienteleService
      * @return 结果
      */
     public int deleteSysClienteleById(Long id);
+
+    public List<SysClientele> selectSysClienteleListForUnit();
 }

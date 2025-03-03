@@ -151,4 +151,11 @@ public class SysClienteleController extends BaseController
     {
         return toAjax(sysClienteleService.deleteSysClienteleByIds(ids));
     }
+
+    @GetMapping("/deptTree")
+    public TableDataInfo deptTree()
+    {
+        List<SysClientele> list = sysClienteleService.selectSysClienteleListForUnit();
+        return getDataTable(list);
+    }
 }

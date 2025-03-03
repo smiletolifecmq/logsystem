@@ -90,4 +90,10 @@ public class SysClienteleServiceImpl implements ISysClienteleService
     {
         return sysClienteleMapper.deleteSysClienteleById(id);
     }
+
+    @Override
+    public List<SysClientele> selectSysClienteleListForUnit()
+    {
+        return sysClienteleMapper.selectSysClienteleListForUnit();
+    }
 }

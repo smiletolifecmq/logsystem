@@ -59,4 +59,6 @@ public interface SysClienteleMapper
      * @return 结果
      */
     public int deleteSysClienteleByIds(Long[] ids);
+
+    public List<SysClientele> selectSysClienteleListForUnit();
 }

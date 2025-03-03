@@ -42,3 +42,10 @@ export function delClientele(id) {
     method: 'delete'
   })
 }
+
+export function deptTreeSelect() {
+  return request({
+    url: '/system/clientele/deptTree',
+    method: 'get'
+  })
+}
