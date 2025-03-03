@@ -46,6 +46,7 @@
         <result property="subpackageType" column="subpackage_type"/>
         <result property="subcontractNo" column="subcontract_no"/>
         <result property="stage" column="stage"/>
+        <result property="isBh" column="is_bh"/>
 
         <association property="dept" column="dept_name" javaType="SysDept" resultMap="SysReviewSubDeptResult"/>
         <association property="user" column="user_name" javaType="SysUser" resultMap="SysReviewSubUserResult"/>
@@ -467,7 +468,10 @@
 
     <update id="updateReviewManType" parameterType="SysReviewSubProcess">
         update sys_review_sub
-        set man_type = #{manType}
+        <trim prefix="SET" suffixOverrides=",">
+            <if test="manType != null">man_type = #{manType},</if>
+            <if test="isBh != null">is_bh = #{isBh},</if>
+        </trim>
         where review_id = #{reviewId}
     </update>
 

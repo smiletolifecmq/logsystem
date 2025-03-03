@@ -288,6 +288,18 @@
                         工程内容
                       </template>
                       {{ formInfo.project.workcontentAlias }}
+                      <el-button
+                        v-if="
+                          ['图', '售', '数'].some((substring) =>
+                            formInfo.project.projectNum.includes(substring)
+                          )
+                        "
+                        size="mini"
+                        type="text"
+                        icon="el-icon-picture"
+                        @click="handleGeo(formInfo.project)"
+                        >查看选图</el-button
+                      >
                     </el-descriptions-item>
                     <el-descriptions-item>
                       <template slot="label">
@@ -670,6 +682,15 @@ export default {
     this.getDeptTree();
   },
   methods: {
+    handleGeo(value) {
+      this.projectCode = value.projectNum;
+      // this.centerDialogVisible = true;
+      window.open(
+        "http://192.168.110.100/fqismap/?sysname=ViewMapInFQIS&salemapid=" +
+          value.projectId,
+        "_blank"
+      );
+    },
     formatDateReviewSub(dateString) {
       if (dateString == "") {
         return "";

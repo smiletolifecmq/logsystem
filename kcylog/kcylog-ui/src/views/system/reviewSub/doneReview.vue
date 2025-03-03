@@ -289,7 +289,7 @@
               >审核单详情</el-button
             >
           </div>
-          <div>
+          <!-- <div>
             <el-button
               size="mini"
               type="text"
@@ -297,7 +297,7 @@
               @click="handleReviewProcess(scope.row)"
               >流程详情</el-button
             >
-          </div>
+          </div> -->
           <div>
             <el-button
               size="mini"
@@ -466,6 +466,18 @@
                         工程内容
                       </template>
                       {{ formInfo.project.workcontentAlias }}
+                      <el-button
+                        v-if="
+                          ['图', '售', '数'].some((substring) =>
+                            formInfo.project.projectNum.includes(substring)
+                          )
+                        "
+                        size="mini"
+                        type="text"
+                        icon="el-icon-picture"
+                        @click="handleGeo(formInfo.project)"
+                        >查看选图</el-button
+                      >
                     </el-descriptions-item>
                     <el-descriptions-item>
                       <template slot="label">
@@ -663,7 +675,26 @@
             </el-col>
           </el-row>
         </div>
-
+        <el-collapse-item title="流程详情" name="7">
+          <el-steps :active="reviewProcessActiveInfo">
+            <el-step
+              v-for="reviewProcess in reviewProcessListInfo"
+              :key="reviewProcess.reviewProcessId"
+              :title="
+                reviewProcess.userId === 1 &&
+                (reviewProcess.status != 2 || reviewProcess.status != 4)
+                  ? '填写最终雇工信息中～'
+                  : reviewProcess.user.userName
+              "
+              :status="reviewProcessStatus(reviewProcess)"
+              :description="
+                reviewProcess.userId === 1 && reviewProcess.status === 2
+                  ? ''
+                  : reviewProcessDescription(reviewProcess)
+              "
+            ></el-step>
+          </el-steps>
+        </el-collapse-item>
         <el-collapse-item title="雇工信息详情" name="1">
           <div>
             <el-row :gutter="10">
@@ -761,6 +792,8 @@ export default {
   },
   data() {
     return {
+      reviewProcessListInfo: [],
+      reviewProcessActiveInfo: -1,
       statusArr: [
         {
           value: -1,
@@ -791,7 +824,7 @@ export default {
       restaurants: [],
       deptOptions: undefined,
       queryParamsDeptId: [],
-      activeNames: ["1", "2", "3"],
+      activeNames: ["1", "2", "3", "7"],
       employmentReasonOptions: [
         {
           value: "1",
@@ -891,6 +924,15 @@ export default {
     this.ggtj();
   },
   methods: {
+    handleGeo(value) {
+      this.projectCode = value.projectNum;
+      // this.centerDialogVisible = true;
+      window.open(
+        "http://192.168.110.100/fqismap/?sysname=ViewMapInFQIS&salemapid=" +
+          value.projectId,
+        "_blank"
+      );
+    },
     formatDateWork(dateString) {
       if (dateString == "" || dateString == null || dateString == undefined) {
         return "";
@@ -1122,7 +1164,7 @@ export default {
           response.data.endTime = response.data.endTime.substring(0, 10);
         }
         this.formInfo = response.data;
-        this.activeNames = ["2", "3", "4"];
+        this.activeNames = ["2", "3", "4", "7"];
         if (
           this.formInfo.subpackageType != 0 &&
           this.formInfo.subpackageType != 1
@@ -1143,6 +1185,31 @@ export default {
       this.queryParamsEmployee.reviewId = reviewId;
       listEmployee(this.queryParamsEmployee).then((response) => {
         this.employeeList = response.rows;
+        let formObj = {};
+        formObj.reviewId = row.reviewId;
+        getReviewProcessList(formObj).then((response) => {
+          this.reviewProcessListInfo = response.rows;
+          this.reviewProcessActiveInfo = -1;
+          for (let i = 0; i < response.rows.length; i++) {
+            if (response.rows[i].status != 0) {
+              this.reviewProcessActiveInfo = this.reviewProcessActiveInfo + 1;
+            }
+          }
+          if (
+            this.reviewProcessListInfo[2].userId === 1 &&
+            this.reviewProcessListInfo[2].status === 2
+          ) {
+            let reviewProcessListTemp = [];
+            reviewProcessListTemp[1] = this.reviewProcessListInfo[0];
+            reviewProcessListTemp[0] = this.reviewProcessListInfo[2];
+            reviewProcessListTemp[0].user.userName = "填写最终雇工";
+            reviewProcessListTemp[0].userId = -1;
+            reviewProcessListTemp[2] = this.reviewProcessListInfo[1];
+            reviewProcessListTemp[3] = this.reviewProcessListInfo[3];
+            this.reviewProcessListInfo = reviewProcessListTemp;
+          }
+          this.openInfo = true;
+        });
       });
     },
   },

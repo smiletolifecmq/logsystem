@@ -49,10 +49,20 @@ public class SysReviewSubProcess extends BaseEntity
 
     private Long manType;
 
+    private Long isBh;
+
     /**
      * 用户对象
      */
     private SysUser user;
+
+    public Long getIsBh() {
+        return isBh;
+    }
+
+    public void setIsBh(Long isBh) {
+        this.isBh = isBh;
+    }
 
     public Long getManType() {
         return manType;

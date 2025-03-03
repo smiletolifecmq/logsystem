@@ -99,6 +99,8 @@ public class SysReviewSub extends BaseEntity
 
     private Long subpackageType;
 
+    private Long isBh;
+
     private SysProjectRelation projectRelation;
 
     private int finalSecondStatus;
@@ -164,6 +166,14 @@ public class SysReviewSub extends BaseEntity
     private BigDecimal guGongMoney;
 
     private String subcontractNo;
+
+    public Long getIsBh() {
+        return isBh;
+    }
+
+    public void setIsBh(Long isBh) {
+        this.isBh = isBh;
+    }
 
     public Long getDrawStatus() {
         return drawStatus;

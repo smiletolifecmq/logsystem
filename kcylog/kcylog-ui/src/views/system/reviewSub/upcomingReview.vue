@@ -292,6 +292,12 @@
           >
         </template>
       </el-table-column>
+      <el-table-column label="驳回记录" align="center" prop="isBh">
+        <template slot-scope="scope">
+          <el-tag v-if="scope.row.isBh === 1" type="danger">有</el-tag>
+          <el-tag v-else-if="scope.row.isBh === 0" type="success">无</el-tag>
+        </template>
+      </el-table-column>
       <el-table-column
         label="操作"
         align="center"
@@ -308,7 +314,7 @@
               >审核单审核</el-button
             >
           </div>
-          <div>
+          <!-- <div>
             <el-button
               size="mini"
               type="text"
@@ -316,7 +322,7 @@
               @click="handleReviewProcess(scope.row)"
               >流程详情</el-button
             >
-          </div>
+          </div> -->
         </template>
       </el-table-column>
     </el-table>
@@ -510,7 +516,23 @@
             <el-col style="width: 50%">
               <el-card class="box-card">
                 <div slot="header" class="clearfix">
-                  <span>审核单详情</span>
+                  <span
+                    >审核单详情(是否有被驳回过)<i>
+                      <el-tag
+                        size="mini"
+                        v-if="formInfo.isBh == 1"
+                        type="danger"
+                        >是</el-tag
+                      >
+                      <el-tag
+                        size="mini"
+                        v-else-if="formInfo.isBh == 0"
+                        type="success"
+                        >否</el-tag
+                      >
+                      <el-tag size="mini" v-else type="danger">其他状态</el-tag>
+                    </i></span
+                  >
                 </div>
 
                 <el-collapse-item name="5">

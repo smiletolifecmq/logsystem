@@ -357,6 +357,9 @@ public class SysReviewSubController extends BaseController
         SysReviewSub review = new SysReviewSub();
         review.setReviewId(sysReviewSubProcess.getReviewId());
         //修改审核单雇工方式
+        if (sysReviewSubProcess.getStatus() == 3){
+            sysReviewSubProcess.setIsBh((long)1);
+        }
         sysReviewSubService.updateReviewManType(sysReviewSubProcess);
         //获取项目信息
         SysProjectRelation projectRelation = sysProjectRelationService.selectSysProjectRelationByReviewId(sysReviewSubProcess.getReviewId());

@@ -402,14 +402,14 @@
             v-hasPermi="['system:project:query']"
             >详情</el-button
           >
-          <el-button
+          <!-- <el-button
             size="mini"
             type="text"
             icon="el-icon-edit"
             @click="handleLotteryProcess(scope.row)"
             v-hasPermi="['system:project:lotteryProcess']"
             >抽签过程</el-button
-          >
+          > -->
           <el-button
             size="mini"
             type="text"
