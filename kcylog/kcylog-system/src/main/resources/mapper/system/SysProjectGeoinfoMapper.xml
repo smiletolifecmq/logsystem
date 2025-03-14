@@ -85,4 +85,14 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
             #{projectId}
         </foreach>
     </delete>
+
+    <select id="selectSysProjectGeoinfoByProjectIds" parameterType="java.util.List" resultMap="SysProjectGeoinfoResult">
+        <include refid="selectSysProjectGeoinfoVo"/>
+        WHERE project_id IN
+        <foreach collection="list" item="id" open="(" separator="," close=")">
+            #{id}
+        </foreach>
+    </select>
+
+
 </mapper>

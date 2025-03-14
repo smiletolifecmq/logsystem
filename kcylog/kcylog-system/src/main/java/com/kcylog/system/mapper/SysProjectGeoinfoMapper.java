@@ -59,4 +59,6 @@ public interface SysProjectGeoinfoMapper
      * @return 结果
      */
     public int deleteSysProjectGeoinfoByProjectIds(Long[] projectIds);
+
+    public List<SysProjectGeoinfo> selectSysProjectGeoinfoByProjectIds(List<Long> projectId);
 }

@@ -240,6 +240,7 @@
             type="text"
             icon="el-icon-picture"
             @click="handleGeo(scope.row)"
+            :disabled="scope.row.mapShow != 1"
             v-hasPermi="['system:project:geoInfo']"
             >查看选图</el-button
           >

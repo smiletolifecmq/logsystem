@@ -130,6 +130,16 @@ public class FqProjectProcess extends BaseEntity
 
     private SysProject projectList;
 
+    private Long mapShow;
+
+    public Long getMapShow() {
+        return mapShow;
+    }
+
+    public void setMapShow(Long mapShow) {
+        this.mapShow = mapShow;
+    }
+
     public SysProject getProjectList() {
         return projectList;
     }

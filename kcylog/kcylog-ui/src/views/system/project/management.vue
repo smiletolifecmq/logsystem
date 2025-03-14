@@ -415,6 +415,7 @@
             icon="el-icon-picture"
             @click="handleGeo(scope.row)"
             v-hasPermi="['system:project:geoInfo']"
+            :disabled="scope.row.mapShow != 1"
             >查看选图</el-button
           >
         </template>

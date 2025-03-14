@@ -234,6 +234,16 @@ public class SysProject extends BaseEntity
 
     private Long gzStatus;
 
+    private Long mapShow;
+
+    public Long getMapShow() {
+        return mapShow;
+    }
+
+    public void setMapShow(Long mapShow) {
+        this.mapShow = mapShow;
+    }
+
     public Long getGzStatus() {
         return gzStatus;
     }

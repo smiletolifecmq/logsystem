@@ -492,6 +492,7 @@
                         icon="el-icon-picture"
                         @click="handleGeo(formInfo.project)"
                         v-hasPermi="['system:project:geoInfo']"
+                        :disabled="formInfo.project.mapShow != 1"
                         >查看选图</el-button
                       >
                     </el-descriptions-item>

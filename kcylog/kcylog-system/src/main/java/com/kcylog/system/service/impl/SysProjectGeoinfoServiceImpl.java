@@ -91,4 +91,10 @@ public class SysProjectGeoinfoServiceImpl implements ISysProjectGeoinfoService
     {
         return sysProjectGeoinfoMapper.deleteSysProjectGeoinfoByProjectId(projectId);
     }
+
+    @Override
+    public List<SysProjectGeoinfo> selectSysProjectGeoinfoByProjectIds(List<Long> projectId)
+    {
+        return sysProjectGeoinfoMapper.selectSysProjectGeoinfoByProjectIds(projectId);
+    }
 }

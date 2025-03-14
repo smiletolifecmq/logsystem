@@ -476,6 +476,7 @@
                         type="text"
                         icon="el-icon-picture"
                         @click="handleGeo(formInfo.project)"
+                        :disabled="formInfo.project.mapShow != 1"
                         >查看选图</el-button
                       >
                     </el-descriptions-item>
