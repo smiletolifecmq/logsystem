@@ -22,6 +22,11 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
         <result property="address"    column="address"    />
         <result property="createname"    column="createname"    />
         <result property="createid"    column="createid"    />
+        <result property="djr"    column="djr"    />
+        <result property="sjh"    column="sjh"    />
+        <result property="sex"    column="sex"    />
+        <result property="wxh"    column="wxh"    />
+        <result property="sshy"    column="sshy"    />
         <association property="jtInfo" javaType="java.util.List" resultMap="SysClienteleJtinfoResult"/>
         <association property="llInfo" javaType="java.util.List" resultMap="SysClienteleLlinfoResult"/>
         <association property="projectInfo" javaType="java.util.List" resultMap="SysClienteleProjectinfoResult"/>
@@ -84,6 +89,11 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
             <if test="address != null">address,</if>
             <if test="createname != null">createname,</if>
             <if test="createid != null">createid,</if>
+            <if test="djr != null">djr,</if>
+            <if test="sjh != null">sjh,</if>
+            <if test="sex != null">sex,</if>
+            <if test="wxh != null">wxh,</if>
+            <if test="sshy != null">sshy,</if>
          </trim>
         <trim prefix="values (" suffix=")" suffixOverrides=",">
             <if test="img != null">#{img},</if>
@@ -102,6 +112,11 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
             <if test="address != null">#{address},</if>
             <if test="createname != null">#{createname},</if>
             <if test="createid != null">#{createid},</if>
+            <if test="djr != null">#{djr},</if>
+            <if test="sjh != null">#{sjh},</if>
+            <if test="sex != null">#{sex},</if>
+            <if test="wxh != null">#{wxh},</if>
+            <if test="sshy != null">#{sshy},</if>
          </trim>
     </insert>
 
@@ -122,6 +137,11 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
             <if test="unit != null">unit = #{unit},</if>
             <if test="position != null">position = #{position},</if>
             <if test="address != null">address = #{address},</if>
+            <if test="djr != null">djr = #{djr},</if>
+            <if test="sjh != null">sjh = #{sjh},</if>
+            <if test="sex != null">sex = #{sex},</if>
+            <if test="wxh != null">wxh = #{wxh},</if>
+            <if test="sshy != null">sshy = #{sshy},</if>
         </trim>
         where id = #{id}
     </update>

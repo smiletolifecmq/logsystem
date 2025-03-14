@@ -167,6 +167,16 @@ public class SysReviewSub extends BaseEntity
 
     private String subcontractNo;
 
+    private String bhly;
+
+    public String getBhly() {
+        return bhly;
+    }
+
+    public void setBhly(String bhly) {
+        this.bhly = bhly;
+    }
+
     public Long getIsBh() {
         return isBh;
     }

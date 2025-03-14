@@ -76,6 +76,16 @@ public class SysClientele extends BaseEntity
     @Excel(name = "家庭住址")
     private String address;
 
+    private String djr;
+
+    private String sjh;
+
+    private Long sex;
+
+    private String wxh;
+
+    private String sshy;
+
     private String createname;
 
     private Long createid;
@@ -85,6 +95,46 @@ public class SysClientele extends BaseEntity
     private List<SysClienteleLlinfo> llInfo;
 
     private List<SysClienteleProjectinfo> projectInfo;
+
+    public String getDjr() {
+        return djr;
+    }
+
+    public void setDjr(String djr) {
+        this.djr = djr;
+    }
+
+    public String getSjh() {
+        return sjh;
+    }
+
+    public void setSjh(String sjh) {
+        this.sjh = sjh;
+    }
+
+    public Long getSex() {
+        return sex;
+    }
+
+    public void setSex(Long sex) {
+        this.sex = sex;
+    }
+
+    public String getWxh() {
+        return wxh;
+    }
+
+    public void setWxh(String wxh) {
+        this.wxh = wxh;
+    }
+
+    public String getSshy() {
+        return sshy;
+    }
+
+    public void setSshy(String sshy) {
+        this.sshy = sshy;
+    }
 
     public String getCreatename() {
         return createname;

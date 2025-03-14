@@ -47,6 +47,7 @@
         <result property="subcontractNo" column="subcontract_no"/>
         <result property="stage" column="stage"/>
         <result property="isBh" column="is_bh"/>
+        <result property="bhly" column="bhly"/>
 
         <association property="dept" column="dept_name" javaType="SysDept" resultMap="SysReviewSubDeptResult"/>
         <association property="user" column="user_name" javaType="SysUser" resultMap="SysReviewSubUserResult"/>
@@ -471,6 +472,7 @@
         <trim prefix="SET" suffixOverrides=",">
             <if test="manType != null">man_type = #{manType},</if>
             <if test="isBh != null">is_bh = #{isBh},</if>
+            <if test="bhly != null">bhly = #{bhly},</if>
         </trim>
         where review_id = #{reviewId}
     </update>

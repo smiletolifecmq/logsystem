@@ -367,6 +367,7 @@ public class SysReviewSubController extends BaseController
         //修改审核单雇工方式
         if (sysReviewSubProcess.getStatus() == 3){
             sysReviewSubProcess.setIsBh((long)1);
+            sysReviewSubProcess.setBhly(sysReviewSubProcess.getReason());
         }
         sysReviewSubService.updateReviewManType(sysReviewSubProcess);
         //获取项目信息

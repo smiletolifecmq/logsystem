@@ -534,6 +534,9 @@
                       <el-tag size="mini" v-else type="danger">其他状态</el-tag>
                     </i></span
                   >
+                  <span v-if="formInfo.isBh == 1">
+                    理由:<i style="color: red">{{ formInfo.bhly }} </i></span
+                  >
                 </div>
 
                 <el-collapse-item name="5">

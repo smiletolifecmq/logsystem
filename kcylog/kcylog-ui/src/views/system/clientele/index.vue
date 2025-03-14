@@ -2,7 +2,7 @@
   <div class="app-container">
     <el-row :gutter="20">
       <!--部门数据-->
-      <el-col :span="5" :xs="24">
+      <el-col :span="4" :xs="24">
         <div class="head-container">
           <el-input
             v-model="unit"
@@ -27,7 +27,7 @@
           />
         </div>
       </el-col>
-      <el-col :span="19" :xs="24">
+      <el-col :span="20" :xs="24">
         <el-form
           :model="queryParams"
           ref="queryForm"
@@ -84,19 +84,24 @@
           @selection-change="handleSelectionChange"
         >
           <el-table-column label="姓名" align="center" prop="name" />
-          <el-table-column label="个人专长" align="center" prop="expertise" />
-          <el-table-column label="兴趣爱好" align="center" prop="hobbies" />
-          <el-table-column label="出生" align="center" prop="born" />
+          <el-table-column label="性别" align="center" prop="sex">
+            <template slot-scope="{ row }">
+              {{ row.sex === 1 ? "男" : "女" }}
+            </template>
+          </el-table-column>
+          <el-table-column label="手机号" align="center" prop="sjh" />
           <el-table-column label="是否吸烟" align="center" prop="smoke">
             <template slot-scope="{ row }">
               {{ row.smoke === 1 ? "是" : "否" }}
             </template>
           </el-table-column>
+          <el-table-column label="兴趣爱好" align="center" prop="hobbies" />
+          <el-table-column label="个人专长" align="center" prop="expertise" />
           <el-table-column label="酒量" align="center" prop="capacity" />
-          <el-table-column label="毕业学校" align="center" prop="school" />
-          <el-table-column label="学历" align="center" prop="education" />
-          <el-table-column label="身高(米)" align="center" prop="height" />
-          <el-table-column label="录入人" align="center" prop="createname" />
+          <el-table-column label="单位" align="center" prop="unit" />
+          <el-table-column label="职位" align="center" prop="position" />
+          <el-table-column label="职称" align="center" prop="jobtitle" />
+          <el-table-column label="对接人" align="center" prop="djr" />
           <el-table-column
             label="操作"
             align="center"
@@ -181,28 +186,29 @@
                       </el-form-item>
                     </el-col>
                     <el-col :span="12">
-                      <el-form-item label="个人专长" prop="expertise">
+                      <el-form-item label="出生" prop="born">
                         <el-input
-                          v-model="form.expertise"
-                          placeholder="请输入个人专长"
+                          v-model="form.born"
+                          placeholder="请输入出生"
                         />
                       </el-form-item>
                     </el-col>
                   </el-row>
                   <el-row>
                     <el-col :span="12">
+                      <el-form-item label="性别" prop="sex">
+                        <el-radio-group v-model="form.sex">
+                          <el-radio :label="1">男</el-radio>
+                          <el-radio :label="0">女</el-radio>
+                        </el-radio-group>
+                      </el-form-item>
+                    </el-col>
+
+                    <el-col :span="12">
                       <el-form-item label="兴趣爱好" prop="hobbies">
                         <el-input
                           v-model="form.hobbies"
                           placeholder="请输入兴趣爱好"
-                        />
-                      </el-form-item>
-                    </el-col>
-                    <el-col :span="12">
-                      <el-form-item label="出生" prop="born">
-                        <el-input
-                          v-model="form.born"
-                          placeholder="请输入出生"
                         />
                       </el-form-item>
                     </el-col>
@@ -228,23 +234,6 @@
 
                   <el-row>
                     <el-col :span="12">
-                      <el-form-item label="毕业学校" prop="school">
-                        <el-input
-                          v-model="form.school"
-                          placeholder="请输入毕业学校"
-                        /> </el-form-item
-                    ></el-col>
-                    <el-col :span="12">
-                      <el-form-item label="学历" prop="education">
-                        <el-input
-                          v-model="form.education"
-                          placeholder="请输入学历"
-                        /> </el-form-item
-                    ></el-col>
-                  </el-row>
-
-                  <el-row>
-                    <el-col :span="12">
                       <el-form-item label="身高(米)" prop="height">
                         <el-input
                           v-model="form.height"
@@ -253,12 +242,49 @@
                       </el-form-item>
                     </el-col>
                     <el-col :span="12">
-                      <el-form-item label="职称" prop="jobtitle">
+                      <el-form-item label="个人专长" prop="expertise">
                         <el-input
-                          v-model="form.jobtitle"
-                          placeholder="请输入职称"
-                        /> </el-form-item
-                    ></el-col>
+                          v-model="form.expertise"
+                          placeholder="请输入个人专长"
+                        />
+                      </el-form-item>
+                    </el-col>
+                  </el-row>
+                  <el-row>
+                    <el-col :span="12">
+                      <el-form-item label="手机号" prop="sjh">
+                        <el-input
+                          v-model="form.sjh"
+                          placeholder="请输入手机号"
+                        />
+                      </el-form-item>
+                    </el-col>
+                    <el-col :span="12">
+                      <el-form-item label="微信号" prop="wxh">
+                        <el-input
+                          v-model="form.wxh"
+                          placeholder="请输入微信号"
+                        />
+                      </el-form-item>
+                    </el-col>
+                  </el-row>
+                  <el-row>
+                    <el-col :span="12">
+                      <el-form-item label="学历" prop="education">
+                        <el-input
+                          v-model="form.education"
+                          placeholder="请输入学历"
+                        />
+                      </el-form-item>
+                    </el-col>
+                    <el-col :span="12">
+                      <el-form-item label="毕业学校" prop="school">
+                        <el-input
+                          v-model="form.school"
+                          placeholder="请输入毕业学校"
+                        />
+                      </el-form-item>
+                    </el-col>
                   </el-row>
 
                   <el-row>
@@ -281,13 +307,40 @@
 
                   <el-row>
                     <el-col :span="12">
+                      <el-form-item label="职称" prop="jobtitle">
+                        <el-input
+                          v-model="form.jobtitle"
+                          placeholder="请输入职称"
+                        />
+                      </el-form-item>
+                    </el-col>
+
+                    <el-col :span="12">
+                      <el-form-item label="所属行业" prop="sshy">
+                        <el-input
+                          v-model="form.sshy"
+                          placeholder="请输入所属行业"
+                        /> </el-form-item
+                    ></el-col>
+                  </el-row>
+
+                  <el-row>
+                    <el-col :span="12">
+                      <el-form-item label="对接人" prop="djr">
+                        <el-input
+                          v-model="form.djr"
+                          placeholder="请输入对接人"
+                        />
+                      </el-form-item>
+                    </el-col>
+
+                    <el-col :span="12">
                       <el-form-item label="家庭住址" prop="address">
                         <el-input
                           v-model="form.address"
                           placeholder="请输入家庭住址"
                         /> </el-form-item
                     ></el-col>
-                    <el-col :span="12"> </el-col>
                   </el-row>
                 </el-collapse-item>
               </el-col>
@@ -524,14 +577,32 @@
                 <el-descriptions-item label="姓名">{{
                   formDetail.name
                 }}</el-descriptions-item>
+                <el-descriptions-item label="性别">{{
+                  formDetail.sex === 1 ? "男" : "女"
+                }}</el-descriptions-item>
+                <el-descriptions-item label="出生">{{
+                  formDetail.born
+                }}</el-descriptions-item>
+                <el-descriptions-item label="身高(米)">{{
+                  formDetail.height
+                }}</el-descriptions-item>
+                <el-descriptions-item label="手机号">{{
+                  formDetail.sjh
+                }}</el-descriptions-item>
+                <el-descriptions-item label="微信号">{{
+                  formDetail.wxh
+                }}</el-descriptions-item>
+                <el-descriptions-item label="学历">{{
+                  formDetail.education
+                }}</el-descriptions-item>
+                <el-descriptions-item label="毕业学校">{{
+                  formDetail.school
+                }}</el-descriptions-item>
                 <el-descriptions-item label="个人专长">{{
                   formDetail.expertise
                 }}</el-descriptions-item>
                 <el-descriptions-item label="兴趣爱好">{{
                   formDetail.hobbies
-                }}</el-descriptions-item>
-                <el-descriptions-item label="出生">{{
-                  formDetail.born
                 }}</el-descriptions-item>
                 <el-descriptions-item label="是否吸烟">
                   {{ formDetail.smoke === 1 ? "是" : "否" }}
@@ -539,24 +610,21 @@
                 <el-descriptions-item label="酒量">{{
                   formDetail.capacity
                 }}</el-descriptions-item>
-
-                <el-descriptions-item label="毕业学校">{{
-                  formDetail.school
+                <el-descriptions-item label="单位">{{
+                  formDetail.unit
                 }}</el-descriptions-item>
-                <el-descriptions-item label="学历">{{
-                  formDetail.education
-                }}</el-descriptions-item>
-                <el-descriptions-item label="身高(米)">{{
-                  formDetail.height
+                <el-descriptions-item label="所属行业">{{
+                  formDetail.sshy
                 }}</el-descriptions-item>
                 <el-descriptions-item label="职称">{{
                   formDetail.jobtitle
                 }}</el-descriptions-item>
-                <el-descriptions-item label="单位">{{
-                  formDetail.unit
-                }}</el-descriptions-item>
+
                 <el-descriptions-item label="职位">{{
                   formDetail.position
+                }}</el-descriptions-item>
+                <el-descriptions-item label="对接人">{{
+                  formDetail.djr
                 }}</el-descriptions-item>
                 <el-descriptions-item label="家庭地址">{{
                   formDetail.address
