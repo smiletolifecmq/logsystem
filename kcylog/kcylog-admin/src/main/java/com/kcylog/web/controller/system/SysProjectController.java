@@ -96,8 +96,10 @@ public class SysProjectController extends BaseController {
                 }
             }
         }
-
-        List<SysProjectGeoinfo> sysProjectGeoinfo = sysProjectGeoinfoService.selectSysProjectGeoinfoByProjectIds(projectId);
+        List<SysProjectGeoinfo> sysProjectGeoinfo = new ArrayList<SysProjectGeoinfo>();
+        if (projectId.size() > 0){
+            sysProjectGeoinfo = sysProjectGeoinfoService.selectSysProjectGeoinfoByProjectIds(projectId);
+        }
         Map<Long, Integer> keyValueMap = new HashMap<>();
         for (SysProjectGeoinfo obj : sysProjectGeoinfo){
             keyValueMap.put(obj.getProjectId(), 1);
