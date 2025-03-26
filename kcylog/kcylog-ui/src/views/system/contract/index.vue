@@ -89,6 +89,9 @@
           <el-tag v-show="scope.row.status == 0" type="danger"
             >诉讼到期90天预警条数</el-tag
           >
+          <el-tag v-show="scope.row.status == 1" type="danger"
+            >已超诉讼期条数</el-tag
+          >
         </template>
       </el-table-column>
       <el-table-column prop="cml" label="陈美玲" align="center">
@@ -98,6 +101,12 @@
             type="danger"
             class="hover-effect"
             >{{ scope.row.cml }}</el-tag
+          >
+          <el-tag
+            v-show="scope.row.status == 1"
+            type="danger"
+            class="hover-effect"
+            >{{ scope.row.yccml }}</el-tag
           >
         </template>
       </el-table-column>
@@ -109,6 +118,12 @@
             class="hover-effect"
             >{{ scope.row.wyy }}</el-tag
           >
+          <el-tag
+            v-show="scope.row.status == 1"
+            type="danger"
+            class="hover-effect"
+            >{{ scope.row.ycwyy }}</el-tag
+          >
         </template>
       </el-table-column>
       <el-table-column prop="cxy" label="陈晓钰" align="center">
@@ -118,6 +133,12 @@
             type="danger"
             class="hover-effect"
             >{{ scope.row.cxy }}</el-tag
+          >
+          <el-tag
+            v-show="scope.row.status == 1"
+            type="danger"
+            class="hover-effect"
+            >{{ scope.row.yccxy }}</el-tag
           >
         </template>
       </el-table-column>
@@ -377,7 +398,6 @@ export default {
   },
   methods: {
     showButton(fzr) {
-      console.log(userInfo.state);
       return fzr == userInfo.state.name;
     },
     getStatisticsData() {
@@ -388,6 +408,18 @@ export default {
           cxy: 0,
           wyy: 0,
           cml: 0,
+          yccxy: 0,
+          ycwyy: 0,
+          yccml: 0,
+        };
+        var numData1 = {
+          status: 1,
+          cxy: 0,
+          wyy: 0,
+          cml: 0,
+          yccxy: 0,
+          ycwyy: 0,
+          yccml: 0,
         };
         for (var i = 0; i < response.rows.length; i++) {
           if (
@@ -406,9 +438,25 @@ export default {
                 numData.cxy++;
                 break;
             }
+          } else if (
+            response.rows[i].ssdqsj != null &&
+            response.rows[i].day < 0
+          ) {
+            switch (response.rows[i].fzr) {
+              case "陈美玲":
+                numData1.yccml++;
+                break;
+              case "王媛媛":
+                numData1.ycwyy++;
+                break;
+              case "陈晓钰":
+                numData1.yccxy++;
+                break;
+            }
           }
         }
         this.statisticsData.push(numData);
+        this.statisticsData.push(numData1);
       });
     },
     /** 查询合同管理列表 */

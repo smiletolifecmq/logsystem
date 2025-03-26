@@ -43,7 +43,7 @@ public class SysContractController extends BaseController
         Date today = new Date(); // 当前日期
         for (SysContract obj : list){
             if(obj.getSsdqsj() != null){
-                long diffInMillies = Math.abs(obj.getSsdqsj().getTime() - today.getTime()); // 计算毫秒差
+                long diffInMillies = obj.getSsdqsj().getTime() - today.getTime(); // 计算毫秒差
                 long daysBetween = TimeUnit.DAYS.convert(diffInMillies, TimeUnit.MILLISECONDS);
                 obj.setDay(daysBetween);
             }
