@@ -1,0 +1,151 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.kcylog.system.mapper.SysContractMapper">
+    
+    <resultMap type="SysContract" id="SysContractResult">
+        <result property="conId"    column="con_id"    />
+        <result property="num"    column="num"    />
+        <result property="name"    column="name"    />
+        <result property="khmc"    column="khmc"    />
+        <result property="classify"    column="classify"    />
+        <result property="fzr"    column="fzr"    />
+        <result property="htje"    column="htje"    />
+        <result property="qdrq"    column="qdrq"    />
+        <result property="jsje"    column="jsje"    />
+        <result property="zjly"    column="zjly"    />
+        <result property="ywsx"    column="ywsx"    />
+        <result property="ykpje"    column="ykpje"    />
+        <result property="wkpje"    column="wkpje"    />
+        <result property="ydzje"    column="ydzje"    />
+        <result property="wdzje"    column="wdzje"    />
+        <result property="ydsj"    column="ydsj"    />
+        <result property="fhsj"    column="fhsj"    />
+        <result property="ssdqsj"    column="ssdqsj"    />
+        <result property="csqk"    column="csqk"    />
+        <result property="htzftk"    column="htzftk"    />
+        <result property="bz"    column="bz"    />
+    </resultMap>
+
+    <sql id="selectSysContractVo">
+        select con_id, num, name, khmc, classify, fzr, htje, qdrq, jsje, zjly, ywsx, ykpje, wkpje, ydzje, wdzje, ydsj, fhsj, ssdqsj, csqk, htzftk, bz from sys_contract
+    </sql>
+
+    <select id="selectSysContractList" parameterType="SysContract" resultMap="SysContractResult">
+        <include refid="selectSysContractVo"/>
+        <where>  
+            <if test="num != null  and num != ''"> and num like concat('%', #{num}, '%')</if>
+            <if test="name != null  and name != ''"> and name like concat('%', #{name}, '%')</if>
+            <if test="khmc != null  and khmc != ''"> and khmc like concat('%', #{khmc}, '%')</if>
+            <if test="classify != null  and classify != ''"> and classify = #{classify}</if>
+            <if test="fzr != null  and fzr != ''"> and fzr = #{fzr}</if>
+            <if test="htje != null "> and htje = #{htje}</if>
+            <if test="qdrq != null  and qdrq != ''"> and qdrq = #{qdrq}</if>
+            <if test="jsje != null "> and jsje = #{jsje}</if>
+            <if test="zjly != null  and zjly != ''"> and zjly = #{zjly}</if>
+            <if test="ywsx != null  and ywsx != ''"> and ywsx = #{ywsx}</if>
+            <if test="ykpje != null "> and ykpje = #{ykpje}</if>
+            <if test="wkpje != null "> and wkpje = #{wkpje}</if>
+            <if test="ydzje != null "> and ydzje = #{ydzje}</if>
+            <if test="wdzje != null "> and wdzje = #{wdzje}</if>
+            <if test="ydsj != null "> and ydsj = #{ydsj}</if>
+            <if test="fhsj != null "> and fhsj = #{fhsj}</if>
+            <if test="ssdqsj != null "> and ssdqsj = #{ssdqsj}</if>
+            <if test="csqk != null  and csqk != ''"> and csqk = #{csqk}</if>
+            <if test="htzftk != null  and htzftk != ''"> and htzftk = #{htzftk}</if>
+            <if test="bz != null  and bz != ''"> and bz = #{bz}</if>
+        </where>
+    </select>
+    
+    <select id="selectSysContractByConId" parameterType="Long" resultMap="SysContractResult">
+        <include refid="selectSysContractVo"/>
+        where con_id = #{conId}
+    </select>
+        
+    <insert id="insertSysContract" parameterType="SysContract" useGeneratedKeys="true" keyProperty="conId">
+        insert into sys_contract
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="num != null">num,</if>
+            <if test="name != null">name,</if>
+            <if test="khmc != null">khmc,</if>
+            <if test="classify != null">classify,</if>
+            <if test="fzr != null">fzr,</if>
+            <if test="htje != null">htje,</if>
+            <if test="qdrq != null">qdrq,</if>
+            <if test="jsje != null">jsje,</if>
+            <if test="zjly != null">zjly,</if>
+            <if test="ywsx != null">ywsx,</if>
+            <if test="ykpje != null">ykpje,</if>
+            <if test="wkpje != null">wkpje,</if>
+            <if test="ydzje != null">ydzje,</if>
+            <if test="wdzje != null">wdzje,</if>
+            <if test="ydsj != null">ydsj,</if>
+            <if test="fhsj != null">fhsj,</if>
+            <if test="ssdqsj != null">ssdqsj,</if>
+            <if test="csqk != null">csqk,</if>
+            <if test="htzftk != null">htzftk,</if>
+            <if test="bz != null">bz,</if>
+         </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test="num != null">#{num},</if>
+            <if test="name != null">#{name},</if>
+            <if test="khmc != null">#{khmc},</if>
+            <if test="classify != null">#{classify},</if>
+            <if test="fzr != null">#{fzr},</if>
+            <if test="htje != null">#{htje},</if>
+            <if test="qdrq != null">#{qdrq},</if>
+            <if test="jsje != null">#{jsje},</if>
+            <if test="zjly != null">#{zjly},</if>
+            <if test="ywsx != null">#{ywsx},</if>
+            <if test="ykpje != null">#{ykpje},</if>
+            <if test="wkpje != null">#{wkpje},</if>
+            <if test="ydzje != null">#{ydzje},</if>
+            <if test="wdzje != null">#{wdzje},</if>
+            <if test="ydsj != null">#{ydsj},</if>
+            <if test="fhsj != null">#{fhsj},</if>
+            <if test="ssdqsj != null">#{ssdqsj},</if>
+            <if test="csqk != null">#{csqk},</if>
+            <if test="htzftk != null">#{htzftk},</if>
+            <if test="bz != null">#{bz},</if>
+         </trim>
+    </insert>
+
+    <update id="updateSysContract" parameterType="SysContract">
+        update sys_contract
+        <trim prefix="SET" suffixOverrides=",">
+            <if test="num != null">num = #{num},</if>
+            <if test="name != null">name = #{name},</if>
+            <if test="khmc != null">khmc = #{khmc},</if>
+            <if test="classify != null">classify = #{classify},</if>
+            <if test="fzr != null">fzr = #{fzr},</if>
+            <if test="htje != null">htje = #{htje},</if>
+            <if test="qdrq != null">qdrq = #{qdrq},</if>
+            <if test="jsje != null">jsje = #{jsje},</if>
+            <if test="zjly != null">zjly = #{zjly},</if>
+            <if test="ywsx != null">ywsx = #{ywsx},</if>
+            <if test="ykpje != null">ykpje = #{ykpje},</if>
+            <if test="wkpje != null">wkpje = #{wkpje},</if>
+            <if test="ydzje != null">ydzje = #{ydzje},</if>
+            <if test="wdzje != null">wdzje = #{wdzje},</if>
+            ydsj = #{ydsj},
+            fhsj = #{fhsj},
+            ssdqsj = #{ssdqsj},
+            <if test="csqk != null">csqk = #{csqk},</if>
+            <if test="htzftk != null">htzftk = #{htzftk},</if>
+            <if test="bz != null">bz = #{bz},</if>
+        </trim>
+        where con_id = #{conId}
+    </update>
+
+    <delete id="deleteSysContractByConId" parameterType="Long">
+        delete from sys_contract where con_id = #{conId}
+    </delete>
+
+    <delete id="deleteSysContractByConIds" parameterType="String">
+        delete from sys_contract where con_id in 
+        <foreach item="conId" collection="array" open="(" separator="," close=")">
+            #{conId}
+        </foreach>
+    </delete>
+</mapper>
