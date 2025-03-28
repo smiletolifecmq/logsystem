@@ -44,6 +44,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
             <if test="zqHtbh != null  and zqHtbh != ''"> and zq_htbh = #{zqHtbh}</if>
             <if test="zqJfdw != null  and zqJfdw != ''"> and zq_jfdw = #{zqJfdw}</if>
             <if test="zqZrr != null  and zqZrr != ''"> and zq_zrr = #{zqZrr}</if>
+            <if test="zqTime != null"> and YEAR(zq_time) = YEAR(#{zqTime})</if>
             and is_delete = 0
         </where>
     </select>

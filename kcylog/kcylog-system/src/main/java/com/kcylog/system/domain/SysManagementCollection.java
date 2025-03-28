@@ -37,7 +37,7 @@ public class SysManagementCollection extends BaseEntity
     private String ysHtbh;
 
     /** 负责部门 */
-    @Excel(name = "责任部门")
+    @Excel(name = "负责部门(责任部门)")
     private String ysFzbm;
 
     /** 负责人 */

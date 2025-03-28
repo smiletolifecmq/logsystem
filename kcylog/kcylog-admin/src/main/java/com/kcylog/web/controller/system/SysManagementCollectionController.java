@@ -24,6 +24,8 @@ import org.springframework.web.bind.annotation.*;
 import javax.servlet.http.HttpServletResponse;
 import java.math.BigDecimal;
 import java.math.RoundingMode;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.Period;
@@ -606,8 +608,7 @@ public class SysManagementCollectionController extends BaseController
     }
 
     @GetMapping(value = "/exportJyyb")
-    public AjaxResult exportJyyb(SysManagementCollection sysManagementCollection)
-    {
+    public AjaxResult exportJyyb(SysManagementCollection sysManagementCollection) throws ParseException {
         if (sysManagementCollection.getYsKprqCs() == null){
             return error("未选择上报日期");
         }
@@ -690,6 +691,10 @@ public class SysManagementCollectionController extends BaseController
 
         //获取全部责权信息
         SysManagementResponsibilities param = new SysManagementResponsibilities();
+        String dateString = sysManagementCollection.getYsKprqCs();
+        SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
+        Date date = sdf.parse(dateString);
+        param.setZqTime(date);
         List<SysManagementResponsibilities> sysManagementResponsibilities = sysManagementResponsibilitiesService.selectSysManagementResponsibilitiesList(param);
         int qzxs = 0;
         BigDecimal qzje = BigDecimal.ZERO;
