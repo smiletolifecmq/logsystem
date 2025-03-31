@@ -419,11 +419,6 @@
             >删除</el-button
           >
           <el-button
-            v-if="
-              ['图', '售', '数'].some((substring) =>
-                scope.row.projectNum.includes(substring)
-              )
-            "
             size="mini"
             type="text"
             icon="el-icon-picture"
@@ -431,6 +426,19 @@
             :disabled="scope.row.mapShow != 1"
             v-hasPermi="['system:project:geoInfo']"
             >查看选图</el-button
+          >
+          <el-button
+            size="mini"
+            v-if="
+              !['图', '售', '数'].some((substring) =>
+                scope.row.projectNum.includes(substring)
+              )
+            "
+            type="text"
+            icon="el-icon-upload"
+            @click="handleGeo(form)"
+            v-hasPermi="['system:project:uploadfwx']"
+            >上传范围线</el-button
           >
         </template>
       </el-table-column>
@@ -673,7 +681,6 @@
               </template>
               {{ form.workcontentAlias }}
               <el-button
-                v-if="showFetailXt(form)"
                 type="text"
                 icon="el-icon-picture"
                 @click="handleGeo(form)"

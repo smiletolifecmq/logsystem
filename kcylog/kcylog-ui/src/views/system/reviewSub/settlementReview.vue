@@ -289,11 +289,6 @@
                       </template>
                       {{ formInfo.project.workcontentAlias }}
                       <el-button
-                        v-if="
-                          ['图', '售', '数'].some((substring) =>
-                            formInfo.project.projectNum.includes(substring)
-                          )
-                        "
                         size="mini"
                         type="text"
                         icon="el-icon-picture"
