@@ -452,14 +452,16 @@ public class SysProjectController extends BaseController {
                 }
         }
 
-        List<SysProjectGeoinfo> sysProjectGeoinfo = sysProjectGeoinfoService.selectSysProjectGeoinfoByProjectIds(projectId);
-        Map<Long, Integer> keyValueMap = new HashMap<>();
-        for (SysProjectGeoinfo obj : sysProjectGeoinfo){
-            keyValueMap.put(obj.getProjectId(), 1);
-        }
-        for (FqProjectProcess projectProcess : list) {
-            if (keyValueMap.containsKey(projectProcess.getProjectId())){
-                projectProcess.setMapShow((long)1);
+        if (projectId.size() > 0){
+            List<SysProjectGeoinfo> sysProjectGeoinfo = sysProjectGeoinfoService.selectSysProjectGeoinfoByProjectIds(projectId);
+            Map<Long, Integer> keyValueMap = new HashMap<>();
+            for (SysProjectGeoinfo obj : sysProjectGeoinfo){
+                keyValueMap.put(obj.getProjectId(), 1);
+            }
+            for (FqProjectProcess projectProcess : list) {
+                if (keyValueMap.containsKey(projectProcess.getProjectId())){
+                    projectProcess.setMapShow((long)1);
+                }
             }
         }
         return getDataTable(list);
@@ -484,14 +486,16 @@ public class SysProjectController extends BaseController {
                 project.setOneCheckDays(0);
             }
         }
-        List<SysProjectGeoinfo> sysProjectGeoinfo = sysProjectGeoinfoService.selectSysProjectGeoinfoByProjectIds(projectId);
-        Map<Long, Integer> keyValueMap = new HashMap<>();
-        for (SysProjectGeoinfo obj : sysProjectGeoinfo){
-            keyValueMap.put(obj.getProjectId(), 1);
-        }
-        for (SysProject project : list) {
-            if (keyValueMap.containsKey(project.getProjectId())){
-                project.setMapShow((long)1);
+        if (projectId.size() > 0){
+            List<SysProjectGeoinfo> sysProjectGeoinfo = sysProjectGeoinfoService.selectSysProjectGeoinfoByProjectIds(projectId);
+            Map<Long, Integer> keyValueMap = new HashMap<>();
+            for (SysProjectGeoinfo obj : sysProjectGeoinfo){
+                keyValueMap.put(obj.getProjectId(), 1);
+            }
+            for (SysProject project : list) {
+                if (keyValueMap.containsKey(project.getProjectId())){
+                    project.setMapShow((long)1);
+                }
             }
         }
         return getDataTable(list);
@@ -516,14 +520,16 @@ public class SysProjectController extends BaseController {
                 project.setTwoCheckDays(0);
             }
         }
-        List<SysProjectGeoinfo> sysProjectGeoinfo = sysProjectGeoinfoService.selectSysProjectGeoinfoByProjectIds(projectId);
-        Map<Long, Integer> keyValueMap = new HashMap<>();
-        for (SysProjectGeoinfo obj : sysProjectGeoinfo){
-            keyValueMap.put(obj.getProjectId(), 1);
-        }
-        for (SysProject project : list) {
-            if (keyValueMap.containsKey(project.getProjectId())){
-                project.setMapShow((long)1);
+        if (projectId.size() > 0){
+            List<SysProjectGeoinfo> sysProjectGeoinfo = sysProjectGeoinfoService.selectSysProjectGeoinfoByProjectIds(projectId);
+            Map<Long, Integer> keyValueMap = new HashMap<>();
+            for (SysProjectGeoinfo obj : sysProjectGeoinfo){
+                keyValueMap.put(obj.getProjectId(), 1);
+            }
+            for (SysProject project : list) {
+                if (keyValueMap.containsKey(project.getProjectId())){
+                    project.setMapShow((long)1);
+                }
             }
         }
         return getDataTable(list);
