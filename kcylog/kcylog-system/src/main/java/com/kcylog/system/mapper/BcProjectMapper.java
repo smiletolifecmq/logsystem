@@ -65,4 +65,5 @@ public interface BcProjectMapper
 
     public int deleteBcProjectByXMBH(String xmbh);
 
+    public List<BcProject> selectSysProjectGeoinfoByProjectIds(List<String> projectIds);
 }

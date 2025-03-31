@@ -78,6 +78,9 @@ public class SysReviewSubController extends BaseController
     @Autowired
     private ISysProjectGeoinfoService sysProjectGeoinfoService;
 
+    @Autowired
+    private IBcProjectService bcProjectService;
+
     /**
      * 查询审核单列表
      */
@@ -193,7 +196,9 @@ public class SysReviewSubController extends BaseController
     @GetMapping(value = "/{reviewId}")
     public AjaxResult getInfo(@PathVariable("reviewId") String reviewId) throws JsonProcessingException {
         SysReviewSub review = sysReviewSubService.selectSysReviewSubByReviewId(reviewId);
-        List<SysProjectGeoinfo> sysProjectGeoinfo = sysProjectGeoinfoService.selectSysProjectGeoinfoByProjectId(review.getProject().getProjectId());
+        BcProject param = new BcProject();
+        param.setXmbh(review.getProject().getProjectNum());
+        List<BcProject> sysProjectGeoinfo = bcProjectService.selectBcProjectList(param);
         if (sysProjectGeoinfo.size() > 0){
             review.getProject().setMapShow((long)1);
         }else {

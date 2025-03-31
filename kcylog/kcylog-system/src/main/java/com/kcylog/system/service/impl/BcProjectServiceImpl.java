@@ -97,4 +97,10 @@ public class BcProjectServiceImpl implements IBcProjectService
     {
         return bcProjectMapper.deleteBcProjectByXMBH(xmbh);
     }
+
+    @Override
+    public List<BcProject> selectSysProjectGeoinfoByProjectIds(List<String> projectIds)
+    {
+        return bcProjectMapper.selectSysProjectGeoinfoByProjectIds(projectIds);
+    }
 }

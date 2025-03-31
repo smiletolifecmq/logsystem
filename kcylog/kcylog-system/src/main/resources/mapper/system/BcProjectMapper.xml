@@ -141,4 +141,12 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
     <delete id="deleteBcProjectByXMBH" parameterType="String">
         delete from bc_project where xmbh = #{xmbh}
     </delete>
+
+    <select id="selectSysProjectGeoinfoByProjectIds" parameterType="java.util.List" resultMap="BcProjectResult">
+        <include refid="selectBcProjectVo"/>
+        WHERE xmbh IN
+        <foreach collection="list" item="xmbh" open="(" separator="," close=")">
+            #{xmbh}
+        </foreach>
+    </select>
 </mapper>
