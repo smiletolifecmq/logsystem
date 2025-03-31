@@ -15,6 +15,13 @@ spring:
                 url: jdbc:postgresql://192.168.150.250:5432/znch_fzis
                 username: fq
                 password: fq@abc
+            slaveoracle:
+                # 从数据源开关/默认关闭
+                enabled: true
+                url: jdbc:oracle:thin:@10.211.55.3:1521/oracle11g
+                username: sde
+                password: 123456
+                validationQuery: select 1 from dual
             # 初始连接数
             initialSize: 5
             # 最小连接池数量

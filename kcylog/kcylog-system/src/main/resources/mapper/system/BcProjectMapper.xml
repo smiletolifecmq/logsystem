@@ -1,0 +1,140 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.kcylog.system.mapper.BcProjectMapper">
+    
+    <resultMap type="BcProject" id="BcProjectResult">
+        <result property="objectid"    column="objectid"    />
+        <result property="shape"    column="shape"    />
+        <result property="xmmc"    column="xmmc"    />
+        <result property="xmbh"    column="xmbh"    />
+        <result property="xmlx"    column="xmlx"    />
+        <result property="djsj"    column="djsj"    />
+        <result property="fzr"    column="fzr"    />
+        <result property="wtdw"    column="wtdw"    />
+        <result property="kssj"    column="kssj"    />
+        <result property="jssj"    column="jssj"    />
+        <result property="gznr"    column="gznr"    />
+        <result property="bm"    column="bm"    />
+        <result property="gclx"    column="gclx"    />
+        <result property="lx"    column="lx"    />
+    </resultMap>
+
+    <sql id="selectBcProjectVo">
+        select objectid, shape, xmmc, xmbh, xmlx, djsj, fzr, wtdw, kssj, jssj, gznr, bm, gclx, lx from bc_project
+    </sql>
+
+    <select id="selectBcProjectList" parameterType="BcProject" resultMap="BcProjectResult">
+        <include refid="selectBcProjectVo"/>
+        <where>  
+            <if test="objectid != null "> and objectid = #{objectid}</if>
+            <if test="shape != null  and shape != ''"> and shape = #{shape}</if>
+            <if test="xmmc != null  and xmmc != ''"> and xmmc = #{xmmc}</if>
+            <if test="xmbh != null  and xmbh != ''"> and xmbh = #{xmbh}</if>
+            <if test="xmlx != null  and xmlx != ''"> and xmlx = #{xmlx}</if>
+            <if test="djsj != null "> and djsj = #{djsj}</if>
+            <if test="fzr != null  and fzr != ''"> and fzr = #{fzr}</if>
+            <if test="wtdw != null  and wtdw != ''"> and wtdw = #{wtdw}</if>
+            <if test="kssj != null "> and kssj = #{kssj}</if>
+            <if test="jssj != null "> and jssj = #{jssj}</if>
+            <if test="gznr != null  and gznr != ''"> and gznr = #{gznr}</if>
+            <if test="bm != null  and bm != ''"> and bm = #{bm}</if>
+            <if test="gclx != null "> and gclx = #{gclx}</if>
+            <if test="lx != null "> and lx = #{lx}</if>
+        </where>
+    </select>
+    
+    <select id="selectBcProjectByObjectid" parameterType="Long" resultMap="BcProjectResult">
+        <include refid="selectBcProjectVo"/>
+        where objectid = #{objectid}
+    </select>
+
+    <insert id="insertBcProject" parameterType="BcProject" useGeneratedKeys="true">
+        insert into bc_project
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="shape != null">shape,</if>
+            <if test="xmmc != null">xmmc,</if>
+            <if test="xmbh != null">xmbh,</if>
+            <if test="xmlx != null">xmlx,</if>
+            <if test="djsj != null">djsj,</if>
+            <if test="fzr != null">fzr,</if>
+            <if test="wtdw != null">wtdw,</if>
+            <if test="kssj != null">kssj,</if>
+            <if test="jssj != null">jssj,</if>
+            <if test="gznr != null">gznr,</if>
+            <if test="bm != null">bm,</if>
+            <if test="gclx != null">gclx,</if>
+            <if test="lx != null">lx,</if>
+         </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test="objectid != null">#{objectid},</if>
+            <if test="shape != null and shape.length() &lt;= 3000">
+                SDE.ST_GEOMETRY(#{shape}, 4549),
+            </if>
+            <if test="shape != null and shape.length() &gt; 3000">
+                SDE.ST_GEOMETRY(
+                <trim prefix="TO_CLOB(" suffix=")" suffixOverrides="||">
+                    <foreach collection="clobFragments" item="fragment" separator="||">
+                        TO_CLOB(#{fragment})
+                    </foreach>
+                </trim>,
+                4549),
+            </if>
+            <if test="xmmc != null">#{xmmc},</if>
+            <if test="xmbh != null">#{xmbh},</if>
+            <if test="xmlx != null">#{xmlx},</if>
+            <if test="djsj != null">#{djsj},</if>
+            <if test="fzr != null">#{fzr},</if>
+            <if test="wtdw != null">#{wtdw},</if>
+            <if test="kssj != null">#{kssj},</if>
+            <if test="jssj != null">#{jssj},</if>
+            <if test="gznr != null">#{gznr},</if>
+            <if test="bm != null">#{bm},</if>
+            <if test="gclx != null">#{gclx},</if>
+            <if test="lx != null">#{lx},</if>
+         </trim>
+    </insert>
+
+    <update id="updateBcProject" parameterType="BcProject">
+        update bc_project
+        <trim prefix="SET" suffixOverrides=",">
+            <if test="shape != null and shape.length() &lt;= 3000">
+                shape = SDE.ST_GEOMETRY(#{shape}, 4549),
+            </if>
+            <if test="shape != null and shape.length() &gt; 3000">
+                shape = SDE.ST_GEOMETRY(
+                <trim prefix="TO_CLOB(" suffix=")" suffixOverrides="||">
+                    <foreach collection="clobFragments" item="fragment" separator="||">
+                        TO_CLOB(#{fragment})
+                    </foreach>
+                </trim>,
+                4549),
+            </if>
+            <if test="xmmc != null">xmmc = #{xmmc},</if>
+            <if test="xmbh != null">xmbh = #{xmbh},</if>
+            <if test="xmlx != null">xmlx = #{xmlx},</if>
+            <if test="djsj != null">djsj = #{djsj},</if>
+            <if test="fzr != null">fzr = #{fzr},</if>
+            <if test="wtdw != null">wtdw = #{wtdw},</if>
+            <if test="kssj != null">kssj = #{kssj},</if>
+            <if test="jssj != null">jssj = #{jssj},</if>
+            <if test="gznr != null">gznr = #{gznr},</if>
+            <if test="bm != null">bm = #{bm},</if>
+            <if test="gclx != null">gclx = #{gclx},</if>
+            <if test="lx != null">lx = #{lx},</if>
+        </trim>
+        where objectid = #{objectid}
+    </update>
+
+    <delete id="deleteBcProjectByObjectid" parameterType="Long">
+        delete from bc_project where objectid = #{objectid}
+    </delete>
+
+    <delete id="deleteBcProjectByObjectids" parameterType="String">
+        delete from bc_project where objectid in 
+        <foreach item="objectid" collection="array" open="(" separator="," close=")">
+            #{objectid}
+        </foreach>
+    </delete>
+</mapper>

@@ -193,6 +193,13 @@
                 <version>42.2.18</version>
             </dependency>
 
+            <!--oracle驱动-->
+            <dependency>
+                <groupId>com.oracle</groupId>
+                <artifactId>ojdbc6</artifactId>
+                <version>11.2.0.3</version>
+            </dependency>
+
 
         </dependencies>
     </dependencyManagement>
