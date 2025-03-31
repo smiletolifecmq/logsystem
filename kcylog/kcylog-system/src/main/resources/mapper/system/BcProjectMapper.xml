@@ -137,4 +137,8 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
             #{objectid}
         </foreach>
     </delete>
+
+    <delete id="deleteBcProjectByXMBH" parameterType="String">
+        delete from bc_project where xmbh = #{xmbh}
+    </delete>
 </mapper>

@@ -62,4 +62,7 @@ public interface BcProjectMapper
      * @return 结果
      */
     public int deleteBcProjectByObjectids(Long[] objectids);
+
+    public int deleteBcProjectByXMBH(String xmbh);
+
 }

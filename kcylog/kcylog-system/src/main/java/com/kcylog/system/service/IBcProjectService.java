@@ -59,4 +59,6 @@ public interface IBcProjectService
      * @return 结果
      */
     public int deleteBcProjectByObjectid(Long objectid);
+
+    public int deleteBcProjectByXMBH(String xmbh);
 }

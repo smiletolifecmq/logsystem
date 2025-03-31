@@ -1200,7 +1200,9 @@ export default {
       // this.centerDialogVisible = true;
       window.open(
         "http://192.168.110.100/fqismap/?sysname=ViewMapInFQIS&salemapid=" +
-          value.projectId,
+          value.projectId +
+          "&xmbh=" +
+          value.projectNum,
         "_blank"
       );
     },

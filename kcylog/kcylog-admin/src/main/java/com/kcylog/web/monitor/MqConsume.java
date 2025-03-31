@@ -15,6 +15,7 @@ import org.springframework.stereotype.Component;
 import java.io.IOException;
 import java.math.BigDecimal;
 import java.text.ParseException;
+import java.time.ZoneId;
 import java.time.format.DateTimeFormatter;
 import java.util.Date;
 import java.util.List;
@@ -71,6 +72,9 @@ public class MqConsume {
 
     @Autowired
     private IProjectChargeInfoService projectChargeInfoService;
+
+    @Autowired
+    private IBcProjectService bcProjectService;
     /**
      * 监听一个简单的队列，队列不存在时候会创建
      */
@@ -239,6 +243,7 @@ public class MqConsume {
                     sysProjectSelectmapTfinfoService.deleteSysProjectSelectmapTfinfoByProjectId(sysProject.getProjectId());
                     fqProjectProcessService.deleteFqProjectProcessById(sysProject.getProjectId());
                     sysProjectValueService.deleteSysProjectValueByProjectId(sysProject.getProjectId());
+                    bcProjectService.deleteBcProjectByXMBH(sysProject.getProjectNum());
                 }else {
                     if (sysProjectService.checkProjectKeyUniqueByViewProjectId(mqMessage.getProjectId()) != null) {
                         sysProject.setProjectId(sysProjectService.checkProjectKeyUniqueByViewProjectId(mqMessage.getProjectId()).getProjectId());
@@ -257,8 +262,42 @@ public class MqConsume {
                     //同步坐标系
                     List<ViewFqSalemapSelectgeoGeoinfo> geoInfoList = viewFqSalemapSelectgeoGeoinfoService.selectViewFqSalemapSelectgeoGeoinfoByProjectId(Long.parseLong(mqMessage.getProjectId()));
                     projectGeoinfoService.deleteSysProjectGeoinfoByProjectId(sysProject.getProjectId());
+                    bcProjectService.deleteBcProjectByXMBH(sysProject.getProjectNum());
                     if (geoInfoList != null){
                         for (ViewFqSalemapSelectgeoGeoinfo geoInfo : geoInfoList){
+                            BcProject newbcproject = new BcProject();
+                            newbcproject.setXmmc(viewFqProject.getProjectName());
+                            newbcproject.setXmbh(viewFqProject.getProjectCode());
+                            if (viewFqProject.getProjectTypeName() != null){
+                                newbcproject.setXmlx(viewFqProject.getProjectTypeName());
+                            }
+                            if (viewFqProject.getRegisterTime() != null){
+                                Date djsj = Date.from(viewFqProject.getRegisterTime().atZone(ZoneId.systemDefault()).toInstant());
+                                newbcproject.setDjsj(djsj);
+                            }
+                            if (sysProject.getUserNameAlias() != null){
+                                newbcproject.setFzr(sysProject.getUserNameAlias());
+                            }
+                            if (viewFqProject.getCustomerName() != null){
+                                newbcproject.setWtdw(viewFqProject.getCustomerName());
+                            }
+                            if (viewFqProject.getArrangeStartTime() != null){
+                                Date kssj = Date.from(viewFqProject.getArrangeStartTime().atZone(ZoneId.systemDefault()).toInstant());
+                                newbcproject.setKssj(kssj);
+                            }
+                            if (viewFqProject.getArrangeEndTime() != null){
+                                Date jssj = Date.from(viewFqProject.getArrangeEndTime().atZone(ZoneId.systemDefault()).toInstant());
+                                newbcproject.setJssj(jssj);
+                            }
+                            if (viewFqProject.getJobContent() != null){
+                                newbcproject.setGznr(viewFqProject.getJobContent());
+                            }
+                            if (viewFqProject.getJobOrgName() != null){
+                                newbcproject.setBm(viewFqProject.getJobOrgName());
+                            }
+                            newbcproject.setGclx((long)1);
+                            newbcproject.setLx((long)1);
+
                             SysProjectGeoinfo sysProjectGeoinfo = new SysProjectGeoinfo();
                             if (geoInfo != null){
                                 if (geoInfo.getGeometry() != null){
@@ -275,6 +314,7 @@ public class MqConsume {
                                 }
                                 if (geoInfo.getGeometryGauss2000() != null){
                                     sysProjectGeoinfo.setGeometryGauss2000(geoInfo.getGeometryGauss2000());
+                                    newbcproject.setShape(geoInfo.getGeometryGauss2000());
                                 }
                                 if (geoInfo.getBufferGeometryGauss2000() != null){
                                     sysProjectGeoinfo.setBufferGeometryGauss2000(geoInfo.getBufferGeometryGauss2000());
@@ -285,6 +325,9 @@ public class MqConsume {
                                 sysProjectGeoinfo.setProjectId(sysProject.getProjectId());
                             }
                             projectGeoinfoService.insertSysProjectGeoinfo(sysProjectGeoinfo);
+                            if (newbcproject.getShape() != null){
+                                bcProjectService.insertBcProject(newbcproject);
+                            }
                         }
 
                     }
@@ -457,6 +500,7 @@ public class MqConsume {
                 fqProjectProcessService.deleteFqProjectProcessById(sysProject.getProjectId());
                 sysProjectValueService.deleteSysProjectValueByProjectId(sysProject.getProjectId());
                 projectChargeInfoService.deleteProjectChargeInfoById(mqMessage.getProjectId());
+                bcProjectService.deleteBcProjectByXMBH(sysProject.getProjectNum());
             }
 
             System.out.println("通过Message:{}" + mqMessage.getOpType());

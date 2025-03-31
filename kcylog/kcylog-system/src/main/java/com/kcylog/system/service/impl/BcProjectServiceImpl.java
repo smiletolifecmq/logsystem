@@ -91,4 +91,10 @@ public class BcProjectServiceImpl implements IBcProjectService
     {
         return bcProjectMapper.deleteBcProjectByObjectid(objectid);
     }
+
+    @Override
+    public int deleteBcProjectByXMBH(String xmbh)
+    {
+        return bcProjectMapper.deleteBcProjectByXMBH(xmbh);
+    }
 }
