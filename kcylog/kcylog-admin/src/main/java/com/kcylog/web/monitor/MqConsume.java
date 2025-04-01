@@ -17,6 +17,7 @@ import java.math.BigDecimal;
 import java.text.ParseException;
 import java.time.ZoneId;
 import java.time.format.DateTimeFormatter;
+import java.util.Arrays;
 import java.util.Date;
 import java.util.List;
 
@@ -102,6 +103,9 @@ public class MqConsume {
                 sysProject.setProjectNameAlias(viewFqProject.getProjectName());
                 sysProject.setProjectNum(viewFqProject.getProjectCode());
                 DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss");
+
+                List<String> substrings = Arrays.asList("图", "售", "数");
+                boolean contains = substrings.stream().anyMatch(sysProject.getProjectNum()::contains);
 
                 sysProject.setViewProjectId(mqMessage.getProjectId());
                 if (viewFqProject.getProjectTypeName() != null){
@@ -243,7 +247,9 @@ public class MqConsume {
                     sysProjectSelectmapTfinfoService.deleteSysProjectSelectmapTfinfoByProjectId(sysProject.getProjectId());
                     fqProjectProcessService.deleteFqProjectProcessById(sysProject.getProjectId());
                     sysProjectValueService.deleteSysProjectValueByProjectId(sysProject.getProjectId());
-                    bcProjectService.deleteBcProjectByXMBH(sysProject.getProjectNum());
+                    if (contains){
+                        bcProjectService.deleteBcProjectByXMBH(sysProject.getProjectNum());
+                    }
                 }else {
                     if (sysProjectService.checkProjectKeyUniqueByViewProjectId(mqMessage.getProjectId()) != null) {
                         sysProject.setProjectId(sysProjectService.checkProjectKeyUniqueByViewProjectId(mqMessage.getProjectId()).getProjectId());
@@ -262,7 +268,10 @@ public class MqConsume {
                     //同步坐标系
                     List<ViewFqSalemapSelectgeoGeoinfo> geoInfoList = viewFqSalemapSelectgeoGeoinfoService.selectViewFqSalemapSelectgeoGeoinfoByProjectId(Long.parseLong(mqMessage.getProjectId()));
                     projectGeoinfoService.deleteSysProjectGeoinfoByProjectId(sysProject.getProjectId());
-                    bcProjectService.deleteBcProjectByXMBH(sysProject.getProjectNum());
+
+                    if (contains){
+                        bcProjectService.deleteBcProjectByXMBH(sysProject.getProjectNum());
+                    }
                     if (geoInfoList != null){
                         for (ViewFqSalemapSelectgeoGeoinfo geoInfo : geoInfoList){
                             BcProject newbcproject = new BcProject();
@@ -325,7 +334,7 @@ public class MqConsume {
                                 sysProjectGeoinfo.setProjectId(sysProject.getProjectId());
                             }
                             projectGeoinfoService.insertSysProjectGeoinfo(sysProjectGeoinfo);
-                            if (newbcproject.getShape() != null){
+                            if (newbcproject.getShape() != null && contains){
                                 bcProjectService.insertBcProject(newbcproject);
                             }
                         }
@@ -500,7 +509,13 @@ public class MqConsume {
                 fqProjectProcessService.deleteFqProjectProcessById(sysProject.getProjectId());
                 sysProjectValueService.deleteSysProjectValueByProjectId(sysProject.getProjectId());
                 projectChargeInfoService.deleteProjectChargeInfoById(mqMessage.getProjectId());
-                bcProjectService.deleteBcProjectByXMBH(sysProject.getProjectNum());
+                List<String> substrings = Arrays.asList("图", "售", "数");
+                if (viewFqProject != null && viewFqProject.getProjectCode() != null){
+                    boolean contains = substrings.stream().anyMatch(viewFqProject.getProjectCode()::contains);
+                    if (contains){
+                        bcProjectService.deleteBcProjectByXMBH(sysProject.getProjectNum());
+                    }
+                }
             }
 
             System.out.println("通过Message:{}" + mqMessage.getOpType());
