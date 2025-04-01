@@ -98,6 +98,12 @@
             <version>11.2.0.3</version>
         </dependency>
 
+        <dependency>
+            <groupId>com.aspose</groupId>
+            <artifactId>aspose-cad</artifactId>
+            <version>23.8</version>
+        </dependency>
+
 
     </dependencies>
 

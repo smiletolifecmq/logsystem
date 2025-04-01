@@ -63,4 +63,6 @@ public interface IBcProjectService
     public int deleteBcProjectByXMBH(String xmbh);
 
     public List<BcProject> selectSysProjectGeoinfoByProjectIds(List<String> projectIds);
+
+    public BcProject selectBcProjectByXmbh(String xmbh);
 }

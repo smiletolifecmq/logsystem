@@ -111,20 +111,10 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
                 </trim>,
                 4549),
             </if>
-            <if test="xmmc != null">xmmc = #{xmmc},</if>
-            <if test="xmbh != null">xmbh = #{xmbh},</if>
-            <if test="xmlx != null">xmlx = #{xmlx},</if>
-            <if test="djsj != null">djsj = #{djsj},</if>
-            <if test="fzr != null">fzr = #{fzr},</if>
-            <if test="wtdw != null">wtdw = #{wtdw},</if>
-            <if test="kssj != null">kssj = #{kssj},</if>
-            <if test="jssj != null">jssj = #{jssj},</if>
-            <if test="gznr != null">gznr = #{gznr},</if>
-            <if test="bm != null">bm = #{bm},</if>
             <if test="gclx != null">gclx = #{gclx},</if>
             <if test="lx != null">lx = #{lx},</if>
         </trim>
-        where objectid = #{objectid}
+        where xmbh = #{xmbh}
     </update>
 
     <delete id="deleteBcProjectByObjectid" parameterType="Long">
@@ -148,5 +138,10 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
         <foreach collection="list" item="xmbh" open="(" separator="," close=")">
             #{xmbh}
         </foreach>
+    </select>
+
+    <select id="selectBcProjectByXmbh" parameterType="String" resultMap="BcProjectResult">
+        <include refid="selectBcProjectVo"/>
+        where xmbh = #{xmbh}
     </select>
 </mapper>

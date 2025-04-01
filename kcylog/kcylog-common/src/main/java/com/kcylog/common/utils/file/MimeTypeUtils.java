@@ -38,7 +38,8 @@ public class MimeTypeUtils
             // pdf
             "pdf",
             // 软件
-            "exe"
+            "exe",
+            "dwg"
             };
 
     public static String getExtension(String prefix)

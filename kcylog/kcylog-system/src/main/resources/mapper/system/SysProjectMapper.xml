@@ -788,4 +788,8 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
             </if>
         </where>
     </select>
+
+    <select id="selectSysProjectByProjectNum" parameterType="String" resultMap="SysProjectResult">
+        select * from sys_project where project_num = #{projectNum}
+    </select>
 </mapper>

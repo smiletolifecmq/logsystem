@@ -185,3 +185,11 @@ export function listProjectOperateValue(query) {
     params: query
   })
 }
+
+export function updateCad(data) {
+  return request({
+    url: '/system/project/rangeLine',
+    method: 'post',
+    data: data
+  })
+}

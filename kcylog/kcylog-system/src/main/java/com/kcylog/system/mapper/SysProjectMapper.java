@@ -116,4 +116,6 @@ public interface SysProjectMapper
     public List<SysProject> selectSysProjectListForFbTwoCheck(SysProject sysProject);
 
     public List<SysProject> listProjectOperateValue(SysProject sysProject);
+
+    public SysProject selectSysProjectByProjectNum(String xmbh);
 }

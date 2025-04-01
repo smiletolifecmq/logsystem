@@ -1097,4 +1097,40 @@ public class SysProjectController extends BaseController {
         return getDataTable(list);
     }
 
+    @Log(title = "项目范围线", businessType = BusinessType.INSERT)
+    @PostMapping("/rangeLine")
+    public AjaxResult rangeLine(@RequestBody BcProject bcProject) throws ParseException {
+        SysProject sysProject = sysProjectService.selectSysProjectByProjectNum(bcProject.getXmbh());
+        if (sysProject == null){
+            return error("项目不存在");
+        }
+        BcProject oldObj = bcProjectService.selectBcProjectByXmbh(bcProject.getXmbh());
+        if (oldObj != null){
+            bcProjectService.updateBcProject(bcProject);
+        }else {
+            bcProject.setXmmc(sysProject.getProjectNameAlias());
+            bcProject.setXmbh(sysProject.getProjectNum());
+            bcProject.setXmlx(sysProject.getProjectType());
+            SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+            if (sysProject.getRegisterTime() != null && !Objects.equals(sysProject.getRegisterTime(), "")){
+                Date djsj = sdf.parse(sysProject.getRegisterTime());
+                bcProject.setDjsj(djsj);
+            }
+            bcProject.setFzr(sysProject.getUserNameAlias());
+            bcProject.setWtdw(sysProject.getRequesterAlias());
+            if (sysProject.getProjectStartAlias() != null && !Objects.equals(sysProject.getProjectStartAlias(), "")){
+                Date kssj = sdf.parse(sysProject.getProjectStartAlias());
+                bcProject.setKssj(kssj);
+            }
+            if (sysProject.getProjectEndAlias() != null && !Objects.equals(sysProject.getProjectEndAlias(), "")){
+                Date jssj = sdf.parse(sysProject.getProjectEndAlias());
+                bcProject.setJssj(jssj);
+            }
+            bcProject.setGznr(sysProject.getWorkcontentAlias());
+            bcProject.setBm(sysProject.getDepartment());
+            bcProjectService.insertBcProject(bcProject);
+        }
+        return toAjax(1);
+    }
+
 }

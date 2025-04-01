@@ -489,6 +489,19 @@
             :disabled="scope.row.mapShow != 1"
             >查看选图</el-button
           >
+          <el-button
+            size="mini"
+            v-if="
+              !['图', '售', '数'].some((substring) =>
+                scope.row.projectList.projectNum.includes(substring)
+              )
+            "
+            type="text"
+            icon="el-icon-picture"
+            @click="scfwx(scope.row)"
+            v-hasPermi="['system:project:uploadfwx']"
+            >上传范围线</el-button
+          >
           <el-tag
             v-show="scope.row.isArchive != 1 && scope.row.isArchive != null"
             type="success"
@@ -1283,6 +1296,44 @@
         >
       </el-table>
     </el-dialog>
+
+    <!-- 新增范围线 -->
+    <el-dialog
+      title="上传范围线"
+      :visible.sync="fwxopen"
+      width="500px"
+      append-to-body
+    >
+      <el-form ref="fwxform" :model="fwxform" label-width="80px">
+        <el-form-item label="DWG文件" required label-width="100px">
+          <FileUpload
+            ref="fileUploadModule"
+            :fileSize="200"
+            :showEncryption="true"
+            :fileType="fileType"
+            :limit="1"
+          ></FileUpload>
+        </el-form-item>
+        <el-form-item label="类型" required label-width="100px">
+          <el-cascader
+            :options="options"
+            clearable
+            v-model="lxValue"
+            @change="changeLx"
+          ></el-cascader>
+        </el-form-item>
+      </el-form>
+      <div slot="footer" class="dialog-footer">
+        <el-button
+          type="success"
+          @click="submitFormFwx"
+          :disabled="cadstatus"
+          size="mini"
+          >确认</el-button
+        >
+        <el-button @click="cancel" size="mini">取 消</el-button>
+      </div>
+    </el-dialog>
   </div>
 </template>
 <style>
@@ -1298,20 +1349,81 @@ import {
   addProject,
   updateProject,
   listProjectSelected,
+  updateCad,
 } from "@/api/system/project";
 import elDragDialog from "@/api/components/el-drag";
 import { listUnit } from "@/api/system/unit";
 import { addReview, setReviewStatus } from "@/api/system/reviewSub";
 import { excelJsExport } from "@/api/system/excelJsExport";
 import userInfo from "@/store/modules/user";
+import FileUpload from "@/components/FileCad";
 
 export default {
   name: "Project",
   directives: {
     elDragDialog,
   },
+  components: {
+    FileUpload,
+  },
+  props: {
+    fileType: {
+      type: Array,
+      default: () => ["dwg"],
+    },
+  },
   data() {
     return {
+      lxValue: [],
+      options: [
+        {
+          value: 1,
+          label: "测图类",
+          children: [
+            {
+              value: 1,
+              label: "售图项目",
+            },
+            {
+              value: 2,
+              label: "地籍图(宗地图)",
+            },
+            {
+              value: 3,
+              label: "道路竣工(地形图)",
+            },
+            {
+              value: 4,
+              label: "规划建筑竣工(地形图)",
+            },
+            {
+              value: 5,
+              label: "园林竣工(测图)",
+            },
+          ],
+        },
+        {
+          value: 2,
+          label: "工程类",
+          children: [
+            {
+              value: 6,
+              label: "土方测量",
+            },
+            {
+              value: 7,
+              label: "道路测量(含河道)",
+            },
+            {
+              value: 8,
+              label: "管线探测",
+            },
+          ],
+        },
+      ],
+      cadstatus: false,
+      fwxopen: false,
+      fwxform: {},
       exportStatus: 0,
       deptName: "",
       overTitle: "",
@@ -1562,6 +1674,48 @@ export default {
     this.getStatisticsData();
   },
   methods: {
+    changeLx() {
+      this.fwxform.gclx = this.lxValue[0];
+      this.fwxform.lx = this.lxValue[1];
+    },
+    scfwx(value) {
+      this.fwxform.xmbh = value.projectList.projectNum;
+      this.fwxopen = true;
+    },
+    submitFormFwx() {
+      if (this.fwxform.gclx == null || this.fwxform.lx == null) {
+        this.$modal.msgError("请选择工程类型～");
+        return;
+      }
+      if (
+        this.$refs.fileUploadModule.fileList.length == 0 &&
+        this.fwxform.xmbh == null
+      ) {
+        this.$modal.msgError("请上传文件～");
+        return;
+      } else if (this.$refs.fileUploadModule.fileList.length != 0) {
+        this.fwxform.shape = this.$refs.fileUploadModule.fileList[0].wkt;
+      }
+      if (
+        this.fwxform.shape == null ||
+        this.fwxform.shape == undefined ||
+        this.fwxform.shape == ""
+      ) {
+        this.$modal.msgError("请上传文件～");
+        return;
+      }
+      this.cadstatus = true;
+      this.$modal.loading("正在保存，请稍候...");
+      updateCad(this.fwxform).then((response) => {
+        this.$modal.msgSuccess("上传成功");
+        this.cadstatus = false;
+        this.fwxform = {};
+        this.fwxopen = false;
+        this.getList();
+        this.reset();
+        this.$modal.closeLoading();
+      });
+    },
     overTimeOpenExport() {
       var status = this.exportStatus;
       var value = this.deptName;
@@ -2392,10 +2546,18 @@ export default {
     cancel() {
       this.open = false;
       this.detailOpen = false;
+      this.fwxopen = false;
       this.reset();
     },
     // 表单重置
     reset() {
+      this.lxValue = [];
+      if (this.$refs.fileUploadModule != null) {
+        this.$refs.fileUploadModule.number = 0;
+        this.$refs.fileUploadModule.uploadList = [];
+        this.$refs.fileUploadModule.fileList = [];
+      }
+      this.fwxform = {};
       this.form = {
         projectId: null,
         projectNameAlias: null,

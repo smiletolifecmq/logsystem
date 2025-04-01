@@ -103,4 +103,10 @@ public class BcProjectServiceImpl implements IBcProjectService
     {
         return bcProjectMapper.selectSysProjectGeoinfoByProjectIds(projectIds);
     }
+
+    @Override
+    public BcProject selectBcProjectByXmbh(String xmbh)
+    {
+        return bcProjectMapper.selectBcProjectByXmbh(xmbh);
+    }
 }

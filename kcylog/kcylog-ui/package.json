@@ -41,6 +41,7 @@
     "clipboard": "2.0.8",
     "core-js": "3.25.3",
     "docxtemplater": "^3.40.0",
+    "dxf-parser": "^1.1.2",
     "echarts": "5.4.0",
     "element-ui": "2.15.12",
     "exceljs": "^4.4.0",

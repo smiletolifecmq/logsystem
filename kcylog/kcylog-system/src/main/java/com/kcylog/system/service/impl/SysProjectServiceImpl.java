@@ -264,4 +264,10 @@ public class SysProjectServiceImpl implements ISysProjectService
     {
         return sysProjectMapper.listProjectOperateValue(sysProject);
     }
+
+    @Override
+    public SysProject selectSysProjectByProjectNum(String xmbh)
+    {
+        return sysProjectMapper.selectSysProjectByProjectNum(xmbh);
+    }
 }
