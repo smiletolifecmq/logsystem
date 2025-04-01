@@ -224,6 +224,9 @@
             >
             </el-option>
           </el-select>
+          <span style="margin-left: 10px; color: red">
+            如果是红冲票重开，请对比金额是否一致，记得备注说明
+          </span>
         </el-form-item>
         <el-form-item label="合同名称" prop="kpHtmc" label-width="260px">
           <el-input v-model="form.kpHtmc" placeholder="请输入合同名称" />

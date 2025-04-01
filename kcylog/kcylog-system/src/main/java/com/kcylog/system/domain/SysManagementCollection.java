@@ -81,6 +81,10 @@ public class SysManagementCollection extends BaseEntity
     @Excel(name = "发函时间（发几条写几条）")
     private String ysFhsj;
 
+    private String ysFhsjOne;
+
+    private String ysFhsjTwo;
+
     /** 措施、未收回原因 */
     @Excel(name = "已采取催收措施，及未收回原因")
     private String ysCs;
@@ -130,6 +134,22 @@ public class SysManagementCollection extends BaseEntity
     private String ysKprqCs;
 
     private String ysKprqLast;
+
+    public String getYsFhsjOne() {
+        return ysFhsjOne;
+    }
+
+    public void setYsFhsjOne(String ysFhsjOne) {
+        this.ysFhsjOne = ysFhsjOne;
+    }
+
+    public String getYsFhsjTwo() {
+        return ysFhsjTwo;
+    }
+
+    public void setYsFhsjTwo(String ysFhsjTwo) {
+        this.ysFhsjTwo = ysFhsjTwo;
+    }
 
     public List<Long> getYsIds() {
         return ysIds;

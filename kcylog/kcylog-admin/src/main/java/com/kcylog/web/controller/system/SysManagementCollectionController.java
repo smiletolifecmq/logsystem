@@ -308,8 +308,7 @@ public class SysManagementCollectionController extends BaseController
     }
 
     @GetMapping(value = "/exportCs")
-    public AjaxResult exportCs(SysManagementCollection sysManagementCollection)
-    {
+    public AjaxResult exportCs(SysManagementCollection sysManagementCollection) throws ParseException {
         if (sysManagementCollection.getYsKprqCs() == null){
             return error("未选择上报日期");
         }
@@ -319,6 +318,17 @@ public class SysManagementCollectionController extends BaseController
         DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd");
         String formattedDate = firstDayOfMonth.format(formatter);
         sysManagementCollection.setYsKprqLast(formattedDate);
+
+        String input = sysManagementCollection.getYsKprqCs();
+        SimpleDateFormat inputFormat = new SimpleDateFormat("yyyy-MM-dd");
+        SimpleDateFormat outputFormat1 = new SimpleDateFormat("yyyy年MM月");
+        SimpleDateFormat outputFormat2 = new SimpleDateFormat("yyyy年M月");
+        Date date = inputFormat.parse(input);
+        String formatted1 = outputFormat1.format(date);
+        String formatted2 = outputFormat2.format(date);
+        sysManagementCollection.setYsFhsjOne(formatted1);
+        sysManagementCollection.setYsFhsjTwo(formatted2);
+
         Fhtj fhtj = new Fhtj();
         int bycsh = 0;
         int bylsh = 0;
@@ -357,8 +367,10 @@ public class SysManagementCollectionController extends BaseController
                 zglsh = zglsh + count2;
                 gzqs = gzqs + count3;
             }
-            if (years >= 3) {
+            if (years >= 3 && obj.getYsStatus() == 1){
                 snys ++;
+            }
+            if (years >= 3) {
                 if (obj.getYsFhlx() != null && !Objects.equals(obj.getYsFhlx(), "")){
                     snqs ++;
                 }
