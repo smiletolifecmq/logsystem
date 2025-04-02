@@ -488,7 +488,7 @@ public class MqConsume {
                                 sysProjectGeoinfo.setProjectId(sysProject.getProjectId());
                             }
                             projectGeoinfoService.insertSysProjectGeoinfo(sysProjectGeoinfo);
-                            if (newbcproject.getShape() != null && contains){
+                            if (newbcproject.getShape() != null && contains && newbcproject.getShape() != null && newbcproject.getShape().toUpperCase().contains("POLYGON")){
                                 bcProjectService.insertBcProject(newbcproject);
                             }
                         }
