@@ -18,9 +18,9 @@ spring:
             slaveoracle:
                 # 从数据源开关/默认关闭
                 enabled: true
-                url: jdbc:oracle:thin:@10.211.55.3:1521/oracle11g
-                username: sde
-                password: 123456
+                url: jdbc:oracle:thin:@192.168.110.100/fzkcypm
+                username: bc
+                password: salemap
                 validationQuery: select 1 from dual
             # 初始连接数
             initialSize: 5
