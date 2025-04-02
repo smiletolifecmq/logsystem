@@ -81,22 +81,21 @@ public class MqConsume {
      */
     @RabbitListener(queuesToDeclare = @Queue(name = "${spring.rabbitmq.queue}"))
     public void consumerSimpleMessage(Message message, Channel channel) throws IOException {
+        String messageStr = new String(message.getBody());
+        Gson gson = new Gson();
+        MqMessage mqMessage = gson.fromJson(messageStr, MqMessage.class);
+        //存储日志
+        Date nowTime = DateUtils.getNowDate();
+        ViewFqProjectLog viewFqProjectLog = new ViewFqProjectLog();
+        viewFqProjectLog.setOperateTime(nowTime);
+        viewFqProjectLog.setProjectCode(mqMessage.getProjectId());
+        viewFqProjectLog.setOperate(mqMessage.getOpType());
+        viewFqProjectLogService.insertViewFqProjectLog(viewFqProjectLog);
+        //获取视图数据
+        ViewFqProject viewFqProject = viewFqProjectService.selectViewFqProjectByProjectCode(Long.parseLong(mqMessage.getProjectId()));
         try {
             // 手动确认消息消费成功
             // 通过Message对象解析消息
-            String messageStr = new String(message.getBody());
-            Gson gson = new Gson();
-            MqMessage mqMessage = gson.fromJson(messageStr, MqMessage.class);
-
-            //存储日志
-            Date nowTime = DateUtils.getNowDate();
-            ViewFqProjectLog viewFqProjectLog = new ViewFqProjectLog();
-            viewFqProjectLog.setOperateTime(nowTime);
-            viewFqProjectLog.setProjectCode(mqMessage.getProjectId());
-            viewFqProjectLog.setOperate(mqMessage.getOpType());
-            viewFqProjectLogService.insertViewFqProjectLog(viewFqProjectLog);
-            //获取视图数据
-            ViewFqProject viewFqProject = viewFqProjectService.selectViewFqProjectByProjectCode(Long.parseLong(mqMessage.getProjectId()));
             if (viewFqProject != null && viewFqProject.getProjectCode() != null && !viewFqProject.getProjectCode().equals("") && !viewFqProject.getProjectCode().contains("图") && !(mqMessage.getOpType().equals("DELETE") || mqMessage.getOpType().equals("PROJECT_INVALID") || mqMessage.getOpType().equals("PROJECT_HANG") || mqMessage.getOpType().equals("PROJECT_DELETE"))){
                 //数据初始化
                 SysProject sysProject = new SysProject();
@@ -238,6 +237,26 @@ public class MqConsume {
                     sysProject.setMapScale(mapBaseinfo.getMapScale());
                 }
 
+                //同步人员安排配比
+                if (mqMessage.getOpType().equals("RESOURCE_ARRANGE_CHANGE") || (mqMessage.getOpType().equals("SECOND_CHECK") && sysProject.getTwoCheck() != null && !sysProject.getTwoCheck().equals(""))){
+                    // todo 需要同步人员安排
+                    List<ViewFqProjectWorkResourceArrange>  resourceArrange = viewFqProjectWorkResourceArrangeService.selectViewFqProjectWorkResourceArrangeByProjectId(Long.parseLong(mqMessage.getProjectId()));
+                    SysProject project = sysProjectService.checkProjectKeyUniqueByViewProjectId(mqMessage.getProjectId());
+                    sysProjectValueService.deleteSysProjectValueByProjectId(project.getProjectId());
+                    if (resourceArrange != null){
+                        for (ViewFqProjectWorkResourceArrange resourceArrange1 : resourceArrange){
+                            if(resourceArrange1 == null || resourceArrange1.getUserName() == null || resourceArrange1.getPerformanceRate() == null){
+                                continue;
+                            }
+                            SysProjectValue sysProjectValue = new SysProjectValue();
+                            sysProjectValue.setProjectId(project.getProjectId());
+                            sysProjectValue.setUserName(resourceArrange1.getUserName());
+                            sysProjectValue.setProportion(resourceArrange1.getPerformanceRate());
+                            sysProjectValueService.insertSysProjectValue(sysProjectValue);
+                        }
+                    }
+                }
+
                 if (mqMessage.getOpType().equals("DELETE") || mqMessage.getOpType().equals("PROJECT_INVALID") || mqMessage.getOpType().equals("PROJECT_HANG") || mqMessage.getOpType().equals("PROJECT_DELETE")){
                     if (sysProjectService.checkProjectKeyUniqueByViewProjectId(mqMessage.getProjectId()) != null) {
                         sysProject.setProjectId(sysProjectService.checkProjectKeyUniqueByViewProjectId(mqMessage.getProjectId()).getProjectId());
@@ -264,81 +283,6 @@ public class MqConsume {
                         sysReviewSubService.updateSubpackageTypeByProjectNum(reviewSub);
                     }else {
                         sysProjectService.insertSysProject(sysProject);
-                    }
-                    //同步坐标系
-                    List<ViewFqSalemapSelectgeoGeoinfo> geoInfoList = viewFqSalemapSelectgeoGeoinfoService.selectViewFqSalemapSelectgeoGeoinfoByProjectId(Long.parseLong(mqMessage.getProjectId()));
-                    projectGeoinfoService.deleteSysProjectGeoinfoByProjectId(sysProject.getProjectId());
-
-                    if (contains){
-                        bcProjectService.deleteBcProjectByXMBH(sysProject.getProjectNum());
-                    }
-                    if (geoInfoList != null){
-                        for (ViewFqSalemapSelectgeoGeoinfo geoInfo : geoInfoList){
-                            BcProject newbcproject = new BcProject();
-                            newbcproject.setXmmc(viewFqProject.getProjectName());
-                            newbcproject.setXmbh(viewFqProject.getProjectCode());
-                            if (viewFqProject.getProjectTypeName() != null){
-                                newbcproject.setXmlx(viewFqProject.getProjectTypeName());
-                            }
-                            if (viewFqProject.getRegisterTime() != null){
-                                Date djsj = Date.from(viewFqProject.getRegisterTime().atZone(ZoneId.systemDefault()).toInstant());
-                                newbcproject.setDjsj(djsj);
-                            }
-                            if (sysProject.getUserNameAlias() != null){
-                                newbcproject.setFzr(sysProject.getUserNameAlias());
-                            }
-                            if (viewFqProject.getCustomerName() != null){
-                                newbcproject.setWtdw(viewFqProject.getCustomerName());
-                            }
-                            if (viewFqProject.getArrangeStartTime() != null){
-                                Date kssj = Date.from(viewFqProject.getArrangeStartTime().atZone(ZoneId.systemDefault()).toInstant());
-                                newbcproject.setKssj(kssj);
-                            }
-                            if (viewFqProject.getArrangeEndTime() != null){
-                                Date jssj = Date.from(viewFqProject.getArrangeEndTime().atZone(ZoneId.systemDefault()).toInstant());
-                                newbcproject.setJssj(jssj);
-                            }
-                            if (viewFqProject.getJobContent() != null){
-                                newbcproject.setGznr(viewFqProject.getJobContent());
-                            }
-                            if (viewFqProject.getJobOrgName() != null){
-                                newbcproject.setBm(viewFqProject.getJobOrgName());
-                            }
-                            newbcproject.setGclx((long)1);
-                            newbcproject.setLx((long)1);
-
-                            SysProjectGeoinfo sysProjectGeoinfo = new SysProjectGeoinfo();
-                            if (geoInfo != null){
-                                if (geoInfo.getGeometry() != null){
-                                    sysProjectGeoinfo.setGeometry(geoInfo.getGeometry());
-                                }
-                                if (geoInfo.getGeometry2000() != null){
-                                    sysProjectGeoinfo.setGeometry2000(geoInfo.getGeometry2000());
-                                }
-                                if (geoInfo.getBufferGeometry() != null){
-                                    sysProjectGeoinfo.setBufferGeometry(geoInfo.getBufferGeometry());
-                                }
-                                if (geoInfo.getBufferGeometry2000() != null){
-                                    sysProjectGeoinfo.setBufferGeometry2000(geoInfo.getBufferGeometry2000());
-                                }
-                                if (geoInfo.getGeometryGauss2000() != null){
-                                    sysProjectGeoinfo.setGeometryGauss2000(geoInfo.getGeometryGauss2000());
-                                    newbcproject.setShape(geoInfo.getGeometryGauss2000());
-                                }
-                                if (geoInfo.getBufferGeometryGauss2000() != null){
-                                    sysProjectGeoinfo.setBufferGeometryGauss2000(geoInfo.getBufferGeometryGauss2000());
-                                }
-                                if (geoInfo.getBufferDistance() != null){
-                                    sysProjectGeoinfo.setBufferDistance(geoInfo.getBufferDistance());
-                                }
-                                sysProjectGeoinfo.setProjectId(sysProject.getProjectId());
-                            }
-                            projectGeoinfoService.insertSysProjectGeoinfo(sysProjectGeoinfo);
-                            if (newbcproject.getShape() != null && contains){
-                                bcProjectService.insertBcProject(newbcproject);
-                            }
-                        }
-
                     }
                     //同步网格
                     List<ViewFqSalemapSelectmapTfinfo> tfinfoList = viewFqSalemapSelectmapTfinfoService.selectViewFqSalemapSelectmapTfinfoByProjectId(Long.parseLong(mqMessage.getProjectId()));
@@ -475,27 +419,84 @@ public class MqConsume {
                             projectChargeInfoService.insertProjectChargeInfo(projectChargeInfoObj);
                         }
                     }
-                }
+                    //同步坐标系
+                    List<ViewFqSalemapSelectgeoGeoinfo> geoInfoList = viewFqSalemapSelectgeoGeoinfoService.selectViewFqSalemapSelectgeoGeoinfoByProjectId(Long.parseLong(mqMessage.getProjectId()));
+                    projectGeoinfoService.deleteSysProjectGeoinfoByProjectId(sysProject.getProjectId());
 
-                //同步人员安排配比
-                if (mqMessage.getOpType().equals("RESOURCE_ARRANGE_CHANGE") || (mqMessage.getOpType().equals("SECOND_CHECK") && sysProject.getTwoCheck() != null && !sysProject.getTwoCheck().equals(""))){
-                    // todo 需要同步人员安排
-                    List<ViewFqProjectWorkResourceArrange>  resourceArrange = viewFqProjectWorkResourceArrangeService.selectViewFqProjectWorkResourceArrangeByProjectId(Long.parseLong(mqMessage.getProjectId()));
-                    SysProject project = sysProjectService.checkProjectKeyUniqueByViewProjectId(mqMessage.getProjectId());
-                    sysProjectValueService.deleteSysProjectValueByProjectId(project.getProjectId());
-                    if (resourceArrange != null){
-                        for (ViewFqProjectWorkResourceArrange resourceArrange1 : resourceArrange){
-                            if(resourceArrange1 == null || resourceArrange1.getUserName() == null || resourceArrange1.getPerformanceRate() == null){
-                                continue;
+                    if (contains){
+                        bcProjectService.deleteBcProjectByXMBH(sysProject.getProjectNum());
+                    }
+                    if (geoInfoList != null){
+                        for (ViewFqSalemapSelectgeoGeoinfo geoInfo : geoInfoList){
+                            BcProject newbcproject = new BcProject();
+                            newbcproject.setXmmc(viewFqProject.getProjectName());
+                            newbcproject.setXmbh(viewFqProject.getProjectCode());
+                            if (viewFqProject.getProjectTypeName() != null){
+                                newbcproject.setXmlx(viewFqProject.getProjectTypeName());
                             }
-                            SysProjectValue sysProjectValue = new SysProjectValue();
-                            sysProjectValue.setProjectId(project.getProjectId());
-                            sysProjectValue.setUserName(resourceArrange1.getUserName());
-                            sysProjectValue.setProportion(resourceArrange1.getPerformanceRate());
-                            sysProjectValueService.insertSysProjectValue(sysProjectValue);
+                            if (viewFqProject.getRegisterTime() != null){
+                                Date djsj = Date.from(viewFqProject.getRegisterTime().atZone(ZoneId.systemDefault()).toInstant());
+                                newbcproject.setDjsj(djsj);
+                            }
+                            if (sysProject.getUserNameAlias() != null){
+                                newbcproject.setFzr(sysProject.getUserNameAlias());
+                            }
+                            if (viewFqProject.getCustomerName() != null){
+                                newbcproject.setWtdw(viewFqProject.getCustomerName());
+                            }
+                            if (viewFqProject.getArrangeStartTime() != null){
+                                Date kssj = Date.from(viewFqProject.getArrangeStartTime().atZone(ZoneId.systemDefault()).toInstant());
+                                newbcproject.setKssj(kssj);
+                            }
+                            if (viewFqProject.getArrangeEndTime() != null){
+                                Date jssj = Date.from(viewFqProject.getArrangeEndTime().atZone(ZoneId.systemDefault()).toInstant());
+                                newbcproject.setJssj(jssj);
+                            }
+                            if (viewFqProject.getJobContent() != null){
+                                newbcproject.setGznr(viewFqProject.getJobContent());
+                            }
+                            if (viewFqProject.getJobOrgName() != null){
+                                newbcproject.setBm(viewFqProject.getJobOrgName());
+                            }
+                            newbcproject.setGclx((long)1);
+                            newbcproject.setLx((long)1);
+
+                            SysProjectGeoinfo sysProjectGeoinfo = new SysProjectGeoinfo();
+                            if (geoInfo != null){
+                                if (geoInfo.getGeometry() != null){
+                                    sysProjectGeoinfo.setGeometry(geoInfo.getGeometry());
+                                }
+                                if (geoInfo.getGeometry2000() != null){
+                                    sysProjectGeoinfo.setGeometry2000(geoInfo.getGeometry2000());
+                                }
+                                if (geoInfo.getBufferGeometry() != null){
+                                    sysProjectGeoinfo.setBufferGeometry(geoInfo.getBufferGeometry());
+                                }
+                                if (geoInfo.getBufferGeometry2000() != null){
+                                    sysProjectGeoinfo.setBufferGeometry2000(geoInfo.getBufferGeometry2000());
+                                }
+                                if (geoInfo.getGeometryGauss2000() != null){
+                                    sysProjectGeoinfo.setGeometryGauss2000(geoInfo.getGeometryGauss2000());
+                                    newbcproject.setShape(geoInfo.getGeometryGauss2000());
+                                }
+                                if (geoInfo.getBufferGeometryGauss2000() != null){
+                                    sysProjectGeoinfo.setBufferGeometryGauss2000(geoInfo.getBufferGeometryGauss2000());
+                                }
+                                if (geoInfo.getBufferDistance() != null){
+                                    sysProjectGeoinfo.setBufferDistance(geoInfo.getBufferDistance());
+                                }
+                                sysProjectGeoinfo.setProjectId(sysProject.getProjectId());
+                            }
+                            projectGeoinfoService.insertSysProjectGeoinfo(sysProjectGeoinfo);
+                            if (newbcproject.getShape() != null && contains){
+                                bcProjectService.insertBcProject(newbcproject);
+                            }
                         }
+
                     }
                 }
+
+
             }
 
             if (mqMessage.getOpType().equals("DELETE") || mqMessage.getOpType().equals("PROJECT_INVALID") || mqMessage.getOpType().equals("PROJECT_HANG") || mqMessage.getOpType().equals("PROJECT_DELETE")){
@@ -524,6 +525,14 @@ public class MqConsume {
         }catch (IOException | ParseException e) {
             // 处理其他确认失败的情况
             channel.basicNack(message.getMessageProperties().getDeliveryTag(), false, true); // 手动确认消息消费失败
+            nowTime = DateUtils.getNowDate();
+            viewFqProjectLog = new ViewFqProjectLog();
+            viewFqProjectLog.setOperateTime(nowTime);
+            if (viewFqProject != null && viewFqProject.getProjectCode() != null){
+                viewFqProjectLog.setProjectCode(viewFqProject.getProjectCode());
+            }
+            viewFqProjectLog.setOperate("同步地理信息数据失败");
+            viewFqProjectLogService.insertViewFqProjectLog(viewFqProjectLog);
         }
     }
 }
