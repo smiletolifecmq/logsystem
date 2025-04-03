@@ -17,6 +17,7 @@ import java.math.BigDecimal;
 import java.text.ParseException;
 import java.time.ZoneId;
 import java.time.format.DateTimeFormatter;
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Date;
 import java.util.List;
@@ -489,6 +490,15 @@ public class MqConsume {
                             }
                             projectGeoinfoService.insertSysProjectGeoinfo(sysProjectGeoinfo);
                             if (newbcproject.getShape() != null && contains && newbcproject.getShape() != null && newbcproject.getShape().toUpperCase().contains("POLYGON")){
+                                String wkt = newbcproject.getShape();
+                                if (wkt.length() > 3000) {
+                                    List<String> fragments = new ArrayList<>();
+                                    int length = wkt.length();
+                                    for (int i = 0; i < length; i += 3000) {
+                                        fragments.add(wkt.substring(i, Math.min(length, i + 3000)));
+                                    }
+                                    newbcproject.setClobFragments(fragments);
+                                }
                                 bcProjectService.insertBcProject(newbcproject);
                             }
                         }

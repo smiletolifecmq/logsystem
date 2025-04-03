@@ -1105,6 +1105,15 @@ public class SysProjectController extends BaseController {
             return error("项目不存在");
         }
         BcProject oldObj = bcProjectService.selectBcProjectByXmbh(bcProject.getXmbh());
+        String wkt = bcProject.getShape();
+        if (wkt.length() > 3000) {
+            List<String> fragments = new ArrayList<>();
+            int length = wkt.length();
+            for (int i = 0; i < length; i += 3000) {
+                fragments.add(wkt.substring(i, Math.min(length, i + 3000)));
+            }
+            bcProject.setClobFragments(fragments);
+        }
         if (oldObj != null){
             bcProjectService.updateBcProject(bcProject);
         }else {

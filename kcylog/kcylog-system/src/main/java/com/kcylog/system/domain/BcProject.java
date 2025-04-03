@@ -7,6 +7,7 @@ import org.apache.commons.lang3.builder.ToStringBuilder;
 import org.apache.commons.lang3.builder.ToStringStyle;
 
 import java.util.Date;
+import java.util.List;
 
 /**
  * 百川项目地理空间数据对象 bc_project
@@ -78,7 +79,17 @@ public class BcProject extends BaseEntity
     @Excel(name = "1售图项目、2地籍图", readConverterExp = "宗=地图")
     private Long lx;
 
-    public void setObjectid(Long objectid) 
+    private List<String> clobFragments;  // 用于存储切割后的 CLOB 片段
+
+    public List<String> getClobFragments() {
+        return clobFragments;
+    }
+
+    public void setClobFragments(List<String> clobFragments) {
+        this.clobFragments = clobFragments;
+    }
+
+    public void setObjectid(Long objectid)
     {
         this.objectid = objectid;
     }
