@@ -699,6 +699,14 @@
                   </el-descriptions>
                   <el-descriptions class="margin-top" :column="1">
                     <el-descriptions-item>
+                      <template slot="label"> 工作量 </template>
+                      {{
+                        subcontractForm && subcontractForm.project
+                          ? subcontractForm.project.workloadAlias
+                          : ""
+                      }}
+                    </el-descriptions-item>
+                    <el-descriptions-item>
                       <template slot="label"> 工程内容 </template>
                       {{
                         subcontractForm && subcontractForm.project
@@ -707,12 +715,8 @@
                       }}
                     </el-descriptions-item>
                     <el-descriptions-item>
-                      <template slot="label"> 工作量 </template>
-                      {{
-                        subcontractForm && subcontractForm.project
-                          ? subcontractForm.project.workloadAlias
-                          : ""
-                      }}
+                      <template slot="label"> 雇工内容 </template>
+                      {{ subcontractForm.employmentReason }}
                     </el-descriptions-item>
                   </el-descriptions>
 
