@@ -678,6 +678,46 @@
                 <div style="text-align: center">
                   <el-descriptions class="margin-top" :column="2">
                     <el-descriptions-item>
+                      <template slot="label"> 预算 </template>
+                      {{ subcontractForm.budgetMoney }}
+                    </el-descriptions-item>
+
+                    <el-descriptions-item>
+                      <template slot="label"> 雇工方式 </template>
+                      <span v-if="subcontractForm.manType === 0"
+                        ><el-tag type="danger" size="mini">非雇工</el-tag>
+                      </span>
+                      <span v-if="subcontractForm.manType === 1"
+                        ><el-tag type="success" size="mini">雇工</el-tag></span
+                      >
+                      <span v-if="subcontractForm.manType === 2"
+                        ><el-tag type="success" size="mini"
+                          >第三方雇工</el-tag
+                        ></span
+                      >
+                    </el-descriptions-item>
+                  </el-descriptions>
+                  <el-descriptions class="margin-top" :column="1">
+                    <el-descriptions-item>
+                      <template slot="label"> 工程内容 </template>
+                      {{
+                        subcontractForm && subcontractForm.project
+                          ? subcontractForm.project.workcontentAlias
+                          : ""
+                      }}
+                    </el-descriptions-item>
+                    <el-descriptions-item>
+                      <template slot="label"> 工作量 </template>
+                      {{
+                        subcontractForm && subcontractForm.project
+                          ? subcontractForm.project.workloadAlias
+                          : ""
+                      }}
+                    </el-descriptions-item>
+                  </el-descriptions>
+
+                  <el-descriptions class="margin-top" :column="2">
+                    <el-descriptions-item>
                       <template slot="label"> 分包类型 </template>
                       <span v-if="subcontractForm.subType == 1">全部分包</span
                       ><span v-if="subcontractForm.subType == 2">局部分包</span>
