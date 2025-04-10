@@ -8,6 +8,20 @@
       v-show="showSearch"
       label-width="68px"
     >
+      <el-form-item label="日期" prop="tbsj">
+        <el-date-picker
+          clearable
+          v-model="dateRange"
+          style="width: 240px"
+          value-format="yyyy-MM-dd"
+          type="daterange"
+          range-separator="-"
+          start-placeholder="开始日期"
+          end-placeholder="结束日期"
+          @change="handleQuery"
+        >
+        </el-date-picker>
+      </el-form-item>
       <el-form-item label="委托人" prop="client">
         <el-input
           v-model="queryParams.client"
@@ -72,14 +86,14 @@
       :data="projectList"
       @selection-change="handleSelectionChange"
     >
-      <el-table-column label="日期" align="center" prop="createTime">
+      <el-table-column label="日期" align="center" prop="tbsj">
         <template slot-scope="scope">
-          <span>{{ parseTime(scope.row.createTime, "{y}-{m}-{d}") }}</span>
+          <span>{{ parseTime(scope.row.tbsj, "{y}-{m}-{d}") }}</span>
         </template>
       </el-table-column>
       <el-table-column label="内容" align="center" prop="content" />
       <el-table-column label="委托人" align="center" prop="client" />
-      <el-table-column label="工作量" align="center" prop="workload" />
+      <el-table-column label="组天" align="center" prop="worknum" />
       <el-table-column label="负责人" align="center" prop="fzr" />
       <el-table-column label="备注" align="center" prop="bz" />
       <el-table-column
@@ -121,6 +135,17 @@
     <!-- 添加或修改无经费服务项目统计对话框 -->
     <el-dialog :title="title" :visible.sync="open" width="500px" append-to-body>
       <el-form ref="form" :model="form" :rules="rules" label-width="80px">
+        <el-form-item label="日期" prop="tbsj">
+          <el-date-picker
+            clearable
+            v-model="form.tbsj"
+            type="date"
+            value-format="yyyy-MM-dd"
+            placeholder="请选择日期"
+          >
+            >
+          </el-date-picker>
+        </el-form-item>
         <el-form-item label="工作内容">
           <el-input
             v-model="form.content"
@@ -134,12 +159,12 @@
             placeholder="请输入委托人（经营人员、领导、业主）"
           />
         </el-form-item>
-        <el-form-item label="工作量" prop="workload">
-          <el-input
-            v-model="form.workload"
-            type="textarea"
-            placeholder="请输入工作量"
-          />
+        <el-form-item label="组天" prop="worknum">
+          <el-input-number
+            v-model="form.worknum"
+            :precision="2"
+            :step="0.1"
+          ></el-input-number>
         </el-form-item>
         <el-form-item label="备注" prop="bz">
           <el-input
@@ -171,6 +196,7 @@ export default {
   name: "Project",
   data() {
     return {
+      dateRange: [],
       // 遮罩层
       loading: true,
       // 选中数组
@@ -215,11 +241,13 @@ export default {
     /** 查询无经费服务项目统计列表 */
     getList() {
       this.loading = true;
-      listProject(this.queryParams).then((response) => {
-        this.projectList = response.rows;
-        this.total = response.total;
-        this.loading = false;
-      });
+      listProject(this.addDateRange(this.queryParams, this.dateRange)).then(
+        (response) => {
+          this.projectList = response.rows;
+          this.total = response.total;
+          this.loading = false;
+        }
+      );
     },
     // 取消按钮
     cancel() {
@@ -228,6 +256,7 @@ export default {
     },
     // 表单重置
     reset() {
+      this.dateRange = [];
       this.form = {
         id: null,
         createTime: null,
@@ -246,6 +275,7 @@ export default {
     },
     /** 重置按钮操作 */
     resetQuery() {
+      this.dateRange = [];
       this.resetForm("queryForm");
       this.handleQuery();
     },

@@ -26,6 +26,9 @@ public class SysGeoNofundingProject extends BaseEntity
 
     @JsonFormat(pattern = "yyyy-MM-dd")
     @Excel(name = "日期", width = 30, dateFormat = "yyyy-MM-dd")
+    private Date tbsj;
+
+    @JsonFormat(pattern = "yyyy-MM-dd")
     private Date createTime;
 
     /** 内容 */
@@ -36,17 +39,35 @@ public class SysGeoNofundingProject extends BaseEntity
     @Excel(name = "委托人（经营人员、领导、业主等）")
     private String client;
 
-    /** 工作量 */
-    @Excel(name = "工作量")
-    private String workload;
-
     /** 负责人 */
     @Excel(name = "负责人")
     private String fzr;
 
+    /** 工作量 */
+    private String workload;
+
+    @Excel(name = "组天")
+    private Long worknum;
+
     /** 备注 */
     @Excel(name = "备注")
     private String bz;
+
+    public Long getWorknum() {
+        return worknum;
+    }
+
+    public void setWorknum(Long worknum) {
+        this.worknum = worknum;
+    }
+
+    public Date getTbsj() {
+        return tbsj;
+    }
+
+    public void setTbsj(Date tbsj) {
+        this.tbsj = tbsj;
+    }
 
     public int getNum() {
         return num;
