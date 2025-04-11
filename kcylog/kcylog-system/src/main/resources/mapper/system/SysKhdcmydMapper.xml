@@ -1,0 +1,117 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.kcylog.system.mapper.SysKhdcmydMapper">
+    
+    <resultMap type="SysKhdcmyd" id="SysKhdcmydResult">
+        <result property="id"    column="id"    />
+        <result property="bfsj"    column="bfsj"    />
+        <result property="bfxs"    column="bfxs"    />
+        <result property="sczy"    column="sczy"    />
+        <result property="sxry"    column="sxry"    />
+        <result property="khmc"    column="khmc"    />
+        <result property="dxxm"    column="dxxm"    />
+        <result property="nr"    column="nr"    />
+        <result property="gjgz"    column="gjgz"    />
+        <result property="gqmyd"    column="gqmyd"    />
+        <result property="zlmyd"    column="zlmyd"    />
+        <result property="fwmyd"    column="fwmyd"    />
+        <result property="fzrtd"    column="fzrtd"    />
+        <result property="ryfwd"    column="ryfwd"    />
+        <result property="zhpj"    column="zhpj"    />
+        <result property="myl"    column="myl"    />
+    </resultMap>
+
+    <sql id="selectSysKhdcmydVo">
+        select id, bfsj, bfxs, sczy, sxry, khmc, dxxm, nr, gjgz, gqmyd, zlmyd, fwmyd, fzrtd, ryfwd, zhpj, myl from sys_khdcmyd
+    </sql>
+
+    <select id="selectSysKhdcmydList" parameterType="SysKhdcmyd" resultMap="SysKhdcmydResult">
+        <include refid="selectSysKhdcmydVo"/>
+        <where>
+            <if test="params.beginTime != null and params.beginTime != ''"><!-- 开始时间检索 -->
+                AND date_format(bfsj,'%y%m%d') &gt;= date_format(#{params.beginTime},'%y%m%d')
+            </if>
+            <if test="params.endTime != null and params.endTime != ''"><!-- 结束时间检索 -->
+                AND date_format(bfsj,'%y%m%d') &lt;= date_format(#{params.endTime},'%y%m%d')
+            </if>
+        </where>
+    </select>
+    
+    <select id="selectSysKhdcmydById" parameterType="Long" resultMap="SysKhdcmydResult">
+        <include refid="selectSysKhdcmydVo"/>
+        where id = #{id}
+    </select>
+        
+    <insert id="insertSysKhdcmyd" parameterType="SysKhdcmyd" useGeneratedKeys="true" keyProperty="id">
+        insert into sys_khdcmyd
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="bfsj != null">bfsj,</if>
+            <if test="bfxs != null">bfxs,</if>
+            <if test="sczy != null">sczy,</if>
+            <if test="sxry != null">sxry,</if>
+            <if test="khmc != null">khmc,</if>
+            <if test="dxxm != null">dxxm,</if>
+            <if test="nr != null">nr,</if>
+            <if test="gjgz != null">gjgz,</if>
+            <if test="gqmyd != null">gqmyd,</if>
+            <if test="zlmyd != null">zlmyd,</if>
+            <if test="fwmyd != null">fwmyd,</if>
+            <if test="fzrtd != null">fzrtd,</if>
+            <if test="ryfwd != null">ryfwd,</if>
+            <if test="zhpj != null">zhpj,</if>
+            <if test="myl != null">myl,</if>
+         </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test="bfsj != null">#{bfsj},</if>
+            <if test="bfxs != null">#{bfxs},</if>
+            <if test="sczy != null">#{sczy},</if>
+            <if test="sxry != null">#{sxry},</if>
+            <if test="khmc != null">#{khmc},</if>
+            <if test="dxxm != null">#{dxxm},</if>
+            <if test="nr != null">#{nr},</if>
+            <if test="gjgz != null">#{gjgz},</if>
+            <if test="gqmyd != null">#{gqmyd},</if>
+            <if test="zlmyd != null">#{zlmyd},</if>
+            <if test="fwmyd != null">#{fwmyd},</if>
+            <if test="fzrtd != null">#{fzrtd},</if>
+            <if test="ryfwd != null">#{ryfwd},</if>
+            <if test="zhpj != null">#{zhpj},</if>
+            <if test="myl != null">#{myl},</if>
+         </trim>
+    </insert>
+
+    <update id="updateSysKhdcmyd" parameterType="SysKhdcmyd">
+        update sys_khdcmyd
+        <trim prefix="SET" suffixOverrides=",">
+            <if test="bfsj != null">bfsj = #{bfsj},</if>
+            <if test="bfxs != null">bfxs = #{bfxs},</if>
+            <if test="sczy != null">sczy = #{sczy},</if>
+            <if test="sxry != null">sxry = #{sxry},</if>
+            <if test="khmc != null">khmc = #{khmc},</if>
+            <if test="dxxm != null">dxxm = #{dxxm},</if>
+            <if test="nr != null">nr = #{nr},</if>
+            <if test="gjgz != null">gjgz = #{gjgz},</if>
+            <if test="gqmyd != null">gqmyd = #{gqmyd},</if>
+            <if test="zlmyd != null">zlmyd = #{zlmyd},</if>
+            <if test="fwmyd != null">fwmyd = #{fwmyd},</if>
+            <if test="fzrtd != null">fzrtd = #{fzrtd},</if>
+            <if test="ryfwd != null">ryfwd = #{ryfwd},</if>
+            <if test="zhpj != null">zhpj = #{zhpj},</if>
+            <if test="myl != null">myl = #{myl},</if>
+        </trim>
+        where id = #{id}
+    </update>
+
+    <delete id="deleteSysKhdcmydById" parameterType="Long">
+        delete from sys_khdcmyd where id = #{id}
+    </delete>
+
+    <delete id="deleteSysKhdcmydByIds" parameterType="String">
+        delete from sys_khdcmyd where id in 
+        <foreach item="id" collection="array" open="(" separator="," close=")">
+            #{id}
+        </foreach>
+    </delete>
+</mapper>
