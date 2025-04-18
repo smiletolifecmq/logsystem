@@ -71,10 +71,10 @@ public class SysProjectController extends BaseController {
     public TableDataInfo list(SysProject sysProject) throws ParseException {
         startPage();
         List<SysProject> list = sysProjectService.selectSysProjectList(sysProject);
-        List<String> projectId = new ArrayList<>();
+        List<Long> projectId = new ArrayList<>();
         for (SysProject project : list) {
             project.setMapShow((long)0);
-            projectId.add(project.getProjectNum());
+            projectId.add(project.getProjectId());
             if (project.getWorkStatus() != null && project.getWorkStatus() == 4){
                 if (project.getProjectEndAlias() == null || project.getProjectEndAlias().isEmpty() || project.getDoTime() == null || project.getDoTime().isEmpty()) {
                     project.setLeadTime(0);
@@ -99,16 +99,16 @@ public class SysProjectController extends BaseController {
                 }
             }
         }
-        List<BcProject> sysProjectGeoinfo = new ArrayList<BcProject>();
+        List<SysProjectGeoinfo> sysProjectGeoinfo = new ArrayList<SysProjectGeoinfo>();
         if (projectId.size() > 0  && projectId.size() < 200){
-            sysProjectGeoinfo = bcProjectService.selectSysProjectGeoinfoByProjectIds(projectId);
+            sysProjectGeoinfo = sysProjectGeoinfoService.selectSysProjectGeoinfoByProjectIds(projectId);
         }
-        Map<String, Integer> keyValueMap = new HashMap<>();
-        for (BcProject obj : sysProjectGeoinfo){
-            keyValueMap.put(obj.getXmbh(), 1);
+        Map<Long, Integer> keyValueMap = new HashMap<>();
+        for (SysProjectGeoinfo obj : sysProjectGeoinfo){
+            keyValueMap.put(obj.getProjectId(), 1);
         }
         for (SysProject project : list) {
-            if (keyValueMap.containsKey(project.getProjectNum())){
+            if (keyValueMap.containsKey(project.getProjectId())){
                 project.setMapShow((long)1);
             }
         }
@@ -305,10 +305,10 @@ public class SysProjectController extends BaseController {
         startPage();
         List<SysProject> list = sysProjectService.listProjectOperate(sysProject);
         if (list.size() != 0){
-            List<String> projectId = new ArrayList<>();
+            List<Long> projectId = new ArrayList<>();
             List<Long> projectIds = new ArrayList<>();
             for (SysProject project : list){
-                projectId.add(project.getProjectNum());
+                projectId.add(project.getProjectId());
                 projectIds.add(project.getProjectId());
                 project.setMapShow((long)0);
             }
@@ -344,13 +344,13 @@ public class SysProjectController extends BaseController {
             }
 
             if (projectId.size() > 0 && projectId.size() < 200){
-                List<BcProject> sysProjectGeoinfo = bcProjectService.selectSysProjectGeoinfoByProjectIds(projectId);
-                Map<String, Integer> keyValueMap = new HashMap<>();
-                for (BcProject obj : sysProjectGeoinfo){
-                    keyValueMap.put(obj.getXmbh(), 1);
+                List<SysProjectGeoinfo> sysProjectGeoinfo = sysProjectGeoinfoService.selectSysProjectGeoinfoByProjectIds(projectId);
+                Map<Long, Integer> keyValueMap = new HashMap<>();
+                for (SysProjectGeoinfo obj : sysProjectGeoinfo){
+                    keyValueMap.put(obj.getProjectId(), 1);
                 }
                 for (SysProject project : list) {
-                    if (keyValueMap.containsKey(project.getProjectNum())){
+                    if (keyValueMap.containsKey(project.getProjectId())){
                         project.setMapShow((long)1);
                     }
                 }
@@ -405,10 +405,10 @@ public class SysProjectController extends BaseController {
     public TableDataInfo listHandover(SysProject sysProject) throws ParseException {
         startPage();
         List<FqProjectProcess> list = fqProjectProcessService.selectFqProjectProcessList(sysProject);
-        List<String> projectId = new ArrayList<>();
+        List<Long> projectId = new ArrayList<>();
         for (FqProjectProcess projectProcess : list) {
             projectProcess.setMapShow((long)0);
-            projectId.add(projectProcess.getProjectList().getProjectNum());
+            projectId.add(projectProcess.getProjectList().getProjectId());
                 //计算收件提前天数
                 if (projectProcess.getReceiveStatus() != null && projectProcess.getReceiveStatus() == 2){
                     if (projectProcess.getReceiveTime() == null || projectProcess.getReceiveTime().isEmpty() || projectProcess.getReceiveCutoffTime() == null || projectProcess.getReceiveCutoffTime().isEmpty()) {
@@ -461,13 +461,13 @@ public class SysProjectController extends BaseController {
         }
 
         if (projectId.size() > 0 && projectId.size() < 200){
-            List<BcProject> sysProjectGeoinfo = bcProjectService.selectSysProjectGeoinfoByProjectIds(projectId);
-            Map<String, Integer> keyValueMap = new HashMap<>();
-            for (BcProject obj : sysProjectGeoinfo){
-                keyValueMap.put(obj.getXmbh(), 1);
+            List<SysProjectGeoinfo> sysProjectGeoinfo = sysProjectGeoinfoService.selectSysProjectGeoinfoByProjectIds(projectId);
+            Map<Long, Integer> keyValueMap = new HashMap<>();
+            for (SysProjectGeoinfo obj : sysProjectGeoinfo){
+                keyValueMap.put(obj.getProjectId(), 1);
             }
             for (FqProjectProcess projectProcess : list) {
-                if (keyValueMap.containsKey(projectProcess.getProjectList().getProjectNum())){
+                if (keyValueMap.containsKey(projectProcess.getProjectId())){
                     projectProcess.setMapShow((long)1);
                 }
             }
@@ -479,10 +479,10 @@ public class SysProjectController extends BaseController {
     public TableDataInfo listProjectWaitOneCheck(SysProject sysProject) throws ParseException {
         startPage();
         List<SysProject> list = sysProjectService.selectSysProjectWaitOneCheck(sysProject);
-        List<String> projectId = new ArrayList<>();
+        List<Long> projectId = new ArrayList<>();
         for (SysProject project : list) {
             project.setMapShow((long)0);
-            projectId.add(project.getProjectNum());
+            projectId.add(project.getProjectId());
             SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd");
             if (project.getProjectEndAlias() != null && !project.getProjectEndAlias().isEmpty() && !project.getProjectEndAlias().equals("")){
                 Date startDate = dateFormat.parse(project.getProjectEndAlias());
@@ -495,13 +495,13 @@ public class SysProjectController extends BaseController {
             }
         }
         if (projectId.size() > 0  && projectId.size() < 200){
-            List<BcProject> sysProjectGeoinfo = bcProjectService.selectSysProjectGeoinfoByProjectIds(projectId);
-            Map<String, Integer> keyValueMap = new HashMap<>();
-            for (BcProject obj : sysProjectGeoinfo){
-                keyValueMap.put(obj.getXmbh(), 1);
+            List<SysProjectGeoinfo> sysProjectGeoinfo = sysProjectGeoinfoService.selectSysProjectGeoinfoByProjectIds(projectId);
+            Map<Long, Integer> keyValueMap = new HashMap<>();
+            for (SysProjectGeoinfo obj : sysProjectGeoinfo){
+                keyValueMap.put(obj.getProjectId(), 1);
             }
             for (SysProject project : list) {
-                if (keyValueMap.containsKey(project.getProjectNum())){
+                if (keyValueMap.containsKey(project.getProjectId())){
                     project.setMapShow((long)1);
                 }
             }
@@ -513,10 +513,10 @@ public class SysProjectController extends BaseController {
     public TableDataInfo listProjectWaitTwoCheck(SysProject sysProject) throws ParseException {
         startPage();
         List<SysProject> list = sysProjectService.selectSysProjectWaitTwoCheck(sysProject);
-        List<String> projectId = new ArrayList<>();
+        List<Long> projectId = new ArrayList<>();
         for (SysProject project : list) {
             project.setMapShow((long)0);
-            projectId.add(project.getProjectNum());
+            projectId.add(project.getProjectId());
             SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd");
             if (project.getProjectEndAlias() != null && !project.getProjectEndAlias().isEmpty() && !project.getProjectEndAlias().equals("")){
                 Date startDate = dateFormat.parse(project.getProjectEndAlias());
@@ -529,13 +529,13 @@ public class SysProjectController extends BaseController {
             }
         }
         if (projectId.size() > 0 && projectId.size() < 200){
-            List<BcProject> sysProjectGeoinfo = bcProjectService.selectSysProjectGeoinfoByProjectIds(projectId);
-            Map<String, Integer> keyValueMap = new HashMap<>();
-            for (BcProject obj : sysProjectGeoinfo){
-                keyValueMap.put(obj.getXmbh(), 1);
+            List<SysProjectGeoinfo> sysProjectGeoinfo = sysProjectGeoinfoService.selectSysProjectGeoinfoByProjectIds(projectId);
+            Map<Long, Integer> keyValueMap = new HashMap<>();
+            for (SysProjectGeoinfo obj : sysProjectGeoinfo){
+                keyValueMap.put(obj.getProjectId(), 1);
             }
             for (SysProject project : list) {
-                if (keyValueMap.containsKey(project.getProjectNum())){
+                if (keyValueMap.containsKey(project.getProjectId())){
                     project.setMapShow((long)1);
                 }
             }
@@ -762,10 +762,10 @@ public class SysProjectController extends BaseController {
     public TableDataInfo listForFb(SysProject sysProject) throws ParseException {
         startPage();
         List<SysProject> list = sysProjectService.selectSysProjectListForFb(sysProject);
-        List<String> projectId = new ArrayList<>();
+        List<Long> projectId = new ArrayList<>();
         for (SysProject project : list) {
             project.setMapShow((long)0);
-            projectId.add(project.getProjectNum());
+            projectId.add(project.getProjectId());
             if (project.getWorkStatus() != null && project.getWorkStatus() == 4){
                 if (project.getProjectEndAlias() == null || project.getProjectEndAlias().isEmpty() || project.getDoTime() == null || project.getDoTime().isEmpty()) {
                     project.setLeadTime(0);
@@ -791,13 +791,13 @@ public class SysProjectController extends BaseController {
             }
         }
         if (projectId.size() > 0 && projectId.size() < 200) {
-            List<BcProject> sysProjectGeoinfo = bcProjectService.selectSysProjectGeoinfoByProjectIds(projectId);
-            Map<String, Integer> keyValueMap = new HashMap<>();
-            for (BcProject obj : sysProjectGeoinfo){
-                keyValueMap.put(obj.getXmbh(), 1);
+            List<SysProjectGeoinfo> sysProjectGeoinfo = sysProjectGeoinfoService.selectSysProjectGeoinfoByProjectIds(projectId);
+            Map<Long, Integer> keyValueMap = new HashMap<>();
+            for (SysProjectGeoinfo obj : sysProjectGeoinfo){
+                keyValueMap.put(obj.getProjectId(), 1);
             }
             for (SysProject project : list) {
-                if (keyValueMap.containsKey(project.getProjectNum())){
+                if (keyValueMap.containsKey(project.getProjectId())){
                     project.setMapShow((long)1);
                 }
             }
@@ -1138,6 +1138,22 @@ public class SysProjectController extends BaseController {
             bcProject.setGznr(sysProject.getWorkcontentAlias());
             bcProject.setBm(sysProject.getDepartment());
             bcProjectService.insertBcProject(bcProject);
+        }
+
+        List<SysProjectGeoinfo> sysProjectGeoinfo =  sysProjectGeoinfoService.selectSysProjectGeoinfoByProjectId(sysProject.getProjectId());
+        SysProjectGeoinfo newSysProjectGeoinfo = new SysProjectGeoinfo();
+        newSysProjectGeoinfo.setGeometry(wkt);
+        newSysProjectGeoinfo.setGeometry2000(wkt);
+        newSysProjectGeoinfo.setBufferGeometry(wkt);
+        newSysProjectGeoinfo.setBufferGeometry2000(wkt);
+        newSysProjectGeoinfo.setGeometryGauss2000(wkt);
+        newSysProjectGeoinfo.setBufferGeometryGauss2000(wkt);
+        newSysProjectGeoinfo.setBufferDistance(BigDecimal.ZERO);
+        newSysProjectGeoinfo.setProjectId(sysProject.getProjectId());
+        if (sysProjectGeoinfo != null && sysProjectGeoinfo.size() > 0){
+            sysProjectGeoinfoService.updateSysProjectGeoinfo(newSysProjectGeoinfo);
+        }else {
+            sysProjectGeoinfoService.insertSysProjectGeoinfo(newSysProjectGeoinfo);
         }
         return toAjax(1);
     }
