@@ -89,12 +89,7 @@
       <el-table-column label="接洽人员服务态度" align="center" prop="ryfwd" />
       <el-table-column label="综合评价" align="center" prop="zhpj" />
       <el-table-column label="满意率" align="center" prop="myl" />
-      <el-table-column
-        label="操作"
-        align="center"
-        fixed="right"
-        class-name="small-padding fixed-width"
-      >
+      <el-table-column label="操作" align="center">
         <template slot-scope="scope">
           <el-button
             size="mini"

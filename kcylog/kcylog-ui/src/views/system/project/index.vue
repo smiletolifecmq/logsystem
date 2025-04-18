@@ -2007,7 +2007,7 @@ export default {
       this.projectCode = value.projectNum;
       // this.centerDialogVisible = true;
       window.open(
-        "http://192.168.110.100/fqismap/?sysname=ViewMapInFQIS&salemapid=" +
+        "http://192.168.110.100/SelectMap/?salemapid=" +
           value.projectId +
           "&xmbh=" +
           value.projectNum,

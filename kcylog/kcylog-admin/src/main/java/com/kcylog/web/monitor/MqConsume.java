@@ -92,6 +92,7 @@ public class MqConsume {
         viewFqProjectLog.setProjectCode(mqMessage.getProjectId());
         viewFqProjectLog.setOperate(mqMessage.getOpType());
         viewFqProjectLogService.insertViewFqProjectLog(viewFqProjectLog);
+        channel.basicAck(message.getMessageProperties().getDeliveryTag(), false); // 手动确认消息消费成功
         //获取视图数据
         ViewFqProject viewFqProject = viewFqProjectService.selectViewFqProjectByProjectCode(Long.parseLong(mqMessage.getProjectId()));
         try {
@@ -243,8 +244,10 @@ public class MqConsume {
                     // todo 需要同步人员安排
                     List<ViewFqProjectWorkResourceArrange>  resourceArrange = viewFqProjectWorkResourceArrangeService.selectViewFqProjectWorkResourceArrangeByProjectId(Long.parseLong(mqMessage.getProjectId()));
                     SysProject project = sysProjectService.checkProjectKeyUniqueByViewProjectId(mqMessage.getProjectId());
-                    sysProjectValueService.deleteSysProjectValueByProjectId(project.getProjectId());
-                    if (resourceArrange != null){
+                    if (project != null){
+                        sysProjectValueService.deleteSysProjectValueByProjectId(project.getProjectId());
+                    }
+                    if (resourceArrange != null && project != null){
                         for (ViewFqProjectWorkResourceArrange resourceArrange1 : resourceArrange){
                             if(resourceArrange1 == null || resourceArrange1.getUserName() == null || resourceArrange1.getPerformanceRate() == null){
                                 continue;
@@ -267,9 +270,9 @@ public class MqConsume {
                     sysProjectSelectmapTfinfoService.deleteSysProjectSelectmapTfinfoByProjectId(sysProject.getProjectId());
                     fqProjectProcessService.deleteFqProjectProcessById(sysProject.getProjectId());
                     sysProjectValueService.deleteSysProjectValueByProjectId(sysProject.getProjectId());
-                    if (contains){
-                        bcProjectService.deleteBcProjectByXMBH(sysProject.getProjectNum());
-                    }
+//                    if (contains){
+//                        bcProjectService.deleteBcProjectByXMBH(sysProject.getProjectNum());
+//                    }
                 }else {
                     if (sysProjectService.checkProjectKeyUniqueByViewProjectId(mqMessage.getProjectId()) != null) {
                         sysProject.setProjectId(sysProjectService.checkProjectKeyUniqueByViewProjectId(mqMessage.getProjectId()).getProjectId());
@@ -524,15 +527,15 @@ public class MqConsume {
                 if (viewFqProject != null && viewFqProject.getProjectCode() != null){
                     boolean contains = substrings.stream().anyMatch(viewFqProject.getProjectCode()::contains);
                     if (contains){
-                        bcProjectService.deleteBcProjectByXMBH(sysProject.getProjectNum());
+//                        bcProjectService.deleteBcProjectByXMBH(sysProject.getProjectNum());
                     }
                 }
             }
 
             System.out.println("通过Message:{}" + mqMessage.getOpType());
             System.out.println("通过Message:{}" + mqMessage.getProjectId());
-            channel.basicAck(message.getMessageProperties().getDeliveryTag(), false); // 手动确认消息消费成功
-        }catch (IOException | ParseException e) {
+//            channel.basicAck(message.getMessageProperties().getDeliveryTag(), false); // 手动确认消息消费成功
+        }catch (ParseException e) {
             // 处理其他确认失败的情况
             channel.basicNack(message.getMessageProperties().getDeliveryTag(), false, true); // 手动确认消息消费失败
             nowTime = DateUtils.getNowDate();
