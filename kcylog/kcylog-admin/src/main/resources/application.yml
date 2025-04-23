@@ -96,7 +96,7 @@ spring:
     host: 192.168.150.14
     port: 5672
     username: mq
-    password: mq@fzis
+    password: mq@fzis_hi@5S!fq
     virtual-host: /fq # 虚拟host 可以不设置,使用server默认host
     queue: FQ_INVOKE_QUEUE
     listener:
