@@ -35,7 +35,7 @@ public class FileController extends BaseController
             String filePath = RuoYiConfig.getUploadPath();
             // 上传并返回新文件名称
             String fileName = FileUploadUtils.upload(filePath, file);
-            String url = serverConfig.getUrl() + fileName;
+            String url = "http://192.168.110.112:9090/prod-api" + fileName;
 
             String newFileNameString = fileName.replace("/profile/upload", "");
             // 获取上传文件的原始路径
