@@ -99,7 +99,15 @@
             type="danger"
             class="hover-effect"
             @click="handleOverTimeOpen('工程测绘部')"
-            >{{ scope.row.gcchbNumWork }} | {{ scope.row.gcwbzs }}</el-tag
+            >{{ scope.row.gcchbNumWork }}</el-tag
+          >
+          <el-tag type="danger" v-show="scope.row.status == 0">｜</el-tag>
+          <el-tag
+            type="danger"
+            class="hover-effect"
+            v-show="scope.row.status == 0"
+            @click="handleOverTimeOpen('工程测绘部', 1)"
+            >{{ scope.row.gcwbzs }}</el-tag
           >
         </template>
       </el-table-column>
@@ -113,7 +121,15 @@
             type="danger"
             class="hover-effect"
             @click="handleOverTimeOpen('不动产测绘部')"
-            >{{ scope.row.bdcchbWork }} | {{ scope.row.bdwbzs }}</el-tag
+            >{{ scope.row.bdcchbWork }}</el-tag
+          >
+          <el-tag type="danger" v-show="scope.row.status == 0">｜</el-tag>
+          <el-tag
+            type="danger"
+            class="hover-effect"
+            v-show="scope.row.status == 0"
+            @click="handleOverTimeOpen('不动产测绘部', 1)"
+            >{{ scope.row.bdwbzs }}</el-tag
           >
         </template>
       </el-table-column>
@@ -127,7 +143,15 @@
             type="danger"
             class="hover-effect"
             @click="handleOverTimeOpen('管线工程部')"
-            >{{ scope.row.gxgcbWork }} | {{ scope.row.gxwbzs }}</el-tag
+            >{{ scope.row.gxgcbWork }}</el-tag
+          >
+          <el-tag type="danger" v-show="scope.row.status == 0">｜</el-tag>
+          <el-tag
+            type="danger"
+            class="hover-effect"
+            v-show="scope.row.status == 0"
+            @click="handleOverTimeOpen('管线工程部', 1)"
+            >{{ scope.row.gxwbzs }}</el-tag
           >
         </template>
       </el-table-column>
@@ -141,7 +165,15 @@
             type="danger"
             class="hover-effect"
             @click="handleOverTimeOpen('地理信息部')"
-            >{{ scope.row.dlxxbWork }} | {{ scope.row.dlwbzs }}</el-tag
+            >{{ scope.row.dlxxbWork }}</el-tag
+          >
+          <el-tag type="danger" v-show="scope.row.status == 0">｜</el-tag>
+          <el-tag
+            type="danger"
+            class="hover-effect"
+            v-show="scope.row.status == 0"
+            @click="handleOverTimeOpen('地理信息部', 1)"
+            >{{ scope.row.dlwbzs }}</el-tag
           >
         </template>
       </el-table-column>
@@ -828,7 +860,7 @@
       </div>
     </el-dialog>
     <el-dialog
-      title="超期项目"
+      :title="cqxmtitle"
       :visible.sync="overTimeOpen"
       width="1400px"
       append-to-body
@@ -1027,6 +1059,7 @@ export default {
   },
   data() {
     return {
+      cqxmtitle: "",
       lxValue: [],
       options: [
         {
@@ -1365,7 +1398,7 @@ export default {
         updateProjectCqBz(this.formReviewCq).then((response) => {
           this.$modal.msgSuccess("修改成功");
           this.cqOpen = false;
-          this.handleOverTimeOpen(this.formReviewCq.department);
+          this.handleOverTimeOpen(this.formReviewCq.department, 1);
           this.formReviewCq = {};
         });
       });
@@ -1375,7 +1408,7 @@ export default {
       this.formReviewCq.department = value.department;
       this.cqOpen = true;
     },
-    handleOverTimeOpen(value) {
+    handleOverTimeOpen(value, num) {
       this.overTimeProjectList = [];
       this.queryStatisticsParams.department = value;
       listProjectWaitTwoCheck(
@@ -1388,8 +1421,22 @@ export default {
             continue;
           }
           if (project[i].twoCheckDays < 0) {
-            this.overTimeProjectList.push(project[i]);
+            if (num === 1) {
+              if (
+                project[i].twoCheckNotes == null ||
+                project[i].twoCheckNotes == "" ||
+                project[i].twoCheckNotes == undefined
+              ) {
+                this.overTimeProjectList.push(project[i]);
+              }
+            } else {
+              this.overTimeProjectList.push(project[i]);
+            }
           }
+        }
+        this.cqxmtitle = "超期项目";
+        if (num === 1) {
+          this.cqxmtitle = "超期未填写项目";
         }
         this.queryStatisticsParams.department = null;
         this.overTimeOpen = true;
