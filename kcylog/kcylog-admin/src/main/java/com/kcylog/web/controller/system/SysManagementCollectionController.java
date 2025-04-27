@@ -528,11 +528,10 @@ public class SysManagementCollectionController extends BaseController
             if (obj1.getKpType() == 2 && obj1.getKpYfpsj() != null){
                 Date yfpsj = obj1.getKpYfpsj();
                 LocalDate ysKprqLocalDate = yfpsj.toInstant().atZone(ZoneId.systemDefault()).toLocalDate();
-                Date kprq = obj1.getKpKprq();
-                LocalDate kprqLocalDate = kprq.toInstant().atZone(ZoneId.systemDefault()).toLocalDate();
-                Period period = Period.between(ysKprqLocalDate, kprqLocalDate);
                 LocalDateTime localDateTime = currentDate.atStartOfDay(); // 将 LocalDate 转换为 LocalDateTime
                 Date currentDateTemp = Date.from(localDateTime.atZone(ZoneId.systemDefault()).toInstant()); // 转换为 Date
+                LocalDate kprqLocalDate = currentDateTemp.toInstant().atZone(ZoneId.systemDefault()).toLocalDate();
+                Period period = Period.between(ysKprqLocalDate, kprqLocalDate);
                 int years = period.getYears();
                 // 判断时间段
                 if (years < 1 && !isSameYearAndMonth(yfpsj, currentDateTemp)) {
