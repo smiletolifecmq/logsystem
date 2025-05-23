@@ -266,7 +266,7 @@
             v-hasPermi="['system:project:geoInfo']"
             >查看选图</el-button
           >
-          <el-button
+          <!-- <el-button
             size="mini"
             v-if="
               !['图', '售', '数'].some((substring) =>
@@ -278,7 +278,7 @@
             @click="scfwx(scope.row)"
             v-hasPermi="['system:project:uploadfwx']"
             >上传范围线</el-button
-          >
+          > -->
         </template>
       </el-table-column>
     </el-table>

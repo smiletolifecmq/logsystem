@@ -425,12 +425,12 @@ public class MqConsume {
                     }
                     //同步坐标系
                     List<ViewFqSalemapSelectgeoGeoinfo> geoInfoList = viewFqSalemapSelectgeoGeoinfoService.selectViewFqSalemapSelectgeoGeoinfoByProjectId(Long.parseLong(mqMessage.getProjectId()));
-                    projectGeoinfoService.deleteSysProjectGeoinfoByProjectId(sysProject.getProjectId());
 
                     if (contains){
                         bcProjectService.deleteBcProjectByXMBH(sysProject.getProjectNum());
                     }
                     if (geoInfoList != null){
+                        projectGeoinfoService.deleteSysProjectGeoinfoByProjectId(sysProject.getProjectId());
                         for (ViewFqSalemapSelectgeoGeoinfo geoInfo : geoInfoList){
                             BcProject newbcproject = new BcProject();
                             newbcproject.setXmmc(viewFqProject.getProjectName());

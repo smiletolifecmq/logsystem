@@ -489,7 +489,7 @@
             :disabled="scope.row.mapShow != 1"
             >查看选图</el-button
           >
-          <el-button
+          <!-- <el-button
             size="mini"
             v-if="
               !['图', '售', '数'].some((substring) =>
@@ -501,7 +501,7 @@
             @click="scfwx(scope.row)"
             v-hasPermi="['system:project:uploadfwx']"
             >上传范围线</el-button
-          >
+          > -->
           <el-tag
             v-show="scope.row.isArchive != 1 && scope.row.isArchive != null"
             type="success"

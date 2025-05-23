@@ -251,12 +251,7 @@
       <el-table-column label="工作状态" align="center" prop="status">
         <el-tag type="danger">待一检</el-tag>
       </el-table-column>
-      <el-table-column
-        fixed="right"
-        label="操作"
-        align="center"
-        class-name="small-padding fixed-width"
-      >
+      <el-table-column label="操作" align="center">
         <template slot-scope="scope">
           <el-button
             size="mini"
@@ -275,7 +270,7 @@
             v-hasPermi="['system:project:geoInfo']"
             >查看选图</el-button
           >
-          <el-button
+          <!-- <el-button
             size="mini"
             v-if="
               !['图', '售', '数'].some((substring) =>
@@ -287,7 +282,7 @@
             @click="scfwx(scope.row)"
             v-hasPermi="['system:project:uploadfwx']"
             >上传范围线</el-button
-          >
+          > -->
         </template>
       </el-table-column>
     </el-table>

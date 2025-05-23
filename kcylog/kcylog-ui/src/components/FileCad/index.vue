@@ -25,7 +25,7 @@
         <template v-if="fileType">
           格式为<b style="color: #f56c6c">{{ fileType.join("/") }}</b>
         </template>
-        的<b style="color: #f56c6c">2000坐标系文件(文件必须解密)</b>
+        的<b style="color: #f56c6c">图层为0层，2000坐标系文件(文件必须解密)</b>
       </div>
     </el-upload>
 

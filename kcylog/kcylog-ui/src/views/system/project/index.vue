@@ -1250,7 +1250,7 @@
     <el-dialog
       title="上传范围线"
       :visible.sync="fwxopen"
-      width="500px"
+      width="700px"
       append-to-body
     >
       <el-form ref="fwxform" :model="fwxform" label-width="80px">
