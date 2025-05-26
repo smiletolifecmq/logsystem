@@ -1,6 +1,7 @@
 package com.kcylog.system.service.impl;
 
 import com.kcylog.common.utils.DateUtils;
+import com.kcylog.system.domain.ProjectTj;
 import com.kcylog.system.domain.SysProject;
 import com.kcylog.system.mapper.SysProjectMapper;
 import com.kcylog.system.service.ISysProjectService;
@@ -269,5 +270,17 @@ public class SysProjectServiceImpl implements ISysProjectService
     public SysProject selectSysProjectByProjectNum(String xmbh)
     {
         return sysProjectMapper.selectSysProjectByProjectNum(xmbh);
+    }
+
+    @Override
+    public List<SysProject> selectRwapz(SysProject sysProject)
+    {
+        return sysProjectMapper.selectRwapz(sysProject);
+    }
+
+    @Override
+    public List<SysProject> selectZyz(SysProject sysProject)
+    {
+        return sysProjectMapper.selectZyz(sysProject);
     }
 }

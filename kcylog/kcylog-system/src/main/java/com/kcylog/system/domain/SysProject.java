@@ -204,6 +204,8 @@ public class SysProject extends BaseEntity
 
     private Date settleTime;
 
+    private Date cgsdtime;
+
     private Long settle;
 
     private BigDecimal durationFactor;
@@ -235,6 +237,34 @@ public class SysProject extends BaseEntity
     private Long gzStatus;
 
     private Long mapShow;
+
+    private BigDecimal ygmoney;
+
+    private int num;
+
+    public int getNum() {
+        return num;
+    }
+
+    public void setNum(int num) {
+        this.num = num;
+    }
+
+    public Date getCgsdtime() {
+        return cgsdtime;
+    }
+
+    public void setCgsdtime(Date cgsdtime) {
+        this.cgsdtime = cgsdtime;
+    }
+
+    public BigDecimal getYgmoney() {
+        return ygmoney;
+    }
+
+    public void setYgmoney(BigDecimal ygmoney) {
+        this.ygmoney = ygmoney;
+    }
 
     public Long getMapShow() {
         return mapShow;

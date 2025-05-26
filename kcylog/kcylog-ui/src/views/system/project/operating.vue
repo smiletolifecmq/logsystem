@@ -274,6 +274,14 @@
           {{ formatDate(scope.row.twoCheck) }}
         </template>
       </el-table-column>
+      <el-table-column label="成果送达时间" align="center" prop="cgsdtime">
+        <template
+          slot-scope="scope"
+          v-if="scope.row.cgsdtime != null && scope.row.cgsdtime != undefined"
+        >
+          {{ formatDate(scope.row.cgsdtime) }}
+        </template>
+      </el-table-column>
       <el-table-column
         label="盖章时间"
         align="center"
@@ -319,6 +327,14 @@
         class-name="small-padding fixed-width"
       >
         <template slot-scope="scope">
+          <el-button
+            size="mini"
+            type="text"
+            icon="el-icon-edit"
+            @click="handleCgsd(scope.row)"
+            v-hasPermi="['system:project:cgsd']"
+            >成果送达</el-button
+          >
           <el-button
             v-show="scope.row.operateUser == ''"
             size="mini"
@@ -956,6 +972,31 @@
     </el-dialog>
 
     <el-dialog
+      title="成果送达确认"
+      :visible.sync="cgsdOpen"
+      width="600px"
+      append-to-body
+      v-el-drag-dialog
+    >
+      <el-form ref="cgsdForm" :model="cgsdForm" label-width="120px">
+        <el-form-item label="成果送达时间" prop="cgsdtime">
+          <el-date-picker
+            v-model="cgsdForm.cgsdtime"
+            type="date"
+            placeholder="选择日期"
+          >
+          </el-date-picker>
+        </el-form-item>
+      </el-form>
+      <div
+        class="dialog-footer"
+        style="display: flex; justify-content: flex-end"
+      >
+        <el-button type="primary" @click="submitCgsd">确认</el-button>
+      </div>
+    </el-dialog>
+
+    <el-dialog
       title="备注"
       :visible.sync="settleOpenBz"
       width="1000px"
@@ -996,6 +1037,7 @@ import {
   listProjectStatisticsData,
   listProjectOperateCq,
   listProjectStatisticsDataForDept,
+  updateProjectCgsd,
 } from "@/api/system/project";
 import elDragDialog from "@/api/components/el-drag";
 
@@ -1018,6 +1060,11 @@ export default {
   },
   data() {
     return {
+      cgsdForm: {
+        cgsdtime: null,
+        projectId: null,
+      },
+      cgsdOpen: false,
       settleOpenBz: false,
       czDetailList: [],
       czOpen: false,
@@ -1601,6 +1648,15 @@ export default {
       });
     },
 
+    handleCgsd(row) {
+      const projectId = row.projectId;
+      getProject(projectId).then((response) => {
+        this.cgsdForm.cgsdtime = response.data.cgsdtime;
+        this.cgsdForm.projectId = response.data.projectId;
+        this.cgsdOpen = true;
+      });
+    },
+
     handleSettleBz(row) {
       const projectId = row.projectId || this.ids;
       this.settleFormBz.projectId = projectId;
@@ -1656,6 +1712,33 @@ export default {
                 this.$message({
                   type: "success",
                   message: "结算办结成功!",
+                });
+              });
+            })
+            .catch(() => {});
+        }
+      });
+    },
+
+    submitCgsd() {
+      this.$refs["cgsdForm"].validate((valid) => {
+        const tempForm = {};
+        tempForm.projectId = this.cgsdForm.projectId;
+        tempForm.cgsdtime = this.cgsdForm.cgsdtime;
+        if (valid) {
+          this.$confirm("是否继续?", "提示", {
+            confirmButtonText: "确定",
+            cancelButtonText: "取消",
+            type: "warning",
+          })
+            .then(() => {
+              this.settleOpen = false;
+              updateProjectCgsd(tempForm).then((response) => {
+                this.cgsdOpen = false;
+                this.getList();
+                this.$message({
+                  type: "success",
+                  message: "成功!",
                 });
               });
             })

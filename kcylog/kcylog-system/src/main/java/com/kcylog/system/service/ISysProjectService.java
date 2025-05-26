@@ -118,4 +118,8 @@ public interface ISysProjectService
     public List<SysProject> listProjectOperateValue(SysProject sysProject);
 
     public SysProject selectSysProjectByProjectNum(String xmbh);
+
+    public List<SysProject> selectRwapz(SysProject sysProject);
+
+    public List<SysProject> selectZyz(SysProject sysProject);
 }

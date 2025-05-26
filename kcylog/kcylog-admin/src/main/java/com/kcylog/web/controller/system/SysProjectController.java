@@ -12,6 +12,7 @@ import com.kcylog.common.utils.poi.ExcelUtil;
 import com.kcylog.system.common.*;
 import com.kcylog.system.domain.*;
 import com.kcylog.system.service.*;
+import com.kcylog.web.controller.common.ProjectHJ;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.bind.annotation.*;
@@ -1158,4 +1159,96 @@ public class SysProjectController extends BaseController {
         return toAjax(1);
     }
 
+    @Log(title = "预估产值金额", businessType = BusinessType.UPDATE)
+    @Transactional
+    @PutMapping("/editYgmoney")
+    public AjaxResult editYgmoney(@RequestBody SysProject sysProject) {
+        SysProject obj = new SysProject();
+        obj.setYgmoney(sysProject.getYgmoney());
+        obj.setProjectId(sysProject.getProjectId());
+        sysProjectService.updateSysProject(obj);
+        return toAjax(1);
+    }
+
+    @Log(title = "成果送达", businessType = BusinessType.UPDATE)
+    @Transactional
+    @PutMapping("/cgsd")
+    public AjaxResult cgsd(@RequestBody SysProject sysProject) {
+        SysProject obj = new SysProject();
+        obj.setCgsdtime(sysProject.getCgsdtime());
+        obj.setProjectId(sysProject.getProjectId());
+        sysProjectService.updateSysProject(obj);
+        return toAjax(1);
+    }
+
+    @GetMapping("/listProjectHj")
+    public TableDataInfo listProjectHj(SysProject sysProject) {
+        sysProject.setGzStatus((long)-1);
+        List<SysProject> list = sysProjectService.selectZyz(sysProject);
+        List<ProjectHJ> projectHJ = new ArrayList<>();
+        // 作业中项目统计
+        ProjectHJ projectHJ1 = new ProjectHJ();
+        projectHJ1.setXmglwz("作业中项目");
+        projectHJ1.setGcchb(0);
+        projectHJ1.setGxgcb(0);
+        projectHJ1.setBdcchb(0);
+        projectHJ1.setDlxxb(0);
+        projectHJ1.setHj(0);
+        for (SysProject obj : list){
+            switch (obj.getDepartment()){
+                case "工程测绘部":
+                    projectHJ1.setGcchb(projectHJ1.getGcchb() + 1);
+                    projectHJ1.setHj(projectHJ1.getHj() + 1);
+                    break;
+                case "管线工程部":
+                    projectHJ1.setGxgcb(projectHJ1.getGxgcb() + 1);
+                    projectHJ1.setHj(projectHJ1.getHj() + 1);
+                    break;
+                case "不动产测绘部":
+                    projectHJ1.setBdcchb(projectHJ1.getBdcchb() + 1);
+                    projectHJ1.setHj(projectHJ1.getHj() + 1);
+                    break;
+                case "地理信息部":
+                    projectHJ1.setDlxxb(projectHJ1.getDlxxb() + 1);
+                    projectHJ1.setHj(projectHJ1.getHj() + 1);
+                    break;
+                default:
+                    break;
+            }
+        }
+        //任务安排统计
+        List<SysProject> rojectTj1 = sysProjectService.selectRwapz(sysProject);
+        ProjectHJ projectHJ2 = new ProjectHJ();
+        projectHJ2.setXmglwz("任务安排");
+        projectHJ2.setGcchb(0);
+        projectHJ2.setGxgcb(0);
+        projectHJ2.setBdcchb(0);
+        projectHJ2.setDlxxb(0);
+        projectHJ2.setHj(0);
+        for (SysProject obj1 : rojectTj1){
+            switch (obj1.getDepartment()){
+                case "工程测绘部":
+                    projectHJ2.setGcchb(obj1.getNum());
+                    projectHJ2.setHj(projectHJ2.getHj() + obj1.getNum());
+                    break;
+                case "管线工程部":
+                    projectHJ2.setGxgcb(obj1.getNum());
+                    projectHJ2.setHj(projectHJ2.getHj() + obj1.getNum());
+                    break;
+                case "不动产测绘部":
+                    projectHJ2.setBdcchb(obj1.getNum());
+                    projectHJ2.setHj(projectHJ2.getHj() + obj1.getNum());
+                    break;
+                case "地理信息部":
+                    projectHJ2.setDlxxb(obj1.getNum());
+                    projectHJ2.setHj(projectHJ2.getHj() + obj1.getNum());
+                    break;
+                default:
+                    break;
+            }
+        }
+        projectHJ.add(projectHJ1);
+        projectHJ.add(projectHJ2);
+        return getDataTable(projectHJ);
+    }
 }

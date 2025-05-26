@@ -193,3 +193,27 @@ export function updateCad(data) {
     data: data
   })
 }
+
+export function updateProjectYgmoney(data) {
+  return request({
+    url: '/system/project/editYgmoney',
+    method: 'put',
+    data: data
+  })
+}
+
+export function updateProjectCgsd(data) {
+  return request({
+    url: '/system/project/cgsd',
+    method: 'put',
+    data: data
+  })
+}
+
+export function listProjectHj(query) {
+  return request({
+    url: '/system/project/listProjectHj',
+    method: 'get',
+    params: query
+  })
+}

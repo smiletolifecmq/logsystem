@@ -65,6 +65,9 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
         <result property="contractAmount" column="contract_amount"/>
         <result property="bjRemark" column="bj_remark"/>
         <result property="drawStatus" column="draw_status"/>
+        <result property="ygmoney" column="ygmoney"/>
+        <result property="cgsdtime" column="cgsdtime"/>
+        <result property="num" column="num"/>
 
         <association property="projectValue" javaType="java.util.List" resultMap="SysProjectValueResult"/>
         <association property="projectCar" javaType="java.util.List" resultMap="SysProjectCarResult"/>
@@ -327,6 +330,8 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
             <if test="qualityCoefficient != null">quality_coefficient = #{qualityCoefficient},</if>
             <if test="projectCoefficient != null">project_coefficient = #{projectCoefficient},</if>
             <if test="bjRemark != null">bj_remark = #{bjRemark},</if>
+            <if test="ygmoney != null">ygmoney = #{ygmoney},</if>
+            <if test="cgsdtime != null">cgsdtime = #{cgsdtime},</if>
         </trim>
         where project_id = #{projectId}
     </update>
@@ -792,4 +797,37 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
     <select id="selectSysProjectByProjectNum" parameterType="String" resultMap="SysProjectResult">
         select * from sys_project where project_num = #{projectNum}
     </select>
+
+    <select id="selectRwapz"  parameterType="SysProject" resultMap="SysProjectResult">
+        SELECT count(*) as num, department FROM sys_project
+        <where>
+            <if test="params.beginTime != null and params.beginTime != ''"><!-- 开始时间检索 -->
+                and (date_format(register_time,'%y%m%d') &gt;= date_format(#{params.beginTime},'%y%m%d'))
+            </if>
+            <if test="params.endTime != null and params.endTime != ''"><!-- 结束时间检索 -->
+                and (date_format(register_time,'%y%m%d') &lt;= date_format(#{params.endTime},'%y%m%d'))
+            </if>
+        </where>
+        GROUP BY department;
+    </select>
+
+    <select id="selectZyz" parameterType="SysProject" resultMap="SysProjectResult">
+        <include refid="selectSysProjectVo"/>
+        <where>
+            <if test="gzStatus != null and gzStatus == -1">
+                and status != 2 and status != 3 and  work_status != 4
+            </if>
+            <if test="gzStatus != null and gzStatus == 1">
+                and status = 1 and work_status = 4
+            </if>
+            <if test="gzStatus != null and gzStatus == 2">
+                and status = 2
+            </if>
+            <if test="gzStatus != null and gzStatus == 3">
+                and status = 3
+            </if>
+        </where>
+        order by p.work_status asc , p.project_id desc
+    </select>
+
 </mapper>
