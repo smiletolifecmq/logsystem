@@ -122,4 +122,34 @@ public interface SysProjectMapper
     public List<SysProject> selectRwapz(SysProject sysProject);
 
     public List<SysProject> selectZyz(SysProject sysProject);
+
+    public List<SysProject> selectXmfbs(SysProject sysProject);
+
+    public List<SysProject> selectZybj(SysProject sysProject);
+
+    public List<SysProject> selectYgmoney(SysProject sysProject);
+
+    public List<SysProject> selectYj(SysProject sysProject);
+
+    public List<SysProject> selectEj(SysProject sysProject);
+
+    public List<SysProject> selectXmcjscjy(SysProject sysProject);
+
+    public List<SysProject> selectCgsd(SysProject sysProject);
+
+    public List<SysProject> selectJyczwtb(SysProject sysProject);
+
+    public List<SysProject> selectNdjycz(SysProject sysProject);
+
+    public List<SysProject> selectXMCQ(SysProject sysProject);
+
+    public List<SysProject> selectXMCQYGY(SysProject sysProject);
+
+    public List<SysProject> selectWYIBJZ(SysProject sysProject);
+
+    public List<SysProject> selectWYIBJY(SysProject sysProject);
+
+    public List<SysProject> selectWEJZ(SysProject sysProject);
+
+    public List<SysProject> selectWEJY(SysProject sysProject);
 }

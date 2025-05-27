@@ -69,6 +69,9 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
         <result property="cgsdtime" column="cgsdtime"/>
         <result property="num" column="num"/>
 
+        <result property="money" column="money"/>
+        <result property="profitMoney" column="profit_money"/>
+
         <association property="projectValue" javaType="java.util.List" resultMap="SysProjectValueResult"/>
         <association property="projectCar" javaType="java.util.List" resultMap="SysProjectCarResult"/>
         <association property="reviewSub" javaType="java.util.List" resultMap="SysReviewSubResult"/>
@@ -807,6 +810,9 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
             <if test="params.endTime != null and params.endTime != ''"><!-- 结束时间检索 -->
                 and (date_format(register_time,'%y%m%d') &lt;= date_format(#{params.endTime},'%y%m%d'))
             </if>
+            <if test="params.endTime == null or params.endTime == ''"><!-- 结束时间检索 -->
+                and register_time is not null and register_time != ''
+            </if>
         </where>
         GROUP BY department;
     </select>
@@ -828,6 +834,262 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
             </if>
         </where>
         order by p.work_status asc , p.project_id desc
+    </select>
+
+    <select id="selectXmfbs"  parameterType="SysProject" resultMap="SysProjectResult">
+        SELECT
+        count(*) AS num,
+        c.dept_name AS department
+        FROM
+        sys_review_sub b
+        INNER JOIN sys_dept c on b.dept_id = c.dept_id
+        <where>
+            <if test="params.beginTime != null and params.beginTime != ''"><!-- 开始时间检索 -->
+                and (date_format(b.lot_time,'%y%m%d') &gt;= date_format(#{params.beginTime},'%y%m%d'))
+            </if>
+            <if test="params.endTime != null and params.endTime != ''"><!-- 结束时间检索 -->
+                and (date_format(b.lot_time,'%y%m%d') &lt;= date_format(#{params.endTime},'%y%m%d'))
+            </if>
+            <if test="params.endTime == null or params.endTime == ''"><!-- 结束时间检索 -->
+                and b.lot_time is not null
+            </if>
+            AND ( b.sub_type = 1 OR b.sub_type = 2 )
+        </where>
+        GROUP BY
+        b.dept_id
+    </select>
+
+    <select id="selectZybj"  parameterType="SysProject" resultMap="SysProjectResult">
+        SELECT
+        count(*) AS num,
+        department
+        FROM
+        sys_project
+        <where>
+            <if test="params.beginTime != null and params.beginTime != ''"><!-- 开始时间检索 -->
+                and (date_format(do_time,'%y%m%d') &gt;= date_format(#{params.beginTime},'%y%m%d'))
+            </if>
+            <if test="params.endTime != null and params.endTime != ''"><!-- 结束时间检索 -->
+                and (date_format(do_time,'%y%m%d') &lt;= date_format(#{params.endTime},'%y%m%d'))
+            </if>
+            <if test="params.endTime == null or params.endTime == ''"><!-- 结束时间检索 -->
+                and do_time is not null  and do_time != ''
+            </if>
+
+        </where>
+        GROUP BY
+        department
+    </select>
+
+    <select id="selectYgmoney"  parameterType="SysProject" resultMap="SysProjectResult">
+        SELECT
+        sum(ygmoney) AS ygmoney,
+        department
+        FROM
+        sys_project
+        <where>
+            <if test="params.beginTime != null and params.beginTime != ''"><!-- 开始时间检索 -->
+                and (date_format(register_time,'%y%m%d') &gt;= date_format(#{params.beginTime},'%y%m%d'))
+            </if>
+            <if test="params.endTime != null and params.endTime != ''"><!-- 结束时间检索 -->
+                and (date_format(register_time,'%y%m%d') &lt;= date_format(#{params.endTime},'%y%m%d'))
+            </if>
+            <if test="params.endTime == null or params.endTime == ''"><!-- 结束时间检索 -->
+                and register_time is not null and register_time != ''
+            </if>
+        </where>
+        GROUP BY
+        department
+    </select>
+
+    <select id="selectYj"  parameterType="SysProject" resultMap="SysProjectResult">
+        SELECT
+        count(*) AS num,
+        department
+        FROM
+        sys_project
+        <where>
+            <if test="params.beginTime != null and params.beginTime != ''"><!-- 开始时间检索 -->
+                and (date_format(one_check,'%y%m%d') &gt;= date_format(#{params.beginTime},'%y%m%d'))
+            </if>
+            <if test="params.endTime != null and params.endTime != ''"><!-- 结束时间检索 -->
+                and (date_format(one_check,'%y%m%d') &lt;= date_format(#{params.endTime},'%y%m%d'))
+            </if>
+            <if test="params.endTime == null or params.endTime == ''"><!-- 结束时间检索 -->
+                and one_check is not null and one_check != ''
+            </if>
+        </where>
+        GROUP BY
+        department
+    </select>
+
+    <select id="selectEj"  parameterType="SysProject" resultMap="SysProjectResult">
+        SELECT
+        count(*) AS num,
+        department
+        FROM
+        sys_project
+        <where>
+            <if test="params.beginTime != null and params.beginTime != ''"><!-- 开始时间检索 -->
+                and (date_format(two_check,'%y%m%d') &gt;= date_format(#{params.beginTime},'%y%m%d'))
+            </if>
+            <if test="params.endTime != null and params.endTime != ''"><!-- 结束时间检索 -->
+                and (date_format(two_check,'%y%m%d') &lt;= date_format(#{params.endTime},'%y%m%d'))
+            </if>
+            <if test="params.endTime == null or params.endTime == ''"><!-- 结束时间检索 -->
+                and two_check is not null and two_check != ''
+            </if>
+        </where>
+        GROUP BY
+        department
+    </select>
+
+    <select id="selectXmcjscjy"  parameterType="SysProject" resultMap="SysProjectResult">
+        SELECT
+        count(*) AS num,
+        b.department AS department
+        FROM
+        fq_project_process a
+        INNER JOIN sys_project b ON a.project_id = b.project_id
+        <where>
+            <if test="params.beginTime != null and params.beginTime != ''"><!-- 开始时间检索 -->
+                and (date_format(a.receive_time,'%y%m%d') &gt;= date_format(#{params.beginTime},'%y%m%d'))
+            </if>
+            <if test="params.endTime != null and params.endTime != ''"><!-- 结束时间检索 -->
+                and (date_format(a.receive_time,'%y%m%d') &lt;= date_format(#{params.endTime},'%y%m%d'))
+            </if>
+            <if test="params.endTime == null or params.endTime == ''"><!-- 结束时间检索 -->
+                and a.receive_time is not null and a.receive_time != ''
+            </if>
+        </where>
+        GROUP BY b.department
+    </select>
+
+    <select id="selectCgsd"  parameterType="SysProject" resultMap="SysProjectResult">
+        SELECT
+        count(*) AS num,
+        department
+        FROM
+        sys_project
+        <where>
+            <if test="params.beginTime != null and params.beginTime != ''"><!-- 开始时间检索 -->
+                and (date_format(cgsdtime,'%y%m%d') &gt;= date_format(#{params.beginTime},'%y%m%d'))
+            </if>
+            <if test="params.endTime != null and params.endTime != ''"><!-- 结束时间检索 -->
+                and (date_format(cgsdtime,'%y%m%d') &lt;= date_format(#{params.endTime},'%y%m%d'))
+            </if>
+            <if test="params.endTime == null or params.endTime == ''"><!-- 结束时间检索 -->
+                and cgsdtime is not null
+            </if>
+        </where>
+        GROUP BY
+        department
+    </select>
+
+    <select id="selectJyczwtb"  parameterType="SysProject" resultMap="SysProjectResult">
+        SELECT
+            count(*) AS num,
+            department
+        FROM
+            sys_project
+        WHERE
+            is_two_check = 1
+          AND operate_user = ''
+          AND receptionist IN ( '王媛媛', '陈晓钰', '陈美玲', '陈美玲1', '黄丽' )
+        GROUP BY
+            department;
+    </select>
+
+    <select id="selectNdjycz"  parameterType="SysProject" resultMap="SysProjectResult">
+        SELECT
+        SUM( a.money ) as money,
+        SUM( a.profit_money ) as profit_money,
+        d.dept_name as department
+        FROM
+        sys_project_value a
+        INNER JOIN sys_project b ON a.project_id = b.project_id
+        INNER JOIN sys_user c ON a.user_name = c.user_name
+        INNER JOIN sys_dept d ON c.dept_id = d.dept_id
+        WHERE
+            YEAR(b.settlement_time) = YEAR(NOW())
+        GROUP BY
+            d.dept_name;
+    </select>
+
+    <select id="selectXMCQ"  parameterType="SysProject" resultMap="SysProjectResult">
+        SELECT
+            count(*) AS num,
+            department
+        FROM
+            sys_project
+        WHERE
+                STR_TO_DATE( do_time, '%Y-%m-%d' ) > STR_TO_DATE( project_end_alias, '%Y-%m-%d' )
+        GROUP BY
+            department
+    </select>
+
+    <select id="selectXMCQYGY"  parameterType="SysProject" resultMap="SysProjectResult">
+        SELECT
+            count(*) AS num,
+            department
+        FROM
+            sys_project
+        WHERE
+                STR_TO_DATE( do_time, '%Y-%m-%d' ) > DATE_ADD( STR_TO_DATE( project_end_alias, '%Y-%m-%d' ), INTERVAL 1 MONTH )
+        GROUP BY
+            department
+    </select>
+
+    <select id="selectWYIBJZ"  parameterType="SysProject" resultMap="SysProjectResult">
+        SELECT
+            count(*) AS num,
+            department
+        FROM
+            sys_project
+        WHERE
+            do_time is not null and do_time != '' and (one_check is null  or one_check = '')
+            and NOW() > DATE_ADD(STR_TO_DATE(do_time, '%Y-%m-%d'), INTERVAL 7 DAY)
+        GROUP BY
+            department
+    </select>
+
+    <select id="selectWYIBJY"  parameterType="SysProject" resultMap="SysProjectResult">
+        SELECT
+            count(*) AS num,
+            department
+        FROM
+            sys_project
+        WHERE
+            do_time is not null and do_time != '' and (one_check is null  or one_check = '')
+            and NOW() > DATE_ADD(STR_TO_DATE(do_time, '%Y-%m-%d'), INTERVAL 1 MONTH)
+        GROUP BY
+            department
+    </select>
+
+    <select id="selectWEJZ"  parameterType="SysProject" resultMap="SysProjectResult">
+        SELECT
+            count(*) AS num,
+            department
+        FROM
+            sys_project
+        WHERE
+            one_check is not null and one_check != '' and (two_check is null or two_check = '')
+            and NOW() > DATE_ADD(STR_TO_DATE(one_check, '%Y-%m-%d'), INTERVAL 7 DAY)
+        GROUP BY
+            department
+    </select>
+
+    <select id="selectWEJY"  parameterType="SysProject" resultMap="SysProjectResult">
+        SELECT
+            count(*) AS num,
+            department
+        FROM
+            sys_project
+        WHERE
+            one_check is not null and one_check != '' and (two_check is null or two_check = '')
+            and NOW() > DATE_ADD(STR_TO_DATE(one_check, '%Y-%m-%d'), INTERVAL 1 MONTH)
+        GROUP BY
+            department
     </select>
 
 </mapper>

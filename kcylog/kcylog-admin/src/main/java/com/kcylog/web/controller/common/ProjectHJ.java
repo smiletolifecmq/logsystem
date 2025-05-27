@@ -1,11 +1,19 @@
 package com.kcylog.web.controller.common;
 
+import com.kcylog.common.annotation.Excel;
+
 public class ProjectHJ {
+    @Excel(name = "项目管理网站流程\\部门", needMerge = true)
     private String xmglwz;
+    @Excel(name = "工程测绘部", needMerge = true)
     private int gcchb;
+    @Excel(name = "管线工程部", needMerge = true)
     private int gxgcb;
+    @Excel(name = "不动产测绘部", needMerge = true)
     private int bdcchb;
+    @Excel(name = "地理信息部", needMerge = true)
     private int dlxxb;
+    @Excel(name = "合计", needMerge = true)
     private int hj;
     private int num;
     private String dept;

@@ -1,7 +1,6 @@
 package com.kcylog.system.service.impl;
 
 import com.kcylog.common.utils.DateUtils;
-import com.kcylog.system.domain.ProjectTj;
 import com.kcylog.system.domain.SysProject;
 import com.kcylog.system.mapper.SysProjectMapper;
 import com.kcylog.system.service.ISysProjectService;
@@ -282,5 +281,95 @@ public class SysProjectServiceImpl implements ISysProjectService
     public List<SysProject> selectZyz(SysProject sysProject)
     {
         return sysProjectMapper.selectZyz(sysProject);
+    }
+
+    @Override
+    public List<SysProject> selectXmfbs(SysProject sysProject)
+    {
+        return sysProjectMapper.selectXmfbs(sysProject);
+    }
+
+    @Override
+    public List<SysProject> selectZybj(SysProject sysProject)
+    {
+        return sysProjectMapper.selectZybj(sysProject);
+    }
+
+    @Override
+    public List<SysProject> selectYgmoney(SysProject sysProject)
+    {
+        return sysProjectMapper.selectYgmoney(sysProject);
+    }
+
+    @Override
+    public List<SysProject> selectYj(SysProject sysProject)
+    {
+        return sysProjectMapper.selectYj(sysProject);
+    }
+
+    @Override
+    public List<SysProject> selectEj(SysProject sysProject)
+    {
+        return sysProjectMapper.selectEj(sysProject);
+    }
+
+    @Override
+    public List<SysProject> selectXmcjscjy(SysProject sysProject)
+    {
+        return sysProjectMapper.selectXmcjscjy(sysProject);
+    }
+
+    @Override
+    public List<SysProject> selectCgsd(SysProject sysProject)
+    {
+        return sysProjectMapper.selectCgsd(sysProject);
+    }
+
+    @Override
+    public List<SysProject> selectJyczwtb(SysProject sysProject)
+    {
+        return sysProjectMapper.selectJyczwtb(sysProject);
+    }
+
+    @Override
+    public List<SysProject> selectNdjycz(SysProject sysProject)
+    {
+        return sysProjectMapper.selectNdjycz(sysProject);
+    }
+
+    @Override
+    public List<SysProject> selectXMCQ(SysProject sysProject)
+    {
+        return sysProjectMapper.selectXMCQ(sysProject);
+    }
+
+    @Override
+    public List<SysProject> selectXMCQYGY(SysProject sysProject)
+    {
+        return sysProjectMapper.selectXMCQYGY(sysProject);
+    }
+
+    @Override
+    public List<SysProject> selectWYIBJZ(SysProject sysProject)
+    {
+        return sysProjectMapper.selectWYIBJZ(sysProject);
+    }
+
+    @Override
+    public List<SysProject> selectWYIBJY(SysProject sysProject)
+    {
+        return sysProjectMapper.selectWYIBJY(sysProject);
+    }
+
+    @Override
+    public List<SysProject> selectWEJZ(SysProject sysProject)
+    {
+        return sysProjectMapper.selectWEJZ(sysProject);
+    }
+
+    @Override
+    public List<SysProject> selectWEJY(SysProject sysProject)
+    {
+        return sysProjectMapper.selectWEJY(sysProject);
     }
 }

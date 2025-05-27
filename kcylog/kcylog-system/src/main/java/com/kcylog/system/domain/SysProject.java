@@ -240,7 +240,27 @@ public class SysProject extends BaseEntity
 
     private BigDecimal ygmoney;
 
+    private BigDecimal money;
+
+    private BigDecimal profitMoney;
+
     private int num;
+
+    public BigDecimal getMoney() {
+        return money;
+    }
+
+    public void setMoney(BigDecimal money) {
+        this.money = money;
+    }
+
+    public BigDecimal getProfitMoney() {
+        return profitMoney;
+    }
+
+    public void setProfitMoney(BigDecimal profitMoney) {
+        this.profitMoney = profitMoney;
+    }
 
     public int getNum() {
         return num;

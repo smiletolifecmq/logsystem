@@ -19,6 +19,7 @@ import org.springframework.web.bind.annotation.*;
 
 import javax.servlet.http.HttpServletResponse;
 import java.math.BigDecimal;
+import java.math.RoundingMode;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.*;
@@ -1247,8 +1248,1134 @@ public class SysProjectController extends BaseController {
                     break;
             }
         }
+        //项目分包数
+        List<SysProject> rojectTj2 = sysProjectService.selectXmfbs(sysProject);
+        ProjectHJ projectHJ3 = new ProjectHJ();
+        projectHJ3.setXmglwz("项目分包数");
+        projectHJ3.setGcchb(0);
+        projectHJ3.setGxgcb(0);
+        projectHJ3.setBdcchb(0);
+        projectHJ3.setDlxxb(0);
+        projectHJ3.setHj(0);
+        for (SysProject obj2 : rojectTj2){
+            switch (obj2.getDepartment()){
+                case "工程测绘部":
+                    projectHJ3.setGcchb(obj2.getNum());
+                    projectHJ3.setHj(projectHJ3.getHj() + obj2.getNum());
+                    break;
+                case "管线工程部":
+                    projectHJ3.setGxgcb(obj2.getNum());
+                    projectHJ3.setHj(projectHJ3.getHj() + obj2.getNum());
+                    break;
+                case "不动产测绘部":
+                    projectHJ3.setBdcchb(obj2.getNum());
+                    projectHJ3.setHj(projectHJ3.getHj() + obj2.getNum());
+                    break;
+                case "地理信息部":
+                    projectHJ3.setDlxxb(obj2.getNum());
+                    projectHJ3.setHj(projectHJ3.getHj() + obj2.getNum());
+                    break;
+                default:
+                    break;
+            }
+        }
+        //作业办结
+        List<SysProject> rojectTj3 = sysProjectService.selectZybj(sysProject);
+        ProjectHJ projectHJ4 = new ProjectHJ();
+        projectHJ4.setXmglwz("作业办结");
+        projectHJ4.setGcchb(0);
+        projectHJ4.setGxgcb(0);
+        projectHJ4.setBdcchb(0);
+        projectHJ4.setDlxxb(0);
+        projectHJ4.setHj(0);
+        for (SysProject obj2 : rojectTj3){
+            switch (obj2.getDepartment()){
+                case "工程测绘部":
+                    projectHJ4.setGcchb(obj2.getNum());
+                    projectHJ4.setHj(projectHJ4.getHj() + obj2.getNum());
+                    break;
+                case "管线工程部":
+                    projectHJ4.setGxgcb(obj2.getNum());
+                    projectHJ4.setHj(projectHJ4.getHj() + obj2.getNum());
+                    break;
+                case "不动产测绘部":
+                    projectHJ4.setBdcchb(obj2.getNum());
+                    projectHJ4.setHj(projectHJ4.getHj() + obj2.getNum());
+                    break;
+                case "地理信息部":
+                    projectHJ4.setDlxxb(obj2.getNum());
+                    projectHJ4.setHj(projectHJ4.getHj() + obj2.getNum());
+                    break;
+                default:
+                    break;
+            }
+        }
+
+        //作业办结经营产值(预估)
+        List<SysProject> rojectTj4 = sysProjectService.selectYgmoney(sysProject);
+        ProjectHJ projectHJ5 = new ProjectHJ();
+        projectHJ5.setXmglwz("作业办结经营产值(预估)");
+        projectHJ5.setGcchb(0);
+        projectHJ5.setGxgcb(0);
+        projectHJ5.setBdcchb(0);
+        projectHJ5.setDlxxb(0);
+        projectHJ5.setHj(0);
+        for (SysProject obj2 : rojectTj4){
+            switch (obj2.getDepartment()){
+                case "工程测绘部":
+                    projectHJ5.setGcchb(obj2.getYgmoney().setScale(0, RoundingMode.HALF_UP).intValue());
+                    projectHJ5.setHj(projectHJ5.getHj() + obj2.getYgmoney().setScale(0, RoundingMode.HALF_UP).intValue());
+                    break;
+                case "管线工程部":
+                    projectHJ5.setGxgcb(obj2.getYgmoney().setScale(0, RoundingMode.HALF_UP).intValue());
+                    projectHJ5.setHj(projectHJ5.getHj() + obj2.getYgmoney().setScale(0, RoundingMode.HALF_UP).intValue());
+                    break;
+                case "不动产测绘部":
+                    projectHJ5.setBdcchb(obj2.getYgmoney().setScale(0, RoundingMode.HALF_UP).intValue());
+                    projectHJ5.setHj(projectHJ5.getHj() + obj2.getYgmoney().setScale(0, RoundingMode.HALF_UP).intValue());
+                    break;
+                case "地理信息部":
+                    projectHJ5.setDlxxb(obj2.getYgmoney().setScale(0, RoundingMode.HALF_UP).intValue());
+                    projectHJ5.setHj(projectHJ5.getHj() + obj2.getYgmoney().setScale(0, RoundingMode.HALF_UP).intValue());
+                    break;
+                default:
+                    break;
+            }
+        }
+
+        //分院一检办结
+        List<SysProject> rojectTj5 = sysProjectService.selectYj(sysProject);
+        ProjectHJ projectHJ6 = new ProjectHJ();
+        projectHJ6.setXmglwz("分院一检办结");
+        projectHJ6.setGcchb(0);
+        projectHJ6.setGxgcb(0);
+        projectHJ6.setBdcchb(0);
+        projectHJ6.setDlxxb(0);
+        projectHJ6.setHj(0);
+        for (SysProject obj2 : rojectTj5){
+            switch (obj2.getDepartment()){
+                case "工程测绘部":
+                    projectHJ6.setGcchb(obj2.getNum());
+                    projectHJ6.setHj(projectHJ6.getHj() + obj2.getNum());
+                    break;
+                case "管线工程部":
+                    projectHJ6.setGxgcb(obj2.getNum());
+                    projectHJ6.setHj(projectHJ6.getHj() + obj2.getNum());
+                    break;
+                case "不动产测绘部":
+                    projectHJ6.setBdcchb(obj2.getNum());
+                    projectHJ6.setHj(projectHJ6.getHj() + obj2.getNum());
+                    break;
+                case "地理信息部":
+                    projectHJ6.setDlxxb(obj2.getNum());
+                    projectHJ6.setHj(projectHJ6.getHj() + obj2.getNum());
+                    break;
+                default:
+                    break;
+            }
+        }
+
+        //分院二检办结
+        List<SysProject> rojectTj6 = sysProjectService.selectEj(sysProject);
+        ProjectHJ projectHJ7 = new ProjectHJ();
+        projectHJ7.setXmglwz("分院二检办结");
+        projectHJ7.setGcchb(0);
+        projectHJ7.setGxgcb(0);
+        projectHJ7.setBdcchb(0);
+        projectHJ7.setDlxxb(0);
+        projectHJ7.setHj(0);
+        for (SysProject obj2 : rojectTj6){
+            switch (obj2.getDepartment()){
+                case "工程测绘部":
+                    projectHJ7.setGcchb(obj2.getNum());
+                    projectHJ7.setHj(projectHJ7.getHj() + obj2.getNum());
+                    break;
+                case "管线工程部":
+                    projectHJ7.setGxgcb(obj2.getNum());
+                    projectHJ7.setHj(projectHJ7.getHj() + obj2.getNum());
+                    break;
+                case "不动产测绘部":
+                    projectHJ7.setBdcchb(obj2.getNum());
+                    projectHJ7.setHj(projectHJ7.getHj() + obj2.getNum());
+                    break;
+                case "地理信息部":
+                    projectHJ7.setDlxxb(obj2.getNum());
+                    projectHJ7.setHj(projectHJ7.getHj() + obj2.getNum());
+                    break;
+                default:
+                    break;
+            }
+        }
+
+        //项目出件（市场经营）
+        List<SysProject> rojectTj7 = sysProjectService.selectXmcjscjy(sysProject);
+        ProjectHJ projectHJ8 = new ProjectHJ();
+        projectHJ8.setXmglwz("项目出件（市场经营）");
+        projectHJ8.setGcchb(0);
+        projectHJ8.setGxgcb(0);
+        projectHJ8.setBdcchb(0);
+        projectHJ8.setDlxxb(0);
+        projectHJ8.setHj(0);
+        for (SysProject obj2 : rojectTj7){
+            switch (obj2.getDepartment()){
+                case "工程测绘部":
+                    projectHJ8.setGcchb(obj2.getNum());
+                    projectHJ8.setHj(projectHJ8.getHj() + obj2.getNum());
+                    break;
+                case "管线工程部":
+                    projectHJ8.setGxgcb(obj2.getNum());
+                    projectHJ8.setHj(projectHJ8.getHj() + obj2.getNum());
+                    break;
+                case "不动产测绘部":
+                    projectHJ8.setBdcchb(obj2.getNum());
+                    projectHJ8.setHj(projectHJ8.getHj() + obj2.getNum());
+                    break;
+                case "地理信息部":
+                    projectHJ8.setDlxxb(obj2.getNum());
+                    projectHJ8.setHj(projectHJ8.getHj() + obj2.getNum());
+                    break;
+                default:
+                    break;
+            }
+        }
+
+        //成果送达（市场经营）
+        List<SysProject> rojectTj8 = sysProjectService.selectCgsd(sysProject);
+        ProjectHJ projectHJ9 = new ProjectHJ();
+        projectHJ9.setXmglwz("成果送达（市场经营）");
+        projectHJ9.setGcchb(0);
+        projectHJ9.setGxgcb(0);
+        projectHJ9.setBdcchb(0);
+        projectHJ9.setDlxxb(0);
+        projectHJ9.setHj(0);
+        for (SysProject obj2 : rojectTj8){
+            switch (obj2.getDepartment()){
+                case "工程测绘部":
+                    projectHJ9.setGcchb(obj2.getNum());
+                    projectHJ9.setHj(projectHJ9.getHj() + obj2.getNum());
+                    break;
+                case "管线工程部":
+                    projectHJ9.setGxgcb(obj2.getNum());
+                    projectHJ9.setHj(projectHJ9.getHj() + obj2.getNum());
+                    break;
+                case "不动产测绘部":
+                    projectHJ9.setBdcchb(obj2.getNum());
+                    projectHJ9.setHj(projectHJ9.getHj() + obj2.getNum());
+                    break;
+                case "地理信息部":
+                    projectHJ9.setDlxxb(obj2.getNum());
+                    projectHJ9.setHj(projectHJ9.getHj() + obj2.getNum());
+                    break;
+                default:
+                    break;
+            }
+        }
+
+        //项目经营产值未填报
+        List<SysProject> rojectTj9 = sysProjectService.selectJyczwtb(sysProject);
+        ProjectHJ projectHJ10 = new ProjectHJ();
+        projectHJ10.setXmglwz("项目经营产值未填报");
+        projectHJ10.setGcchb(0);
+        projectHJ10.setGxgcb(0);
+        projectHJ10.setBdcchb(0);
+        projectHJ10.setDlxxb(0);
+        projectHJ10.setHj(0);
+        for (SysProject obj2 : rojectTj9){
+            switch (obj2.getDepartment()){
+                case "工程测绘部":
+                    projectHJ10.setGcchb(obj2.getNum());
+                    projectHJ10.setHj(projectHJ10.getHj() + obj2.getNum());
+                    break;
+                case "管线工程部":
+                    projectHJ10.setGxgcb(obj2.getNum());
+                    projectHJ10.setHj(projectHJ10.getHj() + obj2.getNum());
+                    break;
+                case "不动产测绘部":
+                    projectHJ10.setBdcchb(obj2.getNum());
+                    projectHJ10.setHj(projectHJ10.getHj() + obj2.getNum());
+                    break;
+                case "地理信息部":
+                    projectHJ10.setDlxxb(obj2.getNum());
+                    projectHJ10.setHj(projectHJ10.getHj() + obj2.getNum());
+                    break;
+                default:
+                    break;
+            }
+        }
+
+        //年度完成经营产值
+        List<SysProject> rojectTj10 = sysProjectService.selectNdjycz(sysProject);
+        ProjectHJ projectHJ11 = new ProjectHJ();
+        projectHJ11.setXmglwz("年度完成经营产值");
+        projectHJ11.setGcchb(0);
+        projectHJ11.setGxgcb(0);
+        projectHJ11.setBdcchb(0);
+        projectHJ11.setDlxxb(0);
+        projectHJ11.setHj(0);
+        for (SysProject obj2 : rojectTj10){
+            switch (obj2.getDepartment()){
+                case "工程测绘部":
+                    projectHJ11.setGcchb(obj2.getMoney().setScale(0, RoundingMode.HALF_UP).intValue());
+                    projectHJ11.setHj(projectHJ11.getHj() + obj2.getMoney().setScale(0, RoundingMode.HALF_UP).intValue());
+                    break;
+                case "管线工程部":
+                    projectHJ11.setGxgcb(obj2.getMoney().setScale(0, RoundingMode.HALF_UP).intValue());
+                    projectHJ11.setHj(projectHJ11.getHj() + obj2.getMoney().setScale(0, RoundingMode.HALF_UP).intValue());
+                    break;
+                case "不动产测绘部":
+                    projectHJ11.setBdcchb(obj2.getMoney().setScale(0, RoundingMode.HALF_UP).intValue());
+                    projectHJ11.setHj(projectHJ11.getHj() + obj2.getMoney().setScale(0, RoundingMode.HALF_UP).intValue());
+                    break;
+                case "地理信息部":
+                    projectHJ11.setDlxxb(obj2.getMoney().setScale(0, RoundingMode.HALF_UP).intValue());
+                    projectHJ11.setHj(projectHJ11.getHj() + obj2.getMoney().setScale(0, RoundingMode.HALF_UP).intValue());
+                    break;
+                default:
+                    break;
+            }
+        }
+
+        //年度完成经营净产值（扣分包）
+        ProjectHJ projectHJ12 = new ProjectHJ();
+        projectHJ12.setXmglwz("年度完成经营净产值（扣分包）");
+        projectHJ12.setGcchb(0);
+        projectHJ12.setGxgcb(0);
+        projectHJ12.setBdcchb(0);
+        projectHJ12.setDlxxb(0);
+        projectHJ12.setHj(0);
+        for (SysProject obj2 : rojectTj10){
+            switch (obj2.getDepartment()){
+                case "工程测绘部":
+                    projectHJ12.setGcchb(obj2.getProfitMoney().setScale(0, RoundingMode.HALF_UP).intValue());
+                    projectHJ12.setHj(projectHJ12.getHj() + obj2.getProfitMoney().setScale(0, RoundingMode.HALF_UP).intValue());
+                    break;
+                case "管线工程部":
+                    projectHJ12.setGxgcb(obj2.getProfitMoney().setScale(0, RoundingMode.HALF_UP).intValue());
+                    projectHJ12.setHj(projectHJ12.getHj() + obj2.getProfitMoney().setScale(0, RoundingMode.HALF_UP).intValue());
+                    break;
+                case "不动产测绘部":
+                    projectHJ12.setBdcchb(obj2.getProfitMoney().setScale(0, RoundingMode.HALF_UP).intValue());
+                    projectHJ12.setHj(projectHJ12.getHj() + obj2.getProfitMoney().setScale(0, RoundingMode.HALF_UP).intValue());
+                    break;
+                case "地理信息部":
+                    projectHJ12.setDlxxb(obj2.getProfitMoney().setScale(0, RoundingMode.HALF_UP).intValue());
+                    projectHJ12.setHj(projectHJ12.getHj() + obj2.getProfitMoney().setScale(0, RoundingMode.HALF_UP).intValue());
+                    break;
+                default:
+                    break;
+            }
+        }
+
+        //项目工期超期
+        List<SysProject> rojectTj11 = sysProjectService.selectXMCQ(sysProject);
+        ProjectHJ projectHJ13 = new ProjectHJ();
+        projectHJ13.setXmglwz("项目工期超期");
+        projectHJ13.setGcchb(0);
+        projectHJ13.setGxgcb(0);
+        projectHJ13.setBdcchb(0);
+        projectHJ13.setDlxxb(0);
+        projectHJ13.setHj(0);
+        for (SysProject obj2 : rojectTj11){
+            switch (obj2.getDepartment()){
+                case "工程测绘部":
+                    projectHJ13.setGcchb(obj2.getNum());
+                    projectHJ13.setHj(projectHJ13.getHj() + obj2.getNum());
+                    break;
+                case "管线工程部":
+                    projectHJ13.setGxgcb(obj2.getNum());
+                    projectHJ13.setHj(projectHJ13.getHj() + obj2.getNum());
+                    break;
+                case "不动产测绘部":
+                    projectHJ13.setBdcchb(obj2.getNum());
+                    projectHJ13.setHj(projectHJ13.getHj() + obj2.getNum());
+                    break;
+                case "地理信息部":
+                    projectHJ13.setDlxxb(obj2.getNum());
+                    projectHJ13.setHj(projectHJ13.getHj() + obj2.getNum());
+                    break;
+                default:
+                    break;
+            }
+        }
+
+        //项目工期超期超1一个月
+        List<SysProject> rojectTj12 = sysProjectService.selectXMCQYGY(sysProject);
+        ProjectHJ projectHJ14 = new ProjectHJ();
+        projectHJ14.setXmglwz("项目工期超期超1一个月");
+        projectHJ14.setGcchb(0);
+        projectHJ14.setGxgcb(0);
+        projectHJ14.setBdcchb(0);
+        projectHJ14.setDlxxb(0);
+        projectHJ14.setHj(0);
+        for (SysProject obj2 : rojectTj12){
+            switch (obj2.getDepartment()){
+                case "工程测绘部":
+                    projectHJ14.setGcchb(obj2.getNum());
+                    projectHJ14.setHj(projectHJ14.getHj() + obj2.getNum());
+                    break;
+                case "管线工程部":
+                    projectHJ14.setGxgcb(obj2.getNum());
+                    projectHJ14.setHj(projectHJ14.getHj() + obj2.getNum());
+                    break;
+                case "不动产测绘部":
+                    projectHJ14.setBdcchb(obj2.getNum());
+                    projectHJ14.setHj(projectHJ14.getHj() + obj2.getNum());
+                    break;
+                case "地理信息部":
+                    projectHJ14.setDlxxb(obj2.getNum());
+                    projectHJ14.setHj(projectHJ14.getHj() + obj2.getNum());
+                    break;
+                default:
+                    break;
+            }
+        }
+
+        //作业办结后未一检办结（超1周）
+        List<SysProject> rojectTj13 = sysProjectService.selectWYIBJZ(sysProject);
+        ProjectHJ projectHJ15 = new ProjectHJ();
+        projectHJ15.setXmglwz("作业办结后未一检办结（超1周）");
+        projectHJ15.setGcchb(0);
+        projectHJ15.setGxgcb(0);
+        projectHJ15.setBdcchb(0);
+        projectHJ15.setDlxxb(0);
+        projectHJ15.setHj(0);
+        for (SysProject obj2 : rojectTj13){
+            switch (obj2.getDepartment()){
+                case "工程测绘部":
+                    projectHJ15.setGcchb(obj2.getNum());
+                    projectHJ15.setHj(projectHJ15.getHj() + obj2.getNum());
+                    break;
+                case "管线工程部":
+                    projectHJ15.setGxgcb(obj2.getNum());
+                    projectHJ15.setHj(projectHJ15.getHj() + obj2.getNum());
+                    break;
+                case "不动产测绘部":
+                    projectHJ15.setBdcchb(obj2.getNum());
+                    projectHJ15.setHj(projectHJ15.getHj() + obj2.getNum());
+                    break;
+                case "地理信息部":
+                    projectHJ15.setDlxxb(obj2.getNum());
+                    projectHJ15.setHj(projectHJ15.getHj() + obj2.getNum());
+                    break;
+                default:
+                    break;
+            }
+        }
+
+        //作业办结后未一检办结（超1个月）
+        List<SysProject> rojectTj14 = sysProjectService.selectWYIBJY(sysProject);
+        ProjectHJ projectHJ16 = new ProjectHJ();
+        projectHJ16.setXmglwz("作业办结后未一检办结（超1个月）");
+        projectHJ16.setGcchb(0);
+        projectHJ16.setGxgcb(0);
+        projectHJ16.setBdcchb(0);
+        projectHJ16.setDlxxb(0);
+        projectHJ16.setHj(0);
+        for (SysProject obj2 : rojectTj14){
+            switch (obj2.getDepartment()){
+                case "工程测绘部":
+                    projectHJ16.setGcchb(obj2.getNum());
+                    projectHJ16.setHj(projectHJ16.getHj() + obj2.getNum());
+                    break;
+                case "管线工程部":
+                    projectHJ16.setGxgcb(obj2.getNum());
+                    projectHJ16.setHj(projectHJ16.getHj() + obj2.getNum());
+                    break;
+                case "不动产测绘部":
+                    projectHJ16.setBdcchb(obj2.getNum());
+                    projectHJ16.setHj(projectHJ16.getHj() + obj2.getNum());
+                    break;
+                case "地理信息部":
+                    projectHJ16.setDlxxb(obj2.getNum());
+                    projectHJ16.setHj(projectHJ16.getHj() + obj2.getNum());
+                    break;
+                default:
+                    break;
+            }
+        }
+
+        //一检后未二检办结（超1周）
+        List<SysProject> rojectTj15 = sysProjectService.selectWEJZ(sysProject);
+        ProjectHJ projectHJ17 = new ProjectHJ();
+        projectHJ17.setXmglwz("一检后未二检办结（超1周）");
+        projectHJ17.setGcchb(0);
+        projectHJ17.setGxgcb(0);
+        projectHJ17.setBdcchb(0);
+        projectHJ17.setDlxxb(0);
+        projectHJ17.setHj(0);
+        for (SysProject obj2 : rojectTj15){
+            switch (obj2.getDepartment()){
+                case "工程测绘部":
+                    projectHJ17.setGcchb(obj2.getNum());
+                    projectHJ17.setHj(projectHJ17.getHj() + obj2.getNum());
+                    break;
+                case "管线工程部":
+                    projectHJ17.setGxgcb(obj2.getNum());
+                    projectHJ17.setHj(projectHJ17.getHj() + obj2.getNum());
+                    break;
+                case "不动产测绘部":
+                    projectHJ17.setBdcchb(obj2.getNum());
+                    projectHJ17.setHj(projectHJ17.getHj() + obj2.getNum());
+                    break;
+                case "地理信息部":
+                    projectHJ17.setDlxxb(obj2.getNum());
+                    projectHJ17.setHj(projectHJ17.getHj() + obj2.getNum());
+                    break;
+                default:
+                    break;
+            }
+        }
+
+        //一检后未二检办结（超1个月）
+        List<SysProject> rojectTj16 = sysProjectService.selectWEJY(sysProject);
+        ProjectHJ projectHJ18 = new ProjectHJ();
+        projectHJ18.setXmglwz("一检后未二检办结（超1个月）");
+        projectHJ18.setGcchb(0);
+        projectHJ18.setGxgcb(0);
+        projectHJ18.setBdcchb(0);
+        projectHJ18.setDlxxb(0);
+        projectHJ18.setHj(0);
+        for (SysProject obj2 : rojectTj16){
+            switch (obj2.getDepartment()){
+                case "工程测绘部":
+                    projectHJ18.setGcchb(obj2.getNum());
+                    projectHJ18.setHj(projectHJ18.getHj() + obj2.getNum());
+                    break;
+                case "管线工程部":
+                    projectHJ18.setGxgcb(obj2.getNum());
+                    projectHJ18.setHj(projectHJ18.getHj() + obj2.getNum());
+                    break;
+                case "不动产测绘部":
+                    projectHJ18.setBdcchb(obj2.getNum());
+                    projectHJ18.setHj(projectHJ18.getHj() + obj2.getNum());
+                    break;
+                case "地理信息部":
+                    projectHJ18.setDlxxb(obj2.getNum());
+                    projectHJ18.setHj(projectHJ18.getHj() + obj2.getNum());
+                    break;
+                default:
+                    break;
+            }
+        }
+
         projectHJ.add(projectHJ1);
         projectHJ.add(projectHJ2);
+        projectHJ.add(projectHJ3);
+        projectHJ.add(projectHJ4);
+        projectHJ.add(projectHJ5);
+        projectHJ.add(projectHJ6);
+        projectHJ.add(projectHJ7);
+        projectHJ.add(projectHJ8);
+        projectHJ.add(projectHJ9);
+        projectHJ.add(projectHJ10);
+        projectHJ.add(projectHJ11);
+        projectHJ.add(projectHJ12);
+        projectHJ.add(projectHJ13);
+        projectHJ.add(projectHJ14);
+        projectHJ.add(projectHJ15);
+        projectHJ.add(projectHJ16);
+        projectHJ.add(projectHJ17);
+        projectHJ.add(projectHJ18);
         return getDataTable(projectHJ);
     }
+
+    @Log(title = "周报导出", businessType = BusinessType.EXPORT)
+    @PostMapping("/exporTj")
+    public void exporTj(HttpServletResponse response, SysProject sysProject) {
+        sysProject.setGzStatus((long)-1);
+        List<SysProject> list = sysProjectService.selectZyz(sysProject);
+        List<ProjectHJ> projectHJ = new ArrayList<>();
+        // 作业中项目统计
+        ProjectHJ projectHJ1 = new ProjectHJ();
+        projectHJ1.setXmglwz("作业中项目");
+        projectHJ1.setGcchb(0);
+        projectHJ1.setGxgcb(0);
+        projectHJ1.setBdcchb(0);
+        projectHJ1.setDlxxb(0);
+        projectHJ1.setHj(0);
+        for (SysProject obj : list){
+            switch (obj.getDepartment()){
+                case "工程测绘部":
+                    projectHJ1.setGcchb(projectHJ1.getGcchb() + 1);
+                    projectHJ1.setHj(projectHJ1.getHj() + 1);
+                    break;
+                case "管线工程部":
+                    projectHJ1.setGxgcb(projectHJ1.getGxgcb() + 1);
+                    projectHJ1.setHj(projectHJ1.getHj() + 1);
+                    break;
+                case "不动产测绘部":
+                    projectHJ1.setBdcchb(projectHJ1.getBdcchb() + 1);
+                    projectHJ1.setHj(projectHJ1.getHj() + 1);
+                    break;
+                case "地理信息部":
+                    projectHJ1.setDlxxb(projectHJ1.getDlxxb() + 1);
+                    projectHJ1.setHj(projectHJ1.getHj() + 1);
+                    break;
+                default:
+                    break;
+            }
+        }
+        //任务安排统计
+        List<SysProject> rojectTj1 = sysProjectService.selectRwapz(sysProject);
+        ProjectHJ projectHJ2 = new ProjectHJ();
+        projectHJ2.setXmglwz("任务安排");
+        projectHJ2.setGcchb(0);
+        projectHJ2.setGxgcb(0);
+        projectHJ2.setBdcchb(0);
+        projectHJ2.setDlxxb(0);
+        projectHJ2.setHj(0);
+        for (SysProject obj1 : rojectTj1){
+            switch (obj1.getDepartment()){
+                case "工程测绘部":
+                    projectHJ2.setGcchb(obj1.getNum());
+                    projectHJ2.setHj(projectHJ2.getHj() + obj1.getNum());
+                    break;
+                case "管线工程部":
+                    projectHJ2.setGxgcb(obj1.getNum());
+                    projectHJ2.setHj(projectHJ2.getHj() + obj1.getNum());
+                    break;
+                case "不动产测绘部":
+                    projectHJ2.setBdcchb(obj1.getNum());
+                    projectHJ2.setHj(projectHJ2.getHj() + obj1.getNum());
+                    break;
+                case "地理信息部":
+                    projectHJ2.setDlxxb(obj1.getNum());
+                    projectHJ2.setHj(projectHJ2.getHj() + obj1.getNum());
+                    break;
+                default:
+                    break;
+            }
+        }
+        //项目分包数
+        List<SysProject> rojectTj2 = sysProjectService.selectXmfbs(sysProject);
+        ProjectHJ projectHJ3 = new ProjectHJ();
+        projectHJ3.setXmglwz("项目分包数");
+        projectHJ3.setGcchb(0);
+        projectHJ3.setGxgcb(0);
+        projectHJ3.setBdcchb(0);
+        projectHJ3.setDlxxb(0);
+        projectHJ3.setHj(0);
+        for (SysProject obj2 : rojectTj2){
+            switch (obj2.getDepartment()){
+                case "工程测绘部":
+                    projectHJ3.setGcchb(obj2.getNum());
+                    projectHJ3.setHj(projectHJ3.getHj() + obj2.getNum());
+                    break;
+                case "管线工程部":
+                    projectHJ3.setGxgcb(obj2.getNum());
+                    projectHJ3.setHj(projectHJ3.getHj() + obj2.getNum());
+                    break;
+                case "不动产测绘部":
+                    projectHJ3.setBdcchb(obj2.getNum());
+                    projectHJ3.setHj(projectHJ3.getHj() + obj2.getNum());
+                    break;
+                case "地理信息部":
+                    projectHJ3.setDlxxb(obj2.getNum());
+                    projectHJ3.setHj(projectHJ3.getHj() + obj2.getNum());
+                    break;
+                default:
+                    break;
+            }
+        }
+        //作业办结
+        List<SysProject> rojectTj3 = sysProjectService.selectZybj(sysProject);
+        ProjectHJ projectHJ4 = new ProjectHJ();
+        projectHJ4.setXmglwz("作业办结");
+        projectHJ4.setGcchb(0);
+        projectHJ4.setGxgcb(0);
+        projectHJ4.setBdcchb(0);
+        projectHJ4.setDlxxb(0);
+        projectHJ4.setHj(0);
+        for (SysProject obj2 : rojectTj3){
+            switch (obj2.getDepartment()){
+                case "工程测绘部":
+                    projectHJ4.setGcchb(obj2.getNum());
+                    projectHJ4.setHj(projectHJ4.getHj() + obj2.getNum());
+                    break;
+                case "管线工程部":
+                    projectHJ4.setGxgcb(obj2.getNum());
+                    projectHJ4.setHj(projectHJ4.getHj() + obj2.getNum());
+                    break;
+                case "不动产测绘部":
+                    projectHJ4.setBdcchb(obj2.getNum());
+                    projectHJ4.setHj(projectHJ4.getHj() + obj2.getNum());
+                    break;
+                case "地理信息部":
+                    projectHJ4.setDlxxb(obj2.getNum());
+                    projectHJ4.setHj(projectHJ4.getHj() + obj2.getNum());
+                    break;
+                default:
+                    break;
+            }
+        }
+
+        //作业办结经营产值(预估)
+        List<SysProject> rojectTj4 = sysProjectService.selectYgmoney(sysProject);
+        ProjectHJ projectHJ5 = new ProjectHJ();
+        projectHJ5.setXmglwz("作业办结经营产值(预估)");
+        projectHJ5.setGcchb(0);
+        projectHJ5.setGxgcb(0);
+        projectHJ5.setBdcchb(0);
+        projectHJ5.setDlxxb(0);
+        projectHJ5.setHj(0);
+        for (SysProject obj2 : rojectTj4){
+            switch (obj2.getDepartment()){
+                case "工程测绘部":
+                    projectHJ5.setGcchb(obj2.getYgmoney().setScale(0, RoundingMode.HALF_UP).intValue());
+                    projectHJ5.setHj(projectHJ5.getHj() + obj2.getYgmoney().setScale(0, RoundingMode.HALF_UP).intValue());
+                    break;
+                case "管线工程部":
+                    projectHJ5.setGxgcb(obj2.getYgmoney().setScale(0, RoundingMode.HALF_UP).intValue());
+                    projectHJ5.setHj(projectHJ5.getHj() + obj2.getYgmoney().setScale(0, RoundingMode.HALF_UP).intValue());
+                    break;
+                case "不动产测绘部":
+                    projectHJ5.setBdcchb(obj2.getYgmoney().setScale(0, RoundingMode.HALF_UP).intValue());
+                    projectHJ5.setHj(projectHJ5.getHj() + obj2.getYgmoney().setScale(0, RoundingMode.HALF_UP).intValue());
+                    break;
+                case "地理信息部":
+                    projectHJ5.setDlxxb(obj2.getYgmoney().setScale(0, RoundingMode.HALF_UP).intValue());
+                    projectHJ5.setHj(projectHJ5.getHj() + obj2.getYgmoney().setScale(0, RoundingMode.HALF_UP).intValue());
+                    break;
+                default:
+                    break;
+            }
+        }
+
+        //分院一检办结
+        List<SysProject> rojectTj5 = sysProjectService.selectYj(sysProject);
+        ProjectHJ projectHJ6 = new ProjectHJ();
+        projectHJ6.setXmglwz("分院一检办结");
+        projectHJ6.setGcchb(0);
+        projectHJ6.setGxgcb(0);
+        projectHJ6.setBdcchb(0);
+        projectHJ6.setDlxxb(0);
+        projectHJ6.setHj(0);
+        for (SysProject obj2 : rojectTj5){
+            switch (obj2.getDepartment()){
+                case "工程测绘部":
+                    projectHJ6.setGcchb(obj2.getNum());
+                    projectHJ6.setHj(projectHJ6.getHj() + obj2.getNum());
+                    break;
+                case "管线工程部":
+                    projectHJ6.setGxgcb(obj2.getNum());
+                    projectHJ6.setHj(projectHJ6.getHj() + obj2.getNum());
+                    break;
+                case "不动产测绘部":
+                    projectHJ6.setBdcchb(obj2.getNum());
+                    projectHJ6.setHj(projectHJ6.getHj() + obj2.getNum());
+                    break;
+                case "地理信息部":
+                    projectHJ6.setDlxxb(obj2.getNum());
+                    projectHJ6.setHj(projectHJ6.getHj() + obj2.getNum());
+                    break;
+                default:
+                    break;
+            }
+        }
+
+        //分院二检办结
+        List<SysProject> rojectTj6 = sysProjectService.selectEj(sysProject);
+        ProjectHJ projectHJ7 = new ProjectHJ();
+        projectHJ7.setXmglwz("分院二检办结");
+        projectHJ7.setGcchb(0);
+        projectHJ7.setGxgcb(0);
+        projectHJ7.setBdcchb(0);
+        projectHJ7.setDlxxb(0);
+        projectHJ7.setHj(0);
+        for (SysProject obj2 : rojectTj6){
+            switch (obj2.getDepartment()){
+                case "工程测绘部":
+                    projectHJ7.setGcchb(obj2.getNum());
+                    projectHJ7.setHj(projectHJ7.getHj() + obj2.getNum());
+                    break;
+                case "管线工程部":
+                    projectHJ7.setGxgcb(obj2.getNum());
+                    projectHJ7.setHj(projectHJ7.getHj() + obj2.getNum());
+                    break;
+                case "不动产测绘部":
+                    projectHJ7.setBdcchb(obj2.getNum());
+                    projectHJ7.setHj(projectHJ7.getHj() + obj2.getNum());
+                    break;
+                case "地理信息部":
+                    projectHJ7.setDlxxb(obj2.getNum());
+                    projectHJ7.setHj(projectHJ7.getHj() + obj2.getNum());
+                    break;
+                default:
+                    break;
+            }
+        }
+
+        //项目出件（市场经营）
+        List<SysProject> rojectTj7 = sysProjectService.selectXmcjscjy(sysProject);
+        ProjectHJ projectHJ8 = new ProjectHJ();
+        projectHJ8.setXmglwz("项目出件（市场经营）");
+        projectHJ8.setGcchb(0);
+        projectHJ8.setGxgcb(0);
+        projectHJ8.setBdcchb(0);
+        projectHJ8.setDlxxb(0);
+        projectHJ8.setHj(0);
+        for (SysProject obj2 : rojectTj7){
+            switch (obj2.getDepartment()){
+                case "工程测绘部":
+                    projectHJ8.setGcchb(obj2.getNum());
+                    projectHJ8.setHj(projectHJ8.getHj() + obj2.getNum());
+                    break;
+                case "管线工程部":
+                    projectHJ8.setGxgcb(obj2.getNum());
+                    projectHJ8.setHj(projectHJ8.getHj() + obj2.getNum());
+                    break;
+                case "不动产测绘部":
+                    projectHJ8.setBdcchb(obj2.getNum());
+                    projectHJ8.setHj(projectHJ8.getHj() + obj2.getNum());
+                    break;
+                case "地理信息部":
+                    projectHJ8.setDlxxb(obj2.getNum());
+                    projectHJ8.setHj(projectHJ8.getHj() + obj2.getNum());
+                    break;
+                default:
+                    break;
+            }
+        }
+
+        //成果送达（市场经营）
+        List<SysProject> rojectTj8 = sysProjectService.selectCgsd(sysProject);
+        ProjectHJ projectHJ9 = new ProjectHJ();
+        projectHJ9.setXmglwz("成果送达（市场经营）");
+        projectHJ9.setGcchb(0);
+        projectHJ9.setGxgcb(0);
+        projectHJ9.setBdcchb(0);
+        projectHJ9.setDlxxb(0);
+        projectHJ9.setHj(0);
+        for (SysProject obj2 : rojectTj8){
+            switch (obj2.getDepartment()){
+                case "工程测绘部":
+                    projectHJ9.setGcchb(obj2.getNum());
+                    projectHJ9.setHj(projectHJ9.getHj() + obj2.getNum());
+                    break;
+                case "管线工程部":
+                    projectHJ9.setGxgcb(obj2.getNum());
+                    projectHJ9.setHj(projectHJ9.getHj() + obj2.getNum());
+                    break;
+                case "不动产测绘部":
+                    projectHJ9.setBdcchb(obj2.getNum());
+                    projectHJ9.setHj(projectHJ9.getHj() + obj2.getNum());
+                    break;
+                case "地理信息部":
+                    projectHJ9.setDlxxb(obj2.getNum());
+                    projectHJ9.setHj(projectHJ9.getHj() + obj2.getNum());
+                    break;
+                default:
+                    break;
+            }
+        }
+
+        //项目经营产值未填报
+        List<SysProject> rojectTj9 = sysProjectService.selectJyczwtb(sysProject);
+        ProjectHJ projectHJ10 = new ProjectHJ();
+        projectHJ10.setXmglwz("项目经营产值未填报");
+        projectHJ10.setGcchb(0);
+        projectHJ10.setGxgcb(0);
+        projectHJ10.setBdcchb(0);
+        projectHJ10.setDlxxb(0);
+        projectHJ10.setHj(0);
+        for (SysProject obj2 : rojectTj9){
+            switch (obj2.getDepartment()){
+                case "工程测绘部":
+                    projectHJ10.setGcchb(obj2.getNum());
+                    projectHJ10.setHj(projectHJ10.getHj() + obj2.getNum());
+                    break;
+                case "管线工程部":
+                    projectHJ10.setGxgcb(obj2.getNum());
+                    projectHJ10.setHj(projectHJ10.getHj() + obj2.getNum());
+                    break;
+                case "不动产测绘部":
+                    projectHJ10.setBdcchb(obj2.getNum());
+                    projectHJ10.setHj(projectHJ10.getHj() + obj2.getNum());
+                    break;
+                case "地理信息部":
+                    projectHJ10.setDlxxb(obj2.getNum());
+                    projectHJ10.setHj(projectHJ10.getHj() + obj2.getNum());
+                    break;
+                default:
+                    break;
+            }
+        }
+
+        //年度完成经营产值
+        List<SysProject> rojectTj10 = sysProjectService.selectNdjycz(sysProject);
+        ProjectHJ projectHJ11 = new ProjectHJ();
+        projectHJ11.setXmglwz("年度完成经营产值");
+        projectHJ11.setGcchb(0);
+        projectHJ11.setGxgcb(0);
+        projectHJ11.setBdcchb(0);
+        projectHJ11.setDlxxb(0);
+        projectHJ11.setHj(0);
+        for (SysProject obj2 : rojectTj10){
+            switch (obj2.getDepartment()){
+                case "工程测绘部":
+                    projectHJ11.setGcchb(obj2.getMoney().setScale(0, RoundingMode.HALF_UP).intValue());
+                    projectHJ11.setHj(projectHJ11.getHj() + obj2.getMoney().setScale(0, RoundingMode.HALF_UP).intValue());
+                    break;
+                case "管线工程部":
+                    projectHJ11.setGxgcb(obj2.getMoney().setScale(0, RoundingMode.HALF_UP).intValue());
+                    projectHJ11.setHj(projectHJ11.getHj() + obj2.getMoney().setScale(0, RoundingMode.HALF_UP).intValue());
+                    break;
+                case "不动产测绘部":
+                    projectHJ11.setBdcchb(obj2.getMoney().setScale(0, RoundingMode.HALF_UP).intValue());
+                    projectHJ11.setHj(projectHJ11.getHj() + obj2.getMoney().setScale(0, RoundingMode.HALF_UP).intValue());
+                    break;
+                case "地理信息部":
+                    projectHJ11.setDlxxb(obj2.getMoney().setScale(0, RoundingMode.HALF_UP).intValue());
+                    projectHJ11.setHj(projectHJ11.getHj() + obj2.getMoney().setScale(0, RoundingMode.HALF_UP).intValue());
+                    break;
+                default:
+                    break;
+            }
+        }
+
+        //年度完成经营净产值（扣分包）
+        ProjectHJ projectHJ12 = new ProjectHJ();
+        projectHJ12.setXmglwz("年度完成经营净产值（扣分包）");
+        projectHJ12.setGcchb(0);
+        projectHJ12.setGxgcb(0);
+        projectHJ12.setBdcchb(0);
+        projectHJ12.setDlxxb(0);
+        projectHJ12.setHj(0);
+        for (SysProject obj2 : rojectTj10){
+            switch (obj2.getDepartment()){
+                case "工程测绘部":
+                    projectHJ12.setGcchb(obj2.getProfitMoney().setScale(0, RoundingMode.HALF_UP).intValue());
+                    projectHJ12.setHj(projectHJ12.getHj() + obj2.getProfitMoney().setScale(0, RoundingMode.HALF_UP).intValue());
+                    break;
+                case "管线工程部":
+                    projectHJ12.setGxgcb(obj2.getProfitMoney().setScale(0, RoundingMode.HALF_UP).intValue());
+                    projectHJ12.setHj(projectHJ12.getHj() + obj2.getProfitMoney().setScale(0, RoundingMode.HALF_UP).intValue());
+                    break;
+                case "不动产测绘部":
+                    projectHJ12.setBdcchb(obj2.getProfitMoney().setScale(0, RoundingMode.HALF_UP).intValue());
+                    projectHJ12.setHj(projectHJ12.getHj() + obj2.getProfitMoney().setScale(0, RoundingMode.HALF_UP).intValue());
+                    break;
+                case "地理信息部":
+                    projectHJ12.setDlxxb(obj2.getProfitMoney().setScale(0, RoundingMode.HALF_UP).intValue());
+                    projectHJ12.setHj(projectHJ12.getHj() + obj2.getProfitMoney().setScale(0, RoundingMode.HALF_UP).intValue());
+                    break;
+                default:
+                    break;
+            }
+        }
+
+        //项目工期超期
+        List<SysProject> rojectTj11 = sysProjectService.selectXMCQ(sysProject);
+        ProjectHJ projectHJ13 = new ProjectHJ();
+        projectHJ13.setXmglwz("项目工期超期");
+        projectHJ13.setGcchb(0);
+        projectHJ13.setGxgcb(0);
+        projectHJ13.setBdcchb(0);
+        projectHJ13.setDlxxb(0);
+        projectHJ13.setHj(0);
+        for (SysProject obj2 : rojectTj11){
+            switch (obj2.getDepartment()){
+                case "工程测绘部":
+                    projectHJ13.setGcchb(obj2.getNum());
+                    projectHJ13.setHj(projectHJ13.getHj() + obj2.getNum());
+                    break;
+                case "管线工程部":
+                    projectHJ13.setGxgcb(obj2.getNum());
+                    projectHJ13.setHj(projectHJ13.getHj() + obj2.getNum());
+                    break;
+                case "不动产测绘部":
+                    projectHJ13.setBdcchb(obj2.getNum());
+                    projectHJ13.setHj(projectHJ13.getHj() + obj2.getNum());
+                    break;
+                case "地理信息部":
+                    projectHJ13.setDlxxb(obj2.getNum());
+                    projectHJ13.setHj(projectHJ13.getHj() + obj2.getNum());
+                    break;
+                default:
+                    break;
+            }
+        }
+
+        //项目工期超期超1一个月
+        List<SysProject> rojectTj12 = sysProjectService.selectXMCQYGY(sysProject);
+        ProjectHJ projectHJ14 = new ProjectHJ();
+        projectHJ14.setXmglwz("项目工期超期超1一个月");
+        projectHJ14.setGcchb(0);
+        projectHJ14.setGxgcb(0);
+        projectHJ14.setBdcchb(0);
+        projectHJ14.setDlxxb(0);
+        projectHJ14.setHj(0);
+        for (SysProject obj2 : rojectTj12){
+            switch (obj2.getDepartment()){
+                case "工程测绘部":
+                    projectHJ14.setGcchb(obj2.getNum());
+                    projectHJ14.setHj(projectHJ14.getHj() + obj2.getNum());
+                    break;
+                case "管线工程部":
+                    projectHJ14.setGxgcb(obj2.getNum());
+                    projectHJ14.setHj(projectHJ14.getHj() + obj2.getNum());
+                    break;
+                case "不动产测绘部":
+                    projectHJ14.setBdcchb(obj2.getNum());
+                    projectHJ14.setHj(projectHJ14.getHj() + obj2.getNum());
+                    break;
+                case "地理信息部":
+                    projectHJ14.setDlxxb(obj2.getNum());
+                    projectHJ14.setHj(projectHJ14.getHj() + obj2.getNum());
+                    break;
+                default:
+                    break;
+            }
+        }
+
+        //作业办结后未一检办结（超1周）
+        List<SysProject> rojectTj13 = sysProjectService.selectWYIBJZ(sysProject);
+        ProjectHJ projectHJ15 = new ProjectHJ();
+        projectHJ15.setXmglwz("作业办结后未一检办结（超1周）");
+        projectHJ15.setGcchb(0);
+        projectHJ15.setGxgcb(0);
+        projectHJ15.setBdcchb(0);
+        projectHJ15.setDlxxb(0);
+        projectHJ15.setHj(0);
+        for (SysProject obj2 : rojectTj13){
+            switch (obj2.getDepartment()){
+                case "工程测绘部":
+                    projectHJ15.setGcchb(obj2.getNum());
+                    projectHJ15.setHj(projectHJ15.getHj() + obj2.getNum());
+                    break;
+                case "管线工程部":
+                    projectHJ15.setGxgcb(obj2.getNum());
+                    projectHJ15.setHj(projectHJ15.getHj() + obj2.getNum());
+                    break;
+                case "不动产测绘部":
+                    projectHJ15.setBdcchb(obj2.getNum());
+                    projectHJ15.setHj(projectHJ15.getHj() + obj2.getNum());
+                    break;
+                case "地理信息部":
+                    projectHJ15.setDlxxb(obj2.getNum());
+                    projectHJ15.setHj(projectHJ15.getHj() + obj2.getNum());
+                    break;
+                default:
+                    break;
+            }
+        }
+
+        //作业办结后未一检办结（超1个月）
+        List<SysProject> rojectTj14 = sysProjectService.selectWYIBJY(sysProject);
+        ProjectHJ projectHJ16 = new ProjectHJ();
+        projectHJ16.setXmglwz("作业办结后未一检办结（超1个月）");
+        projectHJ16.setGcchb(0);
+        projectHJ16.setGxgcb(0);
+        projectHJ16.setBdcchb(0);
+        projectHJ16.setDlxxb(0);
+        projectHJ16.setHj(0);
+        for (SysProject obj2 : rojectTj14){
+            switch (obj2.getDepartment()){
+                case "工程测绘部":
+                    projectHJ16.setGcchb(obj2.getNum());
+                    projectHJ16.setHj(projectHJ16.getHj() + obj2.getNum());
+                    break;
+                case "管线工程部":
+                    projectHJ16.setGxgcb(obj2.getNum());
+                    projectHJ16.setHj(projectHJ16.getHj() + obj2.getNum());
+                    break;
+                case "不动产测绘部":
+                    projectHJ16.setBdcchb(obj2.getNum());
+                    projectHJ16.setHj(projectHJ16.getHj() + obj2.getNum());
+                    break;
+                case "地理信息部":
+                    projectHJ16.setDlxxb(obj2.getNum());
+                    projectHJ16.setHj(projectHJ16.getHj() + obj2.getNum());
+                    break;
+                default:
+                    break;
+            }
+        }
+
+        //一检后未二检办结（超1周）
+        List<SysProject> rojectTj15 = sysProjectService.selectWEJZ(sysProject);
+        ProjectHJ projectHJ17 = new ProjectHJ();
+        projectHJ17.setXmglwz("一检后未二检办结（超1周）");
+        projectHJ17.setGcchb(0);
+        projectHJ17.setGxgcb(0);
+        projectHJ17.setBdcchb(0);
+        projectHJ17.setDlxxb(0);
+        projectHJ17.setHj(0);
+        for (SysProject obj2 : rojectTj15){
+            switch (obj2.getDepartment()){
+                case "工程测绘部":
+                    projectHJ17.setGcchb(obj2.getNum());
+                    projectHJ17.setHj(projectHJ17.getHj() + obj2.getNum());
+                    break;
+                case "管线工程部":
+                    projectHJ17.setGxgcb(obj2.getNum());
+                    projectHJ17.setHj(projectHJ17.getHj() + obj2.getNum());
+                    break;
+                case "不动产测绘部":
+                    projectHJ17.setBdcchb(obj2.getNum());
+                    projectHJ17.setHj(projectHJ17.getHj() + obj2.getNum());
+                    break;
+                case "地理信息部":
+                    projectHJ17.setDlxxb(obj2.getNum());
+                    projectHJ17.setHj(projectHJ17.getHj() + obj2.getNum());
+                    break;
+                default:
+                    break;
+            }
+        }
+
+        //一检后未二检办结（超1个月）
+        List<SysProject> rojectTj16 = sysProjectService.selectWEJY(sysProject);
+        ProjectHJ projectHJ18 = new ProjectHJ();
+        projectHJ18.setXmglwz("一检后未二检办结（超1个月）");
+        projectHJ18.setGcchb(0);
+        projectHJ18.setGxgcb(0);
+        projectHJ18.setBdcchb(0);
+        projectHJ18.setDlxxb(0);
+        projectHJ18.setHj(0);
+        for (SysProject obj2 : rojectTj16){
+            switch (obj2.getDepartment()){
+                case "工程测绘部":
+                    projectHJ18.setGcchb(obj2.getNum());
+                    projectHJ18.setHj(projectHJ18.getHj() + obj2.getNum());
+                    break;
+                case "管线工程部":
+                    projectHJ18.setGxgcb(obj2.getNum());
+                    projectHJ18.setHj(projectHJ18.getHj() + obj2.getNum());
+                    break;
+                case "不动产测绘部":
+                    projectHJ18.setBdcchb(obj2.getNum());
+                    projectHJ18.setHj(projectHJ18.getHj() + obj2.getNum());
+                    break;
+                case "地理信息部":
+                    projectHJ18.setDlxxb(obj2.getNum());
+                    projectHJ18.setHj(projectHJ18.getHj() + obj2.getNum());
+                    break;
+                default:
+                    break;
+            }
+        }
+
+        projectHJ.add(projectHJ1);
+        projectHJ.add(projectHJ2);
+        projectHJ.add(projectHJ3);
+        projectHJ.add(projectHJ4);
+        projectHJ.add(projectHJ5);
+        projectHJ.add(projectHJ6);
+        projectHJ.add(projectHJ7);
+        projectHJ.add(projectHJ8);
+        projectHJ.add(projectHJ9);
+        projectHJ.add(projectHJ10);
+        projectHJ.add(projectHJ11);
+        projectHJ.add(projectHJ12);
+        projectHJ.add(projectHJ13);
+        projectHJ.add(projectHJ14);
+        projectHJ.add(projectHJ15);
+        projectHJ.add(projectHJ16);
+        projectHJ.add(projectHJ17);
+        projectHJ.add(projectHJ18);
+        ExcelMultUtil<ProjectHJ> util = new ExcelMultUtil<ProjectHJ>(ProjectHJ.class, 4);
+        util.exportExcel(response, projectHJ, "福清分院项目管理网站月周报");
+    }
+
 }

@@ -286,7 +286,13 @@ export default {
       this.single = selection.length !== 1;
       this.multiple = !selection.length;
     },
-    handleExportHz() {},
+    handleExportHz() {
+      this.download(
+        "system/project/exporTj",
+        this.addDateRange(this.queryParamsHz, this.dateRangeHz),
+        `福清分院项目管理网站月周报_${new Date().getTime()}.xlsx`
+      );
+    },
   },
 };
 </script>
