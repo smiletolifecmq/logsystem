@@ -1681,7 +1681,6 @@ export default {
             this.$modal.msgSuccess("填写成功");
             this.detailOpen = false;
             this.getList();
-            console.log(tempForm.receptionist);
             this.handleCqOpen(tempForm.receptionist, -1);
           });
         }
