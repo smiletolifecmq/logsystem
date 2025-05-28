@@ -428,9 +428,9 @@ public class MqConsume {
 
                     if (contains){
                         bcProjectService.deleteBcProjectByXMBH(sysProject.getProjectNum());
+                        projectGeoinfoService.deleteSysProjectGeoinfoByProjectId(sysProject.getProjectId());
                     }
                     if (geoInfoList != null){
-                        projectGeoinfoService.deleteSysProjectGeoinfoByProjectId(sysProject.getProjectId());
                         for (ViewFqSalemapSelectgeoGeoinfo geoInfo : geoInfoList){
                             BcProject newbcproject = new BcProject();
                             newbcproject.setXmmc(viewFqProject.getProjectName());
