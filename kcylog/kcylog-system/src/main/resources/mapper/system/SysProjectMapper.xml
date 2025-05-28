@@ -69,8 +69,8 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
         <result property="cgsdtime" column="cgsdtime"/>
         <result property="num" column="num"/>
 
-        <result property="money" column="money"/>
-        <result property="profitMoney" column="profit_money"/>
+        <result property="moneyhj" column="moneyhj"/>
+        <result property="profitMoneyHj" column="profit_money_hj"/>
 
         <association property="projectValue" javaType="java.util.List" resultMap="SysProjectValueResult"/>
         <association property="projectCar" javaType="java.util.List" resultMap="SysProjectCarResult"/>
@@ -1004,8 +1004,8 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 
     <select id="selectNdjycz"  parameterType="SysProject" resultMap="SysProjectResult">
         SELECT
-        SUM( a.money ) as money,
-        SUM( a.profit_money ) as profit_money,
+        SUM( a.money ) as moneyhj,
+        SUM( a.profit_money ) as profit_money_hj,
         d.dept_name as department
         FROM
         sys_project_value a

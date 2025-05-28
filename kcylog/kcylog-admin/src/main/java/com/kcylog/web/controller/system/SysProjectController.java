@@ -1515,20 +1515,20 @@ public class SysProjectController extends BaseController {
         for (SysProject obj2 : rojectTj10){
             switch (obj2.getDepartment()){
                 case "工程测绘部":
-                    projectHJ11.setGcchb(obj2.getMoney().setScale(0, RoundingMode.HALF_UP).intValue());
-                    projectHJ11.setHj(projectHJ11.getHj() + obj2.getMoney().setScale(0, RoundingMode.HALF_UP).intValue());
+                    projectHJ11.setGcchb(obj2.getMoneyhj().setScale(0, RoundingMode.HALF_UP).intValue());
+                    projectHJ11.setHj(projectHJ11.getHj() + obj2.getMoneyhj().setScale(0, RoundingMode.HALF_UP).intValue());
                     break;
                 case "管线工程部":
-                    projectHJ11.setGxgcb(obj2.getMoney().setScale(0, RoundingMode.HALF_UP).intValue());
-                    projectHJ11.setHj(projectHJ11.getHj() + obj2.getMoney().setScale(0, RoundingMode.HALF_UP).intValue());
+                    projectHJ11.setGxgcb(obj2.getMoneyhj().setScale(0, RoundingMode.HALF_UP).intValue());
+                    projectHJ11.setHj(projectHJ11.getHj() + obj2.getMoneyhj().setScale(0, RoundingMode.HALF_UP).intValue());
                     break;
                 case "不动产测绘部":
-                    projectHJ11.setBdcchb(obj2.getMoney().setScale(0, RoundingMode.HALF_UP).intValue());
-                    projectHJ11.setHj(projectHJ11.getHj() + obj2.getMoney().setScale(0, RoundingMode.HALF_UP).intValue());
+                    projectHJ11.setBdcchb(obj2.getMoneyhj().setScale(0, RoundingMode.HALF_UP).intValue());
+                    projectHJ11.setHj(projectHJ11.getHj() + obj2.getMoneyhj().setScale(0, RoundingMode.HALF_UP).intValue());
                     break;
                 case "地理信息部":
-                    projectHJ11.setDlxxb(obj2.getMoney().setScale(0, RoundingMode.HALF_UP).intValue());
-                    projectHJ11.setHj(projectHJ11.getHj() + obj2.getMoney().setScale(0, RoundingMode.HALF_UP).intValue());
+                    projectHJ11.setDlxxb(obj2.getMoneyhj().setScale(0, RoundingMode.HALF_UP).intValue());
+                    projectHJ11.setHj(projectHJ11.getHj() + obj2.getMoneyhj().setScale(0, RoundingMode.HALF_UP).intValue());
                     break;
                 default:
                     break;
@@ -1546,20 +1546,20 @@ public class SysProjectController extends BaseController {
         for (SysProject obj2 : rojectTj10){
             switch (obj2.getDepartment()){
                 case "工程测绘部":
-                    projectHJ12.setGcchb(obj2.getProfitMoney().setScale(0, RoundingMode.HALF_UP).intValue());
-                    projectHJ12.setHj(projectHJ12.getHj() + obj2.getProfitMoney().setScale(0, RoundingMode.HALF_UP).intValue());
+                    projectHJ12.setGcchb(obj2.getProfitMoneyHj().setScale(0, RoundingMode.HALF_UP).intValue());
+                    projectHJ12.setHj(projectHJ12.getHj() + obj2.getProfitMoneyHj().setScale(0, RoundingMode.HALF_UP).intValue());
                     break;
                 case "管线工程部":
-                    projectHJ12.setGxgcb(obj2.getProfitMoney().setScale(0, RoundingMode.HALF_UP).intValue());
-                    projectHJ12.setHj(projectHJ12.getHj() + obj2.getProfitMoney().setScale(0, RoundingMode.HALF_UP).intValue());
+                    projectHJ12.setGxgcb(obj2.getProfitMoneyHj().setScale(0, RoundingMode.HALF_UP).intValue());
+                    projectHJ12.setHj(projectHJ12.getHj() + obj2.getProfitMoneyHj().setScale(0, RoundingMode.HALF_UP).intValue());
                     break;
                 case "不动产测绘部":
-                    projectHJ12.setBdcchb(obj2.getProfitMoney().setScale(0, RoundingMode.HALF_UP).intValue());
-                    projectHJ12.setHj(projectHJ12.getHj() + obj2.getProfitMoney().setScale(0, RoundingMode.HALF_UP).intValue());
+                    projectHJ12.setBdcchb(obj2.getProfitMoneyHj().setScale(0, RoundingMode.HALF_UP).intValue());
+                    projectHJ12.setHj(projectHJ12.getHj() + obj2.getProfitMoneyHj().setScale(0, RoundingMode.HALF_UP).intValue());
                     break;
                 case "地理信息部":
-                    projectHJ12.setDlxxb(obj2.getProfitMoney().setScale(0, RoundingMode.HALF_UP).intValue());
-                    projectHJ12.setHj(projectHJ12.getHj() + obj2.getProfitMoney().setScale(0, RoundingMode.HALF_UP).intValue());
+                    projectHJ12.setDlxxb(obj2.getProfitMoneyHj().setScale(0, RoundingMode.HALF_UP).intValue());
+                    projectHJ12.setHj(projectHJ12.getHj() + obj2.getProfitMoneyHj().setScale(0, RoundingMode.HALF_UP).intValue());
                     break;
                 default:
                     break;
@@ -2113,20 +2113,20 @@ public class SysProjectController extends BaseController {
         for (SysProject obj2 : rojectTj10){
             switch (obj2.getDepartment()){
                 case "工程测绘部":
-                    projectHJ11.setGcchb(obj2.getMoney().setScale(0, RoundingMode.HALF_UP).intValue());
-                    projectHJ11.setHj(projectHJ11.getHj() + obj2.getMoney().setScale(0, RoundingMode.HALF_UP).intValue());
+                    projectHJ11.setGcchb(obj2.getMoneyhj().setScale(0, RoundingMode.HALF_UP).intValue());
+                    projectHJ11.setHj(projectHJ11.getHj() + obj2.getMoneyhj().setScale(0, RoundingMode.HALF_UP).intValue());
                     break;
                 case "管线工程部":
-                    projectHJ11.setGxgcb(obj2.getMoney().setScale(0, RoundingMode.HALF_UP).intValue());
-                    projectHJ11.setHj(projectHJ11.getHj() + obj2.getMoney().setScale(0, RoundingMode.HALF_UP).intValue());
+                    projectHJ11.setGxgcb(obj2.getMoneyhj().setScale(0, RoundingMode.HALF_UP).intValue());
+                    projectHJ11.setHj(projectHJ11.getHj() + obj2.getMoneyhj().setScale(0, RoundingMode.HALF_UP).intValue());
                     break;
                 case "不动产测绘部":
-                    projectHJ11.setBdcchb(obj2.getMoney().setScale(0, RoundingMode.HALF_UP).intValue());
-                    projectHJ11.setHj(projectHJ11.getHj() + obj2.getMoney().setScale(0, RoundingMode.HALF_UP).intValue());
+                    projectHJ11.setBdcchb(obj2.getMoneyhj().setScale(0, RoundingMode.HALF_UP).intValue());
+                    projectHJ11.setHj(projectHJ11.getHj() + obj2.getMoneyhj().setScale(0, RoundingMode.HALF_UP).intValue());
                     break;
                 case "地理信息部":
-                    projectHJ11.setDlxxb(obj2.getMoney().setScale(0, RoundingMode.HALF_UP).intValue());
-                    projectHJ11.setHj(projectHJ11.getHj() + obj2.getMoney().setScale(0, RoundingMode.HALF_UP).intValue());
+                    projectHJ11.setDlxxb(obj2.getMoneyhj().setScale(0, RoundingMode.HALF_UP).intValue());
+                    projectHJ11.setHj(projectHJ11.getHj() + obj2.getMoneyhj().setScale(0, RoundingMode.HALF_UP).intValue());
                     break;
                 default:
                     break;
@@ -2144,20 +2144,20 @@ public class SysProjectController extends BaseController {
         for (SysProject obj2 : rojectTj10){
             switch (obj2.getDepartment()){
                 case "工程测绘部":
-                    projectHJ12.setGcchb(obj2.getProfitMoney().setScale(0, RoundingMode.HALF_UP).intValue());
-                    projectHJ12.setHj(projectHJ12.getHj() + obj2.getProfitMoney().setScale(0, RoundingMode.HALF_UP).intValue());
+                    projectHJ12.setGcchb(obj2.getProfitMoneyHj().setScale(0, RoundingMode.HALF_UP).intValue());
+                    projectHJ12.setHj(projectHJ12.getHj() + obj2.getProfitMoneyHj().setScale(0, RoundingMode.HALF_UP).intValue());
                     break;
                 case "管线工程部":
-                    projectHJ12.setGxgcb(obj2.getProfitMoney().setScale(0, RoundingMode.HALF_UP).intValue());
-                    projectHJ12.setHj(projectHJ12.getHj() + obj2.getProfitMoney().setScale(0, RoundingMode.HALF_UP).intValue());
+                    projectHJ12.setGxgcb(obj2.getProfitMoneyHj().setScale(0, RoundingMode.HALF_UP).intValue());
+                    projectHJ12.setHj(projectHJ12.getHj() + obj2.getProfitMoneyHj().setScale(0, RoundingMode.HALF_UP).intValue());
                     break;
                 case "不动产测绘部":
-                    projectHJ12.setBdcchb(obj2.getProfitMoney().setScale(0, RoundingMode.HALF_UP).intValue());
-                    projectHJ12.setHj(projectHJ12.getHj() + obj2.getProfitMoney().setScale(0, RoundingMode.HALF_UP).intValue());
+                    projectHJ12.setBdcchb(obj2.getProfitMoneyHj().setScale(0, RoundingMode.HALF_UP).intValue());
+                    projectHJ12.setHj(projectHJ12.getHj() + obj2.getProfitMoneyHj().setScale(0, RoundingMode.HALF_UP).intValue());
                     break;
                 case "地理信息部":
-                    projectHJ12.setDlxxb(obj2.getProfitMoney().setScale(0, RoundingMode.HALF_UP).intValue());
-                    projectHJ12.setHj(projectHJ12.getHj() + obj2.getProfitMoney().setScale(0, RoundingMode.HALF_UP).intValue());
+                    projectHJ12.setDlxxb(obj2.getProfitMoneyHj().setScale(0, RoundingMode.HALF_UP).intValue());
+                    projectHJ12.setHj(projectHJ12.getHj() + obj2.getProfitMoneyHj().setScale(0, RoundingMode.HALF_UP).intValue());
                     break;
                 default:
                     break;
