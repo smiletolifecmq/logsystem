@@ -166,6 +166,8 @@ public class SysProject extends BaseEntity
     // 验收通过、验收办结(归档)：（1："未验收"；2："验收办结"；3："验收拒绝"，4： "验收通过"）
     private Long checkStatus;
 
+    private Long deptId;
+
     // 盖章确认 0未确认，1确认
     private Long marketingConfirm;
 
@@ -245,6 +247,44 @@ public class SysProject extends BaseEntity
     private BigDecimal profitMoneyHj;
 
     private int num;
+
+    private Long tjStatus;
+
+    private Long userId;
+
+    private String deptName;
+
+    public Long getDeptId() {
+        return deptId;
+    }
+
+    public void setDeptId(Long deptId) {
+        this.deptId = deptId;
+    }
+
+    public String getDeptName() {
+        return deptName;
+    }
+
+    public void setDeptName(String deptName) {
+        this.deptName = deptName;
+    }
+
+    public Long getUserId() {
+        return userId;
+    }
+
+    public void setUserId(Long userId) {
+        this.userId = userId;
+    }
+
+    public Long getTjStatus() {
+        return tjStatus;
+    }
+
+    public void setTjStatus(Long tjStatus) {
+        this.tjStatus = tjStatus;
+    }
 
     public BigDecimal getMoneyhj() {
         return moneyhj;

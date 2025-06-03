@@ -815,6 +815,12 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
             <if test="params.endTime == null or params.endTime == ''"><!-- 结束时间检索 -->
                 and register_time is not null and register_time != ''
             </if>
+            <if test="tjStatus != null and tjStatus == 0">
+                and user_name_alias = #{userNameAlias}
+            </if>
+            <if test="tjStatus != null and tjStatus == 1">
+                and department = #{department}
+            </if>
         </where>
         GROUP BY department;
     </select>
@@ -833,6 +839,12 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
             </if>
             <if test="gzStatus != null and gzStatus == 3">
                 and status = 3
+            </if>
+            <if test="tjStatus != null and tjStatus == 0">
+                and user_name_alias = #{userNameAlias}
+            </if>
+            <if test="tjStatus != null and tjStatus == 1">
+                and department = #{department}
             </if>
         </where>
         order by p.work_status asc , p.project_id desc
@@ -854,6 +866,12 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
             </if>
             <if test="params.endTime == null or params.endTime == ''"><!-- 结束时间检索 -->
                 and b.lot_time is not null
+            </if>
+            <if test="tjStatus != null and tjStatus == 0">
+                and b.user_id = #{userId}
+            </if>
+            <if test="tjStatus != null and tjStatus == 1">
+                and b.dept_id = #{deptId}
             </if>
             AND ( b.sub_type = 1 OR b.sub_type = 2 )
         </where>
@@ -877,7 +895,12 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
             <if test="params.endTime == null or params.endTime == ''"><!-- 结束时间检索 -->
                 and do_time is not null  and do_time != ''
             </if>
-
+            <if test="tjStatus != null and tjStatus == 0">
+                and user_name_alias = #{userNameAlias}
+            </if>
+            <if test="tjStatus != null and tjStatus == 1">
+                and department = #{department}
+            </if>
         </where>
         GROUP BY
         department
@@ -898,6 +921,12 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
             </if>
             <if test="params.endTime == null or params.endTime == ''"><!-- 结束时间检索 -->
                 and register_time is not null and register_time != ''
+            </if>
+            <if test="tjStatus != null and tjStatus == 0">
+                and user_name_alias = #{userNameAlias}
+            </if>
+            <if test="tjStatus != null and tjStatus == 1">
+                and department = #{department}
             </if>
         </where>
         GROUP BY
@@ -920,6 +949,12 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
             <if test="params.endTime == null or params.endTime == ''"><!-- 结束时间检索 -->
                 and one_check is not null and one_check != ''
             </if>
+            <if test="tjStatus != null and tjStatus == 0">
+                and user_name_alias = #{userNameAlias}
+            </if>
+            <if test="tjStatus != null and tjStatus == 1">
+                and department = #{department}
+            </if>
         </where>
         GROUP BY
         department
@@ -940,6 +975,12 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
             </if>
             <if test="params.endTime == null or params.endTime == ''"><!-- 结束时间检索 -->
                 and two_check is not null and two_check != ''
+            </if>
+            <if test="tjStatus != null and tjStatus == 0">
+                and user_name_alias = #{userNameAlias}
+            </if>
+            <if test="tjStatus != null and tjStatus == 1">
+                and department = #{department}
             </if>
         </where>
         GROUP BY
@@ -963,6 +1004,12 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
             <if test="params.endTime == null or params.endTime == ''"><!-- 结束时间检索 -->
                 and a.receive_time is not null and a.receive_time != ''
             </if>
+            <if test="tjStatus != null and tjStatus == 0">
+                and b.user_name_alias = #{userNameAlias}
+            </if>
+            <if test="tjStatus != null and tjStatus == 1">
+                and b.department = #{department}
+            </if>
         </where>
         GROUP BY b.department
     </select>
@@ -982,6 +1029,12 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
             </if>
             <if test="params.endTime == null or params.endTime == ''"><!-- 结束时间检索 -->
                 and cgsdtime is not null
+            </if>
+            <if test="tjStatus != null and tjStatus == 0">
+                and user_name_alias = #{userNameAlias}
+            </if>
+            <if test="tjStatus != null and tjStatus == 1">
+                and department = #{department}
             </if>
         </where>
         GROUP BY
@@ -1012,8 +1065,15 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
         INNER JOIN sys_project b ON a.project_id = b.project_id
         INNER JOIN sys_user c ON a.user_name = c.user_name
         INNER JOIN sys_dept d ON c.dept_id = d.dept_id
-        WHERE
-            YEAR(b.settlement_time) = YEAR(NOW())
+        <where>
+            <if test="tjStatus != null and tjStatus == 0">
+                and b.user_name_alias = #{userNameAlias}
+            </if>
+            <if test="tjStatus != null and tjStatus == 1">
+                and b.department = #{department}
+            </if>
+            and YEAR(b.settlement_time) = YEAR(NOW())
+        </where>
         GROUP BY
             d.dept_name;
     </select>
@@ -1024,8 +1084,15 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
             department
         FROM
             sys_project
-        WHERE
-                STR_TO_DATE( do_time, '%Y-%m-%d' ) > STR_TO_DATE( project_end_alias, '%Y-%m-%d' )
+        <where>
+            <if test="tjStatus != null and tjStatus == 0">
+                and user_name_alias = #{userNameAlias}
+            </if>
+            <if test="tjStatus != null and tjStatus == 1">
+                and department = #{department}
+            </if>
+            and STR_TO_DATE( do_time, '%Y-%m-%d' ) > STR_TO_DATE( project_end_alias, '%Y-%m-%d' )
+        </where>
         GROUP BY
             department
     </select>
@@ -1036,8 +1103,15 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
             department
         FROM
             sys_project
-        WHERE
-                STR_TO_DATE( do_time, '%Y-%m-%d' ) > DATE_ADD( STR_TO_DATE( project_end_alias, '%Y-%m-%d' ), INTERVAL 1 MONTH )
+        <where>
+            <if test="tjStatus != null and tjStatus == 0">
+                and user_name_alias = #{userNameAlias}
+            </if>
+            <if test="tjStatus != null and tjStatus == 1">
+                and department = #{department}
+            </if>
+            and  STR_TO_DATE( do_time, '%Y-%m-%d' ) > DATE_ADD( STR_TO_DATE( project_end_alias, '%Y-%m-%d' ), INTERVAL 1 MONTH )
+        </where>
         GROUP BY
             department
     </select>
@@ -1048,9 +1122,16 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
             department
         FROM
             sys_project
-        WHERE
-            do_time is not null and do_time != '' and (one_check is null  or one_check = '')
+        <where>
+            <if test="tjStatus != null and tjStatus == 0">
+                and user_name_alias = #{userNameAlias}
+            </if>
+            <if test="tjStatus != null and tjStatus == 1">
+                and department = #{department}
+            </if>
+            and do_time is not null and do_time != '' and (one_check is null  or one_check = '')
             and NOW() > DATE_ADD(STR_TO_DATE(do_time, '%Y-%m-%d'), INTERVAL 7 DAY)
+        </where>
         GROUP BY
             department
     </select>
@@ -1061,9 +1142,16 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
             department
         FROM
             sys_project
-        WHERE
-            do_time is not null and do_time != '' and (one_check is null  or one_check = '')
+        <where>
+            <if test="tjStatus != null and tjStatus == 0">
+                and user_name_alias = #{userNameAlias}
+            </if>
+            <if test="tjStatus != null and tjStatus == 1">
+                and department = #{department}
+            </if>
+            and do_time is not null and do_time != '' and (one_check is null  or one_check = '')
             and NOW() > DATE_ADD(STR_TO_DATE(do_time, '%Y-%m-%d'), INTERVAL 1 MONTH)
+        </where>
         GROUP BY
             department
     </select>
@@ -1074,9 +1162,16 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
             department
         FROM
             sys_project
-        WHERE
-            one_check is not null and one_check != '' and (two_check is null or two_check = '')
+        <where>
+            <if test="tjStatus != null and tjStatus == 0">
+                and user_name_alias = #{userNameAlias}
+            </if>
+            <if test="tjStatus != null and tjStatus == 1">
+                and department = #{department}
+            </if>
+            and one_check is not null and one_check != '' and (two_check is null or two_check = '')
             and NOW() > DATE_ADD(STR_TO_DATE(one_check, '%Y-%m-%d'), INTERVAL 7 DAY)
+        </where>
         GROUP BY
             department
     </select>
@@ -1087,9 +1182,16 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
             department
         FROM
             sys_project
-        WHERE
-            one_check is not null and one_check != '' and (two_check is null or two_check = '')
+        <where>
+            <if test="tjStatus != null and tjStatus == 0">
+                and user_name_alias = #{userNameAlias}
+            </if>
+            <if test="tjStatus != null and tjStatus == 1">
+                and department = #{department}
+            </if>
+            and one_check is not null and one_check != '' and (two_check is null or two_check = '')
             and NOW() > DATE_ADD(STR_TO_DATE(one_check, '%Y-%m-%d'), INTERVAL 1 MONTH)
+        </where>
         GROUP BY
             department
     </select>

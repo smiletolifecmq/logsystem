@@ -444,6 +444,21 @@
         </el-row>
         <el-row>
           <el-col :span="24">
+            <el-form-item label="统计限制">
+              <el-select v-model="form.tjStatus" placeholder="请选择">
+                <el-option
+                  v-for="item in tjStatuss"
+                  :key="item.value"
+                  :label="item.label"
+                  :value="item.value"
+                >
+                </el-option>
+              </el-select>
+            </el-form-item>
+          </el-col>
+        </el-row>
+        <el-row>
+          <el-col :span="24">
             <el-form-item label="备注">
               <el-input
                 v-model="form.remark"
@@ -533,6 +548,20 @@ export default {
         {
           value: 0,
           label: "关闭",
+        },
+      ],
+      tjStatuss: [
+        {
+          value: 0,
+          label: "个人",
+        },
+        {
+          value: 1,
+          label: "部门",
+        },
+        {
+          value: 2,
+          label: "全部",
         },
       ],
       // 遮罩层

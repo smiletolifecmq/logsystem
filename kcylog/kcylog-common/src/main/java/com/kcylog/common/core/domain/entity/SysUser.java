@@ -75,6 +75,8 @@ public class SysUser extends BaseEntity
 
     private Long logStatus;
 
+    private Long tjStatus;
+
     /** 部门对象 */
     @Excels({
         @Excel(name = "部门名称", targetAttr = "deptName", type = Type.EXPORT),
@@ -93,6 +95,14 @@ public class SysUser extends BaseEntity
 
     /** 角色ID */
     private Long roleId;
+
+    public Long getTjStatus() {
+        return tjStatus;
+    }
+
+    public void setTjStatus(Long tjStatus) {
+        this.tjStatus = tjStatus;
+    }
 
     public Long getLogStatus() {
         return logStatus;

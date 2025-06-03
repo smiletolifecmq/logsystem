@@ -1184,7 +1184,14 @@ public class SysProjectController extends BaseController {
 
     @GetMapping("/listProjectHj")
     public TableDataInfo listProjectHj(SysProject sysProject) {
+        Long userId = getUserId();
+        SysUser user = sysUserService.selectUserById(userId);
         sysProject.setGzStatus((long)-1);
+        sysProject.setTjStatus(user.getTjStatus());
+        sysProject.setUserId(userId);
+        sysProject.setDeptId(user.getDept().getDeptId());
+        sysProject.setUserNameAlias(getUsername());
+        sysProject.setDepartment(user.getDept().getDeptName());
         List<SysProject> list = sysProjectService.selectZyz(sysProject);
         List<ProjectHJ> projectHJ = new ArrayList<>();
         // 作业中项目统计
