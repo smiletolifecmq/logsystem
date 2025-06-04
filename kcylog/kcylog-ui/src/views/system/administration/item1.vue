@@ -1,11 +1,16 @@
 <template>
   <div class="bpl1-bg">
     <div class="co-title">
-      <div class="co-title-name">
-        <img
+      <div
+        class="co-title-name"
+        style="margin-top: 0.05rem !important; margin-left: 0.5rem !important"
+      >
+        <b style="font-size: large; color: aliceblue">经营产值管理</b>
+
+        <!-- <img
           src="@/assets/cockpit/subdivision/administration/item1-title.png"
           alt=""
-        />
+        /> -->
       </div>
       <div class="co-title-right co-title-right-flex">
         <div class="co-title-breathe">
@@ -16,53 +21,20 @@
     <div class="content">
       <div class="title">
         <div class="bg"></div>
-        <div class="text">全局督办事务总体情况</div>
+        <div class="text">当前年度经营总体情况</div>
       </div>
-      <ul class="item">
-        <li v-for="(item, index) in data" :key="index">
-          <div class="lf">
-            <div class="yellow-icon"></div>
-            <div class="label">{{ item.name }}</div>
-          </div>
-          <div class="rg">
-            <div class="num">{{ item.count }}<span>件</span></div>
-            <div class="line"></div>
-            <div class="text">
-              环比：
-              <span v-if="Number(item.compare) >= 100" class="red"
-                ><i class="el-icon-top"></i
-                >{{
-                  item.compare && parseFloat(item.compare).toFixed(2)
-                }}%</span
-              >
-              <span v-else class="green"
-                ><i class="el-icon-bottom"></i
-                >{{
-                  item.compare && parseFloat(item.compare).toFixed(2)
-                }}%</span
-              >
-            </div>
-          </div>
-        </li>
-      </ul>
     </div>
     <ul class="bpl1-stac" style="margin-left: -34px">
       <li class="bpl1-st-each">
         <i class="bpl1-ste-icon"
           ><img
-            src="@/assets/cockpit/subdivision/administration/item1-icon1.png"
+            src="@/assets/cockpit/subdivision/administration/item1-icon2.png"
             alt=""
         /></i>
         <div class="bpl1-ste-word">
-          <h6>办结率</h6>
+          <h6>经营产值</h6>
           <p>
-            现状情况<span
-              >{{
-                parseFloat(
-                  (data[1] && data[1].count) / (data[0] && data[0].count)
-                ).toFixed(2)
-              }}%</span
-            >
+            <span>{{ jydata.jycz }}</span>
           </p>
         </div>
       </li>
@@ -73,15 +45,35 @@
             alt=""
         /></i>
         <div class="bpl1-ste-word">
-          <h6>正点率</h6>
+          <h6>经营净产值(扣分包)</h6>
           <p>
-            现状情况<span
-              >{{
-                parseFloat(
-                  (data[2] && data[2].count) / (data[0] && data[0].count)
-                ).toFixed(2)
-              }}%</span
-            >
+            <span>{{ jydata.jyczqfb }}</span>
+          </p>
+        </div>
+      </li>
+      <li class="bpl1-st-each">
+        <i class="bpl1-ste-icon"
+          ><img
+            src="@/assets/cockpit/subdivision/administration/item1-icon1.png"
+            alt=""
+        /></i>
+        <div class="bpl1-ste-word">
+          <h6>经营产值(预估)</h6>
+          <p>
+            <span>{{ jydata.jyczyg }}</span>
+          </p>
+        </div>
+      </li>
+      <li class="bpl1-st-each">
+        <i class="bpl1-ste-icon"
+          ><img
+            src="@/assets/cockpit/subdivision/administration/item1-icon1.png"
+            alt=""
+        /></i>
+        <div class="bpl1-ste-word">
+          <h6>经营产值未填报</h6>
+          <p>
+            <span>{{ jydata.jyczwtb }}</span>
           </p>
         </div>
       </li>
@@ -90,7 +82,7 @@
     <div class="content">
       <div class="title">
         <div class="bg"></div>
-        <div class="text">处室办结量TOP10</div>
+        <div class="text">各部门详情</div>
       </div>
       <div class="map-right-menu" :class="!isFold ? 'map-right-menu-no' : ''">
         <div class="list-header" v-show="isFold">
@@ -106,12 +98,12 @@
           <!--  -->
           <li v-for="(item, index) in listData" :key="index">
             <div class="name">
-              {{ item.dept_name }}
+              {{ item.name }}
               <div class="before"></div>
             </div>
-            <div class="length">{{ item.count }}</div>
-            <div class="des">{{ item.bj_count }}</div>
-            <div class="des">{{ item.bj_lv }}%</div>
+            <div class="length">{{ item.num1 }}</div>
+            <div class="des">{{ item.num2 }}</div>
+            <div class="des">{{ item.num3 }}</div>
           </li>
         </ul>
       </div>
@@ -123,54 +115,84 @@
 export default {
   name: "BplItem1",
   components: {},
+  props: {
+    hztjData: {
+      type: Array,
+      default: () => [],
+    },
+  },
+  watch: {
+    hztjData: {
+      handler(newVal) {
+        // 在这里处理数据，如调用初始化方法
+        this.handleData(newVal);
+      },
+      immediate: true, // 如果希望首次挂载也调用一次
+      deep: true, // 可选，如果数组结构较复杂
+    },
+  },
   data() {
     return {
-      listData: [
-        {
-          name: "建设项目审查一处",
-          num1: "95",
-          num2: "22",
-          num3: "95",
-        },
-        {
-          name: "建设项目审查一处",
-          num1: "95",
-          num2: "22",
-          num3: "95",
-        },
-        {
-          name: "建设项目审查一处",
-          num1: "95",
-          num2: "22",
-          num3: "95",
-        },
-        {
-          name: "建设项目审查一处",
-          num1: "95",
-          num2: "22",
-          num3: "95",
-        },
-      ],
+      listData: [],
       isFold: true,
-      data: {},
+      jydata: {
+        jycz: 0,
+        jyczqfb: 0,
+        jyczwtb: 0,
+        jyczyg: 0,
+      },
       headerData: [
         {
-          fieldName: "处室名称",
+          fieldName: "部门名称",
         },
         {
-          fieldName: "任务总量",
+          fieldName: "经营产值",
         },
         {
-          fieldName: "办结量",
+          fieldName: "经营净产值",
         },
         {
-          fieldName: "办结率",
+          fieldName: "经营预估产值",
         },
       ],
     };
   },
   created() {},
-  methods: {},
+  methods: {
+    handleData(data) {
+      if (data.length !== 0) {
+        this.jydata.jycz = data[10].hj;
+        this.jydata.jyczqfb = data[11].hj;
+        this.jydata.jyczyg = data[4].hj;
+        this.jydata.jyczwtb = data[9].hj;
+        this.listData[0] = {
+          name: "工程测绘部",
+          num1: data[10].gcchb,
+          num2: data[11].gcchb,
+          num3: data[4].gcchb,
+        };
+        this.listData[1] = {
+          name: "管线工程部",
+          num1: data[10].gxgcb,
+          num2: data[11].gxgcb,
+          num3: data[4].gxgcb,
+        };
+        this.listData[2] = {
+          name: "不动产测绘部",
+          num1: data[10].bdcchb,
+          num2: data[11].bdcchb,
+          num3: data[4].bdcchb,
+        };
+        this.listData[3] = {
+          name: "地理信息部",
+          num1: data[10].dlxxb,
+          num2: data[11].dlxxb,
+          num3: data[4].dlxxb,
+        };
+        this.listData.sort((a, b) => b.num1 - a.num1);
+      }
+    },
+  },
 };
 </script>
 <style lang="scss" scoped>

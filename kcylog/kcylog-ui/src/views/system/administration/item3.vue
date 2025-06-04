@@ -1,11 +1,11 @@
 <template>
   <div class="bpl1-bg">
     <div class="co-title">
-      <div class="co-title-name">
-        <img
-          src="@/assets/cockpit/subdivision/administration/item3-title.png"
-          alt=""
-        />
+      <div
+        class="co-title-name"
+        style="margin-top: 0.05rem !important; margin-left: 0.5rem !important"
+      >
+        <b style="font-size: large; color: aliceblue">超期管理</b>
       </div>
       <div class="co-title-right">
         <div class="co-title-breathe">
@@ -21,8 +21,8 @@
               <div class="bb4-leb-light"></div>
               <div class="bb4-leb-tri"></div>
               <div class="bb4-leb-word">
-                <p>{{ totalObj.count }}</p>
-                <h6>登记量</h6>
+                <p>{{ totalObj.cq }}</p>
+                <h6>工期超期</h6>
               </div>
             </div>
           </li>
@@ -31,8 +31,8 @@
               <div class="bb4-leb-light"></div>
               <div class="bb4-leb-tri"></div>
               <div class="bb4-leb-word">
-                <p>{{ totalObj.bj_count }}</p>
-                <h6>办结量</h6>
+                <p>{{ totalObj.yjbj }}</p>
+                <h6>一检办结(超1周)</h6>
               </div>
             </div>
           </li>
@@ -42,8 +42,8 @@
               <div class="bb4-leb-light"></div>
               <div class="bb4-leb-tri"></div>
               <div class="bb4-leb-word">
-                <p>{{ totalObj.zd_lv }}%</p>
-                <h6>正点率</h6>
+                <p>{{ totalObj.ejbj }}</p>
+                <h6>二检办结(超1周)</h6>
               </div>
             </div>
           </li>
@@ -53,7 +53,7 @@
         <div class="item">
           <div class="title">
             <div class="bg"></div>
-            <div class="text">处室发文TOP5</div>
+            <div class="text">工期超期TOP</div>
           </div>
           <ul>
             <li
@@ -61,19 +61,85 @@
               :key="index"
               style="margin-top: 16px"
             >
-              <div class="label" :title="item.dep_name">
-                {{ item.dep_name }}
+              <div class="label" :title="item.label">
+                {{ item.label }}
               </div>
               <div class="process">
                 <el-progress
-                  v-if="item.value"
-                  :percentage="Number(item.value)"
+                  v-if="item.num"
+                  :percentage="(item.num / item.total) * 100"
                   :show-text="false"
-                  :format="format"
                 ></el-progress>
               </div>
               <div class="right">
-                {{ item.count }}
+                {{ item.num }}
+              </div>
+            </li>
+          </ul>
+        </div>
+      </div>
+    </div>
+
+    <div class="item3-top" style="margin-top: 4.5rem">
+      <div class="bb4-main">
+        <ul class="bb4-list">
+          <li class="bb4-l-each">
+            <div class="bb4-le-sub bb4-le-sub1">
+              <div class="bb4-leb-light"></div>
+              <div class="bb4-leb-tri"></div>
+              <div class="bb4-leb-word">
+                <p>{{ totalObj.cqone }}</p>
+                <h6>工期超期(超1月)</h6>
+              </div>
+            </div>
+          </li>
+          <li class="bb4-l-each">
+            <div class="bb4-le-sub bb4-le-sub1">
+              <div class="bb4-leb-light"></div>
+              <div class="bb4-leb-tri"></div>
+              <div class="bb4-leb-word">
+                <p>{{ totalObj.yjbjone }}</p>
+                <h6>一检办结(超1月)</h6>
+              </div>
+            </div>
+          </li>
+
+          <li class="bb4-l-each">
+            <div class="bb4-le-sub bb4-le-sub2">
+              <div class="bb4-leb-light"></div>
+              <div class="bb4-leb-tri"></div>
+              <div class="bb4-leb-word">
+                <p>{{ totalObj.ejbjone }}</p>
+                <h6>二检办结(超1月)</h6>
+              </div>
+            </div>
+          </li>
+        </ul>
+      </div>
+      <div class="item3-content">
+        <div class="item">
+          <div class="title">
+            <div class="bg"></div>
+            <div class="text">工期超期(超1月)TOP</div>
+          </div>
+          <ul>
+            <li
+              v-for="(item, index) in list2"
+              :key="index"
+              style="margin-top: 16px"
+            >
+              <div class="label" :title="item.label">
+                {{ item.label }}
+              </div>
+              <div class="process">
+                <el-progress
+                  v-if="item.num"
+                  :percentage="(item.num / item.total) * 100"
+                  :show-text="false"
+                ></el-progress>
+              </div>
+              <div class="right">
+                {{ item.num }}
               </div>
             </li>
           </ul>
@@ -98,115 +164,95 @@ import * as echarts from "echarts";
 export default {
   name: "Item3",
   components: {},
+  props: {
+    hztjData: {
+      type: Array,
+      default: () => [],
+    },
+  },
+  watch: {
+    hztjData: {
+      handler(newVal) {
+        // 在这里处理数据，如调用初始化方法
+        this.handleData(newVal);
+      },
+      immediate: true, // 如果希望首次挂载也调用一次
+      deep: true, // 可选，如果数组结构较复杂
+    },
+  },
   data() {
     return {
-      totalObj: {},
-      list1: [
-        {
-          label: "用途管制处",
-          num: "100",
-        },
-        {
-          label: "权益处",
-          num: "90",
-        },
-        {
-          label: "信访处",
-          num: "80",
-        },
-        {
-          label: "科室处",
-          num: "70",
-        },
-        {
-          label: "建二处",
-          num: "60",
-        },
-      ],
-      list2: [20, 26, 79, 43, 15, 29],
+      totalObj: {
+        cq: 0,
+        yjbj: 0,
+        ejbj: 0,
+        cqone: 0,
+        yjbjone: 0,
+        ejbjone: 0,
+      },
+      list1: [],
+      list2: [],
       monthList: ["1月", "2月", "3月", "4月", "5月", "6月"],
     };
   },
   created() {},
   methods: {
+    handleData(data) {
+      if (data.length !== 0) {
+        this.totalObj.cq = data[12].hj;
+        this.totalObj.yjbj = data[14].hj;
+        this.totalObj.ejbj = data[16].hj;
+        this.totalObj.cqone = data[13].hj;
+        this.totalObj.yjbjone = data[15].hj;
+        this.totalObj.ejbjone = data[17].hj;
+
+        this.list1[0] = {
+          label: "工程测绘部",
+          num: data[12].gcchb,
+          total: data[12].hj,
+        };
+        this.list1[1] = {
+          label: "管线工程部",
+          num: data[12].gxgcb,
+          total: data[12].hj,
+        };
+        this.list1[2] = {
+          label: "不动产测绘部",
+          num: data[12].bdcchb,
+          total: data[12].hj,
+        };
+        this.list1[3] = {
+          label: "地理信息部",
+          num: data[12].dlxxb,
+          total: data[12].hj,
+        };
+        this.list1.sort((a, b) => b.num - a.num);
+
+        this.list2[0] = {
+          label: "工程测绘部",
+          num: data[13].gcchb,
+          total: data[13].hj,
+        };
+        this.list2[1] = {
+          label: "管线工程部",
+          num: data[13].gxgcb,
+          total: data[13].hj,
+        };
+        this.list2[2] = {
+          label: "不动产测绘部",
+          num: data[13].bdcchb,
+          total: data[13].hj,
+        };
+        this.list2[3] = {
+          label: "地理信息部",
+          num: data[13].dlxxb,
+          total: data[13].hj,
+        };
+        this.list2.sort((a, b) => b.num - a.num);
+      }
+    },
     format(percentage) {
       return percentage;
-    },
-
-    initFloorage() {
-      const myChart = echarts.init(document.getElementById("floorage2"));
-      myChart.setOption({
-        color: ["#afeff6"],
-        tooltip: {
-          trigger: "axis",
-        },
-        label: {
-          color: "#ffffff",
-        },
-        grid: {
-          top: "4%",
-          left: "1%",
-          right: "3%",
-          bottom: "0%",
-          containLabel: true,
-        },
-        xAxis: {
-          type: "category",
-          data: this.monthList,
-          boundaryGap: false, // 从y轴开始
-          //设置网格线颜色
-          splitLine: {
-            show: false,
-          },
-          axisLine: {
-            lineStyle: {
-              color: "#17709c",
-            },
-          },
-
-          axisLabel: {
-            show: true,
-            textStyle: {
-              color: "#ffffff", //更改坐标轴文字颜色
-              fontSize: 12, //更改坐标轴文字大小
-            },
-          },
-        },
-        yAxis: {
-          type: "value",
-          axisLabel: {
-            show: true,
-            textStyle: {
-              color: "#00eaff", //更改坐标轴文字颜色
-              fontSize: 12, //更改坐标轴文字大小
-            },
-          },
-          splitLine: {
-            show: true,
-            lineStyle: {
-              color: ["#17709c"],
-              width: 1,
-              type: "solid",
-            },
-          },
-          // y轴轴线颜色
-          axisLine: {
-            lineStyle: {
-              color: "#254177",
-              // width: 1 //这里是坐标轴的宽度
-            },
-          },
-        },
-        series: [
-          {
-            name: "",
-            data: this.list2,
-            type: "line",
-            // stack: 'Total',
-            smooth: true,
-          },
-        ],
-      });
     },
   },
 };
@@ -231,7 +277,7 @@ export default {
   width: 46%;
   position: relative;
   z-index: 1;
-  margin-top: 50px;
+  margin-top: 26px;
   ul {
     list-style: none;
     // margin: 0;
@@ -297,7 +343,7 @@ export default {
         width: 100%;
         position: absolute;
         left: 0;
-        top: 44px;
+        // top: 44px;
         z-index: 10;
         > p {
           font-size: 22px !important;
@@ -367,13 +413,15 @@ export default {
     }
     ul {
       color: #fff;
-      margin-left: 2px;
+      margin-left: -50px;
       li {
         width: 86%;
         display: flex;
         margin-top: 22px;
         .label {
-          width: 94px;
+          margin-top: -6px;
+          font-size: small;
+          width: 106px;
           flex-shrink: 0;
           text-align: right;
           padding-right: 8px;

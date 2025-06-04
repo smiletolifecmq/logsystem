@@ -174,7 +174,7 @@ export default {
             .then(() => {
               this.$router
                 .push({
-                  path: this.redirect || "/user/fq_project/fq_project_list",
+                  path: this.redirect || "/index",
                 })
                 .catch(() => {});
             })

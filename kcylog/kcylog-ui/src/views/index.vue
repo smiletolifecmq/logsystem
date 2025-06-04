@@ -6,24 +6,21 @@
     <div class="co-body-sup" style="background-color: #042c63">
       <ul style="list-style-type: none; flex: 2">
         <li class="co-mid-item1">
-          <Item2 ref="Item2Ref"></Item2>
+          <Item1 ref="Item1Ref" :hztj-data="hztjData"></Item1>
         </li>
         <li class="co-mid-item2">
-          <Item3 ref="Item3Ref"></Item3>
+          <Item3 ref="Item3Ref" :hztj-data="hztjData"></Item3>
         </li>
-        <li class="co-mid-item2">
+        <!-- <li class="co-mid-item2">
           <Item6 ref="Item6Ref"></Item6>
-        </li>
+        </li> -->
       </ul>
-      <ul style="list-style-type: none; flex: 2; margin-top: -1px">
+      <ul style="list-style-type: none; flex: 2; margin-top: -0.56rem">
         <li class="co-right-item1">
+          <Item2 ref="Item2Ref" :hztj-data="hztjData"></Item2>
+        </li>
+        <!-- <li class="co-right-item2" style="margin-top: 2px">
           <Item4 ref="Item4Ref"></Item4>
-        </li>
-        <li class="co-right-item2" style="margin-top: 2px">
-          <Item1 ref="Item1Ref"></Item1>
-        </li>
-        <!-- <li class="co-right-item2">
-          <Item6 ref="Item6Ref"></Item6>
         </li> -->
       </ul>
     </div>
@@ -35,9 +32,9 @@ import Head from "./system/administration/head.vue";
 import Item1 from "./system/administration/item1.vue";
 import Item2 from "./system/administration/item2.vue";
 import Item3 from "./system/administration/item3.vue";
-import Item4 from "./system/administration/item4.vue";
 import Item5 from "./system/administration/item5.vue";
-import Item6 from "./system/administration/item6.vue";
+import { listProjectHj } from "@/api/system/project";
+
 export default {
   name: "Index",
   components: {
@@ -45,15 +42,27 @@ export default {
     Item1,
     Item2,
     Item3,
-    Item4,
     Item5,
-    Item6,
   },
   data() {
-    return {};
+    return {
+      hztjData: [],
+      queryParamsHz: {},
+      dateRangeHz: [],
+    };
   },
-  created() {},
-  methods: {},
+  created() {
+    this.getHJ();
+  },
+  methods: {
+    getHJ() {
+      listProjectHj(
+        this.addDateRange(this.queryParamsHz, this.dateRangeHz)
+      ).then((response) => {
+        this.hztjData = response.rows;
+      });
+    },
+  },
 };
 </script>
 <style lang="scss" scoped>
