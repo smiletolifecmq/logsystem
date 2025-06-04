@@ -1,0 +1,778 @@
+.co-title {
+    width: 100%;
+    height: 36px;
+    padding: 0 0 6px 40px;
+    display: flex;
+    flex-flow: row nowrap;
+    position: relative;
+    &::before {
+        content: '';
+        display: block;
+        width: 46px;
+        height: 39px;
+        background: url('~@/assets/cockpit/co-title-left.png') no-repeat 0/ 100% 100%;
+        position: absolute;
+        left: -3px;
+        top: -3px;
+    }
+    &::after {
+        content: '';
+        display: block;
+        width: 100%;
+        height: 1px;
+        background: url('~@/assets/cockpit/co-title-sub.png') no-repeat 0/ 100% 100%;
+        position: absolute;
+        left: 0;
+        bottom: 0;
+    }
+    .co-title-name {
+        flex: none;
+        height: 48px;
+        margin: -13px 0 0 -10px;
+        >img {
+            display: block;
+            height: 100%;
+        }
+    }
+    .co-title-right {
+        flex: none;
+        margin: 0 0 0 auto;
+    }
+}
+
+.co-title-breathe {
+    display: flex;
+    flex-flow: row nowrap;
+    margin: 10px 0 0 0;
+    >i {
+        flex: none;
+        width: 4px;
+        height: 7px;
+        background: #00EAFF;
+        margin: 0 2px;
+        &:nth-child(1) {
+            animation: titleBreathe1 linear 2s infinite;
+        }
+        &:nth-child(2) {
+            animation: titleBreathe2 linear 2s infinite;
+        }
+        &:nth-child(3) {
+            animation: titleBreathe3 linear 2s infinite;
+        }
+        &:nth-child(4) {
+            animation: titleBreathe4 linear 2s infinite;
+        }
+        &:nth-child(5) {
+            animation: titleBreathe5 linear 2s infinite;
+        }
+        &:nth-child(6) {
+            animation: titleBreathe6 linear 2s infinite;
+        }
+    }
+}
+
+@keyframes titleBreathe1 {
+    0% {
+        opacity: .25;
+    }
+    10% {
+        opacity: .4;
+    }
+    20% {
+        opacity: .55;
+    }
+    30% {
+        opacity: .7;
+    }
+    40% {
+        opacity: .85;
+    }
+    50% {
+        opacity: 1;
+    }
+    60% {
+        opacity: .85;
+    }
+    70% {
+        opacity: .7;
+    }
+    80% {
+        opacity: .55;
+    }
+    90% {
+        opacity: .4;
+    }
+    100% {
+        opacity: .25;
+    }
+}
+
+@keyframes titleBreathe2 {
+    0% {
+        opacity: .4;
+    }
+    10% {
+        opacity: .55;
+    }
+    20% {
+        opacity: .7;
+    }
+    30% {
+        opacity: .85;
+    }
+    40% {
+        opacity: 1;
+    }
+    50% {
+        opacity: .85;
+    }
+    60% {
+        opacity: .7;
+    }
+    70% {
+        opacity: .55;
+    }
+    80% {
+        opacity: .4;
+    }
+    90% {
+        opacity: .25;
+    }
+    100% {
+        opacity: .4;
+    }
+}
+
+@keyframes titleBreathe3 {
+    0% {
+        opacity: .55;
+    }
+    10% {
+        opacity: .7;
+    }
+    20% {
+        opacity: .85;
+    }
+    30% {
+        opacity: 1;
+    }
+    40% {
+        opacity: .85;
+    }
+    50% {
+        opacity: .7;
+    }
+    60% {
+        opacity: .55;
+    }
+    70% {
+        opacity: .4;
+    }
+    80% {
+        opacity: .25;
+    }
+    90% {
+        opacity: .25;
+    }
+    100% {
+        opacity: .55;
+    }
+}
+
+@keyframes titleBreathe4 {
+    0% {
+        opacity: .7;
+    }
+    10% {
+        opacity: .85;
+    }
+    20% {
+        opacity: 1;
+    }
+    30% {
+        opacity: .85;
+    }
+    40% {
+        opacity: .7;
+    }
+    50% {
+        opacity: .55;
+    }
+    60% {
+        opacity: .4;
+    }
+    70% {
+        opacity: .25;
+    }
+    80% {
+        opacity: .25;
+    }
+    90% {
+        opacity: .25;
+    }
+    100% {
+        opacity: .7;
+    }
+}
+
+@keyframes titleBreathe5 {
+    0% {
+        opacity: .85;
+    }
+    10% {
+        opacity: 1;
+    }
+    20% {
+        opacity: .85;
+    }
+    30% {
+        opacity: .7;
+    }
+    40% {
+        opacity: .55;
+    }
+    50% {
+        opacity: .4;
+    }
+    60% {
+        opacity: .25;
+    }
+    70% {
+        opacity: .25;
+    }
+    80% {
+        opacity: .25;
+    }
+    90% {
+        opacity: .25;
+    }
+    100% {
+        opacity: .85;
+    }
+}
+
+@keyframes titleBreathe6 {
+    0% {
+        opacity: 1;
+    }
+    10% {
+        opacity: .85;
+    }
+    20% {
+        opacity: .7;
+    }
+    30% {
+        opacity: .55;
+    }
+    40% {
+        opacity: .4;
+    }
+    50% {
+        opacity: .25;
+    }
+    60% {
+        opacity: .25;
+    }
+    70% {
+        opacity: .25;
+    }
+    80% {
+        opacity: .25;
+    }
+    90% {
+        opacity: .25;
+    }
+    100% {
+        opacity: 1;
+    }
+}
+
+.bpl-container {
+    width: 100%;
+    height: calc(100% - 36px);
+    padding: 12px 0 0 0;
+    overflow-y: auto;
+}
+
+.circle-petal {
+    width: 170px;
+    height: 170px;
+    position: absolute;
+    left: 50%;
+    bottom: -15px;
+    transform: translate(-50%, 0) rotateX(56deg);
+    z-index: 6;
+    >i {
+        display: block;
+        width: 40px;
+        height: 44px;
+        background: url('~@/assets/cockpit/circle-petal0.png') no-repeat 0/ 100% 100%;
+        position: absolute;
+        top: 0;
+        left: 65px;
+        transform-origin: 20px 85px;
+        &:nth-child(1) {
+            transform: rotate(0deg);
+        }
+        &:nth-child(2) {
+            transform: rotate(18deg);
+        }
+        &:nth-child(3) {
+            transform: rotate(36deg);
+        }
+        &:nth-child(4) {
+            transform: rotate(54deg);
+        }
+        &:nth-child(5) {
+            transform: rotate(72deg);
+        }
+        &:nth-child(6) {
+            transform: rotate(90deg);
+        }
+        &:nth-child(7) {
+            transform: rotate(108deg);
+        }
+        &:nth-child(8) {
+            transform: rotate(126deg);
+        }
+        &:nth-child(9) {
+            transform: rotate(144deg);
+        }
+        &:nth-child(10) {
+            transform: rotate(162deg);
+        }
+        &:nth-child(11) {
+            transform: rotate(180deg);
+        }
+        &:nth-child(12) {
+            transform: rotate(198deg);
+        }
+        &:nth-child(13) {
+            transform: rotate(216deg);
+        }
+        &:nth-child(14) {
+            transform: rotate(234deg);
+        }
+        &:nth-child(15) {
+            transform: rotate(252deg);
+        }
+        &:nth-child(16) {
+            transform: rotate(270deg);
+        }
+        &:nth-child(17) {
+            transform: rotate(288deg);
+        }
+        &:nth-child(18) {
+            transform: rotate(306deg);
+        }
+        &:nth-child(19) {
+            transform: rotate(324deg);
+        }
+        &:nth-child(20) {
+            transform: rotate(342deg);
+        }
+    }
+    &.circle-petal-light1 {
+        >i {
+            &:nth-child(1) {
+                background: url('~@/assets/cockpit/circle-petal1.png') no-repeat 0/ 100% 100%;
+            }
+        }
+    }
+    &.circle-petal-light2 {
+        >i {
+            &:nth-child(1),
+            &:nth-child(2) {
+                background: url('~@/assets/cockpit/circle-petal1.png') no-repeat 0/ 100% 100%;
+            }
+        }
+    }
+    &.circle-petal-light3 {
+        >i {
+            &:nth-child(1),
+            &:nth-child(2),
+            &:nth-child(3) {
+                background: url('~@/assets/cockpit/circle-petal1.png') no-repeat 0/ 100% 100%;
+            }
+        }
+    }
+    &.circle-petal-light4 {
+        >i {
+            &:nth-child(1),
+            &:nth-child(2),
+            &:nth-child(3),
+            &:nth-child(4) {
+                background: url('~@/assets/cockpit/circle-petal1.png') no-repeat 0/ 100% 100%;
+            }
+        }
+    }
+    &.circle-petal-light5 {
+        >i {
+            &:nth-child(1),
+            &:nth-child(2),
+            &:nth-child(3),
+            &:nth-child(4),
+            &:nth-child(5) {
+                background: url('~@/assets/cockpit/circle-petal1.png') no-repeat 0/ 100% 100%;
+            }
+        }
+    }
+    &.circle-petal-light6 {
+        >i {
+            &:nth-child(1),
+            &:nth-child(2),
+            &:nth-child(3),
+            &:nth-child(4),
+            &:nth-child(5),
+            &:nth-child(6) {
+                background: url('~@/assets/cockpit/circle-petal1.png') no-repeat 0/ 100% 100%;
+            }
+        }
+    }
+    &.circle-petal-light7 {
+        >i {
+            &:nth-child(1),
+            &:nth-child(2),
+            &:nth-child(3),
+            &:nth-child(4),
+            &:nth-child(5),
+            &:nth-child(6),
+            &:nth-child(7) {
+                background: url('~@/assets/cockpit/circle-petal1.png') no-repeat 0/ 100% 100%;
+            }
+        }
+    }
+    &.circle-petal-light8 {
+        >i {
+            &:nth-child(1),
+            &:nth-child(2),
+            &:nth-child(3),
+            &:nth-child(4),
+            &:nth-child(5),
+            &:nth-child(6),
+            &:nth-child(7),
+            &:nth-child(8) {
+                background: url('~@/assets/cockpit/circle-petal1.png') no-repeat 0/ 100% 100%;
+            }
+        }
+    }
+    &.circle-petal-light9 {
+        >i {
+            &:nth-child(1),
+            &:nth-child(2),
+            &:nth-child(3),
+            &:nth-child(4),
+            &:nth-child(5),
+            &:nth-child(6),
+            &:nth-child(7),
+            &:nth-child(8),
+            &:nth-child(9) {
+                background: url('~@/assets/cockpit/circle-petal1.png') no-repeat 0/ 100% 100%;
+            }
+        }
+    }
+    &.circle-petal-light10 {
+        >i {
+            &:nth-child(1),
+            &:nth-child(2),
+            &:nth-child(3),
+            &:nth-child(4),
+            &:nth-child(5),
+            &:nth-child(6),
+            &:nth-child(7),
+            &:nth-child(8),
+            &:nth-child(9),
+            &:nth-child(10) {
+                background: url('~@/assets/cockpit/circle-petal1.png') no-repeat 0/ 100% 100%;
+            }
+        }
+    }
+    &.circle-petal-light11 {
+        >i {
+            &:nth-child(1),
+            &:nth-child(2),
+            &:nth-child(3),
+            &:nth-child(4),
+            &:nth-child(5),
+            &:nth-child(6),
+            &:nth-child(7),
+            &:nth-child(8),
+            &:nth-child(9),
+            &:nth-child(10),
+            &:nth-child(11) {
+                background: url('~@/assets/cockpit/circle-petal1.png') no-repeat 0/ 100% 100%;
+            }
+        }
+    }
+    &.circle-petal-light12 {
+        >i {
+            &:nth-child(1),
+            &:nth-child(2),
+            &:nth-child(3),
+            &:nth-child(4),
+            &:nth-child(5),
+            &:nth-child(6),
+            &:nth-child(7),
+            &:nth-child(8),
+            &:nth-child(9),
+            &:nth-child(10),
+            &:nth-child(11),
+            &:nth-child(12) {
+                background: url('~@/assets/cockpit/circle-petal1.png') no-repeat 0/ 100% 100%;
+            }
+        }
+    }
+    &.circle-petal-light13 {
+        >i {
+            &:nth-child(1),
+            &:nth-child(2),
+            &:nth-child(3),
+            &:nth-child(4),
+            &:nth-child(5),
+            &:nth-child(6),
+            &:nth-child(7),
+            &:nth-child(8),
+            &:nth-child(9),
+            &:nth-child(10),
+            &:nth-child(11),
+            &:nth-child(12),
+            &:nth-child(13) {
+                background: url('~@/assets/cockpit/circle-petal1.png') no-repeat 0/ 100% 100%;
+            }
+        }
+    }
+    &.circle-petal-light14 {
+        >i {
+            &:nth-child(1),
+            &:nth-child(2),
+            &:nth-child(3),
+            &:nth-child(4),
+            &:nth-child(5),
+            &:nth-child(6),
+            &:nth-child(7),
+            &:nth-child(8),
+            &:nth-child(9),
+            &:nth-child(10),
+            &:nth-child(11),
+            &:nth-child(12),
+            &:nth-child(13),
+            &:nth-child(14) {
+                background: url('~@/assets/cockpit/circle-petal1.png') no-repeat 0/ 100% 100%;
+            }
+        }
+    }
+    &.circle-petal-light15 {
+        >i {
+            &:nth-child(1),
+            &:nth-child(2),
+            &:nth-child(3),
+            &:nth-child(4),
+            &:nth-child(5),
+            &:nth-child(6),
+            &:nth-child(7),
+            &:nth-child(8),
+            &:nth-child(9),
+            &:nth-child(10),
+            &:nth-child(11),
+            &:nth-child(12),
+            &:nth-child(13),
+            &:nth-child(14),
+            &:nth-child(15) {
+                background: url('~@/assets/cockpit/circle-petal1.png') no-repeat 0/ 100% 100%;
+            }
+        }
+    }
+    &.circle-petal-light16 {
+        >i {
+            &:nth-child(1),
+            &:nth-child(2),
+            &:nth-child(3),
+            &:nth-child(4),
+            &:nth-child(5),
+            &:nth-child(6),
+            &:nth-child(7),
+            &:nth-child(8),
+            &:nth-child(9),
+            &:nth-child(10),
+            &:nth-child(11),
+            &:nth-child(12),
+            &:nth-child(13),
+            &:nth-child(14),
+            &:nth-child(15),
+            &:nth-child(16) {
+                background: url('~@/assets/cockpit/circle-petal1.png') no-repeat 0/ 100% 100%;
+            }
+        }
+    }
+    &.circle-petal-light17 {
+        >i {
+            &:nth-child(1),
+            &:nth-child(2),
+            &:nth-child(3),
+            &:nth-child(4),
+            &:nth-child(5),
+            &:nth-child(6),
+            &:nth-child(7),
+            &:nth-child(8),
+            &:nth-child(9),
+            &:nth-child(10),
+            &:nth-child(11),
+            &:nth-child(12),
+            &:nth-child(13),
+            &:nth-child(14),
+            &:nth-child(15),
+            &:nth-child(16),
+            &:nth-child(17) {
+                background: url('~@/assets/cockpit/circle-petal1.png') no-repeat 0/ 100% 100%;
+            }
+        }
+    }
+    &.circle-petal-light18 {
+        >i {
+            &:nth-child(1),
+            &:nth-child(2),
+            &:nth-child(3),
+            &:nth-child(4),
+            &:nth-child(5),
+            &:nth-child(6),
+            &:nth-child(7),
+            &:nth-child(8),
+            &:nth-child(9),
+            &:nth-child(10),
+            &:nth-child(11),
+            &:nth-child(12),
+            &:nth-child(13),
+            &:nth-child(14),
+            &:nth-child(15),
+            &:nth-child(16),
+            &:nth-child(17),
+            &:nth-child(18) {
+                background: url('~@/assets/cockpit/circle-petal1.png') no-repeat 0/ 100% 100%;
+            }
+        }
+    }
+    &.circle-petal-light19 {
+        >i {
+            &:nth-child(1),
+            &:nth-child(2),
+            &:nth-child(3),
+            &:nth-child(4),
+            &:nth-child(5),
+            &:nth-child(6),
+            &:nth-child(7),
+            &:nth-child(8),
+            &:nth-child(9),
+            &:nth-child(10),
+            &:nth-child(11),
+            &:nth-child(12),
+            &:nth-child(13),
+            &:nth-child(14),
+            &:nth-child(15),
+            &:nth-child(16),
+            &:nth-child(17),
+            &:nth-child(18),
+            &:nth-child(19) {
+                background: url('~@/assets/cockpit/circle-petal1.png') no-repeat 0/ 100% 100%;
+            }
+        }
+    }
+    &.circle-petal-light20 {
+        >i {
+            &:nth-child(1),
+            &:nth-child(2),
+            &:nth-child(3),
+            &:nth-child(4),
+            &:nth-child(5),
+            &:nth-child(6),
+            &:nth-child(7),
+            &:nth-child(8),
+            &:nth-child(9),
+            &:nth-child(10),
+            &:nth-child(11),
+            &:nth-child(12),
+            &:nth-child(13),
+            &:nth-child(14),
+            &:nth-child(15),
+            &:nth-child(16),
+            &:nth-child(17),
+            &:nth-child(18),
+            &:nth-child(19),
+            &:nth-child(20) {
+                background: url('~@/assets/cockpit/circle-petal1.png') no-repeat 0/ 100% 100%;
+            }
+        }
+    }
+}
+
+
+/* select样式重置 */
+.co-title-select {
+    width: 184px;
+    height: 29px;
+    .el-select{
+        width: 100%;
+    }
+    ::v-deep .el-input__inner {
+        width: 100%;
+        height: 29px;
+      background: url('~@/assets/cockpit/co-title-select.png') no-repeat 0/ 100% 100%;
+      border: none;
+      font-size: 12px !important;
+      color: #fff;
+    }
+    ::v-deep .el-input--small .el-input__icon {
+      background: url('~@/assets/cockpit/co-title-select-tri.png') no-repeat 0/ 100% 100%;
+      line-height: 29px;
+      &::before {
+        display: none;
+      }
+    }
+  }
+  // 下拉框样式修改
+.el-select-dropdown__item {
+    width: 90%;
+    height: 100%;
+    background: url('~@/assets/cockpit/co-title-select.png') no-repeat 0/ 100% 100%;
+    border: none;
+    font-size: 12px !important;
+    color: #fff !important;
+    padding-left: 8px !important;
+    font-weight: 400 !important;
+    background-color: rgba(0, 33, 96, 0.9) !important;
+    margin: auto auto 6px auto;
+  }
+  ::v-deep .el-popper {
+    .popper__arrow {
+      border-bottom-color: rgba(0, 33, 96, 0.9) !important;
+    }
+    .popper__arrow::after {
+      border-bottom-color: #3767b6 !important;
+      top: -1px !important;
+    }
+  }
+  ::v-deep .el-select-dropdown {
+    border: solid 1px #3767b6 !important;
+    background-color: rgba(0, 33, 96, 0.9) !important;
+  }
+
+// 文字前icon样式
+.text-icon {
+    width: 6px;
+    height: 6px;
+
+    margin-top: 4px;
+    transform: rotate(45deg);
+    -ms-transform: rotate(45deg); /* IE 9 */
+    -moz-transform: rotate(45deg); /* Firefox */
+    -webkit-transform: rotate(45deg); /* Safari 和 Chrome */
+    -o-transform: rotate(45deg); /* Opera */
+  }
+  .text-icon-blue {
+    background: linear-gradient(180deg, #3dc8fc 0%, #1c96ef 50%, #245abf 100%);
+  }
+  .text-icon-green {
+    background: linear-gradient(180deg, #2effaf 0%, #0fa 50%, #21c18b 100%);
+  }
+  .text-icon-yellow {
+    background: linear-gradient(180deg, #ffeb7b 0%, #ecbf45 50%, #ab9700 100%);
+  }

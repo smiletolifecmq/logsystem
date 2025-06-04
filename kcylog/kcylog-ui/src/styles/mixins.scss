@@ -1,0 +1,67 @@
+// 引入变量
+@import './variables';
+
+@mixin scrollbar($block) {
+  .#{$block} {
+    ::-webkit-scrollbar {
+      z-index: 11;
+      width: 6px;
+    }
+
+    ::-webkit-scrollbar:horizontal {
+      height: 6px;
+    }
+
+    ::-webkit-scrollbar-thumb {
+      border-radius: 5px;
+      width: 6px;
+      background: #dddee0;
+    }
+
+    ::-webkit-scrollbar-corner {
+      background: #fff;
+    }
+
+    ::-webkit-scrollbar-track {
+      background: #fff !important;
+    }
+
+    ::-webkit-scrollbar-track-piece {
+      background: #fff;
+      width: 6px;
+    }
+  }
+}
+
+$theme-map: null;
+
+@mixin themify($themes: $themes) {
+
+  @each $theme-name,
+  $map in $themes {
+    .theme-#{$theme-name} & {
+      $theme-map: () !global;
+
+      @each $key,
+      $value in $map {
+        $theme-map: map-merge($theme-map,
+            ($key: $value)) !global;
+      }
+
+      @content;
+
+      $theme-map: null !global;
+    }
+  }
+}
+
+@function themed($key) {
+  @return map-get($theme-map, $key);
+}
+
+
+@mixin bellow1440 {
+  @media screen and (max-width: 1440px) {
+    @content;
+  }
+}

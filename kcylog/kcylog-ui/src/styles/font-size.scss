@@ -1,0 +1,28 @@
+$baseElement: body, div, span, header, footer, nav, section, aside, article, ul, dl, dt, dd, li, a, p, h1, h2, h3, h4,
+  h5, h6, i, b, textarea, button, input, select, figure, figcaption, label; // 全局标签
+
+#xxzxApp#{$baseElement} {
+  @include themify($themes) {
+    font-size: themed('content-font-size') !important;
+  }
+}
+#xxzxApp.content-font-size {
+  @include themify($themes) {
+    font-size: themed('content-font-size') !important;
+  }
+}
+#xxzxApp.tip-font-size {
+  @include themify($themes) {
+    font-size: themed('tip-font-size') !important;
+  }
+}
+#xxzxApp.title-font-size {
+  @include themify($themes) {
+    font-size: themed('title-font-size') !important;
+  }
+}
+#xxzxApp.header-font-size {
+  @include themify($themes) {
+    font-size: themed('header-font-size') !important;
+  }
+}

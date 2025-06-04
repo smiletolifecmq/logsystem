@@ -1,0 +1,23 @@
+// 重构动态表单样式
+#xx-generataForm{
+    .fm-generate-container{
+        .el-form-item__error{
+            visibility:hidden;
+        }
+        .is-error{
+            .required-border{
+                border: 1px solid #ff4949;
+                border-radius:4px;
+                padding:0px 4px;
+                width: 100%;
+            }
+            .required-border.sign-area{
+                width: 107px;
+            }
+        } 
+        .el-form-item {
+            padding: 8px !important;
+          }
+    }
+    
+}

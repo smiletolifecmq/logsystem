@@ -1,0 +1,55 @@
+.table-wrap {
+  margin: 16px;
+  background: #ffffff;
+  height: calc(100% - 100px);
+  padding: 24px;
+  display: flex;
+  flex-direction: column;
+  .top-form {
+    display: flex;
+    align-items: center;
+    flex-wrap: wrap;
+    ::v-deep .el-date-editor .el-range-separator {
+      width: 30px;
+    }
+    ::v-deep .el-input__inner {
+      width: 120px;
+      &.el-range-editor--small {
+        width: 260px;
+      }
+    }
+
+    ::v-deep .el-input--prefix {
+      .el-input__inner {
+        width: 160px;
+      }
+    }
+    .btn-group {
+      margin-left: auto;
+    }
+  }
+  .el-table-wrap {
+    flex: 1;
+    max-height: 680px;
+  }
+  .el-pagination {
+    height: 40px;
+  }
+}
+.el-button-group {
+    display: flex;
+    ::v-deep .el-upload {
+        .el-button {
+          border-right: 0;
+          border-radius: 0;
+        }
+    }
+}
+::v-deep td.is-right {
+.cell {
+  padding-right: 20px;
+}
+}
+::v-deep .el-date-editor .el-range-separator {
+min-width: 30px;
+}

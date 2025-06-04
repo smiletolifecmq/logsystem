@@ -1,0 +1,568 @@
+/*----------常用混合-----------*/
+
+@mixin warp {
+    &:after {
+        content: '';
+        display: table;
+        clear: both;
+    }
+}
+
+@mixin ease {
+    transition: all .2s ease-in-out;
+    -webkit-transition: all .2s ease-in-out;
+}
+
+@mixin usnone {
+    -moz-user-select: none;
+    -webkit-user-select: none;
+    -ms-user-select: none;
+    -khtml-user-select: none;
+    user-select: none;
+}
+
+@mixin someword {
+    overflow: hidden;
+    white-space: nowrap;
+    text-overflow: ellipsis;
+}
+
+@mixin fullimg {
+    display: block;
+    width: 100%;
+    height: 100%;
+}
+
+@mixin vertalmid {
+    font-size: 0;
+    -webkit-text-size-adjust: none;
+    &:before {
+        content: '';
+        display: inline-block;
+        height: 100%;
+        vertical-align: middle;
+    }
+}
+
+@mixin appnoroll {
+    &::-webkit-scrollbar {
+        display: none;
+        width: 0px !important;
+        height: 0px !important;
+    }
+}
+
+@mixin lineword($n) {
+    overflow: hidden;
+    text-overflow: ellipsis;
+    display: -webkit-box;
+    -webkit-line-clamp: $n;
+    -webkit-box-orient: vertical;
+}
+
+// ::-webkit-scrollbar {
+//     width: 8px !important;
+//     height: 8px !important;
+//     /*    -webkit-appearance: none;*/
+//     background-color: #fff;
+// }
+// ::-webkit-scrollbar-thumb {
+//     height: 8px;
+//     border: 1px solid transparent;
+//     border-top: none;
+//     border-bottom: none;
+//     -webkit-border-radius: 6px;
+//     background-color: rgba(0, 0, 0, .3);
+//     background-clip: padding-box;
+// }
+// ::-webkit-scrollbar-thumb:hover {
+//     background-color: rgba(0, 0, 0, .35);
+// }
+
+/* fade-transform */
+
+.fade-transform-leave-active,
+.fade-transform-enter-active {
+    transition: all .5s;
+}
+
+.fade-transform-enter {
+    opacity: 0;
+    transform: translateX(-30px);
+}
+
+.fade-transform-leave-to {
+    opacity: 0;
+    transform: translateX(30px);
+}
+
+
+/*----------------------------------reset-element-ui-component---------------------------------*/
+
+
+/*---------------------------------common-------------------------------------*/
+
+.list-container {
+    width: 100%;
+    height: 100%;
+    display: flex;
+    flex-flow: column nowrap;
+    justify-content: flex-start;
+    align-items: flex-start;
+}
+
+.list-condition {
+    flex: none;
+    width: 100%;
+    box-shadow: 0 2px 4px 1px rgba(#000, .1);
+    position: relative;
+    // z-index: 10;
+    z-index: 1;
+    .list-con-main {
+        width: 100%;
+        padding: 0 16px;
+        background: #fff;
+        .list-con-item {
+            width: 100%;
+            min-height: 48px;
+            border-bottom: 1px dashed #eee;
+            display: flex;
+            flex-flow: row nowrap;
+            justify-content: flex-start;
+            align-items: flex-start;
+            &:last-child {
+                border-bottom: none;
+            }
+            >label {
+                flex: none;
+                width: 84px;
+                font-size: 12px !important;
+                line-height: 28px;
+                color: #262626;
+                margin: 10px 0 0 0;
+            }
+            .list-con-item-box {
+                flex: auto;
+                display: flex;
+                flex-flow: row nowrap;
+                .all-check {
+                    flex: none;
+                    margin-right: 16px;
+                }
+                .el-checkbox-group {
+                    flex: auto;
+                }
+            }
+        }
+    }
+    .list-con-result {
+        width: 100%;
+        min-height: 44px;
+        padding: 9px 122px 0 16px;
+        background: #f9f9f9;
+        border-top: 1px solid #f0f0f0;
+        display: flex;
+        flex-flow: row nowrap;
+        justify-content: flex-start;
+        align-items: flex-start;
+        position: relative;
+        >label {
+            flex: none;
+            width: 84px;
+            font-size: 12px !important;
+            line-height: 24px;
+            color: #595959;
+        }
+        .list-con-result-box {
+            flex: auto;
+            display: flex;
+            >li {
+                flex: none;
+                height: 24px;
+                padding: 2px 4px;
+                background: #E8F4FE;
+                border: 1px solid #BBDEFC;
+                border-radius: 4px;
+                display: flex;
+                align-items: center;
+                margin: 0 16px 10px 0;
+                >span {
+                    font-size: 14px;
+                    line-height: 18px;
+                    @include themify($themes) {
+                        color: themed('primary-color');
+                    }
+                    margin: 0 8px 0 0;
+                }
+                >i {
+                    font-size: 16px;
+                    line-height: 18px;
+                    @include themify($themes) {
+                        color: themed('primary-color');
+                    }
+                    cursor: pointer;
+                }
+            }
+        }
+    }
+}
+
+.list-box {
+    flex: 1;
+    width: 100%;
+    padding: 16px;
+    display: flex;
+    flex-flow: column nowrap;
+    position: relative;
+    overflow: hidden;
+    .list-box-sup {
+        width: 100%;
+        height: 32px;
+        flex: none;
+        display: flex;
+        align-items: center;
+        .list-boxp-search {
+            flex: none;
+            .el-input {
+                .el-input__suffix {
+                    cursor: pointer;
+                    &:hover {
+                        .el-input__suffix-inner {
+                            >i {
+                                @include themify($themes) {
+                                    color: themed('primary-color');
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        }
+        .list-boxp-each {
+            flex: none;
+            display: flex;
+            flex-flow: row nowrap;
+            align-items: center;
+            margin: 0 16px 0 0;
+            >label {
+                flex: none;
+                font-size: 14px;
+                line-height: 20px;
+                color: #262626;
+                margin: 0 8px 0 0;
+            }
+            >div {
+                flex: none;
+            }
+        }
+        .list-boxp-btn {
+            flex: none;
+            margin: 0 0 0 auto;
+        }
+    }
+    .list-box-sub {
+        width: 100%;
+        flex: 1;
+        margin: 16px 0 0 0;
+        overflow: hidden;
+    }
+}
+
+.meet-popover {
+    padding: 0 !important;
+    box-shadow: 0 1px 4px 1px rgba(#000, .08) !important;
+}
+
+//统一表格，搜索栏+表格
+.grid-bg {
+    width: 100%;
+    height: 100%;
+    display: flex;
+    flex-flow: column nowrap;
+}
+
+.grid-condition {
+    flex: none;
+    width: 100%;
+    padding: 16px 16px;
+    display: flex;
+    flex-flow: row nowrap;
+    .grid-c-left {
+        flex: none;
+        display: flex;
+        flex-flow: row nowrap;
+        margin: 0 16px 0 0;
+        .grid-cl-each {
+            flex: none;
+            display: flex;
+            flex-flow: row nowrap;
+            margin: 0 0 0 12px;
+            &:first-child {
+                margin-left: 0;
+            }
+            .grid-cle-label {
+                flex: none;
+                font-size: 14px;
+                line-height: 30px;
+                color: #595959;
+                text-align: left;
+                margin: 0 8px 0 0;
+            }
+            .grid-cle-box {
+                flex: none;
+                &.w100 {
+                    width: 100px;
+                }
+                &.w200 {
+                    width: 200px;
+                }
+                &.w300 {
+                    width: 300px;
+                }
+                &.w400 {
+                    width: 400px;
+                }
+            }
+        }
+    }
+    .grid-c-right {
+        flex: none;
+        display: flex;
+        flex-flow: row nowrap;
+        margin: 0 0 0 auto;
+    }
+}
+
+.grid-container {
+    flex: 1;
+    width: 100%;
+    padding: 0 16px;
+    .grid-table {
+        width: 100%;
+        height: calc(100% - 50px);
+        position: relative;
+    }
+    .grid-pagination {
+        width: 100%;
+        height: 50px;
+        .el-pagination {
+            padding: 10px 0 0!important;
+        }
+    }
+}
+
+//公文操作弹窗
+.docdeal-modal {
+    .el-dialog {
+        border-radius: 4px;
+        box-shadow: 0 4px 8px 2px rgba(#000, .16);
+        .el-dialog__header {
+            padding: 0;
+            height: 0;
+            border: none;
+            .el-dialog__title {
+                display: none;
+            }
+            .el-dialog__headerbtn {
+                font-size: 16px !important;
+                right: 16px !important;
+                top: 16px !important;
+            }
+        }
+        .el-dialog__body {
+            padding: 0 !important;
+        }
+    }
+}
+
+.docdeal {
+    width: 100%;
+    height: 500px;
+    display: flex;
+    flex-flow: row nowrap;
+    .docdeal-left {
+        flex: none;
+        width: 43%;
+        height: 100%;
+        background: #fafafa;
+        border-right: 1px solid #f0f0f0;
+        .docdeal-l-task {
+            width: 100%;
+            height: 52px;
+            padding: 13px 16px;
+            display: flex;
+            >img {
+                display: block;
+                width: 71px;
+                height: 26px;
+                margin-top: 2px;
+            }
+            >p {
+                font-size: 16px !important;
+                line-height: 26px;
+                color: #262626;
+                font-weight: 600;
+                margin: 0 0 0 8px;
+                width: 140px;
+                overflow: hidden;
+                text-overflow: ellipsis;
+                white-space: nowrap;
+            }
+        }
+        .docdeal-l-tree {
+            width: 100%;
+            height: calc(100% - 52px);
+            overflow: auto;
+            .virtual-tree {
+                .virtual-tree-search {
+                    padding: 0 16px;
+                    .el-input__suffix {
+                        right: 20px !important;
+                    }
+                }
+                .el-input--mini .el-input__inner {
+                    height: 32px;
+                    line-height: 32px;
+                }
+                .virtual-tree-list {
+                    padding: 12px 16px;
+                }
+                .virtual-tree-item {
+                    height: 36px;
+                }
+            }
+            .cus-virtual-tree {
+                .avatar {
+                    width: 22px;
+                    height: 22px;
+                    border-radius: 50%;
+                    margin-right: 4px;
+                }
+                .limit-label {
+                    width: 100%;
+                }
+                .vitural-tree-node {
+                    width: calc(100% - 20px);
+                }
+                .virtual-tree-item .el-checkbox.inner-check-box {
+                    margin-top: 2px;
+                }
+            }
+        }
+    }
+    .docdeal-right {
+        flex: none;
+        width: 57%;
+        height: 100%;
+        display: flex;
+        flex-flow: column nowrap;
+        .docdeal-r-box {
+            flex: 1;
+            width: 100%;
+            padding: 7px 0 0 0;
+            overflow: hidden;
+            .docdeal-rb-head {
+                width: 100%;
+                height: 38px;
+                padding: 0 52px 0 16px;
+                display: flex;
+                flex-flow: row nowrap;
+                align-items: center;
+                >p {
+                    flex: none;
+                    font-size: 14px;
+                    line-height: 22px;
+                    color: #262626;
+                }
+            }
+            .docdeal-rb-main {
+                width: 100%;
+                height: calc(100% - 38px);
+                padding: 12px 16px 0 20px;
+                overflow-y: auto;
+                .docdeal-rbm-list {
+                    width: 100%;
+                    .docdeal-rbm-each {
+                        width: 100%;
+                        display: flex;
+                        flex-flow: row nowrap;
+                        align-items: center;
+                        margin: 12px 0 0 0;
+                        .head {
+                            width: 22px;
+                            height: 22px;
+                            border-radius: 50%;
+                            -webkit-border-radius: 50%;
+                            -moz-border-radius: 50%;
+                            -ms-border-radius: 50%;
+                            -o-border-radius: 50%;
+                        }
+                        &:first-child {
+                            margin-top: 0;
+                        }
+                        >div {
+                            flex: none;
+                            width: 24px;
+                            height: 24px;
+                            >img {
+                                display: block;
+                                width: 100%;
+                                height: 100%;
+                            }
+                        }
+                        >p {
+                            flex: auto;
+                            font-size: 14px;
+                            line-height: 20px;
+                            color: #595959;
+                            text-align: left;
+                            overflow: hidden;
+                            white-space: nowrap;
+                            text-overflow: ellipsis;
+                            cursor: default;
+                            margin: 0 12px 0 8px;
+                        }
+                        >i {
+                            flex: none;
+                            font-size: 16px !important;
+                            cursor: pointer;
+                            margin: 0 0 0 auto;
+                            &:hover {
+                                @include themify($themes) {
+                                    color: themed('primary-color');
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        }
+        .docdeal-r-text {
+            flex: none;
+            width: 100%;
+            height: 120px;
+            padding: 12px;
+        }
+        .docdeal-r-opt {
+            flex: none;
+            width: 100%;
+            height: 64px;
+            padding: 12px 16px;
+            border-top: 1px solid #f0f0f0;
+            display: flex;
+            flex-flow: row nowrap;
+            justify-content: space-between;
+            align-items: center;
+            .docdeal-ro-check {
+                flex: none;
+            }
+            .docdeal-ro-userword {
+                flex: none;
+            }
+            .docdeal-ro-btn {
+                flex: none;
+                margin: 0 0 0 auto;
+            }
+        }
+    }
+}

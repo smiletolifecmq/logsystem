@@ -1,0 +1,81 @@
+
+/* 判断ipad */
+// and (orientation : landscape) 横屏
+// and (orientation : portrait)  竖屏
+/* ipad适配 */
+
+@media only screen and (min-device-width: $--min-device-width) and (max-device-width: $--max-device-width) and (orientation: $--orientation) {
+// 间距公共样式
+.publick-header-style {
+  height: 50px !important;
+  min-height: 50px !important;
+}
+.main-container{
+  padding:8px!important;
+}
+#left{
+  width: 240px!important;
+  min-width: 240px!important;
+}
+.ipad-padding{
+  padding:8px!important;
+}
+.ipad-margin{
+  margin:8px!important;
+}
+.ipad-margin-no-top{
+  margin: 0 8px 8px 8px!important;
+}
+.ipad-mr-lf{
+  margin-left: 8px!important;
+}
+.ipad-mr-rg{
+  margin-right: 8px!important;
+}
+.ipad-pd-lf{
+  margin-left: 8px!important;
+}
+.ipad-pb-8{
+  padding-bottom: 8px!important;
+}
+.ipad-mb-8{
+  margin-bottom: 8px!important;
+}
+::v-deep .el-pagination{
+  padding-top: 8px!important;
+}
+.select-tree-area {
+  height: 32px;
+  ::v-deep .vue-treeselect__control {
+    height: 100% !important;
+    line-height: 100% !important;
+    border: 1px solid #dcdfe6 !important;
+    .vue-treeselect__placeholder,
+    .vue-treeselect__single-value {
+      line-height: 30px !important;
+    }
+  }
+}
+/* 设置dialog最小宽度 */
+.el-dialog{
+  min-width: 440px!important;
+}
+/* 滚动条样式设置 */
+::-webkit-scrollbar {
+  width: 3px!important;
+  height: 3px!important;
+}
+::-webkit-scrollbar-thumb {
+  background-color: rgba(0,0,0, 0.8)!important;
+  border-radius: 3px!important;
+}
+::-webkit-scrollbar-track {
+  background-color: transparent !important;
+}
+::-webkit-scrollbar-track-piece{
+  background-color: transparent!important;
+}
+}
+
+
+

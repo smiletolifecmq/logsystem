@@ -1,0 +1,244 @@
+#app-content {
+    // 头部导航
+    .nav-background {
+        @include themify($themes) {
+            background: themed('navbar-background');
+        }
+    }
+    .navBar {
+        @include themify($themes) {
+            background-image: themed('navbar-background-img');
+        }
+        .navLogo {
+            @include themify($themes) {
+                background-image: themed('navbar-logo');
+            }
+        }
+        .system-title {
+            @include themify($themes) {
+                background-image: themed('navbar-title-img');
+            }
+        }
+    }
+    // 左侧菜单
+    .sidebar {
+        .menu-wrapper {
+            .el-menu-item:nth-child(2),
+            .el-menu-item:nth-last-child(2) {
+                margin-bottom: 28px !important;
+                position: relative;
+                &::after {
+                    content: '';
+                    display: block;
+                    width: 56px;
+                    height: 1px;
+                    position: absolute;
+                    bottom: -15px;
+                    z-index: 9999;
+                    @include themify {
+                        @if themed('classic-2020')and not themed('high-contrast') {
+                            // background: linear-gradient(270deg, rgba(28, 91, 234, 0.2) 0%, rgba(28, 91, 234, 1) 50%, rgba(28, 91, 234, 0.2) 100%);
+                            background: linear-gradient(270deg, rgba(255, 255, 255, 0.06) 0%, rgba(255, 255, 255, 0.3) 49.99%, rgba(255, 255, 255, 0.06) 100%);
+                        }
+                        @else {
+                            background: rgb(240, 240, 240);
+                        }
+                    }
+                }
+            }
+        }
+        // 一级菜单
+        .side-menu {
+            @include themify($themes) {
+                background-color: themed('menu-background-color');
+            }
+            .menu-list {
+                @include themify {
+                    @if themed('classic-2020') {
+                        &::-webkit-scrollbar {
+                            width: 8px;
+                            height: 8px;
+                        }
+                        &::-webkit-scrollbar-thumb {
+                            //滑块
+                            height: 4px;
+                            border-top: none;
+                            border-bottom: none;
+                            border: 2px solid transparent;
+                            background: rgba(#fff, .7);
+                            background-clip: padding-box;
+                            border-radius: 6px;
+                        }
+                        &::-webkit-scrollbar-track {
+                            //轨道
+                            background: themed('primary-color-d1') !important;
+                        }
+                        &::-webkit-scrollbar-track-piece {
+                            //轨道
+                            background: themed('primary-color-d1') !important;
+                        }
+                    }
+                }
+                .icon-menu-title {
+                    @include themify($themes) {
+                        color: themed('menu-text-color');
+                    }
+                }
+            }
+            // 一级目录hover时的样式
+            .el-menu-item:hover {
+                z-index: 11;
+                @include themify($themes) {
+                    @if themed('high-contrast') {
+                        .svg-icon {
+                            color: themed('menu-hover-icon-color');
+                        }
+                    }
+                    background-color: themed('menu-hover-background-color');
+                    @if themed('classic-2020')and not themed('high-contrast') {
+                        border-color: #fff;
+                        background: linear-gradient(180deg, rgba(232, 244, 254, 1) 0%, rgba(255, 255, 255, 1) 100%)!important;
+                        filter: drop-shadow(2px 2px 4px #0B399C) drop-shadow(-2px -2px 4px #528DED);
+                    }
+                }
+                .icon-menu-title {
+                    @include themify($themes) {
+                        color: themed('menu-hover-text-color') !important;
+                        @if themed('classic-2020') {
+                            font-weight: 600;
+                        }
+                    }
+                }
+            }
+            // 一级目录选中时的样式
+            .el-menu-item.is-active:not(.applicationBtn) {
+                @include themify($themes) {
+                    @if themed('high-contrast') {
+                        .svg-icon {
+                            color: themed('menu-hover-text-color');
+                        }
+                    }
+                    @if themed('classic-2020')and not themed('high-contrast') {
+                        position: relative;
+                        left: 6px;
+                        width: 68px;
+                        border-top-right-radius: 0;
+                        border-bottom-right-radius: 0;
+                        box-sizing: border-box;
+                        border: 2px solid #fff;
+                        background: linear-gradient(180deg, rgba(232, 244, 254, 1) 0%, rgba(255, 255, 255, 1) 100%);
+                        filter: drop-shadow(2px 2px 4px #0B399C) drop-shadow(-2px -2px 4px #528DED);
+                        .icon-menu-item {
+                            width: 56px;
+                        }
+                        &::before {
+                            content: '';
+                            display: block;
+                            position: absolute;
+                            right: 4px;
+                            top: 50%;
+                            width: 0;
+                            height: 0;
+                            border: 4px solid transparent;
+                            border-left-color: #679AEE;
+                            transform: translate(0, -50%);
+                        }
+                    }
+                    background-color: themed('menu-hover-background-color');
+                }
+                .icon-menu-title {
+                    @include themify($themes) {
+                        color: themed('menu-hover-text-color') !important;
+                        @if themed('classic-2020') {
+                            font-weight: 600;
+                        }
+                    }
+                }
+            }
+        }
+        // 二级菜单
+        .sub-menu {
+            @include themify($themes) {
+                background-color: themed('submenu-background-color');
+                background-image: themed('submenu-background-img');
+                background-size: 100% auto;
+                background-position: right bottom;
+                background-repeat: no-repeat;
+            }
+            @include themify {
+                @if themed('classic-2020') {
+                    &::-webkit-scrollbar {
+                        width: 8px;
+                        height: 8px;
+                        background: transparent !important;
+                    }
+                    &::-webkit-scrollbar-thumb {
+                        //滑块
+                        height: 4px;
+                        border-top: none;
+                        border-bottom: none;
+                        border: 2px solid transparent;
+                        background: themed('primary-color-l4');
+                        background-clip: padding-box;
+                        border-radius: 6px;
+                    }
+                    &::-webkit-scrollbar-track {
+                        //轨道
+                        background: transparent !important;
+                        box-shadow: none !important;
+                    }
+                    &::-webkit-scrollbar-track-piece {
+                        //轨道
+                        background: transparent !important;
+                    }
+                }
+            }
+            @mixin hoverAndActivited {
+                @include themify($themes) {
+                    background-color: themed('submenu-hover-background-color');
+                    span {
+                        color: themed('submenu-actived-text-color');
+                    }
+                    i {
+                        background-color: themed('submenu-actived-text-color');
+                    }
+                }
+            }
+            .el-submenu {
+                .el-submenu__title {
+                    @include themify($themes) {
+                        @if themed('classic-2020') {
+                            color: #1f1f1f;
+                        }
+                    }
+                }
+                .el-menu-item {
+                    @include themify($themes) {
+                        color: themed('submenu-text-color') !important;
+                    }
+                    .dot {
+                        @include themify($themes) {
+                            background-color: themed('submenu-text-color');
+                        }
+                    }
+                }
+            }
+            .el-menu-item:hover {
+                @include hoverAndActivited
+            }
+            .el-menu-item.is-active {
+                @include hoverAndActivited
+            }
+        }
+    }
+}
+
+@media only screen and (min-device-width: $--min-device-width) and (max-device-width: $--max-device-width) and (orientation: $--orientation) {
+    .sidebar {
+        .sub-menu-ipad {
+            @include themify($themes) {
+                background-color: themed('submenu-background-color') !important;
+            }
+        }
+    }
+}

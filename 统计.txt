@@ -1,0 +1,24 @@
+SELECT count(*) as num, department FROM sys_project WHERE work_status = 2 GROUP BY department; //作业中统计
+SELECT count(*) as num, department FROM sys_project WHERE register_time >= '2025-05-01 00:00:00' AND register_time <= '2025-05-21 23:00:00'  GROUP BY department; //任务安排统计
+
+SELECT count(*) as num, b.dept_id FROM sys_review_sub b WHERE b.lot_time >= '2025-05-01 00:00:00' AND b.lot_time <= '2025-05-21 23:00:00' AND (b.sub_type = 1 or b.sub_type = 2) GROUP BY b.dept_id // 统计分包、抽签时间为5月份
+
+SELECT count(*) as num, department FROM sys_project WHERE do_time >= '2025-05-01 00:00:00' AND do_time <= '2025-05-21 23:00:00'  GROUP BY department; //作业办结统计
+
+SELECT count(*) as num, department FROM sys_project WHERE one_check >= '2025-05-01 00:00:00' AND one_check <= '2025-05-21 23:00:00'  GROUP BY department; //一检办结统计
+
+SELECT count(*) as num, department FROM sys_project WHERE two_check >= '2025-05-01 00:00:00' AND two_check <= '2025-05-21 23:00:00'  GROUP BY department; //二检办结统计
+
+SELECT a.* FROM fq_project_process a INNER JOIN sys_project b on a.project_id = b.project_id WHERE a.receive_time >= '2025-05-01 00:00:00' AND a.receive_time <= '2025-05-21 23:00:00' AND b.department = '地理信息部'; // 工程测绘部,不动产测绘部,地理信息部,管线工程部 移交中，收件时间为5月份
+
+SELECT count(*) as num, department FROM sys_project WHERE is_two_check = 1 AND operate_user = '' AND receptionist IN ('王媛媛','陈晓钰','陈美玲','陈美玲1','黄丽') GROUP BY department;
+
+SELECT SUM(a.money), SUM(a.profit_money), d.dept_name FROM sys_project_value a INNER JOIN sys_project b ON a.project_id = b.project_id  INNER JOIN sys_user c on a.user_name = c.user_name INNER JOIN sys_dept d on c.dept_id = d.dept_id WHERE b.settlement_time >= '2025-01-01 00:00:00' AND b.settlement_time <= '2025-05-21 23:00:00' GROUP BY d.dept_name;
+
+
+SELECT count(*) as num, department FROM sys_project WHERE STR_TO_DATE(do_time,'%Y-%m-%d') > STR_TO_DATE(project_end_alias,'%Y-%m-%d')  GROUP BY department; //项目工期超期统计
+
+SELECT  count(*) as num, department FROM sys_project WHERE STR_TO_DATE(do_time,'%Y-%m-%d') > DATE_ADD(STR_TO_DATE(project_end_alias,'%Y-%m-%d'), INTERVAL 1 MONTH) GROUP BY department ; //项目工期超期统计超期一个月
+
+SELECT a.transfer_time FROM fq_project_process a INNER JOIN sys_project b on a.project_id = b.project_id WHERE (a.transfer_time IS NOT null AND a.transfer_time != '') AND (a.receive_time IS NULL or a.receive_time = '')  AND b.department = '地理信息部'
+

@@ -1,0 +1,107 @@
+.boxContainer {
+  padding: 12px;
+  width: 100%;
+  height: 100%;
+  background-color: red;
+  display: flex;
+  flex-direction: column;
+  border: 1px solid #d9d9d9;
+  @include themify($themes) {
+    @if themed('classic-2020') {
+      background: #fff;
+      padding: 6px 12px!important;
+    } @else {
+      background: themed('primary-color-o10') url('~@/assets/home/stait-bg.png') no-repeat right bottom/ 90% 90%;
+    }
+  }
+  .topTitle {
+    // padding-bottom: 12px;
+    // display: flex;
+    // flex-direction: row;
+    // align-items: center;
+    // height: 24px;
+    padding-bottom: 12px;
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    height: 24px;
+    @include themify($themes) {
+      @if themed('classic-2020') {
+        margin-top: 12px;
+      } @else {
+      }
+    }
+    .iconContainer {
+      // margin-right: 10px;
+      // width: 24px;
+      // height: 24px;
+      // border-radius: 12px;
+      // background-color: white;
+      // display: flex;
+      // justify-content: center;
+      // align-items: center;
+      @include themify($themes) {
+        @if themed('classic-2020') {
+          width: 50px;
+          height: 32px;
+          background: transparent themed('statistics-title-icon-bg') no-repeat left bottom/100% 100%;
+          border-radius: 0px;
+          margin-left: -13px;
+        } @else {
+          background-color: white;
+          margin-right: 10px;
+          width: 24px;
+          height: 24px;
+          border-radius: 12px;
+          display: flex;
+          justify-content: center;
+          align-items: center;
+        }
+      }
+      img {
+        width: 16px;
+        height: 16px;
+        margin-top: 4px;
+        margin-left: -6px;
+      }
+    }
+    .titleWord {
+      // font-size: 16px;
+      // font-weight: 600;
+      // @include themify($themes) {
+      //   color: themed('primary-color-d2');
+      // }
+      @include themify($themes) {
+        @if themed('classic-2020') {
+          height: 28px;
+          line-height: 28px;
+          background: #fff themed('statistics-title-text-bg') no-repeat left bottom/100% 100%;
+          margin-left: -10px;
+          margin-top: -4px;
+          color: rgba(69, 30, 4, 1);
+          padding-left: 4px;
+          padding-right: 4px;
+        } @else {
+          font-size: 16px;
+          font-weight: 600;
+          @include themify($themes) {
+            color: themed('primary-color-d2');
+          }
+        }
+      }
+    }
+    .title-end-bg {
+      @include themify($themes) {
+        @if themed('classic-2020') {
+          width: 18px;
+          height: 28px;
+          line-height: 28px;
+          background: #fff themed('statistics-title-end-bg') no-repeat left bottom/100% 100%;
+          margin-left: 0px;
+          margin-top: -4px;
+        } @else {
+        }
+      }
+    }
+  }
+}

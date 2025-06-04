@@ -1,0 +1,488 @@
+.co-title {
+  width: 100%;
+  height: 36px;
+  padding: 0 0 6px 40px;
+  display: flex;
+  flex-flow: row nowrap;
+  position: relative;
+}
+
+.co-title::before {
+  content: '';
+  display: block;
+  width: 46px;
+  height: 39px;
+  background: url("~@/assets/cockpit/co-title-left.png") no-repeat 0/100% 100%;
+  position: absolute;
+  left: -3px;
+  top: -3px;
+}
+
+.co-title::after {
+  content: '';
+  display: block;
+  width: 100%;
+  height: 1px;
+  background: url("~@/assets/cockpit/co-title-sub.png") no-repeat 0/100% 100%;
+  position: absolute;
+  left: 0;
+  bottom: 0;
+}
+
+.co-title .co-title-name {
+  flex: none;
+  height: 48px;
+  margin: -13px 0 0 -10px;
+}
+
+.co-title .co-title-name > img {
+  display: block;
+  height: 100%;
+}
+
+.co-title .co-title-right {
+  flex: none;
+  margin: 0 0 0 auto;
+}
+
+.co-title-breathe {
+  display: flex;
+  flex-flow: row nowrap;
+  margin: 10px 0 0 0;
+}
+
+.co-title-breathe > i {
+  flex: none;
+  width: 4px;
+  height: 7px;
+  background: #00EAFF;
+  margin: 0 2px;
+}
+
+.co-title-breathe > i:nth-child(1) {
+  animation: titleBreathe1 linear 2s infinite;
+}
+
+.co-title-breathe > i:nth-child(2) {
+  animation: titleBreathe2 linear 2s infinite;
+}
+
+.co-title-breathe > i:nth-child(3) {
+  animation: titleBreathe3 linear 2s infinite;
+}
+
+.co-title-breathe > i:nth-child(4) {
+  animation: titleBreathe4 linear 2s infinite;
+}
+
+.co-title-breathe > i:nth-child(5) {
+  animation: titleBreathe5 linear 2s infinite;
+}
+
+.co-title-breathe > i:nth-child(6) {
+  animation: titleBreathe6 linear 2s infinite;
+}
+
+@keyframes titleBreathe1 {
+  0% {
+    opacity: .25;
+  }
+  10% {
+    opacity: .4;
+  }
+  20% {
+    opacity: .55;
+  }
+  30% {
+    opacity: .7;
+  }
+  40% {
+    opacity: .85;
+  }
+  50% {
+    opacity: 1;
+  }
+  60% {
+    opacity: .85;
+  }
+  70% {
+    opacity: .7;
+  }
+  80% {
+    opacity: .55;
+  }
+  90% {
+    opacity: .4;
+  }
+  100% {
+    opacity: .25;
+  }
+}
+
+@keyframes titleBreathe2 {
+  0% {
+    opacity: .4;
+  }
+  10% {
+    opacity: .55;
+  }
+  20% {
+    opacity: .7;
+  }
+  30% {
+    opacity: .85;
+  }
+  40% {
+    opacity: 1;
+  }
+  50% {
+    opacity: .85;
+  }
+  60% {
+    opacity: .7;
+  }
+  70% {
+    opacity: .55;
+  }
+  80% {
+    opacity: .4;
+  }
+  90% {
+    opacity: .25;
+  }
+  100% {
+    opacity: .4;
+  }
+}
+
+@keyframes titleBreathe3 {
+  0% {
+    opacity: .55;
+  }
+  10% {
+    opacity: .7;
+  }
+  20% {
+    opacity: .85;
+  }
+  30% {
+    opacity: 1;
+  }
+  40% {
+    opacity: .85;
+  }
+  50% {
+    opacity: .7;
+  }
+  60% {
+    opacity: .55;
+  }
+  70% {
+    opacity: .4;
+  }
+  80% {
+    opacity: .25;
+  }
+  90% {
+    opacity: .25;
+  }
+  100% {
+    opacity: .55;
+  }
+}
+
+@keyframes titleBreathe4 {
+  0% {
+    opacity: .7;
+  }
+  10% {
+    opacity: .85;
+  }
+  20% {
+    opacity: 1;
+  }
+  30% {
+    opacity: .85;
+  }
+  40% {
+    opacity: .7;
+  }
+  50% {
+    opacity: .55;
+  }
+  60% {
+    opacity: .4;
+  }
+  70% {
+    opacity: .25;
+  }
+  80% {
+    opacity: .25;
+  }
+  90% {
+    opacity: .25;
+  }
+  100% {
+    opacity: .7;
+  }
+}
+
+@keyframes titleBreathe5 {
+  0% {
+    opacity: .85;
+  }
+  10% {
+    opacity: 1;
+  }
+  20% {
+    opacity: .85;
+  }
+  30% {
+    opacity: .7;
+  }
+  40% {
+    opacity: .55;
+  }
+  50% {
+    opacity: .4;
+  }
+  60% {
+    opacity: .25;
+  }
+  70% {
+    opacity: .25;
+  }
+  80% {
+    opacity: .25;
+  }
+  90% {
+    opacity: .25;
+  }
+  100% {
+    opacity: .85;
+  }
+}
+
+@keyframes titleBreathe6 {
+  0% {
+    opacity: 1;
+  }
+  10% {
+    opacity: .85;
+  }
+  20% {
+    opacity: .7;
+  }
+  30% {
+    opacity: .55;
+  }
+  40% {
+    opacity: .4;
+  }
+  50% {
+    opacity: .25;
+  }
+  60% {
+    opacity: .25;
+  }
+  70% {
+    opacity: .25;
+  }
+  80% {
+    opacity: .25;
+  }
+  90% {
+    opacity: .25;
+  }
+  100% {
+    opacity: 1;
+  }
+}
+
+.bpl-container {
+  width: 100%;
+  height: calc(100% - 36px);
+  padding: 12px 0 0 0;
+  overflow-y: auto;
+}
+
+.circle-petal {
+  width: 170px;
+  height: 170px;
+  position: absolute;
+  left: 50%;
+  bottom: -15px;
+  transform: translate(-50%, 0) rotateX(56deg);
+  z-index: 6;
+}
+
+.circle-petal > i {
+  display: block;
+  width: 40px;
+  height: 44px;
+  background: url("~@/assets/cockpit/circle-petal0.png") no-repeat 0/100% 100%;
+  position: absolute;
+  top: 0;
+  left: 65px;
+  transform-origin: 20px 85px;
+}
+
+.circle-petal > i:nth-child(1) {
+  transform: rotate(0deg);
+}
+
+.circle-petal > i:nth-child(2) {
+  transform: rotate(18deg);
+}
+
+.circle-petal > i:nth-child(3) {
+  transform: rotate(36deg);
+}
+
+.circle-petal > i:nth-child(4) {
+  transform: rotate(54deg);
+}
+
+.circle-petal > i:nth-child(5) {
+  transform: rotate(72deg);
+}
+
+.circle-petal > i:nth-child(6) {
+  transform: rotate(90deg);
+}
+
+.circle-petal > i:nth-child(7) {
+  transform: rotate(108deg);
+}
+
+.circle-petal > i:nth-child(8) {
+  transform: rotate(126deg);
+}
+
+.circle-petal > i:nth-child(9) {
+  transform: rotate(144deg);
+}
+
+.circle-petal > i:nth-child(10) {
+  transform: rotate(162deg);
+}
+
+.circle-petal > i:nth-child(11) {
+  transform: rotate(180deg);
+}
+
+.circle-petal > i:nth-child(12) {
+  transform: rotate(198deg);
+}
+
+.circle-petal > i:nth-child(13) {
+  transform: rotate(216deg);
+}
+
+.circle-petal > i:nth-child(14) {
+  transform: rotate(234deg);
+}
+
+.circle-petal > i:nth-child(15) {
+  transform: rotate(252deg);
+}
+
+.circle-petal > i:nth-child(16) {
+  transform: rotate(270deg);
+}
+
+.circle-petal > i:nth-child(17) {
+  transform: rotate(288deg);
+}
+
+.circle-petal > i:nth-child(18) {
+  transform: rotate(306deg);
+}
+
+.circle-petal > i:nth-child(19) {
+  transform: rotate(324deg);
+}
+
+.circle-petal > i:nth-child(20) {
+  transform: rotate(342deg);
+}
+
+.circle-petal.circle-petal-light1 > i:nth-child(1) {
+  background: url("~@/assets/cockpit/circle-petal1.png") no-repeat 0/100% 100%;
+}
+
+.circle-petal.circle-petal-light2 > i:nth-child(1), .circle-petal.circle-petal-light2 > i:nth-child(2) {
+  background: url("~@/assets/cockpit/circle-petal1.png") no-repeat 0/100% 100%;
+}
+
+.circle-petal.circle-petal-light3 > i:nth-child(1), .circle-petal.circle-petal-light3 > i:nth-child(2), .circle-petal.circle-petal-light3 > i:nth-child(3) {
+  background: url("~@/assets/cockpit/circle-petal1.png") no-repeat 0/100% 100%;
+}
+
+.circle-petal.circle-petal-light4 > i:nth-child(1), .circle-petal.circle-petal-light4 > i:nth-child(2), .circle-petal.circle-petal-light4 > i:nth-child(3), .circle-petal.circle-petal-light4 > i:nth-child(4) {
+  background: url("~@/assets/cockpit/circle-petal1.png") no-repeat 0/100% 100%;
+}
+
+.circle-petal.circle-petal-light5 > i:nth-child(1), .circle-petal.circle-petal-light5 > i:nth-child(2), .circle-petal.circle-petal-light5 > i:nth-child(3), .circle-petal.circle-petal-light5 > i:nth-child(4), .circle-petal.circle-petal-light5 > i:nth-child(5) {
+  background: url("~@/assets/cockpit/circle-petal1.png") no-repeat 0/100% 100%;
+}
+
+.circle-petal.circle-petal-light6 > i:nth-child(1), .circle-petal.circle-petal-light6 > i:nth-child(2), .circle-petal.circle-petal-light6 > i:nth-child(3), .circle-petal.circle-petal-light6 > i:nth-child(4), .circle-petal.circle-petal-light6 > i:nth-child(5), .circle-petal.circle-petal-light6 > i:nth-child(6) {
+  background: url("~@/assets/cockpit/circle-petal1.png") no-repeat 0/100% 100%;
+}
+
+.circle-petal.circle-petal-light7 > i:nth-child(1), .circle-petal.circle-petal-light7 > i:nth-child(2), .circle-petal.circle-petal-light7 > i:nth-child(3), .circle-petal.circle-petal-light7 > i:nth-child(4), .circle-petal.circle-petal-light7 > i:nth-child(5), .circle-petal.circle-petal-light7 > i:nth-child(6), .circle-petal.circle-petal-light7 > i:nth-child(7) {
+  background: url("~@/assets/cockpit/circle-petal1.png") no-repeat 0/100% 100%;
+}
+
+.circle-petal.circle-petal-light8 > i:nth-child(1), .circle-petal.circle-petal-light8 > i:nth-child(2), .circle-petal.circle-petal-light8 > i:nth-child(3), .circle-petal.circle-petal-light8 > i:nth-child(4), .circle-petal.circle-petal-light8 > i:nth-child(5), .circle-petal.circle-petal-light8 > i:nth-child(6), .circle-petal.circle-petal-light8 > i:nth-child(7), .circle-petal.circle-petal-light8 > i:nth-child(8) {
+  background: url("~@/assets/cockpit/circle-petal1.png") no-repeat 0/100% 100%;
+}
+
+.circle-petal.circle-petal-light9 > i:nth-child(1), .circle-petal.circle-petal-light9 > i:nth-child(2), .circle-petal.circle-petal-light9 > i:nth-child(3), .circle-petal.circle-petal-light9 > i:nth-child(4), .circle-petal.circle-petal-light9 > i:nth-child(5), .circle-petal.circle-petal-light9 > i:nth-child(6), .circle-petal.circle-petal-light9 > i:nth-child(7), .circle-petal.circle-petal-light9 > i:nth-child(8), .circle-petal.circle-petal-light9 > i:nth-child(9) {
+  background: url("~@/assets/cockpit/circle-petal1.png") no-repeat 0/100% 100%;
+}
+
+.circle-petal.circle-petal-light10 > i:nth-child(1), .circle-petal.circle-petal-light10 > i:nth-child(2), .circle-petal.circle-petal-light10 > i:nth-child(3), .circle-petal.circle-petal-light10 > i:nth-child(4), .circle-petal.circle-petal-light10 > i:nth-child(5), .circle-petal.circle-petal-light10 > i:nth-child(6), .circle-petal.circle-petal-light10 > i:nth-child(7), .circle-petal.circle-petal-light10 > i:nth-child(8), .circle-petal.circle-petal-light10 > i:nth-child(9), .circle-petal.circle-petal-light10 > i:nth-child(10) {
+  background: url("~@/assets/cockpit/circle-petal1.png") no-repeat 0/100% 100%;
+}
+
+.circle-petal.circle-petal-light11 > i:nth-child(1), .circle-petal.circle-petal-light11 > i:nth-child(2), .circle-petal.circle-petal-light11 > i:nth-child(3), .circle-petal.circle-petal-light11 > i:nth-child(4), .circle-petal.circle-petal-light11 > i:nth-child(5), .circle-petal.circle-petal-light11 > i:nth-child(6), .circle-petal.circle-petal-light11 > i:nth-child(7), .circle-petal.circle-petal-light11 > i:nth-child(8), .circle-petal.circle-petal-light11 > i:nth-child(9), .circle-petal.circle-petal-light11 > i:nth-child(10), .circle-petal.circle-petal-light11 > i:nth-child(11) {
+  background: url("~@/assets/cockpit/circle-petal1.png") no-repeat 0/100% 100%;
+}
+
+.circle-petal.circle-petal-light12 > i:nth-child(1), .circle-petal.circle-petal-light12 > i:nth-child(2), .circle-petal.circle-petal-light12 > i:nth-child(3), .circle-petal.circle-petal-light12 > i:nth-child(4), .circle-petal.circle-petal-light12 > i:nth-child(5), .circle-petal.circle-petal-light12 > i:nth-child(6), .circle-petal.circle-petal-light12 > i:nth-child(7), .circle-petal.circle-petal-light12 > i:nth-child(8), .circle-petal.circle-petal-light12 > i:nth-child(9), .circle-petal.circle-petal-light12 > i:nth-child(10), .circle-petal.circle-petal-light12 > i:nth-child(11), .circle-petal.circle-petal-light12 > i:nth-child(12) {
+  background: url("~@/assets/cockpit/circle-petal1.png") no-repeat 0/100% 100%;
+}
+
+.circle-petal.circle-petal-light13 > i:nth-child(1), .circle-petal.circle-petal-light13 > i:nth-child(2), .circle-petal.circle-petal-light13 > i:nth-child(3), .circle-petal.circle-petal-light13 > i:nth-child(4), .circle-petal.circle-petal-light13 > i:nth-child(5), .circle-petal.circle-petal-light13 > i:nth-child(6), .circle-petal.circle-petal-light13 > i:nth-child(7), .circle-petal.circle-petal-light13 > i:nth-child(8), .circle-petal.circle-petal-light13 > i:nth-child(9), .circle-petal.circle-petal-light13 > i:nth-child(10), .circle-petal.circle-petal-light13 > i:nth-child(11), .circle-petal.circle-petal-light13 > i:nth-child(12), .circle-petal.circle-petal-light13 > i:nth-child(13) {
+  background: url("~@/assets/cockpit/circle-petal1.png") no-repeat 0/100% 100%;
+}
+
+.circle-petal.circle-petal-light14 > i:nth-child(1), .circle-petal.circle-petal-light14 > i:nth-child(2), .circle-petal.circle-petal-light14 > i:nth-child(3), .circle-petal.circle-petal-light14 > i:nth-child(4), .circle-petal.circle-petal-light14 > i:nth-child(5), .circle-petal.circle-petal-light14 > i:nth-child(6), .circle-petal.circle-petal-light14 > i:nth-child(7), .circle-petal.circle-petal-light14 > i:nth-child(8), .circle-petal.circle-petal-light14 > i:nth-child(9), .circle-petal.circle-petal-light14 > i:nth-child(10), .circle-petal.circle-petal-light14 > i:nth-child(11), .circle-petal.circle-petal-light14 > i:nth-child(12), .circle-petal.circle-petal-light14 > i:nth-child(13), .circle-petal.circle-petal-light14 > i:nth-child(14) {
+  background: url("~@/assets/cockpit/circle-petal1.png") no-repeat 0/100% 100%;
+}
+
+.circle-petal.circle-petal-light15 > i:nth-child(1), .circle-petal.circle-petal-light15 > i:nth-child(2), .circle-petal.circle-petal-light15 > i:nth-child(3), .circle-petal.circle-petal-light15 > i:nth-child(4), .circle-petal.circle-petal-light15 > i:nth-child(5), .circle-petal.circle-petal-light15 > i:nth-child(6), .circle-petal.circle-petal-light15 > i:nth-child(7), .circle-petal.circle-petal-light15 > i:nth-child(8), .circle-petal.circle-petal-light15 > i:nth-child(9), .circle-petal.circle-petal-light15 > i:nth-child(10), .circle-petal.circle-petal-light15 > i:nth-child(11), .circle-petal.circle-petal-light15 > i:nth-child(12), .circle-petal.circle-petal-light15 > i:nth-child(13), .circle-petal.circle-petal-light15 > i:nth-child(14), .circle-petal.circle-petal-light15 > i:nth-child(15) {
+  background: url("~@/assets/cockpit/circle-petal1.png") no-repeat 0/100% 100%;
+}
+
+.circle-petal.circle-petal-light16 > i:nth-child(1), .circle-petal.circle-petal-light16 > i:nth-child(2), .circle-petal.circle-petal-light16 > i:nth-child(3), .circle-petal.circle-petal-light16 > i:nth-child(4), .circle-petal.circle-petal-light16 > i:nth-child(5), .circle-petal.circle-petal-light16 > i:nth-child(6), .circle-petal.circle-petal-light16 > i:nth-child(7), .circle-petal.circle-petal-light16 > i:nth-child(8), .circle-petal.circle-petal-light16 > i:nth-child(9), .circle-petal.circle-petal-light16 > i:nth-child(10), .circle-petal.circle-petal-light16 > i:nth-child(11), .circle-petal.circle-petal-light16 > i:nth-child(12), .circle-petal.circle-petal-light16 > i:nth-child(13), .circle-petal.circle-petal-light16 > i:nth-child(14), .circle-petal.circle-petal-light16 > i:nth-child(15), .circle-petal.circle-petal-light16 > i:nth-child(16) {
+  background: url("~@/assets/cockpit/circle-petal1.png") no-repeat 0/100% 100%;
+}
+
+.circle-petal.circle-petal-light17 > i:nth-child(1), .circle-petal.circle-petal-light17 > i:nth-child(2), .circle-petal.circle-petal-light17 > i:nth-child(3), .circle-petal.circle-petal-light17 > i:nth-child(4), .circle-petal.circle-petal-light17 > i:nth-child(5), .circle-petal.circle-petal-light17 > i:nth-child(6), .circle-petal.circle-petal-light17 > i:nth-child(7), .circle-petal.circle-petal-light17 > i:nth-child(8), .circle-petal.circle-petal-light17 > i:nth-child(9), .circle-petal.circle-petal-light17 > i:nth-child(10), .circle-petal.circle-petal-light17 > i:nth-child(11), .circle-petal.circle-petal-light17 > i:nth-child(12), .circle-petal.circle-petal-light17 > i:nth-child(13), .circle-petal.circle-petal-light17 > i:nth-child(14), .circle-petal.circle-petal-light17 > i:nth-child(15), .circle-petal.circle-petal-light17 > i:nth-child(16), .circle-petal.circle-petal-light17 > i:nth-child(17) {
+  background: url("~@/assets/cockpit/circle-petal1.png") no-repeat 0/100% 100%;
+}
+
+.circle-petal.circle-petal-light18 > i:nth-child(1), .circle-petal.circle-petal-light18 > i:nth-child(2), .circle-petal.circle-petal-light18 > i:nth-child(3), .circle-petal.circle-petal-light18 > i:nth-child(4), .circle-petal.circle-petal-light18 > i:nth-child(5), .circle-petal.circle-petal-light18 > i:nth-child(6), .circle-petal.circle-petal-light18 > i:nth-child(7), .circle-petal.circle-petal-light18 > i:nth-child(8), .circle-petal.circle-petal-light18 > i:nth-child(9), .circle-petal.circle-petal-light18 > i:nth-child(10), .circle-petal.circle-petal-light18 > i:nth-child(11), .circle-petal.circle-petal-light18 > i:nth-child(12), .circle-petal.circle-petal-light18 > i:nth-child(13), .circle-petal.circle-petal-light18 > i:nth-child(14), .circle-petal.circle-petal-light18 > i:nth-child(15), .circle-petal.circle-petal-light18 > i:nth-child(16), .circle-petal.circle-petal-light18 > i:nth-child(17), .circle-petal.circle-petal-light18 > i:nth-child(18) {
+  background: url("~@/assets/cockpit/circle-petal1.png") no-repeat 0/100% 100%;
+}
+
+.circle-petal.circle-petal-light19 > i:nth-child(1), .circle-petal.circle-petal-light19 > i:nth-child(2), .circle-petal.circle-petal-light19 > i:nth-child(3), .circle-petal.circle-petal-light19 > i:nth-child(4), .circle-petal.circle-petal-light19 > i:nth-child(5), .circle-petal.circle-petal-light19 > i:nth-child(6), .circle-petal.circle-petal-light19 > i:nth-child(7), .circle-petal.circle-petal-light19 > i:nth-child(8), .circle-petal.circle-petal-light19 > i:nth-child(9), .circle-petal.circle-petal-light19 > i:nth-child(10), .circle-petal.circle-petal-light19 > i:nth-child(11), .circle-petal.circle-petal-light19 > i:nth-child(12), .circle-petal.circle-petal-light19 > i:nth-child(13), .circle-petal.circle-petal-light19 > i:nth-child(14), .circle-petal.circle-petal-light19 > i:nth-child(15), .circle-petal.circle-petal-light19 > i:nth-child(16), .circle-petal.circle-petal-light19 > i:nth-child(17), .circle-petal.circle-petal-light19 > i:nth-child(18), .circle-petal.circle-petal-light19 > i:nth-child(19) {
+  background: url("~@/assets/cockpit/circle-petal1.png") no-repeat 0/100% 100%;
+}
+
+.circle-petal.circle-petal-light20 > i:nth-child(1), .circle-petal.circle-petal-light20 > i:nth-child(2), .circle-petal.circle-petal-light20 > i:nth-child(3), .circle-petal.circle-petal-light20 > i:nth-child(4), .circle-petal.circle-petal-light20 > i:nth-child(5), .circle-petal.circle-petal-light20 > i:nth-child(6), .circle-petal.circle-petal-light20 > i:nth-child(7), .circle-petal.circle-petal-light20 > i:nth-child(8), .circle-petal.circle-petal-light20 > i:nth-child(9), .circle-petal.circle-petal-light20 > i:nth-child(10), .circle-petal.circle-petal-light20 > i:nth-child(11), .circle-petal.circle-petal-light20 > i:nth-child(12), .circle-petal.circle-petal-light20 > i:nth-child(13), .circle-petal.circle-petal-light20 > i:nth-child(14), .circle-petal.circle-petal-light20 > i:nth-child(15), .circle-petal.circle-petal-light20 > i:nth-child(16), .circle-petal.circle-petal-light20 > i:nth-child(17), .circle-petal.circle-petal-light20 > i:nth-child(18), .circle-petal.circle-petal-light20 > i:nth-child(19), .circle-petal.circle-petal-light20 > i:nth-child(20) {
+  background: url("~@/assets/cockpit/circle-petal1.png") no-repeat 0/100% 100%;
+}

@@ -1,0 +1,703 @@
+/*根据不同的主题，配置element的 sucess , danger, info默认样式*/
+
+/* dropdown的样式*/
+.el-dropdown-menu__item:focus,
+.el-dropdown-menu__item:not(.is-disabled):hover {
+  @include themify($themes) {
+    background-color:themed('primary-color-l1');
+    color: themed('primary-color');
+  }
+}
+
+/*弹窗及messageBox的删除按钮hover的样式*/
+.el-message-box__close:hover,.el-dialog__close:hover{
+    @include themify($themes) {
+        color: themed('primary-color');
+      }
+}
+
+.el-button--primary {
+    //通过设置el-button的背景色，来告诉js目前element的主题色
+    color: #ffffff !important;
+    span {
+        color: #ffffff !important;
+    }
+    @include themify($themes) {
+        background-color: themed('primary-color') !important;
+        border-color: themed('primary-color') !important;
+    }
+    &:hover {
+        @include themify($themes) {
+            background-color: themed('primary-color-l5') !important;
+            border-color: themed('primary-color-l5') !important;
+        }
+    }
+    &:focus {
+        @include themify($themes) {
+            background-color: themed('primary-color-d1') !important;
+            border-color: themed('primary-color-d1') !important;
+        }
+    }
+}
+
+.el-button.is-disabled,
+.el-button.is-disabled:focus,
+.el-button.is-disabled:hover {
+    opacity: 0.2;
+}
+
+
+/*为了在14号字体下,el-button-small的高度为32，减少el-button-small的2个内行距*/
+
+.el-button--small {
+    padding-top: 8px !important;
+    padding-bottom: 8px !important;
+    border-radius: 4px !important;
+}
+
+.el-button+.el-button {
+    margin-left: 8px !important;
+}
+
+.el-radio-button--small .el-radio-button__inner {
+    padding-top: 8px !important;
+    padding-bottom: 8px !important;
+}
+
+
+/*调整按钮颜色、hover色、active色适配主题色*/
+
+.el-button--default {
+    &:hover,
+    &:focus {
+        @include themify($themes) {
+            background-color: themed('primary-color-l1') !important;
+            border-color: themed('primary-color-l2') !important;
+            color: themed('primary-color') !important;
+        }
+    }
+}
+
+.el-button--text {
+    padding: 0 !important;
+    @include themify($themes) {
+        color: themed('primary-color') !important;
+    }
+    &:hover,
+    &:focus {
+        text-decoration: underline;
+    }
+}
+
+.el-button-group {
+    >.el-button {
+        &:not(:first-child):not(:last-child) {
+            border-radius: 0 !important;
+        }
+        &:first-child {
+            border-radius: 4px 0 0 4px !important;
+        }
+        &:last-child {
+            border-radius: 0 4px 4px 0 !important;
+        }
+    }
+    .el-button+.el-button {
+        margin-left: 0 !important;
+    }
+}
+
+
+/*最新设计稿更改了radio选中时的样式*/
+
+.el-radio-button__inner {
+    &:hover {
+        @include themify($themes) {
+            color: themed('primary-color') !important;
+        }
+    }
+}
+
+.el-radio-button__orig-radio:checked+.el-radio-button__inner {
+    @include themify($themes) {
+        background-color: themed('primary-color-o10') !important;
+        color: themed('primary-color') !important;
+        border-color: themed('primary-color') !important;
+        box-shadow: -1px 0 0 0 themed('primary-color');
+    }
+}
+
+// 修改全局table的默认行高,及鼠标移至table一行上时,显示手指
+.el-table {
+    .el-table__row {
+        cursor: pointer;
+    }
+}
+
+// 设置small尺寸的table行高
+.el-table--small {
+    .el-table__row {
+        td {
+            padding: 0;
+            height: 48px;
+        }
+    }
+}
+
+.el-table {
+    th {
+        height: 44px !important;
+        // background-color: #fafafa !important;
+    }
+}
+
+// 设置table无数据时的背景图
+.el-table {
+    .el-table__body-wrapper {
+        .el-table__empty-block {
+            background-image: url(../assets/gridNoData.png);
+            background-position: center center;
+            background-repeat: no-repeat;
+            background-size: 240px;
+            height: 200px !important;
+            .el-table__empty-text {
+                display: none;
+            }
+        }
+    }
+    // 设置table的头部样式
+    th {
+        background-color: rgba(245, 247, 249, 1) !important;
+        height: 36px;
+        padding: 0 !important;
+        border-bottom: 1px solid #f0f0f0 !important;
+        color: #262626;
+    }
+    td {
+        padding: 12px 0 !important;
+        border-bottom: 1px solid #f0f0f0 !important;
+    }
+    // 设置头部和表格宽度一致
+    th.gutter {
+        display: table-cell !important;
+    }
+    .el-table-column--selection {
+        text-align: center;
+    }
+}
+
+// 因上面table全局样式的影响,恢复表单内部table底部线框
+#xx-generataForm {
+    .el-table td {
+        border-bottom: 1px solid #dfe6ec !important;
+    }
+}
+
+// 隐藏table的下边线
+.el-table::before {
+    display: none;
+}
+
+.el-table .ascending .sort-caret.ascending {
+    @include themify($themes) {
+        border-bottom-color: themed('primary-color');
+    }
+}
+
+.el-table .descending .sort-caret.descending {
+    @include themify($themes) {
+        border-top-color: themed('primary-color');
+    }
+}
+
+// 调整Dialog样式
+.el-dialog {
+    display: flex;
+    flex-direction: column;
+    margin: 0 !important;
+    max-height: calc(100% - 30px);
+    max-width: calc(100% - 30px);
+    .el-dialog__header {
+        border-bottom: 1px solid #e5e5e5;
+        padding: 16px 16px 16px;
+        .el-dialog__title {
+            font-size: 16px !important;
+            line-height: 20px !important;
+            font-weight: 600;
+        }
+        .el-dialog__close {
+            font-size: 18px;
+            font-weight: 800;
+            top: 16px;
+        }
+    }
+    .el-dialog__body {
+        max-height: 600px;
+     padding: 12px 16px;
+        flex: 1;
+        overflow: auto;
+    }
+    .el-dialog__footer {
+        padding: 16px 24px;
+        border-top: solid 1px #e5e5e5;
+    }
+}
+
+.el-dialog__wrapper {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.el-dialog__headerbtn {
+    right: 13px !important;
+}
+
+.el-dialog__headerbtn .el-dialog__close,
+.el-dialog__headerbtn:focus .el-dialog__close,
+.el-dialog__headerbtn:hover .el-dialog__close {
+    color: #595959 !important;
+    // @include themify($themes) {
+    //     color: themed('primary-color');
+    // }
+}
+
+.el-form-item__label {
+    color: #262626 !important;
+}
+
+.el-form-item__content {
+    .el-input__inner {
+        color: #595959 !important;
+    }
+}
+
+// 设置Form默认间距
+.el-form {
+    .el-form-item__label {
+        // font-size: 14px;
+    }
+    .el-form-item {
+        margin-bottom: 18px;
+    }
+}
+
+.el-loading-mask {
+    z-index: 3260 !important;
+    background-color: rgba(255, 255, 255, 0.7) !important;
+    .el-loading-spinner .circular {
+        display: block;
+        background: url(../assets/loading.png) no-repeat;
+        background-size: contain;
+        position: relative;
+        left: 50%;
+        margin-left: -25px;
+        .path {
+            display: none;
+        }
+    }
+    .el-loading-spinner .el-loading-text {
+        margin-top: 16px;
+        color: #096dd9 !important;
+    }
+}
+
+.el-select-dropdown {
+    min-width: 200px;
+}
+
+// 分页尺寸调整
+.v-application ul {
+    padding-left: 0;
+}
+
+.el-pagination__total {
+    margin-left: 15px;
+}
+
+.el-pagination {
+    font-weight: normal !important;
+    text-align: right;
+    padding: 16px 0 0 !important;
+}
+
+// 设置navMenu的最小宽度
+.el-submenu .el-menu-item {
+    min-width: 100px !important;
+}
+
+// 设置全局上传按钮样式
+.uploader-btn {
+    padding: 8px 15px !important;
+    line-height: 0 !important;
+    border: 1px solid #dcdfe6 !important;
+}
+
+.uploader-btn:hover {
+    background-color: inherit !important;
+}
+
+// 设置按钮下为上传按钮的样式
+.el-button--small.isUpload {
+    // padding: 0 !important;
+    .uploader-btn {
+        border: none !important;
+    }
+    .uploader-btn:hover {
+        background-color: inherit !important;
+    }
+}
+
+// 设置水平分割线的间距
+.el-divider--horizontal {
+    margin: 0 !important;
+}
+
+//设置textarea 不可缩放
+.el-textarea .el-textarea__inner {
+    resize: none;
+}
+
+.el-form--label-top .el-form-item__label {
+    padding-bottom: 0 !important;
+}
+
+.el-tabs--border-card {
+    >.el-tabs__header {
+        .el-tabs__item {
+            &.is-active {
+                @include themify($themes) {
+                    color: themed('primary-color');
+                }
+            }
+            &:not(.is-disabled):hover {
+                @include themify($themes) {
+                    color: themed('primary-color');
+                }
+            }
+        }
+    }
+}
+
+.el-tabs__active-bar {
+    @include themify($themes) {
+        background-color: themed('primary-color');
+    }
+}
+
+.el-tabs__item {
+    &:hover {
+        @include themify($themes) {
+            color: themed('primary-color');
+        }
+    }
+    &.is-active {
+        @include themify($themes) {
+            color: themed('primary-color');
+        }
+    }
+}
+
+.el-input__inner,
+.el-textarea__inner {
+    &:focus {
+        @include themify($themes) {
+            border-color: themed('primary-color');
+        }
+    }
+}
+
+.el-pager {
+    li {
+        &:hover,
+        &.active {
+            @include themify($themes) {
+                color: themed('primary-color');
+            }
+        }
+    }
+}
+
+.el-pagination.is-background .el-pager li:not(.disabled).active {
+    @include themify($themes) {
+        background-color: themed('primary-color');
+    }
+    &:hover {
+        color: #fff !important;
+    }
+}
+
+.el-pagination__sizes .el-input .el-input__inner:hover {
+    @include themify($themes) {
+        border-color: themed('primary-color');
+    }
+}
+
+.el-pagination.is-background .el-pager li:not(.disabled):hover {
+    @include themify($themes) {
+        color: themed('primary-color');
+    }
+}
+
+.el-select .el-input.is-focus .el-input__inner {
+    @include themify($themes) {
+        border-color: themed('primary-color');
+    }
+}
+
+.el-select .el-input__inner:focus {
+    @include themify($themes) {
+        border-color: themed('primary-color');
+    }
+}
+
+.el-select-dropdown {
+    .el-select-dropdown__item {
+        &.selected {
+            color: #262626;
+        }
+        &.hover,
+        &:hover {
+            background-color: #f7f7f7;
+        }
+    }
+}
+
+.el-select-dropdown {
+    .el-select-dropdown__item {
+        &.selected {
+            @include themify($themes) {
+                color: themed('primary-color');
+            }
+        }
+        &.hover,
+        &:hover {
+            @include themify($themes) {
+                background-color: themed('primary-color-o10');
+            }
+        }
+    }
+}
+
+.el-date-table {
+    span,
+    // .el-date-table td.start-date span {
+    //     @include themify($themes) {
+    //         background-color: themed('primary-color');
+    //     }
+    // }
+    td.today {
+        span {
+            line-height: 22px;
+            @include themify($themes) {
+                color: themed('primary-color');
+                border: 1px solid themed('primary-color');
+            }
+        }
+    }
+}
+
+.el-radio__input.is-checked .el-radio__inner {
+    @include themify($themes) {
+        background: themed('primary-color');
+        border-color: themed('primary-color');
+    }
+}
+
+.el-radio__label {
+    font-size: 12px !important; ///根据设计要求，统一调整为12px
+}
+
+.el-radio__inner:hover {
+    @include themify($themes) {
+        border-color: themed('primary-color');
+    }
+}
+
+.el-radio__input.is-checked+.el-radio__label {
+    @include themify($themes) {
+        color: themed('primary-color');
+    }
+}
+
+.el-checkbox__inner:hover,
+.el-checkbox__input.is-focus .el-checkbox__inner {
+    @include themify($themes) {
+        border-color: themed('primary-color');
+    }
+}
+
+.el-checkbox__input.is-checked .el-checkbox__inner,
+.el-checkbox__input.is-indeterminate .el-checkbox__inner {
+    @include themify($themes) {
+        background-color: themed('primary-color');
+        border-color: themed('primary-color');
+    }
+}
+
+.el-checkbox__input.is-checked+.el-checkbox__label {
+    @include themify($themes) {
+        color: themed('primary-color');
+    }
+}
+
+.el-popconfirm__main {
+    margin-bottom: 12px;
+}
+
+.hideStyle {
+    pointer-events: none;
+    color: inherit;
+    cursor: default;
+    padding: 0 !important;
+    border: none !important;
+}
+
+.showStyle {
+    pointer-events: auto;
+    color: inherit;
+    cursor: pointer;
+    padding: 0 !important;
+    border: none !important;
+}
+
+.vue-treeselect {
+    line-height: initial;
+    .vue-treeselect__placeholder {
+        line-height: 30px;
+    }
+    .vue-treeselect__control {
+        height: 32px;
+    }
+    .vue-treeselect__menu {
+        line-height: 30px;
+    }
+}
+// message 弹出位置修改
+.el-message{
+    margin-top: 150px !important;
+}
+
+// 全局设计vue-treeselect的主题色
+.vue-treeselect .vue-treeselect__checkbox--indeterminate {
+    @include themify($themes) {
+        background-color: themed('primary-color') !important;
+        border-color: themed('primary-color') !important;
+    }
+}
+
+.vue-treeselect .vue-treeselect__checkbox--checked {
+    @include themify($themes) {
+        background-color: themed('primary-color') !important;
+        border-color: themed('primary-color') !important;
+    }
+}
+
+.vue-treeselect__label-container:hover .vue-treeselect__checkbox--indeterminate {
+    @include themify($themes) {
+        background-color: themed('primary-color') !important;
+        border-color: themed('primary-color') !important;
+    }
+}
+
+.vue-treeselect__label-container:hover .vue-treeselect__checkbox--unchecked {
+    @include themify($themes) {
+        border-color: themed('primary-color') !important;
+    }
+}
+
+.vue-treeselect--single .vue-treeselect__option--selected {
+    @include themify($themes) {
+        color: themed('primary-color') !important;
+        background: themed('primary-color-l1') !important;
+    }
+}
+
+.el-tree-node__content {
+    height: 30px !important;
+}
+
+// 删除确认弹窗样式重置
+.el-message-box__btns {
+    .el-button:nth-of-type(1) {
+        background: #fff !important;
+        border: 1px solid #dcdfe6 !important;
+        border-color: #dcdfe6 !important;
+        span {
+            color: #262626 !important;
+        }
+        color: #262626 !important;
+    }
+    .el-button:nth-of-type(2) {
+        color: #fff;
+        @include themify($themes) {
+            background: themed('primary-color') !important;
+            border-color: themed('primary-color') !important;
+        }
+    }
+}
+
+.el-message-box__message {
+    padding-left: 0px;
+    padding-right: 12px;
+    word-break: break-all !important;
+}
+
+//设置选中树节点为主题色
+.el-tree-node.is-current>.el-tree-node__content {
+    background: rgba(55, 129, 255, 0.1);
+    @include themify($themes) {
+        color: themed('primary-color');
+    }
+    .svg-icon {
+        color: inherit;
+    }
+}
+
+//输入框padding
+.el-input__inner {
+    padding: 0 8px !important;
+}
+
+.el-input--suffix .el-input__inner {
+    padding-right: 30px !important;
+}
+
+.el-input--prefix .el-input__inner {
+    padding-left: 30px !important;
+}
+
+.el-input .el-input__suffix {
+    right: 2px !important;
+}
+
+.el-textarea__inner {
+    padding: 5px 8px !important;
+}
+
+.el-input.is-disabled .el-input__inner {
+    background-color: #f5f5f5 !important;
+    border-color: #d9d9d9 !important;
+    color: #c0c4cc;
+}
+
+// table拖动样式
+.insert-before-col {
+    border-left: 2px dotted #b1b0b0;
+}
+
+.insert-after-col {
+    border-right: 2px dotted #b1b0b0 !important;
+}
+
+// 修改loading的默认样式
+.mainContent {
+    .el-loading-mask {
+        // 目前的loading颜色和dialog的颜色不一致，会导致部分颜色差
+        // background-color: rgba(128, 128, 128,0.1) !important;
+    }
+}
+
+// 修改表单select下拉框最大宽度
+.el-select-dropdown.el-popper.is-multiple {
+    max-width: 300px !important;
+}
