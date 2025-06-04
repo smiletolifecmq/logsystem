@@ -1,5 +1,5 @@
 <template>
-  <div class="co-head">
+  <div class="co-head" style="width: calc(100% - 0px); display: flex">
     <div class="coh-lock">
       <div class="coh-lock-base"></div>
       <div class="coh-lock-breathe">
@@ -117,8 +117,7 @@ export default {
   justify-content: space-between;
   align-items: flex-start;
   .coh-lock {
-    flex: none;
-    width: 297px;
+    flex: 6;
     height: 100%;
     padding: 16px 16px;
     background: url("~@/assets/cockpit/subdivision/coh-lock.png") no-repeat
@@ -164,8 +163,7 @@ export default {
     }
   }
   .coh-rock {
-    flex: none;
-    width: 300px;
+    flex: 6;
     height: 100%;
     padding: 16px 16px;
     background: url("~@/assets/cockpit/subdivision/coh-rock.png") no-repeat
@@ -173,7 +171,8 @@ export default {
     margin-left: -1px;
     position: relative;
     .coh-rock-base {
-      width: 100%;
+      margin-top: -20px;
+      width: 87%;
       .coh-rockb-sup {
         width: 100%;
         display: flex;
@@ -245,8 +244,7 @@ export default {
       center bottom/ 100% 49px;
   }
   .coh-base {
-    flex: none;
-    width: 920px;
+    flex: 4;
     height: 100%;
     position: relative;
     z-index: 10;
@@ -282,7 +280,7 @@ export default {
     }
     .coh-bap-title {
       width: 604px;
-      height: 104px;
+      height: 85px;
       background: url("~@/assets/cockpit/coh-bap-title.png") no-repeat 0/ 100% 100%;
       position: absolute;
       top: -12px;
@@ -290,8 +288,8 @@ export default {
       transform: translate(-50%, 0);
       z-index: 20;
       .coh-bap-title-name {
-        width: 395px;
-        height: 35px;
+        width: 338px;
+        height: 57px;
         background: url("~@/assets/cockpit/subdivision/administration/page-title.png")
           no-repeat 0/ 100% 100%;
         position: absolute;

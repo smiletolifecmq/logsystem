@@ -181,6 +181,10 @@ export default {
   width: 100%;
   position: relative;
   z-index: 1;
+  ul {
+    list-style: none;
+    padding: 0;
+  }
 }
 
 .bb4-list {

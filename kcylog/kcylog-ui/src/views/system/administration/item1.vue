@@ -8,8 +8,6 @@
         />
       </div>
       <div class="co-title-right co-title-right-flex">
-        <!-- <div class="text">当前月份</div> -->
-
         <div class="co-title-breathe">
           <i></i><i></i><i></i><i></i><i></i><i></i>
         </div>
@@ -48,8 +46,7 @@
         </li>
       </ul>
     </div>
-    <!--  -->
-    <ul class="bpl1-stac">
+    <ul class="bpl1-stac" style="margin-left: -34px">
       <li class="bpl1-st-each">
         <i class="bpl1-ste-icon"
           ><img
@@ -97,11 +94,15 @@
       </div>
       <div class="map-right-menu" :class="!isFold ? 'map-right-menu-no' : ''">
         <div class="list-header" v-show="isFold">
-          <p v-for="(item, index) in headerData" :key="index">
+          <p
+            v-for="(item, index) in headerData"
+            :key="index"
+            style="margin-top: auto"
+          >
             {{ item.fieldName }}
           </p>
         </div>
-        <ul class="list-item">
+        <ul class="list-item" style="margin-left: -41px">
           <!--  -->
           <li v-for="(item, index) in listData" :key="index">
             <div class="name">
@@ -125,42 +126,6 @@ export default {
   data() {
     return {
       listData: [
-        {
-          name: "建设项目审查一处",
-          num1: "95",
-          num2: "22",
-          num3: "95",
-        },
-        {
-          name: "建设项目审查一处",
-          num1: "95",
-          num2: "22",
-          num3: "95",
-        },
-        {
-          name: "建设项目审查一处",
-          num1: "95",
-          num2: "22",
-          num3: "95",
-        },
-        {
-          name: "建设项目审查一处",
-          num1: "95",
-          num2: "22",
-          num3: "95",
-        },
-        {
-          name: "建设项目审查一处",
-          num1: "95",
-          num2: "22",
-          num3: "95",
-        },
-        {
-          name: "建设项目审查一处",
-          num1: "95",
-          num2: "22",
-          num3: "95",
-        },
         {
           name: "建设项目审查一处",
           num1: "95",

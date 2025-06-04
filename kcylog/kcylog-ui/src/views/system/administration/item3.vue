@@ -80,7 +80,7 @@
         </div>
       </div>
     </div>
-    <div class="item3-bottom">
+    <!-- <div class="item3-bottom">
       <div class="title">
         <div class="bg"></div>
         <div class="text">近半年发文情况</div>
@@ -89,7 +89,7 @@
       <div class="echarts-area">
         <div class="floorage-echart" id="floorage2"></div>
       </div>
-    </div>
+    </div> -->
   </div>
 </template>
 
@@ -232,6 +232,11 @@ export default {
   position: relative;
   z-index: 1;
   margin-top: 50px;
+  ul {
+    list-style: none;
+    // margin: 0;
+    padding: 0;
+  }
 }
 
 .bb4-list {
