@@ -217,3 +217,11 @@ export function listProjectHj(query) {
     params: query
   })
 }
+
+export function listProjectHjMonth(query) {
+  return request({
+    url: '/system/project/listProjectHjMonth',
+    method: 'get',
+    params: query
+  })
+}

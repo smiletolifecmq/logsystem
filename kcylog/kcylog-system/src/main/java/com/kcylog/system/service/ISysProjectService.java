@@ -152,4 +152,6 @@ public interface ISysProjectService
     public List<SysProject> selectWEJZ(SysProject sysProject);
 
     public List<SysProject> selectWEJY(SysProject sysProject);
+
+    public List<SysProject> listProjectHjMonth(SysProject sysProject);
 }

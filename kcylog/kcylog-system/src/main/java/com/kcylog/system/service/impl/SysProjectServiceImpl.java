@@ -372,4 +372,10 @@ public class SysProjectServiceImpl implements ISysProjectService
     {
         return sysProjectMapper.selectWEJY(sysProject);
     }
+
+    @Override
+    public List<SysProject> listProjectHjMonth(SysProject sysProject)
+    {
+        return sysProjectMapper.listProjectHjMonth(sysProject);
+    }
 }

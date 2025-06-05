@@ -71,6 +71,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 
         <result property="moneyhj" column="moneyhj"/>
         <result property="profitMoneyHj" column="profit_money_hj"/>
+        <result property="monthhj" column="monthhj"/>
 
         <association property="projectValue" javaType="java.util.List" resultMap="SysProjectValueResult"/>
         <association property="projectCar" javaType="java.util.List" resultMap="SysProjectCarResult"/>
@@ -1194,6 +1195,34 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
         </where>
         GROUP BY
             department
+    </select>
+
+    <select id="listProjectHjMonth"  parameterType="SysProject" resultMap="SysProjectResult">
+        SELECT
+        d.dept_name AS department,
+        MONTH(b.settlement_time) AS monthhj,
+        ROUND(SUM(a.money)) AS moneyhj,
+        ROUND(SUM(a.profit_money)) AS profit_money_hj
+        FROM
+        sys_project_value a
+        INNER JOIN sys_project b ON a.project_id = b.project_id
+        INNER JOIN sys_user c ON a.user_name = c.user_name
+        INNER JOIN sys_dept d ON c.dept_id = d.dept_id
+        <where>
+            <if test="tjStatus != null and tjStatus == 0">
+                and b.user_name_alias = #{userNameAlias}
+            </if>
+            <if test="tjStatus != null and tjStatus == 1">
+                and b.department = #{department}
+            </if>
+            and YEAR(b.settlement_time) = YEAR(NOW())
+        </where>
+        GROUP BY
+        d.dept_name,
+        MONTH(b.settlement_time)
+        ORDER BY
+        d.dept_name,
+        MONTH(b.settlement_time);
     </select>
 
 </mapper>

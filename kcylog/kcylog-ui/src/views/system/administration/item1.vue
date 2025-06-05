@@ -103,7 +103,7 @@
             </div>
             <div class="length">{{ item.num1 }}</div>
             <div class="des">{{ item.num2 }}</div>
-            <div class="des">{{ item.num3 }}</div>
+            <!-- <div class="des">{{ item.num3 }}</div> -->
           </li>
         </ul>
       </div>
@@ -112,7 +112,7 @@
     <div class="content" style="height: 140px">
       <div class="title">
         <div class="bg"></div>
-        <div class="text">各部门详情(月)</div>
+        <div class="text">经营产值(月)</div>
         <div class="echarts-area">
           <div class="floorage-echart" ref="chartArrival"></div>
         </div>
@@ -123,6 +123,8 @@
 
 <script>
 import * as echarts from "echarts";
+import { listProjectHjMonth } from "@/api/system/project";
+
 export default {
   name: "BplItem1",
   components: {},
@@ -151,12 +153,14 @@ export default {
   },
   data() {
     return {
+      queryParamsHz: {},
+      dateRangeHz: [],
       chartInstanceArrival: null,
       list2: {
-        a: [120, 132, 101, 134, 90, 230, 210, 180, 190, 200, 210, 220],
-        b: [220, 182, 191, 234, 290, 330, 310, 305, 295, 280, 270, 260],
-        c: [150, 232, 201, 154, 190, 330, 410, 390, 380, 370, 360, 350],
-        d: [320, 332, 301, 334, 390, 330, 320, 310, 300, 290, 280, 270],
+        a: [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
+        b: [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
+        c: [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
+        d: [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
       },
       monthList: [
         "1月",
@@ -190,109 +194,134 @@ export default {
         {
           fieldName: "经营净产值",
         },
-        {
-          fieldName: "经营预估产值",
-        },
       ],
     };
   },
   created() {},
   methods: {
     initFloorage() {
-      this.chartInstanceArrival.setOption({
-        color: ["#afeff6", "#fbd26a", "#ff7f50", "#e60000"], // 每条折线的颜色
-        tooltip: {
-          trigger: "axis",
-        },
-        legend: {
-          textStyle: {
+      listProjectHjMonth(
+        this.addDateRange(this.queryParamsHz, this.dateRangeHz)
+      ).then((response) => {
+        for (var i = 0; i < response.rows.length; i++) {
+          switch (response.rows[i].department) {
+            case "地理信息部":
+              this.list2.a[response.rows[i].monthhj - 1] =
+                response.rows[i].moneyhj;
+              break;
+            case "工程测绘部":
+              this.list2.b[response.rows[i].monthhj - 1] =
+                response.rows[i].moneyhj;
+              break;
+            case "不动产测绘部":
+              this.list2.c[response.rows[i].monthhj - 1] =
+                response.rows[i].moneyhj;
+              break;
+            case "管线工程部":
+              this.list2.d[response.rows[i].monthhj - 1] =
+                response.rows[i].moneyhj;
+              break;
+            default:
+              break;
+          }
+        }
+
+        this.chartInstanceArrival.setOption({
+          color: ["#afeff6", "#fbd26a", "#ff7f50", "#e60000"], // 每条折线的颜色
+          tooltip: {
+            trigger: "axis",
+          },
+          legend: {
+            bottom: 0,
+            textStyle: {
+              color: "#ffffff",
+            },
+            data: ["地理信息部", "工程测绘部", "不动产测绘部", "管线工程部"],
+          },
+          label: {
             color: "#ffffff",
           },
-          data: ["部门A", "部门B", "部门C", "部门D"],
-        },
-        label: {
-          color: "#ffffff",
-        },
-        grid: {
-          top: "4%",
-          left: "1%",
-          right: "3%",
-          bottom: "0%",
-          containLabel: true,
-        },
-        xAxis: {
-          type: "category",
-          data: this.monthList,
-          boundaryGap: false, // 从y轴开始
-          //设置网格线颜色
-          splitLine: {
-            show: false,
+          grid: {
+            top: "4%",
+            left: "1%",
+            right: "3%",
+            bottom: "20%",
+            containLabel: true,
           },
-          axisLine: {
-            lineStyle: {
-              color: "#17709c",
+          xAxis: {
+            type: "category",
+            data: this.monthList,
+            boundaryGap: false, // 从y轴开始
+            //设置网格线颜色
+            splitLine: {
+              show: false,
             },
-          },
+            axisLine: {
+              lineStyle: {
+                color: "#17709c",
+              },
+            },
 
-          axisLabel: {
-            show: true,
-            textStyle: {
-              color: "#ffffff", //更改坐标轴文字颜色
-              fontSize: 12, //更改坐标轴文字大小
+            axisLabel: {
+              show: true,
+              textStyle: {
+                color: "#ffffff", //更改坐标轴文字颜色
+                fontSize: 12, //更改坐标轴文字大小
+              },
             },
           },
-        },
-        yAxis: {
-          type: "value",
-          axisLabel: {
-            show: true,
-            textStyle: {
-              color: "#00eaff", //更改坐标轴文字颜色
-              fontSize: 12, //更改坐标轴文字大小
+          yAxis: {
+            type: "value",
+            axisLabel: {
+              show: true,
+              textStyle: {
+                color: "#00eaff", //更改坐标轴文字颜色
+                fontSize: 12, //更改坐标轴文字大小
+              },
+            },
+            splitLine: {
+              show: true,
+              lineStyle: {
+                color: ["#17709c"],
+                width: 1,
+                type: "solid",
+              },
+            },
+            // y轴轴线颜色
+            axisLine: {
+              lineStyle: {
+                color: "#254177",
+                // width: 1 //这里是坐标轴的宽度
+              },
             },
           },
-          splitLine: {
-            show: true,
-            lineStyle: {
-              color: ["#17709c"],
-              width: 1,
-              type: "solid",
+          series: [
+            {
+              name: "地理信息部",
+              type: "line",
+              smooth: true,
+              data: this.list2.a,
             },
-          },
-          // y轴轴线颜色
-          axisLine: {
-            lineStyle: {
-              color: "#254177",
-              // width: 1 //这里是坐标轴的宽度
+            {
+              name: "工程测绘部",
+              type: "line",
+              smooth: true,
+              data: this.list2.b,
             },
-          },
-        },
-        series: [
-          {
-            name: "部门A",
-            type: "line",
-            smooth: true,
-            data: this.list2.a,
-          },
-          {
-            name: "部门B",
-            type: "line",
-            smooth: true,
-            data: this.list2.b,
-          },
-          {
-            name: "部门C",
-            type: "line",
-            smooth: true,
-            data: this.list2.c,
-          },
-          {
-            name: "部门D",
-            type: "line",
-            smooth: true,
-            data: this.list2.d,
-          },
-        ],
+            {
+              name: "不动产测绘部",
+              type: "line",
+              smooth: true,
+              data: this.list2.c,
+            },
+            {
+              name: "管线工程部",
+              type: "line",
+              smooth: true,
+              data: this.list2.d,
+            },
+          ],
+        });
       });
     },
     handleData(data) {

@@ -143,7 +143,7 @@
       </div>
     </div>
 
-    <div class="bb4-main">
+    <div class="bb4-main" style="margin-top: 2.3rem">
       <ul class="bb4-list">
         <li class="bb4-l-each">
           <div class="bb4-le-sub bb4-le-sub1">
@@ -229,7 +229,6 @@
         </ul>
       </div>
     </div>
-
     <!--  -->
     <div class="item3-content" style="margin-left: -12px; margin-top: auto">
       <div class="item">

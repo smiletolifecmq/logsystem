@@ -136,6 +136,8 @@ public class SysProject extends BaseEntity
 
     private Integer twoCheckDays;
 
+    private Integer monthhj;
+
     /** 填写经营产值时间 */
     @JsonFormat(pattern = "yyyy-MM-dd")
     private Date operateTime;
@@ -253,6 +255,14 @@ public class SysProject extends BaseEntity
     private Long userId;
 
     private String deptName;
+
+    public Integer getMonthhj() {
+        return monthhj;
+    }
+
+    public void setMonthhj(Integer monthhj) {
+        this.monthhj = monthhj;
+    }
 
     public Long getDeptId() {
         return deptId;

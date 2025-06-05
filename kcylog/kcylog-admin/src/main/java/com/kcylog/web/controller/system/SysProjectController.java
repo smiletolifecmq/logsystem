@@ -2385,4 +2385,18 @@ public class SysProjectController extends BaseController {
         util.exportExcel(response, projectHJ, "福清分院项目管理网站月周报");
     }
 
+    @GetMapping("/listProjectHjMonth")
+    public TableDataInfo listProjectHjMonth(SysProject sysProject) {
+        Long userId = getUserId();
+        SysUser user = sysUserService.selectUserById(userId);
+        sysProject.setGzStatus((long)-1);
+        sysProject.setTjStatus(user.getTjStatus());
+        sysProject.setUserId(userId);
+        sysProject.setDeptId(user.getDept().getDeptId());
+        sysProject.setUserNameAlias(getUsername());
+        sysProject.setDepartment(user.getDept().getDeptName());
+        List<SysProject> list = sysProjectService.listProjectHjMonth(sysProject);
+        return getDataTable(list);
+    }
+
 }
