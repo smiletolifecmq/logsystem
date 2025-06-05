@@ -666,7 +666,7 @@ export default {
         position: absolute;
         left: 2px;
         top: 0;
-        width: 100%;
+        // width: 100%;
       }
     }
     ul {

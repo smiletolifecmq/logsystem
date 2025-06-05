@@ -51,7 +51,7 @@
           </p>
         </div>
       </li>
-      <li class="bpl1-st-each">
+      <!-- <li class="bpl1-st-each">
         <i class="bpl1-ste-icon"
           ><img
             src="@/assets/cockpit/subdivision/administration/item1-icon1.png"
@@ -76,13 +76,13 @@
             <span>{{ jydata.jyczwtb }}</span>
           </p>
         </div>
-      </li>
+      </li> -->
     </ul>
     <!--  -->
     <div class="content">
       <div class="title">
         <div class="bg"></div>
-        <div class="text">各部门详情</div>
+        <div class="text">各部门详情(年)</div>
       </div>
       <div class="map-right-menu" :class="!isFold ? 'map-right-menu-no' : ''">
         <div class="list-header" v-show="isFold">
@@ -108,10 +108,21 @@
         </ul>
       </div>
     </div>
+
+    <div class="content" style="height: 140px">
+      <div class="title">
+        <div class="bg"></div>
+        <div class="text">各部门详情(月)</div>
+        <div class="echarts-area">
+          <div class="floorage-echart" ref="chartArrival"></div>
+        </div>
+      </div>
+    </div>
   </div>
 </template>
 
 <script>
+import * as echarts from "echarts";
 export default {
   name: "BplItem1",
   components: {},
@@ -131,8 +142,36 @@ export default {
       deep: true, // 可选，如果数组结构较复杂
     },
   },
+  mounted() {
+    this.chartInstanceArrival = echarts.init(this.$refs.chartArrival);
+    this.initFloorage(); // 确保图表 DOM 初始化完成后再调用 setOption
+    window.addEventListener("resize", () => {
+      this.chartInstanceArrival.resize();
+    });
+  },
   data() {
     return {
+      chartInstanceArrival: null,
+      list2: {
+        a: [120, 132, 101, 134, 90, 230, 210, 180, 190, 200, 210, 220],
+        b: [220, 182, 191, 234, 290, 330, 310, 305, 295, 280, 270, 260],
+        c: [150, 232, 201, 154, 190, 330, 410, 390, 380, 370, 360, 350],
+        d: [320, 332, 301, 334, 390, 330, 320, 310, 300, 290, 280, 270],
+      },
+      monthList: [
+        "1月",
+        "2月",
+        "3月",
+        "4月",
+        "5月",
+        "6月",
+        "7月",
+        "8月",
+        "9月",
+        "10月",
+        "11月",
+        "12月",
+      ],
       listData: [],
       isFold: true,
       jydata: {
@@ -159,6 +198,103 @@ export default {
   },
   created() {},
   methods: {
+    initFloorage() {
+      this.chartInstanceArrival.setOption({
+        color: ["#afeff6", "#fbd26a", "#ff7f50", "#e60000"], // 每条折线的颜色
+        tooltip: {
+          trigger: "axis",
+        },
+        legend: {
+          textStyle: {
+            color: "#ffffff",
+          },
+          data: ["部门A", "部门B", "部门C", "部门D"],
+        },
+        label: {
+          color: "#ffffff",
+        },
+        grid: {
+          top: "4%",
+          left: "1%",
+          right: "3%",
+          bottom: "0%",
+          containLabel: true,
+        },
+        xAxis: {
+          type: "category",
+          data: this.monthList,
+          boundaryGap: false, // 从y轴开始
+          //设置网格线颜色
+          splitLine: {
+            show: false,
+          },
+          axisLine: {
+            lineStyle: {
+              color: "#17709c",
+            },
+          },
+
+          axisLabel: {
+            show: true,
+            textStyle: {
+              color: "#ffffff", //更改坐标轴文字颜色
+              fontSize: 12, //更改坐标轴文字大小
+            },
+          },
+        },
+        yAxis: {
+          type: "value",
+          axisLabel: {
+            show: true,
+            textStyle: {
+              color: "#00eaff", //更改坐标轴文字颜色
+              fontSize: 12, //更改坐标轴文字大小
+            },
+          },
+          splitLine: {
+            show: true,
+            lineStyle: {
+              color: ["#17709c"],
+              width: 1,
+              type: "solid",
+            },
+          },
+          // y轴轴线颜色
+          axisLine: {
+            lineStyle: {
+              color: "#254177",
+              // width: 1 //这里是坐标轴的宽度
+            },
+          },
+        },
+        series: [
+          {
+            name: "部门A",
+            type: "line",
+            smooth: true,
+            data: this.list2.a,
+          },
+          {
+            name: "部门B",
+            type: "line",
+            smooth: true,
+            data: this.list2.b,
+          },
+          {
+            name: "部门C",
+            type: "line",
+            smooth: true,
+            data: this.list2.c,
+          },
+          {
+            name: "部门D",
+            type: "line",
+            smooth: true,
+            data: this.list2.d,
+          },
+        ],
+      });
+    },
     handleData(data) {
       if (data.length !== 0) {
         this.jydata.jycz = data[10].hj;
@@ -252,7 +388,7 @@ export default {
       position: absolute;
       left: 2px;
       top: 0;
-      width: 100%;
+      // width: 100%;
       font-size: 16px !important;
     }
   }
@@ -554,5 +690,11 @@ export default {
       }
     }
   }
+}
+
+.floorage-echart {
+  width: 100%;
+  height: 140px;
+  // margin-top: 24px;
 }
 </style>

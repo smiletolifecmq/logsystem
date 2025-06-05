@@ -80,7 +80,7 @@
       </div>
     </div>
 
-    <div class="item3-top" style="margin-top: 4.5rem">
+    <div class="item3-top">
       <div class="bb4-main">
         <ul class="bb4-list">
           <li class="bb4-l-each">
@@ -408,7 +408,7 @@ export default {
         position: absolute;
         left: 2px;
         top: 0;
-        width: 100%;
+        // width: 100%;
       }
     }
     ul {
