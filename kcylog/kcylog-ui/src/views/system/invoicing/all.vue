@@ -114,6 +114,17 @@
           >导出</el-button
         >
       </el-col>
+      <el-col :span="1.5">
+        <el-button
+          type="primary"
+          plain
+          icon="el-icon-s-help"
+          size="mini"
+          @click="handleJskpje"
+          v-hasPermi="['system:invoicing:hjkpmoney']"
+          >合计开票金额</el-button
+        >
+      </el-col>
       <right-toolbar
         :showSearch.sync="showSearch"
         @queryTable="getList"
@@ -200,6 +211,16 @@
       :limit.sync="queryParams.pageSize"
       @pagination="getList"
     />
+
+    <el-dialog
+      title="开票金额"
+      :visible.sync="kpopen"
+      width="200px"
+      append-to-body
+      :close-on-click-modal="false"
+    >
+      <div>{{ hjmoney }}</div>
+    </el-dialog>
 
     <!-- 添加或修改经营开票统计对话框 -->
     <el-dialog
@@ -407,6 +428,8 @@ export default {
   name: "Invoicing",
   data() {
     return {
+      kpopen: false,
+      hjmoney: 0,
       kpKhfls: [
         {
           value: "事业单位",
@@ -543,6 +566,21 @@ export default {
     this.getList();
   },
   methods: {
+    handleJskpje() {
+      this.queryParams.pageNum = 1;
+      this.queryParams.pageSize = 9999;
+      this.hjmoney = 0;
+      listInvoicingAll(
+        this.addDateRange(this.queryParams, this.dateRange)
+      ).then((response) => {
+        for (var i = 0; i < response.rows.length; i++) {
+          this.hjmoney += response.rows[i].kpKpje;
+        }
+        // 四舍五入保留两位小数
+        this.hjmoney = parseFloat(this.hjmoney.toFixed(2));
+        this.kpopen = true;
+      });
+    },
     handleDz(value) {
       getArrivalList(value.kpFph).then((response) => {
         if (response.rows.length == 0) {

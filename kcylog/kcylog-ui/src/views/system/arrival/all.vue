@@ -88,6 +88,17 @@
           >导出</el-button
         >
       </el-col>
+      <el-col :span="1.5">
+        <el-button
+          type="primary"
+          plain
+          icon="el-icon-s-help"
+          size="mini"
+          @click="handleJsdzje"
+          v-hasPermi="['system:invoicing:hjdzmoney']"
+          >合计到账金额</el-button
+        >
+      </el-col>
       <right-toolbar
         :showSearch.sync="showSearch"
         @queryTable="getList"
@@ -157,6 +168,16 @@
       :limit.sync="queryParams.pageSize"
       @pagination="getList"
     />
+
+    <el-dialog
+      title="到账金额"
+      :visible.sync="dzopen"
+      width="200px"
+      append-to-body
+      :close-on-click-modal="false"
+    >
+      <div>{{ dzmoney }}</div>
+    </el-dialog>
 
     <!-- 添加或修改经营到账统计对话框 -->
     <el-dialog
@@ -347,6 +368,8 @@ export default {
   name: "Arrival",
   data() {
     return {
+      dzopen: false,
+      dzmoney: 0,
       dzForm: {},
       kptitle: "",
       kpopen: false,
@@ -451,6 +474,21 @@ export default {
     this.getList();
   },
   methods: {
+    handleJsdzje() {
+      this.queryParams.pageNum = 1;
+      this.queryParams.pageSize = 9999;
+      this.dzmoney = 0;
+      listArrivalAll(this.addDateRange(this.queryParams, this.dateRange)).then(
+        (response) => {
+          for (var i = 0; i < response.rows.length; i++) {
+            this.dzmoney += response.rows[i].dzMoney;
+          }
+          // 四舍五入保留两位小数
+          this.dzmoney = parseFloat(this.dzmoney.toFixed(2));
+          this.dzopen = true;
+        }
+      );
+    },
     handleKp(value) {
       getInvoicingByFPH(value.dzFph).then((response) => {
         if (response.data == undefined || response.data == null) {
