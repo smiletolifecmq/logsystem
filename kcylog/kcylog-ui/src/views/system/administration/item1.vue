@@ -203,10 +203,15 @@ export default {
       listProjectHjMonth(
         this.addDateRange(this.queryParamsHz, this.dateRangeHz)
       ).then((response) => {
-        var dl = response.地理信息部;
-        var gc = response.工程测绘部;
-        var bdc = response.不动产测绘部;
-        var gx = response.管线工程部;
+        var dl = response.经营产值.地理信息部;
+        var gc = response.经营产值.工程测绘部;
+        var bdc = response.经营产值.不动产测绘部;
+        var gx = response.经营产值.管线工程部;
+
+        var dlll = response.利润.地理信息部;
+        var gcll = response.利润.工程测绘部;
+        var bdcll = response.利润.不动产测绘部;
+        var gxll = response.利润.管线工程部;
 
         this.listData[0] = {
           name: "工程测绘部",
@@ -228,6 +233,30 @@ export default {
           num1: 0,
           num2: 0,
         };
+
+        for (const key in dlll) {
+          const value = dlll[key];
+          this.jydata.jyczqfb += value;
+          this.listData[3].num2 += value;
+        }
+
+        for (const key in gcll) {
+          const value = gcll[key];
+          this.jydata.jyczqfb += value;
+          this.listData[0].num2 += value;
+        }
+
+        for (const key in bdcll) {
+          const value = bdcll[key];
+          this.jydata.jyczqfb += value;
+          this.listData[2].num2 += value;
+        }
+
+        for (const key in gxll) {
+          const value = gxll[key];
+          this.jydata.jyczqfb += value;
+          this.listData[1].num2 += value;
+        }
 
         for (const key in dl) {
           const value = dl[key];
@@ -263,6 +292,13 @@ export default {
 
         this.listData[2].num1 = this.listData[2].num1.toFixed(2);
         this.listData[3].num1 = this.listData[3].num1.toFixed(2);
+
+        this.jydata.jyczqfb = this.jydata.jyczqfb.toFixed(2);
+        this.listData[0].num2 = this.listData[0].num2.toFixed(2);
+        this.listData[1].num2 = this.listData[1].num2.toFixed(2);
+
+        this.listData[2].num2 = this.listData[2].num2.toFixed(2);
+        this.listData[3].num2 = this.listData[3].num2.toFixed(2);
 
         this.listData.sort((a, b) => b.num1 - a.num1);
 

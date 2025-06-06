@@ -2389,7 +2389,7 @@ public class SysProjectController extends BaseController {
     }
 
     @GetMapping("/listProjectHjMonth")
-    public Map<String, Map<Integer, BigDecimal>> listProjectHjMonth(SysProject sysProject) {
+    public Map<String, Map<String, Map<Integer, BigDecimal>>> listProjectHjMonth(SysProject sysProject) {
         Long userId = getUserId();
         SysUser userObj = sysUserService.selectUserById(userId);
         sysProject.setGzStatus((long)-1);
@@ -2463,7 +2463,27 @@ public class SysProjectController extends BaseController {
                         )
                 ));
 
-        return result;
+        Map<String, Map<Integer, BigDecimal>> result1 = operatingExportList.stream()
+                .filter(o -> o.getSettleTime() != null)
+                .collect(Collectors.groupingBy(
+                        OperatingExport::getDept, // 一级分组：部门
+                        Collectors.groupingBy(
+                                o -> {
+                                    // 从 Date 转换为月份（1~12）
+                                    LocalDate date = o.getSettleTime().toInstant().atZone(ZoneId.systemDefault()).toLocalDate();
+                                    return date.getMonthValue();
+                                },
+                                Collectors.mapping(
+                                        o -> Optional.ofNullable(o.getProfitMoney()).orElse(BigDecimal.ZERO),
+                                        Collectors.reducing(BigDecimal.ZERO, BigDecimal::add)
+                                )
+                        )
+                ));
+
+        Map<String, Map<String, Map<Integer, BigDecimal>>> resultObj = new HashMap<>();
+        resultObj.put("经营产值", result);
+        resultObj.put("利润", result1);
+        return resultObj;
     }
 
 
