@@ -203,28 +203,68 @@ export default {
       listProjectHjMonth(
         this.addDateRange(this.queryParamsHz, this.dateRangeHz)
       ).then((response) => {
-        for (var i = 0; i < response.rows.length; i++) {
-          switch (response.rows[i].department) {
-            case "地理信息部":
-              this.list2.a[response.rows[i].monthhj - 1] =
-                response.rows[i].moneyhj;
-              break;
-            case "工程测绘部":
-              this.list2.b[response.rows[i].monthhj - 1] =
-                response.rows[i].moneyhj;
-              break;
-            case "不动产测绘部":
-              this.list2.c[response.rows[i].monthhj - 1] =
-                response.rows[i].moneyhj;
-              break;
-            case "管线工程部":
-              this.list2.d[response.rows[i].monthhj - 1] =
-                response.rows[i].moneyhj;
-              break;
-            default:
-              break;
-          }
+        var dl = response.地理信息部;
+        var gc = response.工程测绘部;
+        var bdc = response.不动产测绘部;
+        var gx = response.管线工程部;
+
+        this.listData[0] = {
+          name: "工程测绘部",
+          num1: 0,
+          num2: 0,
+        };
+        this.listData[1] = {
+          name: "管线工程部",
+          num1: 0,
+          num2: 0,
+        };
+        this.listData[2] = {
+          name: "不动产测绘部",
+          num1: 0,
+          num2: 0,
+        };
+        this.listData[3] = {
+          name: "地理信息部",
+          num1: 0,
+          num2: 0,
+        };
+
+        for (const key in dl) {
+          const value = dl[key];
+          this.list2.a[key - 1] = value;
+          this.jydata.jycz += value;
+          this.listData[3].num1 += value;
         }
+
+        for (const key in gc) {
+          const value = gc[key];
+          this.list2.b[key - 1] = value;
+          this.jydata.jycz += value;
+          this.listData[0].num1 += value;
+        }
+
+        for (const key in bdc) {
+          const value = bdc[key];
+          this.list2.c[key - 1] = value;
+          this.jydata.jycz += value;
+          this.listData[2].num1 += value;
+        }
+
+        for (const key in gx) {
+          const value = gx[key];
+          this.list2.d[key - 1] = value;
+          this.jydata.jycz += value;
+          this.listData[1].num1 += value;
+        }
+
+        this.jydata.jycz = this.jydata.jycz.toFixed(2);
+        this.listData[0].num1 = this.listData[0].num1.toFixed(2);
+        this.listData[1].num1 = this.listData[1].num1.toFixed(2);
+
+        this.listData[2].num1 = this.listData[2].num1.toFixed(2);
+        this.listData[3].num1 = this.listData[3].num1.toFixed(2);
+
+        this.listData.sort((a, b) => b.num1 - a.num1);
 
         this.chartInstanceArrival.setOption({
           color: ["#afeff6", "#fbd26a", "#ff7f50", "#e60000"], // 每条折线的颜色
@@ -324,39 +364,7 @@ export default {
         });
       });
     },
-    handleData(data) {
-      if (data.length !== 0) {
-        this.jydata.jycz = data[10].hj;
-        this.jydata.jyczqfb = data[11].hj;
-        this.jydata.jyczyg = data[4].hj;
-        this.jydata.jyczwtb = data[9].hj;
-        this.listData[0] = {
-          name: "工程测绘部",
-          num1: data[10].gcchb,
-          num2: data[11].gcchb,
-          num3: data[4].gcchb,
-        };
-        this.listData[1] = {
-          name: "管线工程部",
-          num1: data[10].gxgcb,
-          num2: data[11].gxgcb,
-          num3: data[4].gxgcb,
-        };
-        this.listData[2] = {
-          name: "不动产测绘部",
-          num1: data[10].bdcchb,
-          num2: data[11].bdcchb,
-          num3: data[4].bdcchb,
-        };
-        this.listData[3] = {
-          name: "地理信息部",
-          num1: data[10].dlxxb,
-          num2: data[11].dlxxb,
-          num3: data[4].dlxxb,
-        };
-        this.listData.sort((a, b) => b.num1 - a.num1);
-      }
-    },
+    handleData(data) {},
   },
 };
 </script>

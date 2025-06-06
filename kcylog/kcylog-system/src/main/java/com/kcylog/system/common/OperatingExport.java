@@ -5,6 +5,7 @@ import com.kcylog.system.domain.SysProjectValue;
 import org.apache.poi.ss.usermodel.IndexedColors;
 
 import java.math.BigDecimal;
+import java.util.Date;
 import java.util.List;
 
 public class OperatingExport {
@@ -114,6 +115,16 @@ public class OperatingExport {
 
     @Excel(name = "利润金额-系数", headerBackgroundColor = IndexedColors.GREEN)
     private BigDecimal coefficientProfitMoney;
+
+    private Date settleTime;
+
+    public Date getSettleTime() {
+        return settleTime;
+    }
+
+    public void setSettleTime(Date settleTime) {
+        this.settleTime = settleTime;
+    }
 
     public String getDept() {
         return dept;

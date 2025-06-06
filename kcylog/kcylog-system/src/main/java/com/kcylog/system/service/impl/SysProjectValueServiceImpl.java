@@ -128,4 +128,17 @@ public class SysProjectValueServiceImpl implements ISysProjectValueService
     {
         return sysProjectValueMapper.listProjectOperateValue(sysProject);
     }
+
+    @Override
+    public List<SysProjectValue> listProjectHjMonth(SysProject sysProject)
+    {
+        return sysProjectValueMapper.listProjectHjMonth(sysProject);
+    }
+
+    @Override
+    public List<SysProjectValue> listProjectOperateTJForSpecialPersonnelMonth(SysProject sysProject)
+    {
+        return sysProjectValueMapper.listProjectOperateTJForSpecialPersonnelMonth(sysProject);
+    }
+
 }

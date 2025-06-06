@@ -22,7 +22,10 @@ import java.math.BigDecimal;
 import java.math.RoundingMode;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
+import java.time.LocalDate;
+import java.time.ZoneId;
 import java.util.*;
+import java.util.stream.Collectors;
 
 /**
  * 项目Controller
@@ -2386,17 +2389,82 @@ public class SysProjectController extends BaseController {
     }
 
     @GetMapping("/listProjectHjMonth")
-    public TableDataInfo listProjectHjMonth(SysProject sysProject) {
+    public Map<String, Map<Integer, BigDecimal>> listProjectHjMonth(SysProject sysProject) {
         Long userId = getUserId();
-        SysUser user = sysUserService.selectUserById(userId);
+        SysUser userObj = sysUserService.selectUserById(userId);
         sysProject.setGzStatus((long)-1);
-        sysProject.setTjStatus(user.getTjStatus());
+        sysProject.setTjStatus(userObj.getTjStatus());
         sysProject.setUserId(userId);
-        sysProject.setDeptId(user.getDept().getDeptId());
+        sysProject.setDeptId(userObj.getDept().getDeptId());
         sysProject.setUserNameAlias(getUsername());
-        sysProject.setDepartment(user.getDept().getDeptName());
-        List<SysProject> list = sysProjectService.listProjectHjMonth(sysProject);
-        return getDataTable(list);
+        sysProject.setDepartment(userObj.getDept().getDeptName());
+        List<OperatingExport> operatingExportList = new ArrayList<>();
+        List<SysProjectValue> list = sysProjectValueService.listProjectHjMonth(sysProject);
+        List<SysProjectValue> listSpecial = sysProjectValueService.listProjectOperateTJForSpecialPersonnelMonth(sysProject);
+
+        for (SysProjectValue value1 : listSpecial){
+            OperatingExport operatingExport = new OperatingExport();
+            operatingExport.setSettleTime(value1.getFqSysProject().getSettleTime());
+            operatingExport.setDept(value1.getFqSysProject().getDepartment());
+            operatingExport.setMoney(value1.getMoney());
+            operatingExport.setProfitMoney(value1.getProfitMoney());
+            operatingExportList.add(operatingExport);
+        }
+        SysUser user = new SysUser();
+        List<SysUser> userList = sysUserService.selectUserList(user);
+        Map<String, String> userMap = new HashMap<>();
+        for (SysUser obj : userList){
+            userMap.put(obj.getUserName(),obj.getDept().getDeptName());
+        }
+        String[] dl = {"蔡龙洲1", "蔡龙洲2", "蔡龙洲3", "蔡龙洲4", "蔡龙洲5", "蔡龙洲6", "蔡龙洲7", "蔡龙洲8", "蔡龙洲9", "蔡龙洲10"};
+        String[] gc = {"张功锋1", "张功锋2", "张功锋3", "张功锋4", "张功锋5", "张功锋6", "张功锋7", "张功锋8", "张功锋9", "张功锋10"};
+        String[] bd = {"简煊祥1", "简煊祥2", "简煊祥3", "简煊祥4", "简煊祥5", "简煊祥6", "简煊祥7", "简煊祥8", "简煊祥9", "简煊祥10"};
+        String[] gx = {"朱化弟1", "朱化弟2", "朱化弟3", "朱化弟4", "朱化弟5", "朱化弟6", "朱化弟7", "朱化弟8", "朱化弟9", "朱化弟10"};
+        for (String obj1 : dl){
+            userMap.put(obj1, "地理信息部");
+        }
+        for (String obj2 : gc){
+            userMap.put(obj2, "工程测绘部");
+        }
+        for (String obj3 : bd){
+            userMap.put(obj3, "不动产测绘部");
+        }
+        for (String obj4 : gx){
+            userMap.put(obj4, "管线工程部");
+        }
+
+        for (SysProjectValue objTemp : list){
+            OperatingExport operatingExport = new OperatingExport();
+            if (userMap.containsKey(objTemp.getUserName())){
+                String dept = userMap.get(objTemp.getUserName());
+                operatingExport.setDept(dept);
+                operatingExport.setSettleTime(objTemp.getFqSysProject().getSettleTime());
+                operatingExport.setMoney(objTemp.getMoney());
+                operatingExport.setProfitMoney(objTemp.getProfitMoney());
+                operatingExportList.add(operatingExport);
+            }
+
+        }
+
+        Map<String, Map<Integer, BigDecimal>> result = operatingExportList.stream()
+                .filter(o -> o.getSettleTime() != null)
+                .collect(Collectors.groupingBy(
+                        OperatingExport::getDept, // 一级分组：部门
+                        Collectors.groupingBy(
+                                o -> {
+                                    // 从 Date 转换为月份（1~12）
+                                    LocalDate date = o.getSettleTime().toInstant().atZone(ZoneId.systemDefault()).toLocalDate();
+                                    return date.getMonthValue();
+                                },
+                                Collectors.mapping(
+                                        o -> Optional.ofNullable(o.getMoney()).orElse(BigDecimal.ZERO),
+                                        Collectors.reducing(BigDecimal.ZERO, BigDecimal::add)
+                                )
+                        )
+                ));
+
+        return result;
     }
+
 
 }

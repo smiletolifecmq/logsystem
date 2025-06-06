@@ -72,4 +72,8 @@ public interface SysProjectValueMapper
     public List<SysProjectValue> listProjectOperateTJForSpecialPersonnel(SysProject sysProject);
 
     public List<SysProjectValue> listProjectOperateValue(SysProject sysProject);
+
+    public List<SysProjectValue> listProjectHjMonth(SysProject sysProject);
+
+    public List<SysProjectValue> listProjectOperateTJForSpecialPersonnelMonth(SysProject sysProject);
 }

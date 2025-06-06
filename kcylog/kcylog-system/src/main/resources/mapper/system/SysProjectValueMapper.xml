@@ -18,6 +18,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 
     <resultMap type="SysProject" id="SysProjectResult">
         <result property="department"    column="department"    />
+        <result property="settleTime"    column="settle_time"    />
     </resultMap>
 
     <sql id="selectSysProjectValueVo">
@@ -148,5 +149,32 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
             </if>
         </where>
         group by a.user_name
+    </select>
+
+    <select id="listProjectHjMonth" parameterType="SysProject" resultMap="SysProjectValueResult">
+        select a.*, b.settle_time from sys_project_value a inner join sys_project b on a.project_id = b.project_id
+        <where>
+            <if test="tjStatus != null and tjStatus == 0">
+                and b.user_name_alias = #{userNameAlias}
+            </if>
+            <if test="tjStatus != null and tjStatus == 1">
+                and b.department = #{department}
+            </if>
+            and YEAR(b.settle_time) = YEAR(NOW())
+        </where>
+    </select>
+
+    <select id="listProjectOperateTJForSpecialPersonnelMonth" parameterType="SysProject" resultMap="SysProjectValueResult">
+        select a.*, b.department, b.settle_time from sys_project_value a inner join sys_project b on a.project_id = b.project_id
+        <where>
+            <if test="tjStatus != null and tjStatus == 0">
+                and b.user_name_alias = #{userNameAlias}
+            </if>
+            <if test="tjStatus != null and tjStatus == 1">
+                and b.department = #{department}
+            </if>
+            and YEAR(b.settle_time) = YEAR(NOW())
+            and a.user_name in ('谢小建','张众','梅接文', '黄延')
+        </where>
     </select>
 </mapper>
