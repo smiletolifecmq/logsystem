@@ -1514,7 +1514,53 @@ public class SysProjectController extends BaseController {
         }
 
         //年度完成经营产值
-        List<SysProject> rojectTj10 = sysProjectService.selectNdjycz(sysProject);
+        List<OperatingExport> operatingExportList = new ArrayList<>();
+        List<SysProjectValue> list1 = sysProjectValueService.listProjectHjMonth(sysProject);
+        List<SysProjectValue> listSpecial = sysProjectValueService.listProjectOperateTJForSpecialPersonnelMonth(sysProject);
+
+        for (SysProjectValue value1 : listSpecial){
+            OperatingExport operatingExport = new OperatingExport();
+            operatingExport.setSettleTime(value1.getFqSysProject().getSettleTime());
+            operatingExport.setDept(value1.getFqSysProject().getDepartment());
+            operatingExport.setMoney(value1.getMoney());
+            operatingExport.setProfitMoney(value1.getProfitMoney());
+            operatingExportList.add(operatingExport);
+        }
+        SysUser user1 = new SysUser();
+        List<SysUser> userList = sysUserService.selectUserList(user1);
+        Map<String, String> userMap = new HashMap<>();
+        for (SysUser obj : userList){
+            userMap.put(obj.getUserName(),obj.getDept().getDeptName());
+        }
+        String[] dl = {"蔡龙洲1", "蔡龙洲2", "蔡龙洲3", "蔡龙洲4", "蔡龙洲5", "蔡龙洲6", "蔡龙洲7", "蔡龙洲8", "蔡龙洲9", "蔡龙洲10"};
+        String[] gc = {"张功锋1", "张功锋2", "张功锋3", "张功锋4", "张功锋5", "张功锋6", "张功锋7", "张功锋8", "张功锋9", "张功锋10"};
+        String[] bd = {"简煊祥1", "简煊祥2", "简煊祥3", "简煊祥4", "简煊祥5", "简煊祥6", "简煊祥7", "简煊祥8", "简煊祥9", "简煊祥10"};
+        String[] gx = {"朱化弟1", "朱化弟2", "朱化弟3", "朱化弟4", "朱化弟5", "朱化弟6", "朱化弟7", "朱化弟8", "朱化弟9", "朱化弟10"};
+        for (String obj1 : dl){
+            userMap.put(obj1, "地理信息部");
+        }
+        for (String obj2 : gc){
+            userMap.put(obj2, "工程测绘部");
+        }
+        for (String obj3 : bd){
+            userMap.put(obj3, "不动产测绘部");
+        }
+        for (String obj4 : gx){
+            userMap.put(obj4, "管线工程部");
+        }
+
+        for (SysProjectValue objTemp : list1){
+            OperatingExport operatingExport = new OperatingExport();
+            if (userMap.containsKey(objTemp.getUserName())){
+                String dept = userMap.get(objTemp.getUserName());
+                operatingExport.setDept(dept);
+                operatingExport.setSettleTime(objTemp.getFqSysProject().getSettleTime());
+                operatingExport.setMoney(objTemp.getMoney());
+                operatingExport.setProfitMoney(objTemp.getProfitMoney());
+                operatingExportList.add(operatingExport);
+            }
+
+        }
         ProjectHJ projectHJ11 = new ProjectHJ();
         projectHJ11.setXmglwz("年度完成经营产值");
         projectHJ11.setGcchb(0);
@@ -1522,28 +1568,41 @@ public class SysProjectController extends BaseController {
         projectHJ11.setBdcchb(0);
         projectHJ11.setDlxxb(0);
         projectHJ11.setHj(0);
-        for (SysProject obj2 : rojectTj10){
-            switch (obj2.getDepartment()){
+        BigDecimal hj = BigDecimal.ZERO;
+        BigDecimal gcchb = BigDecimal.ZERO;
+        BigDecimal gxgcb = BigDecimal.ZERO;
+        BigDecimal bdcchb = BigDecimal.ZERO;
+        BigDecimal dlxxb = BigDecimal.ZERO;
+        for (OperatingExport obj2 : operatingExportList){
+            if (obj2.getMoney() == null){
+                continue;
+            }
+            switch (obj2.getDept()){
                 case "工程测绘部":
-                    projectHJ11.setGcchb(obj2.getMoneyhj().setScale(0, RoundingMode.HALF_UP).intValue());
-                    projectHJ11.setHj(projectHJ11.getHj() + obj2.getMoneyhj().setScale(0, RoundingMode.HALF_UP).intValue());
+                    hj = hj.add(obj2.getMoney());
+                    gcchb = gcchb.add(obj2.getMoney());
                     break;
                 case "管线工程部":
-                    projectHJ11.setGxgcb(obj2.getMoneyhj().setScale(0, RoundingMode.HALF_UP).intValue());
-                    projectHJ11.setHj(projectHJ11.getHj() + obj2.getMoneyhj().setScale(0, RoundingMode.HALF_UP).intValue());
+                    gxgcb = gxgcb.add(obj2.getMoney());
+                    hj = hj.add(obj2.getMoney());
                     break;
                 case "不动产测绘部":
-                    projectHJ11.setBdcchb(obj2.getMoneyhj().setScale(0, RoundingMode.HALF_UP).intValue());
-                    projectHJ11.setHj(projectHJ11.getHj() + obj2.getMoneyhj().setScale(0, RoundingMode.HALF_UP).intValue());
+                    bdcchb = bdcchb.add(obj2.getMoney());
+                    hj = hj.add(obj2.getMoney());
                     break;
                 case "地理信息部":
-                    projectHJ11.setDlxxb(obj2.getMoneyhj().setScale(0, RoundingMode.HALF_UP).intValue());
-                    projectHJ11.setHj(projectHJ11.getHj() + obj2.getMoneyhj().setScale(0, RoundingMode.HALF_UP).intValue());
+                    dlxxb = dlxxb.add(obj2.getMoney());
+                    hj = hj.add(obj2.getMoney());
                     break;
                 default:
                     break;
             }
         }
+        projectHJ11.setGcchb(gcchb.setScale(0, RoundingMode.HALF_UP).intValue());
+        projectHJ11.setGxgcb(gxgcb.setScale(0, RoundingMode.HALF_UP).intValue());
+        projectHJ11.setBdcchb(bdcchb.setScale(0, RoundingMode.HALF_UP).intValue());
+        projectHJ11.setDlxxb(dlxxb.setScale(0, RoundingMode.HALF_UP).intValue());
+        projectHJ11.setHj(hj.setScale(0, RoundingMode.HALF_UP).intValue());
 
         //年度完成经营净产值（扣分包）
         ProjectHJ projectHJ12 = new ProjectHJ();
@@ -1553,28 +1612,42 @@ public class SysProjectController extends BaseController {
         projectHJ12.setBdcchb(0);
         projectHJ12.setDlxxb(0);
         projectHJ12.setHj(0);
-        for (SysProject obj2 : rojectTj10){
-            switch (obj2.getDepartment()){
+
+        BigDecimal hjll = BigDecimal.ZERO;
+        BigDecimal gcchbll = BigDecimal.ZERO;
+        BigDecimal gxgcbll = BigDecimal.ZERO;
+        BigDecimal bdcchbll = BigDecimal.ZERO;
+        BigDecimal dlxxbll = BigDecimal.ZERO;
+        for (OperatingExport obj2 : operatingExportList){
+            if (obj2.getProfitMoney() == null){
+                continue;
+            }
+            switch (obj2.getDept()){
                 case "工程测绘部":
-                    projectHJ12.setGcchb(obj2.getProfitMoneyHj().setScale(0, RoundingMode.HALF_UP).intValue());
-                    projectHJ12.setHj(projectHJ12.getHj() + obj2.getProfitMoneyHj().setScale(0, RoundingMode.HALF_UP).intValue());
+                    hjll = hjll.add(obj2.getProfitMoney());
+                    gcchbll = gcchbll.add(obj2.getProfitMoney());
                     break;
                 case "管线工程部":
-                    projectHJ12.setGxgcb(obj2.getProfitMoneyHj().setScale(0, RoundingMode.HALF_UP).intValue());
-                    projectHJ12.setHj(projectHJ12.getHj() + obj2.getProfitMoneyHj().setScale(0, RoundingMode.HALF_UP).intValue());
+                    gxgcbll = gxgcbll.add(obj2.getProfitMoney());
+                    hjll = hjll.add(obj2.getProfitMoney());
                     break;
                 case "不动产测绘部":
-                    projectHJ12.setBdcchb(obj2.getProfitMoneyHj().setScale(0, RoundingMode.HALF_UP).intValue());
-                    projectHJ12.setHj(projectHJ12.getHj() + obj2.getProfitMoneyHj().setScale(0, RoundingMode.HALF_UP).intValue());
+                    bdcchbll = bdcchbll.add(obj2.getProfitMoney());
+                    hjll = hjll.add(obj2.getProfitMoney());
                     break;
                 case "地理信息部":
-                    projectHJ12.setDlxxb(obj2.getProfitMoneyHj().setScale(0, RoundingMode.HALF_UP).intValue());
-                    projectHJ12.setHj(projectHJ12.getHj() + obj2.getProfitMoneyHj().setScale(0, RoundingMode.HALF_UP).intValue());
+                    dlxxbll = dlxxbll.add(obj2.getProfitMoney());
+                    hjll = hjll.add(obj2.getProfitMoney());
                     break;
                 default:
                     break;
             }
         }
+        projectHJ12.setGcchb(gcchbll.setScale(0, RoundingMode.HALF_UP).intValue());
+        projectHJ12.setGxgcb(gxgcbll.setScale(0, RoundingMode.HALF_UP).intValue());
+        projectHJ12.setBdcchb(bdcchbll.setScale(0, RoundingMode.HALF_UP).intValue());
+        projectHJ12.setDlxxb(dlxxbll.setScale(0, RoundingMode.HALF_UP).intValue());
+        projectHJ12.setHj(hjll.setScale(0, RoundingMode.HALF_UP).intValue());
 
         //项目工期超期
         List<SysProject> rojectTj11 = sysProjectService.selectXMCQ(sysProject);
