@@ -1331,6 +1331,9 @@ public class SysProjectController extends BaseController {
         projectHJ5.setDlxxb(0);
         projectHJ5.setHj(0);
         for (SysProject obj2 : rojectTj4){
+            if (obj2.getYgmoney() == null) {
+                continue;
+            }
             switch (obj2.getDepartment()){
                 case "工程测绘部":
                     projectHJ5.setGcchb(obj2.getYgmoney().setScale(0, RoundingMode.HALF_UP).intValue());
