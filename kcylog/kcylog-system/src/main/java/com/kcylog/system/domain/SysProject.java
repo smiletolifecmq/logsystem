@@ -256,6 +256,16 @@ public class SysProject extends BaseEntity
 
     private String deptName;
 
+    private Date ygtime;
+
+    public Date getYgtime() {
+        return ygtime;
+    }
+
+    public void setYgtime(Date ygtime) {
+        this.ygtime = ygtime;
+    }
+
     public Integer getMonthhj() {
         return monthhj;
     }

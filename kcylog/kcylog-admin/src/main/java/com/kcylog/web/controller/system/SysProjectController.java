@@ -7,6 +7,7 @@ import com.kcylog.common.core.domain.AjaxResult;
 import com.kcylog.common.core.domain.entity.SysUser;
 import com.kcylog.common.core.page.TableDataInfo;
 import com.kcylog.common.enums.BusinessType;
+import com.kcylog.common.utils.DateUtils;
 import com.kcylog.common.utils.poi.ExcelMultUtil;
 import com.kcylog.common.utils.poi.ExcelUtil;
 import com.kcylog.system.common.*;
@@ -1170,6 +1171,7 @@ public class SysProjectController extends BaseController {
         SysProject obj = new SysProject();
         obj.setYgmoney(sysProject.getYgmoney());
         obj.setProjectId(sysProject.getProjectId());
+        obj.setYgtime(DateUtils.getNowDate());
         sysProjectService.updateSysProject(obj);
         return toAjax(1);
     }

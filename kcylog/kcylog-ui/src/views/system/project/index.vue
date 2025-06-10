@@ -302,7 +302,7 @@
       >
       <el-table-column
         width="70"
-        label="预估经营产值"
+        label="部门生产经营产值"
         align="center"
         prop="ygmoney"
       >
@@ -436,8 +436,9 @@
             type="text"
             icon="el-icon-edit"
             @click="handleUpdate(scope.row)"
+            v-if="showjycz(scope.row)"
             v-hasPermi="['system:project:editygmoney']"
-            >填写预估产值</el-button
+            >填写经营产值</el-button
           >
           <el-button
             size="mini"
@@ -499,18 +500,18 @@
 
     <!-- 添加或修改项目对话框 -->
     <el-dialog
-      title="预估产值金额"
+      title="填写经营产值金额"
       :visible.sync="open"
-      width="600px"
+      width="800px"
       append-to-body
     >
-      <el-form ref="form" :model="form" :rules="rules" label-width="120px">
-        <el-form-item label="预估产值金额(元)" prop="ygmoney">
+      <el-form ref="form" :model="form" :rules="rules" label-width="210px">
+        <el-form-item label="部门生产经营产值金额(元)" prop="ygmoney">
           <el-input-number
             v-model="form.ygmoney"
             :precision="2"
             :min="0"
-            placeholder="请输入预估产值金额"
+            placeholder="部门生产经营产值金额"
           ></el-input-number>
         </el-form-item>
       </el-form>
@@ -1730,6 +1731,12 @@ export default {
     );
   },
   methods: {
+    showjycz(value) {
+      if (value.ygmoney != null && value.ygmoney != undefined) {
+        return false;
+      }
+      return true;
+    },
     changeLx() {
       this.fwxform.gclx = this.lxValue[0];
       this.fwxform.lx = this.lxValue[1];

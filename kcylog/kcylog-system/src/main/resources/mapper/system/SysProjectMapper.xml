@@ -66,6 +66,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
         <result property="bjRemark" column="bj_remark"/>
         <result property="drawStatus" column="draw_status"/>
         <result property="ygmoney" column="ygmoney"/>
+        <result property="ygtime" column="ygtime"/>
         <result property="cgsdtime" column="cgsdtime"/>
         <result property="num" column="num"/>
 
@@ -338,6 +339,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
             <if test="bjRemark != null">bj_remark = #{bjRemark},</if>
             <if test="ygmoney != null">ygmoney = #{ygmoney},</if>
             <if test="cgsdtime != null">cgsdtime = #{cgsdtime},</if>
+            <if test="ygtime != null">ygtime = #{ygtime},</if>
         </trim>
         where project_id = #{projectId}
     </update>
@@ -915,13 +917,10 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
         sys_project
         <where>
             <if test="params.beginTime != null and params.beginTime != ''"><!-- 开始时间检索 -->
-                and (date_format(register_time,'%y%m%d') &gt;= date_format(#{params.beginTime},'%y%m%d'))
+                and (date_format(ygtime,'%y%m%d') &gt;= date_format(#{params.beginTime},'%y%m%d'))
             </if>
             <if test="params.endTime != null and params.endTime != ''"><!-- 结束时间检索 -->
-                and (date_format(register_time,'%y%m%d') &lt;= date_format(#{params.endTime},'%y%m%d'))
-            </if>
-            <if test="params.endTime == null or params.endTime == ''"><!-- 结束时间检索 -->
-                and register_time is not null and register_time != ''
+                and (date_format(ygtime,'%y%m%d') &lt;= date_format(#{params.endTime},'%y%m%d'))
             </if>
             <if test="tjStatus != null and tjStatus == 0">
                 and user_name_alias = #{userNameAlias}
