@@ -1218,15 +1218,6 @@ export default {
     this.getList();
     this.getStatisticsData();
     this.getCqData();
-    var currentDate = new Date();
-    var currentMonth = currentDate.getMonth() + 1; // 月份从0开始，所以需要加1
-
-    // 计算上一个月的月份
-    var prevMonth = currentMonth;
-    if (prevMonth === 0) {
-      prevMonth = 12;
-    }
-    this.labelValue = this.labelValue + prevMonth + "月份-已办结";
   },
   methods: {
     showFetailXt(value) {
@@ -1395,7 +1386,31 @@ export default {
       });
     },
     getStatisticsData() {
+      this.statisticsData = [];
+      this.labelValue = "类型-";
       var range = getLastMonthRange();
+      var currentDate = new Date();
+      var currentMonth = currentDate.getMonth() + 1; // 月份从0开始，所以需要加1
+
+      // 计算上一个月的月份
+      var prevMonth = currentMonth;
+      if (prevMonth === 0) {
+        prevMonth = 12;
+      }
+      this.labelValue = this.labelValue + prevMonth + "月份-已办结";
+      if (
+        this.dateRange != null &&
+        this.dateRange != undefined &&
+        this.dateRange.length !== 0
+      ) {
+        range.firstDay = this.dateRange[0];
+        range.lastDay = this.dateRange[1];
+        const startMonth = new Date(this.dateRange[0]).getMonth() + 1;
+        const endMonth = new Date(this.dateRange[1]).getMonth() + 1;
+        this.labelValue = "类型-";
+        this.labelValue =
+          this.labelValue + startMonth + "至" + endMonth + "月份-已办结";
+      }
       var dateRangeTemp = [];
       dateRangeTemp[0] = range.firstDay;
       dateRangeTemp[1] = range.lastDay;
@@ -1451,7 +1466,6 @@ export default {
           numData.dlxxbWork = myMap.get("地理信息部").profitMoney.toFixed(2);
         }
         this.statisticsData.push(numData);
-        console.log(this.statisticsData);
       });
     },
     calculateLaborSub(value) {
@@ -1600,6 +1614,7 @@ export default {
     },
     /** 搜索按钮操作 */
     handleQuery() {
+      this.getStatisticsData();
       this.queryParams.pageNum = 1;
       this.getList();
     },
