@@ -824,6 +824,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
             <if test="tjStatus != null and tjStatus == 1">
                 and department = #{department}
             </if>
+            and YEAR(register_time) = YEAR(NOW())
         </where>
         GROUP BY department;
     </select>
@@ -877,6 +878,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
                 and b.dept_id = #{deptId}
             </if>
             AND ( b.sub_type = 1 OR b.sub_type = 2 )
+            and YEAR(b.lot_time) = YEAR(NOW())
         </where>
         GROUP BY
         b.dept_id
@@ -904,6 +906,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
             <if test="tjStatus != null and tjStatus == 1">
                 and department = #{department}
             </if>
+            and YEAR(do_time) = YEAR(NOW())
         </where>
         GROUP BY
         department
@@ -928,6 +931,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
             <if test="tjStatus != null and tjStatus == 1">
                 and department = #{department}
             </if>
+            and YEAR(ygtime) = YEAR(NOW())
         </where>
         GROUP BY
         department
@@ -955,6 +959,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
             <if test="tjStatus != null and tjStatus == 1">
                 and department = #{department}
             </if>
+            and YEAR(one_check) = YEAR(NOW())
         </where>
         GROUP BY
         department
@@ -982,6 +987,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
             <if test="tjStatus != null and tjStatus == 1">
                 and department = #{department}
             </if>
+            and YEAR(two_check) = YEAR(NOW())
         </where>
         GROUP BY
         department
@@ -1010,6 +1016,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
             <if test="tjStatus != null and tjStatus == 1">
                 and b.department = #{department}
             </if>
+            and YEAR(a.receive_time) = YEAR(NOW())
         </where>
         GROUP BY b.department
     </select>
@@ -1036,6 +1043,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
             <if test="tjStatus != null and tjStatus == 1">
                 and department = #{department}
             </if>
+            and YEAR(cgsdtime) = YEAR(NOW())
         </where>
         GROUP BY
         department
