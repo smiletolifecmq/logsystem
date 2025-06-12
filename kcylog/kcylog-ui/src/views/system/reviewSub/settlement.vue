@@ -131,6 +131,14 @@
           <el-button
             size="mini"
             type="text"
+            icon="el-icon-user"
+            @click="handlePeopleExport(scope.row)"
+            >人员明细导出</el-button
+          >
+
+          <el-button
+            size="mini"
+            type="text"
             icon="el-icon-success"
             v-if="showButton(scope.row)"
             @click="confirmSettlementInfo(scope.row)"
@@ -250,6 +258,17 @@ export default {
         settlement.settlementName + `_部门_${new Date().getTime()}.xlsx`
       );
     },
+
+    handlePeopleExport(settlement) {
+      this.queryParamsExport.settlementId = settlement.settlementId;
+      this.queryParamsExport.status = 4;
+      this.download(
+        "system/reviewSub/exportPeople",
+        { ...this.queryParamsExport },
+        settlement.settlementName + `_人员明细_${new Date().getTime()}.xlsx`
+      );
+    },
+
     handleEmployeeExport(settlement) {
       this.queryParamsExport.settlementId = settlement.settlementId;
       this.download(

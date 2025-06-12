@@ -1162,4 +1162,124 @@ public class SysReviewSubController extends BaseController
         }
         return success(review);
     }
+
+    @PostMapping("/exportPeople")
+    public void exportPeople(HttpServletResponse response, SysReviewSub sysReviewSub)
+    {
+        List<SysReviewSub> list = sysReviewSubService.selectSysReviewSubListBySettlementId(sysReviewSub);
+        int num = 0;
+        List<SysReviewSub> sysReviewObjList = new ArrayList<>();
+        for (SysReviewSub sysReviewTemp:list){
+            List<SysReviewSubEmployee> reviewEmployee = sysReviewEmployeeService.selectSysReviewSubEmployeeByReviewId(sysReviewTemp.getReviewId());
+            for (SysReviewSubEmployee employee:reviewEmployee){
+                SysReviewSub sysReviewObj = new SysReviewSub();
+                sysReviewObj.setSerialNum(sysReviewTemp.getSerialNum());
+                sysReviewObj.setProjectName(sysReviewTemp.getProjectName());
+                sysReviewObj.setWorkload(employee.getWorkTime());
+                sysReviewObj.setHiredWorkerName(employee.getName());
+                sysReviewObjList.add(sysReviewObj);
+            }
+        }
+
+        Workbook workbook = new XSSFWorkbook();
+        CellStyle wrapCellStyle = workbook.createCellStyle();
+        Sheet sheet = this.integrateExcelPeople(workbook, wrapCellStyle);
+
+        sysReviewObjList.sort(Comparator.comparing(SysReviewSub::getHiredWorkerName));
+        int rowIndex = 2; // 从第二行开始，留给行头
+        for (SysReviewSub sysReviewTemp : sysReviewObjList) {
+            Row row = sheet.createRow(rowIndex);
+            num ++;
+            Cell cell1 = row.createCell(0);
+            cell1.setCellValue(num);
+            cell1.setCellStyle(wrapCellStyle);
+
+            Cell cell2 = row.createCell(1);
+            cell2.setCellValue(sysReviewTemp.getSerialNum());
+            cell2.setCellStyle(wrapCellStyle);
+
+            Cell cell3 = row.createCell(2);
+            cell3.setCellValue(sysReviewTemp.getProjectName());
+            cell3.setCellStyle(wrapCellStyle);
+
+            Cell cell4 = row.createCell(3);
+            cell4.setCellValue(sysReviewTemp.getWorkload());
+            cell4.setCellStyle(wrapCellStyle);
+
+            Cell cell5 = row.createCell(4);
+            cell5.setCellValue(sysReviewTemp.getHiredWorkerName());
+            cell5.setCellStyle(wrapCellStyle);
+
+            rowIndex++;
+        }
+
+        try (OutputStream outputStream = response.getOutputStream()) {
+            workbook.write(outputStream);
+            workbook.close();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
+
+    private Sheet integrateExcelPeople(Workbook workbook, CellStyle wrapCellStyle){
+        wrapCellStyle.setWrapText(true);
+        wrapCellStyle.setVerticalAlignment(VerticalAlignment.CENTER); // 设置垂直居中对齐
+        wrapCellStyle.setAlignment(HorizontalAlignment.CENTER); // 设置水平居中对齐
+        wrapCellStyle.setBorderTop(BorderStyle.THIN);
+        wrapCellStyle.setBorderRight(BorderStyle.THIN);
+        wrapCellStyle.setBorderBottom(BorderStyle.THIN);
+        wrapCellStyle.setBorderLeft(BorderStyle.THIN);
+        wrapCellStyle.setTopBorderColor(IndexedColors.BLACK.getIndex());
+        wrapCellStyle.setRightBorderColor(IndexedColors.BLACK.getIndex());
+        wrapCellStyle.setBottomBorderColor(IndexedColors.BLACK.getIndex());
+        wrapCellStyle.setLeftBorderColor(IndexedColors.BLACK.getIndex());
+
+        Sheet sheet = workbook.createSheet("Sheet1");
+        // 合并第一行的5个单元格
+        sheet.addMergedRegion(new CellRangeAddress(0, 0, 0, 4));
+
+        // 创建第一行，并设置行高
+        Row headerRowTemp = sheet.createRow(0);
+        headerRowTemp.setHeight((short) 500); // 设置行高，这里设置为500个点
+
+        // 创建第一个合并后的单元格
+        Cell mergedCell = headerRowTemp.createCell(0);
+        mergedCell.setCellValue("人员产值结算明细表");
+        mergedCell.setCellStyle(wrapCellStyle); // 应用居中对齐的样式
+        // 设置合并后的单元格边框颜色为白色
+        RegionUtil.setBorderTop(BorderStyle.THIN, new CellRangeAddress(0, 0, 0, 4), sheet);
+        RegionUtil.setTopBorderColor(IndexedColors.WHITE.getIndex(), new CellRangeAddress(0, 0, 0, 4), sheet);
+        RegionUtil.setBorderRight(BorderStyle.THIN, new CellRangeAddress(0, 0, 0, 4), sheet);
+        RegionUtil.setRightBorderColor(IndexedColors.WHITE.getIndex(), new CellRangeAddress(0, 0, 0, 4), sheet);
+        RegionUtil.setBorderBottom(BorderStyle.THIN, new CellRangeAddress(0, 0, 0, 4), sheet);
+        RegionUtil.setBottomBorderColor(IndexedColors.WHITE.getIndex(), new CellRangeAddress(0, 0, 0, 4), sheet);
+        RegionUtil.setBorderLeft(BorderStyle.THIN, new CellRangeAddress(0, 0, 0, 4), sheet);
+        RegionUtil.setLeftBorderColor(IndexedColors.WHITE.getIndex(), new CellRangeAddress(0, 0, 0, 4), sheet);
+
+        // 设置行头
+        Row headerRow = sheet.createRow(1);
+        Cell headerCell1 = headerRow.createCell(0);
+        headerCell1.setCellValue("序号");
+        headerCell1.setCellStyle(wrapCellStyle);
+        Cell headerCell2 = headerRow.createCell(1);
+        headerCell2.setCellValue("项目编号");
+        headerCell2.setCellStyle(wrapCellStyle);
+
+        Cell headerCell3 = headerRow.createCell(2);
+        headerCell3.setCellValue("项目名称");
+        headerCell3.setCellStyle(wrapCellStyle);
+        Cell headerCell4 = headerRow.createCell(3);
+        headerCell4.setCellValue("工作量");
+        headerCell4.setCellStyle(wrapCellStyle);
+        Cell headerCell5 = headerRow.createCell(4);
+        headerCell5.setCellValue("姓名");
+        headerCell5.setCellStyle(wrapCellStyle);
+
+        sheet.setColumnWidth(1, 5000);
+        sheet.setColumnWidth(2, 17000); // 设置第一列宽度
+        sheet.setColumnWidth(3, 15000);
+        sheet.setColumnWidth(4, 9000);
+        return sheet;
+    }
+
 }
