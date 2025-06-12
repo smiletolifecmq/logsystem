@@ -1546,11 +1546,17 @@ export default {
         pageNum: 1,
         pageSize: 9999,
         gzStatus: -1,
+        projectNameAlias: null,
+        projectNum: null,
+        requesterAlias: null,
       },
       queryOverTimeParams: {
         pageNum: 1,
         pageSize: 9999,
         gzStatus: -1,
+        projectNameAlias: null,
+        projectNum: null,
+        requesterAlias: null,
       },
       queryParams: {
         pageNum: 1,
@@ -1833,6 +1839,10 @@ export default {
     },
     handleOverTimeOpen(value, num) {
       this.queryOverTimeParams.department = value;
+      this.queryOverTimeParams.projectNameAlias =
+        this.queryParams.projectNameAlias;
+      this.queryOverTimeParams.projectNum = this.queryParams.projectNum;
+      this.queryOverTimeParams.requesterAlias = this.queryParams.requesterAlias;
       listProject(this.addDateRange(this.queryOverTimeParams)).then(
         (response) => {
           this.overTimeProjectList = [];
@@ -1862,6 +1872,7 @@ export default {
       this.overTimeOpen = true;
     },
     getStatisticsData() {
+      this.statisticsData = [];
       listProject(this.addDateRange(this.queryStatisticsParams)).then(
         (response) => {
           const project = response.rows;
@@ -2417,6 +2428,12 @@ export default {
     handleQuery() {
       this.queryParams.pageNum = 1;
       this.getList();
+      this.queryStatisticsParams.projectNameAlias =
+        this.queryParams.projectNameAlias;
+      this.queryStatisticsParams.projectNum = this.queryParams.projectNum;
+      this.queryStatisticsParams.requesterAlias =
+        this.queryParams.requesterAlias;
+      this.getStatisticsData();
     },
     /** 重置按钮操作 */
     resetQuery() {
