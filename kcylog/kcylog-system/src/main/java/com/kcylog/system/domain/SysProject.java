@@ -254,9 +254,19 @@ public class SysProject extends BaseEntity
 
     private Long userId;
 
+    private Long cjstatus;
+
     private String deptName;
 
     private Date ygtime;
+
+    public Long getCjstatus() {
+        return cjstatus;
+    }
+
+    public void setCjstatus(Long cjstatus) {
+        this.cjstatus = cjstatus;
+    }
 
     public Date getYgtime() {
         return ygtime;

@@ -248,7 +248,7 @@ export default {
       listProjectHj(
         this.addDateRange(this.queryParamsHz, this.dateRangeHz)
       ).then((response) => {
-        this.hztjData = response.rows;
+        this.hztjData = response.rows.slice(0, 18);
       });
     },
     /** 查询项目列表 */

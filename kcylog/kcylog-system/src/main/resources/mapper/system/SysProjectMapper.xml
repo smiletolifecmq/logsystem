@@ -69,6 +69,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
         <result property="ygtime" column="ygtime"/>
         <result property="cgsdtime" column="cgsdtime"/>
         <result property="num" column="num"/>
+        <result property="cjstatus" column="cjstatus"/>
 
         <result property="moneyhj" column="moneyhj"/>
         <result property="profitMoneyHj" column="profit_money_hj"/>
@@ -250,6 +251,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
             <if test="contractNo != null">contract_no,</if>
             <if test="contractAmount != null">contract_amount,</if>
             <if test="ygmoney != null">ygmoney,</if>
+            <if test="cjstatus != null">cjstatus,</if>
          </trim>
         <trim prefix="values (" suffix=")" suffixOverrides=",">
             <if test="projectNameAlias != null and projectNameAlias != ''">#{projectNameAlias},</if>
@@ -297,6 +299,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
             <if test="contractNo != null">#{contractNo},</if>
             <if test="contractAmount != null">#{contractAmount},</if>
             <if test="ygmoney != null">#{ygmoney},</if>
+            <if test="cjstatus != null">#{cjstatus},</if>
          </trim>
     </insert>
 
@@ -562,6 +565,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
             <if test="viewProjectId != null">view_project_id = #{viewProjectId},</if>
             <if test="contractNo != null">contract_no = #{contractNo},</if>
             <if test="contractAmount != null">contract_amount = #{contractAmount},</if>
+            <if test="cjstatus != null">cjstatus = #{cjstatus},</if>
         </trim>
         where view_project_id = #{viewProjectId}
     </update>
@@ -1217,6 +1221,19 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
             and YEAR(settle_time) = YEAR(NOW())
         </where>
         order by p.project_id desc
+    </select>
+
+    <select id="selectRwapzList"  parameterType="SysProject" resultMap="SysProjectResult">
+        SELECT * FROM sys_project
+        <where>
+            <if test="tjStatus != null and tjStatus == 0">
+                and user_name_alias = #{userNameAlias}
+            </if>
+            <if test="tjStatus != null and tjStatus == 1">
+                and department = #{department}
+            </if>
+            and YEAR(register_time) = YEAR(NOW())
+        </where>
     </select>
 
 </mapper>

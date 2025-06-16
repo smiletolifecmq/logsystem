@@ -1846,6 +1846,201 @@ public class SysProjectController extends BaseController {
             }
         }
 
+
+        //占比数据统计
+        ProjectHJ projectHJ19 = new ProjectHJ();
+        projectHJ19.setXmglwz("作业中-本年度");
+        projectHJ19.setGcchb(0);
+        projectHJ19.setGxgcb(0);
+        projectHJ19.setBdcchb(0);
+        projectHJ19.setDlxxb(0);
+        projectHJ19.setHj(0);
+
+        ProjectHJ projectHJ20 = new ProjectHJ();
+        projectHJ20.setXmglwz("项目分包-本年度");
+        projectHJ20.setGcchb(0);
+        projectHJ20.setGxgcb(0);
+        projectHJ20.setBdcchb(0);
+        projectHJ20.setDlxxb(0);
+        projectHJ20.setHj(0);
+
+        ProjectHJ projectHJ21 = new ProjectHJ();
+        projectHJ21.setXmglwz("作业办结-本年度");
+        projectHJ21.setGcchb(0);
+        projectHJ21.setGxgcb(0);
+        projectHJ21.setBdcchb(0);
+        projectHJ21.setDlxxb(0);
+        projectHJ21.setHj(0);
+
+        ProjectHJ projectHJ22 = new ProjectHJ();
+        projectHJ22.setXmglwz("一检办结-本年度");
+        projectHJ22.setGcchb(0);
+        projectHJ22.setGxgcb(0);
+        projectHJ22.setBdcchb(0);
+        projectHJ22.setDlxxb(0);
+        projectHJ22.setHj(0);
+
+        ProjectHJ projectHJ23 = new ProjectHJ();
+        projectHJ23.setXmglwz("二检办结-本年度");
+        projectHJ23.setGcchb(0);
+        projectHJ23.setGxgcb(0);
+        projectHJ23.setBdcchb(0);
+        projectHJ23.setDlxxb(0);
+        projectHJ23.setHj(0);
+
+        ProjectHJ projectHJ24 = new ProjectHJ();
+        projectHJ24.setXmglwz("项目出件-本年度");
+        projectHJ24.setGcchb(0);
+        projectHJ24.setGxgcb(0);
+        projectHJ24.setBdcchb(0);
+        projectHJ24.setDlxxb(0);
+        projectHJ24.setHj(0);
+
+        ProjectHJ projectHJ25 = new ProjectHJ();
+        projectHJ25.setXmglwz("成果送达-本年度");
+        projectHJ25.setGcchb(0);
+        projectHJ25.setGxgcb(0);
+        projectHJ25.setBdcchb(0);
+        projectHJ25.setDlxxb(0);
+        projectHJ25.setHj(0);
+
+        List<SysProject> rojectTjListObj = sysProjectService.selectRwapzList(sysProject);
+        for (SysProject obj1 : rojectTjListObj){
+            if (obj1.getStatus() != null && obj1.getStatus() != 2 && obj1.getStatus() != 3 && obj1.getWorkStatus() != 4){
+                switch (obj1.getDepartment()){
+                    case "工程测绘部":
+                        projectHJ19.setGcchb(projectHJ19.getGcchb() + 1);
+                        break;
+                    case "管线工程部":
+                        projectHJ19.setGxgcb(projectHJ19.getGxgcb() + 1);
+                        break;
+                    case "不动产测绘部":
+                        projectHJ19.setBdcchb(projectHJ19.getBdcchb() + 1);
+                        break;
+                    case "地理信息部":
+                        projectHJ19.setDlxxb(projectHJ19.getDlxxb() + 1);
+                        break;
+                    default:
+                        break;
+                }
+            }
+
+            if (obj1.getDrawStatus() != null && obj1.getDrawStatus() == 1){
+                switch (obj1.getDepartment()){
+                    case "工程测绘部":
+                        projectHJ20.setGcchb(projectHJ20.getGcchb() + 1);
+                        break;
+                    case "管线工程部":
+                        projectHJ20.setGxgcb(projectHJ20.getGxgcb() + 1);
+                        break;
+                    case "不动产测绘部":
+                        projectHJ20.setBdcchb(projectHJ20.getBdcchb() + 1);
+                        break;
+                    case "地理信息部":
+                        projectHJ20.setDlxxb(projectHJ20.getDlxxb() + 1);
+                        break;
+                    default:
+                        break;
+                }
+            }
+
+            if (obj1.getDoTime() != null && !Objects.equals(obj1.getDoTime(), "")){
+                switch (obj1.getDepartment()){
+                    case "工程测绘部":
+                        projectHJ21.setGcchb(projectHJ21.getGcchb() + 1);
+                        break;
+                    case "管线工程部":
+                        projectHJ21.setGxgcb(projectHJ21.getGxgcb() + 1);
+                        break;
+                    case "不动产测绘部":
+                        projectHJ21.setBdcchb(projectHJ21.getBdcchb() + 1);
+                        break;
+                    case "地理信息部":
+                        projectHJ21.setDlxxb(projectHJ21.getDlxxb() + 1);
+                        break;
+                    default:
+                        break;
+                }
+            }
+
+            if (obj1.getOneCheck() != null && !Objects.equals(obj1.getOneCheck(), "")){
+                switch (obj1.getDepartment()){
+                    case "工程测绘部":
+                        projectHJ22.setGcchb(projectHJ22.getGcchb() + 1);
+                        break;
+                    case "管线工程部":
+                        projectHJ22.setGxgcb(projectHJ22.getGxgcb() + 1);
+                        break;
+                    case "不动产测绘部":
+                        projectHJ22.setBdcchb(projectHJ22.getBdcchb() + 1);
+                        break;
+                    case "地理信息部":
+                        projectHJ22.setDlxxb(projectHJ22.getDlxxb() + 1);
+                        break;
+                    default:
+                        break;
+                }
+            }
+
+            if (obj1.getTwoCheck() != null && !Objects.equals(obj1.getTwoCheck(), "")){
+                switch (obj1.getDepartment()){
+                    case "工程测绘部":
+                        projectHJ23.setGcchb(projectHJ23.getGcchb() + 1);
+                        break;
+                    case "管线工程部":
+                        projectHJ23.setGxgcb(projectHJ23.getGxgcb() + 1);
+                        break;
+                    case "不动产测绘部":
+                        projectHJ23.setBdcchb(projectHJ23.getBdcchb() + 1);
+                        break;
+                    case "地理信息部":
+                        projectHJ23.setDlxxb(projectHJ23.getDlxxb() + 1);
+                        break;
+                    default:
+                        break;
+                }
+            }
+
+            if (obj1.getCjstatus() != null && obj1.getCjstatus() == 1){
+                switch (obj1.getDepartment()){
+                    case "工程测绘部":
+                        projectHJ24.setGcchb(projectHJ24.getGcchb() + 1);
+                        break;
+                    case "管线工程部":
+                        projectHJ24.setGxgcb(projectHJ24.getGxgcb() + 1);
+                        break;
+                    case "不动产测绘部":
+                        projectHJ24.setBdcchb(projectHJ24.getBdcchb() + 1);
+                        break;
+                    case "地理信息部":
+                        projectHJ24.setDlxxb(projectHJ24.getDlxxb() + 1);
+                        break;
+                    default:
+                        break;
+                }
+            }
+
+            if (obj1.getCgsdtime() != null){
+                switch (obj1.getDepartment()){
+                    case "工程测绘部":
+                        projectHJ25.setGcchb(projectHJ25.getGcchb() + 1);
+                        break;
+                    case "管线工程部":
+                        projectHJ25.setGxgcb(projectHJ25.getGxgcb() + 1);
+                        break;
+                    case "不动产测绘部":
+                        projectHJ25.setBdcchb(projectHJ25.getBdcchb() + 1);
+                        break;
+                    case "地理信息部":
+                        projectHJ25.setDlxxb(projectHJ25.getDlxxb() + 1);
+                        break;
+                    default:
+                        break;
+                }
+            }
+        }
+
+
         projectHJ.add(projectHJ1);
         projectHJ.add(projectHJ2);
         projectHJ.add(projectHJ3);
@@ -1864,6 +2059,14 @@ public class SysProjectController extends BaseController {
         projectHJ.add(projectHJ16);
         projectHJ.add(projectHJ17);
         projectHJ.add(projectHJ18);
+        projectHJ.add(projectHJ19);
+        projectHJ.add(projectHJ20);
+        projectHJ.add(projectHJ21);
+        projectHJ.add(projectHJ22);
+        projectHJ.add(projectHJ23);
+        projectHJ.add(projectHJ24);
+        projectHJ.add(projectHJ25);
+
         return getDataTable(projectHJ);
     }
 

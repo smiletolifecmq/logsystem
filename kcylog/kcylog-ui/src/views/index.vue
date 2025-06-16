@@ -24,6 +24,13 @@
         </li> -->
       </ul>
     </div>
+    <div class="co-body-sup" style="background-color: #042c63">
+      <ul style="list-style-type: none; margin-top: -1rem">
+        <li class="co-mid-item1">
+          <Item7 ref="Item1Ref" :hztj-data="hztjData"></Item7>
+        </li>
+      </ul>
+    </div>
   </div>
 </template>
 
@@ -33,6 +40,7 @@ import Item1 from "./system/administration/item1.vue";
 import Item2 from "./system/administration/item2.vue";
 import Item3 from "./system/administration/item3.vue";
 import Item5 from "./system/administration/item5.vue";
+import Item7 from "./system/administration/item7.vue";
 import { listProjectHj } from "@/api/system/project";
 
 export default {
@@ -43,6 +51,7 @@ export default {
     Item2,
     Item3,
     Item5,
+    Item7,
   },
   data() {
     return {

@@ -260,7 +260,7 @@ public class MqConsume {
                         }
                     }
                 }
-
+                List<ViewFqProjectArchiveTransferTrack> projectArchiveTransferTrackList = viewFqProjectArchiveTransferTrackService.selectViewFqProjectArchiveTransferTrackListByProjectId(Long.parseLong(mqMessage.getProjectId()));
                 if (mqMessage.getOpType().equals("DELETE") || mqMessage.getOpType().equals("PROJECT_INVALID") || mqMessage.getOpType().equals("PROJECT_HANG") || mqMessage.getOpType().equals("PROJECT_DELETE")){
                     if (sysProjectService.checkProjectKeyUniqueByViewProjectId(mqMessage.getProjectId()) != null) {
                         sysProject.setProjectId(sysProjectService.checkProjectKeyUniqueByViewProjectId(mqMessage.getProjectId()).getProjectId());
@@ -274,6 +274,16 @@ public class MqConsume {
 //                        bcProjectService.deleteBcProjectByXMBH(sysProject.getProjectNum());
 //                    }
                 }else {
+                    if (projectArchiveTransferTrackList.size() != 0){
+                        for (ViewFqProjectArchiveTransferTrack projectArchiveTransferTrackValue : projectArchiveTransferTrackList){
+                            if (projectArchiveTransferTrackValue.getReceiveStatus() != null){
+                                if (projectArchiveTransferTrackValue.getReceiveStatus() == 2){
+                                    sysProject.setCjstatus((long)1);
+                                }
+                            }
+
+                        }
+                    }
                     if (sysProjectService.checkProjectKeyUniqueByViewProjectId(mqMessage.getProjectId()) != null) {
                         sysProject.setProjectId(sysProjectService.checkProjectKeyUniqueByViewProjectId(mqMessage.getProjectId()).getProjectId());
                         sysProjectService.updateSysProjectForMq(sysProject);
@@ -307,7 +317,6 @@ public class MqConsume {
                        }
                    }
                     //同步流程
-                    List<ViewFqProjectArchiveTransferTrack> projectArchiveTransferTrackList = viewFqProjectArchiveTransferTrackService.selectViewFqProjectArchiveTransferTrackListByProjectId(Long.parseLong(mqMessage.getProjectId()));
                     fqProjectProcessService.deleteFqProjectProcessById(sysProject.getProjectId());
                     if (projectArchiveTransferTrackList.size() != 0){
                         for (ViewFqProjectArchiveTransferTrack projectArchiveTransferTrackValue : projectArchiveTransferTrackList){
