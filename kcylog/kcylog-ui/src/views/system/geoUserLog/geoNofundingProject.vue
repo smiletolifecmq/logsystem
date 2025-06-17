@@ -92,7 +92,8 @@
         </template>
       </el-table-column>
       <el-table-column label="内容" align="center" prop="content" />
-      <el-table-column label="委托人" align="center" prop="client" />
+      <el-table-column label="委托单位" align="center" prop="client" />
+      <el-table-column label="联系人" align="center" prop="lxr" />
       <el-table-column label="组天" align="center" prop="worknum" />
       <el-table-column label="负责人" align="center" prop="fzr" />
       <el-table-column label="备注" align="center" prop="bz" />
@@ -153,10 +154,13 @@
             placeholder="请输入工作内容"
           />
         </el-form-item>
-        <el-form-item label="委托人" prop="client">
+        <el-form-item label="委托单位" prop="client">
+          <el-input v-model="form.client" placeholder="请输入委托单位" />
+        </el-form-item>
+        <el-form-item label="联系人" prop="lxr">
           <el-input
-            v-model="form.client"
-            placeholder="请输入委托人（经营人员、领导、业主）"
+            v-model="form.lxr"
+            placeholder="请输入联系人（经营人员、领导、业主）"
           />
         </el-form-item>
         <el-form-item label="组天" prop="worknum">

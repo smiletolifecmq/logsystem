@@ -36,8 +36,11 @@ public class SysGeoNofundingProject extends BaseEntity
     private String content;
 
     /** 委托人 */
-    @Excel(name = "委托人（经营人员、领导、业主等）")
+    @Excel(name = "委托单位")
     private String client;
+
+    @Excel(name = "联系人（经营人员、领导、业主等）")
+    private String lxr;
 
     /** 负责人 */
     @Excel(name = "负责人")
@@ -52,6 +55,14 @@ public class SysGeoNofundingProject extends BaseEntity
     /** 备注 */
     @Excel(name = "备注")
     private String bz;
+
+    public String getLxr() {
+        return lxr;
+    }
+
+    public void setLxr(String lxr) {
+        this.lxr = lxr;
+    }
 
     public Long getWorknum() {
         return worknum;

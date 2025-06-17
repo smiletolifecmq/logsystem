@@ -14,10 +14,11 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
         <result property="bz"    column="bz"    />
         <result property="tbsj"    column="tbsj"    />
         <result property="worknum"    column="worknum"    />
+        <result property="lxr"    column="lxr"    />
     </resultMap>
 
     <sql id="selectSysGeoNofundingProjectVo">
-        select id, create_time, content, client, workload, fzr, bz, tbsj, worknum from sys_geo_nofunding_project
+        select id, create_time, content, client, workload, fzr, bz, tbsj, worknum, lxr from sys_geo_nofunding_project
     </sql>
 
     <select id="selectSysGeoNofundingProjectList" parameterType="SysGeoNofundingProject" resultMap="SysGeoNofundingProjectResult">
@@ -54,6 +55,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
             <if test="bz != null">bz,</if>
             <if test="tbsj != null">tbsj,</if>
             <if test="worknum != null">worknum,</if>
+            <if test="lxr != null">lxr,</if>
          </trim>
         <trim prefix="values (" suffix=")" suffixOverrides=",">
             <if test="createTime != null">#{createTime},</if>
@@ -64,6 +66,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
             <if test="bz != null">#{bz},</if>
             <if test="tbsj != null">#{tbsj},</if>
             <if test="worknum != null">#{worknum},</if>
+            <if test="lxr != null">#{lxr},</if>
          </trim>
     </insert>
 
@@ -78,6 +81,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
             <if test="bz != null">bz = #{bz},</if>
             <if test="tbsj != null">tbsj = #{tbsj},</if>
             <if test="worknum != null">worknum = #{worknum},</if>
+            <if test="lxr != null">lxr = #{lxr},</if>
         </trim>
         where id = #{id}
     </update>
