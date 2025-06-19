@@ -102,4 +102,6 @@ public interface SysReviewSubMapper
     public int updateSubpackageTypeByProjectNum(SysReviewSub sysReviewSub);
 
     public int updateFinalHire(SysReviewSubProcess sysReviewSubProcess);
+
+    public SysReviewSub selectSysReviewSubByProjectId(String reviewId);
 }

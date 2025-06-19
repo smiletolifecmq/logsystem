@@ -1282,4 +1282,32 @@ public class SysReviewSubController extends BaseController
         return sheet;
     }
 
+    @GetMapping(value = "/getReviewForProjectId/{projectId}")
+    public AjaxResult getReviewForProjectId(@PathVariable("projectId") String projectId) throws JsonProcessingException {
+        SysReviewSub review = sysReviewSubService.selectSysReviewSubByProjectId(projectId);
+//        BcProject param = new BcProject();
+//        param.setXmbh(review.getProject().getProjectNum());
+//        List<BcProject> sysProjectGeoinfo = bcProjectService.selectBcProjectList(param);
+//        if (sysProjectGeoinfo.size() > 0){
+//            review.getProject().setMapShow((long)1);
+//        }else {
+//            review.getProject().setMapShow((long)1);
+//        }
+        if (review != null){
+            if (review.getCooperationUnit() != null && !Objects.equals(review.getCooperationUnit(), "")){
+                ObjectMapper objectMapper = new ObjectMapper();
+                List<String> cooperationUnitJson = objectMapper.readValue(review.getCooperationUnit(), new TypeReference<List<String>>(){});
+                review.setCooperationUnitJson(cooperationUnitJson);
+            }
+
+            if (review.getProjectRelation() != null){
+                review.setProjectId(review.getProjectRelation().getProjectId());
+            }
+        }else {
+            review = new SysReviewSub();
+        }
+
+        return success(review);
+    }
+
 }

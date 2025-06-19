@@ -445,7 +445,6 @@
             type="text"
             icon="el-icon-tickets"
             @click="handleDetail(scope.row)"
-            v-hasPermi="['system:project:query']"
             >详情</el-button
           >
           <!-- <el-button
@@ -456,21 +455,20 @@
             v-hasPermi="['system:project:lotteryProcess']"
             >抽签过程</el-button
           > -->
-          <el-button
+          <!-- <el-button
             size="mini"
             type="text"
             icon="el-icon-delete"
             @click="handleDelete(scope.row)"
             v-hasPermi="['system:project:remove']"
             >删除</el-button
-          >
+          > -->
           <el-button
             size="mini"
             type="text"
             icon="el-icon-picture"
             @click="handleGeo(scope.row)"
             :disabled="scope.row.mapShow != 1"
-            v-hasPermi="['system:project:geoInfo']"
             >查看选图</el-button
           >
           <el-button

@@ -501,4 +501,9 @@
         where review_id = #{reviewId}
     </update>
 
+    <select id="selectSysReviewSubByProjectId" parameterType="String" resultMap="SysReviewSubResult">
+        <include refid="selectSysReviewSubVo"/>
+        where pp.project_id = #{projectId}
+    </select>
+
 </mapper>

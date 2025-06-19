@@ -102,4 +102,6 @@ public interface ISysReviewSubService
     public int updateSubpackageTypeByProjectNum(SysReviewSub sysReviewSub);
 
     public int updateFinalHire(SysReviewSubProcess sysReviewSubProcess);
+
+    public SysReviewSub selectSysReviewSubByProjectId(String projectId);
 }

@@ -468,6 +468,14 @@
             size="mini"
             type="text"
             icon="el-icon-tickets"
+            @click="handleShdDetail(scope.row)"
+            v-hasPermi="['system:project:handleShdDetail']"
+            >审核单详情</el-button
+          >
+          <el-button
+            size="mini"
+            type="text"
+            icon="el-icon-tickets"
             @click="handleDetail(scope.row)"
             v-hasPermi="['system:project:query']"
             >项目详情</el-button
@@ -1334,6 +1342,111 @@
         <el-button @click="cancel" size="mini">取 消</el-button>
       </div>
     </el-dialog>
+
+    <!-- 详情对话框 -->
+    <el-dialog
+      :title="titleInfo"
+      :visible.sync="openInfo"
+      width="1260px"
+      append-to-body
+      :close-on-click-modal="false"
+      :close-on-press-escape="false"
+    >
+      <el-collapse v-model="activeNamesTemp">
+        <el-collapse-item title="审核单详情" name="1">
+          <div>
+            <el-row :gutter="10">
+              <el-col style="width: 100%">
+                <el-card>
+                  <div slot="header">
+                    <span>分包详情</span>
+                    <el-button
+                      style="float: right; padding: 3px 0"
+                      type="text"
+                    ></el-button>
+                  </div>
+
+                  <div style="text-align: center">
+                    <el-descriptions class="margin-top" :column="2" border>
+                      <!-- <el-descriptions-item>
+                        <template slot="label"> 工程编号 </template>
+                        {{ subcontractForm.serialNum }}
+                      </el-descriptions-item> -->
+                      <!-- <el-descriptions-item>
+                        <template slot="label"> 负责人 </template>
+                        {{ subcontractForm.user.userName }}
+                      </el-descriptions-item> -->
+                      <!-- <el-descriptions-item>
+                        <template slot="label"> 项目名称 </template>
+                        {{ subcontractForm.projectName }}
+                      </el-descriptions-item> -->
+                      <!-- <el-descriptions-item>
+                        <template slot="label"> 项目类型 </template>
+                        {{ subcontractForm.businessName }}
+                      </el-descriptions-item> -->
+                      <!-- <el-descriptions-item>
+                        <template slot="label"> 委托单位 </template>
+                        {{ subcontractForm.requester }}
+                      </el-descriptions-item> -->
+                      <!-- <el-descriptions-item>
+                        <template slot="label"> 工作内容 </template>
+                        {{ subcontractForm.workcontent }}
+                      </el-descriptions-item> -->
+                      <el-descriptions-item>
+                        <template slot="label"> 分包类型 </template>
+                        <span v-if="subcontractForm.subType == 1">全部分包</span
+                        ><span v-if="subcontractForm.subType == 2"
+                          >局部分包</span
+                        >
+                      </el-descriptions-item>
+                      <el-descriptions-item>
+                        <template slot="label"> 预估分包工作量 </template>
+                        {{ subcontractForm.subWorkload }}
+                      </el-descriptions-item>
+                      <el-descriptions-item>
+                        <template slot="label"> 抽签业务名称 </template>
+                        {{ subcontractForm.businessName }}
+                      </el-descriptions-item>
+                      <el-descriptions-item>
+                        <template slot="label"> 抽签单位 </template>
+                        <div
+                          v-for="(
+                            unit, index
+                          ) in subcontractForm.cooperationUnitJson"
+                          :key="index"
+                        >
+                          {{ unit }}
+                        </div>
+                      </el-descriptions-item>
+                      <el-descriptions-item>
+                        <template slot="label"> 中签单位 </template>
+                        {{ subcontractForm.winUnit }}
+                      </el-descriptions-item>
+                      <el-descriptions-item>
+                        <template slot="label"> 抽签时间 </template>
+                        {{ parseTime(subcontractForm.lotTime, "{y}-{m}-{d}") }}
+                      </el-descriptions-item>
+                      <!-- <el-descriptions-item>
+                        <template slot="label"> 工期开始 </template>
+                        {{
+                          parseTime(subcontractForm.cpStartTime, "{y}-{m}-{d}")
+                        }}
+                      </el-descriptions-item>
+                      <el-descriptions-item>
+                        <template slot="label"> 工期结束 </template>
+                        {{
+                          parseTime(subcontractForm.cpEndTime, "{y}-{m}-{d}")
+                        }}
+                      </el-descriptions-item> -->
+                    </el-descriptions>
+                  </div>
+                </el-card>
+              </el-col>
+            </el-row>
+          </div>
+        </el-collapse-item>
+      </el-collapse>
+    </el-dialog>
   </div>
 </template>
 <style>
@@ -1353,7 +1466,11 @@ import {
 } from "@/api/system/project";
 import elDragDialog from "@/api/components/el-drag";
 import { listUnit } from "@/api/system/unit";
-import { addReview, setReviewStatus } from "@/api/system/reviewSub";
+import {
+  addReview,
+  setReviewStatus,
+  getReviewForProjectId,
+} from "@/api/system/reviewSub";
 import { excelJsExport } from "@/api/system/excelJsExport";
 import userInfo from "@/store/modules/user";
 import FileUpload from "@/components/FileCad";
@@ -1374,6 +1491,7 @@ export default {
   },
   data() {
     return {
+      activeNamesTemp: ["1"],
       lxValue: [],
       options: [
         {
@@ -1579,6 +1697,7 @@ export default {
         pageSize: 9999,
         checkStatus: -1,
       },
+
       queryParams: {
         pageNum: 1,
         pageSize: 10,
@@ -1605,6 +1724,13 @@ export default {
         outputStatus: null,
         status: null,
       },
+      subcontractForm: {
+        user: {
+          userName: "",
+        },
+      },
+      titleInfo: "",
+      openInfo: false,
       // 表单参数
       form: {},
       // 表单校验
@@ -2624,6 +2750,23 @@ export default {
       getProject(projectId).then((response) => {
         this.form = response.data;
         this.detailOpen = true;
+      });
+    },
+
+    handleShdDetail(row) {
+      const projectId = row.projectId;
+      getReviewForProjectId(projectId).then((response) => {
+        if (response.data.startTime != null && response.data.startTime != "") {
+          this.startAmPm = response.data.startTime.substring(11);
+          response.data.startTime = response.data.startTime.substring(0, 10);
+        }
+        if (response.data.endTime != null && response.data.endTime != "") {
+          this.endAmPm = response.data.endTime.substring(11);
+          response.data.endTime = response.data.endTime.substring(0, 10);
+        }
+        this.subcontractForm = response.data;
+        this.openInfo = true;
+        this.titleInfo = "审核单详情";
       });
     },
 

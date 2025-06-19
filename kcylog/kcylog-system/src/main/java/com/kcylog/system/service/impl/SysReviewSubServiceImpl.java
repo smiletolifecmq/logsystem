@@ -215,4 +215,10 @@ public class SysReviewSubServiceImpl implements ISysReviewSubService
     {
         return sysReviewSubMapper.updateFinalHire(sysReviewSubProcess);
     }
+
+    @Override
+    public SysReviewSub selectSysReviewSubByProjectId(String projectId)
+    {
+        return sysReviewSubMapper.selectSysReviewSubByProjectId(projectId);
+    }
 }

@@ -150,3 +150,10 @@ export function getReviewExport(reviewId) {
     method: 'get'
   })
 }
+
+export function getReviewForProjectId(projectId) {
+  return request({
+    url: '/system/reviewSub/getReviewForProjectId/' + projectId,
+    method: 'get'
+  })
+}
