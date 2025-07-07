@@ -358,6 +358,15 @@
             >结算办结</el-button
           >
           <el-button
+            v-show="scope.row.settle == 0"
+            size="mini"
+            type="text"
+            icon="el-icon-edit"
+            @click="handleLsSettle(scope.row)"
+            v-hasPermi="['system:project:lssettle']"
+            >历史办结</el-button
+          >
+          <el-button
             size="mini"
             type="text"
             icon="el-icon-edit"
@@ -1038,6 +1047,7 @@ import {
   listProjectOperateCq,
   listProjectStatisticsDataForDept,
   updateProjectCgsd,
+  leLsSettleProject,
 } from "@/api/system/project";
 import elDragDialog from "@/api/components/el-drag";
 
@@ -1661,6 +1671,26 @@ export default {
         this.settleTitle = "项目编号：" + response.data.projectNum;
         this.settleOpen = true;
       });
+    },
+    handleLsSettle(row) {
+      const projectId = row.projectId;
+      this.$confirm("是否确认办结?", "提示", {
+        confirmButtonText: "确定",
+        cancelButtonText: "取消",
+        type: "warning",
+      })
+        .then(() => {
+          leLsSettleProject({ projectId: projectId }).then((response) => {
+            this.$modal.msgSuccess("办结成功");
+            this.getList();
+          });
+        })
+        .catch(() => {
+          this.$message({
+            type: "info",
+            message: "已取消办结",
+          });
+        });
     },
 
     handleCgsd(row) {

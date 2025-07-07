@@ -45,6 +45,9 @@ public class OperatingExport {
     @Excel(name = "实际经营产值", needMerge = true)
     private BigDecimal projectCoefficientMoney;
 
+    @Excel(name = "作业办结内部金额", needMerge = true)
+    private BigDecimal ygmoney;
+
     @Excel(name = "经营合同号", needMerge = true)
     private String contractNo;
 
@@ -117,6 +120,14 @@ public class OperatingExport {
     private BigDecimal coefficientProfitMoney;
 
     private Date settleTime;
+
+    public BigDecimal getYgmoney() {
+        return ygmoney;
+    }
+
+    public void setYgmoney(BigDecimal ygmoney) {
+        this.ygmoney = ygmoney;
+    }
 
     public Date getSettleTime() {
         return settleTime;

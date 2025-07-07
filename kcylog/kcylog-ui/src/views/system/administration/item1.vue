@@ -161,6 +161,7 @@ export default {
         b: [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
         c: [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
         d: [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
+        e: [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
       },
       monthList: [
         "1月",
@@ -263,6 +264,7 @@ export default {
           this.list2.a[key - 1] = value;
           this.jydata.jycz += value;
           this.listData[3].num1 += value;
+          this.list2.e[key - 1] = this.list2.e[key - 1] + value;
         }
 
         for (const key in gc) {
@@ -270,11 +272,13 @@ export default {
           this.list2.b[key - 1] = value;
           this.jydata.jycz += value;
           this.listData[0].num1 += value;
+          this.list2.e[key - 1] = this.list2.e[key - 1] + value;
         }
 
         for (const key in bdc) {
           const value = bdc[key];
           this.list2.c[key - 1] = value;
+          this.list2.e[key - 1] = this.list2.e[key - 1] + value;
           this.jydata.jycz += value;
           this.listData[2].num1 += value;
         }
@@ -284,6 +288,7 @@ export default {
           this.list2.d[key - 1] = value;
           this.jydata.jycz += value;
           this.listData[1].num1 += value;
+          this.list2.e[key - 1] = this.list2.e[key - 1] + value;
         }
 
         this.jydata.jycz = this.jydata.jycz.toFixed(2);
@@ -303,7 +308,7 @@ export default {
         this.listData.sort((a, b) => b.num1 - a.num1);
 
         this.chartInstanceArrival.setOption({
-          color: ["#afeff6", "#fbd26a", "#ff7f50", "#e60000"], // 每条折线的颜色
+          color: ["#afeff6", "#fbd26a", "#ff7f50", "#e60000", "#32CD32"], // 每条折线的颜色
           tooltip: {
             trigger: "axis",
           },
@@ -312,7 +317,13 @@ export default {
             textStyle: {
               color: "#ffffff",
             },
-            data: ["地理信息部", "工程测绘部", "不动产测绘部", "管线工程部"],
+            data: [
+              "地理信息部",
+              "工程测绘部",
+              "不动产测绘部",
+              "管线工程部",
+              "总计",
+            ],
           },
           label: {
             color: "#ffffff",
@@ -395,6 +406,12 @@ export default {
               type: "line",
               smooth: true,
               data: this.list2.d,
+            },
+            {
+              name: "总计",
+              type: "line",
+              smooth: true,
+              data: this.list2.e,
             },
           ],
         });

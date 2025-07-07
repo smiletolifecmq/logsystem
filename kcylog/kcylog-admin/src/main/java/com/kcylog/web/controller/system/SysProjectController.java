@@ -684,6 +684,7 @@ public class SysProjectController extends BaseController {
                         operatingExport.setOverDay(0);
                     }
 
+                    operatingExport.setYgmoney(project.getYgmoney());
                     operatingExport.setDurationFactor(project.getDurationFactor());
                     operatingExport.setProjectCoefficient(project.getProjectCoefficient());
                     operatingExport.setQualityCoefficient(project.getQualityCoefficient());
@@ -736,6 +737,7 @@ public class SysProjectController extends BaseController {
                     operatingExport.setIsOverdue("安排结束时间缺失");
                     operatingExport.setOverDay(0);
                 }
+                operatingExport.setYgmoney(project.getYgmoney());
                 operatingExport.setSettleMoney(project.getFbMoney());
                 operatingExport.setDurationFactor(project.getDurationFactor());
                 operatingExport.setProjectCoefficient(project.getProjectCoefficient());
@@ -1326,7 +1328,7 @@ public class SysProjectController extends BaseController {
         //作业办结经营产值(预估)
         List<SysProject> rojectTj4 = sysProjectService.selectYgmoney(sysProject);
         ProjectHJ projectHJ5 = new ProjectHJ();
-        projectHJ5.setXmglwz("作业办结经营产值(预估)");
+        projectHJ5.setXmglwz("作业办结内部产值");
         projectHJ5.setGcchb(0);
         projectHJ5.setGxgcb(0);
         projectHJ5.setBdcchb(0);
@@ -2203,7 +2205,7 @@ public class SysProjectController extends BaseController {
         //作业办结经营产值(预估)
         List<SysProject> rojectTj4 = sysProjectService.selectYgmoney(sysProject);
         ProjectHJ projectHJ5 = new ProjectHJ();
-        projectHJ5.setXmglwz("作业办结经营产值(预估)");
+        projectHJ5.setXmglwz("作业办结内部产值");
         projectHJ5.setGcchb(0);
         projectHJ5.setGxgcb(0);
         projectHJ5.setBdcchb(0);
@@ -2765,6 +2767,16 @@ public class SysProjectController extends BaseController {
         resultObj.put("经营产值", result);
         resultObj.put("利润", result1);
         return resultObj;
+    }
+
+    @Log(title = "历史办结", businessType = BusinessType.UPDATE)
+    @PutMapping("/leLsSettleProject")
+    public AjaxResult leLsSettleProject(@RequestBody SysProject sysProject) {
+        SysProject obj = new SysProject();
+        obj.setProjectId(sysProject.getProjectId());
+        obj.setSettle((long)1);
+        sysProjectService.updateSysProject(obj);
+        return toAjax(1);
     }
 
 

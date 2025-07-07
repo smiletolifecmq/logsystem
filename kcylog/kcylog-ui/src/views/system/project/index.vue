@@ -302,7 +302,7 @@
       >
       <el-table-column
         width="70"
-        label="部门生产经营产值"
+        label="内部产值金额"
         align="center"
         prop="ygmoney"
       >
@@ -438,7 +438,7 @@
             @click="handleUpdate(scope.row)"
             v-if="showjycz(scope.row)"
             v-hasPermi="['system:project:editygmoney']"
-            >填写经营产值</el-button
+            >填写内部产值</el-button
           >
           <el-button
             size="mini"
@@ -498,18 +498,18 @@
 
     <!-- 添加或修改项目对话框 -->
     <el-dialog
-      title="填写经营产值金额"
+      title="填写无经费或服务类项目内部产值"
       :visible.sync="open"
       width="800px"
       append-to-body
     >
       <el-form ref="form" :model="form" :rules="rules" label-width="210px">
-        <el-form-item label="部门生产经营产值金额(元)" prop="ygmoney">
+        <el-form-item label="内部产值金额(元)" prop="ygmoney">
           <el-input-number
             v-model="form.ygmoney"
             :precision="2"
             :min="0"
-            placeholder="部门生产经营产值金额"
+            placeholder="内部产值金额金额"
           ></el-input-number>
         </el-form-item>
       </el-form>

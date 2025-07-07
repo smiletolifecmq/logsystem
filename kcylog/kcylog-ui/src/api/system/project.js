@@ -225,3 +225,11 @@ export function listProjectHjMonth(query) {
     params: query
   })
 }
+
+export function leLsSettleProject(data) {
+  return request({
+    url: '/system/project/leLsSettleProject',
+    method: 'put',
+    data: data
+  })
+}
