@@ -1,5 +1,7 @@
 package com.kcylog.web.controller.system;
 
+import com.fasterxml.jackson.core.type.TypeReference;
+import com.fasterxml.jackson.databind.ObjectMapper;
 import com.kcylog.common.annotation.Anonymous;
 import com.kcylog.common.annotation.Log;
 import com.kcylog.common.core.controller.BaseController;
@@ -19,8 +21,13 @@ import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.bind.annotation.*;
 
 import javax.servlet.http.HttpServletResponse;
+import java.io.IOException;
 import java.math.BigDecimal;
 import java.math.RoundingMode;
+import java.net.URI;
+import java.net.http.HttpClient;
+import java.net.http.HttpRequest;
+import java.net.http.HttpResponse;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.time.LocalDate;
@@ -69,6 +76,11 @@ public class SysProjectController extends BaseController {
 
     @Autowired
     private IBcProjectService bcProjectService;
+
+    @Autowired
+    private ISysBcJybbService sysBcJybbService;
+
+    private static final ObjectMapper objectMapper = new ObjectMapper();
 
     /**
      * 查询项目列表
@@ -2777,6 +2789,51 @@ public class SysProjectController extends BaseController {
         obj.setSettle((long)1);
         sysProjectService.updateSysProject(obj);
         return toAjax(1);
+    }
+
+    @Anonymous
+    @CrossOrigin
+    @PostMapping("/syncBcInfo")
+    public TableDataInfo syncBcInfo(@RequestBody SysBcJybb sysBcJybb) throws IOException, InterruptedException {
+        List<SysBcJybb> list = new ArrayList<>();
+        String url = "http://192.168.150.99:81/gw/fzis/server/report/operating/summary/statistic/V2";
+
+        // 构造请求体
+        Map<String, String> bodyMap = new HashMap<>();
+        bodyMap.put("billingDateBegin", sysBcJybb.getBillingDateBegin());
+        bodyMap.put("billingDateEnd", sysBcJybb.getBillingDateEnd());
+        bodyMap.put("category", "OTHER");
+
+        String requestBody = objectMapper.writeValueAsString(bodyMap);
+
+        // 构造 HttpClient
+        HttpClient client = HttpClient.newHttpClient();
+
+        HttpRequest request = HttpRequest.newBuilder()
+                .uri(URI.create(url))
+                .header("Content-Type", "application/json")
+                .header("Authorization", sysBcJybb.getToken())
+                .POST(HttpRequest.BodyPublishers.ofString(requestBody))
+                .build();
+
+        // 发送请求
+        HttpResponse<String> response = client.send(request, HttpResponse.BodyHandlers.ofString());
+
+        if (response.statusCode() == 200) {
+            String json = response.body();
+
+            // 解析成 ApiResponse<List<SysBcJybb>>
+            BcJybb<List<SysBcJybb>> apiResponse = objectMapper.readValue(
+                    json,
+                    new TypeReference<BcJybb<List<SysBcJybb>>>() {}
+            );
+
+            if ("0".equals(apiResponse.getCode())) {
+                list = apiResponse.getData();
+            }
+        }
+
+        return getDataTable(list);
     }
 
 

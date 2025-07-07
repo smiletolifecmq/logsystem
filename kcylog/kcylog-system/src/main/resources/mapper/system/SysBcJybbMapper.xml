@@ -1,0 +1,111 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.kcylog.system.mapper.SysBcJybbMapper">
+    
+    <resultMap type="SysBcJybb" id="SysBcJybbResult">
+        <result property="id"    column="id"    />
+        <result property="orgName"    column="orgName"    />
+        <result property="finalAmount"    column="finalAmount"    />
+        <result property="invoiceAmount"    column="invoiceAmount"    />
+        <result property="subsidyAmount"    column="subsidyAmount"    />
+        <result property="ownToOwnAmount"    column="ownToOwnAmount"    />
+        <result property="ownToOtherAmount"    column="ownToOtherAmount"    />
+        <result property="otherToOwnAmount"    column="otherToOwnAmount"    />
+        <result property="ownAmount"    column="ownAmount"    />
+        <result property="paymentAmount"    column="paymentAmount"    />
+        <result property="receivableAmount"    column="receivableAmount"    />
+        <result property="tenderAmount"    column="tenderAmount"    />
+        <result property="year"    column="year"    />
+    </resultMap>
+
+    <sql id="selectSysBcJybbVo">
+        select id, orgName, finalAmount, invoiceAmount, subsidyAmount, ownToOwnAmount, ownToOtherAmount, otherToOwnAmount, ownAmount, paymentAmount, receivableAmount, tenderAmount, year from sys_bc_jybb
+    </sql>
+
+    <select id="selectSysBcJybbList" parameterType="SysBcJybb" resultMap="SysBcJybbResult">
+        <include refid="selectSysBcJybbVo"/>
+        <where>  
+            <if test="orgName != null  and orgName != ''"> and orgName like concat('%', #{orgName}, '%')</if>
+            <if test="finalAmount != null  and finalAmount != ''"> and finalAmount = #{finalAmount}</if>
+            <if test="invoiceAmount != null  and invoiceAmount != ''"> and invoiceAmount = #{invoiceAmount}</if>
+            <if test="subsidyAmount != null  and subsidyAmount != ''"> and subsidyAmount = #{subsidyAmount}</if>
+            <if test="ownToOwnAmount != null  and ownToOwnAmount != ''"> and ownToOwnAmount = #{ownToOwnAmount}</if>
+            <if test="ownToOtherAmount != null  and ownToOtherAmount != ''"> and ownToOtherAmount = #{ownToOtherAmount}</if>
+            <if test="otherToOwnAmount != null  and otherToOwnAmount != ''"> and otherToOwnAmount = #{otherToOwnAmount}</if>
+            <if test="ownAmount != null  and ownAmount != ''"> and ownAmount = #{ownAmount}</if>
+            <if test="paymentAmount != null  and paymentAmount != ''"> and paymentAmount = #{paymentAmount}</if>
+            <if test="receivableAmount != null  and receivableAmount != ''"> and receivableAmount = #{receivableAmount}</if>
+            <if test="tenderAmount != null  and tenderAmount != ''"> and tenderAmount = #{tenderAmount}</if>
+            <if test="year != null  and year != ''"> and year = #{year}</if>
+        </where>
+    </select>
+    
+    <select id="selectSysBcJybbById" parameterType="Long" resultMap="SysBcJybbResult">
+        <include refid="selectSysBcJybbVo"/>
+        where id = #{id}
+    </select>
+        
+    <insert id="insertSysBcJybb" parameterType="SysBcJybb" useGeneratedKeys="true" keyProperty="id">
+        insert into sys_bc_jybb
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="orgName != null">orgName,</if>
+            <if test="finalAmount != null">finalAmount,</if>
+            <if test="invoiceAmount != null">invoiceAmount,</if>
+            <if test="subsidyAmount != null">subsidyAmount,</if>
+            <if test="ownToOwnAmount != null">ownToOwnAmount,</if>
+            <if test="ownToOtherAmount != null">ownToOtherAmount,</if>
+            <if test="otherToOwnAmount != null">otherToOwnAmount,</if>
+            <if test="ownAmount != null">ownAmount,</if>
+            <if test="paymentAmount != null">paymentAmount,</if>
+            <if test="receivableAmount != null">receivableAmount,</if>
+            <if test="tenderAmount != null">tenderAmount,</if>
+            <if test="year != null">year,</if>
+         </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test="orgName != null">#{orgName},</if>
+            <if test="finalAmount != null">#{finalAmount},</if>
+            <if test="invoiceAmount != null">#{invoiceAmount},</if>
+            <if test="subsidyAmount != null">#{subsidyAmount},</if>
+            <if test="ownToOwnAmount != null">#{ownToOwnAmount},</if>
+            <if test="ownToOtherAmount != null">#{ownToOtherAmount},</if>
+            <if test="otherToOwnAmount != null">#{otherToOwnAmount},</if>
+            <if test="ownAmount != null">#{ownAmount},</if>
+            <if test="paymentAmount != null">#{paymentAmount},</if>
+            <if test="receivableAmount != null">#{receivableAmount},</if>
+            <if test="tenderAmount != null">#{tenderAmount},</if>
+            <if test="year != null">#{year},</if>
+         </trim>
+    </insert>
+
+    <update id="updateSysBcJybb" parameterType="SysBcJybb">
+        update sys_bc_jybb
+        <trim prefix="SET" suffixOverrides=",">
+            <if test="orgName != null">orgName = #{orgName},</if>
+            <if test="finalAmount != null">finalAmount = #{finalAmount},</if>
+            <if test="invoiceAmount != null">invoiceAmount = #{invoiceAmount},</if>
+            <if test="subsidyAmount != null">subsidyAmount = #{subsidyAmount},</if>
+            <if test="ownToOwnAmount != null">ownToOwnAmount = #{ownToOwnAmount},</if>
+            <if test="ownToOtherAmount != null">ownToOtherAmount = #{ownToOtherAmount},</if>
+            <if test="otherToOwnAmount != null">otherToOwnAmount = #{otherToOwnAmount},</if>
+            <if test="ownAmount != null">ownAmount = #{ownAmount},</if>
+            <if test="paymentAmount != null">paymentAmount = #{paymentAmount},</if>
+            <if test="receivableAmount != null">receivableAmount = #{receivableAmount},</if>
+            <if test="tenderAmount != null">tenderAmount = #{tenderAmount},</if>
+            <if test="year != null">year = #{year},</if>
+        </trim>
+        where id = #{id}
+    </update>
+
+    <delete id="deleteSysBcJybbById" parameterType="Long">
+        delete from sys_bc_jybb where id = #{id}
+    </delete>
+
+    <delete id="deleteSysBcJybbByIds" parameterType="String">
+        delete from sys_bc_jybb where id in 
+        <foreach item="id" collection="array" open="(" separator="," close=")">
+            #{id}
+        </foreach>
+    </delete>
+</mapper>
