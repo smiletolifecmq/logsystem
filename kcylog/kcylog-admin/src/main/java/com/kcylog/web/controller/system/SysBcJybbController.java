@@ -6,7 +6,9 @@ import com.kcylog.common.core.domain.AjaxResult;
 import com.kcylog.common.core.page.TableDataInfo;
 import com.kcylog.common.enums.BusinessType;
 import com.kcylog.common.utils.poi.ExcelUtil;
+import com.kcylog.system.domain.SysBcGcbb;
 import com.kcylog.system.domain.SysBcJybb;
+import com.kcylog.system.service.ISysBcGcbbService;
 import com.kcylog.system.service.ISysBcJybbService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.access.prepost.PreAuthorize;
@@ -14,6 +16,7 @@ import org.springframework.web.bind.annotation.*;
 
 import javax.servlet.http.HttpServletResponse;
 import java.util.List;
+import java.util.Objects;
 
 /**
  * 百川分院经营金额Controller
@@ -28,6 +31,9 @@ public class SysBcJybbController extends BaseController
     @Autowired
     private ISysBcJybbService sysBcJybbService;
 
+    @Autowired
+    private ISysBcGcbbService sysBcGcbbService;
+
     /**
      * 查询百川分院经营金额列表
      */
@@ -35,7 +41,33 @@ public class SysBcJybbController extends BaseController
     @GetMapping("/list")
     public TableDataInfo list(SysBcJybb sysBcJybb)
     {
+        int year = java.time.LocalDate.now().getYear();
+        String yearStr = String.valueOf(year);
+        sysBcJybb.setYear(yearStr);
         List<SysBcJybb> list = sysBcJybbService.selectSysBcJybbList(sysBcJybb);
+        SysBcGcbb sysBcGcbb = new SysBcGcbb();
+        sysBcGcbb.setYear(yearStr);
+        List<SysBcGcbb> gcbbList = sysBcGcbbService.selectSysBcGcbbTj(sysBcGcbb);
+        for(SysBcJybb obj1 : list){
+            for(SysBcGcbb obj2 : gcbbList){
+                if (Objects.equals(obj1.getOrgName(), obj2.getBranchOrgName())){
+                    obj1.setTotalCount(obj2.getTotalCount());
+                    obj1.setWeekCount(obj2.getWeekCount());
+                    obj1.setSellYearCount(obj2.getSellYearCount());
+                    obj1.setSellWeekCount(obj2.getSellWeekCount());
+                    obj1.setPlanYearCount(obj2.getPlanYearCount());
+                    obj1.setPlanWeekCount(obj2.getPlanWeekCount());
+                    obj1.setPipeCctvCount(obj2.getPipeCctvCount());
+                    obj1.setPipeOtherCount(obj2.getPipeOtherCount());
+                    obj1.setGovYearEarthControlCount(obj2.getGovYearEarthControlCount());
+                    obj1.setGovYearRoadCount(obj2.getGovYearRoadCount());
+                    obj1.setGovWeekEarthControlCount(obj2.getGovWeekEarthControlCount());
+                    obj1.setGovWeekRoadCount(obj2.getGovWeekRoadCount());
+                    obj1.setJiCount(obj2.getJiCount());
+                    continue;
+                }
+            }
+        }
         return getDataTable(list);
     }
 

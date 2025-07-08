@@ -61,4 +61,6 @@ public interface SysBcGcbbMapper
     public int deleteSysBcGcbbByIds(Long[] ids);
 
     public int deleteSysBcGcbbByYear(String year);
+
+    public List<SysBcGcbb> selectSysBcGcbbTj(SysBcGcbb sysBcGcbb);
 }

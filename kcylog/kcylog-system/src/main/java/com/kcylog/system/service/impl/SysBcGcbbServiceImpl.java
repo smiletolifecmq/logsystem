@@ -99,4 +99,10 @@ public class SysBcGcbbServiceImpl implements ISysBcGcbbService
     {
         return sysBcGcbbMapper.deleteSysBcGcbbByYear(year);
     }
+
+    @Override
+    public List<SysBcGcbb> selectSysBcGcbbTj(SysBcGcbb sysBcGcbb)
+    {
+        return sysBcGcbbMapper.selectSysBcGcbbTj(sysBcGcbb);
+    }
 }

@@ -57,10 +57,10 @@
     <el-table
       v-loading="loading"
       :data="jybbList"
-      show-summary
+      height="510"
       @selection-change="handleSelectionChange"
     >
-      <el-table-column label="分院" align="center" prop="orgName" />
+      <el-table-column label="分院" align="center" prop="orgName" fixed />
       <el-table-column
         label="合同/订单金额"
         align="center"
@@ -95,74 +95,70 @@
         align="center"
         prop="tenderAmount"
       />
-    </el-table>
+      <el-table-column label="总项目数（年｜周）" align="center">
+        <template slot-scope="scope">
+          {{ scope.row.totalCount }} | {{ scope.row.weekCount }}
+        </template>
+      </el-table-column>
 
-    <!-- 添加或修改百川分院经营金额对话框 -->
-    <el-dialog :title="title" :visible.sync="open" width="500px" append-to-body>
-      <el-form ref="form" :model="form" :rules="rules" label-width="80px">
-        <el-form-item label="分院" prop="orgName">
-          <el-input v-model="form.orgName" placeholder="请输入分院" />
-        </el-form-item>
-        <el-form-item label="合同/订单金额" prop="finalAmount">
-          <el-input
-            v-model="form.finalAmount"
-            placeholder="请输入合同/订单金额"
-          />
-        </el-form-item>
-        <el-form-item label="开票金额" prop="invoiceAmount">
-          <el-input v-model="form.invoiceAmount" placeholder="请输入开票金额" />
-        </el-form-item>
-        <el-form-item label="补助金额" prop="subsidyAmount">
-          <el-input v-model="form.subsidyAmount" placeholder="请输入补助金额" />
-        </el-form-item>
-        <el-form-item label="分配给本分院金额" prop="ownToOwnAmount">
-          <el-input
-            v-model="form.ownToOwnAmount"
-            placeholder="请输入分配给本分院金额"
-          />
-        </el-form-item>
-        <el-form-item label="分配给其他分院金额" prop="ownToOtherAmount">
-          <el-input
-            v-model="form.ownToOtherAmount"
-            placeholder="请输入分配给其他分院金额"
-          />
-        </el-form-item>
-        <el-form-item label="其他分院分配的金额" prop="otherToOwnAmount">
-          <el-input
-            v-model="form.otherToOwnAmount"
-            placeholder="请输入其他分院分配的金额"
-          />
-        </el-form-item>
-        <el-form-item label="归属本分院金额" prop="ownAmount">
-          <el-input
-            v-model="form.ownAmount"
-            placeholder="请输入归属本分院金额"
-          />
-        </el-form-item>
-        <el-form-item label="到账金额" prop="paymentAmount">
-          <el-input v-model="form.paymentAmount" placeholder="请输入到账金额" />
-        </el-form-item>
-        <el-form-item label="应收账款" prop="receivableAmount">
-          <el-input
-            v-model="form.receivableAmount"
-            placeholder="请输入应收账款"
-          />
-        </el-form-item>
-        <el-form-item label="投标中标金额" prop="tenderAmount">
-          <el-input
-            v-model="form.tenderAmount"
-            placeholder="请输入投标中标金额"
-          />
-        </el-form-item>
-        <el-form-item label="年份" prop="year">
-          <el-input v-model="form.year" placeholder="请输入年份" />
-        </el-form-item>
-      </el-form>
-      <div slot="footer" class="dialog-footer">
-        <el-button type="primary" @click="submitForm">确 定</el-button>
-        <el-button @click="cancel">取 消</el-button>
-      </div>
-    </el-dialog>
+      <el-table-column align="center">
+        <template #header>
+          项目编号含<span style="color: red">售</span>项目数（年｜周）
+        </template>
+        <template slot-scope="scope">
+          {{ scope.row.sellYearCount }} | {{ scope.row.sellWeekCount }}
+        </template>
+      </el-table-column>
+
+      <el-table-column align="center">
+        <template #header>
+          项目编号含<span style="color: red">规</span>项目数（年｜周）
+        </template>
+        <template slot-scope="scope">
+          {{ scope.row.planYearCount }} | {{ scope.row.planWeekCount }}
+        </template>
+      </el-table-column>
+
+      <el-table-column label="项目编号含项目数" align="center">
+        <template #header>
+          项目编号含<span style="color: red">籍</span>项目数
+        </template>
+        <template slot-scope="scope">
+          {{ scope.row.jiCount }}
+        </template>
+      </el-table-column>
+
+      <el-table-column align="center">
+        <template #header>
+          项目编号含<span style="color: red">管</span>项目数（cctv | 其它）
+        </template>
+        <template slot-scope="scope">
+          {{ scope.row.pipeCctvCount }} | {{ scope.row.pipeOtherCount }}
+        </template>
+      </el-table-column>
+
+      <el-table-column align="center">
+        <template #header>
+          项目编号含<span style="color: red">政</span>项目数（年-土方或控制 ｜
+          年-道路）
+        </template>
+        <template slot-scope="scope">
+          {{ scope.row.govYearEarthControlCount }} |
+          {{ scope.row.govYearRoadCount }}
+        </template>
+      </el-table-column>
+
+      <el-table-column align="center">
+        <template #header>
+          项目编号含<span style="color: red">政</span>项目数（周-土方或控制 ｜
+          周-道路）
+        </template>
+        <template slot-scope="scope">
+          {{ scope.row.govWeekEarthControlCount }} |
+          {{ scope.row.govWeekRoadCount }}
+        </template>
+      </el-table-column>
+    </el-table>
   </div>
 </template>
 

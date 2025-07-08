@@ -61,4 +61,6 @@ public interface ISysBcGcbbService
     public int deleteSysBcGcbbById(Long id);
 
     public int deleteSysBcGcbbByYear(String year);
+
+    public List<SysBcGcbb> selectSysBcGcbbTj(SysBcGcbb sysBcGcbb);
 }

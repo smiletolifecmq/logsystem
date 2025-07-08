@@ -93,4 +93,71 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
     <delete id="deleteSysBcGcbbByYear" parameterType="String">
         delete from sys_bc_gcbb where year = #{year}
     </delete>
+
+    <select id="selectSysBcGcbbTj" parameterType="SysBcGcbb" resultMap="SysBcGcbbResult">
+        SELECT
+            branchOrgName,
+            -- ① 所有总数
+            COUNT(*) AS totalCount,
+            -- ② 本周数
+            SUM(
+                    CASE
+                        WHEN STR_TO_DATE( cTime, '%Y-%m-%d %H:%i:%s' ) BETWEEN STR_TO_DATE( CONCAT( DATE_FORMAT( CURRENT_DATE - INTERVAL WEEKDAY( CURRENT_DATE ) DAY, '%Y-%m-%d' ), ' 00:00:00' ), '%Y-%m-%d %H:%i:%s' )
+                            AND STR_TO_DATE( CONCAT( DATE_FORMAT( CURRENT_DATE - INTERVAL WEEKDAY( CURRENT_DATE ) DAY + 6, '%Y-%m-%d' ), ' 23:59:59' ), '%Y-%m-%d %H:%i:%s' ) THEN
+                            1 ELSE 0
+                        END
+                ) AS weekCount,
+            -- ③ 含售
+            SUM( CASE WHEN projectCode LIKE '%售%' THEN 1 ELSE 0 END ) AS sellYearCount,
+            SUM(
+                    CASE
+                        WHEN projectCode LIKE '%售%'
+                            AND STR_TO_DATE( cTime, '%Y-%m-%d %H:%i:%s' ) BETWEEN STR_TO_DATE( CONCAT( DATE_FORMAT( CURRENT_DATE - INTERVAL WEEKDAY( CURRENT_DATE ) DAY, '%Y-%m-%d' ), ' 00:00:00' ), '%Y-%m-%d %H:%i:%s' )
+                                 AND STR_TO_DATE( CONCAT( DATE_FORMAT( CURRENT_DATE - INTERVAL WEEKDAY( CURRENT_DATE ) DAY + 6, '%Y-%m-%d' ), ' 23:59:59' ), '%Y-%m-%d %H:%i:%s' ) THEN
+                            1 ELSE 0
+                        END
+                ) AS sellWeekCount,
+            -- ④ 含规
+            SUM( CASE WHEN projectCode LIKE '%规%' THEN 1 ELSE 0 END ) AS planYearCount,
+            SUM(
+                    CASE
+                        WHEN projectCode LIKE '%规%'
+                            AND STR_TO_DATE( cTime, '%Y-%m-%d %H:%i:%s' ) BETWEEN STR_TO_DATE( CONCAT( DATE_FORMAT( CURRENT_DATE - INTERVAL WEEKDAY( CURRENT_DATE ) DAY, '%Y-%m-%d' ), ' 00:00:00' ), '%Y-%m-%d %H:%i:%s' )
+                                 AND STR_TO_DATE( CONCAT( DATE_FORMAT( CURRENT_DATE - INTERVAL WEEKDAY( CURRENT_DATE ) DAY + 6, '%Y-%m-%d' ), ' 23:59:59' ), '%Y-%m-%d %H:%i:%s' ) THEN
+                            1 ELSE 0
+                        END
+                ) AS planWeekCount,
+            -- ⑤ 含管按类型
+            SUM( CASE WHEN projectCode LIKE '%管%' AND LOWER( projectTypeName ) LIKE '%cctv%' THEN 1 ELSE 0 END ) AS pipeCctvCount,-- 含“管” 且 projectTypeName 中不包含 'cctv'（不区分大小写）
+            SUM( CASE WHEN projectCode LIKE '%管%' AND ( projectTypeName IS NULL OR LOWER( projectTypeName ) NOT LIKE '%cctv%' ) THEN 1 ELSE 0 END ) AS pipeOtherCount,
+            -- ⑥ 含政按类型分
+            SUM( CASE WHEN projectCode LIKE '%政%' AND ( projectTypeName LIKE '%土方%' OR projectTypeName LIKE '%控制%' ) THEN 1 ELSE 0 END ) AS govYearEarthControlCount,
+            SUM( CASE WHEN projectCode LIKE '%政%' AND ( projectTypeName NOT LIKE '%土方%' AND projectTypeName NOT LIKE '%控制%' ) THEN 1 ELSE 0 END ) AS govYearRoadCount,
+            SUM(
+                    CASE
+                        WHEN projectCode LIKE '%政%'
+                            AND STR_TO_DATE( cTime, '%Y-%m-%d %H:%i:%s' ) BETWEEN STR_TO_DATE( CONCAT( DATE_FORMAT( CURRENT_DATE - INTERVAL WEEKDAY( CURRENT_DATE ) DAY, '%Y-%m-%d' ), ' 00:00:00' ), '%Y-%m-%d %H:%i:%s' )
+                                 AND STR_TO_DATE( CONCAT( DATE_FORMAT( CURRENT_DATE - INTERVAL WEEKDAY( CURRENT_DATE ) DAY + 6, '%Y-%m-%d' ), ' 23:59:59' ), '%Y-%m-%d %H:%i:%s' )
+                            AND ( projectTypeName LIKE '%土方%' OR projectTypeName LIKE '%控制%' ) THEN
+                            1 ELSE 0
+                        END
+                ) AS govWeekEarthControlCount,
+            SUM(
+                    CASE
+                        WHEN projectCode LIKE '%政%'
+                            AND STR_TO_DATE( cTime, '%Y-%m-%d %H:%i:%s' ) BETWEEN STR_TO_DATE( CONCAT( DATE_FORMAT( CURRENT_DATE - INTERVAL WEEKDAY( CURRENT_DATE ) DAY, '%Y-%m-%d' ), ' 00:00:00' ), '%Y-%m-%d %H:%i:%s' )
+                                 AND STR_TO_DATE( CONCAT( DATE_FORMAT( CURRENT_DATE - INTERVAL WEEKDAY( CURRENT_DATE ) DAY + 6, '%Y-%m-%d' ), ' 23:59:59' ), '%Y-%m-%d %H:%i:%s' )
+                            AND ( projectTypeName NOT LIKE '%土方%' AND projectTypeName NOT LIKE '%控制%' ) THEN
+                            1 ELSE 0
+                        END
+                ) AS govWeekRoadCount,
+            -- ⑦ 含籍
+            SUM( CASE WHEN projectCode LIKE '%籍%' THEN 1 ELSE 0 END ) AS jiCount
+        FROM
+            sys_bc_gcbb
+        WHERE
+            branchOrgName IS NOT NULL AND year = #{year}
+        GROUP BY
+            branchOrgName;
+    </select>
 </mapper>
