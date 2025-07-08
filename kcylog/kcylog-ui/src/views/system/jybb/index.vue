@@ -54,48 +54,70 @@
       ></right-toolbar>
     </el-row> -->
 
-    <el-table
-      v-loading="loading"
-      :data="jybbList"
-      height="510"
-      @selection-change="handleSelectionChange"
-    >
-      <el-table-column label="分院" align="center" prop="orgName" fixed />
+    <el-table v-loading="loading" :data="jybbListFq" ref="fixedTable">
+      <el-table-column
+        label="分院"
+        align="center"
+        prop="orgName"
+        fixed
+        width="150px"
+      />
       <el-table-column
         label="合同/订单金额"
         align="center"
         prop="finalAmount"
+        width="130px"
       />
-      <el-table-column label="开票金额" align="center" prop="invoiceAmount" />
+      <el-table-column
+        label="开票金额"
+        align="center"
+        prop="invoiceAmount"
+        width="130px"
+      />
       <el-table-column label="补助金额" align="center" prop="subsidyAmount" />
       <el-table-column
         label="分配给本分院金额"
         align="center"
         prop="ownToOwnAmount"
+        width="130px"
       />
       <el-table-column
         label="分配给其他分院金额"
         align="center"
         prop="ownToOtherAmount"
+        width="140px"
       />
       <el-table-column
         label="其他分院分配的金额"
         align="center"
         prop="otherToOwnAmount"
+        width="140px"
       />
-      <el-table-column label="归属本分院金额" align="center" prop="ownAmount" />
-      <el-table-column label="到账金额" align="center" prop="paymentAmount" />
+      <el-table-column
+        label="归属本分院金额"
+        align="center"
+        prop="ownAmount"
+        width="130px"
+      />
+      <el-table-column
+        label="到账金额"
+        align="center"
+        prop="paymentAmount"
+        width="130px"
+      />
       <el-table-column
         label="应收账款"
         align="center"
         prop="receivableAmount"
+        width="130px"
       />
       <el-table-column
         label="投标中标金额"
         align="center"
         prop="tenderAmount"
+        width="130px"
       />
-      <el-table-column label="总项目数（年｜周）" align="center">
+      <el-table-column label="总项目数（年｜周）" align="center" width="140px">
         <template slot-scope="scope">
           <span
             class="hover-effect"
@@ -111,7 +133,7 @@
         </template>
       </el-table-column>
 
-      <el-table-column align="center">
+      <el-table-column align="center" width="140px">
         <template #header>
           项目编号含<span style="color: red">售</span>项目数（年｜周）
         </template>
@@ -130,7 +152,7 @@
         </template>
       </el-table-column>
 
-      <el-table-column align="center">
+      <el-table-column align="center" width="140px">
         <template #header>
           项目编号含<span style="color: red">规</span>项目数（年｜周）
         </template>
@@ -149,7 +171,47 @@
         </template>
       </el-table-column>
 
-      <el-table-column label="项目编号含项目数" align="center">
+      <el-table-column align="center" width="210px">
+        <template #header>
+          项目编号含<span style="color: red">政</span>项目数（年-土方或控制
+          ｜周-土方或控制）
+        </template>
+        <template slot-scope="scope">
+          <span
+            class="hover-effect"
+            @click="handleGcbbList(10, scope.row.orgName)"
+            >{{ scope.row.govYearEarthControlCount }}</span
+          >
+          |
+          <span
+            class="hover-effect"
+            @click="handleGcbbList(12, scope.row.orgName)"
+            >{{ scope.row.govWeekEarthControlCount }}</span
+          >
+        </template>
+      </el-table-column>
+
+      <el-table-column align="center" width="210px">
+        <template #header>
+          项目编号含<span style="color: red">政</span>项目数（年-道路 ｜
+          周-道路）
+        </template>
+        <template slot-scope="scope">
+          <span
+            class="hover-effect"
+            @click="handleGcbbList(11, scope.row.orgName)"
+            >{{ scope.row.govYearRoadCount }}</span
+          >
+          |
+          <span
+            class="hover-effect"
+            @click="handleGcbbList(13, scope.row.orgName)"
+            >{{ scope.row.govWeekRoadCount }}</span
+          >
+        </template>
+      </el-table-column>
+
+      <el-table-column label="项目编号含项目数" align="center" width="140px">
         <template #header>
           项目编号含<span style="color: red">籍</span>项目数
         </template>
@@ -162,7 +224,7 @@
         </template>
       </el-table-column>
 
-      <el-table-column align="center">
+      <el-table-column align="center" width="150px">
         <template #header>
           项目编号含<span style="color: red">管</span>项目数（cctv | 其它）
         </template>
@@ -180,11 +242,135 @@
           >
         </template>
       </el-table-column>
+    </el-table>
 
-      <el-table-column align="center">
+    <el-table
+      v-loading="loading"
+      :data="jybbList"
+      :show-header="false"
+      height="520"
+      ref="scrollTable"
+    >
+      <el-table-column
+        label="分院"
+        align="center"
+        prop="orgName"
+        fixed
+        width="150px"
+      />
+      <el-table-column
+        label="合同/订单金额"
+        align="center"
+        prop="finalAmount"
+        width="130px"
+      />
+      <el-table-column
+        label="开票金额"
+        align="center"
+        prop="invoiceAmount"
+        width="130px"
+      />
+      <el-table-column label="补助金额" align="center" prop="subsidyAmount" />
+      <el-table-column
+        label="分配给本分院金额"
+        align="center"
+        prop="ownToOwnAmount"
+        width="130px"
+      />
+      <el-table-column
+        label="分配给其他分院金额"
+        align="center"
+        prop="ownToOtherAmount"
+        width="140px"
+      />
+      <el-table-column
+        label="其他分院分配的金额"
+        align="center"
+        prop="otherToOwnAmount"
+        width="140px"
+      />
+      <el-table-column
+        label="归属本分院金额"
+        align="center"
+        prop="ownAmount"
+        width="130px"
+      />
+      <el-table-column
+        label="到账金额"
+        align="center"
+        prop="paymentAmount"
+        width="130px"
+      />
+      <el-table-column
+        label="应收账款"
+        align="center"
+        prop="receivableAmount"
+        width="130px"
+      />
+      <el-table-column
+        label="投标中标金额"
+        align="center"
+        prop="tenderAmount"
+        width="130px"
+      />
+      <el-table-column label="总项目数（年｜周）" align="center" width="140px">
+        <template slot-scope="scope">
+          <span
+            class="hover-effect"
+            @click="handleGcbbList(1, scope.row.orgName)"
+            >{{ scope.row.totalCount }}</span
+          >
+          |
+          <span
+            class="hover-effect"
+            @click="handleGcbbList(2, scope.row.orgName)"
+            >{{ scope.row.weekCount }}</span
+          >
+        </template>
+      </el-table-column>
+
+      <el-table-column align="center" width="140px">
         <template #header>
-          项目编号含<span style="color: red">政</span>项目数（年-土方或控制 ｜
-          年-道路）
+          项目编号含<span style="color: red">售</span>项目数（年｜周）
+        </template>
+        <template slot-scope="scope">
+          <span
+            class="hover-effect"
+            @click="handleGcbbList(3, scope.row.orgName)"
+            >{{ scope.row.sellYearCount }}</span
+          >
+          |
+          <span
+            class="hover-effect"
+            @click="handleGcbbList(4, scope.row.orgName)"
+            >{{ scope.row.sellWeekCount }}</span
+          >
+        </template>
+      </el-table-column>
+
+      <el-table-column align="center" width="140px">
+        <template #header>
+          项目编号含<span style="color: red">规</span>项目数（年｜周）
+        </template>
+        <template slot-scope="scope">
+          <span
+            class="hover-effect"
+            @click="handleGcbbList(5, scope.row.orgName)"
+            >{{ scope.row.planYearCount }}</span
+          >
+          |
+          <span
+            class="hover-effect"
+            @click="handleGcbbList(6, scope.row.orgName)"
+            >{{ scope.row.planWeekCount }}</span
+          >
+        </template>
+      </el-table-column>
+
+      <el-table-column align="center" width="210px">
+        <template #header>
+          项目编号含<span style="color: red">政</span>项目数（年-土方或控制
+          ｜周-土方或控制）
         </template>
         <template slot-scope="scope">
           <span
@@ -195,28 +381,60 @@
           |
           <span
             class="hover-effect"
-            @click="handleGcbbList(11, scope.row.orgName)"
-            >{{ scope.row.govYearRoadCount }}</span
+            @click="handleGcbbList(12, scope.row.orgName)"
+            >{{ scope.row.govWeekEarthControlCount }}</span
           >
         </template>
       </el-table-column>
 
-      <el-table-column align="center">
+      <el-table-column align="center" width="210px">
         <template #header>
-          项目编号含<span style="color: red">政</span>项目数（周-土方或控制 ｜
+          项目编号含<span style="color: red">政</span>项目数（年-道路 ｜
           周-道路）
         </template>
         <template slot-scope="scope">
           <span
             class="hover-effect"
-            @click="handleGcbbList(12, scope.row.orgName)"
-            >{{ scope.row.govWeekEarthControlCount }}</span
+            @click="handleGcbbList(11, scope.row.orgName)"
+            >{{ scope.row.govYearRoadCount }}</span
           >
           |
           <span
             class="hover-effect"
             @click="handleGcbbList(13, scope.row.orgName)"
             >{{ scope.row.govWeekRoadCount }}</span
+          >
+        </template>
+      </el-table-column>
+
+      <el-table-column label="项目编号含项目数" align="center" width="140px">
+        <template #header>
+          项目编号含<span style="color: red">籍</span>项目数
+        </template>
+        <template slot-scope="scope">
+          <span
+            class="hover-effect"
+            @click="handleGcbbList(7, scope.row.orgName)"
+            >{{ scope.row.jiCount }}</span
+          >
+        </template>
+      </el-table-column>
+
+      <el-table-column align="center" width="150px">
+        <template #header>
+          项目编号含<span style="color: red">管</span>项目数（cctv | 其它）
+        </template>
+        <template slot-scope="scope">
+          <span
+            class="hover-effect"
+            @click="handleGcbbList(8, scope.row.orgName)"
+            >{{ scope.row.pipeCctvCount }}</span
+          >
+          |
+          <span
+            class="hover-effect"
+            @click="handleGcbbList(9, scope.row.orgName)"
+            >{{ scope.row.pipeOtherCount }}</span
           >
         </template>
       </el-table-column>
@@ -282,6 +500,7 @@ export default {
   name: "Jybb",
   data() {
     return {
+      jybbListFq: [],
       gcbbTotal: 0,
       conditionOpen: false,
       gcbbList: [],
@@ -418,7 +637,26 @@ export default {
   created() {
     this.getList();
   },
+  mounted() {
+    this.bindScrollSync();
+  },
   methods: {
+    bindScrollSync() {
+      this.$nextTick(() => {
+        const topWrapper = this.$refs.fixedTable?.bodyWrapper;
+        const bottomWrapper = this.$refs.scrollTable?.bodyWrapper;
+        if (topWrapper && bottomWrapper) {
+          // 下滚动驱动上
+          bottomWrapper.addEventListener("scroll", () => {
+            topWrapper.scrollLeft = bottomWrapper.scrollLeft;
+          });
+          // 上滚动驱动下
+          topWrapper.addEventListener("scroll", () => {
+            bottomWrapper.scrollLeft = topWrapper.scrollLeft;
+          });
+        }
+      });
+    },
     getGcbbList() {
       this.loading = true;
       getTypeGcbb(this.queryGcbbParams).then((response) => {
@@ -445,7 +683,10 @@ export default {
     getList() {
       this.loading = true;
       listJybb(this.queryParams).then((response) => {
+        this.jybbListFq = [];
         this.jybbList = response.rows;
+        this.jybbListFq.push(this.jybbList[0]);
+        this.jybbList.shift();
         this.total = response.total;
         this.loading = false;
       });

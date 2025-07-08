@@ -104,6 +104,7 @@
           icon="el-icon-search"
           size="mini"
           @click="handleQuery"
+          :disabled="ssStaus"
           >搜索</el-button
         >
         <el-button icon="el-icon-refresh" size="mini" @click="resetQuery"
@@ -1264,6 +1265,7 @@ export default {
   },
   data() {
     return {
+      ssStaus: false,
       cqxmtitle: "",
       lxValue: [],
       options: [
@@ -1870,6 +1872,7 @@ export default {
       this.overTimeOpen = true;
     },
     getStatisticsData() {
+      this.ssStaus = true;
       this.statisticsData = [];
       listProject(this.addDateRange(this.queryStatisticsParams)).then(
         (response) => {
@@ -2005,6 +2008,7 @@ export default {
           }
 
           this.statisticsData.push(numData);
+          this.ssStaus = false;
         }
       );
     },

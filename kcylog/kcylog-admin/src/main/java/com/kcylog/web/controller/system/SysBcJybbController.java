@@ -15,6 +15,7 @@ import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
 import javax.servlet.http.HttpServletResponse;
+import java.util.Iterator;
 import java.util.List;
 import java.util.Objects;
 
@@ -68,6 +69,16 @@ public class SysBcJybbController extends BaseController
                 }
             }
         }
+
+        for (Iterator<SysBcJybb> iterator = list.iterator(); iterator.hasNext(); ) {
+            SysBcJybb item = iterator.next();
+            if ("福清分公司".equals(item.getOrgName())) {
+                iterator.remove();        // 从原位置移除
+                list.add(0, item);  // 插到最前面
+                break;                    // 如果只要一个，就结束
+            }
+        }
+
         return getDataTable(list);
     }
 
