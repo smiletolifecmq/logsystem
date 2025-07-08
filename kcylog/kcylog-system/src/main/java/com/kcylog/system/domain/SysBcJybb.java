@@ -63,7 +63,6 @@ public class SysBcJybb extends BaseEntity
     private String tenderAmount;
 
     /** 年份 */
-    @Excel(name = "年份")
     private String year;
 
     private String token;
@@ -99,6 +98,83 @@ public class SysBcJybb extends BaseEntity
     private Long govWeekRoadCount; //含政周，不含土方和控制
 
     private Long jiCount; //含籍统计
+
+    @Excel(name = "总项目数（年｜周）")
+    private String totalCountYearWeek;
+
+    @Excel(name = "项目编号含售项目数（年｜周）")
+    private String sellYearWeekCount;
+
+    @Excel(name = "项目编号含规项目数（年｜周）")
+    private String planYearWeekCount;
+
+    @Excel(name = "项目编号含政项目数（年-土方或控制｜周-土方或控制")
+    private String govYearWeekEarthControlCount;
+
+    @Excel(name = "项目编号含政项目数（年-道路｜周-道路")
+    private String govYearWeekRoadCount;
+
+    @Excel(name = "项目编号含籍项目数")
+    private String jiCountString; //含籍统计
+
+    @Excel(name = "项目编号含管项目数（cctv | 其它）")
+    private String pipeCctvOtherCount; //含管cctv
+
+    public String getTotalCountYearWeek() {
+        return totalCountYearWeek;
+    }
+
+    public void setTotalCountYearWeek(String totalCountYearWeek) {
+        this.totalCountYearWeek = totalCountYearWeek;
+    }
+
+    public String getSellYearWeekCount() {
+        return sellYearWeekCount;
+    }
+
+    public void setSellYearWeekCount(String sellYearWeekCount) {
+        this.sellYearWeekCount = sellYearWeekCount;
+    }
+
+    public String getPlanYearWeekCount() {
+        return planYearWeekCount;
+    }
+
+    public void setPlanYearWeekCount(String planYearWeekCount) {
+        this.planYearWeekCount = planYearWeekCount;
+    }
+
+    public String getGovYearWeekEarthControlCount() {
+        return govYearWeekEarthControlCount;
+    }
+
+    public void setGovYearWeekEarthControlCount(String govYearWeekEarthControlCount) {
+        this.govYearWeekEarthControlCount = govYearWeekEarthControlCount;
+    }
+
+    public String getGovYearWeekRoadCount() {
+        return govYearWeekRoadCount;
+    }
+
+    public void setGovYearWeekRoadCount(String govYearWeekRoadCount) {
+        this.govYearWeekRoadCount = govYearWeekRoadCount;
+    }
+
+    public String getJiCountString() {
+        return jiCountString;
+    }
+
+    public void setJiCountString(String jiCountString) {
+        this.jiCountString = jiCountString;
+    }
+
+    public String getPipeCctvOtherCount() {
+        return pipeCctvOtherCount;
+    }
+
+    public void setPipeCctvOtherCount(String pipeCctvOtherCount) {
+        this.pipeCctvOtherCount = pipeCctvOtherCount;
+    }
 
     public Long getTotalCount() {
         return totalCount;

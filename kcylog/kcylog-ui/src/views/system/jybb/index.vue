@@ -36,7 +36,8 @@
         >
       </el-form-item>
     </el-form>
-    <!-- <el-row :gutter="10" class="mb8">
+
+    <el-row :gutter="10" class="mb8">
       <el-col :span="1.5">
         <el-button
           type="warning"
@@ -44,15 +45,10 @@
           icon="el-icon-download"
           size="mini"
           @click="handleExport"
-          v-hasPermi="['system:jybb:export']"
           >导出</el-button
         >
       </el-col>
-      <right-toolbar
-        :showSearch.sync="showSearch"
-        @queryTable="getList"
-      ></right-toolbar>
-    </el-row> -->
+    </el-row>
 
     <el-table v-loading="loading" :data="jybbListFq" ref="fixedTable">
       <el-table-column
@@ -788,7 +784,7 @@ export default {
         {
           ...this.queryParams,
         },
-        `jybb_${new Date().getTime()}.xlsx`
+        `经营报表_${new Date().getTime()}.xlsx`
       );
     },
   },

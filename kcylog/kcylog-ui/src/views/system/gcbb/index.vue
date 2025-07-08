@@ -45,7 +45,6 @@
           icon="el-icon-download"
           size="mini"
           @click="handleExport"
-          v-hasPermi="['system:gcbb:export']"
           >导出</el-button
         >
       </el-col>

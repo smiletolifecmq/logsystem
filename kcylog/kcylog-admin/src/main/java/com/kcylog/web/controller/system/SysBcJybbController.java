@@ -89,9 +89,55 @@ public class SysBcJybbController extends BaseController
     @PostMapping("/export")
     public void export(HttpServletResponse response, SysBcJybb sysBcJybb)
     {
+        int year = java.time.LocalDate.now().getYear();
+        String yearStr = String.valueOf(year);
+        sysBcJybb.setYear(yearStr);
         List<SysBcJybb> list = sysBcJybbService.selectSysBcJybbList(sysBcJybb);
+        SysBcGcbb sysBcGcbb = new SysBcGcbb();
+        sysBcGcbb.setYear(yearStr);
+        List<SysBcGcbb> gcbbList = sysBcGcbbService.selectSysBcGcbbTj(sysBcGcbb);
+        for(SysBcJybb obj1 : list){
+            for(SysBcGcbb obj2 : gcbbList){
+                if (Objects.equals(obj1.getOrgName(), obj2.getBranchOrgName())){
+                    obj1.setTotalCount(obj2.getTotalCount());
+                    obj1.setWeekCount(obj2.getWeekCount());
+                    obj1.setSellYearCount(obj2.getSellYearCount());
+                    obj1.setSellWeekCount(obj2.getSellWeekCount());
+                    obj1.setPlanYearCount(obj2.getPlanYearCount());
+                    obj1.setPlanWeekCount(obj2.getPlanWeekCount());
+                    obj1.setPipeCctvCount(obj2.getPipeCctvCount());
+                    obj1.setPipeOtherCount(obj2.getPipeOtherCount());
+                    obj1.setGovYearEarthControlCount(obj2.getGovYearEarthControlCount());
+                    obj1.setGovYearRoadCount(obj2.getGovYearRoadCount());
+                    obj1.setGovWeekEarthControlCount(obj2.getGovWeekEarthControlCount());
+                    obj1.setGovWeekRoadCount(obj2.getGovWeekRoadCount());
+                    obj1.setJiCount(obj2.getJiCount());
+                    continue;
+                }
+            }
+        }
+
+        for (Iterator<SysBcJybb> iterator = list.iterator(); iterator.hasNext(); ) {
+            SysBcJybb item = iterator.next();
+            if ("福清分公司".equals(item.getOrgName())) {
+                iterator.remove();        // 从原位置移除
+                list.add(0, item);  // 插到最前面
+                break;                    // 如果只要一个，就结束
+            }
+        }
+
+        for(SysBcJybb obj1 : list){
+            obj1.setTotalCountYearWeek(safeStr(obj1.getTotalCount()) + " ｜ " + safeStr(obj1.getWeekCount()));
+            obj1.setSellYearWeekCount(safeStr(obj1.getSellYearCount()) + " ｜ " + safeStr(obj1.getSellWeekCount()));
+            obj1.setPlanYearWeekCount(safeStr(obj1.getPlanYearCount()) + " ｜ " + safeStr(obj1.getPlanWeekCount()));
+            obj1.setGovYearWeekEarthControlCount(safeStr(obj1.getGovYearEarthControlCount()) + " ｜ " + safeStr(obj1.getGovWeekEarthControlCount()));
+            obj1.setGovYearWeekRoadCount(safeStr(obj1.getGovYearRoadCount()) + " ｜ " + safeStr(obj1.getGovWeekRoadCount()));
+            obj1.setJiCountString(safeStr(obj1.getJiCount()));
+            obj1.setPipeCctvOtherCount(safeStr(obj1.getPipeCctvCount()) + " ｜ " + safeStr(obj1.getPipeOtherCount()));
+        }
+
         ExcelUtil<SysBcJybb> util = new ExcelUtil<SysBcJybb>(SysBcJybb.class);
-        util.exportExcel(response, list, "百川分院经营金额数据");
+        util.exportExcel(response, list, "经营报表");
     }
 
     /**
@@ -131,5 +177,9 @@ public class SysBcJybbController extends BaseController
     public AjaxResult remove(@PathVariable Long[] ids)
     {
         return toAjax(sysBcJybbService.deleteSysBcJybbByIds(ids));
+    }
+
+    static String safeStr(Object val) {
+        return val != null ? String.valueOf(val) : "";
     }
 }
