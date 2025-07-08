@@ -27,17 +27,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
     <select id="selectSysBcJybbList" parameterType="SysBcJybb" resultMap="SysBcJybbResult">
         <include refid="selectSysBcJybbVo"/>
         <where>  
-            <if test="orgName != null  and orgName != ''"> and orgName like concat('%', #{orgName}, '%')</if>
-            <if test="finalAmount != null  and finalAmount != ''"> and finalAmount = #{finalAmount}</if>
-            <if test="invoiceAmount != null  and invoiceAmount != ''"> and invoiceAmount = #{invoiceAmount}</if>
-            <if test="subsidyAmount != null  and subsidyAmount != ''"> and subsidyAmount = #{subsidyAmount}</if>
-            <if test="ownToOwnAmount != null  and ownToOwnAmount != ''"> and ownToOwnAmount = #{ownToOwnAmount}</if>
-            <if test="ownToOtherAmount != null  and ownToOtherAmount != ''"> and ownToOtherAmount = #{ownToOtherAmount}</if>
-            <if test="otherToOwnAmount != null  and otherToOwnAmount != ''"> and otherToOwnAmount = #{otherToOwnAmount}</if>
-            <if test="ownAmount != null  and ownAmount != ''"> and ownAmount = #{ownAmount}</if>
-            <if test="paymentAmount != null  and paymentAmount != ''"> and paymentAmount = #{paymentAmount}</if>
-            <if test="receivableAmount != null  and receivableAmount != ''"> and receivableAmount = #{receivableAmount}</if>
-            <if test="tenderAmount != null  and tenderAmount != ''"> and tenderAmount = #{tenderAmount}</if>
+            <if test="orgName != null  and orgName != ''"> and orgName = #{orgName}</if>
             <if test="year != null  and year != ''"> and year = #{year}</if>
         </where>
     </select>
@@ -82,7 +72,6 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
     <update id="updateSysBcJybb" parameterType="SysBcJybb">
         update sys_bc_jybb
         <trim prefix="SET" suffixOverrides=",">
-            <if test="orgName != null">orgName = #{orgName},</if>
             <if test="finalAmount != null">finalAmount = #{finalAmount},</if>
             <if test="invoiceAmount != null">invoiceAmount = #{invoiceAmount},</if>
             <if test="subsidyAmount != null">subsidyAmount = #{subsidyAmount},</if>
@@ -93,9 +82,8 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
             <if test="paymentAmount != null">paymentAmount = #{paymentAmount},</if>
             <if test="receivableAmount != null">receivableAmount = #{receivableAmount},</if>
             <if test="tenderAmount != null">tenderAmount = #{tenderAmount},</if>
-            <if test="year != null">year = #{year},</if>
         </trim>
-        where id = #{id}
+        where orgName = #{orgName} and year = #{year}
     </update>
 
     <delete id="deleteSysBcJybbById" parameterType="Long">

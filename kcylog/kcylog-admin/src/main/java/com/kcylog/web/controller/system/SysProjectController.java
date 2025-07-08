@@ -80,6 +80,9 @@ public class SysProjectController extends BaseController {
     @Autowired
     private ISysBcJybbService sysBcJybbService;
 
+    @Autowired
+    private ISysBcGcbbService sysBcGcbbService;
+
     private static final ObjectMapper objectMapper = new ObjectMapper();
 
     /**
@@ -2794,8 +2797,9 @@ public class SysProjectController extends BaseController {
     @Anonymous
     @CrossOrigin
     @PostMapping("/syncBcInfo")
-    public TableDataInfo syncBcInfo(@RequestBody SysBcJybb sysBcJybb) throws IOException, InterruptedException {
-        List<SysBcJybb> list = new ArrayList<>();
+    public AjaxResult syncBcInfo(@RequestBody SysBcJybb sysBcJybb) throws IOException, InterruptedException {
+        // 同步经营报表
+        List<BcjybbReturn> list = new ArrayList<>();
         String url = "http://192.168.150.99:81/gw/fzis/server/report/operating/summary/statistic/V2";
 
         // 构造请求体
@@ -2823,17 +2827,100 @@ public class SysProjectController extends BaseController {
             String json = response.body();
 
             // 解析成 ApiResponse<List<SysBcJybb>>
-            BcJybb<List<SysBcJybb>> apiResponse = objectMapper.readValue(
+            BcJybb<List<BcjybbReturn>> apiResponse = objectMapper.readValue(
                     json,
-                    new TypeReference<BcJybb<List<SysBcJybb>>>() {}
+                    new TypeReference<BcJybb<List<BcjybbReturn>>>() {}
             );
 
             if ("0".equals(apiResponse.getCode())) {
                 list = apiResponse.getData();
+                if (list.size() > 0){
+                    for (BcjybbReturn obj : list){
+                        SysBcJybb bcJybb = new SysBcJybb();
+                        bcJybb.setOrgName(obj.getOrgName());
+                        bcJybb.setFinalAmount(obj.getFinalAmount());
+                        bcJybb.setInvoiceAmount(obj.getInvoiceAmount());
+                        bcJybb.setSubsidyAmount(obj.getSubsidyAmount());
+                        bcJybb.setOwnToOwnAmount(obj.getOwnToOwnAmount());
+                        bcJybb.setOwnToOtherAmount(obj.getOwnToOtherAmount());
+                        bcJybb.setOtherToOwnAmount(obj.getOtherToOwnAmount());
+                        bcJybb.setOwnAmount(obj.getOwnAmount());
+                        bcJybb.setPaymentAmount(obj.getPaymentAmount());
+                        bcJybb.setReceivableAmount(obj.getReceivableAmount());
+                        bcJybb.setTenderAmount(obj.getTenderAmount());
+                        bcJybb.setYear(sysBcJybb.getYear());
+                        List<SysBcJybb> res = sysBcJybbService.selectSysBcJybbList(bcJybb);
+                        if(res.size() > 0){
+                            sysBcJybbService.updateSysBcJybb(bcJybb);
+                        }else {
+                            sysBcJybbService.insertSysBcJybb(bcJybb);
+                        }
+                    }
+                }
             }
         }
 
-        return getDataTable(list);
+        // 同步工程报表
+
+        url = "http://192.168.150.99:81/gw/fzis/server/report/project/archive-summary";
+
+        sysBcGcbbService.deleteSysBcGcbbByYear(sysBcJybb.getYear());
+        for (int i = 1; i <= sysBcJybb.getTotal() ; i++) {
+            List<BcProjectRes> listProject = new ArrayList<>();
+            // 构造请求体
+            bodyMap = new HashMap<>();
+            bodyMap.put("createTimeBegin", sysBcJybb.getBillingDateBegin());
+            bodyMap.put("createTimeEnd", sysBcJybb.getBillingDateEnd());
+            bodyMap.put("size", "100");
+            bodyMap.put("current", String.valueOf(i));
+
+            requestBody = objectMapper.writeValueAsString(bodyMap);
+
+            // 构造 HttpClient
+            client = HttpClient.newHttpClient();
+
+            request = HttpRequest.newBuilder()
+                    .uri(URI.create(url))
+                    .header("Content-Type", "application/json")
+                    .header("Authorization", sysBcJybb.getToken())
+                    .POST(HttpRequest.BodyPublishers.ofString(requestBody))
+                    .build();
+
+            // 发送请求
+            response = client.send(request, HttpResponse.BodyHandlers.ofString());
+
+            if (response.statusCode() == 200) {
+                String json = response.body();
+
+                ApiResponse<PageResult<BcProjectRes>> apiResponse = objectMapper.readValue(
+                        json,
+                        new TypeReference<ApiResponse<PageResult<BcProjectRes>>>() {}
+                );
+
+                if ("0".equals(apiResponse.getCode())) {
+                    listProject = apiResponse.getData().getRecords();
+                    if (listProject.size() > 0){
+                        for (BcProjectRes obj : listProject){
+                            SysBcGcbb bcgcbb = new SysBcGcbb();
+                            bcgcbb.setcTime(obj.getCreateTime());
+                            bcgcbb.setProjectCode(obj.getProjectCode());
+                            bcgcbb.setProjectName(obj.getProjectName());
+                            bcgcbb.setProjectTypeName(obj.getProjectTypeName());
+                            bcgcbb.setCustomerName(obj.getCustomerName());
+                            bcgcbb.setBranchOrgName(obj.getBranchOrgName());
+                            bcgcbb.setContractNo(obj.getContractNo());
+                            bcgcbb.setContractAmount(obj.getContractAmount());
+                            bcgcbb.setContractFinalAmount(obj.getContractFinalAmount());
+                            bcgcbb.setYear(sysBcJybb.getYear());
+                            sysBcGcbbService.insertSysBcGcbb(bcgcbb);
+                        }
+                    }
+                }
+            }
+        }
+
+
+        return toAjax(1);
     }
 
 

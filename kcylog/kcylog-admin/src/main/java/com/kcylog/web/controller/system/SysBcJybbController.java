@@ -43,7 +43,6 @@ public class SysBcJybbController extends BaseController
     /**
      * 导出百川分院经营金额列表
      */
-    @PreAuthorize("@ss.hasPermi('system:jybb:export')")
     @Log(title = "百川分院经营金额", businessType = BusinessType.EXPORT)
     @PostMapping("/export")
     public void export(HttpServletResponse response, SysBcJybb sysBcJybb)
@@ -56,7 +55,6 @@ public class SysBcJybbController extends BaseController
     /**
      * 获取百川分院经营金额详细信息
      */
-    @PreAuthorize("@ss.hasPermi('system:jybb:query')")
     @GetMapping(value = "/{id}")
     public AjaxResult getInfo(@PathVariable("id") Long id)
     {
@@ -66,7 +64,6 @@ public class SysBcJybbController extends BaseController
     /**
      * 新增百川分院经营金额
      */
-    @PreAuthorize("@ss.hasPermi('system:jybb:add')")
     @Log(title = "百川分院经营金额", businessType = BusinessType.INSERT)
     @PostMapping
     public AjaxResult add(@RequestBody SysBcJybb sysBcJybb)
@@ -77,7 +74,6 @@ public class SysBcJybbController extends BaseController
     /**
      * 修改百川分院经营金额
      */
-    @PreAuthorize("@ss.hasPermi('system:jybb:edit')")
     @Log(title = "百川分院经营金额", businessType = BusinessType.UPDATE)
     @PutMapping
     public AjaxResult edit(@RequestBody SysBcJybb sysBcJybb)
@@ -88,7 +84,6 @@ public class SysBcJybbController extends BaseController
     /**
      * 删除百川分院经营金额
      */
-    @PreAuthorize("@ss.hasPermi('system:jybb:remove')")
     @Log(title = "百川分院经营金额", businessType = BusinessType.DELETE)
 	@DeleteMapping("/{ids}")
     public AjaxResult remove(@PathVariable Long[] ids)

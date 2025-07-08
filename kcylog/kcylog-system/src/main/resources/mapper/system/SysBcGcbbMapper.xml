@@ -1,0 +1,96 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.kcylog.system.mapper.SysBcGcbbMapper">
+    
+    <resultMap type="SysBcGcbb" id="SysBcGcbbResult">
+        <result property="id"    column="id"    />
+        <result property="cTime"    column="cTime"    />
+        <result property="projectCode"    column="projectCode"    />
+        <result property="projectName"    column="projectName"    />
+        <result property="projectTypeName"    column="projectTypeName"    />
+        <result property="customerName"    column="customerName"    />
+        <result property="branchOrgName"    column="branchOrgName"    />
+        <result property="contractNo"    column="contractNo"    />
+        <result property="contractAmount"    column="contractAmount"    />
+        <result property="contractFinalAmount"    column="contractFinalAmount"    />
+        <result property="year"    column="year"    />
+    </resultMap>
+
+    <sql id="selectSysBcGcbbVo">
+        select id, cTime, projectCode, projectName, projectTypeName, customerName, branchOrgName, contractNo, contractAmount, contractFinalAmount, year from sys_bc_gcbb
+    </sql>
+
+    <select id="selectSysBcGcbbList" parameterType="SysBcGcbb" resultMap="SysBcGcbbResult">
+        <include refid="selectSysBcGcbbVo"/>
+        <where>
+            <if test="branchOrgName != null  and branchOrgName != ''"> and branchOrgName like concat('%', #{branchOrgName}, '%')</if>
+            <if test="year != null  and year != ''"> and year = #{year}</if>
+        </where>
+    </select>
+    
+    <select id="selectSysBcGcbbById" parameterType="Long" resultMap="SysBcGcbbResult">
+        <include refid="selectSysBcGcbbVo"/>
+        where id = #{id}
+    </select>
+        
+    <insert id="insertSysBcGcbb" parameterType="SysBcGcbb" useGeneratedKeys="true" keyProperty="id">
+        insert into sys_bc_gcbb
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="cTime != null">cTime,</if>
+            <if test="projectCode != null">projectCode,</if>
+            <if test="projectName != null">projectName,</if>
+            <if test="projectTypeName != null">projectTypeName,</if>
+            <if test="customerName != null">customerName,</if>
+            <if test="branchOrgName != null">branchOrgName,</if>
+            <if test="contractNo != null">contractNo,</if>
+            <if test="contractAmount != null">contractAmount,</if>
+            <if test="contractFinalAmount != null">contractFinalAmount,</if>
+            <if test="year != null">year,</if>
+         </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test="cTime != null">#{cTime},</if>
+            <if test="projectCode != null">#{projectCode},</if>
+            <if test="projectName != null">#{projectName},</if>
+            <if test="projectTypeName != null">#{projectTypeName},</if>
+            <if test="customerName != null">#{customerName},</if>
+            <if test="branchOrgName != null">#{branchOrgName},</if>
+            <if test="contractNo != null">#{contractNo},</if>
+            <if test="contractAmount != null">#{contractAmount},</if>
+            <if test="contractFinalAmount != null">#{contractFinalAmount},</if>
+            <if test="year != null">#{year},</if>
+         </trim>
+    </insert>
+
+    <update id="updateSysBcGcbb" parameterType="SysBcGcbb">
+        update sys_bc_gcbb
+        <trim prefix="SET" suffixOverrides=",">
+            <if test="cTime != null">cTime = #{cTime},</if>
+            <if test="projectCode != null">projectCode = #{projectCode},</if>
+            <if test="projectName != null">projectName = #{projectName},</if>
+            <if test="projectTypeName != null">projectTypeName = #{projectTypeName},</if>
+            <if test="customerName != null">customerName = #{customerName},</if>
+            <if test="branchOrgName != null">branchOrgName = #{branchOrgName},</if>
+            <if test="contractNo != null">contractNo = #{contractNo},</if>
+            <if test="contractAmount != null">contractAmount = #{contractAmount},</if>
+            <if test="contractFinalAmount != null">contractFinalAmount = #{contractFinalAmount},</if>
+        </trim>
+        where id = #{id}
+    </update>
+
+    <delete id="deleteSysBcGcbbById" parameterType="Long">
+        delete from sys_bc_gcbb where id = #{id}
+    </delete>
+
+    <delete id="deleteSysBcGcbbByIds" parameterType="String">
+        delete from sys_bc_gcbb where id in 
+        <foreach item="id" collection="array" open="(" separator="," close=")">
+            #{id}
+        </foreach>
+    </delete>
+
+    <delete id="deleteSysBcGcbbByYear" parameterType="String">
+        delete from sys_bc_gcbb where year = #{year}
+    </delete>
+</mapper>
