@@ -42,3 +42,11 @@ export function delGcbb(id) {
     method: 'delete'
   })
 }
+
+export function getTypeGcbb(query) {
+  return request({
+    url: '/system/gcbb/getTypeGcbb',
+    method: 'get',
+    params: query
+  })
+}

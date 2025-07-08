@@ -105,4 +105,82 @@ public class SysBcGcbbServiceImpl implements ISysBcGcbbService
     {
         return sysBcGcbbMapper.selectSysBcGcbbTj(sysBcGcbb);
     }
+
+    @Override
+    public List<SysBcGcbb> selectSysBcGcbbListForTotalCount(SysBcGcbb sysBcGcbb)
+    {
+        return sysBcGcbbMapper.selectSysBcGcbbListForTotalCount(sysBcGcbb);
+    }
+
+    @Override
+    public List<SysBcGcbb> selectSysBcGcbbListForWeekCount(SysBcGcbb sysBcGcbb)
+    {
+        return sysBcGcbbMapper.selectSysBcGcbbListForWeekCount(sysBcGcbb);
+    }
+
+    @Override
+    public List<SysBcGcbb> selectSysBcGcbbListForSellYearCount(SysBcGcbb sysBcGcbb)
+    {
+        return sysBcGcbbMapper.selectSysBcGcbbListForSellYearCount(sysBcGcbb);
+    }
+
+    @Override
+    public List<SysBcGcbb> selectSysBcGcbbListForSellWeekCount(SysBcGcbb sysBcGcbb)
+    {
+        return sysBcGcbbMapper.selectSysBcGcbbListForSellWeekCount(sysBcGcbb);
+    }
+
+    @Override
+    public List<SysBcGcbb> selectSysBcGcbbListForPlanYearCount(SysBcGcbb sysBcGcbb)
+    {
+        return sysBcGcbbMapper.selectSysBcGcbbListForPlanYearCount(sysBcGcbb);
+    }
+
+    @Override
+    public List<SysBcGcbb> selectSysBcGcbbListForPlanWeekCount(SysBcGcbb sysBcGcbb)
+    {
+        return sysBcGcbbMapper.selectSysBcGcbbListForPlanWeekCount(sysBcGcbb);
+    }
+
+    @Override
+    public List<SysBcGcbb> selectSysBcGcbbListForJiCount(SysBcGcbb sysBcGcbb)
+    {
+        return sysBcGcbbMapper.selectSysBcGcbbListForJiCount(sysBcGcbb);
+    }
+
+    @Override
+    public List<SysBcGcbb> selectSysBcGcbbListForPipeCctvCount(SysBcGcbb sysBcGcbb)
+    {
+        return sysBcGcbbMapper.selectSysBcGcbbListForPipeCctvCount(sysBcGcbb);
+    }
+
+    @Override
+    public List<SysBcGcbb> selectSysBcGcbbListForPipeOtherCount(SysBcGcbb sysBcGcbb)
+    {
+        return sysBcGcbbMapper.selectSysBcGcbbListForPipeOtherCount(sysBcGcbb);
+    }
+
+    @Override
+    public List<SysBcGcbb> selectSysBcGcbbListForGovYearEarthControlCount(SysBcGcbb sysBcGcbb)
+    {
+        return sysBcGcbbMapper.selectSysBcGcbbListForGovYearEarthControlCount(sysBcGcbb);
+    }
+
+    @Override
+    public List<SysBcGcbb> selectSysBcGcbbListForGovYearRoadCount(SysBcGcbb sysBcGcbb)
+    {
+        return sysBcGcbbMapper.selectSysBcGcbbListForGovYearRoadCount(sysBcGcbb);
+    }
+
+    @Override
+    public List<SysBcGcbb> selectSysBcGcbbListForGovWeekEarthControlCount(SysBcGcbb sysBcGcbb)
+    {
+        return sysBcGcbbMapper.selectSysBcGcbbListForGovWeekEarthControlCount(sysBcGcbb);
+    }
+
+    @Override
+    public List<SysBcGcbb> selectSysBcGcbbListForGovWeekRoadCount(SysBcGcbb sysBcGcbb)
+    {
+        return sysBcGcbbMapper.selectSysBcGcbbListForGovWeekRoadCount(sysBcGcbb);
+    }
 }

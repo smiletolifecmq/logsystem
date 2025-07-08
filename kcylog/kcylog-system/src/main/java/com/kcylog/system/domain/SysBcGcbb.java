@@ -81,6 +81,16 @@ public class SysBcGcbb extends BaseEntity
 
     private Long jiCount; //含籍统计
 
+    private int dataType;
+
+    public int getDataType() {
+        return dataType;
+    }
+
+    public void setDataType(int dataType) {
+        this.dataType = dataType;
+    }
+
     public Long getTotalCount() {
         return totalCount;
     }

@@ -63,4 +63,30 @@ public interface ISysBcGcbbService
     public int deleteSysBcGcbbByYear(String year);
 
     public List<SysBcGcbb> selectSysBcGcbbTj(SysBcGcbb sysBcGcbb);
+
+    public List<SysBcGcbb> selectSysBcGcbbListForTotalCount(SysBcGcbb sysBcGcbb);
+
+    public List<SysBcGcbb> selectSysBcGcbbListForWeekCount(SysBcGcbb sysBcGcbb);
+
+    public List<SysBcGcbb> selectSysBcGcbbListForSellYearCount(SysBcGcbb sysBcGcbb);
+
+    public List<SysBcGcbb> selectSysBcGcbbListForSellWeekCount(SysBcGcbb sysBcGcbb);
+
+    public List<SysBcGcbb> selectSysBcGcbbListForPlanYearCount(SysBcGcbb sysBcGcbb);
+
+    public List<SysBcGcbb> selectSysBcGcbbListForPlanWeekCount(SysBcGcbb sysBcGcbb);
+
+    public List<SysBcGcbb> selectSysBcGcbbListForJiCount(SysBcGcbb sysBcGcbb);
+
+    public List<SysBcGcbb> selectSysBcGcbbListForPipeCctvCount(SysBcGcbb sysBcGcbb);
+
+    public List<SysBcGcbb> selectSysBcGcbbListForPipeOtherCount(SysBcGcbb sysBcGcbb);
+
+    public List<SysBcGcbb> selectSysBcGcbbListForGovYearEarthControlCount(SysBcGcbb sysBcGcbb);
+
+    public List<SysBcGcbb> selectSysBcGcbbListForGovYearRoadCount(SysBcGcbb sysBcGcbb);
+
+    public List<SysBcGcbb> selectSysBcGcbbListForGovWeekEarthControlCount(SysBcGcbb sysBcGcbb);
+
+    public List<SysBcGcbb> selectSysBcGcbbListForGovWeekRoadCount(SysBcGcbb sysBcGcbb);
 }

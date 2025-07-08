@@ -97,7 +97,17 @@
       />
       <el-table-column label="总项目数（年｜周）" align="center">
         <template slot-scope="scope">
-          {{ scope.row.totalCount }} | {{ scope.row.weekCount }}
+          <span
+            class="hover-effect"
+            @click="handleGcbbList(1, scope.row.orgName)"
+            >{{ scope.row.totalCount }}</span
+          >
+          |
+          <span
+            class="hover-effect"
+            @click="handleGcbbList(2, scope.row.orgName)"
+            >{{ scope.row.weekCount }}</span
+          >
         </template>
       </el-table-column>
 
@@ -106,7 +116,17 @@
           项目编号含<span style="color: red">售</span>项目数（年｜周）
         </template>
         <template slot-scope="scope">
-          {{ scope.row.sellYearCount }} | {{ scope.row.sellWeekCount }}
+          <span
+            class="hover-effect"
+            @click="handleGcbbList(3, scope.row.orgName)"
+            >{{ scope.row.sellYearCount }}</span
+          >
+          |
+          <span
+            class="hover-effect"
+            @click="handleGcbbList(4, scope.row.orgName)"
+            >{{ scope.row.sellWeekCount }}</span
+          >
         </template>
       </el-table-column>
 
@@ -115,7 +135,17 @@
           项目编号含<span style="color: red">规</span>项目数（年｜周）
         </template>
         <template slot-scope="scope">
-          {{ scope.row.planYearCount }} | {{ scope.row.planWeekCount }}
+          <span
+            class="hover-effect"
+            @click="handleGcbbList(5, scope.row.orgName)"
+            >{{ scope.row.planYearCount }}</span
+          >
+          |
+          <span
+            class="hover-effect"
+            @click="handleGcbbList(6, scope.row.orgName)"
+            >{{ scope.row.planWeekCount }}</span
+          >
         </template>
       </el-table-column>
 
@@ -124,7 +154,11 @@
           项目编号含<span style="color: red">籍</span>项目数
         </template>
         <template slot-scope="scope">
-          {{ scope.row.jiCount }}
+          <span
+            class="hover-effect"
+            @click="handleGcbbList(7, scope.row.orgName)"
+            >{{ scope.row.jiCount }}</span
+          >
         </template>
       </el-table-column>
 
@@ -133,7 +167,17 @@
           项目编号含<span style="color: red">管</span>项目数（cctv | 其它）
         </template>
         <template slot-scope="scope">
-          {{ scope.row.pipeCctvCount }} | {{ scope.row.pipeOtherCount }}
+          <span
+            class="hover-effect"
+            @click="handleGcbbList(8, scope.row.orgName)"
+            >{{ scope.row.pipeCctvCount }}</span
+          >
+          |
+          <span
+            class="hover-effect"
+            @click="handleGcbbList(9, scope.row.orgName)"
+            >{{ scope.row.pipeOtherCount }}</span
+          >
         </template>
       </el-table-column>
 
@@ -143,8 +187,17 @@
           年-道路）
         </template>
         <template slot-scope="scope">
-          {{ scope.row.govYearEarthControlCount }} |
-          {{ scope.row.govYearRoadCount }}
+          <span
+            class="hover-effect"
+            @click="handleGcbbList(10, scope.row.orgName)"
+            >{{ scope.row.govYearEarthControlCount }}</span
+          >
+          |
+          <span
+            class="hover-effect"
+            @click="handleGcbbList(11, scope.row.orgName)"
+            >{{ scope.row.govYearRoadCount }}</span
+          >
         </template>
       </el-table-column>
 
@@ -154,13 +207,66 @@
           周-道路）
         </template>
         <template slot-scope="scope">
-          {{ scope.row.govWeekEarthControlCount }} |
-          {{ scope.row.govWeekRoadCount }}
+          <span
+            class="hover-effect"
+            @click="handleGcbbList(12, scope.row.orgName)"
+            >{{ scope.row.govWeekEarthControlCount }}</span
+          >
+          |
+          <span
+            class="hover-effect"
+            @click="handleGcbbList(13, scope.row.orgName)"
+            >{{ scope.row.govWeekRoadCount }}</span
+          >
         </template>
       </el-table-column>
     </el-table>
+
+    <el-dialog
+      title="项目列表"
+      :visible.sync="conditionOpen"
+      width="1400px"
+      append-to-body
+    >
+      <el-table v-loading="loading" :data="gcbbList">
+        <el-table-column label="登记时间" align="center" prop="cTime" />
+        <el-table-column label="项目编号" align="center" prop="projectCode" />
+        <el-table-column label="项目名称" align="center" prop="projectName" />
+        <el-table-column
+          label="项目类型"
+          align="center"
+          prop="projectTypeName"
+        />
+        <el-table-column label="委托单位" align="center" prop="customerName" />
+        <el-table-column label="所属分院" align="center" prop="branchOrgName" />
+        <el-table-column label="合同编号" align="center" prop="contractNo" />
+        <el-table-column
+          label="合同金额"
+          align="center"
+          prop="contractAmount"
+        />
+        <el-table-column
+          label="结算金额"
+          align="center"
+          prop="contractFinalAmount"
+        />
+      </el-table>
+
+      <pagination
+        v-show="gcbbTotal > 0"
+        :total="gcbbTotal"
+        :page.sync="queryGcbbParams.pageNum"
+        :limit.sync="queryGcbbParams.pageSize"
+        @pagination="getGcbbList"
+      />
+    </el-dialog>
   </div>
 </template>
+<style>
+.hover-effect:hover {
+  cursor: pointer;
+}
+</style>
 
 <script>
 import {
@@ -170,11 +276,15 @@ import {
   addJybb,
   updateJybb,
 } from "@/api/system/jybb";
+import { getTypeGcbb } from "@/api/system/gcbb";
 
 export default {
   name: "Jybb",
   data() {
     return {
+      gcbbTotal: 0,
+      conditionOpen: false,
+      gcbbList: [],
       options: [
         {
           value: "测绘工程院(含外设)",
@@ -277,6 +387,12 @@ export default {
       // 是否显示弹出层
       open: false,
       // 查询参数
+      queryGcbbParams: {
+        pageNum: 1,
+        pageSize: 10,
+        dataType: null,
+        branchOrgName: null,
+      },
       queryParams: {
         pageNum: 1,
         pageSize: 10,
@@ -303,6 +419,28 @@ export default {
     this.getList();
   },
   methods: {
+    getGcbbList() {
+      this.loading = true;
+      getTypeGcbb(this.queryGcbbParams).then((response) => {
+        this.gcbbList = response.rows;
+        this.gcbbTotal = response.total;
+        this.loading = false;
+      });
+    },
+    handleGcbbList(value, fy) {
+      this.queryGcbbParams = {
+        pageNum: 1,
+        pageSize: 10,
+        dataType: value,
+        branchOrgName: fy,
+      };
+      getTypeGcbb(this.queryGcbbParams).then((response) => {
+        this.gcbbList = response.rows;
+        this.gcbbTotal = response.total;
+        this.loading = false;
+        this.conditionOpen = true;
+      });
+    },
     /** 查询百川分院经营金额列表 */
     getList() {
       this.loading = true;

@@ -13,6 +13,7 @@ import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
 import javax.servlet.http.HttpServletResponse;
+import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -92,5 +93,57 @@ public class SysBcGcbbController extends BaseController
     public AjaxResult remove(@PathVariable Long[] ids)
     {
         return toAjax(sysBcGcbbService.deleteSysBcGcbbByIds(ids));
+    }
+
+    @GetMapping("/getTypeGcbb")
+    public TableDataInfo getTypeGcbb(SysBcGcbb sysBcGcbb)
+    {
+        startPage();
+        int year = java.time.LocalDate.now().getYear();
+        String yearStr = String.valueOf(year);
+        sysBcGcbb.setYear(yearStr);
+        List<SysBcGcbb> list = new ArrayList<>();
+        switch (sysBcGcbb.getDataType()){
+            case 1:
+                list = sysBcGcbbService.selectSysBcGcbbListForTotalCount(sysBcGcbb);
+                break;
+            case 2:
+                list = sysBcGcbbService.selectSysBcGcbbListForWeekCount(sysBcGcbb);
+                break;
+            case 3:
+                list = sysBcGcbbService.selectSysBcGcbbListForSellYearCount(sysBcGcbb);
+                break;
+            case 4:
+                list = sysBcGcbbService.selectSysBcGcbbListForSellWeekCount(sysBcGcbb);
+                break;
+            case 5:
+                list = sysBcGcbbService.selectSysBcGcbbListForPlanYearCount(sysBcGcbb);
+                break;
+            case 6:
+                list = sysBcGcbbService.selectSysBcGcbbListForPlanWeekCount(sysBcGcbb);
+                break;
+            case 7:
+                list = sysBcGcbbService.selectSysBcGcbbListForJiCount(sysBcGcbb);
+                break;
+            case 8:
+                list = sysBcGcbbService.selectSysBcGcbbListForPipeCctvCount(sysBcGcbb);
+                break;
+            case 9:
+                list = sysBcGcbbService.selectSysBcGcbbListForPipeOtherCount(sysBcGcbb);
+                break;
+            case 10:
+                list = sysBcGcbbService.selectSysBcGcbbListForGovYearEarthControlCount(sysBcGcbb);
+                break;
+            case 11:
+                list = sysBcGcbbService.selectSysBcGcbbListForGovYearRoadCount(sysBcGcbb);
+                break;
+            case 12:
+                list = sysBcGcbbService.selectSysBcGcbbListForGovWeekEarthControlCount(sysBcGcbb);
+                break;
+            case 13:
+                list = sysBcGcbbService.selectSysBcGcbbListForGovWeekRoadCount(sysBcGcbb);
+                break;
+        }
+        return getDataTable(list);
     }
 }

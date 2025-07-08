@@ -160,4 +160,182 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
         GROUP BY
             branchOrgName;
     </select>
+
+    <select id="selectSysBcGcbbListForTotalCount" parameterType="SysBcGcbb" resultMap="SysBcGcbbResult">
+        <include refid="selectSysBcGcbbVo"/>
+        <where>
+            <if test="branchOrgName != null  and branchOrgName != ''"> and branchOrgName like concat('%', #{branchOrgName}, '%')</if>
+            <if test="year != null  and year != ''"> and year = #{year}</if>
+        </where>
+    </select>
+
+    <select id="selectSysBcGcbbListForWeekCount" parameterType="SysBcGcbb" resultMap="SysBcGcbbResult">
+        <include refid="selectSysBcGcbbVo"/>
+        <where>
+            <if test="branchOrgName != null  and branchOrgName != ''"> and branchOrgName like concat('%', #{branchOrgName}, '%')</if>
+            <if test="year != null  and year != ''"> and year = #{year}</if>
+            and
+            STR_TO_DATE(cTime, '%Y-%m-%d %H:%i:%s') BETWEEN
+            STR_TO_DATE(CONCAT(DATE_FORMAT(CURRENT_DATE - INTERVAL WEEKDAY(CURRENT_DATE) DAY, '%Y-%m-%d'), ' 00:00:00'), '%Y-%m-%d %H:%i:%s')
+            AND
+            STR_TO_DATE(CONCAT(DATE_FORMAT(CURRENT_DATE - INTERVAL WEEKDAY(CURRENT_DATE) DAY + 6, '%Y-%m-%d'), ' 23:59:59'), '%Y-%m-%d %H:%i:%s')
+        </where>
+    </select>
+
+    <select id="selectSysBcGcbbListForSellYearCount" parameterType="SysBcGcbb" resultMap="SysBcGcbbResult">
+        <include refid="selectSysBcGcbbVo"/>
+        <where>
+            <if test="branchOrgName != null  and branchOrgName != ''"> and branchOrgName like concat('%', #{branchOrgName}, '%')</if>
+            <if test="year != null  and year != ''"> and year = #{year}</if>
+            and
+            projectCode LIKE '%售%'
+        </where>
+    </select>
+
+    <select id="selectSysBcGcbbListForSellWeekCount" parameterType="SysBcGcbb" resultMap="SysBcGcbbResult">
+        <include refid="selectSysBcGcbbVo"/>
+        <where>
+            <if test="branchOrgName != null  and branchOrgName != ''"> and branchOrgName like concat('%', #{branchOrgName}, '%')</if>
+            <if test="year != null  and year != ''"> and year = #{year}</if>
+            and
+            projectCode LIKE '%售%'
+            AND STR_TO_DATE(cTime, '%Y-%m-%d %H:%i:%s') BETWEEN
+            STR_TO_DATE(CONCAT(DATE_FORMAT(CURRENT_DATE - INTERVAL WEEKDAY(CURRENT_DATE) DAY, '%Y-%m-%d'), ' 00:00:00'), '%Y-%m-%d %H:%i:%s')
+            AND
+            STR_TO_DATE(CONCAT(DATE_FORMAT(CURRENT_DATE - INTERVAL WEEKDAY(CURRENT_DATE) DAY + 6, '%Y-%m-%d'), ' 23:59:59'), '%Y-%m-%d %H:%i:%s')
+        </where>
+    </select>
+
+    <select id="selectSysBcGcbbListForPlanYearCount" parameterType="SysBcGcbb" resultMap="SysBcGcbbResult">
+        <include refid="selectSysBcGcbbVo"/>
+        <where>
+            <if test="branchOrgName != null  and branchOrgName != ''"> and branchOrgName like concat('%', #{branchOrgName}, '%')</if>
+            <if test="year != null  and year != ''"> and year = #{year}</if>
+            and
+            projectCode LIKE '%规%'
+        </where>
+    </select>
+
+    <select id="selectSysBcGcbbListForPlanWeekCount" parameterType="SysBcGcbb" resultMap="SysBcGcbbResult">
+        <include refid="selectSysBcGcbbVo"/>
+        <where>
+            <if test="branchOrgName != null  and branchOrgName != ''"> and branchOrgName like concat('%', #{branchOrgName}, '%')</if>
+            <if test="year != null  and year != ''"> and year = #{year}</if>
+            and
+            projectCode LIKE '%规%'
+            AND STR_TO_DATE(cTime, '%Y-%m-%d %H:%i:%s') BETWEEN
+            STR_TO_DATE(CONCAT(DATE_FORMAT(CURRENT_DATE - INTERVAL WEEKDAY(CURRENT_DATE) DAY, '%Y-%m-%d'), ' 00:00:00'), '%Y-%m-%d %H:%i:%s')
+            AND
+            STR_TO_DATE(CONCAT(DATE_FORMAT(CURRENT_DATE - INTERVAL WEEKDAY(CURRENT_DATE) DAY + 6, '%Y-%m-%d'), ' 23:59:59'), '%Y-%m-%d %H:%i:%s')
+        </where>
+    </select>
+
+    <select id="selectSysBcGcbbListForJiCount" parameterType="SysBcGcbb" resultMap="SysBcGcbbResult">
+        <include refid="selectSysBcGcbbVo"/>
+        <where>
+            <if test="branchOrgName != null  and branchOrgName != ''"> and branchOrgName like concat('%', #{branchOrgName}, '%')</if>
+            <if test="year != null  and year != ''"> and year = #{year}</if>
+            and
+            projectCode LIKE '%籍%'
+        </where>
+    </select>
+
+    <select id="selectSysBcGcbbListForPipeCctvCount" parameterType="SysBcGcbb" resultMap="SysBcGcbbResult">
+        <include refid="selectSysBcGcbbVo"/>
+        <where>
+            <if test="branchOrgName != null  and branchOrgName != ''"> and branchOrgName like concat('%', #{branchOrgName}, '%')</if>
+            <if test="year != null  and year != ''"> and year = #{year}</if>
+            and
+            projectCode LIKE '%管%'
+            AND LOWER(projectTypeName) LIKE '%cctv%'
+        </where>
+    </select>
+
+    <select id="selectSysBcGcbbListForPipeOtherCount" parameterType="SysBcGcbb" resultMap="SysBcGcbbResult">
+        <include refid="selectSysBcGcbbVo"/>
+        <where>
+            <if test="branchOrgName != null  and branchOrgName != ''"> and branchOrgName like concat('%', #{branchOrgName}, '%')</if>
+            <if test="year != null  and year != ''"> and year = #{year}</if>
+            and
+            projectCode LIKE '%管%'
+            AND (
+            projectTypeName IS NULL
+            OR LOWER(projectTypeName) NOT LIKE '%cctv%'
+            )
+        </where>
+    </select>
+
+    <select id="selectSysBcGcbbListForGovYearEarthControlCount" parameterType="SysBcGcbb" resultMap="SysBcGcbbResult">
+        <include refid="selectSysBcGcbbVo"/>
+        <where>
+            <if test="branchOrgName != null  and branchOrgName != ''"> and branchOrgName like concat('%', #{branchOrgName}, '%')</if>
+            <if test="year != null  and year != ''"> and year = #{year}</if>
+            and
+            projectCode LIKE '%政%'
+            AND (
+            projectTypeName LIKE '%土方%'
+            OR projectTypeName LIKE '%控制%'
+            )
+        </where>
+    </select>
+
+    <select id="selectSysBcGcbbListForGovYearRoadCount" parameterType="SysBcGcbb" resultMap="SysBcGcbbResult">
+        <include refid="selectSysBcGcbbVo"/>
+        <where>
+            <if test="branchOrgName != null  and branchOrgName != ''"> and branchOrgName like concat('%', #{branchOrgName}, '%')</if>
+            <if test="year != null  and year != ''"> and year = #{year}</if>
+            and
+            projectCode LIKE '%政%'
+            AND (
+            (projectTypeName NOT LIKE '%土方%')
+            AND (projectTypeName NOT LIKE '%控制%')
+            )
+        </where>
+    </select>
+
+    <select id="selectSysBcGcbbListForGovWeekEarthControlCount" parameterType="SysBcGcbb" resultMap="SysBcGcbbResult">
+        <include refid="selectSysBcGcbbVo"/>
+        <where>
+            <if test="branchOrgName != null  and branchOrgName != ''"> and branchOrgName like concat('%', #{branchOrgName}, '%')</if>
+            <if test="year != null  and year != ''"> and year = #{year}</if>
+            and
+            projectCode LIKE '%政%'
+            AND STR_TO_DATE(cTime, '%Y-%m-%d %H:%i:%s') BETWEEN
+            STR_TO_DATE(
+            CONCAT(DATE_FORMAT(CURRENT_DATE - INTERVAL WEEKDAY(CURRENT_DATE) DAY, '%Y-%m-%d'), ' 00:00:00'),
+            '%Y-%m-%d %H:%i:%s'
+            )
+            AND
+            STR_TO_DATE(
+            CONCAT(DATE_FORMAT(CURRENT_DATE - INTERVAL WEEKDAY(CURRENT_DATE) DAY + 6, '%Y-%m-%d'), ' 23:59:59'),
+            '%Y-%m-%d %H:%i:%s'
+            )
+            AND (
+            projectTypeName LIKE '%土方%'
+            OR projectTypeName LIKE '%控制%'
+            )
+        </where>
+    </select>
+
+    <select id="selectSysBcGcbbListForGovWeekRoadCount" parameterType="SysBcGcbb" resultMap="SysBcGcbbResult">
+        <include refid="selectSysBcGcbbVo"/>
+        <where>
+            <if test="branchOrgName != null  and branchOrgName != ''"> and branchOrgName like concat('%', #{branchOrgName}, '%')</if>
+            <if test="year != null  and year != ''"> and year = #{year}</if>
+            and
+            projectCode LIKE '%政%'
+            AND STR_TO_DATE(cTime, '%Y-%m-%d %H:%i:%s') BETWEEN
+            STR_TO_DATE(
+            CONCAT(DATE_FORMAT(CURRENT_DATE - INTERVAL WEEKDAY(CURRENT_DATE) DAY, '%Y-%m-%d'), ' 00:00:00'),
+            '%Y-%m-%d %H:%i:%s'
+            )
+            AND
+            STR_TO_DATE(
+            CONCAT(DATE_FORMAT(CURRENT_DATE - INTERVAL WEEKDAY(CURRENT_DATE) DAY + 6, '%Y-%m-%d'), ' 23:59:59'),
+            '%Y-%m-%d %H:%i:%s'
+            )
+            AND projectTypeName NOT LIKE '%土方%'
+            AND projectTypeName NOT LIKE '%控制%'
+        </where>
+    </select>
 </mapper>
