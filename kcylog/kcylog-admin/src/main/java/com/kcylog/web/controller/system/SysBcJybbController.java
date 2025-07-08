@@ -35,7 +35,6 @@ public class SysBcJybbController extends BaseController
     @GetMapping("/list")
     public TableDataInfo list(SysBcJybb sysBcJybb)
     {
-        startPage();
         List<SysBcJybb> list = sysBcJybbService.selectSysBcJybbList(sysBcJybb);
         return getDataTable(list);
     }

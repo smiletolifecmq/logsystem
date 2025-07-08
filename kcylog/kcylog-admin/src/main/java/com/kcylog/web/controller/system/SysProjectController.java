@@ -2901,6 +2901,9 @@ public class SysProjectController extends BaseController {
                     listProject = apiResponse.getData().getRecords();
                     if (listProject.size() > 0){
                         for (BcProjectRes obj : listProject){
+                            if (obj.getProjectCode().contains("图")) {
+                                continue;
+                            }
                             SysBcGcbb bcgcbb = new SysBcGcbb();
                             bcgcbb.setcTime(obj.getCreateTime());
                             bcgcbb.setProjectCode(obj.getProjectCode());
