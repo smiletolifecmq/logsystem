@@ -484,6 +484,30 @@
 .hover-effect:hover {
   cursor: pointer;
 }
+::-webkit-scrollbar {
+  height: 14px;
+  width: 14px;
+  background-color: transparent;
+}
+
+::-webkit-scrollbar-track {
+  background: rgba(0, 0, 0, 0.05);
+  border-radius: 10px;
+}
+
+::-webkit-scrollbar-thumb {
+  background: linear-gradient(45deg, #00c6ff, #0072ff);
+  border-radius: 10px;
+  border: 3px solid transparent;
+  background-clip: content-box;
+  box-shadow: inset 0 0 4px rgba(255, 255, 255, 0.3);
+  transition: background 0.3s, box-shadow 0.3s;
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background: linear-gradient(45deg, #00e6ff, #0052ff);
+  box-shadow: inset 0 0 6px rgba(255, 255, 255, 0.6);
+}
 </style>
 
 <script>
