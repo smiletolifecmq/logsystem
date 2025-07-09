@@ -90,4 +90,10 @@ public interface SysBcGcbbMapper
 
     public List<SysBcGcbb> selectSysBcGcbbListForGovWeekRoadCount(SysBcGcbb sysBcGcbb);
 
+    public List<SysBcGcbb> selectSysBcGcbbListForJiCountMonth(SysBcGcbb sysBcGcbb);
+
+    public List<SysBcGcbb> selectSysBcGcbbListForPipeCctvCountMonth(SysBcGcbb sysBcGcbb);
+
+    public List<SysBcGcbb> selectSysBcGcbbListForPipeOtherCountMonth(SysBcGcbb sysBcGcbb);
+
 }

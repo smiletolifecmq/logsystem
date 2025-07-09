@@ -143,6 +143,18 @@ public class SysBcGcbbController extends BaseController
             case 13:
                 list = sysBcGcbbService.selectSysBcGcbbListForGovWeekRoadCount(sysBcGcbb);
                 break;
+
+            case 14:
+                list = sysBcGcbbService.selectSysBcGcbbListForJiCountMonth(sysBcGcbb);
+                break;
+
+            case 15:
+                list = sysBcGcbbService.selectSysBcGcbbListForPipeCctvCountMonth(sysBcGcbb);
+                break;
+
+            case 16:
+                list = sysBcGcbbService.selectSysBcGcbbListForPipeOtherCountMonth(sysBcGcbb);
+                break;
         }
         return getDataTable(list);
     }

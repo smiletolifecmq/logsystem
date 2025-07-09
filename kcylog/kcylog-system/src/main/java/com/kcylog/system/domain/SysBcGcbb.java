@@ -81,7 +81,37 @@ public class SysBcGcbb extends BaseEntity
 
     private Long jiCount; //含籍统计
 
+    private Long jiCountMonth; //含籍统计月
+
+    private Long pipeCctvCountMonth;
+
+    private Long pipeOtherCountMonth;
+
     private int dataType;
+
+    public Long getPipeOtherCountMonth() {
+        return pipeOtherCountMonth;
+    }
+
+    public void setPipeOtherCountMonth(Long pipeOtherCountMonth) {
+        this.pipeOtherCountMonth = pipeOtherCountMonth;
+    }
+
+    public Long getPipeCctvCountMonth() {
+        return pipeCctvCountMonth;
+    }
+
+    public void setPipeCctvCountMonth(Long pipeCctvCountMonth) {
+        this.pipeCctvCountMonth = pipeCctvCountMonth;
+    }
+
+    public Long getJiCountMonth() {
+        return jiCountMonth;
+    }
+
+    public void setJiCountMonth(Long jiCountMonth) {
+        this.jiCountMonth = jiCountMonth;
+    }
 
     public int getDataType() {
         return dataType;

@@ -65,6 +65,9 @@ public class SysBcJybbController extends BaseController
                     obj1.setGovWeekEarthControlCount(obj2.getGovWeekEarthControlCount());
                     obj1.setGovWeekRoadCount(obj2.getGovWeekRoadCount());
                     obj1.setJiCount(obj2.getJiCount());
+                    obj1.setJiCountMonth(obj2.getJiCountMonth());
+                    obj1.setPipeCctvCountMonth(obj2.getPipeCctvCountMonth());
+                    obj1.setPipeOtherCountMonth(obj2.getPipeOtherCountMonth());
                     continue;
                 }
             }
@@ -112,6 +115,9 @@ public class SysBcJybbController extends BaseController
                     obj1.setGovWeekEarthControlCount(obj2.getGovWeekEarthControlCount());
                     obj1.setGovWeekRoadCount(obj2.getGovWeekRoadCount());
                     obj1.setJiCount(obj2.getJiCount());
+                    obj1.setJiCountMonth(obj2.getJiCountMonth());
+                    obj1.setPipeCctvCountMonth(obj2.getPipeCctvCountMonth());
+                    obj1.setPipeOtherCountMonth(obj2.getPipeOtherCountMonth());
                     continue;
                 }
             }
@@ -132,8 +138,9 @@ public class SysBcJybbController extends BaseController
             obj1.setPlanYearWeekCount(safeStr(obj1.getPlanYearCount()) + " ｜ " + safeStr(obj1.getPlanWeekCount()));
             obj1.setGovYearWeekEarthControlCount(safeStr(obj1.getGovYearEarthControlCount()) + " ｜ " + safeStr(obj1.getGovWeekEarthControlCount()));
             obj1.setGovYearWeekRoadCount(safeStr(obj1.getGovYearRoadCount()) + " ｜ " + safeStr(obj1.getGovWeekRoadCount()));
-            obj1.setJiCountString(safeStr(obj1.getJiCount()));
-            obj1.setPipeCctvOtherCount(safeStr(obj1.getPipeCctvCount()) + " ｜ " + safeStr(obj1.getPipeOtherCount()));
+            obj1.setJiCountString(safeStr(obj1.getJiCount()) + " ｜ " + safeStr(obj1.getJiCountMonth()));
+            obj1.setPipeCctvCountString(safeStr(obj1.getPipeCctvCount()) + " ｜ " + safeStr(obj1.getPipeCctvCountMonth()));
+            obj1.setPipeOtherCountString(safeStr(obj1.getPipeOtherCount()) + " ｜ " + safeStr(obj1.getPipeOtherCountMonth()));
         }
 
         ExcelUtil<SysBcJybb> util = new ExcelUtil<SysBcJybb>(SysBcJybb.class);

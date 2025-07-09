@@ -31,7 +31,7 @@ public class SysBcJybb extends BaseEntity
     private String invoiceAmount;
 
     /** 补助金额 */
-    @Excel(name = "补助金额")
+//    @Excel(name = "补助金额")
     private String subsidyAmount;
 
     /** 分配给本分院金额 */
@@ -59,7 +59,7 @@ public class SysBcJybb extends BaseEntity
     private String receivableAmount;
 
     /** 投标中标金额 */
-    @Excel(name = "投标中标金额")
+//    @Excel(name = "投标中标金额")
     private String tenderAmount;
 
     /** 年份 */
@@ -99,26 +99,75 @@ public class SysBcJybb extends BaseEntity
 
     private Long jiCount; //含籍统计
 
-    @Excel(name = "总项目数（年｜周）")
+    private Long jiCountMonth; //含籍统计月
+
+    private Long pipeCctvCountMonth;
+
+    private Long pipeOtherCountMonth;
+
+    @Excel(name = "总项目数（年｜月）")
     private String totalCountYearWeek;
 
-    @Excel(name = "项目编号含售项目数（年｜周）")
+    @Excel(name = "售图项目（年｜月）")
     private String sellYearWeekCount;
 
-    @Excel(name = "项目编号含规项目数（年｜周）")
+    @Excel(name = "规划项目（年｜月）")
     private String planYearWeekCount;
 
-    @Excel(name = "项目编号含政项目数（年-土方或控制｜周-土方或控制")
+    @Excel(name = "土方或控制（年｜月）")
     private String govYearWeekEarthControlCount;
 
-    @Excel(name = "项目编号含政项目数（年-道路｜周-道路")
+    @Excel(name = "道路测量（年｜月）")
     private String govYearWeekRoadCount;
 
-    @Excel(name = "项目编号含籍项目数")
+    @Excel(name = "地籍勘界（年｜月）")
     private String jiCountString; //含籍统计
 
-    @Excel(name = "项目编号含管项目数（cctv | 其它）")
-    private String pipeCctvOtherCount; //含管cctv
+    @Excel(name = "CCTV（年｜月）")
+    private String pipeCctvCountString; //含管cctv
+
+    @Excel(name = "管线项目（年｜月）")
+    private String pipeOtherCountString; //含管cctv
+
+    public String getPipeCctvCountString() {
+        return pipeCctvCountString;
+    }
+
+    public void setPipeCctvCountString(String pipeCctvCountString) {
+        this.pipeCctvCountString = pipeCctvCountString;
+    }
+
+    public String getPipeOtherCountString() {
+        return pipeOtherCountString;
+    }
+
+    public void setPipeOtherCountString(String pipeOtherCountString) {
+        this.pipeOtherCountString = pipeOtherCountString;
+    }
+
+    public Long getPipeOtherCountMonth() {
+        return pipeOtherCountMonth;
+    }
+
+    public void setPipeOtherCountMonth(Long pipeOtherCountMonth) {
+        this.pipeOtherCountMonth = pipeOtherCountMonth;
+    }
+
+    public Long getPipeCctvCountMonth() {
+        return pipeCctvCountMonth;
+    }
+
+    public void setPipeCctvCountMonth(Long pipeCctvCountMonth) {
+        this.pipeCctvCountMonth = pipeCctvCountMonth;
+    }
+
+    public Long getJiCountMonth() {
+        return jiCountMonth;
+    }
+
+    public void setJiCountMonth(Long jiCountMonth) {
+        this.jiCountMonth = jiCountMonth;
+    }
 
     public String getTotalCountYearWeek() {
         return totalCountYearWeek;
@@ -166,14 +215,6 @@ public class SysBcJybb extends BaseEntity
 
     public void setJiCountString(String jiCountString) {
         this.jiCountString = jiCountString;
-    }
-
-    public String getPipeCctvOtherCount() {
-        return pipeCctvOtherCount;
-    }
-
-    public void setPipeCctvOtherCount(String pipeCctvOtherCount) {
-        this.pipeCctvOtherCount = pipeCctvOtherCount;
     }
 
     public Long getTotalCount() {

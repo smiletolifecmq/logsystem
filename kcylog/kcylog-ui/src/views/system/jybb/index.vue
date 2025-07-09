@@ -70,7 +70,6 @@
         prop="invoiceAmount"
         width="130px"
       />
-      <el-table-column label="补助金额" align="center" prop="subsidyAmount" />
       <el-table-column
         label="分配给本分院金额"
         align="center"
@@ -107,13 +106,7 @@
         prop="receivableAmount"
         width="130px"
       />
-      <el-table-column
-        label="投标中标金额"
-        align="center"
-        prop="tenderAmount"
-        width="130px"
-      />
-      <el-table-column label="总项目数（年｜周）" align="center" width="140px">
+      <el-table-column label="总项目数（年｜月）" align="center" width="140px">
         <template slot-scope="scope">
           <span
             class="hover-effect"
@@ -130,9 +123,7 @@
       </el-table-column>
 
       <el-table-column align="center" width="140px">
-        <template #header>
-          项目编号含<span style="color: red">售</span>项目数（年｜周）
-        </template>
+        <template #header> 售图项目（年｜月） </template>
         <template slot-scope="scope">
           <span
             class="hover-effect"
@@ -149,9 +140,7 @@
       </el-table-column>
 
       <el-table-column align="center" width="140px">
-        <template #header>
-          项目编号含<span style="color: red">规</span>项目数（年｜周）
-        </template>
+        <template #header> 规划项目（年｜月） </template>
         <template slot-scope="scope">
           <span
             class="hover-effect"
@@ -167,11 +156,8 @@
         </template>
       </el-table-column>
 
-      <el-table-column align="center" width="210px">
-        <template #header>
-          项目编号含<span style="color: red">政</span>项目数（年-土方或控制
-          ｜周-土方或控制）
-        </template>
+      <el-table-column align="center" width="150px">
+        <template #header> 土方或控制（年｜月） </template>
         <template slot-scope="scope">
           <span
             class="hover-effect"
@@ -187,11 +173,8 @@
         </template>
       </el-table-column>
 
-      <el-table-column align="center" width="210px">
-        <template #header>
-          项目编号含<span style="color: red">政</span>项目数（年-道路 ｜
-          周-道路）
-        </template>
+      <el-table-column align="center" width="150px">
+        <template #header> 道路测量（年｜月） </template>
         <template slot-scope="scope">
           <span
             class="hover-effect"
@@ -207,23 +190,25 @@
         </template>
       </el-table-column>
 
-      <el-table-column label="项目编号含项目数" align="center" width="140px">
-        <template #header>
-          项目编号含<span style="color: red">籍</span>项目数
-        </template>
+      <el-table-column align="center" width="140px">
+        <template #header> 地籍勘界（年｜月） </template>
         <template slot-scope="scope">
           <span
             class="hover-effect"
             @click="handleGcbbList(7, scope.row.orgName)"
             >{{ scope.row.jiCount }}</span
           >
+          ｜
+          <span
+            class="hover-effect"
+            @click="handleGcbbList(14, scope.row.orgName)"
+            >{{ scope.row.jiCountMonth }}</span
+          >
         </template>
       </el-table-column>
 
-      <el-table-column align="center" width="150px">
-        <template #header>
-          项目编号含<span style="color: red">管</span>项目数（cctv | 其它）
-        </template>
+      <el-table-column align="center" width="140px">
+        <template #header> CCTV（年 ｜ 月） </template>
         <template slot-scope="scope">
           <span
             class="hover-effect"
@@ -233,8 +218,25 @@
           |
           <span
             class="hover-effect"
+            @click="handleGcbbList(15, scope.row.orgName)"
+            >{{ scope.row.pipeCctvCountMonth }}</span
+          >
+        </template>
+      </el-table-column>
+
+      <el-table-column align="center" width="150px">
+        <template #header> 管线项目（年 ｜ 月） </template>
+        <template slot-scope="scope">
+          <span
+            class="hover-effect"
             @click="handleGcbbList(9, scope.row.orgName)"
             >{{ scope.row.pipeOtherCount }}</span
+          >
+          ｜
+          <span
+            class="hover-effect"
+            @click="handleGcbbList(16, scope.row.orgName)"
+            >{{ scope.row.pipeOtherCountMonth }}</span
           >
         </template>
       </el-table-column>
@@ -266,7 +268,6 @@
         prop="invoiceAmount"
         width="130px"
       />
-      <el-table-column label="补助金额" align="center" prop="subsidyAmount" />
       <el-table-column
         label="分配给本分院金额"
         align="center"
@@ -303,13 +304,7 @@
         prop="receivableAmount"
         width="130px"
       />
-      <el-table-column
-        label="投标中标金额"
-        align="center"
-        prop="tenderAmount"
-        width="130px"
-      />
-      <el-table-column label="总项目数（年｜周）" align="center" width="140px">
+      <el-table-column label="总项目数（年｜月）" align="center" width="140px">
         <template slot-scope="scope">
           <span
             class="hover-effect"
@@ -326,9 +321,7 @@
       </el-table-column>
 
       <el-table-column align="center" width="140px">
-        <template #header>
-          项目编号含<span style="color: red">售</span>项目数（年｜周）
-        </template>
+        <template #header> 售图项目（年｜月） </template>
         <template slot-scope="scope">
           <span
             class="hover-effect"
@@ -345,9 +338,7 @@
       </el-table-column>
 
       <el-table-column align="center" width="140px">
-        <template #header>
-          项目编号含<span style="color: red">规</span>项目数（年｜周）
-        </template>
+        <template #header> 规划项目（年｜月） </template>
         <template slot-scope="scope">
           <span
             class="hover-effect"
@@ -363,11 +354,8 @@
         </template>
       </el-table-column>
 
-      <el-table-column align="center" width="210px">
-        <template #header>
-          项目编号含<span style="color: red">政</span>项目数（年-土方或控制
-          ｜周-土方或控制）
-        </template>
+      <el-table-column align="center" width="150px">
+        <template #header> 土方或控制（年｜月） </template>
         <template slot-scope="scope">
           <span
             class="hover-effect"
@@ -383,11 +371,8 @@
         </template>
       </el-table-column>
 
-      <el-table-column align="center" width="210px">
-        <template #header>
-          项目编号含<span style="color: red">政</span>项目数（年-道路 ｜
-          周-道路）
-        </template>
+      <el-table-column align="center" width="150px">
+        <template #header> 道路测量（年｜月） </template>
         <template slot-scope="scope">
           <span
             class="hover-effect"
@@ -403,23 +388,25 @@
         </template>
       </el-table-column>
 
-      <el-table-column label="项目编号含项目数" align="center" width="140px">
-        <template #header>
-          项目编号含<span style="color: red">籍</span>项目数
-        </template>
+      <el-table-column align="center" width="140px">
+        <template #header> 地籍勘界（年｜月） </template>
         <template slot-scope="scope">
           <span
             class="hover-effect"
             @click="handleGcbbList(7, scope.row.orgName)"
             >{{ scope.row.jiCount }}</span
           >
+          ｜
+          <span
+            class="hover-effect"
+            @click="handleGcbbList(14, scope.row.orgName)"
+            >{{ scope.row.jiCountMonth }}</span
+          >
         </template>
       </el-table-column>
 
-      <el-table-column align="center" width="150px">
-        <template #header>
-          项目编号含<span style="color: red">管</span>项目数（cctv | 其它）
-        </template>
+      <el-table-column align="center" width="140px">
+        <template #header> CCTV（年 ｜ 月） </template>
         <template slot-scope="scope">
           <span
             class="hover-effect"
@@ -429,8 +416,25 @@
           |
           <span
             class="hover-effect"
+            @click="handleGcbbList(15, scope.row.orgName)"
+            >{{ scope.row.pipeCctvCountMonth }}</span
+          >
+        </template>
+      </el-table-column>
+
+      <el-table-column align="center" width="150px">
+        <template #header> 管线项目（年 ｜ 月） </template>
+        <template slot-scope="scope">
+          <span
+            class="hover-effect"
             @click="handleGcbbList(9, scope.row.orgName)"
             >{{ scope.row.pipeOtherCount }}</span
+          >
+          ｜
+          <span
+            class="hover-effect"
+            @click="handleGcbbList(16, scope.row.orgName)"
+            >{{ scope.row.pipeOtherCountMonth }}</span
           >
         </template>
       </el-table-column>

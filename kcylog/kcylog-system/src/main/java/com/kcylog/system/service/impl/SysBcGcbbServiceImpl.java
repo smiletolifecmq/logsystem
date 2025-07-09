@@ -183,4 +183,22 @@ public class SysBcGcbbServiceImpl implements ISysBcGcbbService
     {
         return sysBcGcbbMapper.selectSysBcGcbbListForGovWeekRoadCount(sysBcGcbb);
     }
+
+    @Override
+    public List<SysBcGcbb> selectSysBcGcbbListForJiCountMonth(SysBcGcbb sysBcGcbb)
+    {
+        return sysBcGcbbMapper.selectSysBcGcbbListForJiCountMonth(sysBcGcbb);
+    }
+
+    @Override
+    public List<SysBcGcbb> selectSysBcGcbbListForPipeCctvCountMonth(SysBcGcbb sysBcGcbb)
+    {
+        return sysBcGcbbMapper.selectSysBcGcbbListForPipeCctvCountMonth(sysBcGcbb);
+    }
+
+    @Override
+    public List<SysBcGcbb> selectSysBcGcbbListForPipeOtherCountMonth(SysBcGcbb sysBcGcbb)
+    {
+        return sysBcGcbbMapper.selectSysBcGcbbListForPipeOtherCountMonth(sysBcGcbb);
+    }
 }
