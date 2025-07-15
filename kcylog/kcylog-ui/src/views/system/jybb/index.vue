@@ -246,7 +246,6 @@
       v-loading="loading"
       :data="jybbList"
       :show-header="false"
-      height="520"
       ref="scrollTable"
     >
       <el-table-column
