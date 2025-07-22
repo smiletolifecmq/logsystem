@@ -2800,7 +2800,7 @@ public class SysProjectController extends BaseController {
     public AjaxResult syncBcInfo(@RequestBody SysBcJybb sysBcJybb) throws IOException, InterruptedException {
         // 同步经营报表
         List<BcjybbReturn> list = new ArrayList<>();
-        String url = "http://192.168.150.99:81/gw/fzis/server/report/operating/summary/statistic/V2";
+        String url = "https://e.fzkcy.com/gw/fzis/server/report/operating/summary/statistic/V2";
 
         // 构造请求体
         Map<String, String> bodyMap = new HashMap<>();
@@ -2862,7 +2862,7 @@ public class SysProjectController extends BaseController {
 
         // 同步工程报表
 
-        url = "http://192.168.150.99:81/gw/fzis/server/report/project/archive-summary";
+        url = "https://e.fzkcy.com/gw/fzis/server/report/project/archive-summary";
 
         sysBcGcbbService.deleteSysBcGcbbByYear(sysBcJybb.getYear());
         for (int i = 1; i <= sysBcJybb.getTotal() ; i++) {
@@ -2871,7 +2871,7 @@ public class SysProjectController extends BaseController {
             bodyMap = new HashMap<>();
             bodyMap.put("createTimeBegin", sysBcJybb.getBillingDateBegin());
             bodyMap.put("createTimeEnd", sysBcJybb.getBillingDateEnd());
-            bodyMap.put("size", "100");
+            bodyMap.put("size", "1000");
             bodyMap.put("current", String.valueOf(i));
 
             requestBody = objectMapper.writeValueAsString(bodyMap);
