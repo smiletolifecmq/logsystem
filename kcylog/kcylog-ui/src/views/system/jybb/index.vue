@@ -40,6 +40,16 @@
     <el-row :gutter="10" class="mb8">
       <el-col :span="1.5">
         <el-button
+          type="primary"
+          plain
+          icon="el-icon-timer"
+          size="mini"
+          @click="handleExport"
+          >同步时间：2025-07-22</el-button
+        >
+      </el-col>
+      <el-col :span="1.5">
+        <el-button
           type="warning"
           plain
           icon="el-icon-download"
