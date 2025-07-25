@@ -34,6 +34,10 @@
             <groupId>com.kcylog</groupId>
             <artifactId>kcylog-common</artifactId>
         </dependency>
+        <dependency>
+            <groupId>com.kcylog</groupId>
+            <artifactId>kcylog-system</artifactId>
+        </dependency>
 
     </dependencies>
 
