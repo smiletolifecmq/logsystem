@@ -1,7 +1,5 @@
 package com.kcylog.system.mapper;
 
-import com.kcylog.common.annotation.DataSource;
-import com.kcylog.common.enums.DataSourceType;
 import com.kcylog.system.domain.ViewFqSalemapSelectgeoGeoinfo;
 
 import java.util.List;
@@ -12,8 +10,7 @@ import java.util.List;
  * @author ruoyi
  * @date 2024-04-09
  */
-@DataSource(value = DataSourceType.SLAVE)
-public interface ViewFqSalemapSelectgeoGeoinfoMapper 
+public interface ViewFqSalemapSelectgeoGeoinfoMapper
 {
     /**
      * 查询项目坐标系

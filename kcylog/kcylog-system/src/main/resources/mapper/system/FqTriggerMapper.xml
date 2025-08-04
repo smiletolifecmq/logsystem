@@ -8,10 +8,11 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
         <result property="id"    column="id"    />
         <result property="projectId"    column="project_id"    />
         <result property="opType"    column="op_type"    />
+        <result property="cTime"    column="c_time"    />
     </resultMap>
 
     <sql id="selectFqTriggerVo">
-        select id, project_id, op_type from fq_trigger
+        select id, project_id, op_type, c_time from fq_trigger
     </sql>
 
     <select id="selectFqTriggerList" parameterType="FqTrigger" resultMap="FqTriggerResult">
@@ -20,6 +21,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
             <if test="projectId != null "> and project_id = #{projectId}</if>
             <if test="opType != null  and opType != ''"> and op_type = #{opType}</if>
         </where>
+        order by c_time asc
     </select>
     
     <select id="selectFqTriggerById" parameterType="String" resultMap="FqTriggerResult">
@@ -32,10 +34,12 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
         <trim prefix="(" suffix=")" suffixOverrides=",">
             <if test="projectId != null">project_id,</if>
             <if test="opType != null">op_type,</if>
+            <if test="cTime != null">c_time,</if>
          </trim>
         <trim prefix="values (" suffix=")" suffixOverrides=",">
             <if test="projectId != null">#{projectId},</if>
             <if test="opType != null">#{opType},</if>
+            <if test="cTime != null">#{cTime},</if>
          </trim>
     </insert>
 

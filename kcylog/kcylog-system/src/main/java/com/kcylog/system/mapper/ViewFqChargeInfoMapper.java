@@ -1,7 +1,5 @@
 package com.kcylog.system.mapper;
 
-import com.kcylog.common.annotation.DataSource;
-import com.kcylog.common.enums.DataSourceType;
 import com.kcylog.system.domain.ViewFqChargeInfo;
 
 import java.util.List;
@@ -12,7 +10,6 @@ import java.util.List;
  * @author ruoyi
  * @date 2024-05-12
  */
-@DataSource(value = DataSourceType.SLAVE)
 public interface ViewFqChargeInfoMapper 
 {
     /**

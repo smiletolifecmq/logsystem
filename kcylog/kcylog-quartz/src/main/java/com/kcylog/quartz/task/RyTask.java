@@ -548,6 +548,7 @@ public class RyTask
                     }
                 }
             }
+            fqTriggerService.deleteFqTriggerById(mqMessage.getId());
             System.out.println("通过Message:{}" + mqMessage.getOpType());
             System.out.println("通过Message:{}" + mqMessage.getProjectId());
         }

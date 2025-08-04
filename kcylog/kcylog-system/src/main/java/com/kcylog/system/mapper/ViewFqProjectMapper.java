@@ -1,7 +1,5 @@
 package com.kcylog.system.mapper;
 
-import com.kcylog.common.annotation.DataSource;
-import com.kcylog.common.enums.DataSourceType;
 import com.kcylog.system.domain.ViewFqProject;
 
 import java.util.List;
@@ -12,8 +10,7 @@ import java.util.List;
  * @author ruoyi
  * @date 2024-02-19
  */
-@DataSource(value = DataSourceType.SLAVE)
-public interface ViewFqProjectMapper 
+public interface ViewFqProjectMapper
 {
     /**
      * 查询项目
