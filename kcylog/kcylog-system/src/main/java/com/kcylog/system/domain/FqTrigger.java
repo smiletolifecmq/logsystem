@@ -1,11 +1,9 @@
 package com.kcylog.system.domain;
 
-import org.apache.commons.lang3.builder.ToStringBuilder;
-import org.apache.commons.lang3.builder.ToStringStyle;
 import com.kcylog.common.annotation.Excel;
 import com.kcylog.common.core.domain.BaseEntity;
-
-import java.time.LocalDateTime;
+import org.apache.commons.lang3.builder.ToStringBuilder;
+import org.apache.commons.lang3.builder.ToStringStyle;
 
 /**
  * 百川项目操作对象 fq_trigger
@@ -28,15 +26,6 @@ public class FqTrigger extends BaseEntity
     @Excel(name = "操作类型")
     private String opType;
 
-    private LocalDateTime cTime;
-
-    public LocalDateTime getcTime() {
-        return cTime;
-    }
-
-    public void setcTime(LocalDateTime cTime) {
-        this.cTime = cTime;
-    }
 
     public void setId(String id)
     {
