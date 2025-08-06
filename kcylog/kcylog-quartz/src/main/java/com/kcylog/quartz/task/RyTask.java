@@ -445,7 +445,7 @@ public class RyTask
                     List<ViewFqSalemapSelectgeoGeoinfo> geoInfoList = viewFqSalemapSelectgeoGeoinfoService.selectViewFqSalemapSelectgeoGeoinfoByProjectId(Long.parseLong(mqMessage.getProjectId()));
 
                     if (contains){
-                        bcProjectService.deleteBcProjectByXMBH(sysProject.getProjectNum());
+//                        bcProjectService.deleteBcProjectByXMBH(sysProject.getProjectNum());
                         projectGeoinfoService.deleteSysProjectGeoinfoByProjectId(sysProject.getProjectId());
                     }
                     if (geoInfoList != null){
@@ -520,7 +520,7 @@ public class RyTask
                                     }
                                     newbcproject.setClobFragments(fragments);
                                 }
-                                bcProjectService.insertBcProject(newbcproject);
+//                                bcProjectService.insertBcProject(newbcproject);
                             }
                         }
 

@@ -474,11 +474,6 @@
           >
           <el-button
             size="mini"
-            v-if="
-              !['图', '售', '数'].some((substring) =>
-                scope.row.projectNum.includes(substring)
-              )
-            "
             type="text"
             icon="el-icon-picture"
             @click="scfwx(scope.row)"
