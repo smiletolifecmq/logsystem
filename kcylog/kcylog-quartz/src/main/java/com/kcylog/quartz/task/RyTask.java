@@ -446,7 +446,7 @@ public class RyTask
 
                     if (contains){
 //                        bcProjectService.deleteBcProjectByXMBH(sysProject.getProjectNum());
-                        projectGeoinfoService.deleteSysProjectGeoinfoByProjectId(sysProject.getProjectId());
+//                        projectGeoinfoService.deleteSysProjectGeoinfoByProjectId(sysProject.getProjectId());
                     }
                     if (geoInfoList != null){
                         for (ViewFqSalemapSelectgeoGeoinfo geoInfo : geoInfoList){

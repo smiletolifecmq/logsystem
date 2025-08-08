@@ -1980,7 +1980,7 @@ export default {
       this.projectCode = value.projectNum;
       // this.centerDialogVisible = true;
       window.open(
-        "http://192.168.110.100/SelectMap/?salemapid=" +
+        "http://192.168.110.100/SelectMap/?sysname=viewmapinfqis&salemapid=" +
           value.projectId +
           "&xmbh=" +
           value.projectNum,
