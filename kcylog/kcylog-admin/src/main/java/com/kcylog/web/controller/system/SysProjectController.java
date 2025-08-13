@@ -2919,10 +2919,11 @@ public class SysProjectController extends BaseController {
                         }
                     }
                 }
+                System.out.println("请求第" + i +"页完成");
             }
         }
 
-
+        System.out.println("同步完成");
         return toAjax(1);
     }
 
