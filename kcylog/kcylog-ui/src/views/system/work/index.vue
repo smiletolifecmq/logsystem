@@ -144,9 +144,17 @@
       <el-table-column
         label="操作"
         align="center"
+        fixed="right"
         class-name="small-padding fixed-width"
       >
         <template slot-scope="scope">
+          <el-button
+            size="mini"
+            type="text"
+            icon="el-icon-s-promotion"
+            @click="handleYy(scope.row)"
+            >引用</el-button
+          >
           <el-button
             size="mini"
             type="text"
@@ -442,6 +450,18 @@ export default {
         this.form = response.data;
         this.open = true;
         this.title = "修改内部服务工作清单";
+      });
+    },
+    handleYy(row) {
+      this.reset();
+      const id = row.id || this.ids;
+      getWork(id).then((response) => {
+        this.form = response.data;
+        this.form.id = null;
+        this.form.rwaprq = this.getNowDate(); // 默认当前日期
+        this.form.zyry = userInfo.state.name;
+        this.open = true;
+        this.title = "添加内部服务工作清单";
       });
     },
     /** 提交按钮 */
