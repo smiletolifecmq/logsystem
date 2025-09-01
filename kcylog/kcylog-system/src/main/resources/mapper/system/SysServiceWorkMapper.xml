@@ -1,0 +1,138 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.kcylog.system.mapper.SysServiceWorkMapper">
+    
+    <resultMap type="SysServiceWork" id="SysServiceWorkResult">
+        <result property="id"    column="id"    />
+        <result property="zylx"    column="zylx"    />
+        <result property="xmlx"    column="xmlx"    />
+        <result property="xmbh"    column="xmbh"    />
+        <result property="xmmc"    column="xmmc"    />
+        <result property="gnmc"    column="gnmc"    />
+        <result property="gznr"    column="gznr"    />
+        <result property="sl"    column="sl"    />
+        <result property="rwaprq"    column="rwaprq"    />
+        <result property="zyry"    column="zyry"    />
+        <result property="zysjd"    column="zysjd"    />
+        <result property="zysc"    column="zysc"    />
+        <result property="rwapry"    column="rwapry"    />
+        <result property="yzdw"    column="yzdw"    />
+        <result property="gdcl"    column="gdcl"    />
+        <result property="gdsm"    column="gdsm"    />
+        <result property="xdxm"    column="xdxm"    />
+    </resultMap>
+
+    <sql id="selectSysServiceWorkVo">
+        select id, zylx, xmlx, xmbh, xmmc, gnmc, gznr, sl, rwaprq, zyry, zysjd, zysc, rwapry, yzdw, gdcl, gdsm, xdxm from sys_service_work
+    </sql>
+
+    <select id="selectSysServiceWorkList" parameterType="SysServiceWork" resultMap="SysServiceWorkResult">
+        <include refid="selectSysServiceWorkVo"/>
+        <where>  
+            <if test="zylx != null  and zylx != ''"> and zylx = #{zylx}</if>
+            <if test="xmlx != null  and xmlx != ''"> and xmlx = #{xmlx}</if>
+            <if test="xmbh != null  and xmbh != ''"> and xmbh = #{xmbh}</if>
+            <if test="xmmc != null  and xmmc != ''"> and xmmc = #{xmmc}</if>
+            <if test="gnmc != null  and gnmc != ''"> and gnmc = #{gnmc}</if>
+            <if test="gznr != null  and gznr != ''"> and gznr = #{gznr}</if>
+            <if test="sl != null  and sl != ''"> and sl = #{sl}</if>
+            <if test="params.beginTime != null and params.beginTime != ''"><!-- 开始时间检索 -->
+                AND date_format(rwaprq,'%y%m%d') &gt;= date_format(#{params.beginTime},'%y%m%d')
+            </if>
+            <if test="params.endTime != null and params.endTime != ''"><!-- 结束时间检索 -->
+                AND date_format(rwaprq,'%y%m%d') &lt;= date_format(#{params.endTime},'%y%m%d')
+            </if>
+            <if test="zyry != null  and zyry != ''"> and zyry = #{zyry}</if>
+            <if test="zysjd != null  and zysjd != ''"> and zysjd = #{zysjd}</if>
+            <if test="zysc != null  and zysc != ''"> and zysc = #{zysc}</if>
+            <if test="rwapry != null  and rwapry != ''"> and rwapry = #{rwapry}</if>
+            <if test="yzdw != null  and yzdw != ''"> and yzdw = #{yzdw}</if>
+            <if test="gdcl != null  and gdcl != ''"> and gdcl = #{gdcl}</if>
+            <if test="gdsm != null  and gdsm != ''"> and gdsm = #{gdsm}</if>
+            <if test="xdxm != null  and xdxm != ''"> and xdxm = #{xdxm}</if>
+        </where>
+    </select>
+    
+    <select id="selectSysServiceWorkById" parameterType="Long" resultMap="SysServiceWorkResult">
+        <include refid="selectSysServiceWorkVo"/>
+        where id = #{id}
+    </select>
+        
+    <insert id="insertSysServiceWork" parameterType="SysServiceWork">
+        insert into sys_service_work
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="id != null">id,</if>
+            <if test="zylx != null">zylx,</if>
+            <if test="xmlx != null">xmlx,</if>
+            <if test="xmbh != null">xmbh,</if>
+            <if test="xmmc != null">xmmc,</if>
+            <if test="gnmc != null">gnmc,</if>
+            <if test="gznr != null">gznr,</if>
+            <if test="sl != null">sl,</if>
+            <if test="rwaprq != null">rwaprq,</if>
+            <if test="zyry != null">zyry,</if>
+            <if test="zysjd != null">zysjd,</if>
+            <if test="zysc != null">zysc,</if>
+            <if test="rwapry != null">rwapry,</if>
+            <if test="yzdw != null">yzdw,</if>
+            <if test="gdcl != null">gdcl,</if>
+            <if test="gdsm != null">gdsm,</if>
+            <if test="xdxm != null">xdxm,</if>
+         </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test="id != null">#{id},</if>
+            <if test="zylx != null">#{zylx},</if>
+            <if test="xmlx != null">#{xmlx},</if>
+            <if test="xmbh != null">#{xmbh},</if>
+            <if test="xmmc != null">#{xmmc},</if>
+            <if test="gnmc != null">#{gnmc},</if>
+            <if test="gznr != null">#{gznr},</if>
+            <if test="sl != null">#{sl},</if>
+            <if test="rwaprq != null">#{rwaprq},</if>
+            <if test="zyry != null">#{zyry},</if>
+            <if test="zysjd != null">#{zysjd},</if>
+            <if test="zysc != null">#{zysc},</if>
+            <if test="rwapry != null">#{rwapry},</if>
+            <if test="yzdw != null">#{yzdw},</if>
+            <if test="gdcl != null">#{gdcl},</if>
+            <if test="gdsm != null">#{gdsm},</if>
+            <if test="xdxm != null">#{xdxm},</if>
+         </trim>
+    </insert>
+
+    <update id="updateSysServiceWork" parameterType="SysServiceWork">
+        update sys_service_work
+        <trim prefix="SET" suffixOverrides=",">
+            <if test="zylx != null">zylx = #{zylx},</if>
+            <if test="xmlx != null">xmlx = #{xmlx},</if>
+            <if test="xmbh != null">xmbh = #{xmbh},</if>
+            <if test="xmmc != null">xmmc = #{xmmc},</if>
+            <if test="gnmc != null">gnmc = #{gnmc},</if>
+            <if test="gznr != null">gznr = #{gznr},</if>
+            <if test="sl != null">sl = #{sl},</if>
+            <if test="rwaprq != null">rwaprq = #{rwaprq},</if>
+            <if test="zyry != null">zyry = #{zyry},</if>
+            <if test="zysjd != null">zysjd = #{zysjd},</if>
+            <if test="zysc != null">zysc = #{zysc},</if>
+            <if test="rwapry != null">rwapry = #{rwapry},</if>
+            <if test="yzdw != null">yzdw = #{yzdw},</if>
+            <if test="gdcl != null">gdcl = #{gdcl},</if>
+            <if test="gdsm != null">gdsm = #{gdsm},</if>
+            <if test="xdxm != null">xdxm = #{xdxm},</if>
+        </trim>
+        where id = #{id}
+    </update>
+
+    <delete id="deleteSysServiceWorkById" parameterType="Long">
+        delete from sys_service_work where id = #{id}
+    </delete>
+
+    <delete id="deleteSysServiceWorkByIds" parameterType="String">
+        delete from sys_service_work where id in 
+        <foreach item="id" collection="array" open="(" separator="," close=")">
+            #{id}
+        </foreach>
+    </delete>
+</mapper>

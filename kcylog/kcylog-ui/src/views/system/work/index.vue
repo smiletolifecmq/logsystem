@@ -1,0 +1,495 @@
+<template>
+  <div class="app-container">
+    <el-form
+      :model="queryParams"
+      ref="queryForm"
+      size="small"
+      :inline="true"
+      v-show="showSearch"
+      label-width="68px"
+    >
+      <el-form-item label="专业类型" prop="zylx">
+        <el-input
+          v-model="queryParams.zylx"
+          placeholder="请输入专业类型"
+          clearable
+          @keyup.enter.native="handleQuery"
+        />
+      </el-form-item>
+      <el-form-item label="项目类型" prop="xmlx">
+        <el-input
+          v-model="queryParams.xmlx"
+          placeholder="请输入项目类型"
+          clearable
+          @keyup.enter.native="handleQuery"
+        />
+      </el-form-item>
+      <el-form-item label="项目编号" prop="xmbh">
+        <el-input
+          v-model="queryParams.xmbh"
+          placeholder="请输入项目编号"
+          clearable
+          @keyup.enter.native="handleQuery"
+        />
+      </el-form-item>
+      <el-form-item label="任务安排日期" prop="rwaprq" label-width="100px">
+        <el-date-picker
+          v-model="dateRange"
+          value-format="yyyy-MM-dd"
+          type="daterange"
+          range-separator="-"
+          start-placeholder="开始日期"
+          end-placeholder="结束日期"
+          @change="handleQuery"
+        ></el-date-picker>
+      </el-form-item>
+      <el-form-item label="作业人员" prop="zyry">
+        <el-input
+          v-model="queryParams.zyry"
+          placeholder="请输入作业人员"
+          clearable
+          @keyup.enter.native="handleQuery"
+        />
+      </el-form-item>
+
+      <el-form-item label="任务安排人员" prop="rwapry" label-width="100px">
+        <el-input
+          v-model="queryParams.rwapry"
+          placeholder="请输入任务安排人员"
+          clearable
+          @keyup.enter.native="handleQuery"
+        />
+      </el-form-item>
+      <el-form-item label="业主单位" prop="yzdw">
+        <el-input
+          v-model="queryParams.yzdw"
+          placeholder="请输入业主单位"
+          clearable
+          @keyup.enter.native="handleQuery"
+        />
+      </el-form-item>
+      <el-form-item>
+        <el-button
+          type="primary"
+          icon="el-icon-search"
+          size="mini"
+          @click="handleQuery"
+          >搜索</el-button
+        >
+        <el-button icon="el-icon-refresh" size="mini" @click="resetQuery"
+          >重置</el-button
+        >
+      </el-form-item>
+    </el-form>
+
+    <el-row :gutter="10" class="mb8">
+      <el-col :span="1.5">
+        <el-button
+          type="primary"
+          plain
+          icon="el-icon-plus"
+          size="mini"
+          @click="handleAdd"
+          v-hasPermi="['system:serviceWork:add']"
+          >新增</el-button
+        >
+      </el-col>
+      <el-col :span="1.5">
+        <el-button
+          type="warning"
+          plain
+          icon="el-icon-download"
+          size="mini"
+          @click="handleExport"
+          v-hasPermi="['system:serviceWork:export']"
+          >导出</el-button
+        >
+      </el-col>
+      <right-toolbar
+        :showSearch.sync="showSearch"
+        @queryTable="getList"
+      ></right-toolbar>
+    </el-row>
+
+    <el-table
+      v-loading="loading"
+      :data="workList"
+      @selection-change="handleSelectionChange"
+    >
+      <el-table-column label="专业类型" align="center" prop="zylx" />
+      <el-table-column label="项目类型" align="center" prop="xmlx" />
+      <el-table-column label="项目编号" align="center" prop="xmbh" />
+      <el-table-column label="项目名称" align="center" prop="xmmc" />
+      <el-table-column label="文件名称/功能名称" align="center" prop="gnmc" />
+      <el-table-column label="工作内容" align="center" prop="gznr" />
+      <el-table-column label="数量" align="center" prop="sl" />
+      <el-table-column
+        label="任务安排日期"
+        align="center"
+        prop="rwaprq"
+        width="180"
+      >
+        <template slot-scope="scope">
+          <span>{{ parseTime(scope.row.rwaprq, "{y}-{m}-{d}") }}</span>
+        </template>
+      </el-table-column>
+      <el-table-column label="作业人员" align="center" prop="zyry" />
+      <el-table-column label="作业时间段" align="center" prop="zysjd" />
+      <el-table-column label="作业时长" align="center" prop="zysc" />
+      <el-table-column label="任务安排人员" align="center" prop="rwapry" />
+      <el-table-column label="业主单位" align="center" prop="yzdw" />
+      <el-table-column label="是否有归档资料" align="center" prop="gdcl" />
+      <el-table-column label="无归档情况说明" align="center" prop="gdsm" />
+      <el-table-column label="是否为已下单项目" align="center" prop="xdxm" />
+      <el-table-column
+        label="操作"
+        align="center"
+        class-name="small-padding fixed-width"
+      >
+        <template slot-scope="scope">
+          <el-button
+            size="mini"
+            type="text"
+            icon="el-icon-edit"
+            @click="handleUpdate(scope.row)"
+            v-hasPermi="['system:serviceWork:edit']"
+            v-if="showButton(scope.row.zyry)"
+            >修改</el-button
+          >
+          <el-button
+            size="mini"
+            type="text"
+            icon="el-icon-delete"
+            @click="handleDelete(scope.row)"
+            v-hasPermi="['system:serviceWork:remove']"
+            v-if="showButton(scope.row.zyry)"
+            >删除</el-button
+          >
+        </template>
+      </el-table-column>
+    </el-table>
+
+    <pagination
+      v-show="total > 0"
+      :total="total"
+      :page.sync="queryParams.pageNum"
+      :limit.sync="queryParams.pageSize"
+      @pagination="getList"
+    />
+
+    <!-- 添加或修改【请填写功能名称】对话框 -->
+    <el-dialog :title="title" :visible.sync="open" width="700px" append-to-body>
+      <el-form ref="form" :model="form" :rules="rules" label-width="137px">
+        <el-form-item label="专业类型" prop="zylx">
+          <el-input v-model="form.zylx" placeholder="请输入专业类型" />
+        </el-form-item>
+        <el-form-item label="项目类型" prop="xmlx">
+          <el-input v-model="form.xmlx" placeholder="请输入项目类型" />
+        </el-form-item>
+        <el-form-item label="项目编号" prop="xmbh">
+          <el-input v-model="form.xmbh" placeholder="请输入项目编号" />
+        </el-form-item>
+        <el-form-item label="项目名称" prop="xmmc">
+          <el-input
+            v-model="form.xmmc"
+            type="textarea"
+            placeholder="请输入内容"
+          />
+        </el-form-item>
+        <el-form-item label="文件名称/功能名称" prop="gnmc">
+          <el-input
+            v-model="form.gnmc"
+            type="textarea"
+            placeholder="请输入内容"
+          />
+        </el-form-item>
+        <el-form-item label="工作内容" prop="gznr">
+          <el-input
+            v-model="form.gznr"
+            type="textarea"
+            placeholder="请输入内容"
+          />
+        </el-form-item>
+        <el-form-item label="数量" prop="sl">
+          <el-input v-model="form.sl" placeholder="请输入数量" />
+        </el-form-item>
+        <el-form-item label="任务安排日期" prop="rwaprq">
+          <el-date-picker
+            clearable
+            v-model="form.rwaprq"
+            type="date"
+            value-format="yyyy-MM-dd"
+            placeholder="请选择任务安排日期"
+          >
+          </el-date-picker>
+        </el-form-item>
+        <el-form-item label="作业人员" prop="zyry">
+          <el-input v-model="form.zyry" placeholder="请输入作业人员" />
+        </el-form-item>
+        <el-form-item label="作业时间段" prop="zysjd">
+          <el-input v-model="form.zysjd" placeholder="请输入作业时间段" />
+        </el-form-item>
+        <el-form-item label="作业时长" prop="zysc">
+          <el-input v-model="form.zysc" placeholder="请输入作业时长" />
+        </el-form-item>
+        <el-form-item label="任务安排人员" prop="rwapry">
+          <el-input v-model="form.rwapry" placeholder="请输入任务安排人员" />
+        </el-form-item>
+        <el-form-item label="业主单位" prop="yzdw">
+          <el-input v-model="form.yzdw" placeholder="请输入业主单位" />
+        </el-form-item>
+        <el-form-item label="是否有归档资料" prop="gdcl">
+          <el-select v-model="form.gdcl" placeholder="请选择">
+            <el-option
+              v-for="item in gdcls"
+              :key="item.value"
+              :label="item.label"
+              :value="item.value"
+            >
+            </el-option>
+          </el-select>
+        </el-form-item>
+        <el-form-item label="无归档情况说明" prop="gdsm">
+          <el-input
+            v-model="form.gdsm"
+            type="textarea"
+            placeholder="请输入内容"
+          />
+        </el-form-item>
+        <el-form-item label="是否为已下单项目" prop="xdxm">
+          <el-select v-model="form.xdxm" placeholder="请选择">
+            <el-option
+              v-for="item in xdxms"
+              :key="item.value"
+              :label="item.label"
+              :value="item.value"
+            >
+            </el-option>
+          </el-select>
+        </el-form-item>
+      </el-form>
+      <div slot="footer" class="dialog-footer">
+        <el-button type="primary" @click="submitForm">确 定</el-button>
+        <el-button @click="cancel">取 消</el-button>
+      </div>
+    </el-dialog>
+  </div>
+</template>
+
+<script>
+import {
+  listWork,
+  getWork,
+  delWork,
+  addWork,
+  updateWork,
+} from "@/api/system/work";
+import userInfo from "@/store/modules/user";
+
+export default {
+  name: "Work",
+  data() {
+    return {
+      dateRange: [],
+      xdxms: [
+        {
+          value: "是",
+          label: "是",
+        },
+        {
+          value: "否",
+          label: "否",
+        },
+      ],
+      gdcls: [
+        {
+          value: "是",
+          label: "是",
+        },
+        {
+          value: "否",
+          label: "否",
+        },
+      ],
+      // 遮罩层
+      loading: true,
+      // 选中数组
+      ids: [],
+      // 非单个禁用
+      single: true,
+      // 非多个禁用
+      multiple: true,
+      // 显示搜索条件
+      showSearch: true,
+      // 总条数
+      total: 0,
+      // 【请填写功能名称】表格数据
+      workList: [],
+      // 弹出层标题
+      title: "",
+      // 是否显示弹出层
+      open: false,
+      // 查询参数
+      queryParams: {
+        pageNum: 1,
+        pageSize: 10,
+        zylx: null,
+        xmlx: null,
+        xmbh: null,
+        xmmc: null,
+        gnmc: null,
+        gznr: null,
+        sl: null,
+        rwaprq: null,
+        zyry: null,
+        zysjd: null,
+        zysc: null,
+        rwapry: null,
+        yzdw: null,
+        gdcl: null,
+        gdsm: null,
+        xdxm: null,
+      },
+      // 表单参数
+      form: {},
+      // 表单校验
+      rules: {},
+    };
+  },
+  created() {
+    this.getList();
+  },
+  methods: {
+    showButton(userName) {
+      return userName == userInfo.state.name;
+    },
+    getNowDate() {
+      const date = new Date();
+      const year = date.getFullYear();
+      const month = (date.getMonth() + 1).toString().padStart(2, "0");
+      const day = date.getDate().toString().padStart(2, "0");
+      return `${year}-${month}-${day}`;
+    },
+    /** 查询【请填写功能名称】列表 */
+    getList() {
+      this.loading = true;
+      listWork(this.addDateRange(this.queryParams, this.dateRange)).then(
+        (response) => {
+          this.workList = response.rows;
+          this.total = response.total;
+          this.loading = false;
+        }
+      );
+    },
+    // 取消按钮
+    cancel() {
+      this.open = false;
+      this.reset();
+    },
+    // 表单重置
+    reset() {
+      this.form = {
+        id: null,
+        zylx: null,
+        xmlx: null,
+        xmbh: null,
+        xmmc: null,
+        gnmc: null,
+        gznr: null,
+        sl: null,
+        rwaprq: null,
+        zyry: null,
+        zysjd: null,
+        zysc: null,
+        rwapry: null,
+        yzdw: null,
+        gdcl: null,
+        gdsm: null,
+        xdxm: null,
+      };
+      this.resetForm("form");
+    },
+    /** 搜索按钮操作 */
+    handleQuery() {
+      this.queryParams.pageNum = 1;
+      this.getList();
+    },
+    /** 重置按钮操作 */
+    resetQuery() {
+      this.resetForm("queryForm");
+      this.dateRange = [];
+      this.handleQuery();
+    },
+    // 多选框选中数据
+    handleSelectionChange(selection) {
+      this.ids = selection.map((item) => item.id);
+      this.single = selection.length !== 1;
+      this.multiple = !selection.length;
+    },
+    /** 新增按钮操作 */
+    handleAdd() {
+      this.reset();
+      this.form.rwaprq = this.getNowDate(); // 默认当前日期
+      this.form.zyry = userInfo.state.name;
+      this.open = true;
+      this.title = "添加内部服务工作清单";
+    },
+    /** 修改按钮操作 */
+    handleUpdate(row) {
+      this.reset();
+      const id = row.id || this.ids;
+      getWork(id).then((response) => {
+        this.form = response.data;
+        this.open = true;
+        this.title = "修改内部服务工作清单";
+      });
+    },
+    /** 提交按钮 */
+    submitForm() {
+      this.$refs["form"].validate((valid) => {
+        if (valid) {
+          if (this.form.id != null) {
+            updateWork(this.form).then((response) => {
+              this.$modal.msgSuccess("修改成功");
+              this.open = false;
+              this.getList();
+            });
+          } else {
+            addWork(this.form).then((response) => {
+              this.$modal.msgSuccess("新增成功");
+              this.open = false;
+              this.getList();
+            });
+          }
+        }
+      });
+    },
+    /** 删除按钮操作 */
+    handleDelete(row) {
+      const ids = row.id || this.ids;
+      this.$modal
+        .confirm(
+          '是否确认删除【内部服务工作清单】编号为"' + ids + '"的数据项？'
+        )
+        .then(function () {
+          return delWork(ids);
+        })
+        .then(() => {
+          this.getList();
+          this.$modal.msgSuccess("删除成功");
+        })
+        .catch(() => {});
+    },
+    /** 导出按钮操作 */
+    handleExport() {
+      this.download(
+        "system/serviceWork/export",
+        {
+          ...this.queryParams,
+        },
+        `地理信息工作内部服务工作清单_${new Date().getTime()}.xlsx`
+      );
+    },
+  },
+};
+</script>
