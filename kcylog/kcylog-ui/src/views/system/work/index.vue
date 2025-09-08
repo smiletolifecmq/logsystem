@@ -121,7 +121,27 @@
       <el-table-column label="项目编号" align="center" prop="xmbh" />
       <el-table-column label="项目名称" align="center" prop="xmmc" />
       <el-table-column label="文件名称/功能名称" align="center" prop="gnmc" />
-      <el-table-column label="工作内容" align="center" prop="gznr" />
+      <el-table-column label="工作内容" align="center" prop="gznr">
+        <template slot-scope="scope">
+          <el-tooltip
+            class="item"
+            effect="dark"
+            placement="top-start"
+            popper-class="tooltip-style"
+          >
+            <div slot="content">
+              {{ scope.row.gznr }}
+            </div>
+            <span>
+              {{
+                scope.row.gznr && scope.row.gznr.length > 20
+                  ? scope.row.gznr.slice(0, 20) + "..."
+                  : scope.row.gznr
+              }}
+            </span>
+          </el-tooltip>
+        </template>
+      </el-table-column>
       <el-table-column label="数量" align="center" prop="sl" />
       <el-table-column
         label="任务安排日期"
@@ -161,7 +181,6 @@
             icon="el-icon-edit"
             @click="handleUpdate(scope.row)"
             v-hasPermi="['system:serviceWork:edit']"
-            v-if="showButton(scope.row.zyry)"
             >修改</el-button
           >
           <el-button
@@ -170,7 +189,6 @@
             icon="el-icon-delete"
             @click="handleDelete(scope.row)"
             v-hasPermi="['system:serviceWork:remove']"
-            v-if="showButton(scope.row.zyry)"
             >删除</el-button
           >
         </template>
@@ -189,13 +207,33 @@
     <el-dialog :title="title" :visible.sync="open" width="700px" append-to-body>
       <el-form ref="form" :model="form" :rules="rules" label-width="137px">
         <el-form-item label="专业类型" prop="zylx">
-          <el-input v-model="form.zylx" placeholder="请输入专业类型" />
+          <el-select v-model="form.zylx" placeholder="请选择">
+            <el-option
+              v-for="item in zylxs"
+              :key="item.value"
+              :label="item.label"
+              :value="item.value"
+            >
+            </el-option>
+          </el-select>
         </el-form-item>
         <el-form-item label="项目类型" prop="xmlx">
-          <el-input v-model="form.xmlx" placeholder="请输入项目类型" />
+          <el-select v-model="form.xmlx" placeholder="请选择" filterable>
+            <el-option
+              v-for="item in xmlxs"
+              :key="item.value"
+              :label="item.label"
+              :value="item.value"
+            >
+            </el-option>
+          </el-select>
         </el-form-item>
         <el-form-item label="项目编号" prop="xmbh">
-          <el-input v-model="form.xmbh" placeholder="请输入项目编号" />
+          <el-input v-model="form.xmbh" placeholder="请输入项目编号">
+            <el-button slot="append" type="primary" @click="handleReference">
+              引用
+            </el-button></el-input
+          >
         </el-form-item>
         <el-form-item label="项目名称" prop="xmmc">
           <el-input
@@ -281,8 +319,97 @@
         <el-button @click="cancel">取 消</el-button>
       </div>
     </el-dialog>
+
+    <el-dialog
+      title="项目列表"
+      :visible.sync="xmopen"
+      width="1200px"
+      append-to-body
+    >
+      <el-form
+        :model="queryParamsxm"
+        ref="queryFormxm"
+        size="small"
+        :inline="true"
+        v-show="showSearch"
+        label-width="68px"
+      >
+        <el-form-item label="项目编号" prop="projectNum">
+          <el-input
+            v-model="queryParamsxm.projectNum"
+            placeholder="请输入项目编号"
+            clearable
+            @keyup.enter.native="handleQueryxm"
+          />
+        </el-form-item>
+        <el-form-item label="项目名称" prop="projectName">
+          <el-input
+            v-model="queryParamsxm.projectName"
+            placeholder="请输入项目名称"
+            clearable
+            @keyup.enter.native="handleQueryxm"
+          />
+        </el-form-item>
+        <el-form-item label="负责人" prop="userName">
+          <el-input
+            v-model="queryParamsxm.userName"
+            placeholder="请输入负责人名称"
+            clearable
+            @keyup.enter.native="handleQueryxm"
+          />
+        </el-form-item>
+        <el-form-item>
+          <el-button
+            type="primary"
+            icon="el-icon-search"
+            size="mini"
+            @click="handleQueryxm"
+            >搜索</el-button
+          >
+          <el-button icon="el-icon-refresh" size="mini" @click="resetQueryxm"
+            >重置</el-button
+          >
+        </el-form-item>
+      </el-form>
+
+      <el-table v-loading="loading" :data="projectList">
+        <el-table-column label="项目编号" align="center" prop="projectNum" />
+        <el-table-column label="项目名称" align="center" prop="projectName" />
+        <el-table-column label="负责人名称" align="center" prop="userName" />
+        <el-table-column
+          label="操作"
+          align="center"
+          class-name="small-padding fixed-width"
+        >
+          <template slot-scope="scope">
+            <el-button
+              size="mini"
+              type="text"
+              icon="el-icon-s-promotion"
+              @click="handleYyXm(scope.row)"
+              >引用</el-button
+            ></template
+          >
+        </el-table-column>
+      </el-table>
+
+      <pagination
+        v-show="totalxm > 0"
+        :total="totalxm"
+        :page.sync="queryParamsxm.pageNum"
+        :limit.sync="queryParamsxm.pageSize"
+        @pagination="getListxm"
+      />
+    </el-dialog>
   </div>
 </template>
+<style>
+.tooltip-style {
+  max-width: 400px; /* 限制最大宽度 */
+  white-space: normal !important; /* 允许换行 */
+  word-break: break-all; /* 自动断行 */
+}
+</style>
 
 <script>
 import {
@@ -293,12 +420,99 @@ import {
   updateWork,
 } from "@/api/system/work";
 import userInfo from "@/store/modules/user";
+import { listProject } from "@/api/system/geoProject";
 
 export default {
   name: "Work",
   data() {
     return {
+      projectList: [],
+      xmopen: false,
       dateRange: [],
+      xmlxs: [
+        {
+          value: "软件开发",
+          label: "软件开发",
+        },
+        {
+          value: "软硬件维护",
+          label: "软硬件维护",
+        },
+        {
+          value: "需求调研",
+          label: "需求调研",
+        },
+        {
+          value: "编写文档",
+          label: "编写文档",
+        },
+        {
+          value: "红线数据处理",
+          label: "红线数据处理",
+        },
+        {
+          value: "影像核对",
+          label: "影像核对",
+        },
+        {
+          value: "坐标核对",
+          label: "坐标核对",
+        },
+        {
+          value: "地形、管线数据下载",
+          label: "地形、管线数据下载",
+        },
+        {
+          value: "坐标转换",
+          label: "坐标转换",
+        },
+        {
+          value: "存量土地精准投放系统数据上传",
+          label: "存量土地精准投放系统数据上传",
+        },
+        {
+          value: "数据加密",
+          label: "数据加密",
+        },
+        {
+          value: "数据出库",
+          label: "数据出库",
+        },
+        {
+          value: "紧急出件",
+          label: "紧急出件",
+        },
+        {
+          value: "临时用地系统信息提取录入",
+          label: "临时用地系统信息提取录入",
+        },
+        {
+          value: "挂图专题图类项目(有制作)",
+          label: "挂图专题图类项目(有制作)",
+        },
+        {
+          value: "挂图专题图类项目(仅打印)",
+          label: "挂图专题图类项目(仅打印)",
+        },
+        {
+          value: "无人机机巢日常管理",
+          label: "无人机机巢日常管理",
+        },
+        {
+          value: "其他零星",
+          label: "其他零星",
+        },
+      ],
+      zylxs: [
+        {
+          value: "软件开发与维护",
+          label: "软件开发与维护",
+        },
+        {
+          value: "数据处理与拓展",
+          label: "数据处理与拓展",
+        },
+      ],
       xdxms: [
         {
           value: "是",
@@ -331,6 +545,7 @@ export default {
       showSearch: true,
       // 总条数
       total: 0,
+      totalxm: 0,
       // 【请填写功能名称】表格数据
       workList: [],
       // 弹出层标题
@@ -338,6 +553,13 @@ export default {
       // 是否显示弹出层
       open: false,
       // 查询参数
+      queryParamsxm: {
+        pageNum: 1,
+        pageSize: 10,
+        projectNum: null,
+        projectName: null,
+        userName: null,
+      },
       queryParams: {
         pageNum: 1,
         pageSize: 10,
@@ -368,6 +590,38 @@ export default {
     this.getList();
   },
   methods: {
+    handleYyXm(value) {
+      this.form.xmbh = value.projectNum;
+      this.form.xmmc = value.projectName;
+      this.xmopen = false;
+    },
+    resetQueryxm() {
+      this.resetForm("queryFormxm");
+      this.handleQueryxm();
+    },
+    handleQueryxm() {
+      this.queryParamsxm.pageNum = 1;
+      this.getListxm();
+    },
+    getListxm() {
+      this.loading = true;
+      listProject(this.queryParamsxm).then((response) => {
+        this.projectList = response.rows;
+        this.totalxm = response.total;
+        this.loading = false;
+      });
+    },
+    handleReference() {
+      this.xmopen = true;
+      this.queryParamsxm = {
+        pageNum: 1,
+        pageSize: 10,
+        projectNum: null,
+        projectName: null,
+        userName: null,
+      };
+      this.getListxm();
+    },
     showButton(userName) {
       return userName == userInfo.state.name;
     },
