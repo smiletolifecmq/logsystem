@@ -151,3 +151,7 @@ xss:
   excludes: /system/notice
   # 匹配链接
   urlPatterns: /system/*,/monitor/*,/tool/*
+
+jzd:
+  template:
+    path: classpath:/templates/jzd_template.xlsx
