@@ -582,10 +582,10 @@ export default {
             })
             .then((workbook) => {
               const sheet1 = workbook.getWorksheet("工程测绘部");
+              const sheet2 = workbook.getWorksheet("管线工程部");
+              const sheet3 = workbook.getWorksheet("不动产测绘部");
+              const sheet4 = workbook.getWorksheet("地理信息部");
 
-              // 替换的对象
-              console.log(responseData.rows);
-              const dataToReplace = responseData.rows;
               // 工程测绘部数据
               var gcchb = {
                 jysr1: 0,
@@ -785,15 +785,960 @@ export default {
                 jllhj: 0,
               };
 
+              // 管线工程部数据
+              var gxgcb = {
+                jysr1: 0,
+                jysr2: 0,
+                jysr3: 0,
+                jysr4: 0,
+                jysr5: 0,
+                jysr6: 0,
+                jysr7: 0,
+                jysr8: 0,
+                jysr9: 0,
+                jysr10: 0,
+                jysr11: 0,
+                jysr12: 0,
+                jysrhj: 0,
+                hjsyyj1: 0,
+                hjsyyj2: 0,
+                hjsyyj3: 0,
+                hjsyyj4: 0,
+                hjsyyj5: 0,
+                hjsyyj6: 0,
+                hjsyyj7: 0,
+                hjsyyj8: 0,
+                hjsyyj9: 0,
+                hjsyyj10: 0,
+                hjsyyj11: 0,
+                hjsyyj12: 0,
+                hjsyyjhj: 0,
+                jssyyl1: 0,
+                jssyyl2: 0,
+                jssyyl3: 0,
+                jssyyl4: 0,
+                jssyyl5: 0,
+                jssyyl6: 0,
+                jssyyl7: 0,
+                jssyyl8: 0,
+                jssyyl9: 0,
+                jssyyl10: 0,
+                jssyyl11: 0,
+                jssyyl12: 0,
+                jssyylhj: 0,
+                yl1: 0,
+                yl2: 0,
+                yl3: 0,
+                yl4: 0,
+                yl5: 0,
+                yl6: 0,
+                yl7: 0,
+                yl8: 0,
+                yl9: 0,
+                yl10: 0,
+                yl11: 0,
+                yl12: 0,
+                ylhj: 0,
+                yj1: 0,
+                yj2: 0,
+                yj3: 0,
+                yj4: 0,
+                yj5: 0,
+                yj6: 0,
+                yj7: 0,
+                yj8: 0,
+                yj9: 0,
+                yj10: 0,
+                yj11: 0,
+                yj12: 0,
+                yjhj: 0,
+                sbjysr1: 0,
+                sbjysr2: 0,
+                sbjysr3: 0,
+                sbjysr4: 0,
+                sbjysr5: 0,
+                sbjysr6: 0,
+                sbjysr7: 0,
+                sbjysr8: 0,
+                sbjysr9: 0,
+                sbjysr10: 0,
+                sbjysr11: 0,
+                sbjysr12: 0,
+                sbjysrhj: 0,
+                hdnbcz1: 0,
+                hdnbcz2: 0,
+                hdnbcz3: 0,
+                hdnbcz4: 0,
+                hdnbcz5: 0,
+                hdnbcz6: 0,
+                hdnbcz7: 0,
+                hdnbcz8: 0,
+                hdnbcz9: 0,
+                hdnbcz10: 0,
+                hdnbcz11: 0,
+                hdnbcz12: 0,
+                hdnbczhj: 0,
+                srhj1: 0,
+                srhj2: 0,
+                srhj3: 0,
+                srhj4: 0,
+                srhj5: 0,
+                srhj6: 0,
+                srhj7: 0,
+                srhj8: 0,
+                srhj9: 0,
+                srhj10: 0,
+                srhj11: 0,
+                srhj12: 0,
+                srhjhj: 0,
+                fbje1: 0,
+                fbje2: 0,
+                fbje3: 0,
+                fbje4: 0,
+                fbje5: 0,
+                fbje6: 0,
+                fbje7: 0,
+                fbje8: 0,
+                fbje9: 0,
+                fbje10: 0,
+                fbje11: 0,
+                fbje12: 0,
+                fbjehj: 0,
+                wcxmje1: 0,
+                wcxmje2: 0,
+                wcxmje3: 0,
+                wcxmje4: 0,
+                wcxmje5: 0,
+                wcxmje6: 0,
+                wcxmje7: 0,
+                wcxmje8: 0,
+                wcxmje9: 0,
+                wcxmje10: 0,
+                wcxmje11: 0,
+                wcxmje12: 0,
+                wcxmjehj: 0,
+                cggg1: 0,
+                cggg2: 0,
+                cggg3: 0,
+                cggg4: 0,
+                cggg5: 0,
+                cggg6: 0,
+                cggg7: 0,
+                cggg8: 0,
+                cggg9: 0,
+                cggg10: 0,
+                cggg11: 0,
+                cggg12: 0,
+                cggghj: 0,
+                lwpq1: 0,
+                lwpq2: 0,
+                lwpq3: 0,
+                lwpq4: 0,
+                lwpq5: 0,
+                lwpq6: 0,
+                lwpq7: 0,
+                lwpq8: 0,
+                lwpq9: 0,
+                lwpq10: 0,
+                lwpq11: 0,
+                lwpq12: 0,
+                lwpqhj: 0,
+                bdzc1: 0,
+                bdzc2: 0,
+                bdzc3: 0,
+                bdzc4: 0,
+                bdzc5: 0,
+                bdzc6: 0,
+                bdzc7: 0,
+                bdzc8: 0,
+                bdzc9: 0,
+                bdzc10: 0,
+                bdzc11: 0,
+                bdzc12: 0,
+                bdzchj: 0,
+                zchj1: 0,
+                zchj2: 0,
+                zchj3: 0,
+                zchj4: 0,
+                zchj5: 0,
+                zchj6: 0,
+                zchj7: 0,
+                zchj8: 0,
+                zchj9: 0,
+                zchj10: 0,
+                zchj11: 0,
+                zchj12: 0,
+                zchjhj: 0,
+                jll1: 0,
+                jll2: 0,
+                jll3: 0,
+                jll4: 0,
+                jll5: 0,
+                jll6: 0,
+                jll7: 0,
+                jll8: 0,
+                jll9: 0,
+                jll10: 0,
+                jll11: 0,
+                jll12: 0,
+                jllhj: 0,
+                jy: 0,
+              };
+
+              // 不动产测绘部数据
+              var bdxchb = {
+                jysr1: 0,
+                jysr2: 0,
+                jysr3: 0,
+                jysr4: 0,
+                jysr5: 0,
+                jysr6: 0,
+                jysr7: 0,
+                jysr8: 0,
+                jysr9: 0,
+                jysr10: 0,
+                jysr11: 0,
+                jysr12: 0,
+                jysrhj: 0,
+                hjsyyj1: 0,
+                hjsyyj2: 0,
+                hjsyyj3: 0,
+                hjsyyj4: 0,
+                hjsyyj5: 0,
+                hjsyyj6: 0,
+                hjsyyj7: 0,
+                hjsyyj8: 0,
+                hjsyyj9: 0,
+                hjsyyj10: 0,
+                hjsyyj11: 0,
+                hjsyyj12: 0,
+                hjsyyjhj: 0,
+                jssyyl1: 0,
+                jssyyl2: 0,
+                jssyyl3: 0,
+                jssyyl4: 0,
+                jssyyl5: 0,
+                jssyyl6: 0,
+                jssyyl7: 0,
+                jssyyl8: 0,
+                jssyyl9: 0,
+                jssyyl10: 0,
+                jssyyl11: 0,
+                jssyyl12: 0,
+                jssyylhj: 0,
+                yl1: 0,
+                yl2: 0,
+                yl3: 0,
+                yl4: 0,
+                yl5: 0,
+                yl6: 0,
+                yl7: 0,
+                yl8: 0,
+                yl9: 0,
+                yl10: 0,
+                yl11: 0,
+                yl12: 0,
+                ylhj: 0,
+                yj1: 0,
+                yj2: 0,
+                yj3: 0,
+                yj4: 0,
+                yj5: 0,
+                yj6: 0,
+                yj7: 0,
+                yj8: 0,
+                yj9: 0,
+                yj10: 0,
+                yj11: 0,
+                yj12: 0,
+                yjhj: 0,
+                sbjysr1: 0,
+                sbjysr2: 0,
+                sbjysr3: 0,
+                sbjysr4: 0,
+                sbjysr5: 0,
+                sbjysr6: 0,
+                sbjysr7: 0,
+                sbjysr8: 0,
+                sbjysr9: 0,
+                sbjysr10: 0,
+                sbjysr11: 0,
+                sbjysr12: 0,
+                sbjysrhj: 0,
+                hdnbcz1: 0,
+                hdnbcz2: 0,
+                hdnbcz3: 0,
+                hdnbcz4: 0,
+                hdnbcz5: 0,
+                hdnbcz6: 0,
+                hdnbcz7: 0,
+                hdnbcz8: 0,
+                hdnbcz9: 0,
+                hdnbcz10: 0,
+                hdnbcz11: 0,
+                hdnbcz12: 0,
+                hdnbczhj: 0,
+                srhj1: 0,
+                srhj2: 0,
+                srhj3: 0,
+                srhj4: 0,
+                srhj5: 0,
+                srhj6: 0,
+                srhj7: 0,
+                srhj8: 0,
+                srhj9: 0,
+                srhj10: 0,
+                srhj11: 0,
+                srhj12: 0,
+                srhjhj: 0,
+                fbje1: 0,
+                fbje2: 0,
+                fbje3: 0,
+                fbje4: 0,
+                fbje5: 0,
+                fbje6: 0,
+                fbje7: 0,
+                fbje8: 0,
+                fbje9: 0,
+                fbje10: 0,
+                fbje11: 0,
+                fbje12: 0,
+                fbjehj: 0,
+                wcxmje1: 0,
+                wcxmje2: 0,
+                wcxmje3: 0,
+                wcxmje4: 0,
+                wcxmje5: 0,
+                wcxmje6: 0,
+                wcxmje7: 0,
+                wcxmje8: 0,
+                wcxmje9: 0,
+                wcxmje10: 0,
+                wcxmje11: 0,
+                wcxmje12: 0,
+                wcxmjehj: 0,
+                cggg1: 0,
+                cggg2: 0,
+                cggg3: 0,
+                cggg4: 0,
+                cggg5: 0,
+                cggg6: 0,
+                cggg7: 0,
+                cggg8: 0,
+                cggg9: 0,
+                cggg10: 0,
+                cggg11: 0,
+                cggg12: 0,
+                cggghj: 0,
+                lwpq1: 0,
+                lwpq2: 0,
+                lwpq3: 0,
+                lwpq4: 0,
+                lwpq5: 0,
+                lwpq6: 0,
+                lwpq7: 0,
+                lwpq8: 0,
+                lwpq9: 0,
+                lwpq10: 0,
+                lwpq11: 0,
+                lwpq12: 0,
+                lwpqhj: 0,
+                bdzc1: 0,
+                bdzc2: 0,
+                bdzc3: 0,
+                bdzc4: 0,
+                bdzc5: 0,
+                bdzc6: 0,
+                bdzc7: 0,
+                bdzc8: 0,
+                bdzc9: 0,
+                bdzc10: 0,
+                bdzc11: 0,
+                bdzc12: 0,
+                bdzchj: 0,
+                zchj1: 0,
+                zchj2: 0,
+                zchj3: 0,
+                zchj4: 0,
+                zchj5: 0,
+                zchj6: 0,
+                zchj7: 0,
+                zchj8: 0,
+                zchj9: 0,
+                zchj10: 0,
+                zchj11: 0,
+                zchj12: 0,
+                zchjhj: 0,
+                jll1: 0,
+                jll2: 0,
+                jll3: 0,
+                jll4: 0,
+                jll5: 0,
+                jll6: 0,
+                jll7: 0,
+                jll8: 0,
+                jll9: 0,
+                jll10: 0,
+                jll11: 0,
+                jll12: 0,
+                jllhj: 0,
+              };
+
+              // 地理信息部数据
+              var dlxx = {
+                jysr1: 0,
+                jysr2: 0,
+                jysr3: 0,
+                jysr4: 0,
+                jysr5: 0,
+                jysr6: 0,
+                jysr7: 0,
+                jysr8: 0,
+                jysr9: 0,
+                jysr10: 0,
+                jysr11: 0,
+                jysr12: 0,
+                jysrhj: 0,
+                hjsyyj1: 0,
+                hjsyyj2: 0,
+                hjsyyj3: 0,
+                hjsyyj4: 0,
+                hjsyyj5: 0,
+                hjsyyj6: 0,
+                hjsyyj7: 0,
+                hjsyyj8: 0,
+                hjsyyj9: 0,
+                hjsyyj10: 0,
+                hjsyyj11: 0,
+                hjsyyj12: 0,
+                hjsyyjhj: 0,
+                jssyyl1: 0,
+                jssyyl2: 0,
+                jssyyl3: 0,
+                jssyyl4: 0,
+                jssyyl5: 0,
+                jssyyl6: 0,
+                jssyyl7: 0,
+                jssyyl8: 0,
+                jssyyl9: 0,
+                jssyyl10: 0,
+                jssyyl11: 0,
+                jssyyl12: 0,
+                jssyylhj: 0,
+                yl1: 0,
+                yl2: 0,
+                yl3: 0,
+                yl4: 0,
+                yl5: 0,
+                yl6: 0,
+                yl7: 0,
+                yl8: 0,
+                yl9: 0,
+                yl10: 0,
+                yl11: 0,
+                yl12: 0,
+                ylhj: 0,
+                yj1: 0,
+                yj2: 0,
+                yj3: 0,
+                yj4: 0,
+                yj5: 0,
+                yj6: 0,
+                yj7: 0,
+                yj8: 0,
+                yj9: 0,
+                yj10: 0,
+                yj11: 0,
+                yj12: 0,
+                yjhj: 0,
+                sbjysr1: 0,
+                sbjysr2: 0,
+                sbjysr3: 0,
+                sbjysr4: 0,
+                sbjysr5: 0,
+                sbjysr6: 0,
+                sbjysr7: 0,
+                sbjysr8: 0,
+                sbjysr9: 0,
+                sbjysr10: 0,
+                sbjysr11: 0,
+                sbjysr12: 0,
+                sbjysrhj: 0,
+                hdnbcz1: 0,
+                hdnbcz2: 0,
+                hdnbcz3: 0,
+                hdnbcz4: 0,
+                hdnbcz5: 0,
+                hdnbcz6: 0,
+                hdnbcz7: 0,
+                hdnbcz8: 0,
+                hdnbcz9: 0,
+                hdnbcz10: 0,
+                hdnbcz11: 0,
+                hdnbcz12: 0,
+                hdnbczhj: 0,
+                srhj1: 0,
+                srhj2: 0,
+                srhj3: 0,
+                srhj4: 0,
+                srhj5: 0,
+                srhj6: 0,
+                srhj7: 0,
+                srhj8: 0,
+                srhj9: 0,
+                srhj10: 0,
+                srhj11: 0,
+                srhj12: 0,
+                srhjhj: 0,
+                fbje1: 0,
+                fbje2: 0,
+                fbje3: 0,
+                fbje4: 0,
+                fbje5: 0,
+                fbje6: 0,
+                fbje7: 0,
+                fbje8: 0,
+                fbje9: 0,
+                fbje10: 0,
+                fbje11: 0,
+                fbje12: 0,
+                fbjehj: 0,
+                wcxmje1: 0,
+                wcxmje2: 0,
+                wcxmje3: 0,
+                wcxmje4: 0,
+                wcxmje5: 0,
+                wcxmje6: 0,
+                wcxmje7: 0,
+                wcxmje8: 0,
+                wcxmje9: 0,
+                wcxmje10: 0,
+                wcxmje11: 0,
+                wcxmje12: 0,
+                wcxmjehj: 0,
+                cggg1: 0,
+                cggg2: 0,
+                cggg3: 0,
+                cggg4: 0,
+                cggg5: 0,
+                cggg6: 0,
+                cggg7: 0,
+                cggg8: 0,
+                cggg9: 0,
+                cggg10: 0,
+                cggg11: 0,
+                cggg12: 0,
+                cggghj: 0,
+                lwpq1: 0,
+                lwpq2: 0,
+                lwpq3: 0,
+                lwpq4: 0,
+                lwpq5: 0,
+                lwpq6: 0,
+                lwpq7: 0,
+                lwpq8: 0,
+                lwpq9: 0,
+                lwpq10: 0,
+                lwpq11: 0,
+                lwpq12: 0,
+                lwpqhj: 0,
+                bdzc1: 0,
+                bdzc2: 0,
+                bdzc3: 0,
+                bdzc4: 0,
+                bdzc5: 0,
+                bdzc6: 0,
+                bdzc7: 0,
+                bdzc8: 0,
+                bdzc9: 0,
+                bdzc10: 0,
+                bdzc11: 0,
+                bdzc12: 0,
+                bdzchj: 0,
+                zchj1: 0,
+                zchj2: 0,
+                zchj3: 0,
+                zchj4: 0,
+                zchj5: 0,
+                zchj6: 0,
+                zchj7: 0,
+                zchj8: 0,
+                zchj9: 0,
+                zchj10: 0,
+                zchj11: 0,
+                zchj12: 0,
+                zchjhj: 0,
+                jll1: 0,
+                jll2: 0,
+                jll3: 0,
+                jll4: 0,
+                jll5: 0,
+                jll6: 0,
+                jll7: 0,
+                jll8: 0,
+                jll9: 0,
+                jll10: 0,
+                jll11: 0,
+                jll12: 0,
+                jllhj: 0,
+                jy: 0,
+                yf1: 0,
+                yf2: 0,
+                yf3: 0,
+                yf4: 0,
+                yf5: 0,
+                yf6: 0,
+                yf7: 0,
+                yf8: 0,
+                yf9: 0,
+                yf10: 0,
+                yf11: 0,
+                yf12: 0,
+                yfhj: 0,
+              };
+              for (var i = 0; i < responseData.rows.length; i++) {
+                switch (responseData.rows[i].bm) {
+                  case "工程测绘部":
+                    const jysr = `jysr${responseData.rows[i].yf}`;
+                    const hjsyyj = `hjsyyj${responseData.rows[i].yf}`;
+                    const jssyyl = `jssyyl${responseData.rows[i].yf}`;
+                    const yl = `yl${responseData.rows[i].yf}`;
+                    const yj = `yj${responseData.rows[i].yf}`;
+                    const sbjysr = `sbjysr${responseData.rows[i].yf}`;
+                    const hdnbcz = `hdnbcz${responseData.rows[i].yf}`;
+                    const srhj = `srhj${responseData.rows[i].yf}`;
+                    const fbje = `fbje${responseData.rows[i].yf}`;
+                    const wcxmje = `wcxmje${responseData.rows[i].yf}`;
+                    const cggg = `cggg${responseData.rows[i].yf}`;
+                    const lwpq = `lwpq${responseData.rows[i].yf}`;
+                    const bdzc = `bdzc${responseData.rows[i].yf}`;
+                    const zchj = `zchj${responseData.rows[i].yf}`;
+                    const jll = `jll${responseData.rows[i].yf}`;
+
+                    gcchb[jysr] = responseData.rows[i].jysr;
+                    gcchb[hjsyyj] = responseData.rows[i].hjsyyj;
+                    gcchb[jssyyl] = responseData.rows[i].jssyyl;
+                    gcchb[yl] = responseData.rows[i].yl;
+                    gcchb[yj] = responseData.rows[i].yj;
+                    gcchb[sbjysr] =
+                      gcchb[jysr] -
+                      gcchb[hjsyyj] +
+                      gcchb[jssyyl] -
+                      gcchb[yl] +
+                      gcchb[yj];
+
+                    gcchb[hdnbcz] = responseData.rows[i].hdnbcz;
+                    gcchb[srhj] = gcchb[sbjysr] + gcchb[hdnbcz];
+                    gcchb[fbje] = responseData.rows[i].fbje;
+                    gcchb[wcxmje] = responseData.rows[i].wcxmje;
+                    gcchb[cggg] = responseData.rows[i].cggg;
+                    gcchb[lwpq] = responseData.rows[i].lwpq;
+                    gcchb[bdzc] = responseData.rows[i].bdzc;
+                    gcchb[zchj] =
+                      gcchb[wcxmje] + gcchb[cggg] + gcchb[lwpq] + gcchb[bdzc];
+                    gcchb[jll] = gcchb[srhj] - gcchb[zchj];
+
+                    gcchb.jysrhj = gcchb.jysrhj + responseData.rows[i].jysr;
+                    gcchb.hjsyyjhj =
+                      gcchb.hjsyyjhj + responseData.rows[i].hjsyyj;
+                    gcchb.jssyylhj =
+                      gcchb.jssyylhj + responseData.rows[i].jssyyl;
+                    gcchb.ylhj = gcchb.ylhj + responseData.rows[i].yl;
+                    gcchb.yjhj = gcchb.yjhj + responseData.rows[i].yj;
+                    gcchb.sbjysrhj = gcchb.sbjysrhj + gcchb[sbjysr];
+                    gcchb.hdnbczhj =
+                      gcchb.hdnbczhj + responseData.rows[i].hdnbcz;
+                    gcchb.srhjhj = gcchb.srhjhj + gcchb[srhj];
+                    gcchb.fbjehj = gcchb.fbjehj + responseData.rows[i].fbje;
+                    gcchb.wcxmjehj =
+                      gcchb.wcxmjehj + responseData.rows[i].wcxmje;
+                    gcchb.cggghj = gcchb.cggghj + responseData.rows[i].cggg;
+                    gcchb.lwpqhj = gcchb.lwpqhj + responseData.rows[i].lwpq;
+                    gcchb.bdzchj = gcchb.bdzchj + responseData.rows[i].bdzc;
+                    gcchb.zchjhj = gcchb.zchjhj + gcchb[zchj];
+                    gcchb.jllhj = gcchb.jllhj + gcchb[jll];
+                    break;
+
+                  case "管线工程部":
+                    const jysrgx = `jysr${responseData.rows[i].yf}`;
+                    const hjsyyjgx = `hjsyyj${responseData.rows[i].yf}`;
+                    const jssyylgx = `jssyyl${responseData.rows[i].yf}`;
+                    const ylgx = `yl${responseData.rows[i].yf}`;
+                    const yjgx = `yj${responseData.rows[i].yf}`;
+                    const sbjysrgx = `sbjysr${responseData.rows[i].yf}`;
+                    const hdnbczgx = `hdnbcz${responseData.rows[i].yf}`;
+                    const srhjgx = `srhj${responseData.rows[i].yf}`;
+                    const fbjegx = `fbje${responseData.rows[i].yf}`;
+                    const wcxmjegx = `wcxmje${responseData.rows[i].yf}`;
+                    const cggggx = `cggg${responseData.rows[i].yf}`;
+                    const lwpqgx = `lwpq${responseData.rows[i].yf}`;
+                    const bdzcgx = `bdzc${responseData.rows[i].yf}`;
+                    const zchjgx = `zchj${responseData.rows[i].yf}`;
+                    const jllgx = `jll${responseData.rows[i].yf}`;
+
+                    gxgcb[jysrgx] = responseData.rows[i].jysr;
+                    gxgcb[hjsyyjgx] = responseData.rows[i].hjsyyj;
+                    gxgcb[jssyylgx] = responseData.rows[i].jssyyl;
+                    gxgcb[ylgx] = responseData.rows[i].yl;
+                    gxgcb[yj] = responseData.rows[i].yj;
+                    gxgcb[sbjysrgx] =
+                      gxgcb[jysrgx] -
+                      gxgcb[hjsyyjgx] +
+                      gxgcb[jssyylgx] -
+                      gxgcb[ylgx] +
+                      gxgcb[yjgx];
+
+                    gxgcb[hdnbczgx] = responseData.rows[i].hdnbcz;
+                    gxgcb[srhjgx] = gxgcb[sbjysrgx] + gxgcb[hdnbczgx];
+                    gxgcb[fbjegx] = responseData.rows[i].fbje;
+                    gxgcb[wcxmjegx] = responseData.rows[i].wcxmje;
+                    gxgcb[cggggx] = responseData.rows[i].cggg;
+                    gxgcb[lwpqgx] = responseData.rows[i].lwpq;
+                    gxgcb[bdzcgx] = responseData.rows[i].bdzc;
+                    gxgcb[zchjgx] =
+                      gxgcb[wcxmjegx] +
+                      gxgcb[cggggx] +
+                      gxgcb[lwpqgx] +
+                      gxgcb[bdzcgx];
+                    gxgcb[jllgx] = gxgcb[srhjgx] - gxgcb[zchjgx];
+
+                    gxgcb.jysrhj = gxgcb.jysrhj + responseData.rows[i].jysr;
+                    gxgcb.hjsyyjhj =
+                      gxgcb.hjsyyjhj + responseData.rows[i].hjsyyj;
+                    gxgcb.jssyylhj =
+                      gxgcb.jssyylhj + responseData.rows[i].jssyyl;
+                    gxgcb.ylhj = gxgcb.ylhj + responseData.rows[i].yl;
+                    gxgcb.yjhj = gxgcb.yjhj + responseData.rows[i].yj;
+                    gxgcb.sbjysrhj = gxgcb.sbjysrhj + gxgcb[sbjysrgx];
+                    gxgcb.hdnbczhj =
+                      gxgcb.hdnbczhj + responseData.rows[i].hdnbcz;
+                    gxgcb.srhjhj = gxgcb.srhjhj + gxgcb[srhjgx];
+                    gxgcb.fbjehj = gxgcb.fbjehj + responseData.rows[i].fbje;
+                    gxgcb.wcxmjehj =
+                      gxgcb.wcxmjehj + responseData.rows[i].wcxmje;
+                    gxgcb.cggghj = gxgcb.cggghj + responseData.rows[i].cggg;
+                    gxgcb.lwpqhj = gxgcb.lwpqhj + responseData.rows[i].lwpq;
+                    gxgcb.bdzchj = gxgcb.bdzchj + responseData.rows[i].bdzc;
+                    gxgcb.zchjhj = gxgcb.zchjhj + gxgcb[zchjgx];
+                    gxgcb.jllhj = gxgcb.jllhj + gxgcb[jllgx];
+                    break;
+                  case "不动产测绘部":
+                    const jysrbd = `jysr${responseData.rows[i].yf}`;
+                    const hjsyyjbd = `hjsyyj${responseData.rows[i].yf}`;
+                    const jssyylbd = `jssyyl${responseData.rows[i].yf}`;
+                    const ylbd = `yl${responseData.rows[i].yf}`;
+                    const yjbd = `yj${responseData.rows[i].yf}`;
+                    const sbjysrbd = `sbjysr${responseData.rows[i].yf}`;
+                    const hdnbczbd = `hdnbcz${responseData.rows[i].yf}`;
+                    const srhjbd = `srhj${responseData.rows[i].yf}`;
+                    const fbjebd = `fbje${responseData.rows[i].yf}`;
+                    const wcxmjebd = `wcxmje${responseData.rows[i].yf}`;
+                    const cgggbd = `cggg${responseData.rows[i].yf}`;
+                    const lwpqbd = `lwpq${responseData.rows[i].yf}`;
+                    const bdzcbd = `bdzc${responseData.rows[i].yf}`;
+                    const zchjbd = `zchj${responseData.rows[i].yf}`;
+                    const jllbd = `jll${responseData.rows[i].yf}`;
+
+                    bdxchb[jysrbd] = responseData.rows[i].jysr;
+                    bdxchb[hjsyyjbd] = responseData.rows[i].hjsyyj;
+                    bdxchb[jssyylbd] = responseData.rows[i].jssyyl;
+                    bdxchb[ylbd] = responseData.rows[i].yl;
+                    bdxchb[yjbd] = responseData.rows[i].yj;
+                    bdxchb[sbjysrbd] =
+                      bdxchb[jysrbd] -
+                      bdxchb[hjsyyjbd] +
+                      bdxchb[jssyylbd] -
+                      bdxchb[ylbd] +
+                      bdxchb[yjbd];
+
+                    bdxchb[hdnbczbd] = responseData.rows[i].hdnbcz;
+                    bdxchb[srhjbd] = bdxchb[sbjysrbd] + bdxchb[hdnbczbd];
+                    bdxchb[fbjebd] = responseData.rows[i].fbje;
+                    bdxchb[wcxmjebd] = responseData.rows[i].wcxmje;
+                    bdxchb[cgggbd] = responseData.rows[i].cggg;
+                    bdxchb[lwpqbd] = responseData.rows[i].lwpq;
+                    bdxchb[bdzcbd] = responseData.rows[i].bdzc;
+                    bdxchb[zchjbd] =
+                      bdxchb[wcxmjebd] +
+                      bdxchb[cgggbd] +
+                      bdxchb[lwpqbd] +
+                      bdxchb[bdzcbd];
+                    bdxchb[jllbd] = bdxchb[srhjbd] - bdxchb[zchjbd];
+
+                    bdxchb.jysrhj = bdxchb.jysrhj + responseData.rows[i].jysr;
+                    bdxchb.hjsyyjhj =
+                      bdxchb.hjsyyjhj + responseData.rows[i].hjsyyj;
+                    bdxchb.jssyylhj =
+                      bdxchb.jssyylhj + responseData.rows[i].jssyyl;
+                    bdxchb.ylhj = bdxchb.ylhj + responseData.rows[i].yl;
+                    bdxchb.yjhj = bdxchb.yjhj + responseData.rows[i].yj;
+                    bdxchb.sbjysrhj = bdxchb.sbjysrhj + bdxchb[sbjysrbd];
+                    bdxchb.hdnbczhj =
+                      bdxchb.hdnbczhj + responseData.rows[i].hdnbcz;
+                    bdxchb.srhjhj = bdxchb.srhjhj + bdxchb[srhjbd];
+                    bdxchb.fbjehj = bdxchb.fbjehj + responseData.rows[i].fbje;
+                    bdxchb.wcxmjehj =
+                      bdxchb.wcxmjehj + responseData.rows[i].wcxmje;
+                    bdxchb.cggghj = bdxchb.cggghj + responseData.rows[i].cggg;
+                    bdxchb.lwpqhj = bdxchb.lwpqhj + responseData.rows[i].lwpq;
+                    bdxchb.bdzchj = bdxchb.bdzchj + responseData.rows[i].bdzc;
+                    bdxchb.zchjhj = bdxchb.zchjhj + bdxchb[zchjbd];
+                    bdxchb.jllhj = bdxchb.jllhj + bdxchb[jllbd];
+                    break;
+                  case "地理信息部":
+                    const jysrdl = `jysr${responseData.rows[i].yf}`;
+                    const hjsyyjdl = `hjsyyj${responseData.rows[i].yf}`;
+                    const jssyyldl = `jssyyl${responseData.rows[i].yf}`;
+                    const yldl = `yl${responseData.rows[i].yf}`;
+                    const yjdl = `yj${responseData.rows[i].yf}`;
+                    const sbjysrdl = `sbjysr${responseData.rows[i].yf}`;
+                    const hdnbczdl = `hdnbcz${responseData.rows[i].yf}`;
+                    const srhjdl = `srhj${responseData.rows[i].yf}`;
+                    const fbjedl = `fbje${responseData.rows[i].yf}`;
+                    const wcxmjedl = `wcxmje${responseData.rows[i].yf}`;
+                    const cgggdl = `cggg${responseData.rows[i].yf}`;
+                    const lwpqdl = `lwpq${responseData.rows[i].yf}`;
+                    const bdzcdl = `bdzc${responseData.rows[i].yf}`;
+                    const zchjdl = `zchj${responseData.rows[i].yf}`;
+                    const jlldl = `jll${responseData.rows[i].yf}`;
+                    const yfdl = `yf${responseData.rows[i].yf}`;
+
+                    dlxx[jysrdl] = responseData.rows[i].jysr;
+                    dlxx[hjsyyjdl] = responseData.rows[i].hjsyyj;
+                    dlxx[jssyyldl] = responseData.rows[i].jssyyl;
+                    dlxx[yldl] = responseData.rows[i].yl;
+                    dlxx[yjdl] = responseData.rows[i].yj;
+                    dlxx[sbjysrdl] =
+                      dlxx[jysrdl] -
+                      dlxx[hjsyyjdl] +
+                      dlxx[jssyyldl] -
+                      dlxx[yldl] +
+                      dlxx[yjdl];
+
+                    dlxx[hdnbczdl] = responseData.rows[i].hdnbcz;
+                    dlxx[srhjdl] = dlxx[sbjysrdl] + dlxx[hdnbczdl];
+                    dlxx[fbjedl] = responseData.rows[i].fbje;
+                    dlxx[wcxmjedl] = responseData.rows[i].wcxmje;
+                    dlxx[cgggdl] = responseData.rows[i].cggg;
+                    dlxx[lwpqdl] = responseData.rows[i].lwpq;
+                    dlxx[bdzcdl] = responseData.rows[i].bdzc;
+                    dlxx[zchjdl] =
+                      dlxx[wcxmjedl] +
+                      dlxx[cgggdl] +
+                      dlxx[lwpqdl] +
+                      dlxx[bdzcdl];
+                    dlxx[jlldl] = dlxx[srhjdl] - dlxx[zchjdl];
+                    dlxx[yfdl] = responseData.rows[i].yfcz;
+
+                    dlxx.jysrhj = dlxx.jysrhj + responseData.rows[i].jysr;
+                    dlxx.hjsyyjhj = dlxx.hjsyyjhj + responseData.rows[i].hjsyyj;
+                    dlxx.jssyylhj = dlxx.jssyylhj + responseData.rows[i].jssyyl;
+                    dlxx.ylhj = dlxx.ylhj + responseData.rows[i].yl;
+                    dlxx.yjhj = dlxx.yjhj + responseData.rows[i].yj;
+                    dlxx.sbjysrhj = dlxx.sbjysrhj + dlxx[sbjysrdl];
+                    dlxx.hdnbczhj = dlxx.hdnbczhj + responseData.rows[i].hdnbcz;
+                    dlxx.srhjhj = dlxx.srhjhj + dlxx[srhjdl];
+                    dlxx.fbjehj = dlxx.fbjehj + responseData.rows[i].fbje;
+                    dlxx.wcxmjehj = dlxx.wcxmjehj + responseData.rows[i].wcxmje;
+                    dlxx.cggghj = dlxx.cggghj + responseData.rows[i].cggg;
+                    dlxx.lwpqhj = dlxx.lwpqhj + responseData.rows[i].lwpq;
+                    dlxx.bdzchj = dlxx.bdzchj + responseData.rows[i].bdzc;
+                    dlxx.zchjhj = dlxx.zchjhj + dlxx[zchjdl];
+                    dlxx.jllhj = dlxx.jllhj + dlxx[jlldl];
+                    dlxx.yfhj = dlxx.yfhj + dlxx[yfdl];
+                    break;
+                  default:
+                  // 如果没有匹配的 case，执行这里的代码
+                }
+              }
+              gxgcb.yjhj = gxgcb.yjhj + 297900;
+              dlxx.yjhj = dlxx.yjhj + 970000;
+              gxgcb.jy =
+                gxgcb.hjsyyjhj - gxgcb.jssyylhj + gxgcb.ylhj - gxgcb.yjhj;
+              dlxx.jy = dlxx.hjsyyjhj - dlxx.jssyylhj + dlxx.ylhj - dlxx.yjhj;
               // 替换占位符
               sheet1.eachRow((row) => {
                 row.eachCell((cell) => {
                   if (typeof cell.value === "string") {
                     for (const key in gcchb) {
-                      cell.value = cell.value.replace(
-                        new RegExp(`{${key}}`, "g"),
-                        gcchb[key]
-                      );
+                      const regex = new RegExp(`{${key}}`, "g");
+                      if (regex.test(cell.value)) {
+                        // 如果占位符是整格单元格，直接替换成数值类型
+                        if (cell.value === `{${key}}`) {
+                          cell.value = gcchb[key]; // 保持原数值类型
+                        } else {
+                          // 否则正常字符串替换（比如 "合计:{jysr1}"）
+                          cell.value = cell.value.replace(
+                            regex,
+                            gcchb[key].toString()
+                          );
+                        }
+                      }
+                    }
+                  }
+                });
+              });
+              sheet2.eachRow((row) => {
+                row.eachCell((cell) => {
+                  if (typeof cell.value === "string") {
+                    for (const key in gxgcb) {
+                      const regex = new RegExp(`{${key}}`, "g");
+                      if (regex.test(cell.value)) {
+                        // 如果占位符是整格单元格，直接替换成数值类型
+                        if (cell.value === `{${key}}`) {
+                          cell.value = gxgcb[key]; // 保持原数值类型
+                        } else {
+                          // 否则正常字符串替换（比如 "合计:{jysr1}"）
+                          cell.value = cell.value.replace(
+                            regex,
+                            gxgcb[key].toString()
+                          );
+                        }
+                      }
+                    }
+                  }
+                });
+              });
+
+              sheet3.eachRow((row) => {
+                row.eachCell((cell) => {
+                  if (typeof cell.value === "string") {
+                    for (const key in bdxchb) {
+                      const regex = new RegExp(`{${key}}`, "g");
+                      if (regex.test(cell.value)) {
+                        // 如果占位符是整格单元格，直接替换成数值类型
+                        if (cell.value === `{${key}}`) {
+                          cell.value = bdxchb[key]; // 保持原数值类型
+                        } else {
+                          // 否则正常字符串替换（比如 "合计:{jysr1}"）
+                          cell.value = cell.value.replace(
+                            regex,
+                            bdxchb[key].toString()
+                          );
+                        }
+                      }
+                    }
+                  }
+                });
+              });
+
+              sheet4.eachRow((row) => {
+                row.eachCell((cell) => {
+                  if (typeof cell.value === "string") {
+                    for (const key in dlxx) {
+                      const regex = new RegExp(`{${key}}`, "g");
+                      if (regex.test(cell.value)) {
+                        // 如果占位符是整格单元格，直接替换成数值类型
+                        if (cell.value === `{${key}}`) {
+                          cell.value = dlxx[key]; // 保持原数值类型
+                        } else {
+                          // 否则正常字符串替换（比如 "合计:{jysr1}"）
+                          cell.value = cell.value.replace(
+                            regex,
+                            dlxx[key].toString()
+                          );
+                        }
+                      }
                     }
                   }
                 });
