@@ -10,6 +10,7 @@ const user = {
     permissions: [],
     userId : 0,
     deptId :0,
+    deptName :'',
     logStatus:1,
   },
 
@@ -34,6 +35,9 @@ const user = {
     },
     SET_DEPTIF: (state, deptId) => {
       state.deptId = deptId
+    },
+     SET_DEPTNAME: (state, deptName) => {
+      state.deptName = deptName
     },
     SET_LOGSTATUS: (state, logStatus) => {
       state.logStatus = logStatus
@@ -73,6 +77,7 @@ const user = {
           commit('SET_NAME', user.userName)
           commit('SET_USERID', user.userId)
           commit('SET_DEPTIF', user.deptId)
+          commit('SET_DEPTNAME', user.dept.deptName)
           commit('SET_LOGSTATUS', user.logStatus)
           commit('SET_AVATAR', avatar)
           resolve(res)

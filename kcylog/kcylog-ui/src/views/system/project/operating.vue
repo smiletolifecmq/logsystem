@@ -150,6 +150,17 @@
           >人员产值详情</el-button
         >
       </el-col>
+      <el-col :span="1.5">
+        <el-button
+          type="primary"
+          plain
+          icon="el-icon-check"
+          size="mini"
+          v-hasPermi="['system:profit:add']"
+          @click="projectJyczqr"
+          >经营产值确认</el-button
+        >
+      </el-col>
     </el-row>
 
     <el-table :data="statisticsData" style="width: 100%">
@@ -1030,6 +1041,37 @@
         <el-button type="primary" @click="submitSettleBz">结算办结</el-button>
       </div>
     </el-dialog>
+
+    <el-dialog
+      title="经营产值确认"
+      :visible.sync="jyczOpen"
+      width="600px"
+      append-to-body
+      v-el-drag-dialog
+    >
+      <el-form
+        ref="jyczqrFormBz"
+        :model="jyczqrFormBz"
+        label-width="80px"
+        :rules="jyczqrRules"
+      >
+        <el-form-item label="月份" prop="qryf">
+          <el-date-picker
+            v-model="jyczqrFormBz.qryf"
+            type="month"
+            placeholder="选择月"
+            value-format="yyyy-MM"
+          >
+          </el-date-picker>
+        </el-form-item>
+      </el-form>
+      <div
+        class="dialog-footer"
+        style="display: flex; justify-content: flex-end"
+      >
+        <el-button type="primary" @click="submitJyczqr">确认</el-button>
+      </div>
+    </el-dialog>
   </div>
 </template>
 <style>
@@ -1050,6 +1092,7 @@ import {
   leLsSettleProject,
 } from "@/api/system/project";
 import elDragDialog from "@/api/components/el-drag";
+import { addProfit } from "@/api/system/profit";
 
 export default {
   filters: {
@@ -1070,6 +1113,8 @@ export default {
   },
   data() {
     return {
+      jyczOpen: false,
+      jyczqrFormBz: {},
       cgsdForm: {
         cgsdtime: null,
         projectId: null,
@@ -1211,6 +1256,9 @@ export default {
       },
       // 表单参数
       form: {},
+      jyczqrRules: {
+        qryf: [{ required: true, message: "请选择月份", trigger: "blur" }],
+      },
       rules: {
         operate: [
           { required: true, message: "请填写经营产值", trigger: "blur" },
@@ -1230,6 +1278,38 @@ export default {
     this.getCqData();
   },
   methods: {
+    submitJyczqr() {
+      this.$refs["jyczqrFormBz"].validate((valid) => {
+        if (valid) {
+          const [nf, month] = this.jyczqrFormBz.qryf.split("-");
+          const yf = String(Number(month)); // 去掉前导0
+          this.jyczqrFormBz.nf = nf;
+          this.jyczqrFormBz.yf = yf;
+          var jyczObj = {
+            bdcchbWork: 0,
+            dlxxbWork: 0,
+            gcchbNumWork: 0,
+            gxgcbWork: 0,
+          };
+          for (var i = 0; i < this.statisticsData.length; i++) {
+            if (this.statisticsData[i].status == 0) {
+              jyczObj = this.statisticsData[i];
+            }
+          }
+          this.jyczqrFormBz.bdcchbWork = jyczObj.bdcchbWork;
+          this.jyczqrFormBz.dlxxbWork = jyczObj.dlxxbWork;
+          this.jyczqrFormBz.gcchbNumWork = jyczObj.gcchbNumWork;
+          this.jyczqrFormBz.gxgcbWork = jyczObj.gxgcbWork;
+          addProfit(this.jyczqrFormBz).then((response) => {
+            this.$modal.msgSuccess("确认成功");
+            this.jyczOpen = false;
+          });
+        }
+      });
+    },
+    projectJyczqr() {
+      this.jyczOpen = true;
+    },
     showFetailXt(value) {
       if (!value.projectNum) return false;
       const substrings = ["图", "售", "数"];

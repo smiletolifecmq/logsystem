@@ -1,0 +1,120 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.kcylog.system.mapper.SysProfitMapper">
+    
+    <resultMap type="SysProfit" id="SysProfitResult">
+        <result property="id"    column="id"    />
+        <result property="nf"    column="nf"    />
+        <result property="yf"    column="yf"    />
+        <result property="bm"    column="bm"    />
+        <result property="jysr"    column="jysr"    />
+        <result property="hjsyyj"    column="hjsyyj"    />
+        <result property="jssyyl"    column="jssyyl"    />
+        <result property="yl"    column="yl"    />
+        <result property="yj"    column="yj"    />
+        <result property="sbjysr"    column="sbjysr"    />
+        <result property="hdnbcz"    column="hdnbcz"    />
+        <result property="fbje"    column="fbje"    />
+        <result property="wcxmje"    column="wcxmje"    />
+        <result property="cggg"    column="cggg"    />
+        <result property="lwpq"    column="lwpq"    />
+        <result property="bdzc"    column="bdzc"    />
+        <result property="yfcz"    column="yfcz"    />
+    </resultMap>
+
+    <sql id="selectSysProfitVo">
+        select id, nf, yf, bm, jysr, hjsyyj, jssyyl, yl, yj, sbjysr, hdnbcz, fbje, wcxmje, cggg, lwpq, bdzc, yfcz from sys_profit
+    </sql>
+
+    <select id="selectSysProfitList" parameterType="SysProfit" resultMap="SysProfitResult">
+        <include refid="selectSysProfitVo"/>
+        <where>  
+            <if test="nf != null  and nf != ''"> and nf = #{nf}</if>
+            <if test="yf != null  and yf != ''"> and yf = #{yf}</if>
+            <if test="bm != null  and bm != ''"> and bm = #{bm}</if>
+        </where>
+        order by nf desc , yf desc
+    </select>
+    
+    <select id="selectSysProfitById" parameterType="Long" resultMap="SysProfitResult">
+        <include refid="selectSysProfitVo"/>
+        where id = #{id}
+    </select>
+        
+    <insert id="insertSysProfit" parameterType="SysProfit" useGeneratedKeys="true" keyProperty="id">
+        insert into sys_profit
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="nf != null and nf != ''">nf,</if>
+            <if test="yf != null and yf != ''">yf,</if>
+            <if test="bm != null and bm != ''">bm,</if>
+            <if test="jysr != null">jysr,</if>
+            <if test="hjsyyj != null">hjsyyj,</if>
+            <if test="jssyyl != null">jssyyl,</if>
+            <if test="yl != null">yl,</if>
+            <if test="yj != null">yj,</if>
+            <if test="sbjysr != null">sbjysr,</if>
+            <if test="hdnbcz != null">hdnbcz,</if>
+            <if test="fbje != null">fbje,</if>
+            <if test="wcxmje != null">wcxmje,</if>
+            <if test="cggg != null">cggg,</if>
+            <if test="lwpq != null">lwpq,</if>
+            <if test="bdzc != null">bdzc,</if>
+            <if test="yfcz != null">yfcz,</if>
+         </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test="nf != null and nf != ''">#{nf},</if>
+            <if test="yf != null and yf != ''">#{yf},</if>
+            <if test="bm != null and bm != ''">#{bm},</if>
+            <if test="jysr != null">#{jysr},</if>
+            <if test="hjsyyj != null">#{hjsyyj},</if>
+            <if test="jssyyl != null">#{jssyyl},</if>
+            <if test="yl != null">#{yl},</if>
+            <if test="yj != null">#{yj},</if>
+            <if test="sbjysr != null">#{sbjysr},</if>
+            <if test="hdnbcz != null">#{hdnbcz},</if>
+            <if test="fbje != null">#{fbje},</if>
+            <if test="wcxmje != null">#{wcxmje},</if>
+            <if test="cggg != null">#{cggg},</if>
+            <if test="lwpq != null">#{lwpq},</if>
+            <if test="bdzc != null">#{bdzc},</if>
+            <if test="yfcz != null">#{yfcz},</if>
+         </trim>
+    </insert>
+
+    <update id="updateSysProfit" parameterType="SysProfit">
+        update sys_profit
+        <trim prefix="SET" suffixOverrides=",">
+            <if test="hjsyyj != null">hjsyyj = #{hjsyyj},</if>
+            <if test="jssyyl != null">jssyyl = #{jssyyl},</if>
+            <if test="yl != null">yl = #{yl},</if>
+            <if test="yj != null">yj = #{yj},</if>
+            <if test="sbjysr != null">sbjysr = #{sbjysr},</if>
+            <if test="hdnbcz != null">hdnbcz = #{hdnbcz},</if>
+            <if test="fbje != null">fbje = #{fbje},</if>
+            <if test="wcxmje != null">wcxmje = #{wcxmje},</if>
+            <if test="cggg != null">cggg = #{cggg},</if>
+            <if test="lwpq != null">lwpq = #{lwpq},</if>
+            <if test="bdzc != null">bdzc = #{bdzc},</if>
+            <if test="yfcz != null">yfcz = #{yfcz},</if>
+        </trim>
+        where id = #{id}
+    </update>
+
+    <delete id="deleteSysProfitById" parameterType="Long">
+        delete from sys_profit where id = #{id}
+    </delete>
+
+    <delete id="deleteSysProfitByIds" parameterType="String">
+        delete from sys_profit where id in 
+        <foreach item="id" collection="array" open="(" separator="," close=")">
+            #{id}
+        </foreach>
+    </delete>
+
+    <select id="selectSysProfitListLastMonth" resultMap="SysProfitResult">
+        <include refid="selectSysProfitVo"/>
+        order by nf desc , yf desc limit 4
+    </select>
+</mapper>
