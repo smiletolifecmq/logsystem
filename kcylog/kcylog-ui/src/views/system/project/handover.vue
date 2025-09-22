@@ -338,6 +338,11 @@
           {{ scope.row.projectList.department }}
         </template>
       </el-table-column>
+      <el-table-column label="一检时间" align="center" prop="twoCheck">
+        <template slot-scope="scope">
+          {{ formatDate(scope.row.projectList.oneCheck) }}
+        </template></el-table-column
+      >
       <el-table-column label="二检时间" align="center" prop="twoCheck">
         <template slot-scope="scope">
           {{ formatDate(scope.row.projectList.twoCheck) }}
@@ -467,9 +472,10 @@
         <template slot-scope="scope">
           <el-button
             v-show="
-              scope.row.transferTime == null ||
-              scope.row.transferTime == '' ||
-              scope.row.transferTime == undefined
+              (scope.row.transferTime == null ||
+                scope.row.transferTime == '' ||
+                scope.row.transferTime == undefined) &&
+              scope.row.isArchive !== 0
             "
             size="mini"
             type="text"
@@ -480,9 +486,10 @@
           >
           <el-button
             v-show="
-              scope.row.receiveTime == null ||
-              scope.row.receiveTime == '' ||
-              scope.row.receiveTime == undefined
+              (scope.row.receiveTime == null ||
+                scope.row.receiveTime == '' ||
+                scope.row.receiveTime == undefined) &&
+              scope.row.isArchive !== 0
             "
             size="mini"
             type="text"
@@ -493,9 +500,10 @@
           >
           <el-button
             v-show="
-              scope.row.checkTime == null ||
-              scope.row.checkTime == '' ||
-              scope.row.checkTime == undefined
+              (scope.row.checkTime == null ||
+                scope.row.checkTime == '' ||
+                scope.row.checkTime == undefined) &&
+              scope.row.isArchive !== 0
             "
             size="mini"
             type="text"
@@ -506,9 +514,10 @@
           >
           <el-button
             v-show="
-              scope.row.archiveTime == null ||
-              scope.row.archiveTime == '' ||
-              scope.row.archiveTime == undefined
+              (scope.row.archiveTime == null ||
+                scope.row.archiveTime == '' ||
+                scope.row.archiveTime == undefined) &&
+              scope.row.isArchive !== 0
             "
             size="mini"
             type="text"
@@ -1292,7 +1301,7 @@
           </template>
           <template slot-scope="scope" v-else> </template>
         </el-table-column>
-        <el-table-column
+        <!-- <el-table-column
           label="盖章确认时间"
           align="center"
           prop="marketingTime"
@@ -1301,14 +1310,14 @@
             {{ formatDate(scope.row.marketingTime) }}
           </template>
           <template slot-scope="scope" v-else> </template>
-        </el-table-column>
+        </el-table-column> -->
         <el-table-column label="归档时间" align="center" prop="archiveTime">
           <template slot-scope="scope" v-if="scope.row.archiveTime != null">
             {{ formatDate(scope.row.archiveTime) }}
           </template>
           <template slot-scope="scope" v-else> </template>
         </el-table-column>
-        <el-table-column
+        <!-- <el-table-column
           fixed="right"
           label="归档截止时间"
           align="center"
@@ -1346,7 +1355,7 @@
               >
             </div>
           </template></el-table-column
-        >
+        > -->
       </el-table>
     </el-dialog>
 
