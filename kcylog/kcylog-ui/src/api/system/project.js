@@ -233,3 +233,35 @@ export function leLsSettleProject(data) {
     data: data
   })
 }
+
+export function listProjectYj(data) {
+  return request({
+    url: '/system/project/listProjectYj',
+    method: 'put',
+    data: data
+  })
+}
+
+export function listProjectSj(data) {
+  return request({
+    url: '/system/project/listProjectSj',
+    method: 'put',
+    data: data
+  })
+}
+
+export function listProjectYs(data) {
+  return request({
+    url: '/system/project/listProjectYs',
+    method: 'put',
+    data: data
+  })
+}
+
+export function listProjectGd(data) {
+  return request({
+    url: '/system/project/listProjectGd',
+    method: 'put',
+    data: data
+  })
+}

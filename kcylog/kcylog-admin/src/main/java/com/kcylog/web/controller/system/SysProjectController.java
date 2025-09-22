@@ -31,7 +31,9 @@ import java.net.http.HttpResponse;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.time.ZoneId;
+import java.time.format.DateTimeFormatter;
 import java.util.*;
 import java.util.stream.Collectors;
 
@@ -2924,6 +2926,112 @@ public class SysProjectController extends BaseController {
         }
 
         System.out.println("同步完成");
+        return toAjax(1);
+    }
+
+    @Anonymous
+    @CrossOrigin
+    @GetMapping("/get_project_geo_for_xmbh/{projectNum}")
+    public AjaxResult projectGeoForXmbh(@PathVariable("projectNum") String projectNum)
+    {
+        SysProject project = sysProjectService.selectSysProjectByProjectNum(projectNum);
+        List<SysProjectGeoinfo> projectGeoinfo = sysProjectGeoinfoService.selectSysProjectGeoinfoByProjectId(project.getProjectId());
+        List<SysProjectSelectmapTfinfo> projectSelectmapTfinfo = sysProjectSelectmapTfinfoService.selectSysProjectSelectmapTfinfoByProjectId(project.getProjectId());
+        ProjectGeoList projectGeoList = new ProjectGeoList();
+        List<ProjectGeo> projectGeoArr = new ArrayList<>();
+        List<Geotfinfo> geotfinfoArr = new ArrayList<>();
+        if (project != null )
+        {
+            projectGeoList.setProjectCode(project.getProjectNum());
+            projectGeoList.setProjectName(project.getProjectNameAlias());
+            projectGeoList.setRequester(project.getRequesterAlias());
+            projectGeoList.setRegisterTime(project.getRegisterTime());
+            projectGeoList.setMapScale(project.getMapScale());
+            if (projectGeoinfo != null){
+                for (SysProjectGeoinfo geoInfo : projectGeoinfo){
+                    ProjectGeo projectGeo = new ProjectGeo();
+                    projectGeo.setGeometry(geoInfo.getGeometry());
+                    projectGeo.setGeometry2000(geoInfo.getGeometry2000());
+                    projectGeo.setBufferGeometry(geoInfo.getBufferGeometry());
+                    projectGeo.setBufferGeometry2000(geoInfo.getBufferGeometry2000());
+                    projectGeo.setGeometryGauss2000(geoInfo.getGeometryGauss2000());
+                    projectGeo.setBufferGeometryGauss2000(geoInfo.getBufferGeometryGauss2000());
+                    projectGeo.setBufferDistance(geoInfo.getBufferDistance());
+                    projectGeoArr.add(projectGeo);
+                }
+            }
+            if (projectSelectmapTfinfo != null){
+                for (SysProjectSelectmapTfinfo selectmapTfinfo : projectSelectmapTfinfo){
+                    Geotfinfo geotfinfo = new Geotfinfo();
+                    geotfinfo.setMapCode(selectmapTfinfo.getMapCode());
+                    geotfinfo.setMapAddinfo(selectmapTfinfo.getMapAddinfo());
+                    geotfinfoArr.add(geotfinfo);
+                }
+            }
+            projectGeoList.setProjectGeo(projectGeoArr);
+            projectGeoList.setGeotfinfo(geotfinfoArr);
+        }
+        return success(projectGeoList);
+    }
+
+    @Log(title = "移交", businessType = BusinessType.UPDATE)
+    @PutMapping("/listProjectYj")
+    public AjaxResult listProjectYj(@RequestBody SysProject sysProject) {
+        FqProjectProcess obj = new FqProjectProcess();
+        obj.setProjectId(sysProject.getProjectId());
+        // 获取当前时间
+        LocalDateTime now = LocalDateTime.now();
+        // 定义格式化规则
+        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss");
+        // 转换为字符串
+        String nowStr = now.format(formatter);
+        obj.setTransferTime(nowStr);
+        fqProjectProcessService.updateFqProjectProcess(obj);
+        return toAjax(1);
+    }
+
+    @Log(title = "收件", businessType = BusinessType.UPDATE)
+    @PutMapping("/listProjectSj")
+    public AjaxResult listProjectSj(@RequestBody SysProject sysProject) {
+        FqProjectProcess obj = new FqProjectProcess();
+        obj.setProjectId(sysProject.getProjectId());
+        obj.setReceiveTime(sysProject.getDeptName());
+        obj.setStampTime(sysProject.getDeptName());
+        obj.setReceiveStatus((long)2);
+        fqProjectProcessService.updateFqProjectProcess(obj);
+        return toAjax(1);
+    }
+
+    @Log(title = "验收", businessType = BusinessType.UPDATE)
+    @PutMapping("/listProjectYs")
+    public AjaxResult listProjectYs(@RequestBody SysProject sysProject) {
+        FqProjectProcess obj = new FqProjectProcess();
+        obj.setProjectId(sysProject.getProjectId());
+        // 获取当前时间
+        LocalDateTime now = LocalDateTime.now();
+        // 定义格式化规则
+        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss");
+        // 转换为字符串
+        String nowStr = now.format(formatter);
+        obj.setCheckTime(nowStr);
+        fqProjectProcessService.updateFqProjectProcess(obj);
+        return toAjax(1);
+    }
+
+    @Log(title = "归档", businessType = BusinessType.UPDATE)
+    @PutMapping("/listProjectGd")
+    public AjaxResult listProjectGd(@RequestBody SysProject sysProject) {
+        FqProjectProcess obj = new FqProjectProcess();
+        obj.setProjectId(sysProject.getProjectId());
+        // 获取当前时间
+        LocalDateTime now = LocalDateTime.now();
+        // 定义格式化规则
+        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss");
+        // 转换为字符串
+        String nowStr = now.format(formatter);
+        obj.setArchiveTime(nowStr);
+        obj.setCheckStatus((long)2);
+        fqProjectProcessService.updateFqProjectProcess(obj);
         return toAjax(1);
     }
 

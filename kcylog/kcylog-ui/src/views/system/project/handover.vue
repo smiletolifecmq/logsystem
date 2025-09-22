@@ -400,19 +400,19 @@
         </template>
         <template slot-scope="scope" v-else> </template>
       </el-table-column>
-      <el-table-column label="盖章确认时间" align="center" prop="marketingTime">
+      <!-- <el-table-column label="盖章确认时间" align="center" prop="marketingTime">
         <template slot-scope="scope" v-if="scope.row.marketingTime != null">
           {{ formatDate(scope.row.marketingTime) }}
         </template>
         <template slot-scope="scope" v-else> </template>
-      </el-table-column>
+      </el-table-column> -->
       <el-table-column label="归档时间" align="center" prop="archiveTime">
         <template slot-scope="scope" v-if="scope.row.archiveTime != null">
           {{ formatDate(scope.row.archiveTime) }}
         </template>
         <template slot-scope="scope" v-else> </template>
       </el-table-column>
-      <el-table-column
+      <!-- <el-table-column
         label="归档截止时间"
         align="center"
         prop="rectifyCutoffTime"
@@ -423,8 +423,8 @@
           }}</span>
         </template>
         <template slot-scope="scope" v-else> </template>
-      </el-table-column>
-      <el-table-column label="归档提前天数" align="center">
+      </el-table-column> -->
+      <!-- <el-table-column label="归档提前天数" align="center">
         <template slot-scope="scope">
           <el-tag
             v-show="scope.row.isArchive != 1 && scope.row.isArchive != null"
@@ -444,7 +444,7 @@
             >
           </div>
         </template></el-table-column
-      >
+      > -->
       <el-table-column label="是否已收件" align="center" prop="receiveStatus">
         <template slot-scope="scope">
           <el-tag v-if="scope.row.receiveStatus == 2" type="success">是</el-tag>
@@ -462,8 +462,61 @@
         label="操作"
         align="center"
         class-name="small-padding fixed-width"
+        width="126px"
       >
         <template slot-scope="scope">
+          <el-button
+            v-show="
+              scope.row.transferTime == null ||
+              scope.row.transferTime == '' ||
+              scope.row.transferTime == undefined
+            "
+            size="mini"
+            type="text"
+            icon="el-icon-s-promotion"
+            @click="handleProcessYj(scope.row)"
+            v-hasPermi="['system:project:yj']"
+            >移交</el-button
+          >
+          <el-button
+            v-show="
+              scope.row.receiveTime == null ||
+              scope.row.receiveTime == '' ||
+              scope.row.receiveTime == undefined
+            "
+            size="mini"
+            type="text"
+            icon="el-icon-s-promotion"
+            @click="handleProcessSj(scope.row)"
+            v-hasPermi="['system:project:sj']"
+            >收件</el-button
+          >
+          <el-button
+            v-show="
+              scope.row.checkTime == null ||
+              scope.row.checkTime == '' ||
+              scope.row.checkTime == undefined
+            "
+            size="mini"
+            type="text"
+            icon="el-icon-s-promotion"
+            @click="handleProcessYs(scope.row)"
+            v-hasPermi="['system:project:ys']"
+            >验收</el-button
+          >
+          <el-button
+            v-show="
+              scope.row.archiveTime == null ||
+              scope.row.archiveTime == '' ||
+              scope.row.archiveTime == undefined
+            "
+            size="mini"
+            type="text"
+            icon="el-icon-s-promotion"
+            @click="handleProcessGd(scope.row)"
+            v-hasPermi="['system:project:gd']"
+            >归档</el-button
+          >
           <el-button
             size="mini"
             type="text"
@@ -479,14 +532,6 @@
             @click="handleDetail(scope.row)"
             v-hasPermi="['system:project:query']"
             >项目详情</el-button
-          >
-          <el-button
-            v-show="scope.row.isArchive == 1 || scope.row.isArchive == null"
-            size="mini"
-            type="text"
-            icon="el-icon-s-order"
-            @click="handleProcessDetail(scope.row)"
-            >流程详情</el-button
           >
           <el-button
             size="mini"
@@ -1447,6 +1492,35 @@
         </el-collapse-item>
       </el-collapse>
     </el-dialog>
+
+    <!-- 收件 -->
+    <el-dialog
+      title="确认收件时间"
+      :visible.sync="openSj"
+      width="600px"
+      append-to-body
+      :close-on-click-modal="false"
+      :close-on-press-escape="false"
+    >
+      <el-form
+        ref="sjForm"
+        :model="sjForm"
+        label-width="100px"
+        :rules="rulesSj"
+      >
+        <el-form-item label="收件时间" required>
+          <el-date-picker
+            v-model="sjForm.deptName"
+            type="date"
+            placeholder="选择日期"
+          >
+          </el-date-picker>
+        </el-form-item>
+      </el-form>
+      <div slot="footer" class="dialog-footer">
+        <el-button type="primary" @click="submitFormSJ">确 定</el-button>
+      </div>
+    </el-dialog>
   </div>
 </template>
 <style>
@@ -1463,6 +1537,10 @@ import {
   updateProject,
   listProjectSelected,
   updateCad,
+  listProjectYj,
+  listProjectSj,
+  listProjectYs,
+  listProjectGd,
 } from "@/api/system/project";
 import elDragDialog from "@/api/components/el-drag";
 import { listUnit } from "@/api/system/unit";
@@ -1491,6 +1569,7 @@ export default {
   },
   data() {
     return {
+      openSj: false,
       activeNamesTemp: ["1"],
       lxValue: [],
       options: [
@@ -1731,9 +1810,17 @@ export default {
       },
       titleInfo: "",
       openInfo: false,
+      sjForm: {
+        deptName: null,
+      },
       // 表单参数
       form: {},
       // 表单校验
+      rulesSj: {
+        deptName: [
+          { required: true, message: "收件时间不能为空", trigger: "blur" },
+        ],
+      },
       rules: {
         projectNameAlias: [
           { required: true, message: "项目名称不能为空", trigger: "blur" },
@@ -1790,6 +1877,7 @@ export default {
             trigger: "blur",
           },
         ],
+        projectId: null,
       },
     };
   },
@@ -1800,6 +1888,102 @@ export default {
     this.getStatisticsData();
   },
   methods: {
+    handleProcessYj(value) {
+      this.$confirm("此操作将对项目进行移交, 是否继续?", "提示", {
+        confirmButtonText: "确定",
+        cancelButtonText: "取消",
+        type: "warning",
+      })
+        .then(() => {
+          listProjectYj({ projectId: value.projectId }).then((response) => {
+            this.getList();
+            this.$message({
+              type: "success",
+              message: "移交成功!",
+            });
+          });
+        })
+        .catch(() => {
+          this.$message({
+            type: "info",
+            message: "已取消移交",
+          });
+        });
+    },
+    submitFormSJ() {
+      this.$confirm("此操作将对项目进行收件, 是否继续?", "提示", {
+        confirmButtonText: "确定",
+        cancelButtonText: "取消",
+        type: "warning",
+      })
+        .then(() => {
+          listProjectSj({
+            projectId: this.projectId,
+            deptName: this.sjForm.deptName,
+          }).then((response) => {
+            this.getList();
+            this.openSj = false;
+            this.$message({
+              type: "success",
+              message: "收件成功!",
+            });
+          });
+        })
+        .catch(() => {
+          this.$message({
+            type: "info",
+            message: "已取消收件",
+          });
+        });
+    },
+    handleProcessSj(value) {
+      this.openSj = true;
+      this.projectId = value.projectId;
+    },
+    handleProcessYs(value) {
+      this.$confirm("此操作将对项目进行验收, 是否继续?", "提示", {
+        confirmButtonText: "确定",
+        cancelButtonText: "取消",
+        type: "warning",
+      })
+        .then(() => {
+          listProjectYs({ projectId: value.projectId }).then((response) => {
+            this.getList();
+            this.$message({
+              type: "success",
+              message: "验收成功!",
+            });
+          });
+        })
+        .catch(() => {
+          this.$message({
+            type: "info",
+            message: "已取消验收",
+          });
+        });
+    },
+    handleProcessGd(value) {
+      this.$confirm("此操作将对项目进行归档, 是否继续?", "提示", {
+        confirmButtonText: "确定",
+        cancelButtonText: "取消",
+        type: "warning",
+      })
+        .then(() => {
+          listProjectGd({ projectId: value.projectId }).then((response) => {
+            this.getList();
+            this.$message({
+              type: "success",
+              message: "归档成功!",
+            });
+          });
+        })
+        .catch(() => {
+          this.$message({
+            type: "info",
+            message: "已取消归档",
+          });
+        });
+    },
     changeLx() {
       this.fwxform.gclx = this.lxValue[0];
       this.fwxform.lx = this.lxValue[1];
