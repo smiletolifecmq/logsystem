@@ -430,7 +430,7 @@
           </template>
         </el-table-column>
       </el-table-column>
-      <el-table-column label="操作" align="center" width="100" fixed="right">
+      <el-table-column label="操作" align="center" width="126" fixed="right">
         <template slot-scope="scope">
           <el-button
             size="mini"
@@ -507,6 +507,15 @@
             :min="0"
             placeholder="内部产值金额金额"
           ></el-input-number>
+        </el-form-item>
+
+        <el-form-item label="计算月份" prop="ygtime">
+          <el-date-picker
+            v-model="form.ygtime"
+            type="month"
+            placeholder="选择月"
+          >
+          </el-date-picker>
         </el-form-item>
       </el-form>
       <div slot="footer" class="dialog-footer">
@@ -1733,7 +1742,11 @@ export default {
   },
   methods: {
     showjycz(value) {
-      if (value.ygmoney != null && value.ygmoney != undefined) {
+      if (
+        value.ygmoney != null &&
+        value.ygmoney != undefined &&
+        value.ygmoney != 0
+      ) {
         return false;
       }
       return true;

@@ -163,6 +163,34 @@
       </el-col>
     </el-row>
 
+    <el-table :data="statisticsDataYgmoney" style="width: 100%">
+      <el-table-column prop="status" :label="labelValueYgmoney" align="center">
+        <template slot-scope="scope">
+          <el-tag type="success">{{ scope.row.typeName }}</el-tag>
+        </template>
+      </el-table-column>
+      <el-table-column prop="gcchbNumWork" label="工程测绘部" align="center">
+        <template slot-scope="scope">
+          <el-tag type="success">{{ scope.row.gcchbNumWork }}</el-tag>
+        </template>
+      </el-table-column>
+      <el-table-column prop="bdcchbWork" label="不动产测绘部" align="center">
+        <template slot-scope="scope">
+          <el-tag type="success">{{ scope.row.bdcchbWork }}</el-tag>
+        </template>
+      </el-table-column>
+      <el-table-column prop="gxgcbWork" label="管线工程部" align="center">
+        <template slot-scope="scope">
+          <el-tag type="success">{{ scope.row.gxgcbWork }}</el-tag>
+        </template>
+      </el-table-column>
+      <el-table-column prop="dlxxbWork" label="地理信息部" align="center">
+        <template slot-scope="scope">
+          <el-tag type="success">{{ scope.row.dlxxbWork }}</el-tag>
+        </template>
+      </el-table-column>
+    </el-table>
+
     <el-table :data="statisticsData" style="width: 100%">
       <el-table-column prop="status" :label="labelValue" align="center">
         <template slot-scope="scope">
@@ -336,6 +364,8 @@
         label="操作"
         align="center"
         class-name="small-padding fixed-width"
+        width="126"
+        fixed="right"
       >
         <template slot-scope="scope">
           <el-button
@@ -1090,6 +1120,7 @@ import {
   listProjectStatisticsDataForDept,
   updateProjectCgsd,
   leLsSettleProject,
+  listProjectStatisticsNbcz,
 } from "@/api/system/project";
 import elDragDialog from "@/api/components/el-drag";
 import { addProfit } from "@/api/system/profit";
@@ -1176,6 +1207,8 @@ export default {
       overTimeOpen: false,
       tiCqData: [],
       labelValue: "类型-",
+      labelValueYgmoney: "类型-",
+      statisticsDataYgmoney: [],
       statisticsData: [],
       settleForm: {},
       settleFormBz: {},
@@ -1276,6 +1309,7 @@ export default {
     this.getList();
     this.getStatisticsData();
     this.getCqData();
+    this.getNbczje();
   },
   methods: {
     submitJyczqr() {
@@ -1473,6 +1507,47 @@ export default {
           numData.hlcq = myMap.get("黄丽").cqNum7;
         }
         this.tiCqData.push(numData);
+      });
+    },
+    getNbczje() {
+      listProjectStatisticsNbcz().then((response) => {
+        this.statisticsDataYgmoney = [];
+        this.labelValueYgmoney = "类型-";
+        const now = new Date();
+        // 下一个月
+        const nextMonth = new Date(now);
+        nextMonth.setMonth(now.getMonth() + 1);
+        // 只取月份
+        const month = nextMonth.getMonth() + 1; // 月份从 0 开始，所以要 +1
+
+        this.labelValueYgmoney = this.labelValueYgmoney + month + "月份";
+
+        var obj = {
+          typeName: "内部产值金额",
+          gcchbNumWork: 0,
+          bdcchbWork: 0,
+          gxgcbWork: 0,
+          dlxxbWork: 0,
+        };
+
+        for (var i = 0; i < response.rows.length; i++) {
+          switch (response.rows[i].department) {
+            case "不动产测绘部":
+              obj.bdcchbWork = obj.bdcchbWork + response.rows[i].ygmoney;
+              break;
+            case "地理信息部":
+              obj.dlxxbWork = obj.dlxxbWork + response.rows[i].ygmoney;
+              break;
+            case "工程测绘部":
+              obj.gcchbNumWork = obj.gcchbNumWork + response.rows[i].ygmoney;
+              break;
+            case "管线工程部":
+              obj.gxgcbWork = obj.gxgcbWork + response.rows[i].ygmoney;
+              break;
+          }
+        }
+
+        this.statisticsDataYgmoney.push(obj);
       });
     },
     getStatisticsData() {

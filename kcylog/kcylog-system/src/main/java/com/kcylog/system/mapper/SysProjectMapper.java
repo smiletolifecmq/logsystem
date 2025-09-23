@@ -156,4 +156,6 @@ public interface SysProjectMapper
     public List<SysProject> listProjectHjMonth(SysProject sysProject);
 
     public List<SysProject> selectRwapzList(SysProject sysProject);
+
+    public List<SysProject> selectSysProjectByNbcz();
 }

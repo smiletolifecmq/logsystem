@@ -248,11 +248,25 @@
           {{ formatDate(scope.row.doTime) }}
         </template></el-table-column
       >
+      <el-table-column label="内部产值金额" align="center" prop="ygmoney">
+        <template slot-scope="scope">
+          {{ scope.row.ygmoney }}
+        </template></el-table-column
+      >
       <el-table-column label="工作状态" align="center" prop="status">
         <el-tag type="danger">待一检</el-tag>
       </el-table-column>
-      <el-table-column label="操作" align="center">
+      <el-table-column label="操作" align="center" width="126" fixed="right">
         <template slot-scope="scope">
+          <el-button
+            size="mini"
+            type="text"
+            icon="el-icon-edit"
+            @click="handleUpdate(scope.row)"
+            v-if="showjycz(scope.row)"
+            v-hasPermi="['system:project:editygmoney']"
+            >填写内部产值</el-button
+          >
           <el-button
             size="mini"
             type="text"
@@ -296,90 +310,29 @@
     />
 
     <!-- 添加或修改项目对话框 -->
-    <el-dialog :title="title" :visible.sync="open" width="500px" append-to-body>
-      <el-form ref="form" :model="form" :rules="rules" label-width="80px">
-        <el-form-item label="项目名称" prop="projectNameAlias">
-          <el-input
-            v-model="form.projectNameAlias"
-            placeholder="请输入项目名称"
-          />
+    <el-dialog
+      title="填写无经费或服务类项目内部产值"
+      :visible.sync="open"
+      width="800px"
+      append-to-body
+    >
+      <el-form ref="form" :model="form" :rules="rules" label-width="210px">
+        <el-form-item label="内部产值金额(元)" prop="ygmoney">
+          <el-input-number
+            v-model="form.ygmoney"
+            :precision="2"
+            :min="0"
+            placeholder="内部产值金额金额"
+          ></el-input-number>
         </el-form-item>
-        <el-form-item label="项目编号" prop="projectNum">
-          <el-input v-model="form.projectNum" placeholder="请输入项目编号" />
-        </el-form-item>
-        <el-form-item label="项目类型" prop="projectType">
-          <el-input v-model="form.projectType" placeholder="请输入项目类型" />
-        </el-form-item>
-        <el-form-item label="登记时间" prop="registerTime">
-          <el-input v-model="form.registerTime" placeholder="请输入登记时间" />
-        </el-form-item>
-        <el-form-item label="接待人" prop="receptionist">
-          <el-input v-model="form.receptionist" placeholder="请输入接待人" />
-        </el-form-item>
-        <el-form-item label="工作量" prop="workloadAlias">
-          <el-input
-            v-model="form.workloadAlias"
-            type="textarea"
-            placeholder="请输入内容"
-          />
-        </el-form-item>
-        <el-form-item label="工程内容" prop="workcontentAlias">
-          <el-input
-            v-model="form.workcontentAlias"
-            type="textarea"
-            placeholder="请输入内容"
-          />
-        </el-form-item>
-        <el-form-item label="工程负责人" prop="userNameAlias">
-          <el-input
-            v-model="form.userNameAlias"
-            placeholder="请输入工程负责人"
-          />
-        </el-form-item>
-        <el-form-item label="委托单位" prop="requesterAlias">
-          <el-input
-            v-model="form.requesterAlias"
-            placeholder="请输入委托单位"
-          />
-        </el-form-item>
-        <el-form-item label="安排开始时间" prop="projectStartAlias">
-          <el-input
-            v-model="form.projectStartAlias"
-            placeholder="请输入安排开始时间"
-          />
-        </el-form-item>
-        <el-form-item label="安排结束时间" prop="projectEndAlias">
-          <el-input
-            v-model="form.projectEndAlias"
-            placeholder="请输入安排结束时间"
-          />
-        </el-form-item>
-        <el-form-item label="一检时间" prop="oneCheck">
-          <el-input v-model="form.oneCheck" placeholder="请输入一检时间" />
-        </el-form-item>
-        <el-form-item label="二检时间" prop="twoCheck">
-          <el-input v-model="form.twoCheck" placeholder="请输入二检时间" />
-        </el-form-item>
-        <el-form-item label="通知出件时间" prop="noticeTime">
-          <el-input
-            v-model="form.noticeTime"
-            placeholder="请输入通知出件时间"
-          />
-        </el-form-item>
-        <el-form-item label="项目出件时间" prop="projectTime">
-          <el-input
-            v-model="form.projectTime"
-            placeholder="请输入项目出件时间"
-          />
-        </el-form-item>
-        <el-form-item label="送达时间" prop="deliveryTime">
-          <el-input v-model="form.deliveryTime" placeholder="请输入送达时间" />
-        </el-form-item>
-        <el-form-item label="项目金额" prop="projectMoneyAlias">
-          <el-input
-            v-model="form.projectMoneyAlias"
-            placeholder="请输入项目金额"
-          />
+
+        <el-form-item label="计算月份" prop="ygtime">
+          <el-date-picker
+            v-model="form.ygtime"
+            type="month"
+            placeholder="选择月"
+          >
+          </el-date-picker>
         </el-form-item>
       </el-form>
       <div slot="footer" class="dialog-footer">
@@ -1022,7 +975,7 @@ import {
   getProject,
   delProject,
   addProject,
-  updateProject,
+  updateProjectYgmoney,
   listProjectSelected,
   updateProjectCqBz,
   updateCad,
@@ -1319,6 +1272,16 @@ export default {
     this.getStatisticsData();
   },
   methods: {
+    showjycz(value) {
+      if (
+        value.ygmoney != null &&
+        value.ygmoney != undefined &&
+        value.ygmoney != 0
+      ) {
+        return false;
+      }
+      return true;
+    },
     changeLx() {
       this.fwxform.gclx = this.lxValue[0];
       this.fwxform.lx = this.lxValue[1];
@@ -1909,7 +1872,7 @@ export default {
       this.$refs["form"].validate((valid) => {
         if (valid) {
           if (this.form.projectId != null) {
-            updateProject(this.form).then((response) => {
+            updateProjectYgmoney(this.form).then((response) => {
               this.$modal.msgSuccess("修改成功");
               this.open = false;
               this.getList();

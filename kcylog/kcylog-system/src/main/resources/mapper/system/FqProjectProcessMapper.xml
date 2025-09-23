@@ -85,6 +85,8 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
         <result property="geometryGauss2000" column="geometry_gauss2000"/>
         <result property="bufferGeometryGauss2000" column="buffer_geometry_gauss2000"/>
         <result property="mapScale" column="map_scale"/>
+        <result property="ygmoney" column="ygmoney"/>
+        <result property="ygtime" column="ygtime"/>
     </resultMap>
 
 

@@ -384,4 +384,10 @@ public class SysProjectServiceImpl implements ISysProjectService
     {
         return sysProjectMapper.selectRwapzList(sysProject);
     }
+
+    @Override
+    public List<SysProject> selectSysProjectByNbcz()
+    {
+        return sysProjectMapper.selectSysProjectByNbcz();
+    }
 }

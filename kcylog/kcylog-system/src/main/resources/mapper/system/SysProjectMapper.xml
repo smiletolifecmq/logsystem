@@ -1239,4 +1239,10 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
         </where>
     </select>
 
+    <select id="selectSysProjectByNbcz" resultMap="SysProjectResult">
+        SELECT *
+        FROM sys_project
+        WHERE DATE_FORMAT(ygtime, '%Y-%m') = DATE_FORMAT(DATE_ADD(NOW(), INTERVAL 1 MONTH), '%Y-%m');
+    </select>
+
 </mapper>
