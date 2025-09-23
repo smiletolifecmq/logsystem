@@ -265,3 +265,10 @@ export function listProjectGd(data) {
     data: data
   })
 }
+
+export function listProjectStatisticsNbcz() {
+  return request({
+    url: '/system/project/listProjectStatisticsNbcz',
+    method: 'get',
+  })
+}
