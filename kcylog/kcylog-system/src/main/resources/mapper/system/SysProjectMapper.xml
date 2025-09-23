@@ -420,7 +420,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
             <if test="receptionist != null  and receptionist != ''"> and receptionist = #{receptionist}</if>
             and is_two_check = 1
         </where>
-        order by p.project_id desc
+        order by p.settle asc, p.project_id desc
     </select>
 
     <update id="updateOutputStatusByProjectId" parameterType="SysProject">

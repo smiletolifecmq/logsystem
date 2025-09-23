@@ -450,9 +450,15 @@ export default {
       // return yearStr === value.nf && monthStr === value.yf;
 
       return (
-        yearStr === value.nf &&
-        monthStr === value.yf &&
-        value.bm === userInfo.state.deptName
+        (yearStr === value.nf &&
+          monthStr === value.yf &&
+          value.bm === userInfo.state.deptName) ||
+        (yearStr === value.nf &&
+          monthStr === value.yf &&
+          (userInfo.state.userId == 1 ||
+            userInfo.state.userId == 11 ||
+            userInfo.state.userId == 19 ||
+            userInfo.state.userId == 100))
       );
     },
     submitForm() {
