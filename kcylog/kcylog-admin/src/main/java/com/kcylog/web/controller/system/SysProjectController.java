@@ -3040,4 +3040,11 @@ public class SysProjectController extends BaseController {
         return getDataTable(list);
     }
 
+    @GetMapping("/nbcz")
+    public TableDataInfo nbcz(SysProject sysProject)  {
+        startPage();
+        List<SysProject> list = sysProjectService.selectSysProjectNBCZ(sysProject);
+        return getDataTable(list);
+    }
+
 }

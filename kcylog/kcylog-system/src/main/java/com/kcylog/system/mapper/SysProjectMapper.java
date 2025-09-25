@@ -158,4 +158,6 @@ public interface SysProjectMapper
     public List<SysProject> selectRwapzList(SysProject sysProject);
 
     public List<SysProject> selectSysProjectByNbcz();
+
+    public List<SysProject> selectSysProjectNBCZ(SysProject sysProject);
 }

@@ -390,4 +390,10 @@ public class SysProjectServiceImpl implements ISysProjectService
     {
         return sysProjectMapper.selectSysProjectByNbcz();
     }
+
+    @Override
+    public List<SysProject> selectSysProjectNBCZ(SysProject sysProject)
+    {
+        return sysProjectMapper.selectSysProjectNBCZ(sysProject);
+    }
 }

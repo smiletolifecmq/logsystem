@@ -1546,6 +1546,10 @@ export default {
               break;
           }
         }
+        obj.bdcchbWork = obj.bdcchbWork.toFixed(2);
+        obj.dlxxbWork = obj.dlxxbWork.toFixed(2);
+        obj.gcchbNumWork = obj.gcchbNumWork.toFixed(2);
+        obj.gxgcbWork = obj.gxgcbWork.toFixed(2);
 
         this.statisticsDataYgmoney.push(obj);
       });

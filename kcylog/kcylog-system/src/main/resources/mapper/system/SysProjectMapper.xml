@@ -1245,4 +1245,19 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
         WHERE DATE_FORMAT(ygtime, '%Y-%m') = DATE_FORMAT(DATE_ADD(NOW(), INTERVAL 1 MONTH), '%Y-%m');
     </select>
 
+    <select id="selectSysProjectNBCZ" parameterType="SysProject" resultMap="SysProjectResult">
+        <include refid="selectSysProjectVo"/>
+        <where>
+            <if test="department != null  and department != ''"> and department like concat('%', #{department}, '%')</if>
+            <if test="params.beginTime != null and params.beginTime != ''"><!-- 开始时间检索 -->
+                and (date_format(ygtime,'%y%m%d') &gt;= date_format(#{params.beginTime},'%y%m%d'))
+            </if>
+            <if test="params.endTime != null and params.endTime != ''"><!-- 结束时间检索 -->
+                and (date_format(ygtime,'%y%m%d') &lt;= date_format(#{params.endTime},'%y%m%d'))
+            </if>
+            and ygmoney != 0
+        </where>
+        order by ygtime desc
+    </select>
+
 </mapper>

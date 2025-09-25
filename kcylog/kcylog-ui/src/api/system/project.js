@@ -272,3 +272,11 @@ export function listProjectStatisticsNbcz() {
     method: 'get',
   })
 }
+
+export function nbcz(query) {
+  return request({
+    url: '/system/project/nbcz',
+    method: 'get',
+    params: query
+  })
+}
