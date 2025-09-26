@@ -97,4 +97,10 @@ public class SysProfitServiceImpl implements ISysProfitService
     {
         return sysProfitMapper.selectSysProfitListLastMonth();
     }
+
+    @Override
+    public List<SysProfit> getlistProfitOne()
+    {
+        return sysProfitMapper.getlistProfitOne();
+    }
 }

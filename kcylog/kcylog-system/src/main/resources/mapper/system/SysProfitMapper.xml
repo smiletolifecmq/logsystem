@@ -35,7 +35,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
             <if test="yf != null  and yf != ''"> and yf = #{yf}</if>
             <if test="bm != null  and bm != ''"> and bm = #{bm}</if>
         </where>
-        order by nf desc , yf desc
+        order by CAST(nf AS UNSIGNED) DESC , CAST(yf AS UNSIGNED) DESC
     </select>
     
     <select id="selectSysProfitById" parameterType="Long" resultMap="SysProfitResult">
@@ -115,6 +115,11 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 
     <select id="selectSysProfitListLastMonth" resultMap="SysProfitResult">
         <include refid="selectSysProfitVo"/>
-        order by nf desc , yf desc limit 4
+        order by CAST(nf AS UNSIGNED) DESC , CAST(yf AS UNSIGNED) DESC limit 4
+    </select>
+
+    <select id="getlistProfitOne"  resultMap="SysProfitResult">
+        <include refid="selectSysProfitVo"/>
+        order by CAST(nf AS UNSIGNED) DESC , CAST(yf AS UNSIGNED) DESC limit 1
     </select>
 </mapper>

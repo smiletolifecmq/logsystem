@@ -42,3 +42,11 @@ export function delProfit(id) {
     method: 'delete'
   })
 }
+
+export function getlistProfitOne(query) {
+  return request({
+    url: '/system/profit/getlistProfitOne',
+    method: 'get',
+    params: query
+  })
+}

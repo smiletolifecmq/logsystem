@@ -61,4 +61,6 @@ public interface SysProfitMapper
     public int deleteSysProfitByIds(Long[] ids);
 
     public List<SysProfit> selectSysProfitListLastMonth();
+
+    public List<SysProfit> getlistProfitOne();
 }

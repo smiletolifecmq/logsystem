@@ -617,6 +617,7 @@
             v-model="form.ygtime"
             type="month"
             placeholder="选择月"
+            :picker-options="pickerOptions"
           >
           </el-date-picker>
         </el-form-item>
@@ -1511,6 +1512,7 @@ import {
   setReviewStatus,
   getReviewForProjectId,
 } from "@/api/system/reviewSub";
+import { getlistProfitOne } from "@/api/system/profit";
 import { excelJsExport } from "@/api/system/excelJsExport";
 import userInfo from "@/store/modules/user";
 import FileUpload from "@/components/FileCad";
@@ -1531,6 +1533,16 @@ export default {
   },
   data() {
     return {
+      limitDate: null, // 后端返回的最小年月
+      pickerOptions: {
+        disabledDate: (time) => {
+          if (!this.limitDate) return false;
+          const [year, month] = this.limitDate.split("-").map(Number);
+          const lastDayOfMonth = new Date(year, month, 0); // month 传 11 表示 11 月，0 表示上个月最后一天
+          // 禁用 <= 2025-11 的所有日期
+          return time.getTime() <= lastDayOfMonth.getTime();
+        },
+      },
       openSj: false,
       activeNamesTemp: ["1"],
       lxValue: [],
@@ -1849,12 +1861,20 @@ export default {
     this.loadAllUnits();
     this.getStatisticsData();
   },
+  mounted() {
+    getlistProfitOne().then((response) => {
+      const nf = response.rows[0].nf; // 2025
+      const yf = response.rows[0].yf; // 09
+      this.limitDate = `${nf}-${yf}`;
+    });
+  },
   methods: {
     showjycz(value) {
       if (
-        value.projectList.ygmoney != null &&
-        value.projectList.ygmoney != undefined &&
-        value.projectList.ygmoney != 0
+        (value.projectList.ygmoney != null &&
+          value.projectList.ygmoney != undefined &&
+          value.projectList.ygmoney != 0) ||
+        value.projectList.settle == 1
       ) {
         return false;
       }

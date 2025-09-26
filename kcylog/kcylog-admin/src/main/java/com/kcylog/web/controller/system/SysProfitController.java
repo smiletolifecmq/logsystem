@@ -155,4 +155,11 @@ public class SysProfitController extends BaseController
     {
         return toAjax(sysProfitService.deleteSysProfitByIds(ids));
     }
+
+    @GetMapping("/getlistProfitOne")
+    public TableDataInfo getlistProfitOne()
+    {
+        List<SysProfit> list = sysProfitService.getlistProfitOne();
+        return getDataTable(list);
+    }
 }
