@@ -326,8 +326,8 @@ public class RyTask
                         }
                     }
                     //同步流程
-                    fqProjectProcessService.deleteFqProjectProcessById(sysProject.getProjectId());
-                    if (projectArchiveTransferTrackList.size() != 0){
+                    FqProjectProcess obj1 = fqProjectProcessService.selectFqProjectProcessById(sysProject.getProjectId());
+                    if (obj1 == null && projectArchiveTransferTrackList.size() != 0){
                         for (ViewFqProjectArchiveTransferTrack projectArchiveTransferTrackValue : projectArchiveTransferTrackList){
                             FqProjectProcess fqProjectProcessObj = new FqProjectProcess();
                             fqProjectProcessObj.setProjectId(sysProject.getProjectId());
