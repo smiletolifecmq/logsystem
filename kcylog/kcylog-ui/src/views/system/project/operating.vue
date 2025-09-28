@@ -348,6 +348,7 @@
           <el-tag v-show="scope.row.settle == 1" type="success">已办结</el-tag>
         </template>
       </el-table-column>
+      <el-table-column label="内部产值金额" align="center" prop="ygmoney" />
       <el-table-column label="经营产值" align="center" prop="operate" />
       <el-table-column
         label="结算办结时间"
@@ -739,6 +740,7 @@
             >
           </template>
         </el-table-column>
+
         <el-table-column label="经营产值" align="center" prop="operate" />
         <el-table-column
           label="结算办结时间"
@@ -787,7 +789,7 @@
     </el-dialog>
 
     <el-dialog
-      title="项目"
+      title="项目详情"
       :visible.sync="detailPeopleOpen"
       width="1200px"
       append-to-body
@@ -823,6 +825,13 @@
                 负责人
               </template>
               {{ formPeople.userNameAlias }}
+            </el-descriptions-item>
+            <el-descriptions-item>
+              <template slot="label">
+                <i class="el-icon-s-home"></i>
+                内部产值金额
+              </template>
+              {{ formPeople.ygmoney }}
             </el-descriptions-item>
             <el-descriptions-item>
               <template slot="label">
