@@ -136,7 +136,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
     </select>
     
     <select id="selectFqProjectProcessById" parameterType="Long" resultMap="FqProjectProcessResult">
-        <include refid="selectFqProjectProcessVo"/>
+        select project_id from fq_project_process
         where project_id = #{id}
     </select>
         
