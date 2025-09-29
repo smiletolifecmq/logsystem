@@ -166,27 +166,35 @@
     <el-table :data="statisticsDataYgmoney" style="width: 100%">
       <el-table-column prop="status" :label="labelValueYgmoney" align="center">
         <template slot-scope="scope">
-          <el-tag type="success">{{ scope.row.typeName }}</el-tag>
+          <el-tag type="success">{{ scope.row.typeName }} ｜ 项目数</el-tag>
         </template>
       </el-table-column>
       <el-table-column prop="gcchbNumWork" label="工程测绘部" align="center">
         <template slot-scope="scope">
-          <el-tag type="success">{{ scope.row.gcchbNumWork }}</el-tag>
+          <el-tag type="success"
+            >{{ scope.row.gcchbNumWork }} ｜ {{ scope.row.gcchbNum }}</el-tag
+          >
         </template>
       </el-table-column>
       <el-table-column prop="bdcchbWork" label="不动产测绘部" align="center">
         <template slot-scope="scope">
-          <el-tag type="success">{{ scope.row.bdcchbWork }}</el-tag>
+          <el-tag type="success"
+            >{{ scope.row.bdcchbWork }} ｜ {{ scope.row.bdcNum }}</el-tag
+          >
         </template>
       </el-table-column>
       <el-table-column prop="gxgcbWork" label="管线工程部" align="center">
         <template slot-scope="scope">
-          <el-tag type="success">{{ scope.row.gxgcbWork }}</el-tag>
+          <el-tag type="success"
+            >{{ scope.row.gxgcbWork }} ｜ {{ scope.row.gxNum }}</el-tag
+          >
         </template>
       </el-table-column>
       <el-table-column prop="dlxxbWork" label="地理信息部" align="center">
         <template slot-scope="scope">
-          <el-tag type="success">{{ scope.row.dlxxbWork }}</el-tag>
+          <el-tag type="success"
+            >{{ scope.row.dlxxbWork }} ｜ {{ scope.row.dlNum }}</el-tag
+          >
         </template>
       </el-table-column>
     </el-table>
@@ -1537,21 +1545,29 @@ export default {
           bdcchbWork: 0,
           gxgcbWork: 0,
           dlxxbWork: 0,
+          gcchbNum: 0,
+          bdcNum: 0,
+          gxNum: 0,
+          dlNum: 0,
         };
 
         for (var i = 0; i < response.rows.length; i++) {
           switch (response.rows[i].department) {
             case "不动产测绘部":
               obj.bdcchbWork = obj.bdcchbWork + response.rows[i].ygmoney;
+              obj.bdcNum++;
               break;
             case "地理信息部":
               obj.dlxxbWork = obj.dlxxbWork + response.rows[i].ygmoney;
+              obj.dlNum++;
               break;
             case "工程测绘部":
               obj.gcchbNumWork = obj.gcchbNumWork + response.rows[i].ygmoney;
+              obj.gcchbNum++;
               break;
             case "管线工程部":
               obj.gxgcbWork = obj.gxgcbWork + response.rows[i].ygmoney;
+              obj.gxNum++;
               break;
           }
         }

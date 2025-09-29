@@ -96,13 +96,35 @@
       </el-col>
       <el-col :span="1.5">
         <el-button
-          type="warning"
+          type="success"
           plain
           icon="el-icon-download"
           size="mini"
           @click="handleExport"
           v-hasPermi="['system:serviceWork:export']"
-          >导出</el-button
+          >导出Excel</el-button
+        >
+      </el-col>
+      <el-col :span="1.5">
+        <el-button
+          type="warning"
+          plain
+          icon="el-icon-download"
+          size="mini"
+          @click="handleExport"
+          v-hasPermi="['system:serviceWork:exportRjkfwh']"
+          >导出Word(软件开发维护)</el-button
+        >
+      </el-col>
+      <el-col :span="1.5">
+        <el-button
+          type="warning"
+          plain
+          icon="el-icon-download"
+          size="mini"
+          @click="handleExport"
+          v-hasPermi="['system:serviceWork:exportSjcl']"
+          >导出Word(数据处理)</el-button
         >
       </el-col>
       <right-toolbar
@@ -220,7 +242,7 @@
             </el-option>
           </el-select>
         </el-form-item>
-        <el-form-item label="项目类型" prop="xmlx">
+        <el-form-item label="项目类型" prop="xmlxid">
           <el-select v-model="form.xmlxid" placeholder="请选择" filterable>
             <el-option
               v-for="item in xmlxs"
@@ -434,6 +456,12 @@ export default {
   name: "Work",
   data() {
     return {
+      rules: {
+        zylx: [{ required: true, trigger: "blur", message: "请选择专业类型" }],
+        xmlxid: [
+          { required: true, trigger: "blur", message: "请输入项目类型" },
+        ],
+      },
       projectList: [],
       xmopen: false,
       dateRange: [],
@@ -518,7 +546,6 @@ export default {
       // 表单参数
       form: {},
       // 表单校验
-      rules: {},
     };
   },
   created() {
