@@ -22,10 +22,15 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
         <result property="gdcl"    column="gdcl"    />
         <result property="gdsm"    column="gdsm"    />
         <result property="xdxm"    column="xdxm"    />
+        <result property="dw"    column="dw"    />
+        <result property="dj"    column="dj"    />
+        <result property="fy"    column="fy"    />
+        <result property="xmlxid"    column="xmlxid"    />
+        <result property="zylxid"    column="zylxid"    />
     </resultMap>
 
     <sql id="selectSysServiceWorkVo">
-        select id, zylx, xmlx, xmbh, xmmc, gnmc, gznr, sl, rwaprq, zyry, zysjd, zysc, rwapry, yzdw, gdcl, gdsm, xdxm from sys_service_work
+        select id, zylx, xmlx, xmbh, xmmc, gnmc, gznr, sl, rwaprq, zyry, zysjd, zysc, rwapry, yzdw, gdcl, gdsm, xdxm, dw, dj, fy, xmlxid, zylxid from sys_service_work
     </sql>
 
     <select id="selectSysServiceWorkList" parameterType="SysServiceWork" resultMap="SysServiceWorkResult">
@@ -80,6 +85,11 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
             <if test="gdcl != null">gdcl,</if>
             <if test="gdsm != null">gdsm,</if>
             <if test="xdxm != null">xdxm,</if>
+            <if test="dw != null">dw,</if>
+            <if test="dj != null">dj,</if>
+            <if test="fy != null">fy,</if>
+            <if test="xmlxid != null">xmlxid,</if>
+            <if test="zylxid != null">zylxid,</if>
          </trim>
         <trim prefix="values (" suffix=")" suffixOverrides=",">
             <if test="id != null">#{id},</if>
@@ -99,6 +109,11 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
             <if test="gdcl != null">#{gdcl},</if>
             <if test="gdsm != null">#{gdsm},</if>
             <if test="xdxm != null">#{xdxm},</if>
+            <if test="dw != null">#{dw},</if>
+            <if test="dj != null">#{dj},</if>
+            <if test="fy != null">#{fy},</if>
+            <if test="xmlxid != null">#{xmlxid},</if>
+            <if test="zylxid != null">#{zylxid},</if>
          </trim>
     </insert>
 
@@ -121,6 +136,11 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
             <if test="gdcl != null">gdcl = #{gdcl},</if>
             <if test="gdsm != null">gdsm = #{gdsm},</if>
             <if test="xdxm != null">xdxm = #{xdxm},</if>
+            <if test="dw != null">dw = #{dw},</if>
+            <if test="dj != null">dj = #{dj},</if>
+            <if test="fy != null">fy = #{fy},</if>
+            <if test="xmlxid != null">xmlxid = #{xmlxid},</if>
+            <if test="zylxid != null">zylxid = #{zylxid},</if>
         </trim>
         where id = #{id}
     </update>

@@ -1,0 +1,86 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.kcylog.system.mapper.SysServiceWorkTypeMapper">
+    
+    <resultMap type="SysServiceWorkType" id="SysServiceWorkTypeResult">
+        <result property="id"    column="id"    />
+        <result property="xmlx"    column="xmlx"    />
+        <result property="suffix"    column="suffix"    />
+        <result property="zynr"    column="zynr"    />
+        <result property="dj"    column="dj"    />
+        <result property="dw"    column="dw"    />
+        <result property="czbz"    column="czbz"    />
+        <result property="zylx"    column="zylx"    />
+    </resultMap>
+
+    <sql id="selectSysServiceWorkTypeVo">
+        select id, xmlx, suffix, zynr, dj, dw, czbz, zylx from sys_service_work_type
+    </sql>
+
+    <select id="selectSysServiceWorkTypeList" parameterType="SysServiceWorkType" resultMap="SysServiceWorkTypeResult">
+        <include refid="selectSysServiceWorkTypeVo"/>
+        <where>  
+            <if test="xmlx != null  and xmlx != ''"> and xmlx = #{xmlx}</if>
+            <if test="suffix != null  and suffix != ''"> and suffix = #{suffix}</if>
+            <if test="zynr != null  and zynr != ''"> and zynr = #{zynr}</if>
+            <if test="dj != null "> and dj = #{dj}</if>
+            <if test="dw != null  and dw != ''"> and dw = #{dw}</if>
+            <if test="czbz != null  and czbz != ''"> and czbz = #{czbz}</if>
+            <if test="zylx != null "> and zylx = #{zylx}</if>
+        </where>
+    </select>
+    
+    <select id="selectSysServiceWorkTypeById" parameterType="Long" resultMap="SysServiceWorkTypeResult">
+        <include refid="selectSysServiceWorkTypeVo"/>
+        where id = #{id}
+    </select>
+        
+    <insert id="insertSysServiceWorkType" parameterType="SysServiceWorkType" useGeneratedKeys="true" keyProperty="id">
+        insert into sys_service_work_type
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="xmlx != null">xmlx,</if>
+            <if test="suffix != null and suffix != ''">suffix,</if>
+            <if test="zynr != null">zynr,</if>
+            <if test="dj != null">dj,</if>
+            <if test="dw != null">dw,</if>
+            <if test="czbz != null">czbz,</if>
+            <if test="zylx != null">zylx,</if>
+         </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test="xmlx != null">#{xmlx},</if>
+            <if test="suffix != null and suffix != ''">#{suffix},</if>
+            <if test="zynr != null">#{zynr},</if>
+            <if test="dj != null">#{dj},</if>
+            <if test="dw != null">#{dw},</if>
+            <if test="czbz != null">#{czbz},</if>
+            <if test="zylx != null">#{zylx},</if>
+         </trim>
+    </insert>
+
+    <update id="updateSysServiceWorkType" parameterType="SysServiceWorkType">
+        update sys_service_work_type
+        <trim prefix="SET" suffixOverrides=",">
+            <if test="xmlx != null">xmlx = #{xmlx},</if>
+            <if test="suffix != null and suffix != ''">suffix = #{suffix},</if>
+            <if test="zynr != null">zynr = #{zynr},</if>
+            <if test="dj != null">dj = #{dj},</if>
+            <if test="dw != null">dw = #{dw},</if>
+            <if test="czbz != null">czbz = #{czbz},</if>
+            <if test="zylx != null">zylx = #{zylx},</if>
+        </trim>
+        where id = #{id}
+    </update>
+
+    <delete id="deleteSysServiceWorkTypeById" parameterType="Long">
+        delete from sys_service_work_type where id = #{id}
+    </delete>
+
+    <delete id="deleteSysServiceWorkTypeByIds" parameterType="String">
+        delete from sys_service_work_type where id in 
+        <foreach item="id" collection="array" open="(" separator="," close=")">
+            #{id}
+        </foreach>
+    </delete>
+</mapper>

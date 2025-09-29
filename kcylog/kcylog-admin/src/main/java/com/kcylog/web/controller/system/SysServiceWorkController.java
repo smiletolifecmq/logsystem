@@ -7,7 +7,9 @@ import com.kcylog.common.core.page.TableDataInfo;
 import com.kcylog.common.enums.BusinessType;
 import com.kcylog.common.utils.poi.ExcelUtil;
 import com.kcylog.system.domain.SysServiceWork;
+import com.kcylog.system.domain.SysServiceWorkType;
 import com.kcylog.system.service.ISysServiceWorkService;
+import com.kcylog.system.service.ISysServiceWorkTypeService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
@@ -27,6 +29,9 @@ public class SysServiceWorkController extends BaseController
 {
     @Autowired
     private ISysServiceWorkService sysServiceWorkService;
+
+    @Autowired
+    private ISysServiceWorkTypeService sysServiceWorkTypeService;
 
     /**
      * 查询【请填写功能名称】列表
@@ -76,6 +81,13 @@ public class SysServiceWorkController extends BaseController
     @PostMapping
     public AjaxResult add(@RequestBody SysServiceWork sysServiceWork)
     {
+        Long xmlxid = sysServiceWork.getXmlxid();
+        SysServiceWorkType sysServiceWorkType = sysServiceWorkTypeService.selectSysServiceWorkTypeById(xmlxid);
+        sysServiceWork.setXmlx(sysServiceWorkType.getXmlx());
+        sysServiceWork.setDw(sysServiceWorkType.getDw());
+        sysServiceWork.setDj(sysServiceWorkType.getCzbz());
+        sysServiceWork.setZylxid(sysServiceWorkType.getZylx());
+        sysServiceWork.setFy(sysServiceWork.getSl().multiply(sysServiceWorkType.getDj()));
         return toAjax(sysServiceWorkService.insertSysServiceWork(sysServiceWork));
     }
 
@@ -87,6 +99,13 @@ public class SysServiceWorkController extends BaseController
     @PutMapping
     public AjaxResult edit(@RequestBody SysServiceWork sysServiceWork)
     {
+        Long xmlxid = sysServiceWork.getXmlxid();
+        SysServiceWorkType sysServiceWorkType = sysServiceWorkTypeService.selectSysServiceWorkTypeById(xmlxid);
+        sysServiceWork.setXmlx(sysServiceWorkType.getXmlx());
+        sysServiceWork.setDw(sysServiceWorkType.getDw());
+        sysServiceWork.setDj(sysServiceWorkType.getCzbz());
+        sysServiceWork.setZylxid(sysServiceWorkType.getZylx());
+        sysServiceWork.setFy(sysServiceWork.getSl().multiply(sysServiceWorkType.getDj()));
         return toAjax(sysServiceWorkService.updateSysServiceWork(sysServiceWork));
     }
 

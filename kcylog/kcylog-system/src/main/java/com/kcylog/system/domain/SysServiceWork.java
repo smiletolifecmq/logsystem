@@ -6,6 +6,7 @@ import com.kcylog.common.core.domain.BaseEntity;
 import org.apache.commons.lang3.builder.ToStringBuilder;
 import org.apache.commons.lang3.builder.ToStringStyle;
 
+import java.math.BigDecimal;
 import java.util.Date;
 
 /**
@@ -34,7 +35,7 @@ public class SysServiceWork extends BaseEntity
     private String xmlx;
 
     /** 项目编号 */
-    @Excel(name = "项目编号")
+//    @Excel(name = "项目编号")
     private String xmbh;
 
     /** 项目名称 */
@@ -51,7 +52,16 @@ public class SysServiceWork extends BaseEntity
 
     /** 数量 */
     @Excel(name = "数量")
-    private String sl;
+    private BigDecimal sl;
+
+    @Excel(name = "单位")
+    private String dw;
+
+    @Excel(name = "单价")
+    private String dj;
+
+    @Excel(name = "费用（元）")
+    private BigDecimal fy;
 
     /** 任务安排日期 */
     @JsonFormat(pattern = "yyyy-MM-dd")
@@ -63,7 +73,7 @@ public class SysServiceWork extends BaseEntity
     private String zyry;
 
     /** 作业时间段 */
-    @Excel(name = "作业时间段")
+//    @Excel(name = "作业时间段")
     private String zysjd;
 
     /** 作业时长 */
@@ -89,6 +99,50 @@ public class SysServiceWork extends BaseEntity
     /** 是否为已下单项目 */
     @Excel(name = "是否为已下单项目")
     private String xdxm;
+
+    private Long xmlxid;
+
+    private Long zylxid;
+
+    public Long getZylxid() {
+        return zylxid;
+    }
+
+    public void setZylxid(Long zylxid) {
+        this.zylxid = zylxid;
+    }
+
+    public Long getXmlxid() {
+        return xmlxid;
+    }
+
+    public void setXmlxid(Long xmlxid) {
+        this.xmlxid = xmlxid;
+    }
+
+    public String getDw() {
+        return dw;
+    }
+
+    public void setDw(String dw) {
+        this.dw = dw;
+    }
+
+    public String getDj() {
+        return dj;
+    }
+
+    public void setDj(String dj) {
+        this.dj = dj;
+    }
+
+    public BigDecimal getFy() {
+        return fy;
+    }
+
+    public void setFy(BigDecimal fy) {
+        this.fy = fy;
+    }
 
     public int getNum() {
         return num;
@@ -161,12 +215,12 @@ public class SysServiceWork extends BaseEntity
     {
         return gznr;
     }
-    public void setSl(String sl) 
+    public void setSl(BigDecimal sl)
     {
         this.sl = sl;
     }
 
-    public String getSl() 
+    public BigDecimal getSl()
     {
         return sl;
     }

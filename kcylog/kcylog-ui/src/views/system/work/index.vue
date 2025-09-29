@@ -143,6 +143,9 @@
         </template>
       </el-table-column>
       <el-table-column label="数量" align="center" prop="sl" />
+      <el-table-column label="单位" align="center" prop="dw" />
+      <el-table-column label="单价" align="center" prop="dj" />
+      <el-table-column label="费用（元）" align="center" prop="fy" />
       <el-table-column
         label="任务安排日期"
         align="center"
@@ -218,7 +221,7 @@
           </el-select>
         </el-form-item>
         <el-form-item label="项目类型" prop="xmlx">
-          <el-select v-model="form.xmlx" placeholder="请选择" filterable>
+          <el-select v-model="form.xmlxid" placeholder="请选择" filterable>
             <el-option
               v-for="item in xmlxs"
               :key="item.value"
@@ -257,7 +260,11 @@
           />
         </el-form-item>
         <el-form-item label="数量" prop="sl">
-          <el-input v-model="form.sl" placeholder="请输入数量" />
+          <el-input-number
+            v-model="form.sl"
+            :precision="2"
+            :step="0.1"
+          ></el-input-number>
         </el-form-item>
         <el-form-item label="任务安排日期" prop="rwaprq">
           <el-date-picker
@@ -419,6 +426,7 @@ import {
   addWork,
   updateWork,
 } from "@/api/system/work";
+import { listType } from "@/api/system/serverType";
 import userInfo from "@/store/modules/user";
 import { listProject } from "@/api/system/geoProject";
 
@@ -429,88 +437,15 @@ export default {
       projectList: [],
       xmopen: false,
       dateRange: [],
-      xmlxs: [
-        {
-          value: "软件开发",
-          label: "软件开发",
-        },
-        {
-          value: "软硬件维护",
-          label: "软硬件维护",
-        },
-        {
-          value: "需求调研",
-          label: "需求调研",
-        },
-        {
-          value: "编写文档",
-          label: "编写文档",
-        },
-        {
-          value: "红线数据处理",
-          label: "红线数据处理",
-        },
-        {
-          value: "影像核对",
-          label: "影像核对",
-        },
-        {
-          value: "坐标核对",
-          label: "坐标核对",
-        },
-        {
-          value: "地形、管线数据下载",
-          label: "地形、管线数据下载",
-        },
-        {
-          value: "坐标转换",
-          label: "坐标转换",
-        },
-        {
-          value: "存量土地精准投放系统数据上传",
-          label: "存量土地精准投放系统数据上传",
-        },
-        {
-          value: "数据加密",
-          label: "数据加密",
-        },
-        {
-          value: "数据出库",
-          label: "数据出库",
-        },
-        {
-          value: "紧急出件",
-          label: "紧急出件",
-        },
-        {
-          value: "临时用地系统信息提取录入",
-          label: "临时用地系统信息提取录入",
-        },
-        {
-          value: "挂图专题图类项目(有制作)",
-          label: "挂图专题图类项目(有制作)",
-        },
-        {
-          value: "挂图专题图类项目(仅打印)",
-          label: "挂图专题图类项目(仅打印)",
-        },
-        {
-          value: "无人机机巢日常管理",
-          label: "无人机机巢日常管理",
-        },
-        {
-          value: "其他零星",
-          label: "其他零星",
-        },
-      ],
+      xmlxs: [],
       zylxs: [
         {
-          value: "软件开发与维护",
-          label: "软件开发与维护",
+          value: "软件开发维护",
+          label: "软件开发维护",
         },
         {
-          value: "数据处理与拓展",
-          label: "数据处理与拓展",
+          value: "数据处理",
+          label: "数据处理",
         },
       ],
       xdxms: [
@@ -587,6 +522,21 @@ export default {
     };
   },
   created() {
+    listType().then((response) => {
+      for (var i = 0; i < response.rows.length; i++) {
+        if (response.rows[i].suffix != null && response.rows[i].suffix != "") {
+          this.xmlxs.push({
+            value: response.rows[i].id,
+            label: response.rows[i].xmlx + "-" + response.rows[i].suffix,
+          });
+        } else {
+          this.xmlxs.push({
+            value: response.rows[i].id,
+            label: response.rows[i].xmlx,
+          });
+        }
+      }
+    });
     this.getList();
   },
   methods: {
