@@ -111,7 +111,7 @@
           plain
           icon="el-icon-download"
           size="mini"
-          @click="handleExport"
+          @click="handleExportRjkfwh"
           v-hasPermi="['system:serviceWork:exportRjkfwh']"
           >导出Word(软件开发维护)</el-button
         >
@@ -122,7 +122,7 @@
           plain
           icon="el-icon-download"
           size="mini"
-          @click="handleExport"
+          @click="handleExportSjcl"
           v-hasPermi="['system:serviceWork:exportSjcl']"
           >导出Word(数据处理)</el-button
         >
@@ -451,6 +451,7 @@ import {
 import { listType } from "@/api/system/serverType";
 import userInfo from "@/store/modules/user";
 import { listProject } from "@/api/system/geoProject";
+import { exportSubDocx } from "@/utils/doc.js";
 
 export default {
   name: "Work",
@@ -740,6 +741,98 @@ export default {
         },
         `地理信息工作内部服务工作清单_${new Date().getTime()}.xlsx`
       );
+    },
+    handleExportRjkfwh() {
+      if (this.dateRange.length == 0) {
+        this.$message.error("请选择任务安排日期～");
+        return;
+      }
+      listWork(
+        this.addDateRange({ pageNum: 1, pageSize: 9999 }, this.dateRange)
+      ).then((response) => {
+        var data = {
+          form: {
+            startTime: this.dateRange[0],
+            endTime: this.dateRange[1],
+            gzlx: "软件开发维护",
+            totalMoney: 0,
+          },
+          list: [],
+        };
+        var num = 1;
+
+        for (var i = 0; i < response.rows.length; i++) {
+          if (response.rows[i].zylxid == 2) {
+            continue;
+          }
+          data.list.push({
+            content:
+              num +
+              "、" +
+              response.rows[i].xmlx +
+              "-" +
+              response.rows[i].xmmc +
+              "，" +
+              response.rows[i].sl +
+              response.rows[i].dw +
+              "，" +
+              response.rows[i].dj +
+              "；",
+          });
+          data.form.totalMoney = data.form.totalMoney + response.rows[i].fy;
+          num++;
+        }
+        data.form.totalMoney = data.form.totalMoney.toFixed(2);
+        exportSubDocx(
+          "/nbspb.docx",
+          data,
+          "项目任务审批表-软件开发维护部分.docx"
+        );
+      });
+    },
+    handleExportSjcl() {
+      if (this.dateRange.length == 0) {
+        this.$message.error("请选择任务安排日期～");
+        return;
+      }
+      listWork(
+        this.addDateRange({ pageNum: 1, pageSize: 9999 }, this.dateRange)
+      ).then((response) => {
+        var data = {
+          form: {
+            startTime: this.dateRange[0],
+            endTime: this.dateRange[1],
+            gzlx: "数据处理",
+            totalMoney: 0,
+          },
+          list: [],
+        };
+        var num = 1;
+
+        for (var i = 0; i < response.rows.length; i++) {
+          if (response.rows[i].zylxid == 1) {
+            continue;
+          }
+          data.list.push({
+            content:
+              num +
+              "、" +
+              response.rows[i].xmlx +
+              "-" +
+              response.rows[i].xmmc +
+              "，" +
+              response.rows[i].sl +
+              response.rows[i].dw +
+              "，" +
+              response.rows[i].dj +
+              "；",
+          });
+          data.form.totalMoney = data.form.totalMoney + response.rows[i].fy;
+          num++;
+        }
+        data.form.totalMoney = data.form.totalMoney.toFixed(2);
+        exportSubDocx("/nbspb.docx", data, "项目任务审批表-数据处理部分.docx");
+      });
     },
   },
 };
