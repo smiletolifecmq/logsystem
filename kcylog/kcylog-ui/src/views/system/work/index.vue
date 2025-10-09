@@ -243,7 +243,12 @@
           </el-select>
         </el-form-item>
         <el-form-item label="项目类型" prop="xmlxid">
-          <el-select v-model="form.xmlxid" placeholder="请选择" filterable>
+          <el-select
+            v-model="form.xmlxid"
+            placeholder="请选择"
+            filterable
+            @change="handleXmlxChange"
+          >
             <el-option
               v-for="item in xmlxs"
               :key="item.value"
@@ -287,6 +292,7 @@
             :precision="2"
             :step="0.1"
           ></el-input-number>
+          <span style="color: red"> 单位：{{ dwInfo }}</span>
         </el-form-item>
         <el-form-item label="任务安排日期" prop="rwaprq">
           <el-date-picker
@@ -457,6 +463,7 @@ export default {
   name: "Work",
   data() {
     return {
+      dwInfo: "",
       rules: {
         zylx: [{ required: true, trigger: "blur", message: "请选择专业类型" }],
         xmlxid: [
@@ -516,6 +523,7 @@ export default {
       title: "",
       // 是否显示弹出层
       open: false,
+      allxmlx: [],
       // 查询参数
       queryParamsxm: {
         pageNum: 1,
@@ -551,6 +559,7 @@ export default {
   },
   created() {
     listType().then((response) => {
+      this.allxmlx = response.rows;
       for (var i = 0; i < response.rows.length; i++) {
         if (response.rows[i].suffix != null && response.rows[i].suffix != "") {
           this.xmlxs.push({
@@ -568,6 +577,14 @@ export default {
     this.getList();
   },
   methods: {
+    handleXmlxChange(value) {
+      for (var i = 0; i < this.allxmlx.length; i++) {
+        if (value === this.allxmlx[i].id) {
+          this.dwInfo = this.allxmlx[i].dw;
+          return;
+        }
+      }
+    },
     handleYyXm(value) {
       this.form.xmbh = value.projectNum;
       this.form.xmmc = value.projectName;
@@ -765,20 +782,40 @@ export default {
           if (response.rows[i].zylxid == 2) {
             continue;
           }
-          data.list.push({
-            content:
-              num +
-              "、" +
-              response.rows[i].xmlx +
-              "-" +
-              response.rows[i].xmmc +
-              "，" +
-              response.rows[i].sl +
-              response.rows[i].dw +
-              "，" +
-              response.rows[i].dj +
-              "；",
-          });
+          if (
+            response.rows[i].xmmc != undefined &&
+            response.rows[i].xmmc != null &&
+            response.rows[i].xmmc != ""
+          ) {
+            data.list.push({
+              content:
+                num +
+                "、" +
+                response.rows[i].xmlx +
+                "-" +
+                response.rows[i].xmmc +
+                "，" +
+                response.rows[i].sl +
+                response.rows[i].dw +
+                "，" +
+                response.rows[i].dj +
+                "；",
+            });
+          } else {
+            data.list.push({
+              content:
+                num +
+                "、" +
+                response.rows[i].xmlx +
+                "，" +
+                response.rows[i].sl +
+                response.rows[i].dw +
+                "，" +
+                response.rows[i].dj +
+                "；",
+            });
+          }
+
           data.form.totalMoney = data.form.totalMoney + response.rows[i].fy;
           num++;
         }
@@ -813,20 +850,40 @@ export default {
           if (response.rows[i].zylxid == 1) {
             continue;
           }
-          data.list.push({
-            content:
-              num +
-              "、" +
-              response.rows[i].xmlx +
-              "-" +
-              response.rows[i].xmmc +
-              "，" +
-              response.rows[i].sl +
-              response.rows[i].dw +
-              "，" +
-              response.rows[i].dj +
-              "；",
-          });
+          if (
+            response.rows[i].xmmc != undefined &&
+            response.rows[i].xmmc != null &&
+            response.rows[i].xmmc != ""
+          ) {
+            data.list.push({
+              content:
+                num +
+                "、" +
+                response.rows[i].xmlx +
+                "-" +
+                response.rows[i].xmmc +
+                "，" +
+                response.rows[i].sl +
+                response.rows[i].dw +
+                "，" +
+                response.rows[i].dj +
+                "；",
+            });
+          } else {
+            data.list.push({
+              content:
+                num +
+                "、" +
+                response.rows[i].xmlx +
+                "，" +
+                response.rows[i].sl +
+                response.rows[i].dw +
+                "，" +
+                response.rows[i].dj +
+                "；",
+            });
+          }
+
           data.form.totalMoney = data.form.totalMoney + response.rows[i].fy;
           num++;
         }
