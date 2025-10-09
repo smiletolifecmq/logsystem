@@ -31,6 +31,7 @@ import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
+import java.time.YearMonth;
 import java.time.ZoneId;
 import java.time.format.DateTimeFormatter;
 import java.util.*;
@@ -83,6 +84,9 @@ public class SysProjectController extends BaseController {
 
     @Autowired
     private ISysBcGcbbService sysBcGcbbService;
+
+    @Autowired
+    private ISysProfitService sysProfitService;
 
     private static final ObjectMapper objectMapper = new ObjectMapper();
 
@@ -3036,7 +3040,31 @@ public class SysProjectController extends BaseController {
 
     @GetMapping("/listProjectStatisticsNbcz")
     public TableDataInfo listProjectStatisticsNbcz()  {
-        List<SysProject> list = sysProjectService.selectSysProjectByNbcz();
+        List<SysProfit> list1 = sysProfitService.getlistProfitOne();
+        SysProfit obj = list1.get(0);
+        SysProject sysProject = new SysProject();
+        String dateStr = obj.getNf() + "-" + obj.getYf();
+        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-M");
+
+        // 解析字符串为 YearMonth
+        YearMonth ym = YearMonth.parse(dateStr, formatter);
+
+        // 加一个月
+        YearMonth nextMonth = ym.plusMonths(1);
+
+        // ✅ 将 YearMonth 转为 LocalDate（这里取每月的第一天）
+        LocalDate firstDayOfNextMonth = nextMonth.atDay(1);
+
+        // ✅ LocalDate -> Date
+        Date ygtime = Date.from(firstDayOfNextMonth.atStartOfDay(ZoneId.systemDefault()).toInstant());
+
+        sysProject.setYgtime(ygtime);
+        SimpleDateFormat sdf = new SimpleDateFormat("M");
+        String monthStr = sdf.format(ygtime);
+        List<SysProject> list = sysProjectService.selectSysProjectByNbcz(sysProject);
+        for (SysProject obj1 : list){
+            obj1.setRegisterTime(monthStr);
+        }
         return getDataTable(list);
     }
 

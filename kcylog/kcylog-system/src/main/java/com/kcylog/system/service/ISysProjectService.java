@@ -157,7 +157,7 @@ public interface ISysProjectService
 
     public List<SysProject> selectRwapzList(SysProject sysProject);
 
-    public List<SysProject> selectSysProjectByNbcz();
+    public List<SysProject> selectSysProjectByNbcz(SysProject sysProject);
 
     public List<SysProject> selectSysProjectNBCZ(SysProject sysProject);
 }

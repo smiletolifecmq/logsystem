@@ -1530,14 +1530,20 @@ export default {
       listProjectStatisticsNbcz().then((response) => {
         this.statisticsDataYgmoney = [];
         this.labelValueYgmoney = "类型-";
-        const now = new Date();
-        // 下一个月
-        const nextMonth = new Date(now);
-        nextMonth.setMonth(now.getMonth() + 1);
-        // 只取月份
-        const month = nextMonth.getMonth() + 1; // 月份从 0 开始，所以要 +1
+        if (response.rows.length > 0) {
+          this.labelValueYgmoney =
+            this.labelValueYgmoney + response.rows[0].registerTime + "月份";
+        } else {
+          console.log(2);
+          const now = new Date();
+          // 下一个月
+          const nextMonth = new Date(now);
+          nextMonth.setMonth(now.getMonth() + 1);
+          // 只取月份
+          const month = nextMonth.getMonth() + 1; // 月份从 0 开始，所以要 +1
 
-        this.labelValueYgmoney = this.labelValueYgmoney + month + "月份";
+          this.labelValueYgmoney = this.labelValueYgmoney + month + "月份";
+        }
 
         var obj = {
           typeName: "内部产值金额",
