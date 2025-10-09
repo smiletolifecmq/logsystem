@@ -1534,7 +1534,6 @@ export default {
           this.labelValueYgmoney =
             this.labelValueYgmoney + response.rows[0].registerTime + "月份";
         } else {
-          console.log(2);
           const now = new Date();
           // 下一个月
           const nextMonth = new Date(now);
