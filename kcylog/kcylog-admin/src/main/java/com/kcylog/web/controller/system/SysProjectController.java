@@ -1194,6 +1194,7 @@ public class SysProjectController extends BaseController {
         obj.setYgmoney(sysProject.getYgmoney());
         obj.setProjectId(sysProject.getProjectId());
         obj.setYgtime(sysProject.getYgtime());
+        obj.setYgbjtime(new Date());
         sysProjectService.updateSysProject(obj);
         return toAjax(1);
     }
@@ -3073,6 +3074,31 @@ public class SysProjectController extends BaseController {
         startPage();
         List<SysProject> list = sysProjectService.selectSysProjectNBCZ(sysProject);
         return getDataTable(list);
+    }
+
+    /**
+     * 导出项目列表
+     */
+    @Log(title = "导出内部产值信息", businessType = BusinessType.EXPORT)
+    @PostMapping("/exportNbcz")
+    public void exportNbcz(HttpServletResponse response, SysProject sysProject) {
+        List<SysProject> list = sysProjectService.selectSysProjectNBCZ(sysProject);
+        List<SysProjectNbcz> listNbcz = new ArrayList<>();
+        for (SysProject obj : list){
+            SysProjectNbcz nbczObj = new SysProjectNbcz();
+            nbczObj.setProjectNameAlias(obj.getProjectNameAlias());
+            nbczObj.setProjectNum(obj.getProjectNum());
+            nbczObj.setProjectType(obj.getProjectType());
+            nbczObj.setUserNameAlias(obj.getUserNameAlias());
+            nbczObj.setUserNameAlias(obj.getUserNameAlias());
+            nbczObj.setRequesterAlias(obj.getRequesterAlias());
+            nbczObj.setDepartment(obj.getDepartment());
+            nbczObj.setYgtime(obj.getYgtime());
+            nbczObj.setYgbjtime(obj.getYgbjtime());
+            listNbcz.add(nbczObj);
+        }
+        ExcelUtil<SysProjectNbcz> util = new ExcelUtil<SysProjectNbcz>(SysProjectNbcz.class);
+        util.exportExcel(response, listNbcz, "内部产值信息");
     }
 
 }

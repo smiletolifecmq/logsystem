@@ -260,6 +260,16 @@ public class SysProject extends BaseEntity
 
     private Date ygtime;
 
+    private Date ygbjtime;
+
+    public Date getYgbjtime() {
+        return ygbjtime;
+    }
+
+    public void setYgbjtime(Date ygbjtime) {
+        this.ygbjtime = ygbjtime;
+    }
+
     public Long getCjstatus() {
         return cjstatus;
     }

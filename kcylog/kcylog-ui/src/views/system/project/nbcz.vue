@@ -49,6 +49,19 @@
       </el-form-item>
     </el-form>
 
+    <el-row :gutter="10" class="mb8">
+      <el-col :span="1.5">
+        <el-button
+          type="warning"
+          plain
+          icon="el-icon-download"
+          size="mini"
+          @click="handleExport"
+          >导出</el-button
+        >
+      </el-col>
+    </el-row>
+
     <el-table
       v-loading="loading"
       :data="projectList"
@@ -68,6 +81,7 @@
         prop="projectNameAlias"
       />
       <el-table-column label="项目编号" align="center" prop="projectNum" />
+      <el-table-column label="项目类型" align="center" prop="projectType" />
       <el-table-column label="工程负责人" align="center" prop="userNameAlias" />
       <el-table-column label="作业部门" align="center" prop="department" />
       <!-- <el-table-column label="项目类型" align="center" prop="projectType" />
@@ -82,7 +96,12 @@
           {{ scope.row.ygmoney }}
         </template></el-table-column
       >
-      <el-table-column label="办结时间" align="center" prop="doTime">
+      <el-table-column label="办结时间" align="center" prop="ygbjtime">
+        <template slot-scope="scope">
+          {{ formatDateDAY(scope.row.ygbjtime) }}
+        </template></el-table-column
+      >
+      <el-table-column label="计算时间" align="center" prop="ygtime">
         <template slot-scope="scope">
           {{ formatDate(scope.row.ygtime) }}
         </template></el-table-column
@@ -413,6 +432,17 @@ export default {
       return `${year}-${(month < 10 ? "0" : "") + month}`;
     },
 
+    formatDateDAY(dateString) {
+      if (dateString == "" || dateString == null || dateString == undefined) {
+        return "";
+      }
+      const dateObject = new Date(dateString);
+      const year = dateObject.getFullYear();
+      const month = dateObject.getMonth() + 1;
+      const day = dateObject.getDate();
+      return `${year}-${(month < 10 ? "0" : "") + month} - ${day}`;
+    },
+
     /** 查询项目列表 */
     getList() {
       this.loading = true;
@@ -546,19 +576,12 @@ export default {
     },
     /** 导出按钮操作 */
     handleExport() {
-      if (this.dateRange.length == 0) {
-        this.$message({
-          message: "请先选择导出的结算时间范围～",
-          type: "warning",
-        });
-        return;
-      }
       this.download(
-        "system/project/export",
+        "system/project/exportNbcz",
         {
           ...this.queryParams,
         },
-        `project_${new Date().getTime()}.xlsx`
+        `内部产值信息_${new Date().getTime()}.xlsx`
       );
     },
   },

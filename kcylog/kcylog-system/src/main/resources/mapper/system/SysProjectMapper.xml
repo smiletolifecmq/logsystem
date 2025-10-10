@@ -74,6 +74,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
         <result property="moneyhj" column="moneyhj"/>
         <result property="profitMoneyHj" column="profit_money_hj"/>
         <result property="monthhj" column="monthhj"/>
+        <result property="ygbjtime" column="ygbjtime"/>
 
         <association property="projectValue" javaType="java.util.List" resultMap="SysProjectValueResult"/>
         <association property="projectCar" javaType="java.util.List" resultMap="SysProjectCarResult"/>
@@ -346,6 +347,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
             <if test="ygmoney != null">ygmoney = #{ygmoney},</if>
             <if test="cgsdtime != null">cgsdtime = #{cgsdtime},</if>
             <if test="ygtime != null">ygtime = #{ygtime},</if>
+            <if test="ygbjtime != null">ygbjtime = #{ygbjtime},</if>
         </trim>
         where project_id = #{projectId}
     </update>
@@ -1250,14 +1252,14 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
         <where>
             <if test="department != null  and department != ''"> and department like concat('%', #{department}, '%')</if>
             <if test="params.beginTime != null and params.beginTime != ''"><!-- 开始时间检索 -->
-                and (date_format(ygtime,'%y%m%d') &gt;= date_format(#{params.beginTime},'%y%m%d'))
+                and (date_format(ygbjtime,'%y%m%d') &gt;= date_format(#{params.beginTime},'%y%m%d'))
             </if>
             <if test="params.endTime != null and params.endTime != ''"><!-- 结束时间检索 -->
-                and (date_format(ygtime,'%y%m%d') &lt;= date_format(#{params.endTime},'%y%m%d'))
+                and (date_format(ygbjtime,'%y%m%d') &lt;= date_format(#{params.endTime},'%y%m%d'))
             </if>
             and ygmoney != 0
         </where>
-        order by ygtime desc
+        order by ygbjtime desc
     </select>
 
 </mapper>
