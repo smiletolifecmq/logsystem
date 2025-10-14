@@ -1265,7 +1265,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 
     <update id="updateSysProjectNbcz" parameterType="SysProject">
         update sys_project
-        set ygmoney = 0, ygtime = Null 
+        set ygmoney = 0, ygtime = Null
         where project_id = #{projectId}
     </update>
 
