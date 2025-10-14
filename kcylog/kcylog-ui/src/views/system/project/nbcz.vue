@@ -8,6 +8,14 @@
       v-show="showSearch"
       label-width="68px"
     >
+      <el-form-item label="项目编号" prop="projectNum">
+        <el-input
+          v-model="queryParams.projectNum"
+          placeholder="请输入项目编号"
+          clearable
+          @keyup.enter.native="handleQuery"
+        />
+      </el-form-item>
       <el-form-item label="作业部门" prop="department">
         <el-select
           v-model="queryParams.department"
@@ -106,6 +114,23 @@
           {{ formatDate(scope.row.ygtime) }}
         </template></el-table-column
       >
+
+      <el-table-column
+        label="操作"
+        align="center"
+        class-name="small-padding fixed-width"
+      >
+        <template slot-scope="scope">
+          <el-button
+            size="mini"
+            type="text"
+            icon="el-icon-edit"
+            @click="handleNbczbj(scope.row)"
+            v-hasPermi="['system:project:nbczbj']"
+            >允许编辑</el-button
+          >
+        </template>
+      </el-table-column>
     </el-table>
 
     <pagination
@@ -132,6 +157,7 @@ import {
   nbcz,
   updateProjectCqBz,
   updateCad,
+  updateProjectNbcz,
 } from "@/api/system/project";
 import elDragDialog from "@/api/components/el-drag";
 import { listUnit } from "@/api/system/unit";
@@ -421,6 +447,28 @@ export default {
     this.getList();
   },
   methods: {
+    handleNbczbj(value) {
+      this.$confirm("此操作将允许用户编辑该项目的内部产值, 是否继续?", "提示", {
+        confirmButtonText: "确定",
+        cancelButtonText: "取消",
+        type: "warning",
+      })
+        .then(() => {
+          updateProjectNbcz({ projectId: value.projectId }).then((response) => {
+            this.$message({
+              type: "success",
+              message: "成功!",
+            });
+            this.getList();
+          });
+        })
+        .catch(() => {
+          this.$message({
+            type: "info",
+            message: "已取消",
+          });
+        });
+    },
     formatDate(dateString) {
       if (dateString == "" || dateString == null || dateString == undefined) {
         return "";

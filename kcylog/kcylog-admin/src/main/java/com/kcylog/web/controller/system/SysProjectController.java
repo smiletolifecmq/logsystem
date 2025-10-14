@@ -3101,4 +3101,10 @@ public class SysProjectController extends BaseController {
         util.exportExcel(response, listNbcz, "内部产值信息");
     }
 
+    @Log(title = "允许编辑内部产值", businessType = BusinessType.UPDATE)
+    @PutMapping("/updateProjectNbcz")
+    public AjaxResult updateProjectNbcz(@RequestBody SysProject sysProject) {
+        sysProjectService.updateSysProjectNbcz(sysProject);
+        return toAjax(1);
+    }
 }

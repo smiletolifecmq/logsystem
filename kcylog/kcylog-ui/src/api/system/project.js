@@ -280,3 +280,11 @@ export function nbcz(query) {
     params: query
   })
 }
+
+export function updateProjectNbcz(data) {
+  return request({
+    url: '/system/project/updateProjectNbcz',
+    method: 'put',
+    data: data
+  })
+}

@@ -1251,6 +1251,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
         <include refid="selectSysProjectVo"/>
         <where>
             <if test="department != null  and department != ''"> and department like concat('%', #{department}, '%')</if>
+            <if test="projectNum != null  and projectNum != ''"> and project_num like concat('%', #{projectNum}, '%')</if>
             <if test="params.beginTime != null and params.beginTime != ''"><!-- 开始时间检索 -->
                 and (date_format(ygbjtime,'%y%m%d') &gt;= date_format(#{params.beginTime},'%y%m%d'))
             </if>
@@ -1261,5 +1262,11 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
         </where>
         order by ygbjtime desc
     </select>
+
+    <update id="updateSysProjectNbcz" parameterType="SysProject">
+        update sys_project
+        set ygmoney = 0, ygtime = Null 
+        where project_id = #{projectId}
+    </update>
 
 </mapper>

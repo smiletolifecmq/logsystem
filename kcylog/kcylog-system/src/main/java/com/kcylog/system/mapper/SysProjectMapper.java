@@ -160,4 +160,6 @@ public interface SysProjectMapper
     public List<SysProject> selectSysProjectByNbcz(SysProject sysProject);
 
     public List<SysProject> selectSysProjectNBCZ(SysProject sysProject);
+
+    public int updateSysProjectNbcz(SysProject sysProject);
 }

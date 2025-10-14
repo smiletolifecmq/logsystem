@@ -396,4 +396,10 @@ public class SysProjectServiceImpl implements ISysProjectService
     {
         return sysProjectMapper.selectSysProjectNBCZ(sysProject);
     }
+
+    @Override
+    public int updateSysProjectNbcz(SysProject sysProject)
+    {
+        return sysProjectMapper.updateSysProjectNbcz(sysProject);
+    }
 }
