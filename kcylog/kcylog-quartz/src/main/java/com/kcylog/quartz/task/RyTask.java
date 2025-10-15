@@ -327,7 +327,7 @@ public class RyTask
                     }
                     //同步流程
                     FqProjectProcess obj1 = fqProjectProcessService.selectFqProjectProcessById(sysProject.getProjectId());
-                    if (obj1 == null && projectArchiveTransferTrackList.size() != 0){
+                    if (projectArchiveTransferTrackList.size() != 0){
                         for (ViewFqProjectArchiveTransferTrack projectArchiveTransferTrackValue : projectArchiveTransferTrackList){
                             FqProjectProcess fqProjectProcessObj = new FqProjectProcess();
                             fqProjectProcessObj.setProjectId(sysProject.getProjectId());
@@ -397,7 +397,11 @@ public class RyTask
                             if (projectArchiveTransferTrackValue.getIsArchive() != null){
                                 fqProjectProcessObj.setIsArchive(projectArchiveTransferTrackValue.getIsArchive());
                             }
-                            fqProjectProcessService.insertFqProjectProcess(fqProjectProcessObj);
+                            if (obj1 == null){
+                                fqProjectProcessService.insertFqProjectProcess(fqProjectProcessObj);
+                            }else {
+                                fqProjectProcessService.updateFqProjectProcess(fqProjectProcessObj);
+                            }
                         }
                     }
                     //同步分包合同
