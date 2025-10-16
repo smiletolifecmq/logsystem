@@ -400,7 +400,9 @@ public class RyTask
                             if (obj1 == null){
                                 fqProjectProcessService.insertFqProjectProcess(fqProjectProcessObj);
                             }else {
-                                fqProjectProcessService.updateFqProjectProcess(fqProjectProcessObj);
+                                if (fqProjectProcessObj.getIsArchive() != null){
+                                    fqProjectProcessService.updateFqProjectProcess(fqProjectProcessObj);
+                                }
                             }
                         }
                     }
