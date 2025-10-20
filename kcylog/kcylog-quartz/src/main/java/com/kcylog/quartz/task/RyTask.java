@@ -331,75 +331,78 @@ public class RyTask
                         for (ViewFqProjectArchiveTransferTrack projectArchiveTransferTrackValue : projectArchiveTransferTrackList){
                             FqProjectProcess fqProjectProcessObj = new FqProjectProcess();
                             fqProjectProcessObj.setProjectId(sysProject.getProjectId());
-                            if (projectArchiveTransferTrackValue.getTransferStatus() != null){
-                                fqProjectProcessObj.setTransferStatus(projectArchiveTransferTrackValue.getTransferStatus());
-                            }
-                            if (projectArchiveTransferTrackValue.getTransferTime() != null){
-                                String dateString = projectArchiveTransferTrackValue.getTransferTime().format(formatter);
-                                fqProjectProcessObj.setTransferTime(dateString);
-                            }
-                            if (projectArchiveTransferTrackValue.getTransferUserName() != null){
-                                fqProjectProcessObj.setTransferUserName(projectArchiveTransferTrackValue.getTransferUserName());
-                            }
-                            if (projectArchiveTransferTrackValue.getReceiveStatus() != null){
-                                fqProjectProcessObj.setReceiveStatus(projectArchiveTransferTrackValue.getReceiveStatus());
-                            }
-                            if (projectArchiveTransferTrackValue.getSjsj() != null){
-                                fqProjectProcessObj.setReceiveTime(projectArchiveTransferTrackValue.getSjsj().format(formatter));
-                            }
-                            if (projectArchiveTransferTrackValue.getSjUserName() != null){
-                                fqProjectProcessObj.setReceiveUserName(projectArchiveTransferTrackValue.getSjUserName());
-                            }
-                            if (projectArchiveTransferTrackValue.getStampStatus() != null){
-                                fqProjectProcessObj.setStampStatus(projectArchiveTransferTrackValue.getStampStatus());
-                            }
-                            if (projectArchiveTransferTrackValue.getGzsj() != null){
-                                fqProjectProcessObj.setStampTime(projectArchiveTransferTrackValue.getGzsj().format(formatter));
-                            }
-                            if (projectArchiveTransferTrackValue.getGzUserName() != null){
-                                fqProjectProcessObj.setStampUserName(projectArchiveTransferTrackValue.getGzUserName());
-                            }
-
-                            if (projectArchiveTransferTrackValue.getMarketingConfirm() != null){
-                                fqProjectProcessObj.setMarketingConfirm(projectArchiveTransferTrackValue.getMarketingConfirm());
-                            }
-
-                            if (projectArchiveTransferTrackValue.getMarketingConfirmTime() != null){
-                                fqProjectProcessObj.setMarketingTime(projectArchiveTransferTrackValue.getMarketingConfirmTime().format(formatter));
-                            }
-                            if (projectArchiveTransferTrackValue.getMarketingUserName() != null){
-                                fqProjectProcessObj.setMarketingUserName(projectArchiveTransferTrackValue.getMarketingUserName());
-                            }
-                            if (projectArchiveTransferTrackValue.getCheckStatus() != null){
-                                fqProjectProcessObj.setCheckStatus(projectArchiveTransferTrackValue.getCheckStatus());
-                            }
-                            if (projectArchiveTransferTrackValue.getYstgsj() != null){
-                                fqProjectProcessObj.setCheckTime(projectArchiveTransferTrackValue.getYstgsj().format(formatter));
-                            }
-                            if (projectArchiveTransferTrackValue.getYsTgUserName() != null){
-                                fqProjectProcessObj.setCheckUserName(projectArchiveTransferTrackValue.getYsTgUserName());
-                            }
-                            if (projectArchiveTransferTrackValue.getYssj() != null){
-                                fqProjectProcessObj.setArchiveTime(projectArchiveTransferTrackValue.getYssj().format(formatter));
-                            }
-                            if (projectArchiveTransferTrackValue.getYsUserName() != null){
-                                fqProjectProcessObj.setArchiveUserName(projectArchiveTransferTrackValue.getYsUserName());
-                            }
-                            if (projectArchiveTransferTrackValue.getReceiveCutoffTime() != null){
-                                fqProjectProcessObj.setReceiveCutoffTime(projectArchiveTransferTrackValue.getReceiveCutoffTime().format(formatter));
-                            }
-                            if (projectArchiveTransferTrackValue.getRectifyCutoffTime() != null){
-                                fqProjectProcessObj.setRectifyCutoffTime(projectArchiveTransferTrackValue.getRectifyCutoffTime().format(formatter));
-                            }
-                            if (projectArchiveTransferTrackValue.getVersion() != null){
-                                fqProjectProcessObj.setVersion(projectArchiveTransferTrackValue.getVersion());
-                            }
-                            if (projectArchiveTransferTrackValue.getIsArchive() != null){
-                                fqProjectProcessObj.setIsArchive(projectArchiveTransferTrackValue.getIsArchive());
-                            }
                             if (obj1 == null){
+                                if (projectArchiveTransferTrackValue.getTransferStatus() != null){
+                                    fqProjectProcessObj.setTransferStatus(projectArchiveTransferTrackValue.getTransferStatus());
+                                }
+                                if (projectArchiveTransferTrackValue.getTransferTime() != null){
+                                    String dateString = projectArchiveTransferTrackValue.getTransferTime().format(formatter);
+                                    fqProjectProcessObj.setTransferTime(dateString);
+                                }
+                                if (projectArchiveTransferTrackValue.getTransferUserName() != null){
+                                    fqProjectProcessObj.setTransferUserName(projectArchiveTransferTrackValue.getTransferUserName());
+                                }
+                                if (projectArchiveTransferTrackValue.getReceiveStatus() != null){
+                                    fqProjectProcessObj.setReceiveStatus(projectArchiveTransferTrackValue.getReceiveStatus());
+                                }
+                                if (projectArchiveTransferTrackValue.getSjsj() != null){
+                                    fqProjectProcessObj.setReceiveTime(projectArchiveTransferTrackValue.getSjsj().format(formatter));
+                                }
+                                if (projectArchiveTransferTrackValue.getSjUserName() != null){
+                                    fqProjectProcessObj.setReceiveUserName(projectArchiveTransferTrackValue.getSjUserName());
+                                }
+                                if (projectArchiveTransferTrackValue.getStampStatus() != null){
+                                    fqProjectProcessObj.setStampStatus(projectArchiveTransferTrackValue.getStampStatus());
+                                }
+                                if (projectArchiveTransferTrackValue.getGzsj() != null){
+                                    fqProjectProcessObj.setStampTime(projectArchiveTransferTrackValue.getGzsj().format(formatter));
+                                }
+                                if (projectArchiveTransferTrackValue.getGzUserName() != null){
+                                    fqProjectProcessObj.setStampUserName(projectArchiveTransferTrackValue.getGzUserName());
+                                }
+
+                                if (projectArchiveTransferTrackValue.getMarketingConfirm() != null){
+                                    fqProjectProcessObj.setMarketingConfirm(projectArchiveTransferTrackValue.getMarketingConfirm());
+                                }
+
+                                if (projectArchiveTransferTrackValue.getMarketingConfirmTime() != null){
+                                    fqProjectProcessObj.setMarketingTime(projectArchiveTransferTrackValue.getMarketingConfirmTime().format(formatter));
+                                }
+                                if (projectArchiveTransferTrackValue.getMarketingUserName() != null){
+                                    fqProjectProcessObj.setMarketingUserName(projectArchiveTransferTrackValue.getMarketingUserName());
+                                }
+                                if (projectArchiveTransferTrackValue.getCheckStatus() != null){
+                                    fqProjectProcessObj.setCheckStatus(projectArchiveTransferTrackValue.getCheckStatus());
+                                }
+                                if (projectArchiveTransferTrackValue.getYstgsj() != null){
+                                    fqProjectProcessObj.setCheckTime(projectArchiveTransferTrackValue.getYstgsj().format(formatter));
+                                }
+                                if (projectArchiveTransferTrackValue.getYsTgUserName() != null){
+                                    fqProjectProcessObj.setCheckUserName(projectArchiveTransferTrackValue.getYsTgUserName());
+                                }
+                                if (projectArchiveTransferTrackValue.getYssj() != null){
+                                    fqProjectProcessObj.setArchiveTime(projectArchiveTransferTrackValue.getYssj().format(formatter));
+                                }
+                                if (projectArchiveTransferTrackValue.getYsUserName() != null){
+                                    fqProjectProcessObj.setArchiveUserName(projectArchiveTransferTrackValue.getYsUserName());
+                                }
+                                if (projectArchiveTransferTrackValue.getReceiveCutoffTime() != null){
+                                    fqProjectProcessObj.setReceiveCutoffTime(projectArchiveTransferTrackValue.getReceiveCutoffTime().format(formatter));
+                                }
+                                if (projectArchiveTransferTrackValue.getRectifyCutoffTime() != null){
+                                    fqProjectProcessObj.setRectifyCutoffTime(projectArchiveTransferTrackValue.getRectifyCutoffTime().format(formatter));
+                                }
+                                if (projectArchiveTransferTrackValue.getVersion() != null){
+                                    fqProjectProcessObj.setVersion(projectArchiveTransferTrackValue.getVersion());
+                                }
+                                if (projectArchiveTransferTrackValue.getIsArchive() != null){
+                                    fqProjectProcessObj.setIsArchive(projectArchiveTransferTrackValue.getIsArchive());
+                                }
                                 fqProjectProcessService.insertFqProjectProcess(fqProjectProcessObj);
                             }else {
+                                if (projectArchiveTransferTrackValue.getIsArchive() != null){
+                                    fqProjectProcessObj.setIsArchive(projectArchiveTransferTrackValue.getIsArchive());
+                                }
                                 if (fqProjectProcessObj.getIsArchive() != null){
                                     fqProjectProcessService.updateFqProjectProcess(fqProjectProcessObj);
                                 }

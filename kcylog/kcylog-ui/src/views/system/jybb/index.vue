@@ -45,7 +45,7 @@
           icon="el-icon-timer"
           size="mini"
           @click="handleExport"
-          >同步时间：2025-10-09</el-button
+          >同步时间：{{ tbsj }}</el-button
         >
       </el-col>
       <el-col :span="1.5">
@@ -528,11 +528,13 @@ import {
   updateJybb,
 } from "@/api/system/jybb";
 import { getTypeGcbb } from "@/api/system/gcbb";
+import { listConfig } from "@/api/system/config";
 
 export default {
   name: "Jybb",
   data() {
     return {
+      tbsj: "",
       jybbListFq: [],
       gcbbTotal: 0,
       conditionOpen: false,
@@ -668,6 +670,14 @@ export default {
     };
   },
   created() {
+    listConfig({ pageNum: 1, pageSize: 9999 }).then((response) => {
+      for (var i = 0; i < response.rows.length; i++) {
+        if (response.rows[i].configKey == "bc") {
+          this.tbsj = response.rows[i].configValue;
+          return;
+        }
+      }
+    });
     this.getList();
   },
   mounted() {

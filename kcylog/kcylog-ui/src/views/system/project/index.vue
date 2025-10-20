@@ -110,6 +110,14 @@
         <el-button icon="el-icon-refresh" size="mini" @click="resetQuery"
           >重置</el-button
         >
+        <el-button
+          type="primary"
+          plain
+          icon="el-icon-timer"
+          size="mini"
+          @click="handleExport"
+          >同步时间：{{ tbsj }}</el-button
+        >
       </el-form-item>
     </el-form>
 
@@ -1254,8 +1262,10 @@ import { listUnit } from "@/api/system/unit";
 import { addReview, setReviewStatus } from "@/api/system/reviewSub";
 import userInfo from "@/store/modules/user";
 import FileUpload from "@/components/FileCad";
+import { listConfig } from "@/api/system/config";
 
 export default {
+  tbsj: "",
   name: "Project",
   directives: {
     elDragDialog,
@@ -1662,6 +1672,14 @@ export default {
     };
   },
   mounted() {
+    listConfig({ pageNum: 1, pageSize: 9999 }).then((response) => {
+      for (var i = 0; i < response.rows.length; i++) {
+        if (response.rows[i].configKey == "xm") {
+          this.tbsj = response.rows[i].configValue;
+          return;
+        }
+      }
+    });
     getlistProfitOne().then((response) => {
       const nf = response.rows[0].nf; // 2025
       const yf = response.rows[0].yf; // 09
