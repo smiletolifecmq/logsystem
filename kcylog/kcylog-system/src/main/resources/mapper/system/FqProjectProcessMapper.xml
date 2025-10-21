@@ -36,6 +36,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
         <result property="rectifyCutoffTime"    column="rectify_cutoff_time"    />
         <result property="version"    column="version"    />
         <result property="isArchive"    column="is_archive"    />
+        <result property="bz"    column="bz"    />
         <association property="projectList" javaType="SysProject" resultMap="SysProjectResult"/>
     </resultMap>
 
@@ -91,7 +92,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 
 
     <sql id="selectFqProjectProcessVo">
-        select id, version, is_archive, project_id, register_status, register_time, work_status, work_time, one_check_status, one_check_time, two_check_status, two_check_time, transfer_status, transfer_time, transfer_user_name, receive_status, receive_time, receive_user_name, stamp_status, stamp_time, stamp_user_name, marketing_confirm, marketing_time, marketing_user_name, check_status, check_time, check_user_name, archive_time, archive_user_name, receive_cutoff_time, rectify_cutoff_time from fq_project_process
+        select id, version, is_archive, project_id, register_status, register_time, work_status, work_time, one_check_status, one_check_time, two_check_status, two_check_time, transfer_status, transfer_time, transfer_user_name, receive_status, receive_time, receive_user_name, stamp_status, stamp_time, stamp_user_name, marketing_confirm, marketing_time, marketing_user_name, check_status, check_time, check_user_name, archive_time, archive_user_name, receive_cutoff_time, rectify_cutoff_time, bz from fq_project_process
     </sql>
 
     <sql id="selectFqProjectProcessListVo">
@@ -103,7 +104,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
                 f.marketing_time, f.marketing_user_name,
                 f.check_status, f.check_time,
                 f.check_user_name, f.archive_time,
-                f.archive_user_name, f.receive_cutoff_time,
+                f.archive_user_name, f.receive_cutoff_time, f.bz,
                 f.rectify_cutoff_time, f.version, f.is_archive,  p.* from fq_project_process f
         inner join sys_project p on f.project_id = p.project_id
     </sql>
@@ -240,6 +241,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
             <if test="rectifyCutoffTime != null and rectifyCutoffTime != ''">rectify_cutoff_time = #{rectifyCutoffTime},</if>
             <if test="version != null and version != ''">version = #{version},</if>
             <if test="isArchive != null">is_archive = #{isArchive},</if>
+            <if test="bz != null">bz = #{bz},</if>
         </trim>
         where project_id = #{projectId}
     </update>

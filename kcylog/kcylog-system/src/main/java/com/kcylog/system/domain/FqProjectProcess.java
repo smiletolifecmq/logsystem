@@ -132,6 +132,16 @@ public class FqProjectProcess extends BaseEntity
 
     private Long mapShow;
 
+    private String bz;
+
+    public String getBz() {
+        return bz;
+    }
+
+    public void setBz(String bz) {
+        this.bz = bz;
+    }
+
     public Long getMapShow() {
         return mapShow;
     }

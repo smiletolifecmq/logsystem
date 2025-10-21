@@ -3001,6 +3001,9 @@ public class SysProjectController extends BaseController {
         obj.setProjectId(sysProject.getProjectId());
         obj.setReceiveTime(sysProject.getDeptName());
         obj.setStampTime(sysProject.getDeptName());
+        if (sysProject.getBz() != null){
+            obj.setBz(sysProject.getBz());
+        }
         obj.setReceiveStatus((long)2);
         fqProjectProcessService.updateFqProjectProcess(obj);
         return toAjax(1);

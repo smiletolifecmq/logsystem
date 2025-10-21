@@ -467,6 +467,8 @@
           <el-tag v-else type="danger">否</el-tag>
         </template>
       </el-table-column>
+      <el-table-column label="备注" align="center" prop="bz" />
+
       <el-table-column
         fixed="right"
         label="操作"
@@ -1479,6 +1481,15 @@
           >
           </el-date-picker>
         </el-form-item>
+        <el-form-item label="收件时间">
+          <el-input
+            type="textarea"
+            :rows="2"
+            placeholder="请输入内容"
+            v-model="sjForm.bz"
+          >
+          </el-input>
+        </el-form-item>
       </el-form>
       <div slot="footer" class="dialog-footer">
         <el-button type="primary" @click="submitFormSJ">确 定</el-button>
@@ -1786,6 +1797,7 @@ export default {
       openInfo: false,
       sjForm: {
         deptName: null,
+        bz: null,
       },
       // 表单参数
       form: {},
@@ -1912,6 +1924,7 @@ export default {
           listProjectSj({
             projectId: this.projectId,
             deptName: this.sjForm.deptName,
+            bz: this.sjForm.bz,
           }).then((response) => {
             this.getList();
             this.openSj = false;
