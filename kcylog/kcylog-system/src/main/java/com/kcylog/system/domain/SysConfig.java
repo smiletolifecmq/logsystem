@@ -1,12 +1,14 @@
 package com.kcylog.system.domain;
 
-import javax.validation.constraints.NotBlank;
-import javax.validation.constraints.Size;
-import org.apache.commons.lang3.builder.ToStringBuilder;
-import org.apache.commons.lang3.builder.ToStringStyle;
 import com.kcylog.common.annotation.Excel;
 import com.kcylog.common.annotation.Excel.ColumnType;
 import com.kcylog.common.core.domain.BaseEntity;
+import org.apache.commons.lang3.builder.ToStringBuilder;
+import org.apache.commons.lang3.builder.ToStringStyle;
+
+import javax.validation.constraints.NotBlank;
+import javax.validation.constraints.Size;
+import java.util.Date;
 
 /**
  * 参数配置表 sys_config
@@ -33,9 +35,19 @@ public class SysConfig extends BaseEntity
     @Excel(name = "参数键值")
     private String configValue;
 
+    private Date sdsj;
+
     /** 系统内置（Y是 N否） */
     @Excel(name = "系统内置", readConverterExp = "Y=是,N=否")
     private String configType;
+
+    public Date getSdsj() {
+        return sdsj;
+    }
+
+    public void setSdsj(Date sdsj) {
+        this.sdsj = sdsj;
+    }
 
     public Long getConfigId()
     {

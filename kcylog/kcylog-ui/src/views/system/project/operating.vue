@@ -161,6 +161,21 @@
           >经营产值确认</el-button
         >
       </el-col>
+      <el-col :span="1.5">
+        <el-button
+          type="success"
+          icon="el-icon-check"
+          size="mini"
+          v-hasPermi="['system:profit:szsdsj']"
+          @click="projectXmys"
+          >设置项目预算锁定时间</el-button
+        >
+      </el-col>
+      <el-col :span="1.5">
+        <el-button type="primary" icon="el-icon-timer" size="mini"
+          >项目预算锁定时间：{{ sdsj }}</el-button
+        >
+      </el-col>
     </el-row>
 
     <el-table :data="statisticsDataYgmoney" style="width: 100%">
@@ -1131,6 +1146,28 @@
         <el-button type="primary" @click="submitJyczqr">确认</el-button>
       </div>
     </el-dialog>
+
+    <!-- 项目预算锁定时间 -->
+    <el-dialog
+      title="编辑项目预算锁定时间"
+      :visible.sync="sdsjopen"
+      width="800px"
+      append-to-body
+    >
+      <el-form ref="formsdsj" :model="formsdsj" label-width="100px">
+        <el-form-item label="锁定时间" prop="sdsj">
+          <el-date-picker
+            v-model="formsdsj.sdsj"
+            type="date"
+            placeholder="选择日期"
+          >
+          </el-date-picker>
+        </el-form-item>
+      </el-form>
+      <div slot="footer" class="dialog-footer">
+        <el-button type="primary" @click="submitFormSDSJ">确 定</el-button>
+      </div>
+    </el-dialog>
   </div>
 </template>
 <style>
@@ -1153,6 +1190,7 @@ import {
 } from "@/api/system/project";
 import elDragDialog from "@/api/components/el-drag";
 import { addProfit } from "@/api/system/profit";
+import { listConfig, updateConfig } from "@/api/system/config";
 
 export default {
   filters: {
@@ -1173,6 +1211,11 @@ export default {
   },
   data() {
     return {
+      sdsjopen: false,
+      formsdsj: {
+        sdsj: null,
+      },
+      sdsj: "",
       jyczOpen: false,
       jyczqrFormBz: {},
       cgsdForm: {
@@ -1335,12 +1378,41 @@ export default {
     };
   },
   created() {
+    listConfig({ pageNum: 1, pageSize: 9999 }).then((response) => {
+      for (var i = 0; i < response.rows.length; i++) {
+        if (response.rows[i].configKey == "sdsj") {
+          const dateStr = response.rows[i].sdsj;
+          const date = new Date(dateStr);
+          const formatted =
+            date.getFullYear() +
+            "-" +
+            String(date.getMonth() + 1).padStart(2, "0") +
+            "-" +
+            String(date.getDate()).padStart(2, "0");
+          this.sdsj = formatted;
+          return;
+        }
+      }
+    });
     this.getList();
     this.getStatisticsData();
     this.getCqData();
     this.getNbczje();
   },
   methods: {
+    projectXmys() {
+      this.sdsjopen = true;
+    },
+    submitFormSDSJ() {
+      this.formsdsj.configName = "内部产值锁定时间";
+      this.formsdsj.configId = 9;
+      this.formsdsj.configValue = 1;
+      this.formsdsj.configKey = "sdsj";
+      updateConfig(this.formsdsj).then((response) => {
+        this.$modal.msgSuccess("设置成功");
+        this.sdsjopen = false;
+      });
+    },
     submitJyczqr() {
       this.$refs["jyczqrFormBz"].validate((valid) => {
         if (valid) {

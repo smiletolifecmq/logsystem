@@ -110,12 +110,7 @@
         <el-button icon="el-icon-refresh" size="mini" @click="resetQuery"
           >重置</el-button
         >
-        <el-button
-          type="primary"
-          plain
-          icon="el-icon-timer"
-          size="mini"
-          @click="handleExport"
+        <el-button type="primary" plain icon="el-icon-timer" size="mini"
           >同步时间：{{ tbsj }}</el-button
         >
       </el-form-item>
