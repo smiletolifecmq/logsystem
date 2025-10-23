@@ -113,6 +113,15 @@
           <el-button
             size="mini"
             type="text"
+            icon="el-icon-circle-check"
+            @click="handleBj(scope.row)"
+            v-hasPermi="['system:profit:bj']"
+            v-if="showBj(scope.row)"
+            >办结</el-button
+          >
+          <el-button
+            size="mini"
+            type="text"
             icon="el-icon-info"
             @click="handleInfo(scope.row)"
             v-hasPermi="['system:profit:query']"
@@ -143,10 +152,10 @@
         <el-form-item label="预留" prop="yl" v-hasPermi="['system:profit:bz']">
           <el-input v-model="form.yl" placeholder="请输入预留" />
         </el-form-item>
-        <el-form-item label="预结" prop="yj" v-hasPermi="['system:profit:bz']">
+        <el-form-item label="预结" prop="yj" v-hasPermi="['system:profit:ch']">
           <el-input v-model="form.yj" placeholder="请输入预结" />
         </el-form-item>
-        <el-form-item
+        <!-- <el-form-item
           label="核定内部生产产值"
           prop="hdnbcz"
           v-hasPermi="['system:profit:ch']"
@@ -155,7 +164,7 @@
             v-model="form.hdnbcz"
             placeholder="请输入核定内部生产产值"
           />
-        </el-form-item>
+        </el-form-item> -->
         <el-form-item
           label="项目分包实际支出"
           prop="fbje"
@@ -452,14 +461,38 @@ export default {
       return (
         (yearStr === value.nf &&
           monthStr === value.yf &&
-          value.bm === userInfo.state.deptName) ||
+          value.bm === userInfo.state.deptName &&
+          value.bj != 1) ||
         (yearStr === value.nf &&
           monthStr === value.yf &&
           (userInfo.state.userId == 1 ||
             userInfo.state.userId == 11 ||
             userInfo.state.userId == 19 ||
-            userInfo.state.userId == 100))
+            userInfo.state.userId == 100) &&
+          value.bj != 1)
       );
+    },
+    showBj(value) {
+      return value.bj === 0;
+    },
+    handleBj(value) {
+      this.$confirm("是否办结?", "提示", {
+        confirmButtonText: "确定",
+        cancelButtonText: "取消",
+        type: "warning",
+      })
+        .then(() => {
+          updateProfit({ id: value.id, bj: 1 }).then((response) => {
+            this.$modal.msgSuccess("办结成功");
+            this.getList();
+          });
+        })
+        .catch(() => {
+          this.$message({
+            type: "info",
+            message: "已取消办结",
+          });
+        });
     },
     submitForm() {
       this.$refs["form"].validate((valid) => {

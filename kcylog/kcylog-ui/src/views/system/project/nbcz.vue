@@ -99,7 +99,7 @@
           prop="workcontentAlias"
         /> -->
 
-      <el-table-column label="内部产值金额" align="center" prop="ygmoney">
+      <el-table-column label="项目预算金额" align="center" prop="ygmoney">
         <template slot-scope="scope">
           {{ scope.row.ygmoney }}
         </template></el-table-column
@@ -448,7 +448,7 @@ export default {
   },
   methods: {
     handleNbczbj(value) {
-      this.$confirm("此操作将允许用户编辑该项目的内部产值, 是否继续?", "提示", {
+      this.$confirm("此操作将允许用户编辑该项目预算金额, 是否继续?", "提示", {
         confirmButtonText: "确定",
         cancelButtonText: "取消",
         type: "warning",
@@ -629,7 +629,7 @@ export default {
         {
           ...this.queryParams,
         },
-        `内部产值信息_${new Date().getTime()}.xlsx`
+        `项目预算信息_${new Date().getTime()}.xlsx`
       );
     },
   },

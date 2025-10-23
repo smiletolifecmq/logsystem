@@ -22,10 +22,11 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
         <result property="lwpq"    column="lwpq"    />
         <result property="bdzc"    column="bdzc"    />
         <result property="yfcz"    column="yfcz"    />
+        <result property="bj"    column="bj"    />
     </resultMap>
 
     <sql id="selectSysProfitVo">
-        select id, nf, yf, bm, jysr, hjsyyj, jssyyl, yl, yj, sbjysr, hdnbcz, fbje, wcxmje, cggg, lwpq, bdzc, yfcz from sys_profit
+        select id, nf, yf, bm, jysr, hjsyyj, jssyyl, yl, yj, sbjysr, hdnbcz, fbje, wcxmje, cggg, lwpq, bdzc, yfcz, bj from sys_profit
     </sql>
 
     <select id="selectSysProfitList" parameterType="SysProfit" resultMap="SysProfitResult">
@@ -62,6 +63,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
             <if test="lwpq != null">lwpq,</if>
             <if test="bdzc != null">bdzc,</if>
             <if test="yfcz != null">yfcz,</if>
+            <if test="bj != null">bj,</if>
          </trim>
         <trim prefix="values (" suffix=")" suffixOverrides=",">
             <if test="nf != null and nf != ''">#{nf},</if>
@@ -80,6 +82,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
             <if test="lwpq != null">#{lwpq},</if>
             <if test="bdzc != null">#{bdzc},</if>
             <if test="yfcz != null">#{yfcz},</if>
+            <if test="bj != null">#{bj},</if>
          </trim>
     </insert>
 
@@ -98,6 +101,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
             <if test="lwpq != null">lwpq = #{lwpq},</if>
             <if test="bdzc != null">bdzc = #{bdzc},</if>
             <if test="yfcz != null">yfcz = #{yfcz},</if>
+            <if test="bj != null">bj = #{bj},</if>
         </trim>
         where id = #{id}
     </update>

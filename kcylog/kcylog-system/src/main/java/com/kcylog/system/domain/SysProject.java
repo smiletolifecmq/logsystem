@@ -264,6 +264,16 @@ public class SysProject extends BaseEntity
 
     private String bz;
 
+    private BigDecimal nbczje;
+
+    public BigDecimal getNbczje() {
+        return nbczje;
+    }
+
+    public void setNbczje(BigDecimal nbczje) {
+        this.nbczje = nbczje;
+    }
+
     public String getBz() {
         return bz;
     }

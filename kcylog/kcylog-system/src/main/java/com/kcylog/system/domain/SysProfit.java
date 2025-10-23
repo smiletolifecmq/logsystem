@@ -92,6 +92,56 @@ public class SysProfit extends BaseEntity
 
     private BigDecimal gxgcbWork;
 
+    private BigDecimal bdcnb;
+
+    private BigDecimal dlnb;
+
+    private BigDecimal gcchnb;
+
+    private BigDecimal gxgcnb;
+
+    private Long bj;
+
+    public BigDecimal getBdcnb() {
+        return bdcnb;
+    }
+
+    public void setBdcnb(BigDecimal bdcnb) {
+        this.bdcnb = bdcnb;
+    }
+
+    public BigDecimal getDlnb() {
+        return dlnb;
+    }
+
+    public void setDlnb(BigDecimal dlnb) {
+        this.dlnb = dlnb;
+    }
+
+    public BigDecimal getGcchnb() {
+        return gcchnb;
+    }
+
+    public void setGcchnb(BigDecimal gcchnb) {
+        this.gcchnb = gcchnb;
+    }
+
+    public BigDecimal getGxgcnb() {
+        return gxgcnb;
+    }
+
+    public void setGxgcnb(BigDecimal gxgcnb) {
+        this.gxgcnb = gxgcnb;
+    }
+
+    public Long getBj() {
+        return bj;
+    }
+
+    public void setBj(Long bj) {
+        this.bj = bj;
+    }
+
     public BigDecimal getBdcchbWork() {
         return bdcchbWork;
     }

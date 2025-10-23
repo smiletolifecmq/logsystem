@@ -205,6 +205,9 @@
           <el-tag v-show="scope.row.status == 0" type="success"
             >经营产值</el-tag
           >
+          <el-tag v-show="scope.row.status == 2" type="success"
+            >内部产值</el-tag
+          >
           <el-tag v-show="scope.row.status == 1" type="success"
             >净利润（经营减分包）</el-tag
           >
@@ -321,14 +324,14 @@
           {{ formatDate(scope.row.twoCheck) }}
         </template>
       </el-table-column>
-      <el-table-column label="成果送达时间" align="center" prop="cgsdtime">
+      <!-- <el-table-column label="成果送达时间" align="center" prop="cgsdtime">
         <template
           slot-scope="scope"
           v-if="scope.row.cgsdtime != null && scope.row.cgsdtime != undefined"
         >
           {{ formatDate(scope.row.cgsdtime) }}
         </template>
-      </el-table-column>
+      </el-table-column> -->
       <el-table-column
         label="盖章时间"
         align="center"
@@ -356,8 +359,9 @@
           <el-tag v-show="scope.row.settle == 1" type="success">已办结</el-tag>
         </template>
       </el-table-column>
-      <el-table-column label="内部产值金额" align="center" prop="ygmoney" />
+      <el-table-column label="项目预算金额" align="center" prop="ygmoney" />
       <el-table-column label="经营产值" align="center" prop="operate" />
+      <el-table-column label="内部产值" align="center" prop="nbczje" />
       <el-table-column
         label="结算办结时间"
         align="center"
@@ -377,14 +381,14 @@
         fixed="right"
       >
         <template slot-scope="scope">
-          <el-button
+          <!-- <el-button
             size="mini"
             type="text"
             icon="el-icon-edit"
             @click="handleCgsd(scope.row)"
             v-hasPermi="['system:project:cgsd']"
             >成果送达</el-button
-          >
+          > -->
           <el-button
             v-show="scope.row.operateUser == ''"
             size="mini"
@@ -837,7 +841,7 @@
             <el-descriptions-item>
               <template slot="label">
                 <i class="el-icon-s-home"></i>
-                内部产值金额
+                项目预算金额
               </template>
               {{ formPeople.ygmoney }}
             </el-descriptions-item>
@@ -1021,6 +1025,14 @@
           >
           </el-input>
         </el-form-item> -->
+        <el-form-item label="内部产值" prop="nbczje">
+          <el-input-number
+            v-model="settleForm.nbczje"
+            :precision="2"
+            :step="0.1"
+            :max="99999999"
+          ></el-input-number>
+        </el-form-item>
         <el-form-item label="办结时间" prop="settleTime">
           <el-date-picker
             v-model="settleForm.settleTime"
@@ -1342,15 +1354,28 @@ export default {
             gcchbNumWork: 0,
             gxgcbWork: 0,
           };
+          var nbczObj = {
+            bdcchbWork: 0,
+            dlxxbWork: 0,
+            gcchbNumWork: 0,
+            gxgcbWork: 0,
+          };
           for (var i = 0; i < this.statisticsData.length; i++) {
             if (this.statisticsData[i].status == 0) {
               jyczObj = this.statisticsData[i];
+            }
+            if (this.statisticsData[i].status == 2) {
+              nbczObj = this.statisticsData[i];
             }
           }
           this.jyczqrFormBz.bdcchbWork = jyczObj.bdcchbWork;
           this.jyczqrFormBz.dlxxbWork = jyczObj.dlxxbWork;
           this.jyczqrFormBz.gcchbNumWork = jyczObj.gcchbNumWork;
           this.jyczqrFormBz.gxgcbWork = jyczObj.gxgcbWork;
+          this.jyczqrFormBz.bdcnb = nbczObj.bdcchbWork;
+          this.jyczqrFormBz.dlnb = nbczObj.dlxxbWork;
+          this.jyczqrFormBz.gcchnb = nbczObj.gcchbNumWork;
+          this.jyczqrFormBz.gxgcnb = nbczObj.gxgcbWork;
           addProfit(this.jyczqrFormBz).then((response) => {
             this.$modal.msgSuccess("确认成功");
             this.jyczOpen = false;
@@ -1545,7 +1570,7 @@ export default {
         }
 
         var obj = {
-          typeName: "内部产值金额",
+          typeName: "项目预算金额",
           gcchbNumWork: 0,
           bdcchbWork: 0,
           gxgcbWork: 0,
@@ -1641,6 +1666,28 @@ export default {
         }
         if (myMap.has("地理信息部")) {
           numData.dlxxbWork = myMap.get("地理信息部").money.toFixed(2);
+        }
+        this.statisticsData.push(numData);
+
+        numData = {
+          status: 2,
+          gcchbNumWork: 0,
+          bdcchbWork: 0,
+          gxgcbWork: 0,
+          dlxxbWork: 0,
+        };
+
+        if (myMap.has("工程测绘部")) {
+          numData.gcchbNumWork = myMap.get("工程测绘部").nb.toFixed(2);
+        }
+        if (myMap.has("不动产测绘部")) {
+          numData.bdcchbWork = myMap.get("不动产测绘部").nb.toFixed(2);
+        }
+        if (myMap.has("管线工程部")) {
+          numData.gxgcbWork = myMap.get("管线工程部").nb.toFixed(2);
+        }
+        if (myMap.has("地理信息部")) {
+          numData.dlxxbWork = myMap.get("地理信息部").nb.toFixed(2);
         }
         this.statisticsData.push(numData);
 
@@ -1930,6 +1977,7 @@ export default {
         tempForm.durationFactor = this.settleForm.durationFactor;
         tempForm.qualityCoefficient = this.settleForm.qualityCoefficient;
         tempForm.projectCoefficient = this.settleForm.projectCoefficient;
+        tempForm.nbczje = this.settleForm.nbczje;
         // tempForm.bjRemark = this.settleForm.bjRemark;
         tempForm.settle = 1;
         if (valid) {

@@ -36,7 +36,7 @@ public class SysProjectNbcz
     @Excel(name = "作业部门", needMerge = true)
     private String department;
 
-    @Excel(name = "内部产值金额", needMerge = true)
+    @Excel(name = "项目预算金额", needMerge = true)
     private BigDecimal ygmoney;
 
     @JsonFormat(pattern = "yyyy-MM-dd")

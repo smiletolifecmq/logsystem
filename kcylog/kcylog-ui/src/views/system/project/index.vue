@@ -311,7 +311,7 @@
       >
       <el-table-column
         width="70"
-        label="内部产值金额"
+        label="项目预算金额"
         align="center"
         prop="ygmoney"
       >
@@ -447,7 +447,7 @@
             @click="handleUpdate(scope.row)"
             v-if="showjycz(scope.row)"
             v-hasPermi="['system:project:editygmoney']"
-            >填写内部产值</el-button
+            >填写项目预算</el-button
           >
           <el-button
             size="mini"
@@ -502,18 +502,18 @@
 
     <!-- 添加或修改项目对话框 -->
     <el-dialog
-      title="填写无经费或服务类项目内部产值"
+      title="填写无经费或服务类项目预算"
       :visible.sync="open"
       width="800px"
       append-to-body
     >
       <el-form ref="form" :model="form" :rules="rules" label-width="210px">
-        <el-form-item label="内部产值金额(元)" prop="ygmoney">
+        <el-form-item label="项目预算金额(元)" prop="ygmoney">
           <el-input-number
             v-model="form.ygmoney"
             :precision="2"
             :min="0"
-            placeholder="内部产值金额金额"
+            placeholder="项目预算金额"
           ></el-input-number>
         </el-form-item>
 
@@ -1780,14 +1780,22 @@ export default {
   methods: {
     showjycz(value) {
       if (
-        (value.ygmoney != null &&
-          value.ygmoney != undefined &&
-          value.ygmoney != 0) ||
-        value.settle == 1
+        value.twoCheck != "" &&
+        value.twoCheck != null &&
+        value.twoCheck != undefined
       ) {
+        if (
+          (value.ygmoney != null &&
+            value.ygmoney != undefined &&
+            value.ygmoney != 0) ||
+          value.settle == 1
+        ) {
+          return false;
+        }
+        return true;
+      } else {
         return false;
       }
-      return true;
     },
     changeLx() {
       this.fwxform.gclx = this.lxValue[0];

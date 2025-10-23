@@ -75,6 +75,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
         <result property="profitMoneyHj" column="profit_money_hj"/>
         <result property="monthhj" column="monthhj"/>
         <result property="ygbjtime" column="ygbjtime"/>
+        <result property="nbczje" column="nbczje"/>
 
         <association property="projectValue" javaType="java.util.List" resultMap="SysProjectValueResult"/>
         <association property="projectCar" javaType="java.util.List" resultMap="SysProjectCarResult"/>
@@ -348,6 +349,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
             <if test="cgsdtime != null">cgsdtime = #{cgsdtime},</if>
             <if test="ygtime != null">ygtime = #{ygtime},</if>
             <if test="ygbjtime != null">ygbjtime = #{ygbjtime},</if>
+            <if test="nbczje != null">nbczje = #{nbczje},</if>
         </trim>
         where project_id = #{projectId}
     </update>
@@ -469,7 +471,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
     <update id="jsProjectCz" parameterType="String">
         UPDATE sys_project_value AS spv
         JOIN sys_project AS sp ON spv.project_id = sp.project_id
-        SET spv.money = sp.operate * (spv.proportion / 100),sp.output_status = 2,sp.settlement_time = CURRENT_TIMESTAMP()
+        SET spv.money = sp.operate * (spv.proportion / 100), spv.nb = sp.nbczje * (spv.proportion / 100), sp.output_status = 2,sp.settlement_time = CURRENT_TIMESTAMP()
         WHERE spv.project_id IN
         <foreach item="projectId" collection="array" open="(" separator="," close=")">
             #{projectId}

@@ -248,7 +248,7 @@
           {{ formatDate(scope.row.doTime) }}
         </template></el-table-column
       >
-      <el-table-column label="内部产值金额" align="center" prop="ygmoney">
+      <el-table-column label="项目预算金额" align="center" prop="ygmoney">
         <template slot-scope="scope">
           {{ scope.row.ygmoney }}
         </template></el-table-column
@@ -258,7 +258,7 @@
       </el-table-column>
       <el-table-column label="操作" align="center" width="126" fixed="right">
         <template slot-scope="scope">
-          <el-button
+          <!-- <el-button
             size="mini"
             type="text"
             icon="el-icon-edit"
@@ -266,7 +266,7 @@
             v-if="showjycz(scope.row)"
             v-hasPermi="['system:project:editygmoney']"
             >填写内部产值</el-button
-          >
+          > -->
           <el-button
             size="mini"
             type="text"
@@ -310,7 +310,7 @@
     />
 
     <!-- 添加或修改项目对话框 -->
-    <el-dialog
+    <!-- <el-dialog
       title="填写无经费或服务类项目内部产值"
       :visible.sync="open"
       width="800px"
@@ -340,7 +340,7 @@
         <el-button type="primary" @click="submitForm">确 定</el-button>
         <el-button @click="cancel">取 消</el-button>
       </div>
-    </el-dialog>
+    </el-dialog> -->
 
     <el-dialog
       :title="detailTitle"

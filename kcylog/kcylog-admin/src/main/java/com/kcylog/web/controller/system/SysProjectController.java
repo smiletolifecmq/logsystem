@@ -235,6 +235,9 @@ public class SysProjectController extends BaseController {
     @Transactional
     @PutMapping
     public AjaxResult edit(@RequestBody SysProject sysProject) {
+        if (sysProject.getNbczje() == null){
+            sysProject.setNbczje(BigDecimal.ZERO);
+        }
         sysProjectService.updateSysProject(sysProject);
         // 经营产值计算
         String[] stringArray = new String[1];
@@ -1077,11 +1080,21 @@ public class SysProjectController extends BaseController {
                     SysProjectValue newSysProjectValue = new SysProjectValue();
                     newSysProjectValue.setMoney(moneyMap.get(dept).getMoney().add(objTemp.getMoney()));
                     newSysProjectValue.setProfitMoney(moneyMap.get(dept).getProfitMoney().add(objTemp.getProfitMoney()));
+                    if (objTemp.getNb() != null){
+                        newSysProjectValue.setNb(moneyMap.get(dept).getNb().add(objTemp.getNb()));
+                    }else {
+                        newSysProjectValue.setNb(moneyMap.get(dept).getNb().add(BigDecimal.ZERO));
+                    }
                     moneyMap.put(dept, newSysProjectValue);
                 }else {
                     SysProjectValue newSysProjectValue = new SysProjectValue();
                     newSysProjectValue.setMoney(objTemp.getMoney());
                     newSysProjectValue.setProfitMoney(objTemp.getProfitMoney());
+                    if (objTemp.getNb() == null){
+                        newSysProjectValue.setNb(BigDecimal.ZERO);
+                    }else {
+                        newSysProjectValue.setNb(objTemp.getNb());
+                    }
                     moneyMap.put(dept, newSysProjectValue);
                 }
             }
@@ -1092,11 +1105,21 @@ public class SysProjectController extends BaseController {
                 SysProjectValue newSysProjectValue = new SysProjectValue();
                 newSysProjectValue.setMoney(moneyMap.get(entry.getKey()).getMoney().add(entry.getValue().getMoney()));
                 newSysProjectValue.setProfitMoney(moneyMap.get(entry.getKey()).getProfitMoney().add(entry.getValue().getProfitMoney()));
+                if (entry.getValue().getNb() != null){
+                    newSysProjectValue.setNb(moneyMap.get(entry.getKey()).getNb().add(entry.getValue().getNb()));
+                }else {
+                    newSysProjectValue.setNb(moneyMap.get(entry.getKey()).getNb().add(BigDecimal.ZERO));
+                }
                 moneyMap.put(entry.getKey(), newSysProjectValue);
             }else {
                 SysProjectValue newSysProjectValue = new SysProjectValue();
                 newSysProjectValue.setMoney(entry.getValue().getMoney());
                 newSysProjectValue.setProfitMoney(entry.getValue().getProfitMoney());
+                if (entry.getValue().getNb() != null){
+                    newSysProjectValue.setNb(entry.getValue().getNb());
+                }else {
+                    newSysProjectValue.setNb(BigDecimal.ZERO);
+                }
                 moneyMap.put(entry.getKey(), newSysProjectValue);
             }
         }
