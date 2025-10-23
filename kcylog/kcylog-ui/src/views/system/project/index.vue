@@ -1260,7 +1260,6 @@ import FileUpload from "@/components/FileCad";
 import { listConfig } from "@/api/system/config";
 
 export default {
-  tbsj: "",
   name: "Project",
   directives: {
     elDragDialog,
@@ -1276,14 +1275,37 @@ export default {
   },
   data() {
     return {
+      tbsj: "",
       limitDate: null, // 后端返回的最小年月
       pickerOptions: {
         disabledDate: (time) => {
           if (!this.limitDate) return false;
+
           const [year, month] = this.limitDate.split("-").map(Number);
-          const lastDayOfMonth = new Date(year, month, 0); // month 传 11 表示 11 月，0 表示上个月最后一天
-          // 禁用 <= 2025-11 的所有日期
-          return time.getTime() <= lastDayOfMonth.getTime();
+          const lastDayOfMonth = new Date(year, month, 0); // 该月最后一天
+
+          // 当前时间
+          const now = new Date();
+          const currentYear = now.getFullYear();
+          const currentMonth = now.getMonth() + 1;
+
+          console.log(1);
+          console.log(this.sdsj);
+          // sdsj 锁定时间
+          const sdsj = this.sdsj ? new Date(this.sdsj) : null;
+
+          // 条件1：禁用 <= limitDate 的所有日期
+          const condition1 = time.getTime() <= lastDayOfMonth.getTime();
+
+          // 条件2：如果 sdsj <= 当前时间，则禁用当前月
+          let condition2 = false;
+          if (sdsj && sdsj.getTime() <= now.getTime()) {
+            condition2 =
+              time.getFullYear() === currentYear &&
+              time.getMonth() + 1 === currentMonth;
+          }
+
+          return condition1 || condition2;
         },
       },
       ssStaus: false,
@@ -1604,6 +1626,7 @@ export default {
         department: "",
         outputStatus: null,
       },
+      sdsj: null,
       // 表单参数
       form: {},
       // 表单校验
@@ -1671,7 +1694,9 @@ export default {
       for (var i = 0; i < response.rows.length; i++) {
         if (response.rows[i].configKey == "xm") {
           this.tbsj = response.rows[i].configValue;
-          return;
+        }
+        if (response.rows[i].configKey == "sdsj") {
+          this.sdsj = response.rows[i].sdsj;
         }
       }
     });
