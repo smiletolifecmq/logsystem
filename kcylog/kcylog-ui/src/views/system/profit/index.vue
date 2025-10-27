@@ -94,6 +94,14 @@
       <el-table-column label="劳务派遣" align="center" prop="lwpq" />
       <el-table-column label="博达支出" align="center" prop="bdzc" />
       <el-table-column label="研发人员申报产值" align="center" prop="yfcz" />
+      <el-table-column label="是否已办结" align="center" prop="bj">
+        <template slot-scope="scope">
+          <el-tag v-if="scope.row.bj === 0" type="info">否</el-tag>
+          <el-tag v-else-if="scope.row.bj === 1">是</el-tag>
+          <el-tag v-else type="warning">未知</el-tag>
+        </template>
+      </el-table-column>
+
       <el-table-column
         label="操作"
         align="center"
