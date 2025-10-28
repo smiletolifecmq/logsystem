@@ -392,9 +392,7 @@ public class RyTask
                                 if (projectArchiveTransferTrackValue.getRectifyCutoffTime() != null){
                                     fqProjectProcessObj.setRectifyCutoffTime(projectArchiveTransferTrackValue.getRectifyCutoffTime().format(formatter));
                                 }
-                                if (projectArchiveTransferTrackValue.getVersion() != null){
-                                    fqProjectProcessObj.setVersion(projectArchiveTransferTrackValue.getVersion());
-                                }
+                                fqProjectProcessObj.setVersion("V1");
                                 if (projectArchiveTransferTrackValue.getIsArchive() != null){
                                     fqProjectProcessObj.setIsArchive(projectArchiveTransferTrackValue.getIsArchive());
                                 }
@@ -403,6 +401,7 @@ public class RyTask
                                 if (projectArchiveTransferTrackValue.getIsArchive() != null){
                                     fqProjectProcessObj.setIsArchive(projectArchiveTransferTrackValue.getIsArchive());
                                 }
+                                fqProjectProcessObj.setVersion("V1");
                                 if (fqProjectProcessObj.getIsArchive() != null){
                                     fqProjectProcessService.updateFqProjectProcess(fqProjectProcessObj);
                                 }
