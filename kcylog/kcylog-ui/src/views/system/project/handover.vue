@@ -567,6 +567,21 @@
             :disabled="scope.row.mapShow != 1"
             >查看选图</el-button
           >
+          <el-button
+            size="mini"
+            type="text"
+            icon="el-icon-circle-plus-outline"
+            @click="handleProcessAddYj(scope.row)"
+            v-hasPermi="['system:project:addyj']"
+            >新增移交</el-button
+          >
+          <el-button
+            size="mini"
+            type="text"
+            icon="el-icon-s-fold"
+            @click="handleProcessYjList(scope.row.id)"
+            >多版本移交</el-button
+          >
           <!-- <el-button
             size="mini"
             v-if="
@@ -1481,7 +1496,7 @@
           >
           </el-date-picker>
         </el-form-item>
-        <el-form-item label="收件时间">
+        <el-form-item label="备注">
           <el-input
             type="textarea"
             :rows="2"
@@ -1493,6 +1508,151 @@
       </el-form>
       <div slot="footer" class="dialog-footer">
         <el-button type="primary" @click="submitFormSJ">确 定</el-button>
+      </div>
+    </el-dialog>
+
+    <!-- 新增移交 -->
+    <el-dialog
+      title="新增移交"
+      :visible.sync="openAddYj"
+      width="600px"
+      append-to-body
+      :close-on-click-modal="false"
+      :close-on-press-escape="false"
+    >
+      <el-form ref="addYjForm" :model="addYjForm" label-width="100px">
+        <el-form-item label="版本" required>
+          <el-select v-model="addYjForm.ver" placeholder="请选择">
+            <el-option
+              v-for="item in vers"
+              :key="item.value"
+              :label="item.label"
+              :value="item.value"
+            >
+            </el-option>
+          </el-select>
+        </el-form-item>
+      </el-form>
+      <div slot="footer" class="dialog-footer">
+        <el-button type="primary" @click="submitFormAddYjForm">确 定</el-button>
+      </div>
+    </el-dialog>
+
+    <!-- 多版本移交 -->
+    <el-dialog
+      title="多版本移交信息"
+      :visible.sync="opendbb"
+      width="1000px"
+      append-to-body
+      :close-on-click-modal="false"
+      :close-on-press-escape="false"
+    >
+      <el-table :data="dbbList" size="mini">
+        <el-table-column label="版本" align="center" prop="ver" />
+        <el-table-column label="移交时间" align="center" prop="yjsj">
+          <template slot-scope="scope">
+            {{ formatDate(scope.row.yjsj) }}
+          </template></el-table-column
+        >
+        <el-table-column label="收件时间" align="center" prop="sjsj">
+          <template slot-scope="scope">
+            {{ formatDate(scope.row.sjsj) }}
+          </template></el-table-column
+        >
+        <el-table-column label="盖章时间" align="center" prop="gzsj">
+          <template slot-scope="scope">
+            {{ formatDate(scope.row.gzsj) }}
+          </template></el-table-column
+        >
+        <el-table-column label="验收时间" align="center" prop="yssj">
+          <template slot-scope="scope">
+            {{ formatDate(scope.row.yssj) }}
+          </template></el-table-column
+        >
+        <el-table-column label="归档时间" align="center" prop="gdsj">
+          <template slot-scope="scope">
+            {{ formatDate(scope.row.gdsj) }}
+          </template></el-table-column
+        >
+        <el-table-column label="备注" align="center" prop="bz" />
+
+        <el-table-column
+          label="操作"
+          align="center"
+          class-name="small-padding fixed-width"
+        >
+          <template slot-scope="scope">
+            <el-button
+              v-show="scope.row.yjsj == null"
+              size="mini"
+              type="text"
+              icon="el-icon-s-promotion"
+              @click="handleProcessYjdbb(scope.row)"
+              v-hasPermi="['system:project:yj']"
+              >移交</el-button
+            >
+            <el-button
+              v-show="scope.row.sjsj == null"
+              size="mini"
+              type="text"
+              icon="el-icon-s-promotion"
+              @click="handleProcessSjdbb(scope.row)"
+              v-hasPermi="['system:project:sj']"
+              >收件</el-button
+            >
+            <el-button
+              v-show="scope.row.yssj == null"
+              size="mini"
+              type="text"
+              icon="el-icon-s-promotion"
+              @click="handleProcessYsdbb(scope.row)"
+              v-hasPermi="['system:project:ys']"
+              >验收</el-button
+            >
+            <el-button
+              v-show="scope.row.gdsj == null"
+              size="mini"
+              type="text"
+              icon="el-icon-s-promotion"
+              @click="handleProcessGddbb(scope.row)"
+              v-hasPermi="['system:project:gd']"
+              >归档</el-button
+            >
+          </template>
+        </el-table-column>
+      </el-table>
+    </el-dialog>
+
+    <!-- 多版本收件 -->
+    <el-dialog
+      title="确认收件时间"
+      :visible.sync="opendbbsj"
+      width="600px"
+      append-to-body
+      :close-on-click-modal="false"
+      :close-on-press-escape="false"
+    >
+      <el-form ref="dbbForm" :model="dbbForm" label-width="100px">
+        <el-form-item label="收件时间" required>
+          <el-date-picker
+            v-model="dbbForm.sjsj"
+            type="date"
+            placeholder="选择日期"
+          >
+          </el-date-picker>
+        </el-form-item>
+        <el-form-item label="备注">
+          <el-input
+            type="textarea"
+            :rows="2"
+            placeholder="请输入内容"
+            v-model="dbbForm.bz"
+          >
+          </el-input>
+        </el-form-item>
+      </el-form>
+      <div slot="footer" class="dialog-footer">
+        <el-button type="primary" @click="submitFormSJdbb">确 定</el-button>
       </div>
     </el-dialog>
   </div>
@@ -1527,6 +1687,11 @@ import { getlistProfitOne } from "@/api/system/profit";
 import { excelJsExport } from "@/api/system/excelJsExport";
 import userInfo from "@/store/modules/user";
 import FileUpload from "@/components/FileCad";
+import {
+  addHandover,
+  listHandover,
+  updateHandover,
+} from "@/api/system/handoverVersion";
 
 export default {
   name: "Project",
@@ -1544,6 +1709,54 @@ export default {
   },
   data() {
     return {
+      dbbForm: {
+        sjsj: null,
+        bz: null,
+      },
+      opendbbsj: false,
+      dbbList: [],
+      addYjForm: {
+        ver: null,
+      },
+      openAddYj: false,
+      vers: [
+        {
+          value: "V2",
+          label: "V2",
+        },
+        {
+          value: "V3",
+          label: "V3",
+        },
+        {
+          value: "V4",
+          label: "V4",
+        },
+        {
+          value: "V5",
+          label: "V5",
+        },
+        {
+          value: "V6",
+          label: "V6",
+        },
+        {
+          value: "V7",
+          label: "V7",
+        },
+        {
+          value: "V8",
+          label: "V8",
+        },
+        {
+          value: "V9",
+          label: "V9",
+        },
+        {
+          value: "V10",
+          label: "V10",
+        },
+      ],
       limitDate: null, // 后端返回的最小年月
       pickerOptions: {
         disabledDate: (time) => {
@@ -1788,6 +2001,7 @@ export default {
         outputStatus: null,
         status: null,
       },
+      processId: 0,
       subcontractForm: {
         user: {
           userName: "",
@@ -1799,6 +2013,8 @@ export default {
         deptName: null,
         bz: null,
       },
+      opendbb: false,
+      projectDbbId: 0,
       // 表单参数
       form: {},
       // 表单校验
@@ -1881,6 +2097,23 @@ export default {
     });
   },
   methods: {
+    handleProcessYjList(id) {
+      listHandover({ processId: id }).then((response) => {
+        this.dbbList = response.rows;
+        this.opendbb = true;
+      });
+    },
+    submitFormAddYjForm() {
+      this.addYjForm.processId = this.processId;
+      addHandover(this.addYjForm).then((response) => {
+        this.openAddYj = false;
+        this.$modal.msgSuccess("新增成功");
+      });
+    },
+    handleProcessAddYj(value) {
+      this.processId = value.id;
+      this.openAddYj = true;
+    },
     showjycz(value) {
       if (
         (value.projectList.ygmoney != null &&
@@ -1906,6 +2139,30 @@ export default {
               message: "移交成功!",
             });
           });
+        })
+        .catch(() => {
+          this.$message({
+            type: "info",
+            message: "已取消移交",
+          });
+        });
+    },
+    handleProcessYjdbb(value) {
+      this.$confirm("此操作将对项目进行移交, 是否继续?", "提示", {
+        confirmButtonText: "确定",
+        cancelButtonText: "取消",
+        type: "warning",
+      })
+        .then(() => {
+          updateHandover({ id: value.id, yjsj: new Date() }).then(
+            (response) => {
+              this.handleProcessYjList(value.processId);
+              this.$message({
+                type: "success",
+                message: "移交成功!",
+              });
+            }
+          );
         })
         .catch(() => {
           this.$message({
@@ -1945,6 +2202,63 @@ export default {
       this.openSj = true;
       this.projectId = value.projectId;
     },
+    handleProcessSjdbb(value) {
+      this.opendbbsj = true;
+      this.projectDbbId = value.id;
+      this.processId = value.processId;
+    },
+    submitFormSJdbb() {
+      this.$confirm("此操作将对项目进行收件, 是否继续?", "提示", {
+        confirmButtonText: "确定",
+        cancelButtonText: "取消",
+        type: "warning",
+      })
+        .then(() => {
+          updateHandover({
+            id: this.projectDbbId,
+            sjsj: this.dbbForm.sjsj,
+            gzsj: this.dbbForm.sjsj,
+            bz: this.dbbForm.bz,
+          }).then((response) => {
+            this.opendbbsj = false;
+            this.$message({
+              type: "success",
+              message: "收件成功!",
+            });
+            this.handleProcessYjList(this.processId);
+          });
+        })
+        .catch(() => {
+          this.$message({
+            type: "info",
+            message: "已取消收件",
+          });
+        });
+    },
+    handleProcessYsdbb(value) {
+      this.$confirm("此操作将对项目进行验收, 是否继续?", "提示", {
+        confirmButtonText: "确定",
+        cancelButtonText: "取消",
+        type: "warning",
+      })
+        .then(() => {
+          updateHandover({ id: value.id, yssj: new Date() }).then(
+            (response) => {
+              this.handleProcessYjList(value.processId);
+              this.$message({
+                type: "success",
+                message: "验收成功!",
+              });
+            }
+          );
+        })
+        .catch(() => {
+          this.$message({
+            type: "info",
+            message: "已取消验收",
+          });
+        });
+    },
     handleProcessYs(value) {
       this.$confirm("此操作将对项目进行验收, 是否继续?", "提示", {
         confirmButtonText: "确定",
@@ -1964,6 +2278,30 @@ export default {
           this.$message({
             type: "info",
             message: "已取消验收",
+          });
+        });
+    },
+    handleProcessGddbb(value) {
+      this.$confirm("此操作将对项目进行归档, 是否继续?", "提示", {
+        confirmButtonText: "确定",
+        cancelButtonText: "取消",
+        type: "warning",
+      })
+        .then(() => {
+          updateHandover({ id: value.id, gdsj: new Date() }).then(
+            (response) => {
+              this.handleProcessYjList(value.processId);
+              this.$message({
+                type: "success",
+                message: "归档成功!",
+              });
+            }
+          );
+        })
+        .catch(() => {
+          this.$message({
+            type: "info",
+            message: "已取消归档",
           });
         });
     },

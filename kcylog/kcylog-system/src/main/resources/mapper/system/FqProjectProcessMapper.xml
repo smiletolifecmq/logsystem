@@ -96,7 +96,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
     </sql>
 
     <sql id="selectFqProjectProcessListVo">
-        select  f.transfer_status, f.transfer_time,
+        select  f.id, f.transfer_status, f.transfer_time,
                 f.transfer_user_name, f.receive_status,
                 f.receive_time, f.receive_user_name,
                 f.stamp_status, f.stamp_time,
