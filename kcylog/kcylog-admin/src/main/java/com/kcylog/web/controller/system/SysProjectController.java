@@ -3133,4 +3133,11 @@ public class SysProjectController extends BaseController {
         sysProjectService.updateSysProjectNbcz(sysProject);
         return toAjax(1);
     }
+
+    @Log(title = "预结备注", businessType = BusinessType.UPDATE)
+    @PutMapping("/updateProjectYjbz")
+    public AjaxResult updateProjectYjbz(@RequestBody SysProject sysProject) {
+        sysProjectService.updateSysProject(sysProject);
+        return toAjax(1);
+    }
 }

@@ -438,6 +438,14 @@
           <el-button
             size="mini"
             type="text"
+            icon="el-icon-s-comment"
+            @click="handleYjbz(scope.row)"
+            v-hasPermi="['system:project:yjbz']"
+            >预结备注</el-button
+          >
+          <el-button
+            size="mini"
+            type="text"
             icon="el-icon-edit"
             @click="handleUpdate(scope.row)"
             v-if="showjycz(scope.row)"
@@ -684,6 +692,13 @@
                 办结超期备注
               </template>
               {{ form.completionNotes }}
+            </el-descriptions-item>
+            <el-descriptions-item>
+              <template slot="label">
+                <i class="el-icon-document"></i>
+                预结备注
+              </template>
+              {{ form.yjbz }}
             </el-descriptions-item>
           </el-descriptions>
         </el-collapse-item>
@@ -1231,6 +1246,24 @@
         <el-button @click="cancel" size="mini">取 消</el-button>
       </div>
     </el-dialog>
+
+    <el-dialog
+      title="预结备注"
+      :visible.sync="openYjbz"
+      width="700px"
+      append-to-body
+      :close-on-click-modal="false"
+      :close-on-press-escape="false"
+    >
+      <el-form ref="formYjbz" :model="formYjbz" label-width="80px">
+        <el-form-item label="预结备注" prop="yjbz">
+          <el-input v-model="formYjbz.yjbz" placeholder="请输入项预结备注" />
+        </el-form-item>
+      </el-form>
+      <div slot="footer" class="dialog-footer">
+        <el-button type="primary" @click="submitFormYjbz()">保存</el-button>
+      </div>
+    </el-dialog>
   </div>
 </template>
 <style>
@@ -1250,6 +1283,7 @@ import {
   updateProjectCqBz,
   updateProjectDrawStatus,
   updateCad,
+  updateProjectYjbz,
 } from "@/api/system/project";
 import { getlistProfitOne } from "@/api/system/profit";
 import elDragDialog from "@/api/components/el-drag";
@@ -1275,6 +1309,11 @@ export default {
   },
   data() {
     return {
+      yjbzId: 0,
+      openYjbz: false,
+      formYjbz: {
+        yjbz: null,
+      },
       tbsj: "",
       limitDate: null, // 后端返回的最小年月
       pickerOptions: {
@@ -1798,6 +1837,17 @@ export default {
     );
   },
   methods: {
+    handleYjbz(value) {
+      this.yjbzId = value.projectId;
+      this.openYjbz = true;
+    },
+    submitFormYjbz() {
+      this.formYjbz.projectId = this.yjbzId;
+      updateProjectYjbz(this.formYjbz).then((response) => {
+        this.$modal.msgSuccess("保存成功");
+        this.openYjbz = false;
+      });
+    },
     showjycz(value) {
       if (
         value.twoCheck != "" &&

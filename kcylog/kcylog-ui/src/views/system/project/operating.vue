@@ -388,6 +388,7 @@
         </template>
       </el-table-column>
       <el-table-column label="办结备注" align="center" prop="bjRemark" />
+      <el-table-column label="预结备注" align="center" prop="yjbz" />
       <el-table-column
         label="操作"
         align="center"

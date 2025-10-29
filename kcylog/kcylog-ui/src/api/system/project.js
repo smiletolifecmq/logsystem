@@ -288,3 +288,11 @@ export function updateProjectNbcz(data) {
     data: data
   })
 }
+
+export function updateProjectYjbz(data) {
+  return request({
+    url: '/system/project/updateProjectYjbz',
+    method: 'put',
+    data: data
+  })
+}
