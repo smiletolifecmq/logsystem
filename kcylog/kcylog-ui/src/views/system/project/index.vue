@@ -438,6 +438,14 @@
           <el-button
             size="mini"
             type="text"
+            icon="el-icon-circle-plus-outline"
+            @click="handleXzsj(scope.row)"
+            v-hasPermi="['system:sending:add']"
+            >新增送件</el-button
+          >
+          <el-button
+            size="mini"
+            type="text"
             icon="el-icon-s-comment"
             @click="handleYjbz(scope.row)"
             v-hasPermi="['system:project:yjbz']"
@@ -490,6 +498,13 @@
             @click="scfwx(scope.row)"
             v-hasPermi="['system:project:uploadfwx']"
             >上传范围线</el-button
+          >
+          <el-button
+            size="mini"
+            type="text"
+            icon="el-icon-info"
+            @click="handleSjxx(scope.row)"
+            >送件信息</el-button
           >
         </template>
       </el-table-column>
@@ -1264,6 +1279,111 @@
         <el-button type="primary" @click="submitFormYjbz()">保存</el-button>
       </div>
     </el-dialog>
+
+    <el-dialog
+      title="新增送件"
+      :visible.sync="opensj"
+      width="1200px"
+      append-to-body
+    >
+      <el-form ref="formsj" :model="formsj" :rules="rulessj" label-width="80px">
+        <el-form-item label="时间" prop="sjsj">
+          <el-date-picker
+            v-model="formsj.sjsj"
+            type="date"
+            placeholder="选择日期"
+          >
+          </el-date-picker>
+        </el-form-item>
+        <el-form-item label="备注" prop="bz">
+          <el-input v-model="formsj.bz" placeholder="请输入内容"></el-input>
+        </el-form-item>
+        <el-collapse v-model="activeNames">
+          <el-collapse-item title="送件信息" name="1">
+            <el-button
+              type="text"
+              icon="el-icon-circle-plus"
+              size="medium"
+              style="margin-left: 20px; margin-bottom: 20px"
+              @click="addGeoLogInfo()"
+            ></el-button>
+            <el-form-item
+              v-for="(info, index) in formsj.sjInfo"
+              :key="index"
+              prop="info"
+            >
+              <el-row>
+                <el-col :span="4">
+                  <el-form-item label="类型" prop="lx">
+                    <el-select v-model="info.lx" placeholder="请选择">
+                      <el-option
+                        v-for="item in lxs"
+                        :key="item.value"
+                        :label="item.label"
+                        :value="item.value"
+                      >
+                      </el-option>
+                    </el-select>
+                  </el-form-item>
+                </el-col>
+
+                <el-col :span="4">
+                  <el-form-item label="份数" prop="fs">
+                    <el-input-number
+                      v-model="info.fs"
+                      :min="0"
+                    ></el-input-number>
+                  </el-form-item>
+                </el-col>
+
+                <el-col :span="3" style="margin-left: 90px">
+                  <el-button
+                    v-if="index != 0 || formsj.sjInfo.length == 1"
+                    type="text"
+                    icon="el-icon-circle-plus"
+                    size="medium"
+                    style="margin-left: 20px; margin-bottom: 20px"
+                    @click="addGeoLogInfo()"
+                  ></el-button>
+                  <el-button
+                    type="text"
+                    icon="el-icon-remove"
+                    size="medium"
+                    style="margin-left: 20px; margin-bottom: 20px"
+                    @click="removeGeoLogInfo(index)"
+                  ></el-button>
+                </el-col>
+              </el-row>
+            </el-form-item>
+          </el-collapse-item>
+        </el-collapse>
+      </el-form>
+      <div slot="footer" class="dialog-footer">
+        <el-button type="primary" @click="submitFormSj">确 定</el-button>
+      </div>
+    </el-dialog>
+
+    <el-dialog
+      title="送件信息"
+      :visible.sync="opensjxx"
+      width="1000px"
+      append-to-body
+    >
+      <el-table :data="logListsj">
+        <el-table-column
+          label="送件日期"
+          align="center"
+          prop="sjsj"
+          width="180"
+        >
+          <template slot-scope="scope">
+            <span>{{ parseTime(scope.row.sjsj, "{y}-{m}-{d}") }}</span>
+          </template>
+        </el-table-column>
+        <el-table-column label="类型｜份数" align="center" prop="lxfs" />
+        <el-table-column label="备注" align="center" prop="bz" />
+      </el-table>
+    </el-dialog>
   </div>
 </template>
 <style>
@@ -1292,6 +1412,7 @@ import { addReview, setReviewStatus } from "@/api/system/reviewSub";
 import userInfo from "@/store/modules/user";
 import FileUpload from "@/components/FileCad";
 import { listConfig } from "@/api/system/config";
+import { addSending, listSending } from "@/api/system/sending";
 
 export default {
   name: "Project",
@@ -1309,6 +1430,35 @@ export default {
   },
   data() {
     return {
+      logListsj: [],
+      opensjxx: false,
+      lxs: [
+        {
+          value: "入库意见单",
+          label: "入库意见单",
+        },
+        {
+          value: "图纸",
+          label: "图纸",
+        },
+        {
+          value: "报告",
+          label: "报告",
+        },
+        {
+          value: "函件",
+          label: "函件",
+        },
+        {
+          value: "证明",
+          label: "证明",
+        },
+        {
+          value: "其它",
+          label: "其它",
+        },
+      ],
+      opensj: false,
       yjbzId: 0,
       openYjbz: false,
       formYjbz: {
@@ -1346,6 +1496,12 @@ export default {
 
           return condition1 || condition2;
         },
+      },
+      formsj: {
+        sjInfo: [],
+        projectId: null,
+        bz: null,
+        sjsj: null,
       },
       ssStaus: false,
       cqxmtitle: "",
@@ -1505,6 +1661,7 @@ export default {
           { required: true, message: "委托单位不能为空", trigger: "blur" },
         ],
       },
+      rulessj: {},
       titleReviewSub: "",
       openReviewSub: false,
       statusArr: [
@@ -1666,6 +1823,7 @@ export default {
         outputStatus: null,
       },
       sdsj: null,
+      sjprojectid: 0,
       // 表单参数
       form: {},
       // 表单校验
@@ -1837,6 +1995,46 @@ export default {
     );
   },
   methods: {
+    handleSjxx(value) {
+      listSending({ projectId: value.projectId }).then((response) => {
+        this.logListsj = response.rows;
+        this.opensjxx = true;
+      });
+    },
+    submitFormSj() {
+      if (this.formsj.sjInfo.length == 0) {
+        this.$message({
+          showClose: true,
+          message: "请添加送件信息",
+          type: "error",
+        });
+        return;
+      }
+      this.formsj.projectId = this.sjprojectid;
+      addSending(this.formsj).then((response) => {
+        this.opensj = false;
+        this.$modal.msgSuccess("新增成功");
+      });
+      console.log(this.formsj.sjInfo);
+    },
+    addGeoLogInfo() {
+      this.formsj.sjInfo.push({ lx: "", fs: 0 });
+      this.$forceUpdate();
+    },
+    removeGeoLogInfo(index) {
+      this.formsj.sjInfo.splice(index, 1);
+      this.$forceUpdate();
+    },
+    handleXzsj(value) {
+      this.formsj = {
+        sjInfo: [],
+        projectId: null,
+        bz: null,
+        sjsj: null,
+      };
+      this.sjprojectid = value.projectId;
+      this.opensj = true;
+    },
     handleYjbz(value) {
       this.yjbzId = value.projectId;
       this.openYjbz = true;
