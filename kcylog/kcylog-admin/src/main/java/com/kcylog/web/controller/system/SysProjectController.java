@@ -436,6 +436,11 @@ public class SysProjectController extends BaseController {
         List<FqProjectProcess> list = fqProjectProcessService.selectFqProjectProcessList(sysProject);
         List<Long> projectId = new ArrayList<>();
         for (FqProjectProcess projectProcess : list) {
+            if (projectProcess.getSysVersionHandover() != null && projectProcess.getSysVersionHandover().size() > 0){
+                for (SysVersionHandover obj1 : projectProcess.getSysVersionHandover()){
+                    projectProcess.setVersion(projectProcess.getVersion() + " | " + obj1.getVer());
+                }
+            }
             projectProcess.setMapShow((long)0);
             projectId.add(projectProcess.getProjectList().getProjectId());
                 //计算收件提前天数

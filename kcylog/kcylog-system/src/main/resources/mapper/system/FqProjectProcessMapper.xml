@@ -38,6 +38,11 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
         <result property="isArchive"    column="is_archive"    />
         <result property="bz"    column="bz"    />
         <association property="projectList" javaType="SysProject" resultMap="SysProjectResult"/>
+        <association property="sysVersionHandover" javaType="java.util.List" resultMap="SysVersionHandoverResult"/>
+    </resultMap>
+
+    <resultMap type="SysVersionHandover" id="SysVersionHandoverResult">
+        <result property="ver"    column="ver"    />
     </resultMap>
 
     <resultMap type="SysProject" id="SysProjectResult">
@@ -105,8 +110,8 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
                 f.check_status, f.check_time,
                 f.check_user_name, f.archive_time,
                 f.archive_user_name, f.receive_cutoff_time, f.bz,
-                f.rectify_cutoff_time, f.version, f.is_archive,  p.* from fq_project_process f
-        inner join sys_project p on f.project_id = p.project_id
+                f.rectify_cutoff_time, f.version, f.is_archive, h.ver, p.* from fq_project_process f
+        inner join sys_project p on f.project_id = p.project_id left join sys_version_handover h on h.process_id = f.id
     </sql>
 
     <select id="selectFqProjectProcessList" parameterType="SysProject" resultMap="FqProjectProcessResult">

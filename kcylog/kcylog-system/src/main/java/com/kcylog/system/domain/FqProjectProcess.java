@@ -5,6 +5,8 @@ import com.kcylog.common.core.domain.BaseEntity;
 import org.apache.commons.lang3.builder.ToStringBuilder;
 import org.apache.commons.lang3.builder.ToStringStyle;
 
+import java.util.List;
+
 /**
  * 新系统项目流程同步对象 fq_project_process
  * 
@@ -133,6 +135,16 @@ public class FqProjectProcess extends BaseEntity
     private Long mapShow;
 
     private String bz;
+
+    private List<SysVersionHandover> sysVersionHandover;
+
+    public List<SysVersionHandover> getSysVersionHandover() {
+        return sysVersionHandover;
+    }
+
+    public void setSysVersionHandover(List<SysVersionHandover> sysVersionHandover) {
+        this.sysVersionHandover = sysVersionHandover;
+    }
 
     public String getBz() {
         return bz;
