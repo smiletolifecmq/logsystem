@@ -24,7 +24,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
             <if test="sjsj != null "> and sjsj = #{sjsj}</if>
             <if test="bz != null  and bz != ''"> and bz = #{bz}</if>
         </where>
-        order by id asc 
+        order by id asc
     </select>
     
     <select id="selectSysSendingById" parameterType="Long" resultMap="SysSendingResult">
