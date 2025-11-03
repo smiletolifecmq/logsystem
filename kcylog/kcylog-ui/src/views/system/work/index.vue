@@ -799,7 +799,10 @@ export default {
                 response.rows[i].dw +
                 "，" +
                 response.rows[i].dj +
-                "；",
+                "，" +
+                "小计" +
+                response.rows[i].fy +
+                "元；",
             });
           } else {
             data.list.push({
@@ -812,7 +815,10 @@ export default {
                 response.rows[i].dw +
                 "，" +
                 response.rows[i].dj +
-                "；",
+                "，" +
+                "小计" +
+                response.rows[i].fy +
+                "元；",
             });
           }
 
@@ -820,6 +826,8 @@ export default {
           num++;
         }
         data.form.totalMoney = data.form.totalMoney.toFixed(2);
+        data.form.rcxmlx = "分公司内部软硬件日常维护类项目";
+        data.form.jbr = "高诚伟、陈明强、黄秋锋、吴哲涵";
         exportSubDocx(
           "/nbspb.docx",
           data,
@@ -867,7 +875,10 @@ export default {
                 response.rows[i].dw +
                 "，" +
                 response.rows[i].dj +
-                "；",
+                "，" +
+                "小计" +
+                response.rows[i].fy +
+                "元；",
             });
           } else {
             data.list.push({
@@ -880,11 +891,16 @@ export default {
                 response.rows[i].dw +
                 "，" +
                 response.rows[i].dj +
-                "；",
+                "，" +
+                "小计" +
+                response.rows[i].fy +
+                "元；",
             });
           }
 
           data.form.totalMoney = data.form.totalMoney + response.rows[i].fy;
+          data.form.rcxmlx = "分公司日常数据服务类项目";
+          data.form.jbr = "张宾、锜小芳";
           num++;
         }
         data.form.totalMoney = data.form.totalMoney.toFixed(2);
