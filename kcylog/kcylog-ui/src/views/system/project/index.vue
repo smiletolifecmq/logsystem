@@ -1292,6 +1292,7 @@
             v-model="formsj.sjsj"
             type="date"
             placeholder="选择日期"
+            value-format="yyyy-MM-dd"
           >
           </el-date-picker>
         </el-form-item>
@@ -2015,7 +2016,7 @@ export default {
         this.opensj = false;
         this.$modal.msgSuccess("新增成功");
       });
-      console.log(this.formsj.sjInfo);
+      console.log(this.formsj);
     },
     addGeoLogInfo() {
       this.formsj.sjInfo.push({ lx: "", fs: 0 });
@@ -2030,7 +2031,7 @@ export default {
         sjInfo: [],
         projectId: null,
         bz: null,
-        sjsj: null,
+        sjsj: new Date(),
       };
       this.sjprojectid = value.projectId;
       this.opensj = true;
