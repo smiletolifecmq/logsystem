@@ -1558,6 +1558,10 @@ export default {
       fwxform: {},
       businessNameS: [
         {
+          value: "地下病害体探测",
+          label: "地下病害体探测",
+        },
+        {
           value: "管线测量-2024",
           label: "管线测量-2024",
         },
@@ -1910,6 +1914,11 @@ export default {
     this.loadAllUnits();
     this.getStatisticsData();
     this.businessNameMap = new Map();
+    this.businessNameMap.set("地下病害体探测", [
+      "闽侯县小箬永强钻探劳务队",
+      "福州市一三建筑劳务有限公司",
+      "闽侯县信安钻探劳务有限公司",
+    ]);
     this.businessNameMap.set("管线测量-2024", [
       "福建越扬信息科技有限公司",
       "福建省易测工程勘测有限公司",

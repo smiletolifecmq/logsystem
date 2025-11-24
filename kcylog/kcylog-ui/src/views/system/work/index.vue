@@ -854,55 +854,56 @@ export default {
         };
         var num = 1;
 
+        var mapNbcz = new Map();
+
         for (var i = 0; i < response.rows.length; i++) {
           if (response.rows[i].zylxid == 1) {
             continue;
           }
-          if (
-            response.rows[i].xmmc != undefined &&
-            response.rows[i].xmmc != null &&
-            response.rows[i].xmmc != ""
-          ) {
-            data.list.push({
-              content:
-                num +
-                "、" +
-                response.rows[i].xmlx +
-                "-" +
-                response.rows[i].xmmc +
-                "，" +
-                response.rows[i].sl +
-                response.rows[i].dw +
-                "，" +
-                response.rows[i].dj +
-                "，" +
-                "小计" +
-                response.rows[i].fy +
-                "元；",
-            });
-          } else {
-            data.list.push({
-              content:
-                num +
-                "、" +
-                response.rows[i].xmlx +
-                "，" +
-                response.rows[i].sl +
-                response.rows[i].dw +
-                "，" +
-                response.rows[i].dj +
-                "，" +
-                "小计" +
-                response.rows[i].fy +
-                "元；",
-            });
+
+          if (!mapNbcz.has(response.rows[i].xmlx)) {
+            mapNbcz.set(response.rows[i].xmlx, []);
           }
+          mapNbcz.get(response.rows[i].xmlx).push(response.rows[i]);
 
           data.form.totalMoney = data.form.totalMoney + response.rows[i].fy;
-          data.form.rcxmlx = "分公司日常数据服务类项目";
-          data.form.jbr = "张宾、锜小芳";
+        }
+
+        console.log(mapNbcz);
+        for (const [key, arr] of mapNbcz) {
+          var sl = 0;
+          var dw = "";
+          var dj = "";
+          var fy = 0;
+          console.log("key:", key);
+          arr.forEach((item) => {
+            sl = sl + item.sl;
+            dw = item.dw;
+            dj = item.dj;
+            fy = fy + item.fy;
+          });
+
+          data.list.push({
+            content:
+              num +
+              "、" +
+              key +
+              "，" +
+              sl +
+              dw +
+              "，" +
+              dj +
+              "，" +
+              "小计" +
+              fy +
+              "元；",
+          });
+
           num++;
         }
+
+        data.form.rcxmlx = "分公司日常数据服务类项目";
+        data.form.jbr = "张宾、锜小芳";
         data.form.totalMoney = data.form.totalMoney.toFixed(2);
         exportSubDocx("/nbspb.docx", data, "项目任务审批表-数据处理部分.docx");
       });

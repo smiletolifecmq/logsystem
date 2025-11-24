@@ -712,7 +712,7 @@ public class SysProjectController extends BaseController {
                         operatingExport.setOverDay(0);
                     }
 
-                    operatingExport.setYgmoney(project.getYgmoney());
+                    operatingExport.setYgmoney(project.getNbczje());
                     operatingExport.setDurationFactor(project.getDurationFactor());
                     operatingExport.setProjectCoefficient(project.getProjectCoefficient());
                     operatingExport.setQualityCoefficient(project.getQualityCoefficient());
@@ -765,7 +765,7 @@ public class SysProjectController extends BaseController {
                     operatingExport.setIsOverdue("安排结束时间缺失");
                     operatingExport.setOverDay(0);
                 }
-                operatingExport.setYgmoney(project.getYgmoney());
+                operatingExport.setYgmoney(project.getNbczje());
                 operatingExport.setSettleMoney(project.getFbMoney());
                 operatingExport.setDurationFactor(project.getDurationFactor());
                 operatingExport.setProjectCoefficient(project.getProjectCoefficient());
