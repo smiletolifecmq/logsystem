@@ -882,7 +882,8 @@ export default {
             dj = item.dj;
             fy = fy + item.fy;
           });
-
+          sl = sl.toFixed(2);
+          fy = fy.toFixed(2);
           data.list.push({
             content:
               num +
