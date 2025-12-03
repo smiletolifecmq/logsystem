@@ -155,6 +155,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
         <result property="profitMoney"    column="profit_money"    />
         <result property="coefficientMoney"    column="coefficient_money"    />
         <result property="coefficientProfitMoney"    column="coefficient_profit_money"    />
+        <result property="nb"    column="nb"    />
     </resultMap>
 
     <sql id="selectSysProjectVo">
@@ -727,7 +728,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 
 
     <sql id="selectSysProjectExportVo">
-        select p.*, a.firm_name, a.subcontract_no, a.settle_money, v.user_name, v.proportion, v.money, v.profit_money, v.coefficient_money, v.coefficient_profit_money  from sys_project p
+        select p.*, a.firm_name, a.subcontract_no, a.settle_money, v.user_name, v.proportion, v.money, v.profit_money, v.coefficient_money, v.coefficient_profit_money, v.nb  from sys_project p
             left join project_charge_info a on p.project_num = a.project_code
             left join sys_project_value v on p.project_id = v.project_id
     </sql>

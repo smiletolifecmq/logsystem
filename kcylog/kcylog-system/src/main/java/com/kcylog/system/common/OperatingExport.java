@@ -119,7 +119,18 @@ public class OperatingExport {
     @Excel(name = "利润金额-系数", headerBackgroundColor = IndexedColors.GREEN)
     private BigDecimal coefficientProfitMoney;
 
+    @Excel(name = "内部产值", headerBackgroundColor = IndexedColors.GREEN)
+    private BigDecimal nb;
+
     private Date settleTime;
+
+    public BigDecimal getNb() {
+        return nb;
+    }
+
+    public void setNb(BigDecimal nb) {
+        this.nb = nb;
+    }
 
     public BigDecimal getYgmoney() {
         return ygmoney;

@@ -933,6 +933,7 @@ public class SysProjectController extends BaseController {
                         operatingExport.setProfitMoney(obj1.getProfitMoney());
                         operatingExport.setCoefficientMoney(obj1.getCoefficientMoney());
                         operatingExport.setCoefficientProfitMoney(obj1.getCoefficientProfitMoney());
+                        operatingExport.setNb(obj1.getNb());
                         operatingExportList.add(operatingExport);
                     }
                 }
@@ -994,6 +995,7 @@ public class SysProjectController extends BaseController {
                     operatingExport.setProfitMoney(obj1.getProfitMoney());
                     operatingExport.setCoefficientMoney(obj1.getCoefficientMoney());
                     operatingExport.setCoefficientProfitMoney(obj1.getCoefficientProfitMoney());
+                    operatingExport.setNb(obj1.getNb());
                     operatingExportList.add(operatingExport);
                 }
 
