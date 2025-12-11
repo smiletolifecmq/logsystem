@@ -496,7 +496,7 @@
           >
           </el-date-picker>
         </el-form-item>
-        <el-form-item label="作业部门" prop="department">
+        <!-- <el-form-item label="作业部门" prop="department">
           <el-select
             v-model="productionDetailsForm.department"
             placeholder="请选择部门"
@@ -510,7 +510,7 @@
             >
             </el-option>
           </el-select>
-        </el-form-item>
+        </el-form-item> -->
         <el-form-item label="用户名" prop="userName">
           <el-input
             v-model="productionDetailsForm.userName"
@@ -701,15 +701,59 @@
     <el-dialog
       title="产值详情"
       :visible.sync="czOpen"
-      width="600px"
+      width="1000px"
       append-to-body
       v-el-drag-dialog
     >
-      <el-table v-loading="loading" :data="czDetailList" height="500px">
+      <el-table
+        v-loading="loading"
+        :data="czDetailList"
+        height="500px"
+        show-summary
+      >
         <el-table-column label="用户名" align="center" prop="userName" />
-        <el-table-column label="产值" align="center" prop="money">
+        <el-table-column label="月份" align="center" prop="settleTime">
+          <template slot-scope="scope">
+            <el-tag type="success">
+              {{
+                parseTime(scope.row.fqSysProject.settleTime, "{y}-{m}")
+              }}</el-tag
+            >
+          </template>
+        </el-table-column>
+        <el-table-column label="产值金额" align="center" prop="money">
           <template slot-scope="scope">
             <el-tag type="success">{{ scope.row.money }}</el-tag>
+          </template>
+        </el-table-column>
+        <el-table-column label="利润金额" align="center" prop="profitMoney">
+          <template slot-scope="scope">
+            <el-tag type="success">{{ scope.row.profitMoney }}</el-tag>
+          </template>
+        </el-table-column>
+        <el-table-column
+          label="产值金额-系数"
+          align="center"
+          prop="coefficientMoney"
+        >
+          <template slot-scope="scope">
+            <el-tag type="success">{{ scope.row.coefficientMoney }}</el-tag>
+          </template>
+        </el-table-column>
+        <el-table-column
+          label="利润金额-系数"
+          align="center"
+          prop="coefficientProfitMoney"
+        >
+          <template slot-scope="scope">
+            <el-tag type="success">{{
+              scope.row.coefficientProfitMoney
+            }}</el-tag>
+          </template>
+        </el-table-column>
+        <el-table-column label="内部产值" align="center" prop="nb">
+          <template slot-scope="scope">
+            <el-tag type="success">{{ scope.row.nb }}</el-tag>
           </template>
         </el-table-column>
       </el-table>
@@ -1480,12 +1524,13 @@ export default {
     submitDetailsForm() {
       if (
         this.dateRangeDetails.length == 0 ||
-        this.productionDetailsForm.department == "" ||
-        this.productionDetailsForm.department == null
+        this.productionDetailsForm.userName == "" ||
+        this.productionDetailsForm.userName == undefined ||
+        this.productionDetailsForm.userName == null
       ) {
         this.$message({
           type: "error",
-          message: "办结时间和部门为必选条件～",
+          message: "办结时间和人员名称为必选条件～",
         });
         return;
       }
@@ -1542,13 +1587,14 @@ export default {
           }
           if (myMap.has(key)) {
             let num = myMap.get(key);
-            if (project[i].operateUser == "") {
+            if (project[i].operateUser == "" && project[i].settle != 1) {
               num.cqNum++;
             }
             if (
               project[i].operateUser == "" &&
               project[i].twoCheck != "" &&
-              over7(project[i].twoCheck)
+              over7(project[i].twoCheck) &&
+              project[i].settle != 1
             ) {
               num.cqNum7++;
             }
@@ -1558,13 +1604,14 @@ export default {
               cqNum: 0,
               cqNum7: 0,
             };
-            if (project[i].operateUser == "") {
+            if (project[i].operateUser == "" && project[i].settle != 1) {
               num.cqNum++;
             }
             if (
               project[i].operateUser == "" &&
               project[i].twoCheck != "" &&
-              over7(project[i].twoCheck)
+              over7(project[i].twoCheck) &&
+              project[i].settle != 1
             ) {
               num.cqNum7++;
             }

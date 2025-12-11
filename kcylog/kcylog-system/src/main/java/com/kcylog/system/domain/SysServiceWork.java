@@ -35,7 +35,7 @@ public class SysServiceWork extends BaseEntity
     private String xmlx;
 
     /** 项目编号 */
-//    @Excel(name = "项目编号")
+    @Excel(name = "项目编号")
     private String xmbh;
 
     /** 项目名称 */

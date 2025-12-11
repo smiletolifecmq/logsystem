@@ -94,7 +94,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
     </select>
 
     <select id="selectSysProjectValueListProductionDetails" parameterType="SysProject" resultMap="SysProjectValueResult">
-        select a.user_name, sum(a.money) as money from sys_project_value a inner join sys_project b on a.project_id = b.project_id
+        select a.user_name, b.settle_time, sum(a.money) as money, sum(a.profit_money) as profit_money, sum(a.coefficient_money) as coefficient_money, sum(a.coefficient_profit_money) as coefficient_profit_money, sum(a.nb) as nb from sys_project_value a inner join sys_project b on a.project_id = b.project_id
         <where>
             <if test="params.beginTime != null"><!-- 开始时间检索 -->
                 and (date_format(b.settle_time,'%y%m%d') &gt;= date_format(#{params.beginTime},'%y%m%d'))
@@ -102,14 +102,11 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
             <if test="params.endTime != null"><!-- 结束时间检索 -->
                 and (date_format(b.settle_time,'%y%m%d') &lt;= date_format(#{params.endTime},'%y%m%d'))
             </if>
-            <if test="department != null and department != ''"><!-- 开始时间检索 -->
-                and b.department = #{department}
-            </if>
             <if test="userName != null and userName != ''"><!-- 开始时间检索 -->
                 and a.user_name = #{userName}
             </if>
         </where>
-        group by a.user_name order by money desc
+        group by b.settle_time, a.user_name order by b.settle_time asc
     </select>
 
     <select id="listProjectOperateTJ" parameterType="SysProject" resultMap="SysProjectValueResult">
