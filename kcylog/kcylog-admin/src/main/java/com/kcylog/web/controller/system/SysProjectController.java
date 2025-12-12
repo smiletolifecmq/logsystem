@@ -3149,28 +3149,28 @@ public class SysProjectController extends BaseController {
     }
 
 
-    @Anonymous
-    @CrossOrigin
-    @PostMapping("/syncBcGEO")
-    public TableDataInfo syncBcGEO(@RequestBody SysProjectGeoinfo sysBcJybb) throws IOException, InterruptedException {
-
-        List<SysProjectGeoinfo > list = sysProjectGeoinfoService.selectSysProjectGeoinfoList(sysBcJybb);
-        for (SysProjectGeoinfo a : list){
-            BcProject bcProject = new BcProject();
-            bcProject.setProjectNum(a.getProjectNum());
-            String geometry = a.getGeometry2000();
-//            if (geometry.length() > 3000) {
-//                List<String> fragments = new ArrayList<>();
-//                int length = geometry.length();
-//                for (int i = 0; i < length; i += 3000) {
-//                    fragments.add(geometry.substring(i, Math.min(length, i + 3000)));
-//                }
-//                bcProject.setClobFragments(fragments);
-//            }else {
-                bcProject.setGeometry2000(geometry);
-//            }
-            bcProjectService.insertBcProject(bcProject);
-        }
+//    @Anonymous
+//    @CrossOrigin
+//    @PostMapping("/syncBcGEO")
+//    public TableDataInfo syncBcGEO(@RequestBody SysProjectGeoinfo sysBcJybb) throws IOException, InterruptedException {
+//
+//        List<SysProjectGeoinfo > list = sysProjectGeoinfoService.selectSysProjectGeoinfoList(sysBcJybb);
+//        for (SysProjectGeoinfo a : list){
+//            BcProject bcProject = new BcProject();
+//            bcProject.setProjectNum(a.getProjectNum());
+//            String geometry = a.getGeometry2000();
+////            if (geometry.length() > 3000) {
+////                List<String> fragments = new ArrayList<>();
+////                int length = geometry.length();
+////                for (int i = 0; i < length; i += 3000) {
+////                    fragments.add(geometry.substring(i, Math.min(length, i + 3000)));
+////                }
+////                bcProject.setClobFragments(fragments);
+////            }else {
+//                bcProject.setGeometry2000(geometry);
+////            }
+//            bcProjectService.insertBcProject(bcProject);
+//        }
 
 
         return getDataTable(list);
