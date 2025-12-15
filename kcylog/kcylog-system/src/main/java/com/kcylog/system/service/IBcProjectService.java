@@ -65,4 +65,6 @@ public interface IBcProjectService
     public List<BcProject> selectSysProjectGeoinfoByProjectIds(List<String> projectIds);
 
     public BcProject selectBcProjectByXmbh(String xmbh);
+
+    public BcProject selectBcProjectMaxObjectId();
 }

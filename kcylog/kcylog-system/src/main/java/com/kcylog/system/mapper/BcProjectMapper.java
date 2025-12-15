@@ -68,4 +68,6 @@ public interface BcProjectMapper
     public List<BcProject> selectSysProjectGeoinfoByProjectIds(List<String> projectIds);
 
     public BcProject selectBcProjectByXmbh(String xmbh);
+
+    public BcProject selectBcProjectMaxObjectId();
 }

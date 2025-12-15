@@ -1193,6 +1193,8 @@ public class SysProjectController extends BaseController {
                 Date jssj = sdf.parse(sysProject.getProjectEndAlias());
                 bcProject.setJssj(jssj);
             }
+            BcProject obj = bcProjectService.selectBcProjectMaxObjectId();
+            bcProject.setObjectid(obj.getObjectid());
             bcProject.setGznr(sysProject.getWorkcontentAlias());
             bcProject.setBm(sysProject.getDepartment());
             bcProjectService.insertBcProject(bcProject);

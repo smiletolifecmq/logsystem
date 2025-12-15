@@ -53,6 +53,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
     <insert id="insertBcProject" parameterType="BcProject" useGeneratedKeys="true">
         insert into bc_project
         <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="objectid != null">objectid,</if>
             <if test="shape != null">shape,</if>
             <if test="xmmc != null">xmmc,</if>
             <if test="xmbh != null">xmbh,</if>
@@ -143,5 +144,14 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
     <select id="selectBcProjectByXmbh" parameterType="String" resultMap="BcProjectResult">
         <include refid="selectBcProjectVo"/>
         where xmbh = #{xmbh}
+    </select>
+
+    <select id="selectBcProjectMaxObjectId"  resultMap="BcProjectResult">
+        SELECT *
+        FROM bc_project
+        WHERE objectid = (
+            SELECT MAX(objectid)
+            FROM bc_project
+        );
     </select>
 </mapper>

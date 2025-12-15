@@ -109,4 +109,10 @@ public class BcProjectServiceImpl implements IBcProjectService
     {
         return bcProjectMapper.selectBcProjectByXmbh(xmbh);
     }
+
+    @Override
+    public BcProject selectBcProjectMaxObjectId()
+    {
+        return bcProjectMapper.selectBcProjectMaxObjectId();
+    }
 }
