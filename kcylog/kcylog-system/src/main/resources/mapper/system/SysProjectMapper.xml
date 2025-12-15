@@ -721,7 +721,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
         <include refid="selectSysProjectVo"/>
         <where>
             <if test="receptionist != null  and receptionist != ''"> and receptionist = #{receptionist}</if>
-            and is_two_check = 1 and operate_user = ''
+            and is_two_check = 1 and operate_user = '' and settle != 1
         </where>
         order by p.project_id desc
     </select>
