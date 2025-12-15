@@ -1194,7 +1194,7 @@ public class SysProjectController extends BaseController {
                 bcProject.setJssj(jssj);
             }
             BcProject obj = bcProjectService.selectBcProjectMaxObjectId();
-            bcProject.setObjectid(obj.getObjectid());
+            bcProject.setObjectid(obj.getObjectid() + 1);
             bcProject.setGznr(sysProject.getWorkcontentAlias());
             bcProject.setBm(sysProject.getDepartment());
             bcProjectService.insertBcProject(bcProject);
