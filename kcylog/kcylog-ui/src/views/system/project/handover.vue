@@ -470,11 +470,10 @@
       <el-table-column label="备注" align="center" prop="bz" />
 
       <el-table-column
-        fixed="right"
         label="操作"
         align="center"
+        width="200"
         class-name="small-padding fixed-width"
-        width="126px"
       >
         <template slot-scope="scope">
           <!-- <el-button
