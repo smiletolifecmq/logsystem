@@ -467,6 +467,19 @@
           <el-tag v-else type="danger">否</el-tag>
         </template>
       </el-table-column>
+      <el-table-column label="无需盖章" align="center">
+        <template slot-scope="scope">
+          <span>
+            {{
+              (scope.row.sysSending || [])
+                .filter((item) => item.lxfs && item.lxfs.includes("0；"))
+                .map((item) => item.ver)
+                .join("｜")
+            }}
+          </span>
+        </template>
+      </el-table-column>
+
       <el-table-column label="备注" align="center" prop="bz" />
 
       <el-table-column

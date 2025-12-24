@@ -1296,6 +1296,17 @@
           >
           </el-date-picker>
         </el-form-item>
+        <el-form-item label="版本" prop="ver">
+          <el-select v-model="formsj.ver" placeholder="请选择">
+            <el-option
+              v-for="item in vers"
+              :key="item.value"
+              :label="item.label"
+              :value="item.value"
+            >
+            </el-option>
+          </el-select>
+        </el-form-item>
         <el-form-item label="备注" prop="bz">
           <el-input v-model="formsj.bz" placeholder="请输入内容"></el-input>
         </el-form-item>
@@ -1381,6 +1392,7 @@
             <span>{{ parseTime(scope.row.sjsj, "{y}-{m}-{d}") }}</span>
           </template>
         </el-table-column>
+        <el-table-column label="版本" align="center" prop="ver" />
         <el-table-column label="类型｜份数" align="center" prop="lxfs" />
         <el-table-column label="备注" align="center" prop="bz" />
       </el-table>
@@ -1556,6 +1568,48 @@ export default {
       cadstatus: false,
       fwxopen: false,
       fwxform: {},
+      vers: [
+        {
+          value: "V1",
+          label: "V1",
+        },
+        {
+          value: "V2",
+          label: "V2",
+        },
+        {
+          value: "V3",
+          label: "V3",
+        },
+        {
+          value: "V4",
+          label: "V4",
+        },
+        {
+          value: "V5",
+          label: "V5",
+        },
+        {
+          value: "V6",
+          label: "V6",
+        },
+        {
+          value: "V7",
+          label: "V7",
+        },
+        {
+          value: "V8",
+          label: "V8",
+        },
+        {
+          value: "V9",
+          label: "V9",
+        },
+        {
+          value: "V10",
+          label: "V10",
+        },
+      ],
       businessNameS: [
         {
           value: "地下病害体探测",
@@ -1666,7 +1720,9 @@ export default {
           { required: true, message: "委托单位不能为空", trigger: "blur" },
         ],
       },
-      rulessj: {},
+      rulessj: {
+        ver: [{ required: true, message: "版本不能为空", trigger: "blur" }],
+      },
       titleReviewSub: "",
       openReviewSub: false,
       statusArr: [
@@ -2021,11 +2077,15 @@ export default {
         return;
       }
       this.formsj.projectId = this.sjprojectid;
-      addSending(this.formsj).then((response) => {
-        this.opensj = false;
-        this.$modal.msgSuccess("新增成功");
+
+      this.$refs["formsj"].validate((valid) => {
+        if (valid) {
+          addSending(this.formsj).then((response) => {
+            this.opensj = false;
+            this.$modal.msgSuccess("新增成功");
+          });
+        }
       });
-      console.log(this.formsj);
     },
     addGeoLogInfo() {
       this.formsj.sjInfo.push({ lx: "", fs: 0 });

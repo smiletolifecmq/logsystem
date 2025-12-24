@@ -97,4 +97,11 @@ public class FqProjectProcessServiceImpl implements IFqProjectProcessService
     {
         return fqProjectProcessMapper.selectFqProjectProcessByProjectIds(projectIds);
     }
+
+    @Override
+    public List<FqProjectProcess> selectFqProjectProcessListInfo(FqProjectProcess fqProjectProcess)
+    {
+        return fqProjectProcessMapper.selectFqProjectProcessListInfo(fqProjectProcess);
+    }
+
 }

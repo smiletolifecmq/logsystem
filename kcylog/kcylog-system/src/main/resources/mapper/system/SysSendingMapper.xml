@@ -10,19 +10,18 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
         <result property="projectId"    column="project_id"    />
         <result property="sjsj"    column="sjsj"    />
         <result property="bz"    column="bz"    />
+        <result property="ver"    column="ver"    />
     </resultMap>
 
     <sql id="selectSysSendingVo">
-        select id, lxfs, project_id, sjsj, bz from sys_sending
+        select id, lxfs, project_id, sjsj, bz, ver from sys_sending
     </sql>
 
     <select id="selectSysSendingList" parameterType="SysSending" resultMap="SysSendingResult">
         <include refid="selectSysSendingVo"/>
         <where>  
-            <if test="lxfs != null  and lxfs != ''"> and lxfs = #{lxfs}</if>
             <if test="projectId != null "> and project_id = #{projectId}</if>
-            <if test="sjsj != null "> and sjsj = #{sjsj}</if>
-            <if test="bz != null  and bz != ''"> and bz = #{bz}</if>
+            <if test="ver != null  and bz != ''"> and ver = #{ver}</if>
         </where>
         order by id asc
     </select>
@@ -39,12 +38,14 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
             <if test="projectId != null">project_id,</if>
             <if test="sjsj != null">sjsj,</if>
             <if test="bz != null">bz,</if>
+            <if test="ver != null">ver,</if>
          </trim>
         <trim prefix="values (" suffix=")" suffixOverrides=",">
             <if test="lxfs != null">#{lxfs},</if>
             <if test="projectId != null">#{projectId},</if>
             <if test="sjsj != null">#{sjsj},</if>
             <if test="bz != null">#{bz},</if>
+            <if test="ver != null">#{ver},</if>
          </trim>
     </insert>
 
@@ -55,6 +56,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
             <if test="projectId != null">project_id = #{projectId},</if>
             <if test="sjsj != null">sjsj = #{sjsj},</if>
             <if test="bz != null">bz = #{bz},</if>
+            <if test="ver != null">ver = #{ver},</if>
         </trim>
         where id = #{id}
     </update>
@@ -69,4 +71,12 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
             #{id}
         </foreach>
     </delete>
+
+    <select id="selectSysSendingListForProjectIds" parameterType="java.util.List" resultMap="SysSendingResult">
+        <include refid="selectSysSendingVo"/>
+        where project_id in
+        <foreach item="projectId" collection="list" open="(" separator="," close=")">
+            #{projectId}
+        </foreach>
+    </select>
 </mapper>

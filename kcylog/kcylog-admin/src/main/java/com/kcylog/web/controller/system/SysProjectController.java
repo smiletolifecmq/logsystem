@@ -88,6 +88,9 @@ public class SysProjectController extends BaseController {
     @Autowired
     private ISysProfitService sysProfitService;
 
+    @Autowired
+    private ISysSendingService sysSendingService;
+
     private static final ObjectMapper objectMapper = new ObjectMapper();
 
     /**
@@ -434,8 +437,19 @@ public class SysProjectController extends BaseController {
     public TableDataInfo listHandover(SysProject sysProject) throws ParseException {
         startPage();
         List<FqProjectProcess> list = fqProjectProcessService.selectFqProjectProcessList(sysProject);
+        List<Long> projectIds = new ArrayList<>();
+        for (FqProjectProcess obj : list) {
+            projectIds.add(obj.getProjectId());
+        }
+        List<SysSending> sysSendings = sysSendingService.selectSysSendingListForProjectIds(projectIds);
         List<Long> projectId = new ArrayList<>();
         for (FqProjectProcess projectProcess : list) {
+            projectProcess.setSysSending(new ArrayList<>());
+            for (SysSending obj1 : sysSendings){
+                if (Objects.equals(projectProcess.getProjectId(), obj1.getProjectId())){
+                    projectProcess.getSysSending().add(obj1);
+                }
+            }
             if (projectProcess.getSysVersionHandover() != null && projectProcess.getSysVersionHandover().size() > 0){
                 for (SysVersionHandover obj1 : projectProcess.getSysVersionHandover()){
                     projectProcess.setVersion(projectProcess.getVersion() + " | " + obj1.getVer());

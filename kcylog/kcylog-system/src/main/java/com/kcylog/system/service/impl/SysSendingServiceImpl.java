@@ -91,4 +91,10 @@ public class SysSendingServiceImpl implements ISysSendingService
     {
         return sysSendingMapper.deleteSysSendingById(id);
     }
+
+    @Override
+    public List<SysSending> selectSysSendingListForProjectIds(List<Long> projectIds)
+    {
+        return sysSendingMapper.selectSysSendingListForProjectIds(projectIds);
+    }
 }

@@ -39,7 +39,17 @@ public class SysSending extends BaseEntity
     @Excel(name = "备注")
     private String bz;
 
+    private String ver;
+
     private List<SjInfo> sjInfo;
+
+    public String getVer() {
+        return ver;
+    }
+
+    public void setVer(String ver) {
+        this.ver = ver;
+    }
 
     public List<SjInfo> getSjInfo() {
         return sjInfo;

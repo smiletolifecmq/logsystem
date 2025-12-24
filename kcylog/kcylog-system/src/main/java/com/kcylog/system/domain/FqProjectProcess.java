@@ -138,6 +138,16 @@ public class FqProjectProcess extends BaseEntity
 
     private List<SysVersionHandover> sysVersionHandover;
 
+    private List<SysSending> sysSending;
+
+    public List<SysSending> getSysSending() {
+        return sysSending;
+    }
+
+    public void setSysSending(List<SysSending> sysSending) {
+        this.sysSending = sysSending;
+    }
+
     public List<SysVersionHandover> getSysVersionHandover() {
         return sysVersionHandover;
     }

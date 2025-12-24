@@ -39,6 +39,11 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
         <result property="bz"    column="bz"    />
         <association property="projectList" javaType="SysProject" resultMap="SysProjectResult"/>
         <association property="sysVersionHandover" javaType="java.util.List" resultMap="SysVersionHandoverResult"/>
+        <association property="sysSending" javaType="java.util.List" resultMap="SysSendingResult"/>
+    </resultMap>
+
+    <resultMap type="SysSending" id="SysSendingResult">
+        <result property="lxfs"    column="lxfs"    />
     </resultMap>
 
     <resultMap type="SysVersionHandover" id="SysVersionHandoverResult">
@@ -268,5 +273,13 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
         <foreach item="projectId" collection="list" open="(" separator="," close=")">
             #{projectId}
         </foreach>
+    </select>
+
+    <select id="selectFqProjectProcessListInfo" parameterType="FqProjectProcess" resultMap="FqProjectProcessResult">
+        select project_id, id from fq_project_process
+        <where>
+            <if test="projectId != null">and project_id = #{projectId}</if>
+            <if test="version != null and version != ''">and version = #{version}</if>
+        </where>
     </select>
 </mapper>

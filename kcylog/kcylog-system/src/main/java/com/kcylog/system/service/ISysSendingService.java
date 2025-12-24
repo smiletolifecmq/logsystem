@@ -1,7 +1,8 @@
 package com.kcylog.system.service;
 
-import java.util.List;
 import com.kcylog.system.domain.SysSending;
+
+import java.util.List;
 
 /**
  * 送件Service接口
@@ -58,4 +59,6 @@ public interface ISysSendingService
      * @return 结果
      */
     public int deleteSysSendingById(Long id);
+
+    public List<SysSending> selectSysSendingListForProjectIds(List<Long> projectIds);
 }

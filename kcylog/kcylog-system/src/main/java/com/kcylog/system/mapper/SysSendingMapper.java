@@ -59,4 +59,6 @@ public interface SysSendingMapper
      * @return 结果
      */
     public int deleteSysSendingByIds(Long[] ids);
+
+    public List<SysSending> selectSysSendingListForProjectIds(List<Long> projectIds);
 }

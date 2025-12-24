@@ -6,14 +6,19 @@ import com.kcylog.common.core.domain.AjaxResult;
 import com.kcylog.common.core.page.TableDataInfo;
 import com.kcylog.common.enums.BusinessType;
 import com.kcylog.common.utils.poi.ExcelUtil;
+import com.kcylog.system.domain.FqProjectProcess;
 import com.kcylog.system.domain.SjInfo;
 import com.kcylog.system.domain.SysSending;
+import com.kcylog.system.domain.SysVersionHandover;
+import com.kcylog.system.service.IFqProjectProcessService;
 import com.kcylog.system.service.ISysSendingService;
+import com.kcylog.system.service.ISysVersionHandoverService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
 import javax.servlet.http.HttpServletResponse;
 import java.util.List;
+import java.util.Objects;
 
 /**
  * 送件Controller
@@ -27,6 +32,12 @@ public class SysSendingController extends BaseController
 {
     @Autowired
     private ISysSendingService sysSendingService;
+
+    @Autowired
+    private IFqProjectProcessService fqProjectProcessService;
+
+    @Autowired
+    private ISysVersionHandoverService sysVersionHandoverService;
 
     /**
      * 查询送件列表
@@ -74,9 +85,38 @@ public class SysSendingController extends BaseController
         newObj.setProjectId(sysSending.getProjectId());
         newObj.setSjsj(sysSending.getSjsj());
         newObj.setBz(sysSending.getBz());
+        newObj.setVer(sysSending.getVer());
         newObj.setLxfs("");
         for (SjInfo obj : sysSending.getSjInfo()){
             newObj.setLxfs(newObj.getLxfs() + obj.getLx() + "：" + obj.getFs() + "；");
+        }
+        List<SysSending> list = sysSendingService.selectSysSendingList(newObj);
+        if (list != null &&  list.size() > 0){
+            return error("当前版本送件已存在，不可以重复提交～");
+        }
+
+        FqProjectProcess fqProjectProcess = new FqProjectProcess();
+        fqProjectProcess.setVersion(sysSending.getVer());
+        fqProjectProcess.setProjectId(sysSending.getProjectId());
+        List<FqProjectProcess> obj = fqProjectProcessService.selectFqProjectProcessListInfo(fqProjectProcess);
+        if ((obj == null || obj.size() == 0) && Objects.equals(sysSending.getVer(), "V1")){
+            return error("提交失败，不存在该版本的项目移交信息～");
+        }
+        if (!Objects.equals(sysSending.getVer(), "V1")){
+            fqProjectProcess = new FqProjectProcess();
+            fqProjectProcess.setProjectId(sysSending.getProjectId());
+            obj = fqProjectProcessService.selectFqProjectProcessListInfo(fqProjectProcess);
+            if (obj == null || obj.size() == 0){
+                return error("提交失败，不存在该版本的项目移交信息～");
+            }else {
+                SysVersionHandover sysVersionHandover = new SysVersionHandover();
+                sysVersionHandover.setProcessId(obj.get(0).getId());
+                sysVersionHandover.setVer(sysSending.getVer());
+                List<SysVersionHandover> listVer = sysVersionHandoverService.selectSysVersionHandoverList(sysVersionHandover);
+                if (listVer == null || listVer.size() == 0){
+                    return error("提交失败，不存在该版本的项目移交信息～");
+                }
+            }
         }
         return toAjax(sysSendingService.insertSysSending(newObj));
     }
