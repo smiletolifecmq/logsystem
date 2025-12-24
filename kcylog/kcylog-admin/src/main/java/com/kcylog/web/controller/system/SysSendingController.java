@@ -90,10 +90,10 @@ public class SysSendingController extends BaseController
         for (SjInfo obj : sysSending.getSjInfo()){
             newObj.setLxfs(newObj.getLxfs() + obj.getLx() + "：" + obj.getFs() + "；");
         }
-        List<SysSending> list = sysSendingService.selectSysSendingList(newObj);
-        if (list != null &&  list.size() > 0){
-            return error("当前版本送件已存在，不可以重复提交～");
-        }
+//        List<SysSending> list = sysSendingService.selectSysSendingList(newObj);
+//        if (list != null &&  list.size() > 0){
+//            return error("当前版本送件已存在，不可以重复提交～");
+//        }
 
         FqProjectProcess fqProjectProcess = new FqProjectProcess();
         fqProjectProcess.setVersion(sysSending.getVer());
