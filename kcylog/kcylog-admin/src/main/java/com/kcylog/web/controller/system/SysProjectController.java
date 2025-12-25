@@ -441,7 +441,10 @@ public class SysProjectController extends BaseController {
         for (FqProjectProcess obj : list) {
             projectIds.add(obj.getProjectId());
         }
-        List<SysSending> sysSendings = sysSendingService.selectSysSendingListForProjectIds(projectIds);
+        List<SysSending> sysSendings = new ArrayList<>();
+        if (list.size() > 0){
+            sysSendings = sysSendingService.selectSysSendingListForProjectIds(projectIds);
+        }
         List<Long> projectId = new ArrayList<>();
         for (FqProjectProcess projectProcess : list) {
             projectProcess.setSysSending(new ArrayList<>());
