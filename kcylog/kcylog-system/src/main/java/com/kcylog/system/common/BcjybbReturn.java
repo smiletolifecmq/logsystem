@@ -32,6 +32,46 @@ public class BcjybbReturn {
 
     private String tenderAmount;
 
+    private String contractYearTargetAmount;
+
+    private String contractYearTargetDiffAmount;
+
+    private String invoiceYearTargetAmount;
+
+    private String invoiceYearTargetDiffAmount;
+
+    public String getContractYearTargetAmount() {
+        return contractYearTargetAmount;
+    }
+
+    public void setContractYearTargetAmount(String contractYearTargetAmount) {
+        this.contractYearTargetAmount = contractYearTargetAmount;
+    }
+
+    public String getContractYearTargetDiffAmount() {
+        return contractYearTargetDiffAmount;
+    }
+
+    public void setContractYearTargetDiffAmount(String contractYearTargetDiffAmount) {
+        this.contractYearTargetDiffAmount = contractYearTargetDiffAmount;
+    }
+
+    public String getInvoiceYearTargetAmount() {
+        return invoiceYearTargetAmount;
+    }
+
+    public void setInvoiceYearTargetAmount(String invoiceYearTargetAmount) {
+        this.invoiceYearTargetAmount = invoiceYearTargetAmount;
+    }
+
+    public String getInvoiceYearTargetDiffAmount() {
+        return invoiceYearTargetDiffAmount;
+    }
+
+    public void setInvoiceYearTargetDiffAmount(String invoiceYearTargetDiffAmount) {
+        this.invoiceYearTargetDiffAmount = invoiceYearTargetDiffAmount;
+    }
+
     public String getIsCityCenter() {
         return isCityCenter;
     }

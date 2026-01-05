@@ -42,12 +42,10 @@ public class SysBcJybbController extends BaseController
     @GetMapping("/list")
     public TableDataInfo list(SysBcJybb sysBcJybb)
     {
-        int year = java.time.LocalDate.now().getYear();
-        String yearStr = String.valueOf(year);
-        sysBcJybb.setYear(yearStr);
+        sysBcJybb.setYear(sysBcJybb.getYear());
         List<SysBcJybb> list = sysBcJybbService.selectSysBcJybbList(sysBcJybb);
         SysBcGcbb sysBcGcbb = new SysBcGcbb();
-        sysBcGcbb.setYear(yearStr);
+        sysBcGcbb.setYear(sysBcJybb.getYear());
         List<SysBcGcbb> gcbbList = sysBcGcbbService.selectSysBcGcbbTj(sysBcGcbb);
         for(SysBcJybb obj1 : list){
             for(SysBcGcbb obj2 : gcbbList){

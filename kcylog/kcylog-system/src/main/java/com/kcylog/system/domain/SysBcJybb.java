@@ -62,6 +62,14 @@ public class SysBcJybb extends BaseEntity
 //    @Excel(name = "投标中标金额")
     private String tenderAmount;
 
+    private String contractYearTargetAmount;
+
+    private String contractYearTargetDiffAmount;
+
+    private String invoiceYearTargetAmount;
+
+    private String invoiceYearTargetDiffAmount;
+
     /** 年份 */
     private String year;
 
@@ -128,6 +136,38 @@ public class SysBcJybb extends BaseEntity
 
     @Excel(name = "管线项目（年｜月）")
     private String pipeOtherCountString; //含管cctv
+
+    public String getContractYearTargetAmount() {
+        return contractYearTargetAmount;
+    }
+
+    public void setContractYearTargetAmount(String contractYearTargetAmount) {
+        this.contractYearTargetAmount = contractYearTargetAmount;
+    }
+
+    public String getContractYearTargetDiffAmount() {
+        return contractYearTargetDiffAmount;
+    }
+
+    public void setContractYearTargetDiffAmount(String contractYearTargetDiffAmount) {
+        this.contractYearTargetDiffAmount = contractYearTargetDiffAmount;
+    }
+
+    public String getInvoiceYearTargetAmount() {
+        return invoiceYearTargetAmount;
+    }
+
+    public void setInvoiceYearTargetAmount(String invoiceYearTargetAmount) {
+        this.invoiceYearTargetAmount = invoiceYearTargetAmount;
+    }
+
+    public String getInvoiceYearTargetDiffAmount() {
+        return invoiceYearTargetDiffAmount;
+    }
+
+    public void setInvoiceYearTargetDiffAmount(String invoiceYearTargetDiffAmount) {
+        this.invoiceYearTargetDiffAmount = invoiceYearTargetDiffAmount;
+    }
 
     public String getPipeCctvCountString() {
         return pipeCctvCountString;

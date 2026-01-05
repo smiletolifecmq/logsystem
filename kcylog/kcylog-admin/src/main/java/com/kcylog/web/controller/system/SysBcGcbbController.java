@@ -37,9 +37,7 @@ public class SysBcGcbbController extends BaseController
     public TableDataInfo list(SysBcGcbb sysBcGcbb)
     {
         startPage();
-        int year = java.time.LocalDate.now().getYear();
-        String yearStr = String.valueOf(year);
-        sysBcGcbb.setYear(yearStr);
+        sysBcGcbb.setYear(sysBcGcbb.getYear());
         List<SysBcGcbb> list = sysBcGcbbService.selectSysBcGcbbList(sysBcGcbb);
         return getDataTable(list);
     }

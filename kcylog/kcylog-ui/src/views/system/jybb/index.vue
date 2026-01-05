@@ -23,6 +23,17 @@
           </el-option>
         </el-select>
       </el-form-item>
+      <el-form-item label="年份" prop="year">
+        <el-select v-model="queryParams.year" filterable placeholder="请选择">
+          <el-option
+            v-for="item in years"
+            :key="item.value"
+            :label="item.label"
+            :value="item.value"
+          >
+          </el-option>
+        </el-select>
+      </el-form-item>
       <el-form-item>
         <el-button
           type="primary"
@@ -70,10 +81,34 @@
         width="130px"
       />
       <el-table-column
+        label="合同年度目标"
+        align="center"
+        prop="contractYearTargetAmount"
+        width="130px"
+      />
+      <el-table-column
+        label="与年度目标差值(合同)"
+        align="center"
+        prop="contractYearTargetDiffAmount"
+        width="150px"
+      />
+      <el-table-column
         label="开票金额"
         align="center"
         prop="invoiceAmount"
         width="130px"
+      />
+      <el-table-column
+        label="开票年度目标"
+        align="center"
+        prop="invoiceYearTargetAmount"
+        width="130px"
+      />
+      <el-table-column
+        label="与年度目标差值(开票)"
+        align="center"
+        prop="invoiceYearTargetDiffAmount"
+        width="150px"
       />
       <el-table-column
         label="分配给本分院金额"
@@ -267,10 +302,34 @@
         width="130px"
       />
       <el-table-column
+        label="合同年度目标"
+        align="center"
+        prop="contractYearTargetAmount"
+        width="130px"
+      />
+      <el-table-column
+        label="与年度目标差值(合同)"
+        align="center"
+        prop="contractYearTargetDiffAmount"
+        width="150px"
+      />
+      <el-table-column
         label="开票金额"
         align="center"
         prop="invoiceAmount"
         width="130px"
+      />
+      <el-table-column
+        label="开票年度目标"
+        align="center"
+        prop="invoiceYearTargetAmount"
+        width="130px"
+      />
+      <el-table-column
+        label="与年度目标差值(开票)"
+        align="center"
+        prop="invoiceYearTargetDiffAmount"
+        width="150px"
       />
       <el-table-column
         label="分配给本分院金额"
@@ -534,6 +593,16 @@ export default {
       gcbbTotal: 0,
       conditionOpen: false,
       gcbbList: [],
+      years: [
+        {
+          value: "2026",
+          label: "2026",
+        },
+        {
+          value: "2025",
+          label: "2025",
+        },
+      ],
       options: [
         {
           value: "测绘工程院(含外设)",
@@ -656,7 +725,7 @@ export default {
         paymentAmount: null,
         receivableAmount: null,
         tenderAmount: null,
-        year: null,
+        year: "2026",
       },
       // 表单参数
       form: {},

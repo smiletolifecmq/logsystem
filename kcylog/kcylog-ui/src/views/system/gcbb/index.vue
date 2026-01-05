@@ -23,6 +23,17 @@
           </el-option>
         </el-select>
       </el-form-item>
+      <el-form-item label="年份" prop="year">
+        <el-select v-model="queryParams.year" filterable placeholder="请选择">
+          <el-option
+            v-for="item in years"
+            :key="item.value"
+            :label="item.label"
+            :value="item.value"
+          >
+          </el-option>
+        </el-select>
+      </el-form-item>
       <el-form-item>
         <el-button
           type="primary"
@@ -140,6 +151,16 @@ export default {
   name: "Gcbb",
   data() {
     return {
+      years: [
+        {
+          value: "2026",
+          label: "2026",
+        },
+        {
+          value: "2025",
+          label: "2025",
+        },
+      ],
       options: [
         {
           value: "测绘工程院",
@@ -244,6 +265,7 @@ export default {
         contractNo: null,
         contractAmount: null,
         contractFinalAmount: null,
+        year: "2026",
       },
       // 表单参数
       form: {},

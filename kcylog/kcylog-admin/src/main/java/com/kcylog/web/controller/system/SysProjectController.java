@@ -2904,6 +2904,10 @@ public class SysProjectController extends BaseController {
                         bcJybb.setReceivableAmount(obj.getReceivableAmount());
                         bcJybb.setTenderAmount(obj.getTenderAmount());
                         bcJybb.setYear(sysBcJybb.getYear());
+                        bcJybb.setContractYearTargetAmount(obj.getContractYearTargetAmount());
+                        bcJybb.setContractYearTargetDiffAmount(obj.getContractYearTargetDiffAmount());
+                        bcJybb.setInvoiceYearTargetAmount(obj.getInvoiceYearTargetAmount());
+                        bcJybb.setInvoiceYearTargetDiffAmount(obj.getInvoiceYearTargetDiffAmount());
                         List<SysBcJybb> res = sysBcJybbService.selectSysBcJybbList(bcJybb);
                         if(res.size() > 0){
                             sysBcJybbService.updateSysBcJybb(bcJybb);

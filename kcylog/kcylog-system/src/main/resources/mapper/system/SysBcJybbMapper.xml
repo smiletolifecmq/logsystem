@@ -18,10 +18,14 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
         <result property="receivableAmount"    column="receivableAmount"    />
         <result property="tenderAmount"    column="tenderAmount"    />
         <result property="year"    column="year"    />
+        <result property="contractYearTargetAmount"    column="contractYearTargetAmount"    />
+        <result property="contractYearTargetDiffAmount"    column="contractYearTargetDiffAmount"    />
+        <result property="invoiceYearTargetAmount"    column="invoiceYearTargetAmount"    />
+        <result property="invoiceYearTargetDiffAmount"    column="invoiceYearTargetDiffAmount"    />
     </resultMap>
 
     <sql id="selectSysBcJybbVo">
-        select id, orgName, finalAmount, invoiceAmount, subsidyAmount, ownToOwnAmount, ownToOtherAmount, otherToOwnAmount, ownAmount, paymentAmount, receivableAmount, tenderAmount, year from sys_bc_jybb
+        select id, orgName, finalAmount, invoiceAmount, subsidyAmount, ownToOwnAmount, ownToOtherAmount, otherToOwnAmount, ownAmount, paymentAmount, receivableAmount, tenderAmount, year, contractYearTargetAmount, contractYearTargetDiffAmount, invoiceYearTargetAmount, invoiceYearTargetDiffAmount from sys_bc_jybb
     </sql>
 
     <select id="selectSysBcJybbList" parameterType="SysBcJybb" resultMap="SysBcJybbResult">
@@ -52,6 +56,10 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
             <if test="receivableAmount != null">receivableAmount,</if>
             <if test="tenderAmount != null">tenderAmount,</if>
             <if test="year != null">year,</if>
+            <if test="contractYearTargetAmount != null">contractYearTargetAmount,</if>
+            <if test="contractYearTargetDiffAmount != null">contractYearTargetDiffAmount,</if>
+            <if test="invoiceYearTargetAmount != null">invoiceYearTargetAmount,</if>
+            <if test="invoiceYearTargetDiffAmount != null">invoiceYearTargetDiffAmount,</if>
          </trim>
         <trim prefix="values (" suffix=")" suffixOverrides=",">
             <if test="orgName != null">#{orgName},</if>
@@ -66,6 +74,10 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
             <if test="receivableAmount != null">#{receivableAmount},</if>
             <if test="tenderAmount != null">#{tenderAmount},</if>
             <if test="year != null">#{year},</if>
+            <if test="contractYearTargetAmount != null">#{contractYearTargetAmount},</if>
+            <if test="contractYearTargetDiffAmount != null">#{contractYearTargetDiffAmount},</if>
+            <if test="invoiceYearTargetAmount != null">#{invoiceYearTargetAmount},</if>
+            <if test="invoiceYearTargetDiffAmount != null">#{invoiceYearTargetDiffAmount},</if>
          </trim>
     </insert>
 
@@ -82,6 +94,10 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
             <if test="paymentAmount != null">paymentAmount = #{paymentAmount},</if>
             <if test="receivableAmount != null">receivableAmount = #{receivableAmount},</if>
             <if test="tenderAmount != null">tenderAmount = #{tenderAmount},</if>
+            <if test="contractYearTargetAmount != null">contractYearTargetAmount = #{contractYearTargetAmount},</if>
+            <if test="contractYearTargetDiffAmount != null">contractYearTargetDiffAmount = #{contractYearTargetDiffAmount},</if>
+            <if test="invoiceYearTargetAmount != null">invoiceYearTargetAmount = #{invoiceYearTargetAmount},</if>
+            <if test="invoiceYearTargetDiffAmount != null">invoiceYearTargetDiffAmount = #{invoiceYearTargetDiffAmount},</if>
         </trim>
         where orgName = #{orgName} and year = #{year}
     </update>
