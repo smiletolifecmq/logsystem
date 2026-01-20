@@ -55,6 +55,15 @@ public class DruidConfig
         return druidProperties.dataSource(dataSource);
     }
 
+    @Bean
+    @ConfigurationProperties("spring.datasource.druid.slavebc")
+    @ConditionalOnProperty(prefix = "spring.datasource.druid.slavebc", name = "enabled", havingValue = "true")
+    public DataSource slavebc(DruidProperties druidProperties)
+    {
+        DruidDataSource dataSource = DruidDataSourceBuilder.create().build();
+        return druidProperties.dataSource(dataSource);
+    }
+
     @Bean(name = "dynamicDataSource")
     @Primary
     public DynamicDataSource dataSource(DataSource masterDataSource)
@@ -63,6 +72,7 @@ public class DruidConfig
         targetDataSources.put(DataSourceType.MASTER.name(), masterDataSource);
         setDataSource(targetDataSources, DataSourceType.SLAVE.name(), "slaveDataSource");
         setDataSource(targetDataSources, DataSourceType.SLAVEORACLE.name(), "slaveoracle");
+        setDataSource(targetDataSources, DataSourceType.SLAVEBC.name(), "slavebc");
         return new DynamicDataSource(masterDataSource, targetDataSources);
     }
     

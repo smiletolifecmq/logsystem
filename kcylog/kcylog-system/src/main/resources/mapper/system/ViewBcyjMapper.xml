@@ -1,0 +1,277 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.kcylog.system.mapper.ViewBcyjMapper">
+    
+    <resultMap type="ViewBcyj" id="ViewBcyjResult">
+        <result property="projectCode"    column="project_code"    />
+        <result property="projectName"    column="project_name"    />
+        <result property="receiveStatus"    column="receive_status"    />
+        <result property="stampStatus"    column="stamp_status"    />
+        <result property="checkStatus"    column="check_status"    />
+        <result property="customerName"    column="customer_name"    />
+        <result property="managerUserName"    column="manager_user_name"    />
+        <result property="secondCheckTime"    column="second_check_time"    />
+        <result property="receiveCutoffTime"    column="receive_cutoff_time"    />
+        <result property="yjUserName"    column="yj_user_name"    />
+        <result property="yjsj"    column="yjsj"    />
+        <result property="sjUserName"    column="sj_user_name"    />
+        <result property="sjsj"    column="sjsj"    />
+        <result property="zgsj"    column="zgsj"    />
+        <result property="rectifyCutoffTime"    column="rectify_cutoff_time"    />
+        <result property="gzsj"    column="gzsj"    />
+        <result property="ysUserName"    column="ys_user_name"    />
+        <result property="yssj"    column="yssj"    />
+        <result property="isArchive"    column="is_archive"    />
+        <result property="jobOrgName"    column="job_org_name"    />
+        <result property="createTime"    column="create_time"    />
+    </resultMap>
+
+    <sql id="selectViewBcyjVo">
+        select project_code, project_name, receive_status, stamp_status, check_status, customer_name, manager_user_name, second_check_time, receive_cutoff_time, yj_user_name, yjsj, sj_user_name, sjsj, zgsj, rectify_cutoff_time, gzsj, ys_user_name, yssj, is_archive, job_org_name from view_bcyj
+    </sql>
+
+    <select id="selectViewBcyjList" parameterType="ViewBcyj" resultMap="ViewBcyjResult">
+        SELECT *
+        FROM (
+        SELECT
+        a.project_code_year,
+        a.project_code_type,
+        a.project_code_seq,
+        a.project_code_custom,
+        a.project_type_id,
+        a.total_check_status,
+        a.work_status,
+        a.id,
+        a.project_name,
+        a.project_code,
+        a.customer_name,
+        a.customer_id,
+        a.manager_user_id,
+        a.manager_user_name,
+        a.branch_org_id,
+        a.branch_org_name,
+        a.level,
+        a.sync_source,
+        a.project_check_instance_id,
+        a.create_time,
+        pc.check_time as second_check_time,
+        e.*
+        FROM project a
+        INNER JOIN project_check pc
+        ON a.id = pc.project_id
+        RIGHT JOIN (
+        SELECT
+        a.is_archive,
+        a.id AS transferId,
+        a.project_id,
+        a.transfer_user_id,
+        a.transfer_user_name,
+        a.transfer_status,
+        a.transfer_time,
+        a.check_status,
+        a.receive_status,
+        a.stamp_status,
+        a.receive_cutoff_time,
+        a.rectify_cutoff_time,
+        a.is_need_stamp,
+        a.is_need_electronic_stamp,
+        a.version,
+        a.is_new_archive_transfer,
+        b.*
+        FROM project_archive_transfer a
+        LEFT JOIN (
+        SELECT DISTINCT
+        a.id,
+        MAX(ystgsj) OVER (PARTITION BY a.id) AS ystgsj,
+        LAST_VALUE(ys_tg_user_id) OVER (PARTITION BY a.id) AS ys_tg_user_id,
+        LAST_VALUE(ys_tg_user_name) OVER (PARTITION BY a.id) AS ys_tg_user_name,
+        MAX(yssj) OVER (PARTITION BY a.id) AS yssj,
+        LAST_VALUE(ys_user_id) OVER (PARTITION BY a.id) AS ys_user_id,
+        LAST_VALUE(ys_user_name) OVER (PARTITION BY a.id) AS ys_user_name,
+        MAX(yjsj) OVER (PARTITION BY a.id) AS yjsj,
+        LAST_VALUE(yj_user_id) OVER (PARTITION BY a.id) AS yj_user_id,
+        LAST_VALUE(yj_user_name) OVER (PARTITION BY a.id) AS yj_user_name,
+        MAX(sjsj) OVER (PARTITION BY a.id) AS sjsj,
+        LAST_VALUE(sj_user_id) OVER (PARTITION BY a.id) AS sj_user_id,
+        LAST_VALUE(sj_user_name) OVER (PARTITION BY a.id) AS sj_user_name,
+        MAX(gzsj) OVER (PARTITION BY a.id) AS gzsj,
+        LAST_VALUE(gz_user_id) OVER (PARTITION BY a.id) AS gz_user_id,
+        LAST_VALUE(gz_user_name) OVER (PARTITION BY a.id) AS gz_user_name,
+        MIN(zgsj) OVER (PARTITION BY a.id) AS zgsj,
+        FIRST_VALUE(zg_user_id) OVER (PARTITION BY a.id) AS zg_user_id,
+        FIRST_VALUE(zg_user_name) OVER (PARTITION BY a.id) AS zg_user_name
+        FROM project_archive_transfer a
+        LEFT JOIN (
+        SELECT
+        t.create_time AS yssj,
+        t.create_user_id AS ys_user_id,
+        t.create_user_name AS ys_user_name,
+        t.bo_id
+        FROM business_operate t
+        WHERE t.type = 204
+        AND t.step_code = 'check_done'
+        ) b ON a.id = b.bo_id
+        LEFT JOIN (
+        SELECT
+        t.create_time AS yjsj,
+        t.create_user_id AS yj_user_id,
+        t.create_user_name AS yj_user_name,
+        t.bo_id
+        FROM business_operate t
+        WHERE t.type = 204
+        AND t.step_code = 'transfer_done'
+        ) c ON a.id = c.bo_id
+        LEFT JOIN (
+        SELECT
+        t.create_time AS sjsj,
+        t.create_user_id AS sj_user_id,
+        t.create_user_name AS sj_user_name,
+        t.bo_id
+        FROM business_operate t
+        WHERE t.type = 204
+        AND t.step_code = 'receive_done'
+        ) d ON a.id = d.bo_id
+        LEFT JOIN (
+        SELECT
+        t.create_time AS gzsj,
+        t.create_user_id AS gz_user_id,
+        t.create_user_name AS gz_user_name,
+        t.bo_id
+        FROM business_operate t
+        WHERE t.type = 204
+        AND t.step_code = 'stamp_done'
+        ) e ON a.id = e.bo_id
+        LEFT JOIN (
+        SELECT
+        t.create_time AS zgsj,
+        t.create_user_id AS zg_user_id,
+        t.create_user_name AS zg_user_name,
+        t.bo_id
+        FROM business_operate t
+        WHERE t.type = 204
+        AND t.step_code = 'refuse_done'
+        ) f ON a.id = f.bo_id
+        LEFT JOIN (
+        SELECT
+        t.create_time AS ystgsj,
+        t.create_user_id AS ys_tg_user_id,
+        t.create_user_name AS ys_tg_user_name,
+        t.bo_id
+        FROM business_operate t
+        WHERE t.type = 204
+        AND t.step_code = 'check_pass_done'
+        ) g ON a.id = g.bo_id
+        ) b ON a.id = b.id
+        ) e ON a.id = e.project_id
+        <where>
+            <if test="projectCode != null  and projectCode != ''"> and a.project_code like concat('%', #{projectCode}, '%')</if>
+            <if test="projectName != null  and projectName != ''"> and a.project_name like concat('%', #{projectName}, '%')</if>
+            <if test="customerName != null  and customerName != ''"> and a.customer_name like concat('%', #{customerName}, '%')</if>
+            <if test="managerUserName != null  and managerUserName != ''"> and a.manager_user_name like concat('%', #{managerUserName}, '%')</if>
+            <if test="jobOrgName != null  and jobOrgName != ''"> and a.job_org_name like concat('%', #{jobOrgName}, '%')</if>
+            <if test="receiveStatus != null"> and e.receive_status = #{receiveStatus}</if>
+            <if test="stampStatus != null"> and e.stamp_status = #{stampStatus}</if>
+            <if test="checkStatus != null"> and e.check_status = #{checkStatus}</if>
+            and a.create_time >= '2024-01-01 00:00:00'
+            and e.is_archive != 0
+            and a.branch_org_id = '1352137951374610444'
+            AND pc.stage = 200
+            AND pc.status = 1
+        </where>
+        ORDER BY e.transfer_status asc, pc.check_time DESC ,e.transfer_time DESC NULLS LAST,
+        a.project_code DESC NULLS LAST
+        ) t ;
+    </select>
+    
+    <select id="selectViewBcyjByProjectCode" parameterType="String" resultMap="ViewBcyjResult">
+        <include refid="selectViewBcyjVo"/>
+        where project_code = #{projectCode}
+    </select>
+        
+    <insert id="insertViewBcyj" parameterType="ViewBcyj">
+        insert into view_bcyj
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="projectCode != null">project_code,</if>
+            <if test="projectName != null">project_name,</if>
+            <if test="receiveStatus != null">receive_status,</if>
+            <if test="stampStatus != null">stamp_status,</if>
+            <if test="checkStatus != null">check_status,</if>
+            <if test="customerName != null">customer_name,</if>
+            <if test="managerUserName != null">manager_user_name,</if>
+            <if test="secondCheckTime != null">second_check_time,</if>
+            <if test="receiveCutoffTime != null">receive_cutoff_time,</if>
+            <if test="yjUserName != null">yj_user_name,</if>
+            <if test="yjsj != null">yjsj,</if>
+            <if test="sjUserName != null">sj_user_name,</if>
+            <if test="sjsj != null">sjsj,</if>
+            <if test="zgsj != null">zgsj,</if>
+            <if test="rectifyCutoffTime != null">rectify_cutoff_time,</if>
+            <if test="gzsj != null">gzsj,</if>
+            <if test="ysUserName != null">ys_user_name,</if>
+            <if test="yssj != null">yssj,</if>
+            <if test="isArchive != null">is_archive,</if>
+            <if test="jobOrgName != null">job_org_name,</if>
+         </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test="projectCode != null">#{projectCode},</if>
+            <if test="projectName != null">#{projectName},</if>
+            <if test="receiveStatus != null">#{receiveStatus},</if>
+            <if test="stampStatus != null">#{stampStatus},</if>
+            <if test="checkStatus != null">#{checkStatus},</if>
+            <if test="customerName != null">#{customerName},</if>
+            <if test="managerUserName != null">#{managerUserName},</if>
+            <if test="secondCheckTime != null">#{secondCheckTime},</if>
+            <if test="receiveCutoffTime != null">#{receiveCutoffTime},</if>
+            <if test="yjUserName != null">#{yjUserName},</if>
+            <if test="yjsj != null">#{yjsj},</if>
+            <if test="sjUserName != null">#{sjUserName},</if>
+            <if test="sjsj != null">#{sjsj},</if>
+            <if test="zgsj != null">#{zgsj},</if>
+            <if test="rectifyCutoffTime != null">#{rectifyCutoffTime},</if>
+            <if test="gzsj != null">#{gzsj},</if>
+            <if test="ysUserName != null">#{ysUserName},</if>
+            <if test="yssj != null">#{yssj},</if>
+            <if test="isArchive != null">#{isArchive},</if>
+            <if test="jobOrgName != null">#{jobOrgName},</if>
+         </trim>
+    </insert>
+
+    <update id="updateViewBcyj" parameterType="ViewBcyj">
+        update view_bcyj
+        <trim prefix="SET" suffixOverrides=",">
+            <if test="projectName != null">project_name = #{projectName},</if>
+            <if test="receiveStatus != null">receive_status = #{receiveStatus},</if>
+            <if test="stampStatus != null">stamp_status = #{stampStatus},</if>
+            <if test="checkStatus != null">check_status = #{checkStatus},</if>
+            <if test="customerName != null">customer_name = #{customerName},</if>
+            <if test="managerUserName != null">manager_user_name = #{managerUserName},</if>
+            <if test="secondCheckTime != null">second_check_time = #{secondCheckTime},</if>
+            <if test="receiveCutoffTime != null">receive_cutoff_time = #{receiveCutoffTime},</if>
+            <if test="yjUserName != null">yj_user_name = #{yjUserName},</if>
+            <if test="yjsj != null">yjsj = #{yjsj},</if>
+            <if test="sjUserName != null">sj_user_name = #{sjUserName},</if>
+            <if test="sjsj != null">sjsj = #{sjsj},</if>
+            <if test="zgsj != null">zgsj = #{zgsj},</if>
+            <if test="rectifyCutoffTime != null">rectify_cutoff_time = #{rectifyCutoffTime},</if>
+            <if test="gzsj != null">gzsj = #{gzsj},</if>
+            <if test="ysUserName != null">ys_user_name = #{ysUserName},</if>
+            <if test="yssj != null">yssj = #{yssj},</if>
+            <if test="isArchive != null">is_archive = #{isArchive},</if>
+            <if test="jobOrgName != null">job_org_name = #{jobOrgName},</if>
+        </trim>
+        where project_code = #{projectCode}
+    </update>
+
+    <delete id="deleteViewBcyjByProjectCode" parameterType="String">
+        delete from view_bcyj where project_code = #{projectCode}
+    </delete>
+
+    <delete id="deleteViewBcyjByProjectCodes" parameterType="String">
+        delete from view_bcyj where project_code in 
+        <foreach item="projectCode" collection="array" open="(" separator="," close=")">
+            #{projectCode}
+        </foreach>
+    </delete>
+</mapper>
