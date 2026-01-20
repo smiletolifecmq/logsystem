@@ -96,156 +96,382 @@
       </el-form-item>
     </el-form>
 
-    <el-table :data="statisticsData" style="width: 100%">
-      <el-table-column
-        prop="status"
-        label="类型(二检时间为2026年1月12日之后)"
-        align="center"
-      >
-        <template slot-scope="scope">
-          <el-tag v-show="scope.row.status == 1" type="danger"
-            >收件将要超期项目数(2天内)</el-tag
+    <el-tabs v-model="activeName" @tab-click="handleClick">
+      <el-tab-pane label="二检时间为2026年1月12日之后" name="first">
+        <el-table :data="statisticsData" style="width: 100%">
+          <el-table-column prop="status" label="类型" align="center">
+            <template slot-scope="scope">
+              <el-tag v-show="scope.row.status == 0" type="danger"
+                >未移交项目数</el-tag
+              >
+              <el-tag v-show="scope.row.status == 1" type="danger"
+                >收件将要超期项目数(2天内)</el-tag
+              >
+              <el-tag v-show="scope.row.status == 2" type="danger"
+                >整改将要超期项目数(2天内)</el-tag
+              >
+              <el-tag v-show="scope.row.status == 3" type="danger"
+                >收件超期项目数</el-tag
+              >
+              <el-tag v-show="scope.row.status == 4" type="danger"
+                >整改超期项目数</el-tag
+              >
+            </template>
+          </el-table-column>
+          <el-table-column
+            prop="gcchbNumWork"
+            label="工程测绘部"
+            align="center"
           >
-          <el-tag v-show="scope.row.status == 2" type="danger"
-            >整改将要超期项目数(2天内)</el-tag
+            <template slot-scope="scope">
+              <el-tag
+                v-show="scope.row.status == 0"
+                type="danger"
+                class="hover-effect"
+                @click="handleOverTimeOpen('工程测绘部', 0)"
+                >{{ scope.row.gcchbNumWork }}</el-tag
+              >
+              <el-tag
+                v-show="scope.row.status == 1"
+                type="danger"
+                class="hover-effect"
+                @click="handleOverTimeOpen('工程测绘部', 1)"
+                >{{ scope.row.gcchbNumWork }}</el-tag
+              >
+              <el-tag
+                v-show="scope.row.status == 2"
+                type="danger"
+                class="hover-effect"
+                @click="handleOverTimeOpen('工程测绘部', 2)"
+                >{{ scope.row.gcchbNumWork }}</el-tag
+              >
+              <el-tag
+                v-show="scope.row.status == 3"
+                type="danger"
+                class="hover-effect"
+                @click="handleOverTimeOpen('工程测绘部', 3)"
+                >{{ scope.row.gcchbNumWork }}</el-tag
+              >
+              <el-tag
+                v-show="scope.row.status == 4"
+                type="danger"
+                class="hover-effect"
+                @click="handleOverTimeOpen('工程测绘部', 4)"
+                >{{ scope.row.gcchbNumWork }}</el-tag
+              >
+            </template>
+          </el-table-column>
+          <el-table-column
+            prop="bdcchbWork"
+            label="不动产测绘部"
+            align="center"
           >
-          <el-tag v-show="scope.row.status == 3" type="danger"
-            >收件超期项目数</el-tag
+            <template slot-scope="scope">
+              <el-tag
+                v-show="scope.row.status == 0"
+                type="danger"
+                class="hover-effect"
+                @click="handleOverTimeOpen('不动产测绘部', 0)"
+                >{{ scope.row.bdcchbWork }}</el-tag
+              >
+              <el-tag
+                v-show="scope.row.status == 1"
+                type="danger"
+                class="hover-effect"
+                @click="handleOverTimeOpen('不动产测绘部', 1)"
+                >{{ scope.row.bdcchbWork }}</el-tag
+              >
+              <el-tag
+                v-show="scope.row.status == 2"
+                type="danger"
+                class="hover-effect"
+                @click="handleOverTimeOpen('不动产测绘部', 2)"
+                >{{ scope.row.bdcchbWork }}</el-tag
+              >
+              <el-tag
+                v-show="scope.row.status == 3"
+                type="danger"
+                class="hover-effect"
+                @click="handleOverTimeOpen('不动产测绘部', 3)"
+                >{{ scope.row.bdcchbWork }}</el-tag
+              >
+              <el-tag
+                v-show="scope.row.status == 4"
+                type="danger"
+                class="hover-effect"
+                @click="handleOverTimeOpen('不动产测绘部', 4)"
+                >{{ scope.row.bdcchbWork }}</el-tag
+              >
+            </template>
+          </el-table-column>
+          <el-table-column prop="gxgcbWork" label="管线工程部" align="center">
+            <template slot-scope="scope">
+              <el-tag
+                v-show="scope.row.status == 0"
+                type="danger"
+                class="hover-effect"
+                @click="handleOverTimeOpen('管线工程部', 0)"
+                >{{ scope.row.gxgcbWork }}</el-tag
+              >
+              <el-tag
+                v-show="scope.row.status == 1"
+                type="danger"
+                class="hover-effect"
+                @click="handleOverTimeOpen('管线工程部', 1)"
+                >{{ scope.row.gxgcbWork }}</el-tag
+              >
+              <el-tag
+                v-show="scope.row.status == 2"
+                type="danger"
+                class="hover-effect"
+                @click="handleOverTimeOpen('管线工程部', 2)"
+                >{{ scope.row.gxgcbWork }}</el-tag
+              >
+              <el-tag
+                v-show="scope.row.status == 3"
+                type="danger"
+                class="hover-effect"
+                @click="handleOverTimeOpen('管线工程部', 3)"
+                >{{ scope.row.gxgcbWork }}</el-tag
+              >
+              <el-tag
+                v-show="scope.row.status == 4"
+                type="danger"
+                class="hover-effect"
+                @click="handleOverTimeOpen('管线工程部', 4)"
+                >{{ scope.row.gxgcbWork }}</el-tag
+              >
+            </template>
+          </el-table-column>
+          <el-table-column prop="dlxxbWork" label="地理信息部" align="center">
+            <template slot-scope="scope">
+              <el-tag
+                v-show="scope.row.status == 0"
+                type="danger"
+                class="hover-effect"
+                @click="handleOverTimeOpen('地理信息部', 0)"
+                >{{ scope.row.dlxxbWork }}</el-tag
+              >
+              <el-tag
+                v-show="scope.row.status == 1"
+                type="danger"
+                class="hover-effect"
+                @click="handleOverTimeOpen('地理信息部', 1)"
+                >{{ scope.row.dlxxbWork }}</el-tag
+              >
+              <el-tag
+                v-show="scope.row.status == 2"
+                type="danger"
+                class="hover-effect"
+                @click="handleOverTimeOpen('地理信息部', 2)"
+                >{{ scope.row.dlxxbWork }}</el-tag
+              >
+              <el-tag
+                v-show="scope.row.status == 3"
+                type="danger"
+                class="hover-effect"
+                @click="handleOverTimeOpen('地理信息部', 3)"
+                >{{ scope.row.dlxxbWork }}</el-tag
+              >
+              <el-tag
+                v-show="scope.row.status == 4"
+                type="danger"
+                class="hover-effect"
+                @click="handleOverTimeOpen('地理信息部', 4)"
+                >{{ scope.row.dlxxbWork }}</el-tag
+              >
+            </template>
+          </el-table-column>
+        </el-table>
+      </el-tab-pane>
+      <el-tab-pane label="所有历史统计" name="second">
+        <el-table :data="statisticsData" style="width: 100%">
+          <el-table-column prop="status" label="类型" align="center">
+            <template slot-scope="scope">
+              <el-tag v-show="scope.row.status == 0" type="danger"
+                >未移交项目数</el-tag
+              >
+              <el-tag v-show="scope.row.status == 1" type="danger"
+                >收件将要超期项目数(2天内)</el-tag
+              >
+              <el-tag v-show="scope.row.status == 2" type="danger"
+                >整改将要超期项目数(2天内)</el-tag
+              >
+              <el-tag v-show="scope.row.status == 3" type="danger"
+                >收件超期项目数</el-tag
+              >
+              <el-tag v-show="scope.row.status == 4" type="danger"
+                >整改超期项目数</el-tag
+              >
+            </template>
+          </el-table-column>
+          <el-table-column
+            prop="gcchbNumWork"
+            label="工程测绘部"
+            align="center"
           >
-          <el-tag v-show="scope.row.status == 4" type="danger"
-            >整改超期项目数</el-tag
+            <template slot-scope="scope">
+              <el-tag
+                v-show="scope.row.status == 0"
+                type="danger"
+                class="hover-effect"
+                @click="handleOverTimeOpen('工程测绘部', 0)"
+                >{{ scope.row.gcchbNumWork }}</el-tag
+              >
+              <el-tag
+                v-show="scope.row.status == 1"
+                type="danger"
+                class="hover-effect"
+                @click="handleOverTimeOpen('工程测绘部', 1)"
+                >{{ scope.row.gcchbNumWork }}</el-tag
+              >
+              <el-tag
+                v-show="scope.row.status == 2"
+                type="danger"
+                class="hover-effect"
+                @click="handleOverTimeOpen('工程测绘部', 2)"
+                >{{ scope.row.gcchbNumWork }}</el-tag
+              >
+              <el-tag
+                v-show="scope.row.status == 3"
+                type="danger"
+                class="hover-effect"
+                @click="handleOverTimeOpen('工程测绘部', 3)"
+                >{{ scope.row.gcchbNumWork }}</el-tag
+              >
+              <el-tag
+                v-show="scope.row.status == 4"
+                type="danger"
+                class="hover-effect"
+                @click="handleOverTimeOpen('工程测绘部', 4)"
+                >{{ scope.row.gcchbNumWork }}</el-tag
+              >
+            </template>
+          </el-table-column>
+          <el-table-column
+            prop="bdcchbWork"
+            label="不动产测绘部"
+            align="center"
           >
-        </template>
-      </el-table-column>
-      <el-table-column prop="gcchbNumWork" label="工程测绘部" align="center">
-        <template slot-scope="scope">
-          <el-tag
-            v-show="scope.row.status == 1"
-            type="danger"
-            class="hover-effect"
-            @click="handleOverTimeOpen('工程测绘部', 1)"
-            >{{ scope.row.gcchbNumWork }}</el-tag
-          >
-          <el-tag
-            v-show="scope.row.status == 2"
-            type="danger"
-            class="hover-effect"
-            @click="handleOverTimeOpen('工程测绘部', 2)"
-            >{{ scope.row.gcchbNumWork }}</el-tag
-          >
-          <el-tag
-            v-show="scope.row.status == 3"
-            type="danger"
-            class="hover-effect"
-            @click="handleOverTimeOpen('工程测绘部', 3)"
-            >{{ scope.row.gcchbNumWork }}</el-tag
-          >
-          <el-tag
-            v-show="scope.row.status == 4"
-            type="danger"
-            class="hover-effect"
-            @click="handleOverTimeOpen('工程测绘部', 4)"
-            >{{ scope.row.gcchbNumWork }}</el-tag
-          >
-        </template>
-      </el-table-column>
-      <el-table-column prop="bdcchbWork" label="不动产测绘部" align="center">
-        <template slot-scope="scope">
-          <el-tag
-            v-show="scope.row.status == 1"
-            type="danger"
-            class="hover-effect"
-            @click="handleOverTimeOpen('不动产测绘部', 1)"
-            >{{ scope.row.bdcchbWork }}</el-tag
-          >
-          <el-tag
-            v-show="scope.row.status == 2"
-            type="danger"
-            class="hover-effect"
-            @click="handleOverTimeOpen('不动产测绘部', 2)"
-            >{{ scope.row.bdcchbWork }}</el-tag
-          >
-          <el-tag
-            v-show="scope.row.status == 3"
-            type="danger"
-            class="hover-effect"
-            @click="handleOverTimeOpen('不动产测绘部', 3)"
-            >{{ scope.row.bdcchbWork }}</el-tag
-          >
-          <el-tag
-            v-show="scope.row.status == 4"
-            type="danger"
-            class="hover-effect"
-            @click="handleOverTimeOpen('不动产测绘部', 4)"
-            >{{ scope.row.bdcchbWork }}</el-tag
-          >
-        </template>
-      </el-table-column>
-      <el-table-column prop="gxgcbWork" label="管线工程部" align="center">
-        <template slot-scope="scope">
-          <el-tag
-            v-show="scope.row.status == 1"
-            type="danger"
-            class="hover-effect"
-            @click="handleOverTimeOpen('管线工程部', 1)"
-            >{{ scope.row.gxgcbWork }}</el-tag
-          >
-          <el-tag
-            v-show="scope.row.status == 2"
-            type="danger"
-            class="hover-effect"
-            @click="handleOverTimeOpen('管线工程部', 2)"
-            >{{ scope.row.gxgcbWork }}</el-tag
-          >
-          <el-tag
-            v-show="scope.row.status == 3"
-            type="danger"
-            class="hover-effect"
-            @click="handleOverTimeOpen('管线工程部', 3)"
-            >{{ scope.row.gxgcbWork }}</el-tag
-          >
-          <el-tag
-            v-show="scope.row.status == 4"
-            type="danger"
-            class="hover-effect"
-            @click="handleOverTimeOpen('管线工程部', 4)"
-            >{{ scope.row.gxgcbWork }}</el-tag
-          >
-        </template>
-      </el-table-column>
-      <el-table-column prop="dlxxbWork" label="地理信息部" align="center">
-        <template slot-scope="scope">
-          <el-tag
-            v-show="scope.row.status == 1"
-            type="danger"
-            class="hover-effect"
-            @click="handleOverTimeOpen('地理信息部', 1)"
-            >{{ scope.row.dlxxbWork }}</el-tag
-          >
-          <el-tag
-            v-show="scope.row.status == 2"
-            type="danger"
-            class="hover-effect"
-            @click="handleOverTimeOpen('地理信息部', 2)"
-            >{{ scope.row.dlxxbWork }}</el-tag
-          >
-          <el-tag
-            v-show="scope.row.status == 3"
-            type="danger"
-            class="hover-effect"
-            @click="handleOverTimeOpen('地理信息部', 3)"
-            >{{ scope.row.dlxxbWork }}</el-tag
-          >
-          <el-tag
-            v-show="scope.row.status == 4"
-            type="danger"
-            class="hover-effect"
-            @click="handleOverTimeOpen('地理信息部', 4)"
-            >{{ scope.row.dlxxbWork }}</el-tag
-          >
-        </template>
-      </el-table-column>
-    </el-table>
+            <template slot-scope="scope">
+              <el-tag
+                v-show="scope.row.status == 0"
+                type="danger"
+                class="hover-effect"
+                @click="handleOverTimeOpen('不动产测绘部', 0)"
+                >{{ scope.row.bdcchbWork }}</el-tag
+              >
+              <el-tag
+                v-show="scope.row.status == 1"
+                type="danger"
+                class="hover-effect"
+                @click="handleOverTimeOpen('不动产测绘部', 1)"
+                >{{ scope.row.bdcchbWork }}</el-tag
+              >
+              <el-tag
+                v-show="scope.row.status == 2"
+                type="danger"
+                class="hover-effect"
+                @click="handleOverTimeOpen('不动产测绘部', 2)"
+                >{{ scope.row.bdcchbWork }}</el-tag
+              >
+              <el-tag
+                v-show="scope.row.status == 3"
+                type="danger"
+                class="hover-effect"
+                @click="handleOverTimeOpen('不动产测绘部', 3)"
+                >{{ scope.row.bdcchbWork }}</el-tag
+              >
+              <el-tag
+                v-show="scope.row.status == 4"
+                type="danger"
+                class="hover-effect"
+                @click="handleOverTimeOpen('不动产测绘部', 4)"
+                >{{ scope.row.bdcchbWork }}</el-tag
+              >
+            </template>
+          </el-table-column>
+          <el-table-column prop="gxgcbWork" label="管线工程部" align="center">
+            <template slot-scope="scope">
+              <el-tag
+                v-show="scope.row.status == 0"
+                type="danger"
+                class="hover-effect"
+                @click="handleOverTimeOpen('管线工程部', 0)"
+                >{{ scope.row.gxgcbWork }}</el-tag
+              >
+              <el-tag
+                v-show="scope.row.status == 1"
+                type="danger"
+                class="hover-effect"
+                @click="handleOverTimeOpen('管线工程部', 1)"
+                >{{ scope.row.gxgcbWork }}</el-tag
+              >
+              <el-tag
+                v-show="scope.row.status == 2"
+                type="danger"
+                class="hover-effect"
+                @click="handleOverTimeOpen('管线工程部', 2)"
+                >{{ scope.row.gxgcbWork }}</el-tag
+              >
+              <el-tag
+                v-show="scope.row.status == 3"
+                type="danger"
+                class="hover-effect"
+                @click="handleOverTimeOpen('管线工程部', 3)"
+                >{{ scope.row.gxgcbWork }}</el-tag
+              >
+              <el-tag
+                v-show="scope.row.status == 4"
+                type="danger"
+                class="hover-effect"
+                @click="handleOverTimeOpen('管线工程部', 4)"
+                >{{ scope.row.gxgcbWork }}</el-tag
+              >
+            </template>
+          </el-table-column>
+          <el-table-column prop="dlxxbWork" label="地理信息部" align="center">
+            <template slot-scope="scope">
+              <el-tag
+                v-show="scope.row.status == 0"
+                type="danger"
+                class="hover-effect"
+                @click="handleOverTimeOpen('地理信息部', 0)"
+                >{{ scope.row.dlxxbWork }}</el-tag
+              >
+              <el-tag
+                v-show="scope.row.status == 1"
+                type="danger"
+                class="hover-effect"
+                @click="handleOverTimeOpen('地理信息部', 1)"
+                >{{ scope.row.dlxxbWork }}</el-tag
+              >
+              <el-tag
+                v-show="scope.row.status == 2"
+                type="danger"
+                class="hover-effect"
+                @click="handleOverTimeOpen('地理信息部', 2)"
+                >{{ scope.row.dlxxbWork }}</el-tag
+              >
+              <el-tag
+                v-show="scope.row.status == 3"
+                type="danger"
+                class="hover-effect"
+                @click="handleOverTimeOpen('地理信息部', 3)"
+                >{{ scope.row.dlxxbWork }}</el-tag
+              >
+              <el-tag
+                v-show="scope.row.status == 4"
+                type="danger"
+                class="hover-effect"
+                @click="handleOverTimeOpen('地理信息部', 4)"
+                >{{ scope.row.dlxxbWork }}</el-tag
+              >
+            </template>
+          </el-table-column>
+        </el-table>
+      </el-tab-pane>
+    </el-tabs>
 
     <el-table
       v-loading="loading"
@@ -309,18 +535,6 @@
           <span>{{ parseTime(scope.row.secondCheckTime, "{y}-{m}-{d}") }}</span>
         </template>
       </el-table-column>
-      <el-table-column
-        label="收件截止时间"
-        align="center"
-        prop="receiveCutoffTime"
-        width="180"
-      >
-        <template slot-scope="scope">
-          <span>{{
-            parseTime(scope.row.receiveCutoffTime, "{y}-{m}-{d}")
-          }}</span>
-        </template>
-      </el-table-column>
       <el-table-column label="移交人" align="center" prop="yjUserName" />
       <el-table-column label="移交日期" align="center" prop="yjsj" width="180">
         <template slot-scope="scope">
@@ -333,6 +547,19 @@
           <span>{{ parseTime(scope.row.sjsj, "{y}-{m}-{d}") }}</span>
         </template>
       </el-table-column>
+      <el-table-column
+        label="收件截止时间"
+        align="center"
+        prop="receiveCutoffTime"
+        width="180"
+      >
+        <template slot-scope="scope">
+          <span>{{
+            parseTime(scope.row.receiveCutoffTime, "{y}-{m}-{d}")
+          }}</span>
+        </template>
+      </el-table-column>
+
       <el-table-column
         label="退回整改日期"
         align="center"
@@ -459,18 +686,6 @@
             }}</span>
           </template>
         </el-table-column>
-        <el-table-column
-          label="收件截止时间"
-          align="center"
-          prop="receiveCutoffTime"
-          width="180"
-        >
-          <template slot-scope="scope">
-            <span>{{
-              parseTime(scope.row.receiveCutoffTime, "{y}-{m}-{d}")
-            }}</span>
-          </template>
-        </el-table-column>
         <el-table-column label="移交人" align="center" prop="yjUserName" />
         <el-table-column
           label="移交日期"
@@ -493,6 +708,19 @@
             <span>{{ parseTime(scope.row.sjsj, "{y}-{m}-{d}") }}</span>
           </template>
         </el-table-column>
+        <el-table-column
+          label="收件截止时间"
+          align="center"
+          prop="receiveCutoffTime"
+          width="180"
+        >
+          <template slot-scope="scope">
+            <span>{{
+              parseTime(scope.row.receiveCutoffTime, "{y}-{m}-{d}")
+            }}</span>
+          </template>
+        </el-table-column>
+
         <el-table-column
           label="退回整改日期"
           align="center"
@@ -563,6 +791,7 @@ export default {
   name: "Bcyj",
   data() {
     return {
+      activeName: "first",
       overTitle: "",
       overTimeOpen: false,
       overTimeProjectList: [],
@@ -652,11 +881,28 @@ export default {
   },
   created() {
     this.getList();
-    this.getStatisticsData();
+    this.getStatisticsData("first");
   },
   methods: {
-    getStatisticsData() {
-      listBcyj({ pageNum: 1, pageSize: 9999, isTwoCheck: 1 }).then(
+    handleClick(tab, event) {
+      this.getStatisticsData(this.activeName);
+    },
+    getStatisticsData(value) {
+      const loading = this.$loading({
+        lock: true,
+        text: "数据统计中～",
+        spinner: "el-icon-loading",
+        background: "rgba(0, 0, 0, 0.7)",
+      });
+      this.statisticsData = [];
+      var twoCheck = 1;
+      if (value == "first") {
+        twoCheck = 1;
+      }
+      if (value == "second") {
+        twoCheck = null;
+      }
+      listBcyj({ pageNum: 1, pageSize: 9999, isTwoCheck: twoCheck }).then(
         (response) => {
           const project = response.rows;
           let myMap = new Map();
@@ -667,6 +913,9 @@ export default {
             }
             if (myMap.has(key)) {
               let num = myMap.get(key);
+              if (project[i].yjsj == null) {
+                num.wyj++;
+              }
               if (project[i].issjcq == 1) {
                 num.issjcq++;
               }
@@ -682,11 +931,15 @@ export default {
               myMap.set(key, num);
             } else {
               let num = {
+                wyj: 0,
                 issjcq: 0,
                 iszgcq: 0,
                 sjmscq: 0,
                 zgmscq: 0,
               };
+              if (project[i].yjsj == null) {
+                num.wyj++;
+              }
               if (project[i].issjcq == 1) {
                 num.issjcq++;
               }
@@ -703,6 +956,27 @@ export default {
             }
           }
           let numData = {
+            status: 0,
+            gcchbNumWork: 0,
+            bdcchbWork: 0,
+            gxgcbWork: 0,
+            dlxxbWork: 0,
+          };
+
+          if (myMap.has("工程测绘部")) {
+            numData.gcchbNumWork = myMap.get("工程测绘部").wyj;
+          }
+          if (myMap.has("不动产测绘部")) {
+            numData.bdcchbWork = myMap.get("不动产测绘部").wyj;
+          }
+          if (myMap.has("管线工程部")) {
+            numData.gxgcbWork = myMap.get("管线工程部").wyj;
+          }
+          if (myMap.has("地理信息部")) {
+            numData.dlxxbWork = myMap.get("地理信息部").wyj;
+          }
+          this.statisticsData.push(numData);
+          numData = {
             status: 1,
             gcchbNumWork: 0,
             bdcchbWork: 0,
@@ -789,7 +1063,7 @@ export default {
             numData.dlxxbWork = myMap.get("地理信息部").iszgcq;
           }
           this.statisticsData.push(numData);
-          console.log(this.statisticsData);
+          loading.close();
         }
       );
     },
@@ -805,20 +1079,34 @@ export default {
       } else if (status == 2) {
         this.overTitle = "整改将要超期项目数(2天内)";
       } else if (status == 3) {
-        this.overTitle = "收件超期项目数";
+        this.overTitle = "收件超期项目";
       } else if (status == 4) {
-        this.overTitle = "整改超期项目数";
+        this.overTitle = "整改超期项目";
+      } else if (status == 0) {
+        this.overTitle = "未移交项目";
       }
       this.overTimeProjectList = [];
+      var twoCheck = 1;
+      if (this.activeName == "first") {
+        twoCheck = 1;
+      }
+      if (this.activeName == "second") {
+        twoCheck = null;
+      }
       listBcyj({
         pageNum: 1,
         pageSize: 9999,
         jobOrgName: value,
-        isTwoCheck: 1,
+        isTwoCheck: twoCheck,
       }).then((response) => {
         const project = response.rows;
         for (let i = 0; i < project.length; i++) {
           switch (status) {
+            case 0:
+              if (project[i].yjsj == null) {
+                this.overTimeProjectList.push(project[i]);
+              }
+              break;
             case 1:
               if (project[i].sjmscq == 1) {
                 this.overTimeProjectList.push(project[i]);
