@@ -175,6 +175,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
             <if test="receiveStatus != null"> and e.receive_status = #{receiveStatus}</if>
             <if test="stampStatus != null"> and e.stamp_status = #{stampStatus}</if>
             <if test="checkStatus != null"> and e.check_status = #{checkStatus}</if>
+            <if test="isTwoCheck != null and isTwoCheck == 1"> and pc.check_time >= '2026-01-12 00:00:00'</if>
             and a.create_time >= '2024-01-01 00:00:00'
             and e.is_archive != 0
             and a.branch_org_id = '1352137951374610444'
@@ -185,7 +186,26 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
         a.project_code DESC NULLS LAST
         ) t
     </select>
-    
+
+<!--    <select id="selectViewBcyjList" parameterType="ViewBcyj" resultMap="ViewBcyjResult">-->
+<!--        <include refid="selectViewBcyjVo"/>-->
+<!--        <where>-->
+<!--            <if test="projectCode != null  and projectCode != ''"> and project_code like concat('%', #{projectCode}, '%')</if>-->
+<!--            <if test="projectName != null  and projectName != ''"> and project_name like concat('%', #{projectName}, '%')</if>-->
+<!--            <if test="customerName != null  and customerName != ''"> and customer_name like concat('%', #{customerName}, '%')</if>-->
+<!--            <if test="managerUserName != null  and managerUserName != ''"> and manager_user_name like concat('%', #{managerUserName}, '%')</if>-->
+<!--            <if test="jobOrgName != null  and jobOrgName != ''"> and job_org_name like concat('%', #{jobOrgName}, '%')</if>-->
+<!--            <if test="receiveStatus != null"> and receive_status = #{receiveStatus}</if>-->
+<!--            <if test="stampStatus != null"> and stamp_status = #{stampStatus}</if>-->
+<!--            <if test="checkStatus != null"> and check_status = #{checkStatus}</if>-->
+<!--            <if test="isTwoCheck != null and isTwoCheck == 1"> and second_check_time >= '2026-01-12 00:00:00'</if>-->
+
+<!--            and create_time >= '2024-01-01 00:00:00'-->
+<!--            and is_archive != 0-->
+<!--        </where>-->
+<!--    </select>-->
+
+
     <select id="selectViewBcyjByProjectCode" parameterType="String" resultMap="ViewBcyjResult">
         <include refid="selectViewBcyjVo"/>
         where project_code = #{projectCode}

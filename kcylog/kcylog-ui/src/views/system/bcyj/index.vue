@@ -97,7 +97,11 @@
     </el-form>
 
     <el-table :data="statisticsData" style="width: 100%">
-      <el-table-column prop="status" label="类型" align="center">
+      <el-table-column
+        prop="status"
+        label="类型(二检时间为2026年1月12日之后)"
+        align="center"
+      >
         <template slot-scope="scope">
           <el-tag v-show="scope.row.status == 1" type="danger"
             >收件将要超期项目数(2天内)</el-tag
@@ -652,142 +656,150 @@ export default {
   },
   methods: {
     getStatisticsData() {
-      listBcyj({ pageNum: 1, pageSize: 9999 }).then((response) => {
-        const project = response.rows;
-        let myMap = new Map();
-        for (let i = 0; i < project.length; i++) {
-          let key = project[i].jobOrgName;
-          if (key == "" || key == null || key == undefined) {
-            continue;
+      listBcyj({ pageNum: 1, pageSize: 9999, isTwoCheck: 1 }).then(
+        (response) => {
+          const project = response.rows;
+          let myMap = new Map();
+          for (let i = 0; i < project.length; i++) {
+            let key = project[i].jobOrgName;
+            if (key == "" || key == null || key == undefined) {
+              continue;
+            }
+            if (myMap.has(key)) {
+              let num = myMap.get(key);
+              if (project[i].issjcq == 1) {
+                num.issjcq++;
+              }
+              if (project[i].iszgcq == 1) {
+                num.iszgcq++;
+              }
+              if (project[i].sjmscq == 1) {
+                num.sjmscq++;
+              }
+              if (project[i].zgmscq == 1) {
+                num.zgmscq++;
+              }
+              myMap.set(key, num);
+            } else {
+              let num = {
+                issjcq: 0,
+                iszgcq: 0,
+                sjmscq: 0,
+                zgmscq: 0,
+              };
+              if (project[i].issjcq == 1) {
+                num.issjcq++;
+              }
+              if (project[i].iszgcq == 1) {
+                num.iszgcq++;
+              }
+              if (project[i].sjmscq == 1) {
+                num.sjmscq++;
+              }
+              if (project[i].zgmscq == 1) {
+                num.zgmscq++;
+              }
+              myMap.set(key, num);
+            }
           }
-          if (myMap.has(key)) {
-            let num = myMap.get(key);
-            if (project[i].issjcq == 1) {
-              num.issjcq++;
-            }
-            if (project[i].iszgcq == 1) {
-              num.iszgcq++;
-            }
-            if (project[i].sjmscq == 1) {
-              num.sjmscq++;
-            }
-            if (project[i].zgmscq == 1) {
-              num.zgmscq++;
-            }
-            myMap.set(key, num);
-          } else {
-            let num = {
-              issjcq: 0,
-              iszgcq: 0,
-              sjmscq: 0,
-              zgmscq: 0,
-            };
-            if (project[i].issjcq == 1) {
-              num.issjcq++;
-            }
-            if (project[i].iszgcq == 1) {
-              num.iszgcq++;
-            }
-            if (project[i].sjmscq == 1) {
-              num.sjmscq++;
-            }
-            if (project[i].zgmscq == 1) {
-              num.zgmscq++;
-            }
-            myMap.set(key, num);
+          let numData = {
+            status: 1,
+            gcchbNumWork: 0,
+            bdcchbWork: 0,
+            gxgcbWork: 0,
+            dlxxbWork: 0,
+          };
+
+          if (myMap.has("工程测绘部")) {
+            numData.gcchbNumWork = myMap.get("工程测绘部").sjmscq;
           }
-        }
-        let numData = {
-          status: 1,
-          gcchbNumWork: 0,
-          bdcchbWork: 0,
-          gxgcbWork: 0,
-          dlxxbWork: 0,
-        };
+          if (myMap.has("不动产测绘部")) {
+            numData.bdcchbWork = myMap.get("不动产测绘部").sjmscq;
+          }
+          if (myMap.has("管线工程部")) {
+            numData.gxgcbWork = myMap.get("管线工程部").sjmscq;
+          }
+          if (myMap.has("地理信息部")) {
+            numData.dlxxbWork = myMap.get("地理信息部").sjmscq;
+          }
+          this.statisticsData.push(numData);
 
-        if (myMap.has("工程测绘部")) {
-          numData.gcchbNumWork = myMap.get("工程测绘部").sjmscq;
-        }
-        if (myMap.has("不动产测绘部")) {
-          numData.bdcchbWork = myMap.get("不动产测绘部").sjmscq;
-        }
-        if (myMap.has("管线工程部")) {
-          numData.gxgcbWork = myMap.get("管线工程部").sjmscq;
-        }
-        if (myMap.has("地理信息部")) {
-          numData.dlxxbWork = myMap.get("地理信息部").sjmscq;
-        }
-        this.statisticsData.push(numData);
+          numData = {
+            status: 2,
+            gcchbNumWork: 0,
+            bdcchbWork: 0,
+            gxgcbWork: 0,
+            dlxxbWork: 0,
+          };
 
-        numData = {
-          status: 2,
-          gcchbNumWork: 0,
-          bdcchbWork: 0,
-          gxgcbWork: 0,
-          dlxxbWork: 0,
-        };
+          if (myMap.has("工程测绘部")) {
+            numData.gcchbNumWork = myMap.get("工程测绘部").zgmscq;
+          }
+          if (myMap.has("不动产测绘部")) {
+            numData.bdcchbWork = myMap.get("不动产测绘部").zgmscq;
+          }
+          if (myMap.has("管线工程部")) {
+            numData.gxgcbWork = myMap.get("管线工程部").zgmscq;
+          }
+          if (myMap.has("地理信息部")) {
+            numData.dlxxbWork = myMap.get("地理信息部").zgmscq;
+          }
+          this.statisticsData.push(numData);
 
-        if (myMap.has("工程测绘部")) {
-          numData.gcchbNumWork = myMap.get("工程测绘部").zgmscq;
-        }
-        if (myMap.has("不动产测绘部")) {
-          numData.bdcchbWork = myMap.get("不动产测绘部").zgmscq;
-        }
-        if (myMap.has("管线工程部")) {
-          numData.gxgcbWork = myMap.get("管线工程部").zgmscq;
-        }
-        if (myMap.has("地理信息部")) {
-          numData.dlxxbWork = myMap.get("地理信息部").zgmscq;
-        }
-        this.statisticsData.push(numData);
+          numData = {
+            status: 3,
+            gcchbNumWork: 0,
+            bdcchbWork: 0,
+            gxgcbWork: 0,
+            dlxxbWork: 0,
+          };
 
-        numData = {
-          status: 3,
-          gcchbNumWork: 0,
-          bdcchbWork: 0,
-          gxgcbWork: 0,
-          dlxxbWork: 0,
-        };
+          if (myMap.has("工程测绘部")) {
+            numData.gcchbNumWork = myMap.get("工程测绘部").issjcq;
+          }
+          if (myMap.has("不动产测绘部")) {
+            numData.bdcchbWork = myMap.get("不动产测绘部").issjcq;
+          }
+          if (myMap.has("管线工程部")) {
+            numData.gxgcbWork = myMap.get("管线工程部").issjcq;
+          }
+          if (myMap.has("地理信息部")) {
+            numData.dlxxbWork = myMap.get("地理信息部").issjcq;
+          }
+          this.statisticsData.push(numData);
 
-        if (myMap.has("工程测绘部")) {
-          numData.gcchbNumWork = myMap.get("工程测绘部").issjcq;
-        }
-        if (myMap.has("不动产测绘部")) {
-          numData.bdcchbWork = myMap.get("不动产测绘部").issjcq;
-        }
-        if (myMap.has("管线工程部")) {
-          numData.gxgcbWork = myMap.get("管线工程部").issjcq;
-        }
-        if (myMap.has("地理信息部")) {
-          numData.dlxxbWork = myMap.get("地理信息部").issjcq;
-        }
-        this.statisticsData.push(numData);
+          numData = {
+            status: 4,
+            gcchbNumWork: 0,
+            bdcchbWork: 0,
+            gxgcbWork: 0,
+            dlxxbWork: 0,
+          };
 
-        numData = {
-          status: 4,
-          gcchbNumWork: 0,
-          bdcchbWork: 0,
-          gxgcbWork: 0,
-          dlxxbWork: 0,
-        };
-
-        if (myMap.has("工程测绘部")) {
-          numData.gcchbNumWork = myMap.get("工程测绘部").iszgcq;
+          if (myMap.has("工程测绘部")) {
+            numData.gcchbNumWork = myMap.get("工程测绘部").iszgcq;
+          }
+          if (myMap.has("不动产测绘部")) {
+            numData.bdcchbWork = myMap.get("不动产测绘部").iszgcq;
+          }
+          if (myMap.has("管线工程部")) {
+            numData.gxgcbWork = myMap.get("管线工程部").iszgcq;
+          }
+          if (myMap.has("地理信息部")) {
+            numData.dlxxbWork = myMap.get("地理信息部").iszgcq;
+          }
+          this.statisticsData.push(numData);
+          console.log(this.statisticsData);
         }
-        if (myMap.has("不动产测绘部")) {
-          numData.bdcchbWork = myMap.get("不动产测绘部").iszgcq;
-        }
-        if (myMap.has("管线工程部")) {
-          numData.gxgcbWork = myMap.get("管线工程部").iszgcq;
-        }
-        if (myMap.has("地理信息部")) {
-          numData.dlxxbWork = myMap.get("地理信息部").iszgcq;
-        }
-        this.statisticsData.push(numData);
-        console.log(this.statisticsData);
-      });
+      );
     },
     handleOverTimeOpen(value, status) {
+      const loading = this.$loading({
+        lock: true,
+        text: "数据加载中～",
+        spinner: "el-icon-loading",
+        background: "rgba(0, 0, 0, 0.7)",
+      });
       if (status == 1) {
         this.overTitle = "收件将要超期项目数(2天内)";
       } else if (status == 2) {
@@ -798,38 +810,42 @@ export default {
         this.overTitle = "整改超期项目数";
       }
       this.overTimeProjectList = [];
-      listBcyj({ pageNum: 1, pageSize: 9999, jobOrgName: value }).then(
-        (response) => {
-          const project = response.rows;
-          for (let i = 0; i < project.length; i++) {
-            switch (status) {
-              case 1:
-                if (project[i].sjmscq == 1) {
-                  this.overTimeProjectList.push(project[i]);
-                }
-                break;
-              case 2:
-                if (project[i].zgmscq == 1) {
-                  this.overTimeProjectList.push(project[i]);
-                }
-                break;
-              case 3:
-                if (project[i].issjcq == 1) {
-                  this.overTimeProjectList.push(project[i]);
-                }
-                break;
-              case 4:
-                if (project[i].iszgcq == 1) {
-                  this.overTimeProjectList.push(project[i]);
-                }
-                break;
-              default:
-                console.log("未知类型");
-            }
+      listBcyj({
+        pageNum: 1,
+        pageSize: 9999,
+        jobOrgName: value,
+        isTwoCheck: 1,
+      }).then((response) => {
+        const project = response.rows;
+        for (let i = 0; i < project.length; i++) {
+          switch (status) {
+            case 1:
+              if (project[i].sjmscq == 1) {
+                this.overTimeProjectList.push(project[i]);
+              }
+              break;
+            case 2:
+              if (project[i].zgmscq == 1) {
+                this.overTimeProjectList.push(project[i]);
+              }
+              break;
+            case 3:
+              if (project[i].issjcq == 1) {
+                this.overTimeProjectList.push(project[i]);
+              }
+              break;
+            case 4:
+              if (project[i].iszgcq == 1) {
+                this.overTimeProjectList.push(project[i]);
+              }
+              break;
+            default:
+              console.log("未知类型");
           }
-          this.overTimeOpen = true;
         }
-      );
+        loading.close();
+        this.overTimeOpen = true;
+      });
     },
     /** 查询【请填写功能名称】列表 */
     getList() {

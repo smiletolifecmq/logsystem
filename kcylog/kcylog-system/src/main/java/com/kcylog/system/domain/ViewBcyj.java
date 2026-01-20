@@ -114,6 +114,16 @@ public class ViewBcyj extends BaseEntity
 
     private Long zgmscq;
 
+    private Long isTwoCheck;
+
+    public Long getIsTwoCheck() {
+        return isTwoCheck;
+    }
+
+    public void setIsTwoCheck(Long isTwoCheck) {
+        this.isTwoCheck = isTwoCheck;
+    }
+
     public Long getIssjcq() {
         return issjcq;
     }
