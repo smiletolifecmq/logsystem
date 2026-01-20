@@ -751,6 +751,7 @@
                       clearable
                       allow-create
                       placeholder="请输入审核意见"
+                      :filter-method="onFilter"
                     >
                       <el-option
                         v-for="item in auditOpinions"
@@ -887,6 +888,7 @@ export default {
   },
   data() {
     return {
+      inputCache: "",
       statisticsData: [],
       isfg: false,
       queryUserParams: {
@@ -1009,6 +1011,10 @@ export default {
     this.ggtj();
   },
   methods: {
+    onFilter(query) {
+      // 实时拿到用户输入
+      this.inputCache = query;
+    },
     formatDateWork(dateString) {
       if (dateString == "" || dateString == null || dateString == undefined) {
         return "";
@@ -1249,6 +1255,10 @@ export default {
 
     /** 操作审核状态 */
     handleReview(row, status) {
+      if (!this.formInfo.auditOpinion && this.inputCache) {
+        this.formInfo.auditOpinion = this.inputCache;
+      }
+
       let reason = "";
       if (status == 2) {
         reason = "此操作将确认审核为通过,是否继续?";
