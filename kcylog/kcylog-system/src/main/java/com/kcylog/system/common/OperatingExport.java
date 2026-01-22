@@ -93,6 +93,9 @@ public class OperatingExport {
     @Excel(name = "备注", needMerge = true)
     private String bjRemark;
 
+    @Excel(name = "预结备注", needMerge = true)
+    private String yjbz;
+
 //    @Excel(name = "人员分配", isIngoreSubList = true, subIndex = 0, headerBackgroundColor = IndexedColors.GREEN)
     private List<SysProjectValue> projectValue;
 
@@ -123,6 +126,14 @@ public class OperatingExport {
     private BigDecimal nb;
 
     private Date settleTime;
+
+    public String getYjbz() {
+        return yjbz;
+    }
+
+    public void setYjbz(String yjbz) {
+        this.yjbz = yjbz;
+    }
 
     public BigDecimal getNb() {
         return nb;

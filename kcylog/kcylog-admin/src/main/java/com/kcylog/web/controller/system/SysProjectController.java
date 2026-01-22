@@ -706,6 +706,7 @@ public class SysProjectController extends BaseController {
                     operatingExport.setContractAmount(project.getContractAmount());
                     operatingExport.setProjectStartAlias(project.getProjectStartAlias());
                     operatingExport.setTwoCheck(project.getTwoCheck());
+                    operatingExport.setYjbz(project.getYjbz());
                     operatingExport.setSubpackageType("是");
                     if (project.getAfterTime() != null && !project.getAfterTime().equals("")){
                         operatingExport.setAfterTime("是");
@@ -760,6 +761,7 @@ public class SysProjectController extends BaseController {
                 operatingExport.setContractAmount(project.getContractAmount());
                 operatingExport.setProjectStartAlias(project.getProjectStartAlias());
                 operatingExport.setTwoCheck(project.getTwoCheck());
+                operatingExport.setYjbz(project.getYjbz());
                 operatingExport.setSubpackageType("否");
                 if (project.getAfterTime() != null && !project.getAfterTime().equals("")){
                     operatingExport.setAfterTime("是");
