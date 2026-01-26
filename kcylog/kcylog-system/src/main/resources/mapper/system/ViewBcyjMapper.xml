@@ -62,6 +62,13 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
         FROM project a
         INNER JOIN project_check pc
         ON a.id = pc.project_id
+        AND pc.create_time = (
+        SELECT MAX(pc2.create_time)
+        FROM project_check pc2
+        WHERE pc2.project_id = pc.project_id
+        AND pc2.stage = 200
+        AND pc2.status = 1
+        )
         RIGHT JOIN (
         SELECT
         a.is_archive,
