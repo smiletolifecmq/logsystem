@@ -82,6 +82,18 @@
           </el-option>
         </el-select>
       </el-form-item>
+      <el-form-item label="二检时间">
+        <el-date-picker
+          v-model="dateRange"
+          style="width: 240px"
+          value-format="yyyy-MM-dd"
+          type="daterange"
+          range-separator="-"
+          start-placeholder="开始日期"
+          end-placeholder="结束日期"
+          @change="handleQuery"
+        ></el-date-picker>
+      </el-form-item>
       <el-form-item>
         <el-button
           type="primary"
@@ -792,6 +804,7 @@ export default {
   data() {
     return {
       activeName: "first",
+      dateRange: [],
       overTitle: "",
       overTimeOpen: false,
       overTimeProjectList: [],
@@ -1138,11 +1151,13 @@ export default {
     /** 查询【请填写功能名称】列表 */
     getList() {
       this.loading = true;
-      listBcyj(this.queryParams).then((response) => {
-        this.bcyjList = response.rows;
-        this.total = response.total;
-        this.loading = false;
-      });
+      listBcyj(this.addDateRange(this.queryParams, this.dateRange)).then(
+        (response) => {
+          this.bcyjList = response.rows;
+          this.total = response.total;
+          this.loading = false;
+        }
+      );
     },
     // 取消按钮
     cancel() {
@@ -1151,6 +1166,7 @@ export default {
     },
     // 表单重置
     reset() {
+      this.dateRange = [];
       this.form = {
         projectCode: null,
         projectName: null,
@@ -1182,6 +1198,7 @@ export default {
     },
     /** 重置按钮操作 */
     resetQuery() {
+      this.dateRange = [];
       this.resetForm("queryForm");
       this.handleQuery();
     },

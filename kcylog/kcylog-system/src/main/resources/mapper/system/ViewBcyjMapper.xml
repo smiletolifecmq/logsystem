@@ -183,6 +183,15 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
             <if test="stampStatus != null"> and e.stamp_status = #{stampStatus}</if>
             <if test="checkStatus != null"> and e.check_status = #{checkStatus}</if>
             <if test="isTwoCheck != null and isTwoCheck == 1"> and pc.check_time >= '2026-01-12 00:00:00'</if>
+            <!-- 开始时间 -->
+            <if test="params.beginTime != null and params.beginTime != ''">
+                and pc.check_time &gt;= #{params.beginTime}::timestamp
+            </if>
+
+            <!-- 结束时间（包含当天） -->
+            <if test="params.endTime != null and params.endTime != ''">
+                and pc.check_time &lt; (#{params.endTime}::timestamp + interval '1 day')
+            </if>
             and a.create_time >= '2024-01-01 00:00:00'
             and e.is_archive != 0
             and a.branch_org_id = '1352137951374610444'
@@ -206,7 +215,15 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 <!--            <if test="stampStatus != null"> and stamp_status = #{stampStatus}</if>-->
 <!--            <if test="checkStatus != null"> and check_status = #{checkStatus}</if>-->
 <!--            <if test="isTwoCheck != null and isTwoCheck == 1"> and second_check_time >= '2026-01-12 00:00:00'</if>-->
+<!--            &lt;!&ndash; 开始时间 &ndash;&gt;-->
+<!--            <if test="params.beginTime != null and params.beginTime != ''">-->
+<!--                and second_check_time &gt;= #{params.beginTime}::timestamp-->
+<!--            </if>-->
 
+<!--            &lt;!&ndash; 结束时间（包含当天） &ndash;&gt;-->
+<!--            <if test="params.endTime != null and params.endTime != ''">-->
+<!--                and second_check_time &lt; (#{params.endTime}::timestamp + interval '1 day')-->
+<!--            </if>-->
 <!--            and create_time >= '2024-01-01 00:00:00'-->
 <!--            and is_archive != 0-->
 <!--        </where>-->

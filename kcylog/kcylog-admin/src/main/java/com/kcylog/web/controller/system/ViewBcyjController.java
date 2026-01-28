@@ -14,6 +14,7 @@ import org.springframework.web.bind.annotation.*;
 
 import javax.servlet.http.HttpServletResponse;
 import java.time.temporal.ChronoUnit;
+import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
 
@@ -44,6 +45,12 @@ public class ViewBcyjController extends BaseController
             obj.setIszgcq((long)0);
             obj.setSjmscq((long)0);
             obj.setZgmscq((long)0);
+            // 如果未移交且收件截止时间未空，则加上5个工作日
+            if (obj.getYjsj() == null && obj.getReceiveCutoffTime() == null && obj.getSecondCheckTime() != null){
+                Date receiveCutoffTime = addWorkDays(obj.getSecondCheckTime(), 5);
+                obj.setReceiveCutoffTime(receiveCutoffTime);
+            }
+
             // 收件时间大于收件截止时间
             if (obj.getReceiveCutoffTime() != null && obj.getSjsj() != null){
                 if (obj.getSjsj().after(obj.getReceiveCutoffTime())) {
@@ -146,5 +153,22 @@ public class ViewBcyjController extends BaseController
     public AjaxResult remove(@PathVariable String[] projectCodes)
     {
         return toAjax(viewBcyjService.deleteViewBcyjByProjectCodes(projectCodes));
+    }
+
+    public static Date addWorkDays(Date startDate, int workDays) {
+        Calendar cal = Calendar.getInstance();
+        cal.setTime(startDate);
+
+        int addedDays = 0;
+        while (addedDays < workDays) {
+            cal.add(Calendar.DAY_OF_MONTH, 1);
+            int dayOfWeek = cal.get(Calendar.DAY_OF_WEEK);
+
+            // 周一 ~ 周五算工作日
+            if (dayOfWeek != Calendar.SATURDAY && dayOfWeek != Calendar.SUNDAY) {
+                addedDays++;
+            }
+        }
+        return cal.getTime();
     }
 }
