@@ -175,4 +175,31 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
             and a.user_name in ('谢小建','张众','梅接文', '黄延')
         </where>
     </select>
+
+    <select id="listProjectHjMonthPreviousYear" parameterType="SysProject" resultMap="SysProjectValueResult">
+        select a.*, b.settle_time from sys_project_value a inner join sys_project b on a.project_id = b.project_id
+        <where>
+            <if test="tjStatus != null and tjStatus == 0">
+                and b.user_name_alias = #{userNameAlias}
+            </if>
+            <if test="tjStatus != null and tjStatus == 1">
+                and b.department = #{department}
+            </if>
+            and YEAR(b.settle_time) = YEAR(NOW()) - 1
+        </where>
+    </select>
+
+    <select id="listProjectOperateTJForSpecialPersonnelMonthPreviousYear" parameterType="SysProject" resultMap="SysProjectValueResult">
+        select a.*, b.department, b.settle_time from sys_project_value a inner join sys_project b on a.project_id = b.project_id
+        <where>
+            <if test="tjStatus != null and tjStatus == 0">
+                and b.user_name_alias = #{userNameAlias}
+            </if>
+            <if test="tjStatus != null and tjStatus == 1">
+                and b.department = #{department}
+            </if>
+            and YEAR(b.settle_time) = YEAR(NOW()) - 1
+            and a.user_name in ('谢小建','张众','梅接文', '黄延')
+        </where>
+    </select>
 </mapper>

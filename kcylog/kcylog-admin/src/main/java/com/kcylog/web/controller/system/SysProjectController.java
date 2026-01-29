@@ -2788,6 +2788,7 @@ public class SysProjectController extends BaseController {
             userMap.put(obj4, "管线工程部");
         }
 
+        // 当前年度
         for (SysProjectValue objTemp : list){
             OperatingExport operatingExport = new OperatingExport();
             if (userMap.containsKey(objTemp.getUserName())){
@@ -2835,9 +2836,52 @@ public class SysProjectController extends BaseController {
                         )
                 ));
 
+        // 上一年度
+        List<OperatingExport> operatingExportListPreviousYear = new ArrayList<>();
+        List<SysProjectValue> listPreviousYear = sysProjectValueService.listProjectHjMonthPreviousYear(sysProject);
+        List<SysProjectValue> listSpecialPreviousYear = sysProjectValueService.listProjectOperateTJForSpecialPersonnelMonthPreviousYear(sysProject);
+        for (SysProjectValue value1 : listSpecialPreviousYear){
+            OperatingExport operatingExport = new OperatingExport();
+            operatingExport.setSettleTime(value1.getFqSysProject().getSettleTime());
+            operatingExport.setDept(value1.getFqSysProject().getDepartment());
+            operatingExport.setMoney(value1.getMoney());
+            operatingExport.setProfitMoney(value1.getProfitMoney());
+            operatingExportListPreviousYear.add(operatingExport);
+        }
+        for (SysProjectValue objTemp : listPreviousYear){
+            OperatingExport operatingExport = new OperatingExport();
+            if (userMap.containsKey(objTemp.getUserName())){
+                String dept = userMap.get(objTemp.getUserName());
+                operatingExport.setDept(dept);
+                operatingExport.setSettleTime(objTemp.getFqSysProject().getSettleTime());
+                operatingExport.setMoney(objTemp.getMoney());
+                operatingExport.setProfitMoney(objTemp.getProfitMoney());
+                operatingExportListPreviousYear.add(operatingExport);
+            }
+
+        }
+
+        Map<String, Map<Integer, BigDecimal>> result2 = operatingExportListPreviousYear.stream()
+                .filter(o -> o.getSettleTime() != null)
+                .collect(Collectors.groupingBy(
+                        OperatingExport::getDept, // 一级分组：部门
+                        Collectors.groupingBy(
+                                o -> {
+                                    // 从 Date 转换为月份（1~12）
+                                    LocalDate date = o.getSettleTime().toInstant().atZone(ZoneId.systemDefault()).toLocalDate();
+                                    return date.getMonthValue();
+                                },
+                                Collectors.mapping(
+                                        o -> Optional.ofNullable(o.getMoney()).orElse(BigDecimal.ZERO),
+                                        Collectors.reducing(BigDecimal.ZERO, BigDecimal::add)
+                                )
+                        )
+                ));
+
         Map<String, Map<String, Map<Integer, BigDecimal>>> resultObj = new HashMap<>();
         resultObj.put("经营产值", result);
         resultObj.put("利润", result1);
+        resultObj.put("上一年度", result2);
         return resultObj;
     }
 

@@ -109,7 +109,7 @@
       </div>
     </div>
 
-    <div class="content" style="height: 140px">
+    <div class="content" style="height: 200px">
       <div class="title">
         <div class="bg"></div>
         <div class="text">经营产值(月)</div>
@@ -162,6 +162,7 @@ export default {
         c: [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
         d: [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
         e: [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
+        f: [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
       },
       monthList: [
         "1月",
@@ -208,6 +209,11 @@ export default {
         var gc = response.经营产值.工程测绘部;
         var bdc = response.经营产值.不动产测绘部;
         var gx = response.经营产值.管线工程部;
+
+        var dlqn = response.上一年度.地理信息部;
+        var gcqn = response.上一年度.工程测绘部;
+        var bdcqn = response.上一年度.不动产测绘部;
+        var gxqn = response.上一年度.管线工程部;
 
         var dlll = response.利润.地理信息部;
         var gcll = response.利润.工程测绘部;
@@ -291,6 +297,26 @@ export default {
           this.list2.e[key - 1] = this.list2.e[key - 1] + value;
         }
 
+        for (const key in dlqn) {
+          const value = dlqn[key];
+          this.list2.f[key - 1] = this.list2.f[key - 1] + value;
+        }
+
+        for (const key in gcqn) {
+          const value = gcqn[key];
+          this.list2.f[key - 1] = this.list2.f[key - 1] + value;
+        }
+
+        for (const key in bdcqn) {
+          const value = bdcqn[key];
+          this.list2.f[key - 1] = this.list2.f[key - 1] + value;
+        }
+
+        for (const key in gxqn) {
+          const value = gxqn[key];
+          this.list2.f[key - 1] = this.list2.f[key - 1] + value;
+        }
+
         this.jydata.jycz = this.jydata.jycz.toFixed(2);
         this.listData[0].num1 = this.listData[0].num1.toFixed(2);
         this.listData[1].num1 = this.listData[1].num1.toFixed(2);
@@ -307,24 +333,54 @@ export default {
 
         this.listData.sort((a, b) => b.num1 - a.num1);
 
+        for (var i = 0; i < this.list2.a.length; i++) {
+          this.list2.a[i] = this.list2.a[i].toFixed(2);
+        }
+
+        for (var i = 0; i < this.list2.b.length; i++) {
+          this.list2.b[i] = this.list2.b[i].toFixed(2);
+        }
+
+        for (var i = 0; i < this.list2.c.length; i++) {
+          this.list2.c[i] = this.list2.c[i].toFixed(2);
+        }
+
+        for (var i = 0; i < this.list2.e.length; i++) {
+          this.list2.e[i] = this.list2.e[i].toFixed(2);
+        }
+
+        for (var i = 0; i < this.list2.f.length; i++) {
+          this.list2.f[i] = this.list2.f[i].toFixed(2);
+        }
+
         this.chartInstanceArrival.setOption({
-          color: ["#afeff6", "#fbd26a", "#ff7f50", "#e60000", "#32CD32"], // 每条折线的颜色
+          color: [
+            "#afeff6",
+            "#fbd26a",
+            "#ff7f50",
+            "#e60000",
+            "#32CD32",
+            "#8A2BE2",
+          ], // 每条折线的颜色
           tooltip: {
             trigger: "axis",
           },
-          legend: {
-            bottom: 0,
-            textStyle: {
-              color: "#ffffff",
+          legend: [
+            {
+              bottom: 0,
+              textStyle: {
+                color: "#ffffff",
+              },
+              data: ["地理信息部", "工程测绘部", "不动产测绘部", "管线工程部"],
             },
-            data: [
-              "地理信息部",
-              "工程测绘部",
-              "不动产测绘部",
-              "管线工程部",
-              "总计",
-            ],
-          },
+            {
+              bottom: 20,
+              textStyle: {
+                color: "#ffffff",
+              },
+              data: ["总计", "上一年度"],
+            },
+          ],
           label: {
             color: "#ffffff",
           },
@@ -332,7 +388,7 @@ export default {
             top: "4%",
             left: "1%",
             right: "3%",
-            bottom: "20%",
+            bottom: "30%",
             containLabel: true,
           },
           xAxis: {
@@ -413,6 +469,12 @@ export default {
               smooth: true,
               data: this.list2.e,
             },
+            {
+              name: "上一年度",
+              type: "line",
+              smooth: true,
+              data: this.list2.f,
+            },
           ],
         });
       });
@@ -457,7 +519,7 @@ export default {
   }
 }
 .content {
-  margin: 22px 0;
+  margin: 12px 0;
   .title {
     position: relative;
     width: 100%;
@@ -784,7 +846,7 @@ export default {
 
 .floorage-echart {
   width: 100%;
-  height: 140px;
+  height: 200px;
   // margin-top: 24px;
 }
 </style>
