@@ -506,6 +506,13 @@
             @click="handleSjxx(scope.row)"
             >送件信息</el-button
           >
+          <el-button
+            size="mini"
+            type="text"
+            icon="el-icon-printer"
+            @click="dydc(scope.row)"
+            >打印导出</el-button
+          >
         </template>
       </el-table-column>
     </el-table>
@@ -1426,6 +1433,7 @@ import userInfo from "@/store/modules/user";
 import FileUpload from "@/components/FileCad";
 import { listConfig } from "@/api/system/config";
 import { addSending, listSending } from "@/api/system/sending";
+import { exportSubDocx } from "@/utils/doc.js";
 
 export default {
   name: "Project",
@@ -2061,6 +2069,27 @@ export default {
     );
   },
   methods: {
+    dydc(value) {
+      const data = {
+        form: {
+          user_name_alias: value.userNameAlias,
+          project_num: value.projectNum,
+          project_type: value.projectType,
+          requester_alias: value.requesterAlias,
+          customer_contract_name: value.customerContractName,
+          customer_contract_phone: value.customerContractPhone,
+          register_time: value.registerTime.substring(0, 10),
+          project_name_alias: value.projectNameAlias,
+          workcontent_alias: value.workcontentAlias,
+          workload_alias: value.workloadAlias,
+          project_start_alias: value.projectStartAlias.substring(0, 10),
+          project_end_alias: value.projectEndAlias.substring(0, 10),
+          department: value.department,
+        },
+      };
+      exportSubDocx("/xmzb.docx", data, value.projectNum + ".docx");
+      console.log(value);
+    },
     handleSjxx(value) {
       listSending({ projectId: value.projectId }).then((response) => {
         this.logListsj = response.rows;
