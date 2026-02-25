@@ -888,16 +888,13 @@ export default {
           "黄晶晶",
           "陈明强",
           "黄金煌",
-          "赖伟超",
           "吴哲涵",
-          "蔡龙洲",
+          "林秀芳",
           "高诚伟",
           "张宾",
           "朱小巧",
           "朱思静",
           "黄秋锋",
-          "林秀芳",
-          "郑晗昕",
         ];
         const sortedArray = customSort(dataArray, sortUser);
         for (var i = 0; i < sortedArray.length; i++) {
