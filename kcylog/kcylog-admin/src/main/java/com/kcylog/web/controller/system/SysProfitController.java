@@ -98,6 +98,7 @@ public class SysProfitController extends BaseController
         obj1.setJysr(sysProfit.getGcchbNumWork());
         obj1.setSbjysr(sysProfit.getGcchbNumWork().add(map.get("工程测绘部").getYl()));
         obj1.setJssyyl(map.get("工程测绘部").getYl());
+        obj1.setHjsyyj(map.get("工程测绘部").getYj());
         obj1.setNf(sysProfit.getNf());
         obj1.setYf(sysProfit.getYf());
         obj1.setBj((long)0);
@@ -109,6 +110,7 @@ public class SysProfitController extends BaseController
         obj2.setHdnbcz(sysProfit.getBdcnb());
         obj2.setSbjysr(sysProfit.getBdcchbWork().add(map.get("不动产测绘部").getYl()));
         obj2.setJssyyl(map.get("不动产测绘部").getYl());
+        obj2.setHjsyyj(map.get("不动产测绘部").getYj());
         obj2.setNf(sysProfit.getNf());
         obj2.setYf(sysProfit.getYf());
         obj2.setBj((long)0);
@@ -120,6 +122,7 @@ public class SysProfitController extends BaseController
         obj3.setHdnbcz(sysProfit.getGxgcnb());
         obj3.setSbjysr(sysProfit.getGxgcbWork().add(map.get("管线工程部").getYl()));
         obj3.setJssyyl(map.get("管线工程部").getYl());
+        obj3.setHjsyyj(map.get("管线工程部").getYj());
         obj3.setNf(sysProfit.getNf());
         obj3.setYf(sysProfit.getYf());
         obj3.setBj((long)0);
@@ -131,6 +134,7 @@ public class SysProfitController extends BaseController
         obj4.setHdnbcz(sysProfit.getDlnb());
         obj4.setSbjysr(sysProfit.getDlxxbWork().add(map.get("地理信息部").getYl()));
         obj4.setJssyyl(map.get("地理信息部").getYl());
+        obj4.setHjsyyj(map.get("地理信息部").getYj());
         obj4.setNf(sysProfit.getNf());
         obj4.setYf(sysProfit.getYf());
         obj4.setBj((long)0);

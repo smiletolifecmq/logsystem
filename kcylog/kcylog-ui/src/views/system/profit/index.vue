@@ -63,7 +63,7 @@
           size="mini"
           @click="handleExport"
           v-hasPermi="['system:profit:export']"
-          >导出</el-button
+          >导出当前年份</el-button
         >
       </el-col>
     </el-row>
@@ -157,7 +157,7 @@
         >
           <el-input v-model="form.hjsyyj" placeholder="请输入核减上月预结" />
         </el-form-item>
-        <el-form-item label="预留" prop="yl" v-hasPermi="['system:profit:bz']">
+        <el-form-item label="预留" prop="yl" v-hasPermi="['system:profit:xy']">
           <el-input v-model="form.yl" placeholder="请输入预留" />
         </el-form-item>
         <el-form-item label="预结" prop="yj" v-hasPermi="['system:profit:ch']">
@@ -608,14 +608,8 @@ export default {
 
     /** 导出按钮操作 */
     handleExport() {
-      if (
-        this.queryParams.nf == null ||
-        this.queryParams.nf == undefined ||
-        this.queryParams.nf == ""
-      ) {
-        this.$message.error("请选择年份～");
-        return;
-      }
+      this.queryParams.nf = new Date().getFullYear();
+
       listProfit({ nf: this.queryParams.nf, pageNum: 1, pageSize: 9999 }).then(
         (responseData) => {
           fetch("/sbcz.xlsx")
@@ -1698,8 +1692,8 @@ export default {
                   // 如果没有匹配的 case，执行这里的代码
                 }
               }
-              gxgcb.yjhj = gxgcb.yjhj + 297900;
-              dlxx.yjhj = dlxx.yjhj + 970000;
+              // gxgcb.yjhj = gxgcb.yjhj + 297900;
+              // dlxx.yjhj = dlxx.yjhj + 970000;
               gxgcb.jy =
                 gxgcb.hjsyyjhj - gxgcb.jssyylhj + gxgcb.ylhj - gxgcb.yjhj;
               dlxx.jy = dlxx.hjsyyjhj - dlxx.jssyylhj + dlxx.ylhj - dlxx.yjhj;
