@@ -142,6 +142,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
                 and (date_format(p.two_check,'%y%m%d') &lt;= date_format(#{params.endTime},'%y%m%d'))
             </if>
             and (p.one_check != '')
+            and (p.two_check != '')
         </where>
         order by p.one_check desc, p.two_check desc, f.version asc
     </select>
