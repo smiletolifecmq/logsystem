@@ -14,6 +14,7 @@ import com.kcylog.common.utils.poi.ExcelUtil;
 import com.kcylog.system.common.*;
 import com.kcylog.system.domain.*;
 import com.kcylog.system.service.*;
+import com.kcylog.web.controller.common.ExcelUtilNum;
 import com.kcylog.web.controller.common.ProjectHJ;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.transaction.annotation.Transactional;
@@ -793,7 +794,7 @@ public class SysProjectController extends BaseController {
                 operatingExportList.add(operatingExport);
             }
         }
-        ExcelUtil<OperatingExport> util = new ExcelUtil<OperatingExport>(OperatingExport.class);
+        ExcelUtilNum<OperatingExport> util = new ExcelUtilNum<OperatingExport>(OperatingExport.class);
         util.exportExcel(response, operatingExportList, "项目结算单");
     }
 
@@ -1020,7 +1021,7 @@ public class SysProjectController extends BaseController {
 
             }
         }
-        ExcelUtil<OperatingExport> util = new ExcelUtil<OperatingExport>(OperatingExport.class);
+        ExcelUtilNum<OperatingExport> util = new ExcelUtilNum<OperatingExport>(OperatingExport.class);
         util.exportExcel(response, operatingExportList, "项目结算单");
     }
 
@@ -1067,12 +1068,20 @@ public class SysProjectController extends BaseController {
                 SysProjectValue newSysProjectValue = new SysProjectValue();
                 newSysProjectValue.setMoney(listSpecialMap.get(value1.getFqSysProject().getDepartment()).getMoney().add(value1.getMoney()));
                 newSysProjectValue.setProfitMoney(listSpecialMap.get(value1.getFqSysProject().getDepartment()).getProfitMoney().add(value1.getProfitMoney()));
-                listSpecialMap.put(value1.getFqSysProject().getDepartment(), newSysProjectValue);
+                if (Objects.equals(value1.getUserName(), "谢小建")){
+                    listSpecialMap.put("管线工程部", newSysProjectValue);
+                }else {
+                    listSpecialMap.put(value1.getFqSysProject().getDepartment(), newSysProjectValue);
+                }
             }else {
                 SysProjectValue newSysProjectValue = new SysProjectValue();
                 newSysProjectValue.setMoney(value1.getMoney());
                 newSysProjectValue.setProfitMoney(value1.getProfitMoney());
-                listSpecialMap.put(value1.getFqSysProject().getDepartment(),newSysProjectValue);
+                if (Objects.equals(value1.getUserName(), "谢小建")){
+                    listSpecialMap.put("管线工程部",newSysProjectValue);
+                }else {
+                    listSpecialMap.put(value1.getFqSysProject().getDepartment(),newSysProjectValue);
+                }
             }
         }
         SysUser user = new SysUser();

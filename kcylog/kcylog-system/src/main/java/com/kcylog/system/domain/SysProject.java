@@ -83,6 +83,8 @@ public class SysProject extends BaseEntity
     @Excel(name = "二检时间", needMerge = true)
     private String twoCheck;
 
+    private String cyry;
+
     private String department;
 
     private Date twoCheckTime;
@@ -267,6 +269,14 @@ public class SysProject extends BaseEntity
     private BigDecimal nbczje;
 
     private String yjbz;
+
+    public String getCyry() {
+        return cyry;
+    }
+
+    public void setCyry(String cyry) {
+        this.cyry = cyry;
+    }
 
     public String getYjbz() {
         return yjbz;

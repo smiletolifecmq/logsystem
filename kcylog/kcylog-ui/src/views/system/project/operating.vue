@@ -63,6 +63,14 @@
           @keyup.enter.native="handleQuery"
         />
       </el-form-item>
+      <el-form-item label="参与人员" prop="cyry">
+        <el-input
+          v-model="queryParams.cyry"
+          placeholder="请输入参与人员"
+          clearable
+          @keyup.enter.native="handleQuery"
+        />
+      </el-form-item>
       <el-form-item label="办结时间">
         <el-date-picker
           v-model="dateRange"
@@ -2185,7 +2193,12 @@ export default {
       }
       this.download(
         "system/project/exportOperating",
-        { createTime: this.dateRange[0], updateTime: this.dateRange[1] },
+        {
+          createTime: this.dateRange[0],
+          updateTime: this.dateRange[1],
+          userNameAlias: this.queryParams.userNameAlias,
+          cyry: this.queryParams.cyry,
+        },
         `项目结算表` + `.xlsx`
       );
     },
@@ -2200,7 +2213,12 @@ export default {
       }
       this.download(
         "system/project/exportOperatingAssignPersonnel",
-        { createTime: this.dateRange[0], updateTime: this.dateRange[1] },
+        {
+          createTime: this.dateRange[0],
+          updateTime: this.dateRange[1],
+          userNameAlias: this.queryParams.userNameAlias,
+          cyry: this.queryParams.cyry,
+        },
         `项目结算表` + `.xlsx`,
         { timeout: 600000 }
       );
